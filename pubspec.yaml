@@ -1,0 +1,62 @@
+name: eng_quest
+description: Native-equivalent English cognition for Japanese children — RPG-driven L1-L2 boundary elimination.
+version: 0.1.0+1
+publish_to: 'none'
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+  flutter: '>=3.19.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # Firebase
+  firebase_core: ^3.6.0
+  firebase_auth: ^5.3.1
+  cloud_firestore: ^5.4.3
+  firebase_analytics: ^11.3.3
+  firebase_remote_config: ^5.1.3
+  
+  # Audio & ASR
+  whisper_ggml_plus: ^1.5.2
+  record: ^5.1.0
+  path_provider: ^2.1.5
+  
+  # Networking
+  http: ^1.2.2
+  
+  # Local Storage
+  sqflite: ^2.3.3+1
+  
+  # State Management
+  flutter_riverpod: ^2.5.1
+  riverpod_annotation: ^2.3.5
+  
+  # Navigation
+  go_router: ^14.2.7
+  
+  # UI
+  flutter_svg: ^2.0.10+1
+  cached_network_image: ^3.4.1
+  
+  # Utilities
+  intl: ^0.19.0
+  uuid: ^4.5.1
+  collection: ^1.18.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  riverpod_generator: ^2.4.3
+  build_runner: ^2.4.12
+  mocktail: ^1.0.4
+
+flutter:
+  uses-material-design: true
+  
+  assets:
+    - assets/images/
+    - assets/audio/
+    - assets/content/
