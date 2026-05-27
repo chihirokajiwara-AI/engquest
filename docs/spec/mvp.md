@@ -54,7 +54,7 @@ Native-equivalent English cognition in Japanese children, age 4–18.
 
 | ID | Component | Status | Last Updated | Notes |
 |----|-----------|--------|--------------|-------|
-| C01 | FSRS-4.5 Dart Implementation | `todo` | 2026-05-26 | Core algorithm — everything depends on this |
+| C01 | FSRS-4.5 Dart Implementation | `delegated` | 2026-05-27 | Spike S02 COMPLETE. Delegated to Claude Code (engquest-20260527-001.json). Branch: feat/c01-fsrs-dart |
 | C02 | CEFR-Tagged Content DB (300 words, A1) | `todo` | 2026-05-26 | 英検5級 word list + CEFR metadata |
 | C03 | Firebase Project Setup + Auth | `todo` | 2026-05-26 | Anonymous auth for MVP, upgrade path to email |
 | C04 | Flutter App Scaffold + Navigation | `todo` | 2026-05-26 | RPG world map as root nav, 3 zones for MVP |
@@ -70,7 +70,7 @@ Native-equivalent English cognition in Japanese children, age 4–18.
 | Spike | Question | Priority |
 |-------|----------|---------|
 | S01 | on-device-whisper | ✅ COMPLETE 2026-05-26 — whisper_ggml_plus base.en, hybrid on-device+cloud arch. See src/spikes/on-device-whisper/README.md | ✅ DONE |
-| S02 | fsrs-dart | Can FSRS-4.5 be implemented purely in Dart? Performance on 300-card deck? | 🟡 MEDIUM |
+| S02 | fsrs-dart | ✅ COMPLETE 2026-05-27 — FSRS-4.5 viable in Dart. FACTOR=19/81, DECAY=-0.5. 88.8% retention. C01 delegated to Claude Code. See src/spikes/fsrs-dart/README.md | ✅ DONE |
 | S03 | claude-haiku-dialog | What's the p95 latency + cost per dialog turn with claude-3-haiku? Is it viable for <5s response? | 🟡 MEDIUM |
 | S04 | firebase-offline | Does Firebase Firestore offline mode handle FSRS scheduling without connectivity? | 🟢 LOW |
 
