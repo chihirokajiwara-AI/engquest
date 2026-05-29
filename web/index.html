@@ -473,6 +473,75 @@ body {
 .btn-good  { background: #2E7D32; color: #fff; box-shadow: 0 4px 16px rgba(46,125,50,0.4); }
 .btn-easy  { background: #1565C0; color: #fff; box-shadow: 0 4px 16px rgba(21,101,192,0.4); }
 
+/* ===== WEEKLY LEADERBOARD ===== */
+.leaderboard {
+  display: none;
+  width: 100%;
+  max-width: 380px;
+  margin-top: 20px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,215,0,0.12);
+  border-radius: 16px;
+  padding: 16px;
+}
+.leaderboard.visible { display: block; }
+.leaderboard-title {
+  font-size: 13px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #FFD700;
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.leaderboard-sub {
+  font-size: 11px;
+  color: rgba(255,255,255,0.5);
+  text-align: center;
+  margin-bottom: 12px;
+}
+.lb-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  margin-bottom: 6px;
+  background: rgba(255,255,255,0.03);
+}
+.lb-row:last-child { margin-bottom: 0; }
+.lb-row.me {
+  background: linear-gradient(135deg, rgba(255,215,0,0.18), rgba(255,160,0,0.10));
+  border: 1px solid rgba(255,215,0,0.35);
+}
+.lb-rank {
+  font-size: 14px;
+  font-weight: 800;
+  width: 26px;
+  text-align: center;
+  color: rgba(255,255,255,0.7);
+}
+.lb-row.me .lb-rank { color: #FFD700; }
+.lb-emoji { font-size: 20px; width: 26px; text-align: center; }
+.lb-name {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lb-row.me .lb-name { font-weight: 800; }
+.lb-xp { font-size: 14px; font-weight: 800; color: #FFD700; white-space: nowrap; }
+.leaderboard-hint {
+  font-size: 11px;
+  color: rgba(255,255,255,0.55);
+  text-align: center;
+  margin-top: 10px;
+  line-height: 1.5;
+}
+
 /* ===== XP POPUP ===== */
 .xp-popup {
   position: fixed;
@@ -667,6 +736,14 @@ body {
     </div>
   </div>
 
+  <!-- Weekly XP leaderboard (P2.8) -->
+  <div class="leaderboard" id="leaderboard">
+    <div class="leaderboard-title">🏆 今週のランキング</div>
+    <div class="leaderboard-sub" id="leaderboard-sub">毎週リセット ・ 月曜スタート</div>
+    <div id="leaderboard-rows"></div>
+    <div class="leaderboard-hint" id="leaderboard-hint"></div>
+  </div>
+
 </div>
 
 <!-- ===== SCREEN 2: BATTLE ===== -->
@@ -770,6 +847,7 @@ body {
 
 </div>
 
+<script src="leaderboard.js"></script>
 <script>
 'use strict';
 
@@ -1133,6 +1211,10 @@ function updateStreakOnSession() {
 function addXP(amount) {
   const current = parseInt(localStorage.getItem('eq_xp') || '0');
   localStorage.setItem('eq_xp', String(current + amount));
+  // Track weekly XP for the leaderboard (P2.8)
+  if (window.EQLeaderboard) {
+    EQLeaderboard.addWeeklyXP(localStorage, amount);
+  }
 }
 
 // ===== SCREEN MANAGEMENT =====
@@ -1411,6 +1493,43 @@ function updateStats() {
     const readiness = Math.round((mastered / 300) * 100);
     document.getElementById('stat-readiness').textContent = readiness + '%';
     document.getElementById('readiness-bar').style.width = Math.min(readiness, 100) + '%';
+  }
+
+  renderLeaderboard();
+}
+
+// ===== WEEKLY LEADERBOARD (P2.8) =====
+function renderLeaderboard() {
+  if (!window.EQLeaderboard) return;
+  const board = EQLeaderboard.getLeaderboard(localStorage);
+  const playerXP = EQLeaderboard.getPlayerWeeklyXP(localStorage);
+  const wrap = document.getElementById('leaderboard');
+  const rowsEl = document.getElementById('leaderboard-rows');
+  const hintEl = document.getElementById('leaderboard-hint');
+  if (!wrap || !rowsEl) return;
+
+  // Always show the board — it gives a target even before the first battle.
+  wrap.classList.add('visible');
+
+  const medals = { 1: '🥇', 2: '🥈', 3: '🥉' };
+  rowsEl.innerHTML = board.map(function (e) {
+    const rank = medals[e.rank] || ('#' + e.rank);
+    return '<div class="lb-row' + (e.isPlayer ? ' me' : '') + '">'
+      + '<span class="lb-rank">' + rank + '</span>'
+      + '<span class="lb-emoji">' + e.emoji + '</span>'
+      + '<span class="lb-name">' + e.name + '</span>'
+      + '<span class="lb-xp">' + e.xp + ' XP</span>'
+      + '</div>';
+  }).join('');
+
+  const gap = EQLeaderboard.xpToNextRank(localStorage);
+  const me = board.find(function (e) { return e.isPlayer; });
+  if (me && me.rank === 1) {
+    hintEl.textContent = playerXP > 0 ? '👑 今週は1位！このままキープしよう！' : '今週はまだ0 XP。バトルして1位をねらおう！';
+  } else if (gap > 0) {
+    hintEl.textContent = 'あと ' + gap + ' XP で ' + (me.rank - 1) + '位にアップ！🔥';
+  } else {
+    hintEl.textContent = 'バトルしてXPを集めよう！';
   }
 }
 

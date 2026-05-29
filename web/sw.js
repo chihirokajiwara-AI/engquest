@@ -1,10 +1,11 @@
 /* ENG Quest Service Worker
  * Offline-first PWA. Bump CACHE_VERSION on every deploy to invalidate old caches.
  */
-const CACHE_VERSION = 'engquest-v2';
+const CACHE_VERSION = 'engquest-v3';
 const APP_SHELL = [
   './',
   './index.html',
+  './leaderboard.js',
   './manifest.json',
   './icons/icon-192.svg',
   './icons/icon-512.svg',
