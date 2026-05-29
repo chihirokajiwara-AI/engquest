@@ -848,6 +848,7 @@ body {
 </div>
 
 <script src="leaderboard.js"></script>
+<script src="srs.js"></script>
 <script>
 'use strict';
 
@@ -1155,26 +1156,34 @@ const VOCAB = [
   {"id":"eiken5_300","word":"Japan","reading":"ジャパン","jpTranslation":"にほん","category":"Places","exampleSentences":["I live in Japan."]}
 ];
 
-// ===== FSRS SIMPLIFIED =====
-const GRADE_INTERVALS = { again: 1/1440, hard: 1, good: 3, easy: 7 };
-
+// ===== ADAPTIVE SPACED REPETITION (srs.js) =====
+// Replaces the old fixed-interval scheme. Intervals now COMPOUND with each
+// successful review (ease-driven), so well-known words stop wasting session
+// time — the core of the "1/100th cost" efficiency thesis. Falls back to a
+// minimal inline scheduler if srs.js failed to load (defensive).
 function gradeCard(wordId, gradeKey) {
   const state = JSON.parse(localStorage.getItem('eq_cards') || '{}');
-  const dueDate = new Date();
-  // Use fractional days for "again" (1 minute = 1/1440 day)
-  const intervalDays = GRADE_INTERVALS[gradeKey];
-  const msToAdd = intervalDays * 24 * 60 * 60 * 1000;
-  const due = new Date(Date.now() + msToAdd);
-  state[wordId] = {
-    dueDate: due.toISOString(),
-    grade: gradeKey,
-    reviews: (state[wordId]?.reviews || 0) + 1
-  };
+  if (window.EQSrs) {
+    state[wordId] = EQSrs.schedule(state[wordId], gradeKey);
+  } else {
+    // Defensive fallback (should never run in production).
+    const FALLBACK = { again: 1 / 1440, hard: 1, good: 3, easy: 7 };
+    const due = new Date(Date.now() + FALLBACK[gradeKey] * 86400000);
+    state[wordId] = {
+      dueDate: due.toISOString(),
+      grade: gradeKey,
+      reviews: (state[wordId]?.reviews || 0) + 1
+    };
+  }
   localStorage.setItem('eq_cards', JSON.stringify(state));
 }
 
 function getSessionCards(words, count = 10) {
   const state = JSON.parse(localStorage.getItem('eq_cards') || '{}');
+  if (window.EQSrs) {
+    return EQSrs.buildSession(words, state, count);
+  }
+  // Defensive fallback.
   const now = new Date();
   const due = words.filter(w => !state[w.id] || new Date(state[w.id].dueDate) <= now);
   const newCards = due.filter(w => !state[w.id]).slice(0, count);
