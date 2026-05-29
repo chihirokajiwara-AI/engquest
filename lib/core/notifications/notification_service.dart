@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest_all.dart' as tz_data;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:engquest/core/storage/preferences_service.dart';
 
 // ---------------------------------------------------------------------------
 // Background FCM handler (top-level, required by firebase_messaging)
@@ -144,6 +145,81 @@ class NotificationService {
       debugPrint('[NotificationService] FCM token fetch failed: $e');
       return null;
     }
+  }
+
+  // ── Reminder enable/disable preferences (P2.10) ───────────────────────────
+
+  /// Whether daily review reminders are enabled (default: true / opted-in).
+  ///
+  /// Backed by [PrefKeys.remindersOptedOut] (stored inverted so a brand-new
+  /// user with no stored value is opted **in** — retention-first default).
+  Future<bool> remindersEnabled() async {
+    final prefs = await PreferencesService.getInstance();
+    return !prefs.getBool(PrefKeys.remindersOptedOut);
+  }
+
+  /// Persists the user's reminder on/off choice and (re)schedules or cancels
+  /// the local notification accordingly. Call from a settings toggle.
+  Future<void> setRemindersEnabled(bool enabled) async {
+    final prefs = await PreferencesService.getInstance();
+    await prefs.setBool(PrefKeys.remindersOptedOut, !enabled);
+    if (enabled) {
+      await scheduleDailyReminder(await _storedReminderTime());
+    } else {
+      await _localNotifications.cancel(_notificationId);
+      debugPrint('[NotificationService] Daily reminder disabled by user.');
+    }
+  }
+
+  /// Persists a custom reminder [time] and re-schedules if reminders are on.
+  Future<void> setReminderTime(TimeOfDay time) async {
+    final prefs = await PreferencesService.getInstance();
+    await prefs.setInt(PrefKeys.reminderHour, time.hour);
+    await prefs.setInt(PrefKeys.reminderMinute, time.minute);
+    if (await remindersEnabled()) {
+      await scheduleDailyReminder(time);
+    }
+  }
+
+  /// Reads the stored reminder time, falling back to [defaultReminderTime].
+  Future<TimeOfDay> _storedReminderTime() async {
+    final prefs = await PreferencesService.getInstance();
+    final hour = prefs.getInt(PrefKeys.reminderHour);
+    final minute = prefs.getInt(PrefKeys.reminderMinute);
+    // getInt returns 0 when unset; 0:00 is not a sensible reminder default,
+    // so treat an unset hour as "use the default time".
+    if (hour == 0 && minute == 0) return defaultReminderTime;
+    return TimeOfDay(hour: hour, minute: minute);
+  }
+
+  /// One-shot startup orchestration: request permission (first run) and
+  /// schedule the daily reminder if the user has not opted out.
+  ///
+  /// Safe to call on every app start — [scheduleDailyReminder] replaces any
+  /// existing schedule so this is idempotent. No-ops if reminders are disabled.
+  ///
+  /// Returns `true` if a reminder is now scheduled.
+  Future<bool> setupReminders() async {
+    if (!_initialised) {
+      debugPrint('[NotificationService] Not initialised — call init() first.');
+      return false;
+    }
+
+    if (!await remindersEnabled()) {
+      debugPrint('[NotificationService] Reminders opted out — skipping.');
+      await _localNotifications.cancel(_notificationId);
+      return false;
+    }
+
+    // Request permission (idempotent — OS only prompts once).
+    final granted = await requestPermission();
+    if (!granted) {
+      debugPrint('[NotificationService] Permission denied — reminder not set.');
+      return false;
+    }
+
+    await scheduleDailyReminder(await _storedReminderTime());
+    return true;
   }
 
   // ── Scheduled daily reminder ──────────────────────────────────────────────

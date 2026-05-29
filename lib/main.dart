@@ -22,5 +22,9 @@ void main() async {
   // 3. Notifications (FCM + local scheduler).
   await NotificationService.instance.init(firebaseAvailable: firebaseAvailable);
 
+  // 3b. Schedule the daily review reminder (P2.10) — opted-in by default,
+  //     idempotent across launches, no-op if the user has opted out.
+  await NotificationService.instance.setupReminders();
+
   runApp(const EngQuestApp());
 }

@@ -12,6 +12,13 @@ abstract class PrefKeys {
   static const String dailyGoalMinutes = 'daily_goal_minutes';
   static const String cefrPlacement = 'cefr_placement';
 
+  // Daily review reminder preferences (P2.10).
+  // [remindersOptedOut] is stored inverted so the default (false) == opted-in,
+  // i.e. reminders are ON by default for new users (retention-first).
+  static const String remindersOptedOut = 'reminders_opted_out';
+  static const String reminderHour = 'reminder_hour';
+  static const String reminderMinute = 'reminder_minute';
+
   // Legacy keys kept for backward-compat with OnboardingStorage
   static const String onboardingAge = 'onboarding_age';
   static const String onboardingCefr = 'onboarding_cefr';
