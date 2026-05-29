@@ -62,8 +62,8 @@ Native-equivalent English cognition in Japanese children, age 4–18.
 | C06 | Voice Module (Pronunciation Coach) | `done` | 2026-05-29 | VoiceService + Levenshtein評価 + PlatformChannel stub + デモモード完全動作 |
 | C07 | Dialog Module (Conversational AI) | `done` | 2026-05-29 | ClaudeClient (haiku) + DialogService (3シナリオ) + オフラインフォールバック |
 | C08 | Parent Dashboard | `done` | 2026-05-29 | 4タブ (Home/Progress/Schedule/Settings) + MockData完全表示 + ストリーク/英検準備度 |
-| C09 | Analytics + A/B Framework | `todo` | 2026-05-26 | Firebase Analytics + custom events |
-| C10 | Onboarding Flow | `todo` | 2026-05-26 | Age input, CEFR placement, avatar selection |
+| C09 | Analytics + A/B Framework | `done` | 2026-05-29 | lib/core/analytics/analytics_service.dart — AnalyticsSink interface + FirebaseAnalyticsAdapter + AbFramework (FNV-1a 50/50 deterministic split) + AnalyticsService facade + unit tests |
+| C10 | Onboarding Flow | `done` | 2026-05-29 | lib/features/onboarding/onboarding_flow.dart — 4ステップ: 年齢スライダー + CEFRミニテスト3問 + アバター選択5体 + 目標設定 + OnboardingResult model |
 
 ### Spike Backlog
 
