@@ -41,12 +41,12 @@ ios/ServiceDefinitions.json
 ios/Runner/GeneratedPluginRegistrant.*
 ios/Podfile.lock
 
-# Firebase
+# Firebase — secrets (ignored)
 google-services.json
 GoogleService-Info.plist
-firebase.json
-.firebaserc
 firebase-debug.log
+# firebase.json and .firebaserc are tracked (no secrets — project config only)
+# google-services.json and GoogleService-Info.plist are generated per-developer
 
 # Whisper models (downloaded on-demand, not committed)
 *.bin
