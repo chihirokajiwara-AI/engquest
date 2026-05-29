@@ -138,6 +138,12 @@ class _AppEntryPointState extends State<_AppEntryPoint> {
   bool _onboardingComplete = false;
   bool _loading = true;
 
+  /// The age to route into [WorldMapScreen] with.  Sourced either from
+  /// persisted prefs (returning user) or directly from the just-completed
+  /// [OnboardingResult] (new user) to avoid any read-after-write race on the
+  /// storage layer.  Defaults to 8 until prefs are loaded.
+  int _childAge = 8;
+
   @override
   void initState() {
     super.initState();
@@ -151,17 +157,25 @@ class _AppEntryPointState extends State<_AppEntryPoint> {
     if (mounted) {
       setState(() {
         _onboardingComplete = complete;
+        // For returning users, read the persisted age now that prefs are warm.
+        if (complete) _childAge = OnboardingStorage.ageYears;
         _loading = false;
       });
     }
   }
 
-  void _handleOnboardingComplete(OnboardingResult result) {
-    // Persist the result asynchronously (fire-and-forget is fine here;
-    // in-memory cache is updated synchronously so the UI stays responsive).
-    OnboardingStorage.save(result);
-    // Transition to world map
+  Future<void> _handleOnboardingComplete(OnboardingResult result) async {
+    // Persist the result, then transition.  We must await the write so the
+    // synchronous [OnboardingStorage.ageYears] getter (and any later route
+    // rebuild) reflects the chosen age — otherwise the WorldMap/Battle vocab
+    // filter falls back to the default age 8 on the very first session, which
+    // is exactly when age-appropriate filtering matters most. We also pass the
+    // age directly from [result] so the first render is correct regardless of
+    // storage timing.
+    await OnboardingStorage.save(result);
+    if (!mounted) return;
     setState(() {
+      _childAge = result.ageYears;
       _onboardingComplete = true;
     });
   }
@@ -176,7 +190,7 @@ class _AppEntryPointState extends State<_AppEntryPoint> {
       );
     }
     if (_onboardingComplete) {
-      return WorldMapScreen(childAge: OnboardingStorage.ageYears);
+      return WorldMapScreen(childAge: _childAge);
     }
     return OnboardingFlow(onComplete: _handleOnboardingComplete);
   }

@@ -34,6 +34,7 @@ import 'package:flutter/services.dart';
 
 import '../../core/analytics/firestore_progress_repository.dart';
 import '../../core/analytics/progress_service.dart';
+import '../../core/content/vocab_age_filter.dart';
 import '../../core/firebase/auth_service.dart';
 import '../../core/fsrs/firestore_card_repository.dart';
 import '../../core/fsrs/fsrs_algorithm.dart';
@@ -80,42 +81,12 @@ const List<VocabItem> _kSeedVocab = [
 
 // ── Age-appropriate vocabulary filter ────────────────────────────────────────
 
-/// Word IDs suitable for young learners (age < 8).
-/// Focus: concrete nouns (animals, colors, food, family) + simple verbs.
-const Set<String> _kYoungLearnerIds = {
-  'eiken5_001', // cat
-  'eiken5_002', // dog
-  'eiken5_003', // apple
-  'eiken5_006', // red
-  'eiken5_007', // big
-  'eiken5_009', // eat
-  'eiken5_010', // water
-  'eiken5_012', // happy
-  'eiken5_013', // play
-  'eiken5_015', // blue
-  'eiken5_016', // mother
-  'eiken5_017', // father
-  'eiken5_019', // small
-  'eiken5_020', // bird
-  'eiken5_021', // fish
-  'eiken5_022', // tree
-  'eiken5_023', // green
-  'eiken5_024', // sing
-  'eiken5_027', // white
-  'eiken5_029', // milk
-};
-
-/// Returns vocab filtered by age:
-///   age < 8  → young learner set (animals + colors + food + family)
-///   age >= 8 → full A1 deck
-List<VocabItem> _filterVocabByAge(int age) {
-  if (age < 8) {
-    return _kSeedVocab
-        .where((v) => _kYoungLearnerIds.contains(v.id))
-        .toList();
-  }
-  return List<VocabItem>.from(_kSeedVocab);
-}
+/// Returns the seed vocab filtered by age.
+///
+/// Delegates to the shared [filterVocabByAge] helper (single source of truth
+/// for the Onboarding → Battle age-filter contract). See
+/// `core/content/vocab_age_filter.dart`.
+List<VocabItem> _filterVocabByAge(int age) => filterVocabByAge(_kSeedVocab, age);
 
 // ── Session result per card ───────────────────────────────────────────────────
 class _CardResult {
