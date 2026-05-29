@@ -1,6 +1,6 @@
 # ENG Quest MVP Specification
 **Version**: 0.1.0  
-**Last Updated**: 2026-05-26  
+**Last Updated**: 2026-05-29  
 **Status**: In Progress
 
 ---
@@ -55,7 +55,7 @@ Native-equivalent English cognition in Japanese children, age 4–18.
 | ID | Component | Status | Last Updated | Notes |
 |----|-----------|--------|--------------|-------|
 | C01 | FSRS-4.5 Dart Implementation | `delegated` | 2026-05-27 | Spike S02 COMPLETE. Delegated to Claude Code (engquest-20260527-001.json). Branch: feat/c01-fsrs-dart |
-| C02 | CEFR-Tagged Content DB (300 words, A1) | `todo` | 2026-05-26 | 英検5級 word list + CEFR metadata |
+| C02 | CEFR-Tagged Content DB (300 words, A1) | `delegated` | 2026-05-29 | COMPLETE: vocab_a1_300.json (300 words, 12 cats), VocabItem model, VocabRepository. Delegated Flutter Riverpod+Firestore integration to Claude Code (engquest-20260529-001.json). Branch: feature/c02-content-db |
 | C03 | Firebase Project Setup + Auth | `todo` | 2026-05-26 | Anonymous auth for MVP, upgrade path to email |
 | C04 | Flutter App Scaffold + Navigation | `todo` | 2026-05-26 | RPG world map as root nav, 3 zones for MVP |
 | C05 | Battle Module (Retrieval Loop) | `todo` | 2026-05-26 | Card flip + FSRS scheduling |
