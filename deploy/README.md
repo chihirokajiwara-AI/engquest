@@ -44,15 +44,30 @@ The script will:
 9. health-check `http://127.0.0.1:8080/` (must return 200)
 
 ### 🚑 Recovery runbook (if the live demo is down RIGHT NOW)
-SSH to the VPS and run:
+SSH to the VPS and run this **one line** (no checkout needed — works even after a
+reboot that wiped `/tmp`):
 ```bash
-cd /tmp/engquest && git pull && sudo bash deploy/install_nginx.sh
+curl -fsSL https://raw.githubusercontent.com/chihirokajiwara-AI/engquest/main/deploy/recover_live_demo.sh | sudo bash
 ```
-That single command restores the site **and** installs the watchdog so this
-outage cannot recur on its own. To check the watchdog:
+`recover_live_demo.sh` is the resilient front door. It:
+1. clones the repo into a **persistent** path (`/opt/engquest-src`, never `/tmp`)
+2. guarantees something to serve via a fallback chain (fresh build → existing
+   persistent root → checked-in static `web/` demo) so the demo is **never blank**
+3. runs `install_nginx.sh` (nginx + systemd watchdog)
+4. installs a **cron backstop** (`/etc/cron.d/engquest-watchdog`, `@reboot` +
+   every 2 min) that self-heals **even if the systemd timer is removed**
+5. health-checks `:8080`
+
+> ⚠️ The old runbook said `cd /tmp/engquest && git pull` — that is **broken**
+> after a reboot because `/tmp` (and the checkout in it) is wiped. Use the
+> one-liner above instead.
+
+To verify self-heal is active:
 ```bash
-systemctl status engquest-watchdog.timer
+systemctl status engquest-watchdog.timer            # systemd timer
+cat /etc/cron.d/engquest-watchdog                    # cron backstop
 journalctl -u engquest-watchdog.service -n 20 --no-pager
+tail -n 20 /var/log/engquest-watchdog.log
 ```
 
 ### Behavior
