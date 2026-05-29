@@ -5,11 +5,13 @@ Verification tests for P0.3 — nginx deployment package.
 Validates that the committed nginx config + install script satisfy every
 requirement of the task WITHOUT needing the live VPS:
 
-  • serves /tmp/engquest/build/web
+  • serves a PERSISTENT web root (/var/www/engquest) that survives reboot
+  • syncs the volatile build (/tmp/engquest/build/web) into the persistent root
   • gzip enabled
   • cache headers (immutable for hashed assets, no-cache for index/sw)
   • SPA fallback
   • auto-restart on reboot (systemd enable)
+  • self-healing watchdog (systemd timer) restarts nginx if :8080 goes down
   • idempotent + validated install (nginx -t, health check)
 
 Also runs `bash -n` on the install script and, if `nginx` is available,
@@ -28,6 +30,7 @@ import tempfile
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONF = os.path.join(ROOT, "deploy", "nginx", "engquest.conf")
 INSTALL = os.path.join(ROOT, "deploy", "install_nginx.sh")
+WATCHDOG = os.path.join(ROOT, "deploy", "engquest-watchdog.sh")
 
 passed = 0
 failed = 0
@@ -51,7 +54,8 @@ def main():
 
     print("nginx config — requirements")
     check("listens on :8080", re.search(r"listen\s+8080", conf))
-    check("serves /tmp/engquest/build/web", "/tmp/engquest/build/web" in conf)
+    check("serves persistent root /var/www/engquest", "/var/www/engquest" in conf)
+    check("does NOT serve volatile /tmp root", "root /tmp/engquest" not in conf)
     check("gzip on", re.search(r"\bgzip\s+on\b", conf))
     check("gzip_static (precompressed)", "gzip_static on" in conf)
     check("gzip covers js", "application/javascript" in conf)
@@ -82,6 +86,29 @@ def main():
     check("requires root", re.search(r"EUID.*-ne 0", inst))
     check("disables default site", "sites-enabled/default" in inst)
     check("symlinks into sites-enabled", "sites-enabled/engquest.conf" in inst)
+
+    print("\ninstall script — reboot resilience (P0.3 hardening)")
+    check("syncs build into persistent root",
+          "/var/www/engquest" in inst and 'BUILD_SRC="/tmp/engquest/build/web"' in inst)
+    check("falls back to existing persistent content if no fresh build",
+          re.search(r'WEB_ROOT.*index\.html.*keeping existing', inst, re.S)
+          or "keeping existing persistent content" in inst)
+    check("installs self-healing watchdog binary",
+          "/usr/local/bin/engquest-watchdog.sh" in inst)
+    check("creates watchdog systemd timer",
+          "engquest-watchdog.timer" in inst and "OnUnitActiveSec=120" in inst)
+    check("enables watchdog timer", "enable --now engquest-watchdog.timer" in inst)
+
+    print("\nwatchdog script — requirements")
+    assert os.path.isfile(WATCHDOG), f"missing {WATCHDOG}"
+    wd = open(WATCHDOG, encoding="utf-8").read()
+    check("health-checks :8080", "http_code" in wd and "127.0.0.1" in wd)
+    check("restarts nginx on failure", "systemctl restart nginx" in wd)
+    check("re-syncs persistent root if empty",
+          "ensure_content" in wd and "index.html" in wd)
+    check("starts nginx if not active", "is-active --quiet nginx" in wd)
+    r = subprocess.run(["bash", "-n", WATCHDOG], capture_output=True, text=True)
+    check("bash -n engquest-watchdog.sh", r.returncode == 0, r.stderr.strip())
 
     print("\nshell syntax")
     r = subprocess.run(["bash", "-n", INSTALL], capture_output=True, text=True)
