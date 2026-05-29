@@ -1,5 +1,5 @@
 // lib/features/battle/battle_screen.dart
-// ENG Quest — C05 Battle Module: FSRS-4.5 Retrieval Loop (UI Polish v2 + P0.2)
+// ENG Quest — C05 Battle Module: FSRS-4.5 Retrieval Loop (UI Polish v2 + P0.2 + P2-7)
 //
 // Game flow:
 //   1. Build a deck of FSRSCards — loaded from Firestore (FirestoreFsrsCardRepository)
@@ -11,6 +11,12 @@
 //   6. Card state saved to Firestore immediately after grading
 //   7. Cycle through due cards; show session summary when done
 //   Progress persists across app restarts (Firestore offline cache)
+//
+// P2-7 XP System additions:
+//   - Grade-aware XP (Again=0, Hard=5, Good=10, Easy=15) via XpService
+//   - Level-up detection + celebratory dialog (レベルアップ！🎉)
+//   - XP popup shows correct per-grade amount (not constant 10)
+//   - Session summary shows XP earned this session
 //
 // UI Polish sprint additions:
 //   - 3D perspective card flip (400 ms, easeInOut)
@@ -33,6 +39,8 @@ import '../../core/fsrs/firestore_card_repository.dart';
 import '../../core/fsrs/fsrs_algorithm.dart';
 import '../../core/fsrs/fsrs_card.dart';
 import '../../core/fsrs/fsrs_card_repository.dart';
+import '../../core/gamification/xp_service.dart';
+import '../../core/gamification/xp_profile.dart';
 import '../../core/sound/sound_service.dart';
 import '../../data/models/vocab_item.dart';
 
@@ -151,6 +159,7 @@ class _BattleScreenState extends State<BattleScreen>
   final _sound = SoundService();
   late final FsrsCardRepository _repository;
   final _auth = AuthService();
+  final _xpService = XpService();
   String? _userId;
   bool _repoLoading = true; // true while we await uid + loadDeck
 
@@ -339,14 +348,31 @@ class _BattleScreenState extends State<BattleScreen>
       _streak = 0;
     }
 
-    // XP popup
-    const xpGain = 10;
+    // ── Grade-aware XP (P2-7) ─────────────────────────────────────────────
+    // XP per grade: Again=0, Hard=5, Good=10, Easy=15
+    final xpGain = kGradeXp[grade.name.toLowerCase()] ?? 0;
     _totalXp += xpGain;
     final popupId = ++_xpPopupIdCounter;
-    setState(() => _xpPopups.add(_XpPopup(xpGain, popupId)));
-    Future.delayed(const Duration(milliseconds: 900), () {
-      if (mounted) setState(() => _xpPopups.removeWhere((p) => p.id == popupId));
-    });
+
+    // Show popup only when XP > 0 (Again gives no XP — no popup)
+    if (xpGain > 0) {
+      setState(() => _xpPopups.add(_XpPopup(xpGain, popupId)));
+      Future.delayed(const Duration(milliseconds: 900), () {
+        if (mounted) setState(() => _xpPopups.removeWhere((p) => p.id == popupId));
+      });
+    }
+
+    // Persist XP to Firestore (fire-and-forget); check for level-up
+    final uid = _userId;
+    if (uid != null) {
+      _xpService.awardXp(uid, grade).then((result) {
+        if (result.didLevelUp && mounted) {
+          _showLevelUpDialog(result.after);
+        }
+      }).catchError((_) {
+        // Non-fatal: XP syncs later via Firestore offline cache
+      });
+    }
 
     final now = DateTime.now();
     final updated = _fsrs.schedule(_currentCard, grade, now);
@@ -354,7 +380,6 @@ class _BattleScreenState extends State<BattleScreen>
     _sessionResults.add(_CardResult(_currentVocab.word, grade));
 
     // Persist updated card to Firestore (fire-and-forget; offline cache handles it)
-    final uid = _userId;
     if (uid != null) {
       _repository.saveCard(uid, updated).catchError((_) {
         // Non-fatal: offline writes are cached by Firestore SDK and synced later
@@ -412,6 +437,85 @@ class _BattleScreenState extends State<BattleScreen>
     ).catchError((_) {
       // Non-fatal: offline writes queued by Firestore SDK
     });
+  }
+
+  // ── Level-up dialog (P2-7) ────────────────────────────────────────────────
+
+  /// Shows a celebratory dialog when the player reaches a new level.
+  /// Auto-dismisses after 3 seconds; user can also tap to dismiss.
+  void _showLevelUpDialog(XpProfile newProfile) {
+    if (!mounted) return;
+    showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (ctx) {
+        // Auto-close after 3 seconds
+        Future.delayed(const Duration(seconds: 3), () {
+          if (ctx.mounted) Navigator.of(ctx, rootNavigator: true).pop();
+        });
+
+        return Dialog(
+          backgroundColor: const Color(0xFF1A1A2E),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+            side: const BorderSide(color: _accentGold, width: 2),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 28),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Star burst
+                const Text('🌟', style: TextStyle(fontSize: 56)),
+                const SizedBox(height: 12),
+                Text(
+                  'レベルアップ！',
+                  style: const TextStyle(
+                    color: _accentGold,
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 2,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Lv.${newProfile.level} に到達！',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '合計 ${newProfile.totalXp} XP',
+                  style: const TextStyle(
+                    color: Colors.white60,
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                // XP progress bar for new level
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: LinearProgressIndicator(
+                    value: newProfile.levelProgress,
+                    backgroundColor: Colors.white12,
+                    valueColor:
+                        const AlwaysStoppedAnimation<Color>(_accentGold),
+                    minHeight: 10,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  '${newProfile.currentLevelXp} / ${newProfile.levelXpSpan} XP',
+                  style: const TextStyle(color: Colors.white54, fontSize: 12),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   // ── Build ──────────────────────────────────────────────────────────────────

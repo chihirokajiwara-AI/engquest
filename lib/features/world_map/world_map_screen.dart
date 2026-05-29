@@ -1,23 +1,29 @@
 // lib/features/world_map/world_map_screen.dart
-// ENG Quest — World Map (Village Square) — UI Polish v2
+// ENG Quest — World Map (Village Square) — UI Polish v2 + P2-7 XP wiring
 //
 // UI Polish sprint additions:
 //   - Gradient Card widgets for each zone (using LinearGradient)
 //   - Zone-specific icons (sword, speech bubble, mic, shield)
 //   - Animated entrance: each card slides in with 200ms stagger from bottom
-//   - Player stats bar at top: avatar + level + XP progress bar (mock data)
+//   - Player stats bar at top: avatar + level + XP progress bar (real data)
 //   - Day streak badge: 🔥 N日連続 when streak > 0
+//
+// P2-7 XP System wiring:
+//   - Loads real XpProfile from XpService (Firestore-backed)
+//   - Shows actual level, XP progress bar, totalXp
+//   - Falls back to Lv.1 / 0 XP if Firebase unavailable (offline cold start)
+//   - Listens to XpService.profileNotifier for live updates after Battle
 
 import 'package:flutter/material.dart';
+import 'package:engquest/core/firebase/auth_service.dart';
+import 'package:engquest/core/gamification/xp_profile.dart';
+import 'package:engquest/core/gamification/xp_service.dart';
 import 'package:engquest/features/battle/battle_screen.dart';
 import 'package:engquest/features/parent_dashboard/parent_dashboard_screen.dart';
 
-// ── Mock player data (will come from Riverpod/Firestore in next sprint) ──────
-const _kMockLevel      = 7;
-const _kMockXp         = 340;
-const _kMockXpToNext   = 500;
-const _kMockStreak     = 5;  // days
+// ── Mock player data (fallback when Firestore unavailable) ───────────────────
 const _kMockAvatarEmoji = '🧙';
+const _kMockStreak     = 0;  // shown when offline
 
 // ── Zone definition ──────────────────────────────────────────────────────────
 class _ZoneDef {
@@ -86,6 +92,11 @@ class _WorldMapScreenState extends State<WorldMapScreen>
   late List<AnimationController> _slideCtls;
   late List<Animation<Offset>>   _slideAnims;
 
+  // ── XP / Level (P2-7) ──────────────────────────────────────────────────────
+  final _xpService = XpService();
+  final _auth      = AuthService();
+  XpProfile? _xpProfile;  // null until loaded; UI shows skeleton
+
   @override
   void initState() {
     super.initState();
@@ -109,10 +120,36 @@ class _WorldMapScreenState extends State<WorldMapScreen>
         if (mounted) _slideCtls[i].forward();
       });
     }
+
+    // Load real XP profile from Firestore
+    _loadXpProfile();
+
+    // Listen to XpService for live updates (e.g. returning from BattleScreen)
+    _xpService.profileNotifier.addListener(_onXpProfileUpdated);
+  }
+
+  void _onXpProfileUpdated() {
+    final updated = _xpService.profileNotifier.value;
+    if (updated != null && mounted) {
+      setState(() => _xpProfile = updated);
+    }
+  }
+
+  Future<void> _loadXpProfile() async {
+    try {
+      final uid = await _auth.getOrCreateUid();
+      if (!mounted) return;
+      final profile = await _xpService.init(uid);
+      if (mounted) setState(() => _xpProfile = profile);
+    } catch (_) {
+      // Firebase unavailable — use zero profile (offline cold start)
+      if (mounted) setState(() => _xpProfile = XpProfile.zero('offline'));
+    }
   }
 
   @override
   void dispose() {
+    _xpService.profileNotifier.removeListener(_onXpProfileUpdated);
     for (final c in _slideCtls) {
       c.dispose();
     }
@@ -137,13 +174,16 @@ class _WorldMapScreenState extends State<WorldMapScreen>
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // ── Player Stats Bar ─────────────────────────────────────────────
-            _PlayerStatsBar(
-              avatarEmoji: _kMockAvatarEmoji,
-              level: _kMockLevel,
-              xp: _kMockXp,
-              xpToNext: _kMockXpToNext,
-              streak: _kMockStreak,
-            ),
+            _xpProfile == null
+                // Loading skeleton
+                ? const _XpLoadingSkeleton()
+                : _PlayerStatsBar(
+                    avatarEmoji: _kMockAvatarEmoji,
+                    level: _xpProfile!.level,
+                    xp: _xpProfile!.currentLevelXp,
+                    xpToNext: _xpProfile!.levelXpSpan,
+                    streak: _kMockStreak,
+                  ),
             const SizedBox(height: 8),
             // ── Zone title ───────────────────────────────────────────────────
             const Padding(
@@ -203,6 +243,58 @@ class _WorldMapScreenState extends State<WorldMapScreen>
             const SizedBox(height: 12),
           ],
         ),
+      ),
+    );
+  }
+}
+
+// ── XP Loading Skeleton ───────────────────────────────────────────────────────
+
+/// Shown while XpProfile is being loaded from Firestore.
+class _XpLoadingSkeleton extends StatelessWidget {
+  const _XpLoadingSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      height: 72,
+      decoration: BoxDecoration(
+        color: const Color(0xFF16213E),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFFFFD700).withAlpha(30)),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white12,
+              border: Border.all(color: Colors.white12, width: 2),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(height: 14, width: 80, color: Colors.white12),
+                const SizedBox(height: 8),
+                Container(
+                  height: 6,
+                  decoration: BoxDecoration(
+                    color: Colors.white12,
+                    borderRadius: BorderRadius.circular(3),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
