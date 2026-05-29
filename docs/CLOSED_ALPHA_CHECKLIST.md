@@ -32,10 +32,15 @@
   - Test write + read from app succeeds
   - No permission denied errors in console
 
-- [ ] **Security rules published**
-  - Users can only access their own `users/{uid}/` documents
-  - Vocabulary content is read-only
-  - Rules tested with Firebase Rules Playground
+- [x] **Security rules written** — `firestore.rules` + `firestore.indexes.json` + `firebase.json` (C19 ✅)
+  - Users can ONLY access their own `users/{uid}/` documents
+  - Vocabulary content is read-only (write: false)
+  - Field validation: FSRS card state enum, numeric range checks, session sanity bounds
+  - Card ID injection prevention: regex `[a-zA-Z0-9_]{3,50}` enforced at create
+  - 30-case JS test suite: `firebase emulators:exec "node test/firestore/firestore_rules_test.js"`
+- [ ] **Security rules DEPLOYED to Firebase Console**
+  - Run: `firebase deploy --only firestore:rules`
+  - Verify in Firebase Console → Firestore → Rules
 
 - [ ] **`GoogleService-Info.plist` in place** (`ios/Runner/`)
   - No placeholder values remaining

@@ -104,11 +104,14 @@ class EngQuestApp extends StatelessWidget {
       ),
       // Entry point: check onboarding flag and route accordingly
       home: const _AppEntryPoint(),
+      // NOTE: Named routes for Battle must carry childAge.
+      // WorldMapScreen uses Navigator.push (not named route) to pass childAge.
+      // The named '/battle' route is a fallback for direct navigation (childAge=8 default).
       routes: {
-        '/battle': (context) => const BattleScreen(),
+        '/battle': (context) => BattleScreen(childAge: OnboardingStorage.ageYears),
         '/voice': (context) => const VoiceScreen(),
         '/dialog': (context) => const DialogScenariosScreen(),
-        '/world': (context) => const WorldMapScreen(),
+        '/world': (context) => WorldMapScreen(childAge: OnboardingStorage.ageYears),
       },
     );
   }

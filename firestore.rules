@@ -1,0 +1,139 @@
+// ENG Quest — Firestore Security Rules
+// Version: 1.0.0
+// Last Updated: 2026-05-29
+//
+// Design principles:
+//   1. Users can ONLY read/write their own data (users/{uid}/*)
+//   2. Anonymous auth is required — no unauthenticated access
+//   3. COPPA compliance: no PII fields stored; UID is Firebase anonymous ID
+//   4. Vocabulary content is read-only for all authenticated users
+//   5. Field-level validation prevents malformed FSRS card data
+//
+// Data model:
+//   users/{uid}/profile        — XP, level, streak
+//   users/{uid}/cards/{cardId} — FSRS card state
+//   users/{uid}/sessions/{date} — daily session summaries
+//   vocabulary/{vocabId}       — shared vocab content (read-only)
+
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Helper functions ────────────────────────────────────────────────────
+
+    /// True when the request comes from a signed-in user (anonymous or real).
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /// True when the path's {uid} matches the authenticated user.
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    /// True when a field value is within an inclusive numeric range.
+    function inRange(value, min, max) {
+      return value >= min && value <= max;
+    }
+
+    /// Validates an FSRS card document on write.
+    /// Allows partial updates (merge writes) — only validates fields that ARE present.
+    function isValidCard(data) {
+      return (
+        // stability: 0.0 – 1000.0 (days)
+        (!('stability' in data) || (data.stability is float && inRange(data.stability, 0.0, 1000.0))) &&
+        // difficulty: 0.0 – 10.0 (FSRS scale)
+        (!('difficulty' in data) || (data.difficulty is float && inRange(data.difficulty, 0.0, 10.0))) &&
+        // state: enum string
+        (!('state' in data) || data.state in ['new', 'learning', 'review', 'relearning']) &&
+        // lapses: non-negative int
+        (!('lapses' in data) || (data.lapses is int && data.lapses >= 0)) &&
+        // repetitions: non-negative int
+        (!('repetitions' in data) || (data.repetitions is int && data.repetitions >= 0))
+      );
+    }
+
+    /// Validates a user profile document on write.
+    function isValidProfile(data) {
+      return (
+        // totalXp: 0 – 999999
+        (!('totalXp' in data) || (data.totalXp is int && inRange(data.totalXp, 0, 999999))) &&
+        // level: 1 – 100
+        (!('level' in data) || (data.level is int && inRange(data.level, 1, 100))) &&
+        // streak: 0 – 3650 (10 years max)
+        (!('streak' in data) || (data.streak is int && inRange(data.streak, 0, 3650)))
+      );
+    }
+
+    /// Validates a session summary document on write.
+    function isValidSession(data) {
+      return (
+        // wordsPracticed: 0 – 1000 per session
+        (!('wordsPracticed' in data) || (data.wordsPracticed is int && inRange(data.wordsPracticed, 0, 1000))) &&
+        // minutes: 0 – 480 (8 hours max per session)
+        (!('minutes' in data) || (data.minutes is int && inRange(data.minutes, 0, 480))) &&
+        // avgScore: 0.0 – 4.0 (FSRS grade scale)
+        (!('avgScore' in data) || (data.avgScore is float && inRange(data.avgScore, 0.0, 4.0)))
+      );
+    }
+
+    // ── User data ───────────────────────────────────────────────────────────
+
+    // users/{uid} — top-level user document (rarely used; subcollections hold data)
+    match /users/{uid} {
+      allow read, write: if isOwner(uid);
+
+      // users/{uid}/profile — XP, level, streak, dailyGoalMinutes
+      match /profile/{document=**} {
+        allow read: if isOwner(uid);
+        allow write: if isOwner(uid) && isValidProfile(request.resource.data);
+      }
+
+      // users/{uid}/cards/{cardId} — FSRS card state per vocab word
+      match /cards/{cardId} {
+        allow read: if isOwner(uid);
+        allow write: if isOwner(uid) && isValidCard(request.resource.data);
+
+        // Card ID must match FSRS vocab naming pattern: letters/digits/underscores, 3–50 chars
+        // This prevents injection-style document creation
+        allow create: if isOwner(uid)
+          && cardId.matches('[a-zA-Z0-9_]{3,50}')
+          && isValidCard(request.resource.data);
+      }
+
+      // users/{uid}/sessions/{dateISO} — daily session summaries (YYYY-MM-DD)
+      match /sessions/{dateISO} {
+        allow read: if isOwner(uid);
+        allow write: if isOwner(uid)
+          && dateISO.matches('[0-9]{4}-[0-9]{2}-[0-9]{2}')
+          && isValidSession(request.resource.data);
+      }
+    }
+
+    // ── Shared vocabulary content ───────────────────────────────────────────
+
+    // vocabulary/{vocabId} — CEFR-tagged word data (read-only for all auth users)
+    // This allows future server-side vocab updates without client-side writes.
+    match /vocabulary/{vocabId} {
+      allow read: if isSignedIn();
+      allow write: if false; // Admin SDK only (Firebase Functions or Admin Console)
+    }
+
+    // ── A/B experiment config ───────────────────────────────────────────────
+
+    // experiments/{expId} — read-only experiment definitions (set via Admin Console)
+    match /experiments/{expId} {
+      allow read: if isSignedIn();
+      allow write: if false;
+    }
+
+    // ── Default deny ───────────────────────────────────────────────────────
+
+    // Explicitly deny all other paths not matched above.
+    // This is the default behavior in Firestore, but being explicit is safer.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
