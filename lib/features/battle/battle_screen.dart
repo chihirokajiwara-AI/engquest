@@ -1,13 +1,16 @@
 // lib/features/battle/battle_screen.dart
-// ENG Quest — C05 Battle Module: FSRS-4.5 Retrieval Loop (UI Polish v2)
+// ENG Quest — C05 Battle Module: FSRS-4.5 Retrieval Loop (UI Polish v2 + P0.2)
 //
 // Game flow:
-//   1. Build a deck of FSRSCards from kVocabA1 (all new cards are due on first run)
+//   1. Build a deck of FSRSCards — loaded from Firestore (FirestoreFsrsCardRepository)
+//      Falls back to InMemory on first launch / offline
 //   2. Show the English word face-up ("cat")
 //   3. Tap to flip card → Japanese translation + example sentence
 //   4. Rate with 4 buttons: Again / Hard / Good / Easy
 //   5. FSRSAlgorithm.schedule() computes next due date
-//   6. Cycle through due cards; show session summary when done
+//   6. Card state saved to Firestore immediately after grading
+//   7. Cycle through due cards; show session summary when done
+//   Progress persists across app restarts (Firestore offline cache)
 //
 // UI Polish sprint additions:
 //   - 3D perspective card flip (400 ms, easeInOut)
@@ -23,8 +26,11 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../core/firebase/auth_service.dart';
+import '../../core/fsrs/firestore_card_repository.dart';
 import '../../core/fsrs/fsrs_algorithm.dart';
 import '../../core/fsrs/fsrs_card.dart';
+import '../../core/fsrs/fsrs_card_repository.dart';
 import '../../core/sound/sound_service.dart';
 import '../../data/models/vocab_item.dart';
 
@@ -78,9 +84,12 @@ class _XpPopup {
 
 // ── BattleScreen ─────────────────────────────────────────────────────────────
 
-/// FSRS-based vocabulary flashcard battle screen — UI Polish v2.
+/// FSRS-based vocabulary flashcard battle screen — UI Polish v2 + Firestore persistence.
+///
+/// [repository] — injectable for testing; defaults to FirestoreFsrsCardRepository.
 class BattleScreen extends StatefulWidget {
-  const BattleScreen({super.key});
+  final FsrsCardRepository? repository;
+  const BattleScreen({super.key, this.repository});
 
   @override
   State<BattleScreen> createState() => _BattleScreenState();
@@ -88,14 +97,18 @@ class BattleScreen extends StatefulWidget {
 
 class _BattleScreenState extends State<BattleScreen>
     with TickerProviderStateMixin {
-  // ── FSRS engine ────────────────────────────────────────────────────────────
+  // ── FSRS engine + persistence ──────────────────────────────────────────────
   final FSRSAlgorithm _fsrs = FSRSAlgorithm();
   final _sound = SoundService();
+  late final FsrsCardRepository _repository;
+  final _auth = AuthService();
+  String? _userId;
+  bool _repoLoading = true; // true while we await uid + loadDeck
 
   // ── Deck state ─────────────────────────────────────────────────────────────
-  late List<VocabItem>  _vocab;
-  late List<FSRSCard>   _deck;
-  late List<int>        _queue;
+  List<VocabItem>  _vocab = const [];
+  List<FSRSCard>   _deck  = const [];
+  List<int>        _queue = const [];
   int _queueIdx = 0;
 
   // ── Session stats ──────────────────────────────────────────────────────────
@@ -140,6 +153,8 @@ class _BattleScreenState extends State<BattleScreen>
   @override
   void initState() {
     super.initState();
+    // Resolve repository: injected (tests) or production Firestore
+    _repository = widget.repository ?? FirestoreFsrsCardRepository();
     _flipCtrl = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 400),
@@ -152,7 +167,7 @@ class _BattleScreenState extends State<BattleScreen>
       duration: const Duration(milliseconds: 1800),
     );
     _starsAnim = CurvedAnimation(parent: _starsCtrl, curve: Curves.easeOut);
-    _initDeck();
+    _initDeckAsync();
   }
 
   @override
@@ -162,26 +177,73 @@ class _BattleScreenState extends State<BattleScreen>
     super.dispose();
   }
 
-  // ── Deck initialisation ────────────────────────────────────────────────────
+  // ── Deck initialisation (async — loads from Firestore) ────────────────────
 
-  void _initDeck() {
+  Future<void> _initDeckAsync() async {
+    // 1. Get or create anonymous uid
+    String uid;
+    try {
+      uid = await _auth.getOrCreateUid();
+    } catch (_) {
+      // Firebase Auth unavailable (offline cold start) — use local fallback uid
+      uid = 'offline_user';
+    }
+    if (!mounted) return;
+    _userId = uid;
+
+    // 2. Load vocab list
     _vocab = List<VocabItem>.from(_kSeedVocab);
-    final now = DateTime.now();
-    _deck = _vocab.map((v) => FSRSCard(vocabId: v.id)).toList();
-    _queue = _fsrs
-        .getDueCards(_deck, now)
-        .map((c) => _deck.indexWhere((d) => d.vocabId == c.vocabId))
-        .where((i) => i >= 0)
+    final vocabIds = _vocab.map((v) => v.id).toList();
+
+    // 3. Load persisted cards from Firestore (or InMemory fallback)
+    List<FSRSCard> persistedCards;
+    try {
+      persistedCards = await _repository.loadDeck(uid);
+    } catch (_) {
+      persistedCards = [];
+    }
+
+    // 4. Merge: use persisted state for known words, new card for unknowns
+    final cardMap = {for (final c in persistedCards) c.vocabId: c};
+    final deck = vocabIds
+        .map((id) => cardMap[id] ?? FSRSCard(vocabId: id))
         .toList();
-    _queue.shuffle(math.Random());
-    _queueIdx = 0;
-    _sessionResults.clear();
-    _sessionDone = false;
-    _isFlipped = false;
-    _streak = 0;
-    _totalXp = 0;
-    _xpPopups.clear();
-    _starsCtrl.reset();
+
+    // 5. Seed missing new cards to Firestore in batch (first launch)
+    final newCards = deck.where((c) => !cardMap.containsKey(c.vocabId)).toList();
+    if (newCards.isNotEmpty) {
+      try {
+        await _repository.saveCards(uid, newCards);
+      } catch (_) {
+        // Non-fatal: will retry on next save
+      }
+    }
+
+    // 6. Compute due queue
+    if (!mounted) return;
+    final now = DateTime.now();
+    final dueCards = await _repository.getDueCards(uid, now);
+    final dueIds = dueCards.map((c) => c.vocabId).toSet();
+
+    final queue = <int>[];
+    for (var i = 0; i < deck.length; i++) {
+      if (dueIds.contains(deck[i].vocabId)) queue.add(i);
+    }
+    queue.shuffle(math.Random());
+
+    setState(() {
+      _deck = deck;
+      _queue = queue.isNotEmpty ? queue : List.generate(deck.length, (i) => i)..shuffle(math.Random());
+      _queueIdx = 0;
+      _sessionResults.clear();
+      _sessionDone = false;
+      _isFlipped = false;
+      _streak = 0;
+      _totalXp = 0;
+      _xpPopups.clear();
+      _starsCtrl.reset();
+      _repoLoading = false;
+    });
   }
 
   // ── Current card helpers ───────────────────────────────────────────────────
@@ -242,6 +304,14 @@ class _BattleScreenState extends State<BattleScreen>
     _deck[_currentDeckIdx] = updated;
     _sessionResults.add(_CardResult(_currentVocab.word, grade));
 
+    // Persist updated card to Firestore (fire-and-forget; offline cache handles it)
+    final uid = _userId;
+    if (uid != null) {
+      _repository.saveCard(uid, updated).catchError((_) {
+        // Non-fatal: offline writes are cached by Firestore SDK and synced later
+      });
+    }
+
     if (updated.state == CardState.learning ||
         updated.state == CardState.relearning) {
       final insertAt = math.min(_queueIdx + 3, _queue.length);
@@ -266,7 +336,34 @@ class _BattleScreenState extends State<BattleScreen>
     return Scaffold(
       backgroundColor: _bgColor,
       appBar: _buildAppBar(),
-      body: _sessionDone ? _buildSummary() : _buildCardSession(),
+      body: _repoLoading
+          ? _buildLoadingSpinner()
+          : _sessionDone
+              ? _buildSummary()
+              : _buildCardSession(),
+    );
+  }
+
+  Widget _buildLoadingSpinner() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const CircularProgressIndicator(
+            color: Color(0xFFFFD700),
+            strokeWidth: 3,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'カードを読み込んでいます…',
+            style: const TextStyle(
+              color: Colors.white70,
+              fontSize: 14,
+              letterSpacing: 0.5,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -296,7 +393,7 @@ class _BattleScreenState extends State<BattleScreen>
         ],
       ),
       actions: [
-        if (!_sessionDone)
+        if (!_repoLoading && !_sessionDone)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             child: Text(
