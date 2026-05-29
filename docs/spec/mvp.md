@@ -66,6 +66,8 @@ Native-equivalent English cognition in Japanese children, age 4–18.
 | C10 | Onboarding Flow | `done` | 2026-05-29 | lib/features/onboarding/onboarding_flow.dart — 4ステップ: 年齢スライダー + CEFRミニテスト3問 + アバター選択5体 + 目標設定 + OnboardingResult model |
 | C11 | App Entry Wiring | `done` | 2026-05-29 | lib/app.dart — OnboardingStorage + _AppEntryPoint: onboarding_complete flag check → OnboardingFlow or WorldMapScreen |
 | C12 | FSRS Card Repository | `done` | 2026-05-29 | lib/core/fsrs/fsrs_card_repository.dart — FsrsCardRepository interface + InMemoryFsrsCardRepository (JSON round-trip stub, sqflite schema documented) |
+| C13 | SharedPreferences Real Integration | `done` | 2026-05-29 | lib/core/storage/preferences_service.dart — PreferencesService singleton wrapping SharedPreferences with in-memory graceful fallback; OnboardingStorage migrated from _MemStore; unit tests in test/core/storage/preferences_service_test.dart |
+| C14 | FCM Push Notifications (Daily Review Reminders) | `done` | 2026-05-29 | lib/core/notifications/notification_service.dart — firebase_messaging ^14.7.6 + flutter_local_notifications ^16.3.0 + timezone; scheduleDailyReminder(TimeOfDay) default 19:00 JST; '今日の復習 5枚が待っています！⚔️'; requestPermission() iOS/Android; cancelAll() for settings; FCM token retrieval; graceful no-op with placeholder Firebase keys |
 
 ### Spike Backlog
 

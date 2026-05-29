@@ -4,32 +4,14 @@ import 'package:engquest/features/battle/battle_screen.dart';
 import 'package:engquest/features/voice/voice_screen.dart';
 import 'package:engquest/features/dialog/dialog_screen.dart';
 import 'package:engquest/features/onboarding/onboarding_flow.dart';
+import 'package:engquest/core/storage/preferences_service.dart';
 
 // ---------------------------------------------------------------------------
 // Onboarding state management
 // ---------------------------------------------------------------------------
 
-/// Key names written to SharedPreferences (real) or an in-memory store (test).
-///
-/// NOTE: In production, this class uses SharedPreferences via a platform channel.
-/// For now we use a static in-memory store so the app compiles and runs
-/// without requiring the shared_preferences native plugin wired up.
-/// Replace [_MemStore] with a SharedPreferences adapter in the next sprint.
-
-class _MemStore {
-  static final Map<String, dynamic> _data = {};
-  static bool getBool(String k) => (_data[k] as bool?) ?? false;
-  static String? getString(String k) => _data[k] as String?;
-  static int getInt(String k) => (_data[k] as int?) ?? 0;
-  static void setBool(String k, bool v) => _data[k] = v;
-  static void setString(String k, String v) => _data[k] = v;
-  static void setInt(String k, int v) => _data[k] = v;
-}
-
-/// Persists and loads [OnboardingResult] to/from device storage.
-///
-/// API mirrors what a SharedPreferences implementation will provide so
-/// the calling code can swap the implementation without changes.
+/// Persists and loads [OnboardingResult] to/from device storage via
+/// [PreferencesService] (backed by SharedPreferences with in-memory fallback).
 class OnboardingStorage {
   static const _kComplete = 'onboarding_complete';
   static const _kAge = 'onboarding_age';
@@ -37,26 +19,58 @@ class OnboardingStorage {
   static const _kAvatar = 'onboarding_avatar';
   static const _kGoal = 'onboarding_goal_minutes';
 
-  static bool get isComplete => _MemStore.getBool(_kComplete);
+  // Cached instance — populated by [init()] or [_lazyPrefs()].
+  static PreferencesService? _prefs;
 
-  static void save(OnboardingResult result) {
-    _MemStore.setBool(_kComplete, true);
-    _MemStore.setInt(_kAge, result.ageYears);
-    _MemStore.setString(_kCefr, result.cefrPlacement.name);
-    _MemStore.setString(_kAvatar, result.avatarId);
-    _MemStore.setInt(_kGoal, result.dailyGoalMinutes);
+  // ── Lazy initialisation ──────────────────────────────────────────────────
+
+  /// Preloads the [PreferencesService] singleton.  Call this in [main] (or
+  /// early in [initState]) to avoid the first async hop at render time.
+  static Future<void> init() async {
+    _prefs = await PreferencesService.getInstance();
   }
 
-  static OnboardingResult? load() {
-    if (!isComplete) return null;
+  /// Returns the already-cached prefs, or blocks until they are ready.
+  static Future<PreferencesService> _lazyPrefs() async {
+    _prefs ??= await PreferencesService.getInstance();
+    return _prefs!;
+  }
+
+  // ── Synchronous read (uses cached instance) ──────────────────────────────
+
+  /// Returns true if onboarding has been completed.
+  ///
+  /// This is synchronous so [_AppEntryPointState.initState] can read it
+  /// without async scaffolding.  If [init()] has not been called yet the
+  /// value comes from the in-memory fallback (false) — the async [loadAsync]
+  /// path will re-check once prefs are loaded.
+  static bool get isComplete {
+    if (_prefs == null) return false;
+    return _prefs!.getBool(_kComplete);
+  }
+
+  // ── Async save / load ────────────────────────────────────────────────────
+
+  static Future<void> save(OnboardingResult result) async {
+    final p = await _lazyPrefs();
+    await p.setBool(_kComplete, true);
+    await p.setInt(_kAge, result.ageYears);
+    await p.setString(_kCefr, result.cefrPlacement.name);
+    await p.setString(_kAvatar, result.avatarId);
+    await p.setInt(_kGoal, result.dailyGoalMinutes);
+  }
+
+  static Future<OnboardingResult?> loadAsync() async {
+    final p = await _lazyPrefs();
+    if (!p.getBool(_kComplete)) return null;
     return OnboardingResult(
-      ageYears: _MemStore.getInt(_kAge),
+      ageYears: p.getInt(_kAge),
       cefrPlacement: CefrPlacement.values.firstWhere(
-        (e) => e.name == _MemStore.getString(_kCefr),
+        (e) => e.name == p.getString(_kCefr),
         orElse: () => CefrPlacement.a1,
       ),
-      avatarId: _MemStore.getString(_kAvatar) ?? 'knight',
-      dailyGoalMinutes: _MemStore.getInt(_kGoal),
+      avatarId: p.getString(_kAvatar) ?? 'knight',
+      dailyGoalMinutes: p.getInt(_kGoal),
     );
   }
 }
@@ -111,20 +125,30 @@ class _AppEntryPoint extends StatefulWidget {
 }
 
 class _AppEntryPointState extends State<_AppEntryPoint> {
-  // Track whether we've completed onboarding in this session.
-  // Initialised from persisted storage.
-  late bool _onboardingComplete;
+  bool _onboardingComplete = false;
+  bool _loading = true;
 
   @override
   void initState() {
     super.initState();
-    // Read persisted flag (synchronous in-memory store; replace with
-    // `await SharedPreferences.getInstance()` in the next sprint).
-    _onboardingComplete = OnboardingStorage.isComplete;
+    _loadPrefs();
+  }
+
+  Future<void> _loadPrefs() async {
+    // Ensure PreferencesService is initialised (real SharedPreferences).
+    await OnboardingStorage.init();
+    final complete = OnboardingStorage.isComplete;
+    if (mounted) {
+      setState(() {
+        _onboardingComplete = complete;
+        _loading = false;
+      });
+    }
   }
 
   void _handleOnboardingComplete(OnboardingResult result) {
-    // Persist the result
+    // Persist the result asynchronously (fire-and-forget is fine here;
+    // in-memory cache is updated synchronously so the UI stays responsive).
     OnboardingStorage.save(result);
     // Transition to world map
     setState(() {
@@ -134,6 +158,13 @@ class _AppEntryPointState extends State<_AppEntryPoint> {
 
   @override
   Widget build(BuildContext context) {
+    if (_loading) {
+      // Minimal splash while SharedPreferences warms up (<100 ms typically).
+      return const Scaffold(
+        backgroundColor: Color(0xFF1B2838),
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
     if (_onboardingComplete) {
       return const WorldMapScreen();
     }
