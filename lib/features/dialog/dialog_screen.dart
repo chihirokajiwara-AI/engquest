@@ -214,7 +214,7 @@ class _DialogScreenState extends State<DialogScreen> {
       appBar: _buildAppBar(),
       body: Column(
         children: [
-          _OfflineBanner(isOffline: const ClaudeClient(apiKey: kClaudeApiKey).isOfflineMode),
+          _OfflineBanner(isOffline: ClaudeClient(apiKey: kClaudeApiKey).isOfflineMode),
           Expanded(child: _buildMessageList()),
           if (_isLoading) const _TypingIndicator(),
           _buildQuickReplies(),

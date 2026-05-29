@@ -957,7 +957,7 @@ class _BattleScreenState extends State<BattleScreen>
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    onPressed: () => setState(_initDeck),
+                    onPressed: () => setState(() { _initDeckAsync(); }),
                   ),
                 ),
                 const SizedBox(height: 12),

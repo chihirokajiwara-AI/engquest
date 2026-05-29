@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0F0E17">
+<title>ENG Quest ⭐ 英語冒険RPG</title>
+<style>
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { height: 100%; }
+body {
+  min-height: 100%;
+  background: #0F0E17;
+  color: #FFFFFF;
+  font-family: system-ui, -apple-system, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ===== SCREEN SYSTEM ===== */
+.screen { display: none; min-height: 100vh; padding: 20px 16px 40px; }
+.screen.active { display: flex; flex-direction: column; align-items: center; }
+
+/* ===== WELCOME SCREEN ===== */
+#screen-welcome {
+  justify-content: center;
+  background: radial-gradient(ellipse at 50% 0%, #1A1A3E 0%, #0F0E17 60%);
+}
+
+.welcome-logo {
+  text-align: center;
+  margin-bottom: 8px;
+}
+.welcome-title {
+  font-size: 52px;
+  font-weight: 900;
+  color: #FFD700;
+  text-shadow: 0 0 30px rgba(255,215,0,0.5), 0 2px 8px rgba(0,0,0,0.6);
+  letter-spacing: -1px;
+  line-height: 1;
+}
+.welcome-title .star { display: inline-block; animation: star-pulse 2s ease-in-out infinite; }
+.welcome-title .star:nth-child(2) { animation-delay: 0.3s; }
+
+@keyframes star-pulse {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.2) rotate(10deg); }
+}
+
+.welcome-subtitle {
+  font-size: 13px;
+  letter-spacing: 6px;
+  color: #FFD700;
+  opacity: 0.7;
+  text-transform: uppercase;
+  margin-top: 6px;
+  font-weight: 600;
+}
+.welcome-tagline {
+  font-size: 18px;
+  color: #FFFFFF;
+  margin: 16px 0 32px;
+  font-weight: 400;
+  opacity: 0.9;
+}
+
+/* ===== BUTTONS ===== */
+.btn-primary {
+  width: 100%;
+  max-width: 340px;
+  height: 56px;
+  background: linear-gradient(135deg, #FFD700, #FFA000);
+  color: #0F0E17;
+  font-size: 18px;
+  font-weight: 800;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 4px 20px rgba(255,215,0,0.4), 0 2px 8px rgba(0,0,0,0.3);
+  transition: transform 0.15s, box-shadow 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn-primary:active {
+  transform: scale(0.96);
+  box-shadow: 0 2px 10px rgba(255,215,0,0.3);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(255,215,0,0.5);
+}
+
+.btn-secondary {
+  height: 48px;
+  padding: 0 24px;
+  background: transparent;
+  color: #FFD700;
+  font-size: 15px;
+  font-weight: 700;
+  border: 2px solid #FFD700;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.15s, background 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn-secondary:active { transform: scale(0.96); background: rgba(255,215,0,0.1); }
+
+.welcome-info {
+  font-size: 12px;
+  color: #B0BEC5;
+  margin-top: 14px;
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* ===== STATS BAR (welcome bottom) ===== */
+.stats-bar {
+  width: 100%;
+  max-width: 380px;
+  margin-top: 36px;
+  background: #1A1A2E;
+  border: 1px solid rgba(255,215,0,0.2);
+  border-radius: 16px;
+  padding: 16px;
+  display: none;
+}
+.stats-bar.visible { display: block; }
+.stats-bar-title {
+  font-size: 11px;
+  color: #B0BEC5;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.stat-item {
+  background: rgba(255,255,255,0.04);
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+}
+.stat-value {
+  font-size: 20px;
+  font-weight: 800;
+  color: #FFD700;
+  line-height: 1;
+}
+.stat-label {
+  font-size: 11px;
+  color: #B0BEC5;
+  margin-top: 4px;
+}
+.progress-readiness {
+  margin-top: 12px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 10px;
+  padding: 12px;
+}
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #B0BEC5;
+  margin-bottom: 8px;
+}
+.progress-label span:last-child { color: #FFD700; font-weight: 700; }
+.progress-track {
+  height: 6px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #FFD700, #FFA000);
+  border-radius: 3px;
+  transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* ===== BATTLE SCREEN ===== */
+#screen-battle {
+  padding: 12px 16px 32px;
+  background: radial-gradient(ellipse at 50% -10%, #1A1A3E 0%, #0F0E17 50%);
+}
+
+/* Top bar */
+.battle-topbar {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 10px 14px;
+  background: #1A1A2E;
+  border-radius: 14px;
+  border: 1px solid rgba(255,215,0,0.15);
+}
+.xp-display {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 15px;
+  font-weight: 800;
+  color: #FFD700;
+  white-space: nowrap;
+  min-width: 70px;
+}
+.progress-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.progress-bar-track {
+  height: 8px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #FFD700, #FFA000);
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+.progress-text {
+  font-size: 11px;
+  color: #B0BEC5;
+  text-align: center;
+  font-weight: 600;
+}
+.card-count {
+  font-size: 13px;
+  font-weight: 700;
+  color: #B0BEC5;
+  white-space: nowrap;
+}
+
+/* ===== 3D CARD ===== */
+.card-container {
+  perspective: 1000px;
+  width: 100%;
+  max-width: 420px;
+  margin-bottom: 20px;
+  position: relative;
+}
+.card {
+  width: 100%;
+  aspect-ratio: 3/2;
+  min-height: 220px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.45s cubic-bezier(.4,2,.55,.44);
+  cursor: pointer;
+}
+.card.flipped { transform: rotateY(180deg); }
+
+/* Flash animations */
+.card.flash-again { animation: flash-red 0.5s ease-out; }
+.card.flash-hard  { animation: flash-orange 0.5s ease-out; }
+.card.flash-good  { animation: flash-green 0.5s ease-out; }
+.card.flash-easy  { animation: flash-blue 0.5s ease-out; }
+
+@keyframes flash-red    { 0%,100%{box-shadow:none} 30%{box-shadow:0 0 50px 15px rgba(198,40,40,0.8)} }
+@keyframes flash-orange { 0%,100%{box-shadow:none} 30%{box-shadow:0 0 50px 15px rgba(230,81,0,0.8)} }
+@keyframes flash-green  { 0%,100%{box-shadow:none} 30%{box-shadow:0 0 50px 15px rgba(46,125,50,0.8)} }
+@keyframes flash-blue   { 0%,100%{box-shadow:none} 30%{box-shadow:0 0 50px 15px rgba(21,101,192,0.8)} }
+
+.card-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow: hidden;
+}
+.card-front {
+  background: linear-gradient(145deg, #1E1E3A, #1A1A2E);
+  border: 2px solid #FFD700;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,215,0,0.1) inset;
+}
+.card-back {
+  background: linear-gradient(145deg, #1A2040, #16213E);
+  border: 2px solid rgba(255,215,0,0.5);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  transform: rotateY(180deg);
+}
+
+/* Card front content */
+.card-tap-hint {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.3);
+  letter-spacing: 1px;
+  font-weight: 500;
+}
+.card-word {
+  font-size: clamp(36px, 10vw, 56px);
+  font-weight: 900;
+  color: #FFFFFF;
+  letter-spacing: -1px;
+  text-align: center;
+  line-height: 1;
+  margin-bottom: 14px;
+  text-shadow: 0 2px 12px rgba(255,215,0,0.3);
+}
+.category-badge {
+  background: rgba(255,215,0,0.15);
+  border: 1px solid rgba(255,215,0,0.4);
+  color: #FFD700;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 20px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.speak-btn {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(255,215,0,0.1);
+  border: 2px solid rgba(255,215,0,0.4);
+  color: #FFD700;
+  font-size: 22px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s, background 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.speak-btn:active {
+  transform: scale(0.9);
+  background: rgba(255,215,0,0.25);
+}
+.speak-btn.playing {
+  animation: speaker-pulse 0.6s ease-in-out infinite alternate;
+}
+@keyframes speaker-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(255,215,0,0.4); }
+  100% { box-shadow: 0 0 0 12px rgba(255,215,0,0); }
+}
+
+/* Card back content */
+.card-back-inner {
+  width: 100%;
+  text-align: left;
+}
+.back-row {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.back-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #B0BEC5;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  min-width: 36px;
+}
+.back-reading {
+  font-size: 18px;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+.back-translation {
+  font-size: clamp(22px, 6vw, 30px);
+  font-weight: 900;
+  color: #FFD700;
+  text-shadow: 0 0 20px rgba(255,215,0,0.4);
+}
+.back-example {
+  font-size: 14px;
+  color: #B0BEC5;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+/* ===== GRADE BUTTONS ===== */
+.grade-section {
+  width: 100%;
+  max-width: 420px;
+}
+.grade-hint {
+  text-align: center;
+  font-size: 12px;
+  color: #B0BEC5;
+  margin-bottom: 10px;
+  opacity: 0.7;
+}
+.grade-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(12px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.grade-grid.visible {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0);
+}
+.grade-btn {
+  height: 54px;
+  border: none;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.2;
+  gap: 2px;
+  transition: transform 0.15s, filter 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.grade-btn:active {
+  transform: scale(0.94);
+  filter: brightness(1.1);
+}
+.grade-btn .interval {
+  font-size: 10px;
+  font-weight: 500;
+  opacity: 0.8;
+}
+.btn-again { background: #C62828; color: #fff; box-shadow: 0 4px 16px rgba(198,40,40,0.4); }
+.btn-hard  { background: #E65100; color: #fff; box-shadow: 0 4px 16px rgba(230,81,0,0.4); }
+.btn-good  { background: #2E7D32; color: #fff; box-shadow: 0 4px 16px rgba(46,125,50,0.4); }
+.btn-easy  { background: #1565C0; color: #fff; box-shadow: 0 4px 16px rgba(21,101,192,0.4); }
+
+/* ===== XP POPUP ===== */
+.xp-popup {
+  position: fixed;
+  font-size: 24px;
+  font-weight: 900;
+  color: #FFD700;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  pointer-events: none;
+  z-index: 1000;
+  animation: xp-float 1.2s ease-out forwards;
+}
+@keyframes xp-float {
+  0%   { transform: translateY(0) scale(0.8); opacity: 0; }
+  20%  { transform: translateY(-20px) scale(1.1); opacity: 1; }
+  80%  { transform: translateY(-80px) scale(1); opacity: 1; }
+  100% { transform: translateY(-120px) scale(0.9); opacity: 0; }
+}
+
+/* ===== COMPLETE SCREEN ===== */
+#screen-complete {
+  justify-content: center;
+  background: radial-gradient(ellipse at 50% 0%, #1A2A1A 0%, #0F0E17 60%);
+  overflow: hidden;
+  position: relative;
+}
+
+.complete-title {
+  font-size: 38px;
+  font-weight: 900;
+  text-align: center;
+  color: #FFD700;
+  margin-bottom: 8px;
+  text-shadow: 0 0 30px rgba(255,215,0,0.5);
+  animation: complete-bounce 0.6s cubic-bezier(0.4,2,.55,.44) 0.2s both;
+}
+@keyframes complete-bounce {
+  0% { transform: scale(0) rotate(-5deg); opacity: 0; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+.complete-card {
+  background: #1A1A2E;
+  border: 1px solid rgba(255,215,0,0.3);
+  border-radius: 20px;
+  padding: 24px 28px;
+  width: 100%;
+  max-width: 360px;
+  margin: 20px 0;
+  animation: slide-up 0.5s ease 0.4s both;
+}
+@keyframes slide-up {
+  0% { transform: translateY(30px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+.result-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.result-row:last-child { border-bottom: none; }
+.result-label {
+  font-size: 15px;
+  color: #B0BEC5;
+  font-weight: 500;
+}
+.result-value {
+  font-size: 22px;
+  font-weight: 900;
+  color: #FFD700;
+}
+
+.complete-btns {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  max-width: 360px;
+  animation: slide-up 0.5s ease 0.6s both;
+}
+.complete-btns .btn-secondary { flex: 1; }
+.complete-btns .btn-primary   { flex: 2; }
+
+/* ===== CONFETTI ===== */
+.confetti-piece {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  top: -20px;
+  border-radius: 2px;
+  animation: confetti-fall linear forwards;
+  z-index: 500;
+  pointer-events: none;
+}
+@keyframes confetti-fall {
+  0%   { transform: translateY(-100px) rotate(0deg) scale(1); opacity: 1; }
+  80%  { opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg) scale(0.5); opacity: 0; }
+}
+
+/* ===== DECORATIVE STARS ===== */
+.deco-stars {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.deco-star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: #fff;
+  border-radius: 50%;
+  animation: twinkle var(--dur) ease-in-out infinite;
+  animation-delay: var(--delay);
+  opacity: 0;
+}
+@keyframes twinkle {
+  0%,100% { opacity: 0; transform: scale(1); }
+  50%     { opacity: var(--bright); transform: scale(1.5); }
+}
+
+/* ===== UTILITY ===== */
+.spacer { flex: 1; }
+
+/* ===== RESPONSIVE ===== */
+@media (min-width: 480px) {
+  .card { min-height: 260px; }
+  .card-word { font-size: 64px; }
+}
+@media (max-height: 680px) {
+  #screen-welcome { justify-content: flex-start; padding-top: 24px; }
+  .welcome-title { font-size: 40px; }
+  .welcome-tagline { margin: 12px 0 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Decorative starfield -->
+<div class="deco-stars" id="stars-bg"></div>
+
+<!-- ===== SCREEN 1: WELCOME ===== -->
+<div class="screen active" id="screen-welcome">
+
+  <div class="welcome-logo">
+    <div class="welcome-title">
+      <span class="star">⭐</span> ENG Quest <span class="star">⭐</span>
+    </div>
+    <div class="welcome-subtitle">E N G &nbsp; Q U E S T</div>
+  </div>
+
+  <p class="welcome-tagline">「英語を冒険しよう！」</p>
+
+  <button class="btn-primary" id="btn-start" onclick="startSession()">
+    <span>👑</span> 冒険をはじめる
+  </button>
+
+  <p class="welcome-info">英検5級 ・ 300単語 ・ FSRSアルゴリズム</p>
+
+  <!-- Stats bar (shown after first session) -->
+  <div class="stats-bar" id="stats-bar">
+    <div class="stats-bar-title">⚔️ &nbsp;ぼうけんきろく</div>
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-value" id="stat-streak">0</div>
+        <div class="stat-label">🔥 日連続</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="stat-xp">0</div>
+        <div class="stat-label">⭐ XP</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="stat-mastered">0</div>
+        <div class="stat-label">📚 個完成</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="stat-new">0</div>
+        <div class="stat-label">📖 復習待ち</div>
+      </div>
+    </div>
+    <div class="progress-readiness">
+      <div class="progress-label">
+        <span>英検5級準備度</span>
+        <span id="stat-readiness">0%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="readiness-bar" style="width:0%"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== SCREEN 2: BATTLE ===== -->
+<div class="screen" id="screen-battle">
+
+  <!-- Top bar -->
+  <div class="battle-topbar">
+    <div class="xp-display">⭐ <span id="battle-xp">0</span></div>
+    <div class="progress-wrap">
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" id="battle-progress-fill" style="width:0%"></div>
+      </div>
+      <div class="progress-text" id="battle-progress-text">0 / 10</div>
+    </div>
+    <div class="card-count" id="battle-card-count">10問</div>
+  </div>
+
+  <!-- 3D Card -->
+  <div class="card-container" id="card-container">
+    <div class="card" id="flashcard" onclick="flipCard()">
+
+      <!-- Front face -->
+      <div class="card-face card-front">
+        <div class="card-tap-hint">タップしてめくる</div>
+        <div class="card-word" id="card-word">cat</div>
+        <div class="category-badge" id="card-category">Animals</div>
+        <button class="speak-btn" id="speak-btn" onclick="speakWord(event)" aria-label="発音を聞く">
+          🔊
+        </button>
+      </div>
+
+      <!-- Back face -->
+      <div class="card-face card-back">
+        <div class="card-back-inner">
+          <div class="back-row">
+            <span class="back-label">読み</span>
+            <span class="back-reading" id="card-reading">キャット</span>
+          </div>
+          <div class="back-row">
+            <span class="back-label">意味</span>
+            <span class="back-translation" id="card-translation">ねこ</span>
+          </div>
+          <div class="back-row">
+            <span class="back-label">例文</span>
+            <span class="back-example" id="card-example">I have a cat.</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Grade buttons -->
+  <div class="grade-section">
+    <div class="grade-hint" id="grade-hint">カードをめくってから評価してね</div>
+    <div class="grade-grid" id="grade-grid">
+      <button class="grade-btn btn-again" onclick="grade('again')">
+        もう一度<span class="interval">1分後</span>
+      </button>
+      <button class="grade-btn btn-hard" onclick="grade('hard')">
+        むずかしい<span class="interval">1日後</span>
+      </button>
+      <button class="grade-btn btn-good" onclick="grade('good')">
+        おぼえた<span class="interval">3日後</span>
+      </button>
+      <button class="grade-btn btn-easy" onclick="grade('easy')">
+        かんたん<span class="interval">7日後</span>
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== SCREEN 3: COMPLETE ===== -->
+<div class="screen" id="screen-complete">
+
+  <div class="complete-title" id="complete-title">⚔️ バトル完了！</div>
+
+  <div class="complete-card">
+    <div class="result-row">
+      <span class="result-label">正解率</span>
+      <span class="result-value" id="result-accuracy">0%</span>
+    </div>
+    <div class="result-row">
+      <span class="result-label">覚えた単語</span>
+      <span class="result-value" id="result-mastered">0個</span>
+    </div>
+    <div class="result-row">
+      <span class="result-label">獲得 XP</span>
+      <span class="result-value" id="result-xp">0 XP</span>
+    </div>
+  </div>
+
+  <div class="complete-btns">
+    <button class="btn-secondary" onclick="showScreen('welcome'); updateStats()">ホームへ</button>
+    <button class="btn-primary" onclick="startSession()">
+      <span>⚔️</span> もう一度
+    </button>
+  </div>
+
+</div>
+
+<script>
+'use strict';
+
+// ===== VOCAB DATA (50 words embedded) =====
+const VOCAB = [
+  {"id":"eiken5_001","word":"cat","reading":"キャット","jpTranslation":"ねこ","category":"Animals","exampleSentences":["I have a cat."]},
+  {"id":"eiken5_002","word":"dog","reading":"ドッグ","jpTranslation":"いぬ","category":"Animals","exampleSentences":["My dog is big."]},
+  {"id":"eiken5_003","word":"fish","reading":"フィッシュ","jpTranslation":"さかな","category":"Animals","exampleSentences":["I like fish."]},
+  {"id":"eiken5_004","word":"bird","reading":"バード","jpTranslation":"とり","category":"Animals","exampleSentences":["The bird is small."]},
+  {"id":"eiken5_005","word":"rabbit","reading":"ラビット","jpTranslation":"うさぎ","category":"Animals","exampleSentences":["A rabbit is white."]},
+  {"id":"eiken5_006","word":"horse","reading":"ホース","jpTranslation":"うま","category":"Animals","exampleSentences":["The horse runs fast."]},
+  {"id":"eiken5_007","word":"cow","reading":"カウ","jpTranslation":"うし","category":"Animals","exampleSentences":["A cow is big."]},
+  {"id":"eiken5_008","word":"pig","reading":"ピッグ","jpTranslation":"ぶた","category":"Animals","exampleSentences":["The pig is pink."]},
+  {"id":"eiken5_009","word":"sheep","reading":"シープ","jpTranslation":"ひつじ","category":"Animals","exampleSentences":["I see a sheep."]},
+  {"id":"eiken5_010","word":"duck","reading":"ダック","jpTranslation":"あひる","category":"Animals","exampleSentences":["The duck is yellow."]},
+  {"id":"eiken5_011","word":"lion","reading":"ライオン","jpTranslation":"ライオン","category":"Animals","exampleSentences":["A lion is strong."]},
+  {"id":"eiken5_012","word":"tiger","reading":"タイガー","jpTranslation":"トラ","category":"Animals","exampleSentences":["The tiger is fast."]},
+  {"id":"eiken5_013","word":"elephant","reading":"エレファント","jpTranslation":"ぞう","category":"Animals","exampleSentences":["An elephant is large."]},
+  {"id":"eiken5_014","word":"monkey","reading":"マンキー","jpTranslation":"さる","category":"Animals","exampleSentences":["The monkey is funny."]},
+  {"id":"eiken5_015","word":"bear","reading":"ベアー","jpTranslation":"くま","category":"Animals","exampleSentences":["The bear is brown."]},
+  {"id":"eiken5_016","word":"fox","reading":"フォックス","jpTranslation":"きつね","category":"Animals","exampleSentences":["A fox is clever."]},
+  {"id":"eiken5_017","word":"wolf","reading":"ウルフ","jpTranslation":"おおかみ","category":"Animals","exampleSentences":["The wolf runs."]},
+  {"id":"eiken5_018","word":"frog","reading":"フロッグ","jpTranslation":"かえる","category":"Animals","exampleSentences":["A frog is green."]},
+  {"id":"eiken5_019","word":"snake","reading":"スネイク","jpTranslation":"へび","category":"Animals","exampleSentences":["The snake is long."]},
+  {"id":"eiken5_020","word":"turtle","reading":"タートル","jpTranslation":"かめ","category":"Animals","exampleSentences":["A turtle is slow."]},
+  {"id":"eiken5_021","word":"hamster","reading":"ハムスター","jpTranslation":"ハムスター","category":"Animals","exampleSentences":["My hamster is cute."]},
+  {"id":"eiken5_022","word":"parrot","reading":"パロット","jpTranslation":"おうむ","category":"Animals","exampleSentences":["The parrot can talk."]},
+  {"id":"eiken5_023","word":"penguin","reading":"ペンギン","jpTranslation":"ペンギン","category":"Animals","exampleSentences":["A penguin is black and white."]},
+  {"id":"eiken5_024","word":"panda","reading":"パンダ","jpTranslation":"パンダ","category":"Animals","exampleSentences":["The panda eats bamboo."]},
+  {"id":"eiken5_025","word":"deer","reading":"ディア","jpTranslation":"しか","category":"Animals","exampleSentences":["A deer is in the forest."]},
+  {"id":"eiken5_026","word":"mouse","reading":"マウス","jpTranslation":"ねずみ","category":"Animals","exampleSentences":["The mouse is small."]},
+  {"id":"eiken5_027","word":"chicken","reading":"チキン","jpTranslation":"にわとり","category":"Animals","exampleSentences":["The chicken lays eggs."]},
+  {"id":"eiken5_028","word":"butterfly","reading":"バタフライ","jpTranslation":"ちょうちょ","category":"Animals","exampleSentences":["The butterfly is beautiful."]},
+  {"id":"eiken5_029","word":"bee","reading":"ビー","jpTranslation":"はち","category":"Animals","exampleSentences":["A bee makes honey."]},
+  {"id":"eiken5_030","word":"ant","reading":"アント","jpTranslation":"あり","category":"Animals","exampleSentences":["The ant is small."]},
+  {"id":"eiken5_031","word":"apple","reading":"アップル","jpTranslation":"りんご","category":"Food","exampleSentences":["I eat an apple."]},
+  {"id":"eiken5_032","word":"rice","reading":"ライス","jpTranslation":"ごはん","category":"Food","exampleSentences":["I eat rice every day."]},
+  {"id":"eiken5_033","word":"water","reading":"ウォーター","jpTranslation":"みず","category":"Food","exampleSentences":["Please give me water."]},
+  {"id":"eiken5_034","word":"bread","reading":"ブレッド","jpTranslation":"パン","category":"Food","exampleSentences":["I eat bread for breakfast."]},
+  {"id":"eiken5_035","word":"milk","reading":"ミルク","jpTranslation":"ぎゅうにゅう","category":"Food","exampleSentences":["I drink milk."]},
+  {"id":"eiken5_036","word":"egg","reading":"エッグ","jpTranslation":"たまご","category":"Food","exampleSentences":["I eat an egg."]},
+  {"id":"eiken5_037","word":"orange","reading":"オレンジ","jpTranslation":"オレンジ（果物）","category":"Food","exampleSentences":["An orange is sweet."]},
+  {"id":"eiken5_038","word":"banana","reading":"バナナ","jpTranslation":"バナナ","category":"Food","exampleSentences":["I like bananas."]},
+  {"id":"eiken5_039","word":"cake","reading":"ケーキ","jpTranslation":"ケーキ","category":"Food","exampleSentences":["The cake is delicious."]},
+  {"id":"eiken5_040","word":"juice","reading":"ジュース","jpTranslation":"ジュース","category":"Food","exampleSentences":["I drink orange juice."]},
+  {"id":"eiken5_041","word":"meat","reading":"ミート","jpTranslation":"にく","category":"Food","exampleSentences":["I eat meat."]},
+  {"id":"eiken5_042","word":"vegetable","reading":"ベジタブル","jpTranslation":"やさい","category":"Food","exampleSentences":["I eat vegetables."]},
+  {"id":"eiken5_043","word":"salad","reading":"サラダ","jpTranslation":"サラダ","category":"Food","exampleSentences":["I like salad."]},
+  {"id":"eiken5_044","word":"soup","reading":"スープ","jpTranslation":"スープ","category":"Food","exampleSentences":["The soup is hot."]},
+  {"id":"eiken5_045","word":"cookie","reading":"クッキー","jpTranslation":"クッキー","category":"Food","exampleSentences":["I eat a cookie."]},
+  {"id":"eiken5_046","word":"ice cream","reading":"アイスクリーム","jpTranslation":"アイスクリーム","category":"Food","exampleSentences":["Ice cream is cold."]},
+  {"id":"eiken5_047","word":"pizza","reading":"ピザ","jpTranslation":"ピザ","category":"Food","exampleSentences":["I like pizza."]},
+  {"id":"eiken5_048","word":"sandwich","reading":"サンドウィッチ","jpTranslation":"サンドウィッチ","category":"Food","exampleSentences":["I eat a sandwich."]},
+  {"id":"eiken5_049","word":"chocolate","reading":"チョコレート","jpTranslation":"チョコレート","category":"Food","exampleSentences":["Chocolate is sweet."]},
+  {"id":"eiken5_050","word":"strawberry","reading":"ストロベリー","jpTranslation":"いちご","category":"Food","exampleSentences":["Strawberries are red."]}
+];
+
+// ===== FSRS SIMPLIFIED =====
+const GRADE_INTERVALS = { again: 1/1440, hard: 1, good: 3, easy: 7 };
+
+function gradeCard(wordId, gradeKey) {
+  const state = JSON.parse(localStorage.getItem('eq_cards') || '{}');
+  const dueDate = new Date();
+  // Use fractional days for "again" (1 minute = 1/1440 day)
+  const intervalDays = GRADE_INTERVALS[gradeKey];
+  const msToAdd = intervalDays * 24 * 60 * 60 * 1000;
+  const due = new Date(Date.now() + msToAdd);
+  state[wordId] = {
+    dueDate: due.toISOString(),
+    grade: gradeKey,
+    reviews: (state[wordId]?.reviews || 0) + 1
+  };
+  localStorage.setItem('eq_cards', JSON.stringify(state));
+}
+
+function getSessionCards(words, count = 10) {
+  const state = JSON.parse(localStorage.getItem('eq_cards') || '{}');
+  const now = new Date();
+  const due = words.filter(w => !state[w.id] || new Date(state[w.id].dueDate) <= now);
+  const newCards = due.filter(w => !state[w.id]).slice(0, count);
+  const reviewCards = due.filter(w => state[w.id]).slice(0, count - newCards.length);
+  const session = [...reviewCards, ...newCards].slice(0, count);
+  return session.length > 0 ? session : words.slice(0, count);
+}
+
+// ===== STATS HELPERS =====
+function getStats() {
+  const state = JSON.parse(localStorage.getItem('eq_cards') || '{}');
+  const xp = parseInt(localStorage.getItem('eq_xp') || '0');
+  const streak = parseInt(localStorage.getItem('eq_streak') || '0');
+  const mastered = Object.values(state).filter(s => s.grade === 'easy').length;
+  const dueCount = VOCAB.filter(w => {
+    const s = state[w.id];
+    return !s || new Date(s.dueDate) <= new Date();
+  }).length;
+  return { xp, streak, mastered, dueCount };
+}
+
+function updateStreakOnSession() {
+  const today = new Date().toDateString();
+  const lastSession = localStorage.getItem('eq_last_session');
+  let streak = parseInt(localStorage.getItem('eq_streak') || '0');
+  if (lastSession !== today) {
+    const yesterday = new Date(Date.now() - 86400000).toDateString();
+    streak = (lastSession === yesterday) ? streak + 1 : 1;
+    localStorage.setItem('eq_streak', String(streak));
+    localStorage.setItem('eq_last_session', today);
+  }
+}
+
+function addXP(amount) {
+  const current = parseInt(localStorage.getItem('eq_xp') || '0');
+  localStorage.setItem('eq_xp', String(current + amount));
+}
+
+// ===== SCREEN MANAGEMENT =====
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ===== SESSION STATE =====
+let sessionCards = [];
+let sessionIndex = 0;
+let sessionXP = 0;
+let sessionGood = 0; // good + easy count
+let sessionMastered = 0; // easy count
+let isFlipped = false;
+
+// ===== START SESSION =====
+function startSession() {
+  sessionCards = getSessionCards(VOCAB, 10);
+  sessionIndex = 0;
+  sessionXP = 0;
+  sessionGood = 0;
+  sessionMastered = 0;
+  isFlipped = false;
+
+  updateStreakOnSession();
+
+  const card = document.getElementById('flashcard');
+  card.classList.remove('flipped');
+
+  const gradeGrid = document.getElementById('grade-grid');
+  gradeGrid.classList.remove('visible');
+
+  document.getElementById('battle-xp').textContent = '0';
+  updateBattleProgress();
+
+  showScreen('battle');
+  loadCard();
+}
+
+// ===== LOAD CARD =====
+function loadCard() {
+  const word = sessionCards[sessionIndex];
+  if (!word) {
+    showComplete();
+    return;
+  }
+
+  const card = document.getElementById('flashcard');
+  card.classList.remove('flipped', 'flash-again', 'flash-hard', 'flash-good', 'flash-easy');
+
+  isFlipped = false;
+
+  document.getElementById('card-word').textContent = word.word;
+  document.getElementById('card-category').textContent = word.category;
+  document.getElementById('card-reading').textContent = word.reading;
+  document.getElementById('card-translation').textContent = word.jpTranslation;
+  document.getElementById('card-example').textContent = word.exampleSentences[0] || '';
+
+  const gradeGrid = document.getElementById('grade-grid');
+  gradeGrid.classList.remove('visible');
+  document.getElementById('grade-hint').textContent = 'カードをタップしてめくってね👆';
+
+  updateBattleProgress();
+}
+
+function updateBattleProgress() {
+  const total = sessionCards.length || 10;
+  const done = sessionIndex;
+  const pct = (done / total) * 100;
+  document.getElementById('battle-progress-fill').style.width = pct + '%';
+  document.getElementById('battle-progress-text').textContent = done + ' / ' + total;
+  document.getElementById('battle-card-count').textContent = (total - done) + '問';
+  document.getElementById('battle-xp').textContent = sessionXP;
+}
+
+// ===== FLIP CARD =====
+function flipCard() {
+  if (isFlipped) return;
+  isFlipped = true;
+
+  const card = document.getElementById('flashcard');
+  card.classList.add('flipped');
+
+  // Auto-speak on flip
+  speakCurrentWord();
+
+  // Show grade buttons
+  setTimeout(() => {
+    const gradeGrid = document.getElementById('grade-grid');
+    gradeGrid.classList.add('visible');
+    document.getElementById('grade-hint').textContent = '覚えてた？正直に選んでね！';
+  }, 350);
+}
+
+// ===== SPEAK =====
+function speakWord(e) {
+  if (e) { e.stopPropagation(); }
+  speakCurrentWord();
+}
+
+function speakCurrentWord() {
+  if (!window.speechSynthesis) return;
+  const word = sessionCards[sessionIndex];
+  if (!word) return;
+  try {
+    window.speechSynthesis.cancel();
+    const utt = new SpeechSynthesisUtterance(word.word);
+    utt.lang = 'en-US';
+    utt.rate = 0.85;
+    utt.pitch = 1.0;
+
+    const btn = document.getElementById('speak-btn');
+    if (btn) {
+      btn.classList.add('playing');
+      utt.onend = () => btn.classList.remove('playing');
+      utt.onerror = () => btn.classList.remove('playing');
+    }
+    window.speechSynthesis.speak(utt);
+  } catch(err) {
+    console.warn('Speech synthesis error:', err);
+  }
+}
+
+// ===== GRADE =====
+function grade(gradeKey) {
+  const word = sessionCards[sessionIndex];
+  if (!word || !isFlipped) return;
+
+  // Disable buttons temporarily
+  const gradeGrid = document.getElementById('grade-grid');
+  gradeGrid.classList.remove('visible');
+
+  // Save FSRS state
+  gradeCard(word.id, gradeKey);
+
+  // XP & stats
+  const xpMap = { again: 2, hard: 5, good: 10, easy: 15 };
+  const earned = xpMap[gradeKey];
+  sessionXP += earned;
+  addXP(earned);
+
+  if (gradeKey === 'good' || gradeKey === 'easy') sessionGood++;
+  if (gradeKey === 'easy') sessionMastered++;
+
+  // Flash card
+  const card = document.getElementById('flashcard');
+  const flashMap = { again: 'flash-again', hard: 'flash-hard', good: 'flash-good', easy: 'flash-easy' };
+  card.classList.add(flashMap[gradeKey]);
+
+  // XP popup for good/easy
+  if (gradeKey === 'good' || gradeKey === 'easy') {
+    showXPPopup(earned, gradeKey);
+  }
+
+  // Next card after animation
+  setTimeout(() => {
+    card.classList.remove(flashMap[gradeKey]);
+    sessionIndex++;
+    if (sessionIndex >= sessionCards.length) {
+      showComplete();
+    } else {
+      loadCard();
+    }
+  }, 500);
+}
+
+// ===== XP POPUP =====
+function showXPPopup(amount, gradeKey) {
+  const popup = document.createElement('div');
+  popup.className = 'xp-popup';
+  popup.textContent = '+' + amount + ' XP';
+
+  // Color by grade
+  if (gradeKey === 'easy') popup.style.color = '#64B5F6';
+
+  const card = document.getElementById('card-container');
+  const rect = card.getBoundingClientRect();
+  popup.style.left = (rect.left + rect.width / 2 - 40) + 'px';
+  popup.style.top = (rect.top + rect.height / 2) + 'px';
+  popup.style.position = 'fixed';
+
+  document.body.appendChild(popup);
+  setTimeout(() => popup.remove(), 1300);
+}
+
+// ===== COMPLETE SCREEN =====
+function showComplete() {
+  const total = sessionCards.length;
+  const accuracy = total > 0 ? Math.round((sessionGood / total) * 100) : 0;
+
+  document.getElementById('result-accuracy').textContent = accuracy + '%';
+  document.getElementById('result-mastered').textContent = sessionMastered + '個';
+  document.getElementById('result-xp').textContent = sessionXP + ' XP';
+
+  spawnConfetti();
+  showScreen('complete');
+}
+
+// ===== CONFETTI =====
+function spawnConfetti() {
+  // Remove old confetti
+  document.querySelectorAll('.confetti-piece').forEach(e => e.remove());
+
+  const colors = ['#FFD700','#FF6B6B','#4ECDC4','#45B7D1','#96CEB4','#FFEAA7','#FF9FF3','#54A0FF','#5F27CD','#00D2D3'];
+  const shapes = ['2px', '50%', '4px'];
+
+  for (let i = 0; i < 35; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    const shape = shapes[Math.floor(Math.random() * shapes.length)];
+    const size = 6 + Math.random() * 10;
+    const left = Math.random() * 100;
+    const delay = Math.random() * 1.5;
+    const duration = 2.5 + Math.random() * 2;
+
+    el.style.cssText = `
+      background: ${color};
+      width: ${size}px;
+      height: ${size}px;
+      left: ${left}vw;
+      top: -20px;
+      border-radius: ${shape};
+      animation-duration: ${duration}s;
+      animation-delay: ${delay}s;
+    `;
+    document.body.appendChild(el);
+  }
+
+  // Auto cleanup
+  setTimeout(() => {
+    document.querySelectorAll('.confetti-piece').forEach(e => e.remove());
+  }, 6000);
+}
+
+// ===== STATS UPDATE =====
+function updateStats() {
+  const { xp, streak, mastered, dueCount } = getStats();
+  const hasActivity = xp > 0 || mastered > 0;
+
+  if (hasActivity) {
+    document.getElementById('stats-bar').classList.add('visible');
+    document.getElementById('stat-streak').textContent = streak;
+    document.getElementById('stat-xp').textContent = xp;
+    document.getElementById('stat-mastered').textContent = mastered;
+    document.getElementById('stat-new').textContent = dueCount;
+
+    const readiness = Math.round((mastered / 300) * 100);
+    document.getElementById('stat-readiness').textContent = readiness + '%';
+    document.getElementById('readiness-bar').style.width = Math.min(readiness, 100) + '%';
+  }
+}
+
+// ===== STARFIELD =====
+function initStars() {
+  const container = document.getElementById('stars-bg');
+  if (!container) return;
+  for (let i = 0; i < 50; i++) {
+    const star = document.createElement('div');
+    star.className = 'deco-star';
+    star.style.cssText = `
+      left: ${Math.random() * 100}%;
+      top: ${Math.random() * 100}%;
+      --dur: ${2 + Math.random() * 4}s;
+      --delay: ${Math.random() * 4}s;
+      --bright: ${0.3 + Math.random() * 0.7};
+    `;
+    container.appendChild(star);
+  }
+}
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', () => {
+  initStars();
+  updateStats();
+
+  // Prevent double-tap zoom on iOS
+  document.addEventListener('touchend', e => {
+    if (e.target.tagName === 'BUTTON') {
+      e.preventDefault();
+    }
+  }, { passive: false });
+});
+</script>
+</body>
+</html>

@@ -2,7 +2,6 @@
 // ENG Quest — Unit tests for VocabRepository and VocabItem
 // Run: flutter test test/core/data/vocab_repository_test.dart
 
-import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import '../../../lib/core/models/vocab_item.dart';
 
