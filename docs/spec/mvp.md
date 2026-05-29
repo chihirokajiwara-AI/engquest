@@ -64,14 +64,16 @@ Native-equivalent English cognition in Japanese children, age 4–18.
 | C08 | Parent Dashboard | `done` | 2026-05-29 | 4タブ (Home/Progress/Schedule/Settings) + MockData完全表示 + ストリーク/英検準備度 |
 | C09 | Analytics + A/B Framework | `done` | 2026-05-29 | lib/core/analytics/analytics_service.dart — AnalyticsSink interface + FirebaseAnalyticsAdapter + AbFramework (FNV-1a 50/50 deterministic split) + AnalyticsService facade + unit tests |
 | C10 | Onboarding Flow | `done` | 2026-05-29 | lib/features/onboarding/onboarding_flow.dart — 4ステップ: 年齢スライダー + CEFRミニテスト3問 + アバター選択5体 + 目標設定 + OnboardingResult model |
+| C11 | App Entry Wiring | `done` | 2026-05-29 | lib/app.dart — OnboardingStorage + _AppEntryPoint: onboarding_complete flag check → OnboardingFlow or WorldMapScreen |
+| C12 | FSRS Card Repository | `done` | 2026-05-29 | lib/core/fsrs/fsrs_card_repository.dart — FsrsCardRepository interface + InMemoryFsrsCardRepository (JSON round-trip stub, sqflite schema documented) |
 
 ### Spike Backlog
 
-| Spike | Question | Priority |
-|-------|----------|---------|
-| S01 | on-device-whisper | ✅ COMPLETE 2026-05-26 — whisper_ggml_plus base.en, hybrid on-device+cloud arch. See src/spikes/on-device-whisper/README.md | ✅ DONE |
-| S02 | fsrs-dart | ✅ COMPLETE 2026-05-27 — FSRS-4.5 viable in Dart. FACTOR=19/81, DECAY=-0.5. 88.8% retention. C01 delegated to Claude Code. See src/spikes/fsrs-dart/README.md | ✅ DONE |
-| S03 | claude-haiku-dialog | What's the p95 latency + cost per dialog turn with claude-3-haiku? Is it viable for <5s response? | 🟡 MEDIUM |
+| Spike | Question | Status |
+|-------|----------|--------|
+| S01 | on-device-whisper | ✅ COMPLETE 2026-05-26 — whisper_ggml_plus base.en, hybrid on-device+cloud arch. See src/spikes/on-device-whisper/README.md |
+| S02 | fsrs-dart | ✅ COMPLETE 2026-05-27 — FSRS-4.5 viable in Dart. FACTOR=19/81, DECAY=-0.5. 88.8% retention. C01 delegated to Claude Code. See src/spikes/fsrs-dart/README.md |
+| S03 | claude-haiku-dialog | ✅ COMPLETE 2026-05-29 — p50=1411ms, p95=3141ms (✅ <5000ms). Cost $0.0001/turn. 206K turns/month at ¥3000 budget. VIABLE. See src/spikes/claude-haiku-dialog/README.md |
 | S04 | firebase-offline | Does Firebase Firestore offline mode handle FSRS scheduling without connectivity? | 🟢 LOW |
 
 ---

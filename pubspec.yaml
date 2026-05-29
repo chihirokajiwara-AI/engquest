@@ -17,6 +17,12 @@ dependencies:
   # SRS / Data
   sqflite: ^2.3.2
   path: ^1.9.0
+  # Persistence / Prefs
+  shared_preferences: ^2.2.0
+  # Networking (Claude API)
+  http: ^1.1.0
+  # Crypto (analytics hashing)
+  crypto: ^3.0.3
   # UI
   cupertino_icons: ^1.0.6
 
