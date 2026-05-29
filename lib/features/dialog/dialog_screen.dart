@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:engquest/core/config/app_config.dart';
 import 'package:engquest/core/dialog/claude_client.dart';
 import 'package:engquest/core/dialog/dialog_service.dart';
+import 'package:engquest/core/dialog/suggestion_engine.dart';
 
 // ---------------------------------------------------------------------------
 // DialogScenariosScreen — pick a scenario to start chatting
@@ -139,6 +140,7 @@ class DialogScreen extends StatefulWidget {
 
 class _DialogScreenState extends State<DialogScreen> {
   late final DialogService _service;
+  final SuggestionEngine _suggestionEngine = const SuggestionEngine();
   final List<ChatMessage> _history = [];
   final TextEditingController _textController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
@@ -264,14 +266,26 @@ class _DialogScreenState extends State<DialogScreen> {
     );
   }
 
+  /// The most recent NPC (assistant) message, used to pick contextual chips.
+  String? get _lastNpcMessage {
+    for (var i = _history.length - 1; i >= 0; i--) {
+      if (_history[i].role == 'assistant') return _history[i].content;
+    }
+    return null;
+  }
+
   Widget _buildQuickReplies() {
+    final suggestions = _suggestionEngine.suggestionsFor(
+      widget.scenario,
+      lastNpcMessage: _lastNpcMessage,
+    );
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
       color: const Color(0xFF16213E),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
-          children: widget.scenario.quickReplies.map((reply) {
+          children: suggestions.map((reply) {
             return Padding(
               padding: const EdgeInsets.only(right: 8),
               child: ActionChip(
