@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:engquest/features/parent_dashboard/parent_dashboard_screen.dart';
 
 /// ENG Quest A1 World Map — Village Square
-/// Three zones: Blacksmith (Battle), Town Crier (Dialog), Echo Cave (Voice)
+/// Four zones: Blacksmith (Battle), Town Crier (Dialog), Echo Cave (Voice),
+/// Scholar's Tower (Parent Dashboard)
 class WorldMapScreen extends StatelessWidget {
   const WorldMapScreen({super.key});
 
@@ -55,6 +57,19 @@ class WorldMapScreen extends StatelessWidget {
                 subtitle: 'Voice — Speak and be heard',
                 color: const Color(0xFF4A148C),
                 onTap: () => Navigator.pushNamed(context, '/voice'),
+              ),
+              const SizedBox(height: 16),
+              _ZoneCard(
+                emoji: '📊',
+                title: "Scholar's Tower",
+                subtitle: 'Parent Dashboard — Track progress',
+                color: const Color(0xFF004D40),
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const ParentDashboardScreen(),
+                  ),
+                ),
               ),
             ],
           ),
