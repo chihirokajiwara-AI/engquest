@@ -1,7 +1,7 @@
 /* ENG Quest Service Worker
  * Offline-first PWA. Bump CACHE_VERSION on every deploy to invalidate old caches.
  */
-const CACHE_VERSION = 'engquest-v1';
+const CACHE_VERSION = 'engquest-v2';
 const APP_SHELL = [
   './',
   './index.html',
@@ -9,6 +9,19 @@ const APP_SHELL = [
   './icons/icon-192.svg',
   './icons/icon-512.svg',
   './icons/icon-maskable.svg',
+  './images/categories/Animals.svg',
+  './images/categories/Food.svg',
+  './images/categories/Family.svg',
+  './images/categories/Colors.svg',
+  './images/categories/Numbers.svg',
+  './images/categories/Actions.svg',
+  './images/categories/Adjectives.svg',
+  './images/categories/School.svg',
+  './images/categories/Time_Weather.svg',
+  './images/categories/Greetings_Social.svg',
+  './images/categories/Body.svg',
+  './images/categories/Places.svg',
+  './images/categories/_default.svg',
 ];
 
 // Install: pre-cache the app shell.

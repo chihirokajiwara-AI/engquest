@@ -44,4 +44,5 @@ flutter:
   assets:
     - assets/audio/
     - assets/images/
+    - assets/images/categories/
     - assets/content/

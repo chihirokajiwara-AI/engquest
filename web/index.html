@@ -319,6 +319,16 @@ body {
   letter-spacing: 1px;
   font-weight: 500;
 }
+.card-image {
+  width: clamp(96px, 34vw, 128px);
+  height: clamp(96px, 34vw, 128px);
+  border-radius: 24px;
+  margin-bottom: 18px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+  user-select: none;
+  -webkit-user-drag: none;
+  background: rgba(255,255,255,0.04);
+}
 .card-word {
   font-size: clamp(36px, 10vw, 56px);
   font-weight: 900;
@@ -681,6 +691,7 @@ body {
       <!-- Front face -->
       <div class="card-face card-front">
         <div class="card-tap-hint">タップしてめくる</div>
+        <img class="card-image" id="card-image" src="images/categories/Animals.svg" alt="" draggable="false">
         <div class="card-word" id="card-word">cat</div>
         <div class="category-badge" id="card-category">Animals</div>
         <button class="speak-btn" id="speak-btn" onclick="speakWord(event)" aria-label="発音を聞く">
@@ -1178,6 +1189,14 @@ function loadCard() {
 
   document.getElementById('card-word').textContent = word.word;
   document.getElementById('card-category').textContent = word.category;
+  const cardImg = document.getElementById('card-image');
+  if (cardImg) {
+    cardImg.src = 'images/categories/' + encodeURIComponent(word.category) + '.svg';
+    cardImg.onerror = function () {
+      cardImg.onerror = null;
+      cardImg.src = 'images/categories/_default.svg';
+    };
+  }
   document.getElementById('card-reading').textContent = word.reading;
   document.getElementById('card-translation').textContent = word.jpTranslation;
   document.getElementById('card-example').textContent = word.exampleSentences[0] || '';
