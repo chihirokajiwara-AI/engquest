@@ -45,6 +45,13 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      # ── Audio asset integrity ──────────────────────────────────────────────
+      # Ensures every status="ready" word in audio_manifest.json has its MP3
+      # bundled (assets/audio/a1) AND web-served (web/audio/a1) byte-identically,
+      # and that manifest webPath/localCachePath match real filenames.
+      - name: Verify audio assets
+        run: python3 scripts/verify_audio_assets.py
+
       # ── Analyze ───────────────────────────────────────────────────────────
       - name: Flutter analyze
         run: flutter analyze --fatal-infos --fatal-warnings
