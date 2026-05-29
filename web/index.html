@@ -970,27 +970,44 @@ function speakWord(e) {
   speakCurrentWord();
 }
 
-function speakCurrentWord() {
-  if (!window.speechSynthesis) return;
-  const word = sessionCards[sessionIndex];
-  if (!word) return;
-  try {
-    window.speechSynthesis.cancel();
-    const utt = new SpeechSynthesisUtterance(word.word);
-    utt.lang = 'en-US';
-    utt.rate = 0.85;
-    utt.pitch = 1.0;
+function playPronunciation(word, wordId) {
+  // Try real MP3 first, fall back to Web Speech API
+  const safeWord = word.replace(/ /g, '_');
+  const audioPath = `audio/${wordId}_${safeWord}.mp3`;
+  const audioEl = new Audio(audioPath);
+  const btn = document.getElementById('speak-btn');
 
-    const btn = document.getElementById('speak-btn');
+  audioEl.onerror = () => {
+    // Fallback: Web Speech API
+    if (!window.speechSynthesis) return;
+    const utterance = new SpeechSynthesisUtterance(word);
+    utterance.lang = 'en-US';
+    utterance.rate = 0.85;
+    speechSynthesis.speak(utterance);
     if (btn) {
       btn.classList.add('playing');
-      utt.onend = () => btn.classList.remove('playing');
-      utt.onerror = () => btn.classList.remove('playing');
+      utterance.onend = () => btn.classList.remove('playing');
+      utterance.onerror = () => btn.classList.remove('playing');
     }
-    window.speechSynthesis.speak(utt);
-  } catch(err) {
-    console.warn('Speech synthesis error:', err);
-  }
+  };
+
+  if (btn) btn.classList.add('playing');
+  audioEl.onended = () => { if (btn) btn.classList.remove('playing'); };
+  audioEl.play().catch(() => {
+    if (btn) btn.classList.remove('playing');
+    // Fallback: Web Speech API
+    if (!window.speechSynthesis) return;
+    const utterance = new SpeechSynthesisUtterance(word);
+    utterance.lang = 'en-US';
+    utterance.rate = 0.85;
+    speechSynthesis.speak(utterance);
+  });
+}
+
+function speakCurrentWord() {
+  const word = sessionCards[sessionIndex];
+  if (!word) return;
+  playPronunciation(word.word, word.id);
 }
 
 // ===== GRADE =====
