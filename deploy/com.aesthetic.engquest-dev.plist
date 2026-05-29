@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.aesthetic.engquest-dev</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/openclaw/dev/engquest-flutter/scripts/engquest-dev.sh</string>
+    </array>
+
+    <!-- Run every 3 hours (10800 seconds) -->
+    <key>StartInterval</key>
+    <integer>10800</integer>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/openclaw/dev/engquest-flutter</string>
+
+    <key>StandardOutPath</key>
+    <string>/Users/openclaw/dev/engquest-flutter/logs/autonomous/launchd-stdout.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/openclaw/dev/engquest-flutter/logs/autonomous/launchd-stderr.log</string>
+
+    <!-- Don't restart on crash — wait for next interval -->
+    <key>KeepAlive</key>
+    <false/>
+
+    <!-- Environment -->
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>HOME</key>
+        <string>/Users/openclaw</string>
+        <key>PATH</key>
+        <string>/Users/openclaw/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    </dict>
+
+    <!-- Timeout: 30 minutes max per session -->
+    <key>TimeOut</key>
+    <integer>1800</integer>
+</dict>
+</plist>
