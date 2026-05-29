@@ -1,28 +1,16 @@
 // lib/core/audio/tts_service.dart
 // ENG Quest — Google Cloud Text-to-Speech service
 //
-// Sprint status: STUB — API call structure is production-ready, but real audio
-// files are NOT yet generated (requires GOOGLE_TTS_API_KEY in Cloud Run env).
-// Run scripts/generate_tts_audio.py to batch-generate all 30 A1 words.
-//
-// Architecture:
-//   1. Check local file cache (app documents dir) → play immediately
-//   2. Check Firebase Storage → download + cache + play
-//   3. Call Google TTS REST API → save + cache + play
-//   4. On any failure → log error, do NOT crash (audio is enhancement, not blocker)
-//
-// Voice: en-US-Neural2-C (natural female, child-friendly)
-// Format: LINEAR16 → MP3, 24kHz sample rate
-// Cost: $4/1M chars (Neural2). 30 words × avg 5 chars = 150 chars = $0.0006 total.
+// Web-compatible: uses http package instead of dart:io HttpClient.
+// On web, audio is cached in memory only (no filesystem access).
+// On mobile, audio is cached to the app documents directory.
 
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:path/path.dart' as p;
-import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' as http;
 
 /// Result of a TTS audio fetch operation
 enum TtsAudioSource { localCache, firebaseStorage, googleTtsApi, bundledAsset, unavailable }
@@ -168,7 +156,7 @@ class GoogleTtsConfig {
 /// TTS Service — word audio for ENG Quest Battle flashcards
 ///
 /// Playback is handled separately by WordAudioPlayerService.
-/// This service handles: manifest loading → cache lookup → TTS fetch → local save.
+/// This service handles: manifest loading -> cache lookup -> TTS fetch -> local save.
 ///
 /// Usage:
 ///   final tts = TtsService();
@@ -179,11 +167,13 @@ class GoogleTtsConfig {
 ///   }
 class TtsService {
   static const String _manifestAssetPath = 'assets/content/audio_manifest.json';
-  static const String _cacheDirName = 'tts_audio';
-
   AudioManifest? _manifest;
-  Directory? _cacheDir;
+  // File-based caching removed for web compatibility.
+  // All caching is in-memory via _memoryCache.
   bool _initialized = false;
+
+  // In-memory cache for web (and as L1 cache on mobile)
+  final Map<String, Uint8List> _memoryCache = {};
 
   bool get isInitialized => _initialized;
   AudioManifest? get manifest => _manifest;
@@ -206,15 +196,6 @@ class TtsService {
       final jsonData = jsonDecode(jsonStr) as Map<String, dynamic>;
       _manifest = AudioManifest.fromJson(jsonData);
 
-      // Set up local cache directory
-      if (!kIsWeb) {
-        final appDocDir = await getApplicationDocumentsDirectory();
-        _cacheDir = Directory(p.join(appDocDir.path, _cacheDirName));
-        if (!await _cacheDir!.exists()) {
-          await _cacheDir!.create(recursive: true);
-        }
-      }
-
       _initialized = true;
       debugPrint('[TtsService] initialized — manifest: '
           '${_manifest!.totalWords} words, '
@@ -227,19 +208,27 @@ class TtsService {
   }
 
   /// Get audio bytes for a vocab word.
-  /// Priority: local cache → Google TTS API → unavailable
+  /// Priority: memory cache -> local file cache -> Google TTS API -> unavailable
   ///
   /// [vocabId] — e.g. "eiken5_001"
   /// [word]    — e.g. "cat"
   Future<TtsAudioResult> getAudioForWord(String vocabId, String word) async {
     if (!_initialized) await initialize();
 
-    // 1. Check local file cache
-    final cached = await _checkLocalCache(vocabId, word);
-    if (cached != null) return cached;
+    // 1. Check in-memory cache
+    final cacheKey = _cacheKey(vocabId, word);
+    final memCached = _memoryCache[cacheKey];
+    if (memCached != null) {
+      return TtsAudioResult(
+        vocabId: vocabId,
+        word: word,
+        audioBytes: memCached,
+        source: TtsAudioSource.localCache,
+      );
+    }
 
     // 2. Call Google TTS API (if key configured)
-    if (GoogleTtsConfig.apiKey != null && !kIsWeb) {
+    if (GoogleTtsConfig.apiKey != null) {
       final fromApi = await _fetchFromGoogleTts(vocabId, word);
       if (fromApi != null) return fromApi;
     } else {
@@ -290,64 +279,30 @@ class TtsService {
 
   /// Cache stats for debug/admin
   Future<Map<String, dynamic>> getCacheStats() async {
-    if (_cacheDir == null || !await _cacheDir!.exists()) {
-      return {'cached': 0, 'totalBytes': 0, 'cacheDir': 'unavailable'};
-    }
-
-    final files = await _cacheDir!.list().toList();
     var totalBytes = 0;
-    for (final f in files) {
-      if (f is File) {
-        totalBytes += await f.length();
-      }
+    for (final bytes in _memoryCache.values) {
+      totalBytes += bytes.length;
     }
 
     return {
-      'cached': files.length,
+      'cached': _memoryCache.length,
       'totalBytes': totalBytes,
       'totalKb': (totalBytes / 1024).round(),
-      'cacheDir': _cacheDir!.path,
+      'cacheDir': 'memory-only',
       'manifestTotal': _manifest?.totalWords ?? 0,
     };
   }
 
-  /// Clear local audio cache (e.g., user clears app data)
+  /// Clear local audio cache
   Future<void> clearCache() async {
-    if (_cacheDir != null && await _cacheDir!.exists()) {
-      await _cacheDir!.delete(recursive: true);
-      await _cacheDir!.create();
-      debugPrint('[TtsService] cache cleared');
-    }
+    _memoryCache.clear();
+    debugPrint('[TtsService] cache cleared');
   }
 
   // ── Private helpers ───────────────────────────────────────────────────────
 
-  String _cacheFileName(String vocabId, String word) {
-    return '${vocabId}_${word.replaceAll(RegExp(r'[^a-z0-9]'), '_')}.mp3';
-  }
-
-  Future<TtsAudioResult?> _checkLocalCache(String vocabId, String word) async {
-    if (_cacheDir == null) return null;
-
-    final file = File(p.join(_cacheDir!.path, _cacheFileName(vocabId, word)));
-    if (!await file.exists()) return null;
-
-    try {
-      final bytes = await file.readAsBytes();
-      if (bytes.isEmpty) return null;
-
-      debugPrint('[TtsService] cache hit: $vocabId ($word)');
-      return TtsAudioResult(
-        vocabId: vocabId,
-        word: word,
-        audioBytes: bytes,
-        source: TtsAudioSource.localCache,
-        localPath: file.path,
-      );
-    } catch (e) {
-      debugPrint('[TtsService] cache read error for $vocabId: $e');
-      return null;
-    }
+  String _cacheKey(String vocabId, String word) {
+    return '${vocabId}_${word.replaceAll(RegExp(r'[^a-z0-9]'), '_')}';
   }
 
   Future<TtsAudioResult?> _fetchFromGoogleTts(String vocabId, String word) async {
@@ -358,25 +313,18 @@ class TtsService {
       final url = Uri.parse('${GoogleTtsConfig.apiEndpoint}?key=$apiKey');
       final body = jsonEncode(GoogleTtsConfig.buildRequestBody(word));
 
-      final client = HttpClient();
-      client.connectionTimeout = const Duration(seconds: 10);
-
-      final request = await client.postUrl(url);
-      request.headers.set('Content-Type', 'application/json');
-      request.write(body);
-      final response = await request.close();
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: body,
+      ).timeout(const Duration(seconds: 10));
 
       if (response.statusCode != 200) {
-        final errorBody = await response.transform(utf8.decoder).join();
-        debugPrint('[TtsService] Google TTS API error ${response.statusCode}: $errorBody');
-        client.close();
+        debugPrint('[TtsService] Google TTS API error ${response.statusCode}: ${response.body}');
         return null;
       }
 
-      final responseBody = await response.transform(utf8.decoder).join();
-      client.close();
-
-      final json = jsonDecode(responseBody) as Map<String, dynamic>;
+      final json = jsonDecode(response.body) as Map<String, dynamic>;
       final audioContent = json['audioContent'] as String?;
       if (audioContent == null || audioContent.isEmpty) {
         debugPrint('[TtsService] empty audioContent for $word');
@@ -386,21 +334,15 @@ class TtsService {
       // Decode base64 MP3 bytes
       final audioBytes = base64Decode(audioContent);
 
-      // Save to local cache
-      String? localPath;
-      if (_cacheDir != null) {
-        final file = File(p.join(_cacheDir!.path, _cacheFileName(vocabId, word)));
-        await file.writeAsBytes(audioBytes);
-        localPath = file.path;
-        debugPrint('[TtsService] fetched + cached: $vocabId ($word) — ${audioBytes.length} bytes');
-      }
+      // Cache in memory
+      _memoryCache[_cacheKey(vocabId, word)] = audioBytes;
+      debugPrint('[TtsService] fetched + cached: $vocabId ($word) — ${audioBytes.length} bytes');
 
       return TtsAudioResult(
         vocabId: vocabId,
         word: word,
         audioBytes: audioBytes,
         source: TtsAudioSource.googleTtsApi,
-        localPath: localPath,
       );
     } catch (e) {
       debugPrint('[TtsService] fetch error for $word: $e');
