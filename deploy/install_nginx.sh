@@ -30,7 +30,8 @@ SITE_AVAILABLE="/etc/nginx/sites-available/engquest.conf"
 SITE_ENABLED="/etc/nginx/sites-enabled/engquest.conf"
 WATCHDOG_SRC_REL="deploy/engquest-watchdog.sh"
 WATCHDOG_BIN="/usr/local/bin/engquest-watchdog.sh"
-PORT="8080"
+PORT="8080"          # documented live-demo URL port
+ALT_PORT="80"        # clean no-port URL; served by the same nginx server block
 
 log()  { printf '\033[1;36m[engquest]\033[0m %s\n' "$*"; }
 err()  { printf '\033[1;31m[engquest][ERROR]\033[0m %s\n' "$*" >&2; }
@@ -62,15 +63,17 @@ else
     log "nginx already installed: $(nginx -v 2>&1)"
 fi
 
-# ── 3. stop any lingering python http.server on :8080 ────────────────────────
-log "Stopping any process bound to :${PORT} that is not nginx..."
+# ── 3. stop any lingering non-nginx listener on :8080 and :80 ────────────────
+log "Stopping any non-nginx process bound to :${PORT} or :${ALT_PORT}..."
 if command -v fuser >/dev/null 2>&1; then
-    # kill python http.server holding the port; ignore if none.
-    for pid in $(fuser "${PORT}/tcp" 2>/dev/null || true); do
-        if ! ps -p "$pid" -o comm= 2>/dev/null | grep -qi nginx; then
-            log "  killing PID $pid on :${PORT}"
-            kill "$pid" 2>/dev/null || true
-        fi
+    # kill python http.server (or anything) holding the ports; ignore if none.
+    for p in "${PORT}" "${ALT_PORT}"; do
+        for pid in $(fuser "${p}/tcp" 2>/dev/null || true); do
+            if ! ps -p "$pid" -o comm= 2>/dev/null | grep -qi nginx; then
+                log "  killing PID $pid on :${p}"
+                kill "$pid" 2>/dev/null || true
+            fi
+        done
     done
 fi
 # also disable any systemd unit or cron that may relaunch python http.server
@@ -176,13 +179,14 @@ else
     err "engquest-watchdog.sh not found — skipping self-healing watchdog install."
 fi
 
-# ── 9. health check ──────────────────────────────────────────────────────────
+# ── 9. health check (both documented :8080 and clean :80) ────────────────────
 sleep 1
-log "Health check on http://127.0.0.1:${PORT}/ ..."
+log "Health check on http://127.0.0.1:${PORT}/ and http://127.0.0.1:${ALT_PORT}/ ..."
 code="$(curl -s -o /dev/null -w '%{http_code}' "http://127.0.0.1:${PORT}/" || echo 000)"
-if [[ "$code" == "200" ]]; then
-    log "✅ nginx serving ENG Quest on :${PORT} (HTTP $code). Auto-restart on reboot ENABLED."
+acode="$(curl -s -o /dev/null -w '%{http_code}' "http://127.0.0.1:${ALT_PORT}/" || echo 000)"
+if [[ "$code" == "200" && "$acode" == "200" ]]; then
+    log "✅ nginx serving ENG Quest on :${PORT} (HTTP $code) AND :${ALT_PORT} (HTTP $acode). Auto-restart on reboot ENABLED."
 else
-    err "Health check returned HTTP $code. Inspect: journalctl -u nginx --no-pager -n 50"
+    err "Health check failed (:${PORT}=$code, :${ALT_PORT}=$acode). Inspect: journalctl -u nginx --no-pager -n 50"
     exit 1
 fi

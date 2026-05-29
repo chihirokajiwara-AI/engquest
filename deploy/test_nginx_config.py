@@ -53,7 +53,11 @@ def main():
     inst = open(INSTALL, encoding="utf-8").read()
 
     print("nginx config — requirements")
-    check("listens on :8080", re.search(r"listen\s+8080", conf))
+    check("listens on :8080 (documented URL)", re.search(r"listen\s+8080", conf))
+    check("listens on :80 (clean no-port URL)", re.search(r"listen\s+80\b", conf))
+    check("single server block serves both ports",
+          re.search(r"listen\s+80\b", conf) and re.search(r"listen\s+8080", conf)
+          and conf.count("root /var/www/engquest") == 1)
     check("serves persistent root /var/www/engquest", "/var/www/engquest" in conf)
     check("does NOT serve volatile /tmp root", "root /tmp/engquest" not in conf)
     check("gzip on", re.search(r"\bgzip\s+on\b", conf))
@@ -76,8 +80,9 @@ def main():
     print("\ninstall script — requirements")
     check("set -euo pipefail", "set -euo pipefail" in inst)
     check("installs nginx if missing", "apt-get install -y -qq nginx" in inst)
-    check("kills lingering :8080 (python http.server)",
-          "fuser" in inst and "${PORT}/tcp" in inst and 'PORT="8080"' in inst)
+    check("kills lingering listeners on :8080 and :80 (python http.server)",
+          "fuser" in inst and "${p}/tcp" in inst and 'PORT="8080"' in inst
+          and 'ALT_PORT="80"' in inst)
     check("validates config (nginx -t) before reload", "nginx -t" in inst)
     check("enables on boot (survives reboot)", "systemctl enable nginx" in inst)
     check("restarts nginx", "systemctl restart nginx" in inst)
@@ -102,11 +107,16 @@ def main():
     print("\nwatchdog script — requirements")
     assert os.path.isfile(WATCHDOG), f"missing {WATCHDOG}"
     wd = open(WATCHDOG, encoding="utf-8").read()
-    check("health-checks :8080", "http_code" in wd and "127.0.0.1" in wd)
+    check("health-checks :8080", "127.0.0.1:${PORT}" in wd or "${PORT}" in wd)
+    check("also health-checks :80 (both_healthy)",
+          "ALT_PORT" in wd and "both_healthy" in wd)
     check("restarts nginx on failure", "systemctl restart nginx" in wd)
     check("re-syncs persistent root if empty",
           "ensure_content" in wd and "index.html" in wd)
     check("starts nginx if not active", "is-active --quiet nginx" in wd)
+    check("self-updates config from origin/main on drift",
+          "sync_config" in wd and "cmp -s" in wd and "reset --hard origin/main" in wd
+          and "nginx -t" in wd)
     r = subprocess.run(["bash", "-n", WATCHDOG], capture_output=True, text=True)
     check("bash -n engquest-watchdog.sh", r.returncode == 0, r.stderr.strip())
 
