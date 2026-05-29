@@ -25,7 +25,7 @@ class EngQuestApp extends StatelessWidget {
         '/': (context) => const WorldMapScreen(),
         '/battle': (context) => const BattleScreen(),
         '/voice': (context) => const VoiceScreen(),
-        '/dialog': (context) => const DialogScreen(),
+        '/dialog': (context) => const DialogScenariosScreen(),
       },
     );
   }
