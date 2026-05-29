@@ -789,50 +789,45 @@ class _GradeButtonState extends State<_GradeButton>
         widget.onTap();
       },
       onTapCancel: () => _scaleCtrl.reverse(),
-      child: ScaleTransition(
-        scale: _scaleAnim.drive(
-          Tween<double>(begin: 1.0, end: 0.95),
-        )..toString(), // workaround: use AnimatedBuilder below
-        child: AnimatedBuilder(
-          animation: _scaleAnim,
-          builder: (context, child) => Transform.scale(
-            scale: 1.0 - (_scaleAnim.value - 1.0).abs() * 0.05,
-            child: child,
+      child: AnimatedBuilder(
+        animation: _scaleAnim,
+        builder: (context, child) => Transform.scale(
+          scale: _scaleAnim.value,
+          child: child,
+        ),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
+          decoration: BoxDecoration(
+            color: widget.color.withAlpha(204),
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: widget.color.withAlpha(77),
+                blurRadius: 8,
+                offset: const Offset(0, 3),
+              ),
+            ],
           ),
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
-            decoration: BoxDecoration(
-              color: widget.color.withAlpha(204),
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: widget.color.withAlpha(77),
-                  blurRadius: 8,
-                  offset: const Offset(0, 3),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                widget.grade.label,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 13,
                 ),
-              ],
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  widget.grade.label,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 13,
-                  ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                interval,
+                style: const TextStyle(
+                  color: Colors.white70,
+                  fontSize: 10,
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  interval,
-                  style: const TextStyle(
-                    color: Colors.white70,
-                    fontSize: 10,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

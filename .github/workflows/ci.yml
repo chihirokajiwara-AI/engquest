@@ -1,0 +1,82 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+# Cancel in-progress runs for same branch (saves free-tier minutes)
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analyze-and-test:
+    name: Flutter Analyze & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── Checkout ──────────────────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── Flutter setup ─────────────────────────────────────────────────────
+      - name: Set up Flutter 3.22.x
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.22.x'
+          channel: 'stable'
+          cache: true
+          cache-key: 'flutter-${{ runner.os }}-3.22.x'
+
+      # ── Pub cache ─────────────────────────────────────────────────────────
+      - name: Cache pub dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            ${{ env.PUB_CACHE }}
+          key: pub-${{ runner.os }}-${{ hashFiles('pubspec.yaml', 'pubspec.lock') }}
+          restore-keys: |
+            pub-${{ runner.os }}-
+
+      # ── Install dependencies ───────────────────────────────────────────────
+      - name: Install dependencies
+        run: flutter pub get
+
+      # ── Analyze ───────────────────────────────────────────────────────────
+      - name: Flutter analyze
+        run: flutter analyze --fatal-infos --fatal-warnings
+
+      # ── Format check ──────────────────────────────────────────────────────
+      - name: Check formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+      # ── Unit + Widget tests ────────────────────────────────────────────────
+      - name: Run tests
+        run: flutter test --coverage --reporter=github
+
+      # ── Coverage report (optional, no external service needed) ────────────
+      - name: Upload coverage artifact
+        if: github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/lcov.info
+          retention-days: 30
+
+  # ── Summary job (required status check) ────────────────────────────────────
+  ci-pass:
+    name: CI Pass
+    needs: analyze-and-test
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Check all jobs passed
+        run: |
+          if [ "${{ needs.analyze-and-test.result }}" != "success" ]; then
+            echo "❌ analyze-and-test failed"
+            exit 1
+          fi
+          echo "✅ All CI checks passed"
