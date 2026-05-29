@@ -148,6 +148,23 @@ class BattleScreen extends StatefulWidget {
     this.childAge = 8,
   });
 
+  /// Computes elapsed session time in whole minutes, rounded to the nearest
+  /// minute with a floor of 1 (a completed session always counts as ≥ 1 min,
+  /// so study-time analytics never record a zero-minute session).
+  ///
+  /// Exposed as a static pure function so the rounding logic is unit-testable
+  /// without constructing the full widget/animation stack.
+  ///   - [start] null            → 1 (defensive fallback)
+  ///   - non-positive duration   → 1 (clock skew / instant complete)
+  ///   - otherwise               → round to nearest minute, floor of 1
+  static int elapsedMinutes(DateTime? start, DateTime end) {
+    if (start == null) return 1;
+    final seconds = end.difference(start).inSeconds;
+    if (seconds <= 0) return 1;
+    final minutes = (seconds + 30) ~/ 60;
+    return minutes < 1 ? 1 : minutes;
+  }
+
   @override
   State<BattleScreen> createState() => _BattleScreenState();
 }
@@ -172,6 +189,11 @@ class _BattleScreenState extends State<BattleScreen>
   // ── Session stats ──────────────────────────────────────────────────────────
   final List<_CardResult> _sessionResults = [];
   bool _sessionDone = false;
+
+  // ── Session timer (P0.1) ────────────────────────────────────────────────────
+  /// Wall-clock timestamp captured when the deck finishes loading and the first
+  /// card becomes visible. Used to compute real elapsed minutes on completion.
+  DateTime? _sessionStartTime;
 
   // ── Streak ─────────────────────────────────────────────────────────────────
   int _streak = 0; // consecutive Good/Easy answers
@@ -301,6 +323,9 @@ class _BattleScreenState extends State<BattleScreen>
       _xpPopups.clear();
       _starsCtrl.reset();
       _repoLoading = false;
+      // Session begins now — first card is visible. Capture start timestamp
+      // so we can compute real elapsed minutes when the session completes.
+      _sessionStartTime = DateTime.now();
     });
   }
 
@@ -422,6 +447,9 @@ class _BattleScreenState extends State<BattleScreen>
     // Count 'review' state cards as mastered
     final masteredCount = _deck.where((c) => c.state == CardState.review).length;
 
+    // Real elapsed study time (P0.1) — computed from session start timestamp.
+    final minutes = BattleScreen.elapsedMinutes(_sessionStartTime, DateTime.now());
+
     final progressService = ProgressService(
       repository: FirestoreProgressRepository(),
     );
@@ -429,7 +457,7 @@ class _BattleScreenState extends State<BattleScreen>
     progressService.recordSession(
       uid: uid,
       wordsPracticed: total,
-      minutes: 1, // approximate; real timer would need to track start time
+      minutes: minutes,
       avgScore: avgScore,
       totalMastered: masteredCount,
       totalPracticed: _deck.length,
