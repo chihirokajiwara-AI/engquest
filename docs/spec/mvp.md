@@ -58,10 +58,10 @@ Native-equivalent English cognition in Japanese children, age 4–18.
 | C02 | CEFR-Tagged Content DB (300 words, A1) | `done` | 2026-05-29 | lib/data/content/vocab_a1.dart — 300語 const List, JSON + Dart model + repository + unit tests |
 | C03 | Firebase Project Setup + Auth | `done` | 2026-05-29 | lib/core/firebase/ — FirebaseConfig.initialize() + AuthService (anonymous auth, COPPA準拠) |
 | C04 | Flutter App Scaffold + Navigation | `done` | 2026-05-29 | lib/main.dart + app.dart + world_map_screen.dart — 3ゾーンナビゲーション実装済み |
-| C05 | Battle Module (Retrieval Loop) | `todo` | 2026-05-26 | Card flip + FSRS scheduling |
-| C06 | Voice Module (Pronunciation Coach) | `spec` | 2026-05-26 | Spike S01 complete: whisper_ggml_plus base.en, hybrid arch. Delegate to Claude Code next. |
-| C07 | Dialog Module (Conversational AI) | `todo` | 2026-05-26 | Claude haiku + conversation templates |
-| C08 | Parent Dashboard | `todo` | 2026-05-26 | Progress viz, streak, word mastery % |
+| C05 | Battle Module (Retrieval Loop) | `done` | 2026-05-29 | FSRS-4.5 Dart全公式実装 + カードフリップUI + 4段階評価 + セッションサマリー |
+| C06 | Voice Module (Pronunciation Coach) | `done` | 2026-05-29 | VoiceService + Levenshtein評価 + PlatformChannel stub + デモモード完全動作 |
+| C07 | Dialog Module (Conversational AI) | `done` | 2026-05-29 | ClaudeClient (haiku) + DialogService (3シナリオ) + オフラインフォールバック |
+| C08 | Parent Dashboard | `done` | 2026-05-29 | 4タブ (Home/Progress/Schedule/Settings) + MockData完全表示 + ストリーク/英検準備度 |
 | C09 | Analytics + A/B Framework | `todo` | 2026-05-26 | Firebase Analytics + custom events |
 | C10 | Onboarding Flow | `todo` | 2026-05-26 | Age input, CEFR placement, avatar selection |
 
