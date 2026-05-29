@@ -23,6 +23,8 @@ dependencies:
   path: ^1.9.0
   # Persistence / Prefs
   shared_preferences: ^2.2.0
+  path_provider: ^2.1.2
+  equatable: ^2.0.5
   # Networking (Claude API)
   http: ^1.1.0
   # Crypto (analytics hashing)
