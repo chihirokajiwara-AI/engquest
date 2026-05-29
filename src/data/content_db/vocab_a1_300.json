@@ -1,0 +1,6948 @@
+{
+  "version": "1.0.0",
+  "created": "2026-05-29",
+  "description": "ENG Quest A1 vocabulary database — 英検5級 300 words with CEFR-J A1 metadata",
+  "totalWords": 300,
+  "cefrLevel": "A1",
+  "eikenLevel": "5",
+  "categories": {
+    "Animals": 30,
+    "Food": 30,
+    "Family": 20,
+    "Colors": 15,
+    "Numbers": 20,
+    "Actions": 40,
+    "Adjectives": 30,
+    "School": 25,
+    "Time_Weather": 25,
+    "Greetings_Social": 25,
+    "Body": 20,
+    "Places": 20
+  },
+  "words": [
+    {
+      "id": "eiken5_001",
+      "word": "cat",
+      "reading": "キャット",
+      "jpTranslation": "ねこ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Animals",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I have a cat."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_001.mp3",
+      "imageUrl": "images/eiken5/eiken5_001.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "animals"
+      ]
+    },
+    {
+      "id": "eiken5_002",
+      "word": "dog",
+      "reading": "ドッグ",
+      "jpTranslation": "いぬ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Animals",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "My dog is big."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_002.mp3",
+      "imageUrl": "images/eiken5/eiken5_002.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "animals"
+      ]
+    },
+    {
+      "id": "eiken5_003",
+      "word": "fish",
+      "reading": "フィッシュ",
+      "jpTranslation": "さかな",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Animals",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I like fish."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_003.mp3",
+      "imageUrl": "images/eiken5/eiken5_003.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "animals"
+      ]
+    },
+    {
+      "id": "eiken5_004",
+      "word": "bird",
+      "reading": "バード",
+      "jpTranslation": "とり",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Animals",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "The bird is small."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_004.mp3",
+      "imageUrl": "images/eiken5/eiken5_004.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "animals"
+      ]
+    },
+    {
+      "id": "eiken5_005",
+      "word": "rabbit",
+      "reading": "ラビット",
+      "jpTranslation": "うさぎ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Animals",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "A rabbit is white."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_005.mp3",
+      "imageUrl": "images/eiken5/eiken5_005.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "animals"
+      ]
+    },
+    {
+      "id": "eiken5_006",
+      "word": "horse",
+      "reading": "ホース",
+      "jpTranslation": "うま",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Animals",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "The horse runs fast."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_006.mp3",
+      "imageUrl": "images/eiken5/eiken5_006.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "animals"
+      ]
+    },
+    {
+      "id": "eiken5_007",
+      "word": "cow",
+      "reading": "カウ",
+      "jpTranslation": "うし",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Animals",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "A cow is big."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_007.mp3",
+      "imageUrl": "images/eiken5/eiken5_007.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "animals"
+      ]
+    },
+    {
+      "id": "eiken5_008",
+      "word": "pig",
+      "reading": "ピッグ",
+      "jpTranslation": "ぶた",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Animals",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "The pig is pink."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_008.mp3",
+      "imageUrl": "images/eiken5/eiken5_008.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "animals"
+      ]
+    },
+    {
+      "id": "eiken5_009",
+      "word": "sheep",
+      "reading": "シープ",
+      "jpTranslation": "ひつじ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Animals",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I see a sheep."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_009.mp3",
+      "imageUrl": "images/eiken5/eiken5_009.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "animals"
+      ]
+    },
+    {
+      "id": "eiken5_010",
+      "word": "duck",
+      "reading": "ダック",
+      "jpTranslation": "あひる",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Animals",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "The duck is yellow."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_010.mp3",
+      "imageUrl": "images/eiken5/eiken5_010.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "animals"
+      ]
+    },
+    {
+      "id": "eiken5_011",
+      "word": "lion",
+      "reading": "ライオン",
+      "jpTranslation": "ライオン",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Animals",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "A lion is strong."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_011.mp3",
+      "imageUrl": "images/eiken5/eiken5_011.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "animals"
+      ]
+    },
+    {
+      "id": "eiken5_012",
+      "word": "tiger",
+      "reading": "タイガー",
+      "jpTranslation": "トラ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Animals",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "The tiger is fast."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_012.mp3",
+      "imageUrl": "images/eiken5/eiken5_012.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "animals"
+      ]
+    },
+    {
+      "id": "eiken5_013",
+      "word": "elephant",
+      "reading": "エレファント",
+      "jpTranslation": "ぞう",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Animals",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "An elephant is large."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_013.mp3",
+      "imageUrl": "images/eiken5/eiken5_013.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "animals"
+      ]
+    },
+    {
+      "id": "eiken5_014",
+      "word": "monkey",
+      "reading": "マンキー",
+      "jpTranslation": "さる",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Animals",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "The monkey is funny."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_014.mp3",
+      "imageUrl": "images/eiken5/eiken5_014.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "animals"
+      ]
+    },
+    {
+      "id": "eiken5_015",
+      "word": "bear",
+      "reading": "ベアー",
+      "jpTranslation": "くま",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Animals",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "The bear is brown."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_015.mp3",
+      "imageUrl": "images/eiken5/eiken5_015.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "animals"
+      ]
+    },
+    {
+      "id": "eiken5_016",
+      "word": "fox",
+      "reading": "フォックス",
+      "jpTranslation": "きつね",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Animals",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "A fox is clever."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_016.mp3",
+      "imageUrl": "images/eiken5/eiken5_016.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "animals"
+      ]
+    },
+    {
+      "id": "eiken5_017",
+      "word": "wolf",
+      "reading": "ウルフ",
+      "jpTranslation": "おおかみ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Animals",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "The wolf runs."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_017.mp3",
+      "imageUrl": "images/eiken5/eiken5_017.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "animals"
+      ]
+    },
+    {
+      "id": "eiken5_018",
+      "word": "frog",
+      "reading": "フロッグ",
+      "jpTranslation": "かえる",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Animals",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "A frog is green."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_018.mp3",
+      "imageUrl": "images/eiken5/eiken5_018.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "animals"
+      ]
+    },
+    {
+      "id": "eiken5_019",
+      "word": "snake",
+      "reading": "スネイク",
+      "jpTranslation": "へび",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Animals",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "The snake is long."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_019.mp3",
+      "imageUrl": "images/eiken5/eiken5_019.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "animals"
+      ]
+    },
+    {
+      "id": "eiken5_020",
+      "word": "turtle",
+      "reading": "タートル",
+      "jpTranslation": "かめ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Animals",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "A turtle is slow."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_020.mp3",
+      "imageUrl": "images/eiken5/eiken5_020.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "animals"
+      ]
+    },
+    {
+      "id": "eiken5_021",
+      "word": "hamster",
+      "reading": "ハムスター",
+      "jpTranslation": "ハムスター",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Animals",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "My hamster is cute."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_021.mp3",
+      "imageUrl": "images/eiken5/eiken5_021.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "animals"
+      ]
+    },
+    {
+      "id": "eiken5_022",
+      "word": "parrot",
+      "reading": "パロット",
+      "jpTranslation": "おうむ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Animals",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "The parrot can talk."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_022.mp3",
+      "imageUrl": "images/eiken5/eiken5_022.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "animals"
+      ]
+    },
+    {
+      "id": "eiken5_023",
+      "word": "penguin",
+      "reading": "ペンギン",
+      "jpTranslation": "ペンギン",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Animals",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "A penguin is black and white."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_023.mp3",
+      "imageUrl": "images/eiken5/eiken5_023.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "animals"
+      ]
+    },
+    {
+      "id": "eiken5_024",
+      "word": "panda",
+      "reading": "パンダ",
+      "jpTranslation": "パンダ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Animals",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "The panda eats bamboo."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_024.mp3",
+      "imageUrl": "images/eiken5/eiken5_024.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "animals"
+      ]
+    },
+    {
+      "id": "eiken5_025",
+      "word": "deer",
+      "reading": "ディア",
+      "jpTranslation": "しか",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Animals",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "A deer is in the forest."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_025.mp3",
+      "imageUrl": "images/eiken5/eiken5_025.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "animals"
+      ]
+    },
+    {
+      "id": "eiken5_026",
+      "word": "mouse",
+      "reading": "マウス",
+      "jpTranslation": "ねずみ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Animals",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "The mouse is small."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_026.mp3",
+      "imageUrl": "images/eiken5/eiken5_026.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "animals"
+      ]
+    },
+    {
+      "id": "eiken5_027",
+      "word": "chicken",
+      "reading": "チキン",
+      "jpTranslation": "にわとり",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Animals",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "The chicken lays eggs."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_027.mp3",
+      "imageUrl": "images/eiken5/eiken5_027.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "animals"
+      ]
+    },
+    {
+      "id": "eiken5_028",
+      "word": "butterfly",
+      "reading": "バタフライ",
+      "jpTranslation": "ちょうちょ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Animals",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "The butterfly is beautiful."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_028.mp3",
+      "imageUrl": "images/eiken5/eiken5_028.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "animals"
+      ]
+    },
+    {
+      "id": "eiken5_029",
+      "word": "bee",
+      "reading": "ビー",
+      "jpTranslation": "はち",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Animals",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "A bee makes honey."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_029.mp3",
+      "imageUrl": "images/eiken5/eiken5_029.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "animals"
+      ]
+    },
+    {
+      "id": "eiken5_030",
+      "word": "ant",
+      "reading": "アント",
+      "jpTranslation": "あり",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Animals",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "The ant is small."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_030.mp3",
+      "imageUrl": "images/eiken5/eiken5_030.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "animals"
+      ]
+    },
+    {
+      "id": "eiken5_031",
+      "word": "apple",
+      "reading": "アップル",
+      "jpTranslation": "りんご",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Food",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I eat an apple."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_031.mp3",
+      "imageUrl": "images/eiken5/eiken5_031.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "food"
+      ]
+    },
+    {
+      "id": "eiken5_032",
+      "word": "rice",
+      "reading": "ライス",
+      "jpTranslation": "ごはん",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Food",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I eat rice every day."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_032.mp3",
+      "imageUrl": "images/eiken5/eiken5_032.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "food"
+      ]
+    },
+    {
+      "id": "eiken5_033",
+      "word": "water",
+      "reading": "ウォーター",
+      "jpTranslation": "みず",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Food",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "Please give me water."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_033.mp3",
+      "imageUrl": "images/eiken5/eiken5_033.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "food"
+      ]
+    },
+    {
+      "id": "eiken5_034",
+      "word": "bread",
+      "reading": "ブレッド",
+      "jpTranslation": "パン",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Food",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I eat bread for breakfast."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_034.mp3",
+      "imageUrl": "images/eiken5/eiken5_034.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "food"
+      ]
+    },
+    {
+      "id": "eiken5_035",
+      "word": "milk",
+      "reading": "ミルク",
+      "jpTranslation": "ぎゅうにゅう",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Food",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I drink milk."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_035.mp3",
+      "imageUrl": "images/eiken5/eiken5_035.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "food"
+      ]
+    },
+    {
+      "id": "eiken5_036",
+      "word": "egg",
+      "reading": "エッグ",
+      "jpTranslation": "たまご",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Food",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I eat an egg."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_036.mp3",
+      "imageUrl": "images/eiken5/eiken5_036.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "food"
+      ]
+    },
+    {
+      "id": "eiken5_037",
+      "word": "orange",
+      "reading": "オレンジ",
+      "jpTranslation": "オレンジ（果物）",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Food",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "An orange is sweet."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_037.mp3",
+      "imageUrl": "images/eiken5/eiken5_037.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "food"
+      ]
+    },
+    {
+      "id": "eiken5_038",
+      "word": "banana",
+      "reading": "バナナ",
+      "jpTranslation": "バナナ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Food",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I like bananas."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_038.mp3",
+      "imageUrl": "images/eiken5/eiken5_038.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "food"
+      ]
+    },
+    {
+      "id": "eiken5_039",
+      "word": "cake",
+      "reading": "ケーキ",
+      "jpTranslation": "ケーキ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Food",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "The cake is delicious."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_039.mp3",
+      "imageUrl": "images/eiken5/eiken5_039.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "food"
+      ]
+    },
+    {
+      "id": "eiken5_040",
+      "word": "juice",
+      "reading": "ジュース",
+      "jpTranslation": "ジュース",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Food",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I drink orange juice."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_040.mp3",
+      "imageUrl": "images/eiken5/eiken5_040.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "food"
+      ]
+    },
+    {
+      "id": "eiken5_041",
+      "word": "meat",
+      "reading": "ミート",
+      "jpTranslation": "にく",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Food",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I eat meat."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_041.mp3",
+      "imageUrl": "images/eiken5/eiken5_041.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "food"
+      ]
+    },
+    {
+      "id": "eiken5_042",
+      "word": "vegetable",
+      "reading": "ベジタブル",
+      "jpTranslation": "やさい",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Food",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I eat vegetables."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_042.mp3",
+      "imageUrl": "images/eiken5/eiken5_042.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "food"
+      ]
+    },
+    {
+      "id": "eiken5_043",
+      "word": "salad",
+      "reading": "サラダ",
+      "jpTranslation": "サラダ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Food",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I like salad."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_043.mp3",
+      "imageUrl": "images/eiken5/eiken5_043.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "food"
+      ]
+    },
+    {
+      "id": "eiken5_044",
+      "word": "soup",
+      "reading": "スープ",
+      "jpTranslation": "スープ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Food",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "The soup is hot."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_044.mp3",
+      "imageUrl": "images/eiken5/eiken5_044.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "food"
+      ]
+    },
+    {
+      "id": "eiken5_045",
+      "word": "cookie",
+      "reading": "クッキー",
+      "jpTranslation": "クッキー",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Food",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I eat a cookie."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_045.mp3",
+      "imageUrl": "images/eiken5/eiken5_045.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "food"
+      ]
+    },
+    {
+      "id": "eiken5_046",
+      "word": "ice cream",
+      "reading": "アイスクリーム",
+      "jpTranslation": "アイスクリーム",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Food",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "Ice cream is cold."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_046.mp3",
+      "imageUrl": "images/eiken5/eiken5_046.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "food"
+      ]
+    },
+    {
+      "id": "eiken5_047",
+      "word": "pizza",
+      "reading": "ピザ",
+      "jpTranslation": "ピザ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Food",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I like pizza."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_047.mp3",
+      "imageUrl": "images/eiken5/eiken5_047.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "food"
+      ]
+    },
+    {
+      "id": "eiken5_048",
+      "word": "sandwich",
+      "reading": "サンドウィッチ",
+      "jpTranslation": "サンドウィッチ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Food",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I eat a sandwich."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_048.mp3",
+      "imageUrl": "images/eiken5/eiken5_048.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "food"
+      ]
+    },
+    {
+      "id": "eiken5_049",
+      "word": "chocolate",
+      "reading": "チョコレート",
+      "jpTranslation": "チョコレート",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Food",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "Chocolate is sweet."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_049.mp3",
+      "imageUrl": "images/eiken5/eiken5_049.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "food"
+      ]
+    },
+    {
+      "id": "eiken5_050",
+      "word": "strawberry",
+      "reading": "ストロベリー",
+      "jpTranslation": "いちご",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Food",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "Strawberries are red."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_050.mp3",
+      "imageUrl": "images/eiken5/eiken5_050.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "food"
+      ]
+    },
+    {
+      "id": "eiken5_051",
+      "word": "grape",
+      "reading": "グレープ",
+      "jpTranslation": "ぶどう",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Food",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "Grapes are purple."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_051.mp3",
+      "imageUrl": "images/eiken5/eiken5_051.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "food"
+      ]
+    },
+    {
+      "id": "eiken5_052",
+      "word": "watermelon",
+      "reading": "ウォーターメロン",
+      "jpTranslation": "すいか",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Food",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "Watermelon is sweet."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_052.mp3",
+      "imageUrl": "images/eiken5/eiken5_052.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "food"
+      ]
+    },
+    {
+      "id": "eiken5_053",
+      "word": "lemon",
+      "reading": "レモン",
+      "jpTranslation": "レモン",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Food",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "A lemon is sour."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_053.mp3",
+      "imageUrl": "images/eiken5/eiken5_053.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "food"
+      ]
+    },
+    {
+      "id": "eiken5_054",
+      "word": "corn",
+      "reading": "コーン",
+      "jpTranslation": "とうもろこし",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Food",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I eat corn."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_054.mp3",
+      "imageUrl": "images/eiken5/eiken5_054.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "food"
+      ]
+    },
+    {
+      "id": "eiken5_055",
+      "word": "potato",
+      "reading": "ポテト",
+      "jpTranslation": "じゃがいも",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Food",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I like potatoes."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_055.mp3",
+      "imageUrl": "images/eiken5/eiken5_055.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "food"
+      ]
+    },
+    {
+      "id": "eiken5_056",
+      "word": "tomato",
+      "reading": "トマト",
+      "jpTranslation": "トマト",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Food",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "A tomato is red."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_056.mp3",
+      "imageUrl": "images/eiken5/eiken5_056.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "food"
+      ]
+    },
+    {
+      "id": "eiken5_057",
+      "word": "carrot",
+      "reading": "キャロット",
+      "jpTranslation": "にんじん",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Food",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "A carrot is orange."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_057.mp3",
+      "imageUrl": "images/eiken5/eiken5_057.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "food"
+      ]
+    },
+    {
+      "id": "eiken5_058",
+      "word": "onion",
+      "reading": "オニオン",
+      "jpTranslation": "たまねぎ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Food",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "An onion makes me cry."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_058.mp3",
+      "imageUrl": "images/eiken5/eiken5_058.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "food"
+      ]
+    },
+    {
+      "id": "eiken5_059",
+      "word": "tea",
+      "reading": "ティー",
+      "jpTranslation": "おちゃ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Food",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I drink tea."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_059.mp3",
+      "imageUrl": "images/eiken5/eiken5_059.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "food"
+      ]
+    },
+    {
+      "id": "eiken5_060",
+      "word": "coffee",
+      "reading": "コーヒー",
+      "jpTranslation": "コーヒー",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Food",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "My parents drink coffee."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_060.mp3",
+      "imageUrl": "images/eiken5/eiken5_060.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "food"
+      ]
+    },
+    {
+      "id": "eiken5_061",
+      "word": "mother",
+      "reading": "マザー",
+      "jpTranslation": "おかあさん",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Family",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "My mother is kind."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_061.mp3",
+      "imageUrl": "images/eiken5/eiken5_061.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "family"
+      ]
+    },
+    {
+      "id": "eiken5_062",
+      "word": "father",
+      "reading": "ファーザー",
+      "jpTranslation": "おとうさん",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Family",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "My father works hard."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_062.mp3",
+      "imageUrl": "images/eiken5/eiken5_062.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "family"
+      ]
+    },
+    {
+      "id": "eiken5_063",
+      "word": "sister",
+      "reading": "シスター",
+      "jpTranslation": "おねえさん・いもうと",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Family",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I have a sister."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_063.mp3",
+      "imageUrl": "images/eiken5/eiken5_063.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "family"
+      ]
+    },
+    {
+      "id": "eiken5_064",
+      "word": "brother",
+      "reading": "ブラザー",
+      "jpTranslation": "おにいさん・おとうと",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Family",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "My brother is tall."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_064.mp3",
+      "imageUrl": "images/eiken5/eiken5_064.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "family"
+      ]
+    },
+    {
+      "id": "eiken5_065",
+      "word": "grandmother",
+      "reading": "グランドマザー",
+      "jpTranslation": "おばあさん",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Family",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "My grandmother is kind."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_065.mp3",
+      "imageUrl": "images/eiken5/eiken5_065.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "family"
+      ]
+    },
+    {
+      "id": "eiken5_066",
+      "word": "grandfather",
+      "reading": "グランドファーザー",
+      "jpTranslation": "おじいさん",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Family",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "My grandfather tells stories."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_066.mp3",
+      "imageUrl": "images/eiken5/eiken5_066.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "family"
+      ]
+    },
+    {
+      "id": "eiken5_067",
+      "word": "family",
+      "reading": "ファミリー",
+      "jpTranslation": "かぞく",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Family",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I love my family."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_067.mp3",
+      "imageUrl": "images/eiken5/eiken5_067.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "family"
+      ]
+    },
+    {
+      "id": "eiken5_068",
+      "word": "baby",
+      "reading": "ベイビー",
+      "jpTranslation": "あかちゃん",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Family",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "The baby is cute."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_068.mp3",
+      "imageUrl": "images/eiken5/eiken5_068.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "family"
+      ]
+    },
+    {
+      "id": "eiken5_069",
+      "word": "child",
+      "reading": "チャイルド",
+      "jpTranslation": "こども",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Family",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "The child is happy."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_069.mp3",
+      "imageUrl": "images/eiken5/eiken5_069.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "family"
+      ]
+    },
+    {
+      "id": "eiken5_070",
+      "word": "boy",
+      "reading": "ボーイ",
+      "jpTranslation": "おとこのこ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Family",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "The boy is strong."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_070.mp3",
+      "imageUrl": "images/eiken5/eiken5_070.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "family"
+      ]
+    },
+    {
+      "id": "eiken5_071",
+      "word": "girl",
+      "reading": "ガール",
+      "jpTranslation": "おんなのこ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Family",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "The girl sings well."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_071.mp3",
+      "imageUrl": "images/eiken5/eiken5_071.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "family"
+      ]
+    },
+    {
+      "id": "eiken5_072",
+      "word": "man",
+      "reading": "マン",
+      "jpTranslation": "おとこのひと",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Family",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "The man is tall."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_072.mp3",
+      "imageUrl": "images/eiken5/eiken5_072.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "family"
+      ]
+    },
+    {
+      "id": "eiken5_073",
+      "word": "woman",
+      "reading": "ウーマン",
+      "jpTranslation": "おんなのひと",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Family",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "The woman is kind."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_073.mp3",
+      "imageUrl": "images/eiken5/eiken5_073.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "family"
+      ]
+    },
+    {
+      "id": "eiken5_074",
+      "word": "friend",
+      "reading": "フレンド",
+      "jpTranslation": "ともだち",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Family",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "She is my friend."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_074.mp3",
+      "imageUrl": "images/eiken5/eiken5_074.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "family"
+      ]
+    },
+    {
+      "id": "eiken5_075",
+      "word": "name",
+      "reading": "ネーム",
+      "jpTranslation": "なまえ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Family",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "My name is Ken."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_075.mp3",
+      "imageUrl": "images/eiken5/eiken5_075.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "family"
+      ]
+    },
+    {
+      "id": "eiken5_076",
+      "word": "age",
+      "reading": "エイジ",
+      "jpTranslation": "とし",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Family",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "My age is ten."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_076.mp3",
+      "imageUrl": "images/eiken5/eiken5_076.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "family"
+      ]
+    },
+    {
+      "id": "eiken5_077",
+      "word": "son",
+      "reading": "サン",
+      "jpTranslation": "むすこ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Family",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "He is my son."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_077.mp3",
+      "imageUrl": "images/eiken5/eiken5_077.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "family"
+      ]
+    },
+    {
+      "id": "eiken5_078",
+      "word": "daughter",
+      "reading": "ドーター",
+      "jpTranslation": "むすめ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Family",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "She is my daughter."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_078.mp3",
+      "imageUrl": "images/eiken5/eiken5_078.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "family"
+      ]
+    },
+    {
+      "id": "eiken5_079",
+      "word": "uncle",
+      "reading": "アンクル",
+      "jpTranslation": "おじさん",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Family",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "My uncle is funny."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_079.mp3",
+      "imageUrl": "images/eiken5/eiken5_079.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "family"
+      ]
+    },
+    {
+      "id": "eiken5_080",
+      "word": "aunt",
+      "reading": "アント",
+      "jpTranslation": "おばさん",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Family",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "My aunt cooks well."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_080.mp3",
+      "imageUrl": "images/eiken5/eiken5_080.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "family"
+      ]
+    },
+    {
+      "id": "eiken5_081",
+      "word": "red",
+      "reading": "レッド",
+      "jpTranslation": "あか",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Colors",
+      "pos": [
+        "adjective",
+        "noun"
+      ],
+      "exampleSentences": [
+        "The apple is red."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_081.mp3",
+      "imageUrl": "images/eiken5/eiken5_081.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "colors"
+      ]
+    },
+    {
+      "id": "eiken5_082",
+      "word": "blue",
+      "reading": "ブルー",
+      "jpTranslation": "あお",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Colors",
+      "pos": [
+        "adjective",
+        "noun"
+      ],
+      "exampleSentences": [
+        "The sky is blue."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_082.mp3",
+      "imageUrl": "images/eiken5/eiken5_082.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "colors"
+      ]
+    },
+    {
+      "id": "eiken5_083",
+      "word": "green",
+      "reading": "グリーン",
+      "jpTranslation": "みどり",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Colors",
+      "pos": [
+        "adjective",
+        "noun"
+      ],
+      "exampleSentences": [
+        "The leaf is green."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_083.mp3",
+      "imageUrl": "images/eiken5/eiken5_083.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "colors"
+      ]
+    },
+    {
+      "id": "eiken5_084",
+      "word": "yellow",
+      "reading": "イエロー",
+      "jpTranslation": "きいろ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Colors",
+      "pos": [
+        "adjective",
+        "noun"
+      ],
+      "exampleSentences": [
+        "The sun is yellow."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_084.mp3",
+      "imageUrl": "images/eiken5/eiken5_084.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "colors"
+      ]
+    },
+    {
+      "id": "eiken5_085",
+      "word": "white",
+      "reading": "ホワイト",
+      "jpTranslation": "しろ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Colors",
+      "pos": [
+        "adjective",
+        "noun"
+      ],
+      "exampleSentences": [
+        "Snow is white."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_085.mp3",
+      "imageUrl": "images/eiken5/eiken5_085.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "colors"
+      ]
+    },
+    {
+      "id": "eiken5_086",
+      "word": "black",
+      "reading": "ブラック",
+      "jpTranslation": "くろ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Colors",
+      "pos": [
+        "adjective",
+        "noun"
+      ],
+      "exampleSentences": [
+        "The night is black."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_086.mp3",
+      "imageUrl": "images/eiken5/eiken5_086.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "colors"
+      ]
+    },
+    {
+      "id": "eiken5_087",
+      "word": "orange",
+      "reading": "オレンジ",
+      "jpTranslation": "オレンジいろ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Colors",
+      "pos": [
+        "adjective",
+        "noun"
+      ],
+      "exampleSentences": [
+        "The sunset is orange."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_087.mp3",
+      "imageUrl": "images/eiken5/eiken5_087.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "colors"
+      ]
+    },
+    {
+      "id": "eiken5_088",
+      "word": "pink",
+      "reading": "ピンク",
+      "jpTranslation": "ピンク",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Colors",
+      "pos": [
+        "adjective",
+        "noun"
+      ],
+      "exampleSentences": [
+        "Sakura is pink."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_088.mp3",
+      "imageUrl": "images/eiken5/eiken5_088.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "colors"
+      ]
+    },
+    {
+      "id": "eiken5_089",
+      "word": "purple",
+      "reading": "パープル",
+      "jpTranslation": "むらさき",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Colors",
+      "pos": [
+        "adjective",
+        "noun"
+      ],
+      "exampleSentences": [
+        "Grapes are purple."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_089.mp3",
+      "imageUrl": "images/eiken5/eiken5_089.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "colors"
+      ]
+    },
+    {
+      "id": "eiken5_090",
+      "word": "brown",
+      "reading": "ブラウン",
+      "jpTranslation": "ちゃいろ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Colors",
+      "pos": [
+        "adjective",
+        "noun"
+      ],
+      "exampleSentences": [
+        "The bear is brown."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_090.mp3",
+      "imageUrl": "images/eiken5/eiken5_090.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "colors"
+      ]
+    },
+    {
+      "id": "eiken5_091",
+      "word": "gray",
+      "reading": "グレー",
+      "jpTranslation": "はいいろ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Colors",
+      "pos": [
+        "adjective",
+        "noun"
+      ],
+      "exampleSentences": [
+        "The elephant is gray."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_091.mp3",
+      "imageUrl": "images/eiken5/eiken5_091.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "colors"
+      ]
+    },
+    {
+      "id": "eiken5_092",
+      "word": "gold",
+      "reading": "ゴールド",
+      "jpTranslation": "きんいろ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Colors",
+      "pos": [
+        "adjective",
+        "noun"
+      ],
+      "exampleSentences": [
+        "The star is gold."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_092.mp3",
+      "imageUrl": "images/eiken5/eiken5_092.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "colors"
+      ]
+    },
+    {
+      "id": "eiken5_093",
+      "word": "silver",
+      "reading": "シルバー",
+      "jpTranslation": "ぎんいろ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Colors",
+      "pos": [
+        "adjective",
+        "noun"
+      ],
+      "exampleSentences": [
+        "The moon is silver."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_093.mp3",
+      "imageUrl": "images/eiken5/eiken5_093.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "colors"
+      ]
+    },
+    {
+      "id": "eiken5_094",
+      "word": "color",
+      "reading": "カラー",
+      "jpTranslation": "いろ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Colors",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "What color is it?"
+      ],
+      "audioUrl": "audio/eiken5/eiken5_094.mp3",
+      "imageUrl": "images/eiken5/eiken5_094.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "colors"
+      ]
+    },
+    {
+      "id": "eiken5_095",
+      "word": "light",
+      "reading": "ライト",
+      "jpTranslation": "うすい（色）",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Colors",
+      "pos": [
+        "adjective"
+      ],
+      "exampleSentences": [
+        "It is light blue."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_095.mp3",
+      "imageUrl": "images/eiken5/eiken5_095.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "colors"
+      ]
+    },
+    {
+      "id": "eiken5_096",
+      "word": "one",
+      "reading": "ワン",
+      "jpTranslation": "いち",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Numbers",
+      "pos": [
+        "number"
+      ],
+      "exampleSentences": [
+        "I have one book."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_096.mp3",
+      "imageUrl": "images/eiken5/eiken5_096.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "numbers"
+      ]
+    },
+    {
+      "id": "eiken5_097",
+      "word": "two",
+      "reading": "ツー",
+      "jpTranslation": "に",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Numbers",
+      "pos": [
+        "number"
+      ],
+      "exampleSentences": [
+        "I have two cats."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_097.mp3",
+      "imageUrl": "images/eiken5/eiken5_097.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "numbers"
+      ]
+    },
+    {
+      "id": "eiken5_098",
+      "word": "three",
+      "reading": "スリー",
+      "jpTranslation": "さん",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Numbers",
+      "pos": [
+        "number"
+      ],
+      "exampleSentences": [
+        "Three birds sit."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_098.mp3",
+      "imageUrl": "images/eiken5/eiken5_098.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "numbers"
+      ]
+    },
+    {
+      "id": "eiken5_099",
+      "word": "four",
+      "reading": "フォー",
+      "jpTranslation": "し・よん",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Numbers",
+      "pos": [
+        "number"
+      ],
+      "exampleSentences": [
+        "I see four fish."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_099.mp3",
+      "imageUrl": "images/eiken5/eiken5_099.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "numbers"
+      ]
+    },
+    {
+      "id": "eiken5_100",
+      "word": "five",
+      "reading": "ファイブ",
+      "jpTranslation": "ご",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Numbers",
+      "pos": [
+        "number"
+      ],
+      "exampleSentences": [
+        "Five apples are here."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_100.mp3",
+      "imageUrl": "images/eiken5/eiken5_100.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "numbers"
+      ]
+    },
+    {
+      "id": "eiken5_101",
+      "word": "six",
+      "reading": "シックス",
+      "jpTranslation": "ろく",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Numbers",
+      "pos": [
+        "number"
+      ],
+      "exampleSentences": [
+        "Six dogs play."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_101.mp3",
+      "imageUrl": "images/eiken5/eiken5_101.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "numbers"
+      ]
+    },
+    {
+      "id": "eiken5_102",
+      "word": "seven",
+      "reading": "セブン",
+      "jpTranslation": "しち・なな",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Numbers",
+      "pos": [
+        "number"
+      ],
+      "exampleSentences": [
+        "I have seven cards."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_102.mp3",
+      "imageUrl": "images/eiken5/eiken5_102.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "numbers"
+      ]
+    },
+    {
+      "id": "eiken5_103",
+      "word": "eight",
+      "reading": "エイト",
+      "jpTranslation": "はち",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Numbers",
+      "pos": [
+        "number"
+      ],
+      "exampleSentences": [
+        "Eight birds fly."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_103.mp3",
+      "imageUrl": "images/eiken5/eiken5_103.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "numbers"
+      ]
+    },
+    {
+      "id": "eiken5_104",
+      "word": "nine",
+      "reading": "ナイン",
+      "jpTranslation": "く・きゅう",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Numbers",
+      "pos": [
+        "number"
+      ],
+      "exampleSentences": [
+        "Nine children run."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_104.mp3",
+      "imageUrl": "images/eiken5/eiken5_104.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "numbers"
+      ]
+    },
+    {
+      "id": "eiken5_105",
+      "word": "ten",
+      "reading": "テン",
+      "jpTranslation": "じゅう",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Numbers",
+      "pos": [
+        "number"
+      ],
+      "exampleSentences": [
+        "I count to ten."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_105.mp3",
+      "imageUrl": "images/eiken5/eiken5_105.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "numbers"
+      ]
+    },
+    {
+      "id": "eiken5_106",
+      "word": "eleven",
+      "reading": "イレブン",
+      "jpTranslation": "じゅういち",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Numbers",
+      "pos": [
+        "number"
+      ],
+      "exampleSentences": [
+        "I am eleven years old."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_106.mp3",
+      "imageUrl": "images/eiken5/eiken5_106.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "numbers"
+      ]
+    },
+    {
+      "id": "eiken5_107",
+      "word": "twelve",
+      "reading": "トゥエルブ",
+      "jpTranslation": "じゅうに",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Numbers",
+      "pos": [
+        "number"
+      ],
+      "exampleSentences": [
+        "It is twelve o'clock."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_107.mp3",
+      "imageUrl": "images/eiken5/eiken5_107.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "numbers"
+      ]
+    },
+    {
+      "id": "eiken5_108",
+      "word": "twenty",
+      "reading": "トゥエンティ",
+      "jpTranslation": "にじゅう",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Numbers",
+      "pos": [
+        "number"
+      ],
+      "exampleSentences": [
+        "There are twenty students."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_108.mp3",
+      "imageUrl": "images/eiken5/eiken5_108.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "numbers"
+      ]
+    },
+    {
+      "id": "eiken5_109",
+      "word": "hundred",
+      "reading": "ハンドレッド",
+      "jpTranslation": "ひゃく",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Numbers",
+      "pos": [
+        "number"
+      ],
+      "exampleSentences": [
+        "One hundred yen."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_109.mp3",
+      "imageUrl": "images/eiken5/eiken5_109.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "numbers"
+      ]
+    },
+    {
+      "id": "eiken5_110",
+      "word": "first",
+      "reading": "ファースト",
+      "jpTranslation": "いちばん・はじめ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Numbers",
+      "pos": [
+        "number",
+        "adjective"
+      ],
+      "exampleSentences": [
+        "I am first."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_110.mp3",
+      "imageUrl": "images/eiken5/eiken5_110.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "numbers"
+      ]
+    },
+    {
+      "id": "eiken5_111",
+      "word": "second",
+      "reading": "セカンド",
+      "jpTranslation": "にばんめ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Numbers",
+      "pos": [
+        "number",
+        "adjective"
+      ],
+      "exampleSentences": [
+        "I am second."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_111.mp3",
+      "imageUrl": "images/eiken5/eiken5_111.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "numbers"
+      ]
+    },
+    {
+      "id": "eiken5_112",
+      "word": "third",
+      "reading": "サード",
+      "jpTranslation": "さんばんめ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Numbers",
+      "pos": [
+        "number",
+        "adjective"
+      ],
+      "exampleSentences": [
+        "I finished third."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_112.mp3",
+      "imageUrl": "images/eiken5/eiken5_112.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "numbers"
+      ]
+    },
+    {
+      "id": "eiken5_113",
+      "word": "number",
+      "reading": "ナンバー",
+      "jpTranslation": "かず・ばんごう",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Numbers",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "What is your number?"
+      ],
+      "audioUrl": "audio/eiken5/eiken5_113.mp3",
+      "imageUrl": "images/eiken5/eiken5_113.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "numbers"
+      ]
+    },
+    {
+      "id": "eiken5_114",
+      "word": "zero",
+      "reading": "ゼロ",
+      "jpTranslation": "ゼロ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Numbers",
+      "pos": [
+        "number"
+      ],
+      "exampleSentences": [
+        "Zero points today."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_114.mp3",
+      "imageUrl": "images/eiken5/eiken5_114.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "numbers"
+      ]
+    },
+    {
+      "id": "eiken5_115",
+      "word": "half",
+      "reading": "ハーフ",
+      "jpTranslation": "はんぶん",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Numbers",
+      "pos": [
+        "number",
+        "noun"
+      ],
+      "exampleSentences": [
+        "Half an hour."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_115.mp3",
+      "imageUrl": "images/eiken5/eiken5_115.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "numbers"
+      ]
+    },
+    {
+      "id": "eiken5_116",
+      "word": "run",
+      "reading": "ラン",
+      "jpTranslation": "はしる",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "I run every day."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_116.mp3",
+      "imageUrl": "images/eiken5/eiken5_116.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_117",
+      "word": "eat",
+      "reading": "イート",
+      "jpTranslation": "たべる",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "I eat lunch."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_117.mp3",
+      "imageUrl": "images/eiken5/eiken5_117.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_118",
+      "word": "sleep",
+      "reading": "スリープ",
+      "jpTranslation": "ねる",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "I sleep at nine."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_118.mp3",
+      "imageUrl": "images/eiken5/eiken5_118.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_119",
+      "word": "play",
+      "reading": "プレイ",
+      "jpTranslation": "あそぶ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "I play with my dog."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_119.mp3",
+      "imageUrl": "images/eiken5/eiken5_119.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_120",
+      "word": "read",
+      "reading": "リード",
+      "jpTranslation": "よむ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "I read a book."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_120.mp3",
+      "imageUrl": "images/eiken5/eiken5_120.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_121",
+      "word": "write",
+      "reading": "ライト",
+      "jpTranslation": "かく",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "I write my name."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_121.mp3",
+      "imageUrl": "images/eiken5/eiken5_121.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_122",
+      "word": "go",
+      "reading": "ゴー",
+      "jpTranslation": "いく",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "I go to school."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_122.mp3",
+      "imageUrl": "images/eiken5/eiken5_122.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_123",
+      "word": "come",
+      "reading": "カム",
+      "jpTranslation": "くる",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "Please come here."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_123.mp3",
+      "imageUrl": "images/eiken5/eiken5_123.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_124",
+      "word": "see",
+      "reading": "シー",
+      "jpTranslation": "みる",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "I see the sky."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_124.mp3",
+      "imageUrl": "images/eiken5/eiken5_124.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_125",
+      "word": "look",
+      "reading": "ルック",
+      "jpTranslation": "みる（注目）",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "Look at this!"
+      ],
+      "audioUrl": "audio/eiken5/eiken5_125.mp3",
+      "imageUrl": "images/eiken5/eiken5_125.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_126",
+      "word": "listen",
+      "reading": "リッスン",
+      "jpTranslation": "きく",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "Please listen to me."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_126.mp3",
+      "imageUrl": "images/eiken5/eiken5_126.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_127",
+      "word": "speak",
+      "reading": "スピーク",
+      "jpTranslation": "はなす",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "I speak English."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_127.mp3",
+      "imageUrl": "images/eiken5/eiken5_127.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_128",
+      "word": "say",
+      "reading": "セイ",
+      "jpTranslation": "いう",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "What do you say?"
+      ],
+      "audioUrl": "audio/eiken5/eiken5_128.mp3",
+      "imageUrl": "images/eiken5/eiken5_128.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_129",
+      "word": "ask",
+      "reading": "アスク",
+      "jpTranslation": "たずねる",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "I ask a question."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_129.mp3",
+      "imageUrl": "images/eiken5/eiken5_129.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_130",
+      "word": "answer",
+      "reading": "アンサー",
+      "jpTranslation": "こたえる",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "Please answer me."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_130.mp3",
+      "imageUrl": "images/eiken5/eiken5_130.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_131",
+      "word": "study",
+      "reading": "スタディ",
+      "jpTranslation": "べんきょうする",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "I study English."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_131.mp3",
+      "imageUrl": "images/eiken5/eiken5_131.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_132",
+      "word": "learn",
+      "reading": "ラーン",
+      "jpTranslation": "まなぶ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "I learn new words."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_132.mp3",
+      "imageUrl": "images/eiken5/eiken5_132.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_133",
+      "word": "teach",
+      "reading": "ティーチ",
+      "jpTranslation": "おしえる",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "She teaches me."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_133.mp3",
+      "imageUrl": "images/eiken5/eiken5_133.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_134",
+      "word": "help",
+      "reading": "ヘルプ",
+      "jpTranslation": "てつだう",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "Please help me."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_134.mp3",
+      "imageUrl": "images/eiken5/eiken5_134.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_135",
+      "word": "give",
+      "reading": "ギブ",
+      "jpTranslation": "あげる",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "I give you a gift."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_135.mp3",
+      "imageUrl": "images/eiken5/eiken5_135.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_136",
+      "word": "get",
+      "reading": "ゲット",
+      "jpTranslation": "もらう・もつ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "I get a present."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_136.mp3",
+      "imageUrl": "images/eiken5/eiken5_136.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_137",
+      "word": "make",
+      "reading": "メイク",
+      "jpTranslation": "つくる",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "I make a cake."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_137.mp3",
+      "imageUrl": "images/eiken5/eiken5_137.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_138",
+      "word": "open",
+      "reading": "オープン",
+      "jpTranslation": "あける",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "Please open the door."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_138.mp3",
+      "imageUrl": "images/eiken5/eiken5_138.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_139",
+      "word": "close",
+      "reading": "クローズ",
+      "jpTranslation": "しめる",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "Please close the window."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_139.mp3",
+      "imageUrl": "images/eiken5/eiken5_139.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_140",
+      "word": "walk",
+      "reading": "ウォーク",
+      "jpTranslation": "あるく",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "I walk to school."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_140.mp3",
+      "imageUrl": "images/eiken5/eiken5_140.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_141",
+      "word": "swim",
+      "reading": "スウィム",
+      "jpTranslation": "およぐ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "I swim in the pool."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_141.mp3",
+      "imageUrl": "images/eiken5/eiken5_141.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_142",
+      "word": "jump",
+      "reading": "ジャンプ",
+      "jpTranslation": "とぶ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "I can jump high."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_142.mp3",
+      "imageUrl": "images/eiken5/eiken5_142.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_143",
+      "word": "sing",
+      "reading": "シング",
+      "jpTranslation": "うたう",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "I sing a song."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_143.mp3",
+      "imageUrl": "images/eiken5/eiken5_143.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_144",
+      "word": "dance",
+      "reading": "ダンス",
+      "jpTranslation": "おどる",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "I dance with friends."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_144.mp3",
+      "imageUrl": "images/eiken5/eiken5_144.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_145",
+      "word": "draw",
+      "reading": "ドロー",
+      "jpTranslation": "かく（絵）",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "I draw a picture."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_145.mp3",
+      "imageUrl": "images/eiken5/eiken5_145.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_146",
+      "word": "drink",
+      "reading": "ドリンク",
+      "jpTranslation": "のむ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "I drink water."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_146.mp3",
+      "imageUrl": "images/eiken5/eiken5_146.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_147",
+      "word": "buy",
+      "reading": "バイ",
+      "jpTranslation": "かう",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "I buy an apple."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_147.mp3",
+      "imageUrl": "images/eiken5/eiken5_147.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_148",
+      "word": "use",
+      "reading": "ユーズ",
+      "jpTranslation": "つかう",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "I use a pen."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_148.mp3",
+      "imageUrl": "images/eiken5/eiken5_148.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_149",
+      "word": "know",
+      "reading": "ノウ",
+      "jpTranslation": "しっている",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "I know the answer."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_149.mp3",
+      "imageUrl": "images/eiken5/eiken5_149.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_150",
+      "word": "think",
+      "reading": "シンク",
+      "jpTranslation": "おもう",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "I think it is fun."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_150.mp3",
+      "imageUrl": "images/eiken5/eiken5_150.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_151",
+      "word": "like",
+      "reading": "ライク",
+      "jpTranslation": "すきだ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "I like dogs."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_151.mp3",
+      "imageUrl": "images/eiken5/eiken5_151.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_152",
+      "word": "want",
+      "reading": "ウォント",
+      "jpTranslation": "ほしい",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "I want water."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_152.mp3",
+      "imageUrl": "images/eiken5/eiken5_152.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_153",
+      "word": "have",
+      "reading": "ハブ",
+      "jpTranslation": "もっている",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "I have a book."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_153.mp3",
+      "imageUrl": "images/eiken5/eiken5_153.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_154",
+      "word": "live",
+      "reading": "リブ",
+      "jpTranslation": "すんでいる",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "I live in Japan."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_154.mp3",
+      "imageUrl": "images/eiken5/eiken5_154.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_155",
+      "word": "stand",
+      "reading": "スタンド",
+      "jpTranslation": "たつ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Actions",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "Please stand up."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_155.mp3",
+      "imageUrl": "images/eiken5/eiken5_155.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "actions"
+      ]
+    },
+    {
+      "id": "eiken5_156",
+      "word": "big",
+      "reading": "ビッグ",
+      "jpTranslation": "おおきい",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Adjectives",
+      "pos": [
+        "adjective"
+      ],
+      "exampleSentences": [
+        "The elephant is big."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_156.mp3",
+      "imageUrl": "images/eiken5/eiken5_156.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "adjectives"
+      ]
+    },
+    {
+      "id": "eiken5_157",
+      "word": "small",
+      "reading": "スモール",
+      "jpTranslation": "ちいさい",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Adjectives",
+      "pos": [
+        "adjective"
+      ],
+      "exampleSentences": [
+        "The mouse is small."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_157.mp3",
+      "imageUrl": "images/eiken5/eiken5_157.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "adjectives"
+      ]
+    },
+    {
+      "id": "eiken5_158",
+      "word": "happy",
+      "reading": "ハッピー",
+      "jpTranslation": "うれしい",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Adjectives",
+      "pos": [
+        "adjective"
+      ],
+      "exampleSentences": [
+        "I am happy today."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_158.mp3",
+      "imageUrl": "images/eiken5/eiken5_158.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "adjectives"
+      ]
+    },
+    {
+      "id": "eiken5_159",
+      "word": "sad",
+      "reading": "サッド",
+      "jpTranslation": "かなしい",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Adjectives",
+      "pos": [
+        "adjective"
+      ],
+      "exampleSentences": [
+        "She looks sad."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_159.mp3",
+      "imageUrl": "images/eiken5/eiken5_159.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "adjectives"
+      ]
+    },
+    {
+      "id": "eiken5_160",
+      "word": "hot",
+      "reading": "ホット",
+      "jpTranslation": "あつい",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Adjectives",
+      "pos": [
+        "adjective"
+      ],
+      "exampleSentences": [
+        "The soup is hot."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_160.mp3",
+      "imageUrl": "images/eiken5/eiken5_160.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "adjectives"
+      ]
+    },
+    {
+      "id": "eiken5_161",
+      "word": "cold",
+      "reading": "コールド",
+      "jpTranslation": "つめたい",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Adjectives",
+      "pos": [
+        "adjective"
+      ],
+      "exampleSentences": [
+        "Water is cold."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_161.mp3",
+      "imageUrl": "images/eiken5/eiken5_161.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "adjectives"
+      ]
+    },
+    {
+      "id": "eiken5_162",
+      "word": "good",
+      "reading": "グッド",
+      "jpTranslation": "よい",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Adjectives",
+      "pos": [
+        "adjective"
+      ],
+      "exampleSentences": [
+        "This is a good book."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_162.mp3",
+      "imageUrl": "images/eiken5/eiken5_162.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "adjectives"
+      ]
+    },
+    {
+      "id": "eiken5_163",
+      "word": "bad",
+      "reading": "バッド",
+      "jpTranslation": "わるい",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Adjectives",
+      "pos": [
+        "adjective"
+      ],
+      "exampleSentences": [
+        "This is bad."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_163.mp3",
+      "imageUrl": "images/eiken5/eiken5_163.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "adjectives"
+      ]
+    },
+    {
+      "id": "eiken5_164",
+      "word": "fast",
+      "reading": "ファスト",
+      "jpTranslation": "はやい",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Adjectives",
+      "pos": [
+        "adjective"
+      ],
+      "exampleSentences": [
+        "The train is fast."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_164.mp3",
+      "imageUrl": "images/eiken5/eiken5_164.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "adjectives"
+      ]
+    },
+    {
+      "id": "eiken5_165",
+      "word": "slow",
+      "reading": "スロー",
+      "jpTranslation": "おそい",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Adjectives",
+      "pos": [
+        "adjective"
+      ],
+      "exampleSentences": [
+        "A turtle is slow."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_165.mp3",
+      "imageUrl": "images/eiken5/eiken5_165.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "adjectives"
+      ]
+    },
+    {
+      "id": "eiken5_166",
+      "word": "tall",
+      "reading": "トール",
+      "jpTranslation": "せがたかい",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Adjectives",
+      "pos": [
+        "adjective"
+      ],
+      "exampleSentences": [
+        "He is tall."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_166.mp3",
+      "imageUrl": "images/eiken5/eiken5_166.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "adjectives"
+      ]
+    },
+    {
+      "id": "eiken5_167",
+      "word": "short",
+      "reading": "ショート",
+      "jpTranslation": "ひくい・みじかい",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Adjectives",
+      "pos": [
+        "adjective"
+      ],
+      "exampleSentences": [
+        "She is short."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_167.mp3",
+      "imageUrl": "images/eiken5/eiken5_167.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "adjectives"
+      ]
+    },
+    {
+      "id": "eiken5_168",
+      "word": "long",
+      "reading": "ロング",
+      "jpTranslation": "ながい",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Adjectives",
+      "pos": [
+        "adjective"
+      ],
+      "exampleSentences": [
+        "The snake is long."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_168.mp3",
+      "imageUrl": "images/eiken5/eiken5_168.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "adjectives"
+      ]
+    },
+    {
+      "id": "eiken5_169",
+      "word": "new",
+      "reading": "ニュー",
+      "jpTranslation": "あたらしい",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Adjectives",
+      "pos": [
+        "adjective"
+      ],
+      "exampleSentences": [
+        "I have a new bag."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_169.mp3",
+      "imageUrl": "images/eiken5/eiken5_169.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "adjectives"
+      ]
+    },
+    {
+      "id": "eiken5_170",
+      "word": "old",
+      "reading": "オールド",
+      "jpTranslation": "ふるい・としをとった",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Adjectives",
+      "pos": [
+        "adjective"
+      ],
+      "exampleSentences": [
+        "This is an old book."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_170.mp3",
+      "imageUrl": "images/eiken5/eiken5_170.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "adjectives"
+      ]
+    },
+    {
+      "id": "eiken5_171",
+      "word": "beautiful",
+      "reading": "ビューティフル",
+      "jpTranslation": "きれいな",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Adjectives",
+      "pos": [
+        "adjective"
+      ],
+      "exampleSentences": [
+        "The flower is beautiful."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_171.mp3",
+      "imageUrl": "images/eiken5/eiken5_171.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "adjectives"
+      ]
+    },
+    {
+      "id": "eiken5_172",
+      "word": "cute",
+      "reading": "キュート",
+      "jpTranslation": "かわいい",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Adjectives",
+      "pos": [
+        "adjective"
+      ],
+      "exampleSentences": [
+        "The cat is cute."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_172.mp3",
+      "imageUrl": "images/eiken5/eiken5_172.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "adjectives"
+      ]
+    },
+    {
+      "id": "eiken5_173",
+      "word": "funny",
+      "reading": "ファニー",
+      "jpTranslation": "おかしい",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Adjectives",
+      "pos": [
+        "adjective"
+      ],
+      "exampleSentences": [
+        "The monkey is funny."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_173.mp3",
+      "imageUrl": "images/eiken5/eiken5_173.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "adjectives"
+      ]
+    },
+    {
+      "id": "eiken5_174",
+      "word": "easy",
+      "reading": "イージー",
+      "jpTranslation": "かんたんな",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Adjectives",
+      "pos": [
+        "adjective"
+      ],
+      "exampleSentences": [
+        "This is easy."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_174.mp3",
+      "imageUrl": "images/eiken5/eiken5_174.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "adjectives"
+      ]
+    },
+    {
+      "id": "eiken5_175",
+      "word": "hard",
+      "reading": "ハード",
+      "jpTranslation": "むずかしい",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Adjectives",
+      "pos": [
+        "adjective"
+      ],
+      "exampleSentences": [
+        "This question is hard."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_175.mp3",
+      "imageUrl": "images/eiken5/eiken5_175.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "adjectives"
+      ]
+    },
+    {
+      "id": "eiken5_176",
+      "word": "strong",
+      "reading": "ストロング",
+      "jpTranslation": "つよい",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Adjectives",
+      "pos": [
+        "adjective"
+      ],
+      "exampleSentences": [
+        "He is strong."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_176.mp3",
+      "imageUrl": "images/eiken5/eiken5_176.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "adjectives"
+      ]
+    },
+    {
+      "id": "eiken5_177",
+      "word": "weak",
+      "reading": "ウィーク",
+      "jpTranslation": "よわい",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Adjectives",
+      "pos": [
+        "adjective"
+      ],
+      "exampleSentences": [
+        "I feel weak."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_177.mp3",
+      "imageUrl": "images/eiken5/eiken5_177.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "adjectives"
+      ]
+    },
+    {
+      "id": "eiken5_178",
+      "word": "clean",
+      "reading": "クリーン",
+      "jpTranslation": "きれいな",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Adjectives",
+      "pos": [
+        "adjective"
+      ],
+      "exampleSentences": [
+        "The room is clean."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_178.mp3",
+      "imageUrl": "images/eiken5/eiken5_178.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "adjectives"
+      ]
+    },
+    {
+      "id": "eiken5_179",
+      "word": "dirty",
+      "reading": "ダーティ",
+      "jpTranslation": "きたない",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Adjectives",
+      "pos": [
+        "adjective"
+      ],
+      "exampleSentences": [
+        "My hands are dirty."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_179.mp3",
+      "imageUrl": "images/eiken5/eiken5_179.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "adjectives"
+      ]
+    },
+    {
+      "id": "eiken5_180",
+      "word": "busy",
+      "reading": "ビジー",
+      "jpTranslation": "いそがしい",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Adjectives",
+      "pos": [
+        "adjective"
+      ],
+      "exampleSentences": [
+        "She is busy today."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_180.mp3",
+      "imageUrl": "images/eiken5/eiken5_180.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "adjectives"
+      ]
+    },
+    {
+      "id": "eiken5_181",
+      "word": "free",
+      "reading": "フリー",
+      "jpTranslation": "ひまな",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Adjectives",
+      "pos": [
+        "adjective"
+      ],
+      "exampleSentences": [
+        "Are you free now?"
+      ],
+      "audioUrl": "audio/eiken5/eiken5_181.mp3",
+      "imageUrl": "images/eiken5/eiken5_181.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "adjectives"
+      ]
+    },
+    {
+      "id": "eiken5_182",
+      "word": "right",
+      "reading": "ライト",
+      "jpTranslation": "ただしい",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Adjectives",
+      "pos": [
+        "adjective"
+      ],
+      "exampleSentences": [
+        "This answer is right."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_182.mp3",
+      "imageUrl": "images/eiken5/eiken5_182.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "adjectives"
+      ]
+    },
+    {
+      "id": "eiken5_183",
+      "word": "wrong",
+      "reading": "ロング（ラング）",
+      "jpTranslation": "まちがっている",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Adjectives",
+      "pos": [
+        "adjective"
+      ],
+      "exampleSentences": [
+        "This is wrong."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_183.mp3",
+      "imageUrl": "images/eiken5/eiken5_183.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "adjectives"
+      ]
+    },
+    {
+      "id": "eiken5_184",
+      "word": "same",
+      "reading": "セイム",
+      "jpTranslation": "おなじ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Adjectives",
+      "pos": [
+        "adjective"
+      ],
+      "exampleSentences": [
+        "We have the same book."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_184.mp3",
+      "imageUrl": "images/eiken5/eiken5_184.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "adjectives"
+      ]
+    },
+    {
+      "id": "eiken5_185",
+      "word": "different",
+      "reading": "ディファレント",
+      "jpTranslation": "ちがう",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Adjectives",
+      "pos": [
+        "adjective"
+      ],
+      "exampleSentences": [
+        "We are different."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_185.mp3",
+      "imageUrl": "images/eiken5/eiken5_185.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "adjectives"
+      ]
+    },
+    {
+      "id": "eiken5_186",
+      "word": "pencil",
+      "reading": "ペンシル",
+      "jpTranslation": "えんぴつ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "School",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I use a pencil."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_186.mp3",
+      "imageUrl": "images/eiken5/eiken5_186.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "school"
+      ]
+    },
+    {
+      "id": "eiken5_187",
+      "word": "book",
+      "reading": "ブック",
+      "jpTranslation": "ほん",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "School",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I read a book."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_187.mp3",
+      "imageUrl": "images/eiken5/eiken5_187.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "school"
+      ]
+    },
+    {
+      "id": "eiken5_188",
+      "word": "teacher",
+      "reading": "ティーチャー",
+      "jpTranslation": "せんせい",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "School",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "My teacher is kind."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_188.mp3",
+      "imageUrl": "images/eiken5/eiken5_188.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "school"
+      ]
+    },
+    {
+      "id": "eiken5_189",
+      "word": "desk",
+      "reading": "デスク",
+      "jpTranslation": "つくえ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "School",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I sit at my desk."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_189.mp3",
+      "imageUrl": "images/eiken5/eiken5_189.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "school"
+      ]
+    },
+    {
+      "id": "eiken5_190",
+      "word": "class",
+      "reading": "クラス",
+      "jpTranslation": "クラス・じゅぎょう",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "School",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I am in class."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_190.mp3",
+      "imageUrl": "images/eiken5/eiken5_190.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "school"
+      ]
+    },
+    {
+      "id": "eiken5_191",
+      "word": "school",
+      "reading": "スクール",
+      "jpTranslation": "がっこう",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "School",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I go to school."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_191.mp3",
+      "imageUrl": "images/eiken5/eiken5_191.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "school"
+      ]
+    },
+    {
+      "id": "eiken5_192",
+      "word": "student",
+      "reading": "ステューデント",
+      "jpTranslation": "せいと",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "School",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I am a student."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_192.mp3",
+      "imageUrl": "images/eiken5/eiken5_192.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "school"
+      ]
+    },
+    {
+      "id": "eiken5_193",
+      "word": "pen",
+      "reading": "ペン",
+      "jpTranslation": "ペン",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "School",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I write with a pen."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_193.mp3",
+      "imageUrl": "images/eiken5/eiken5_193.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "school"
+      ]
+    },
+    {
+      "id": "eiken5_194",
+      "word": "eraser",
+      "reading": "イレイサー",
+      "jpTranslation": "けしごむ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "School",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I use an eraser."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_194.mp3",
+      "imageUrl": "images/eiken5/eiken5_194.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "school"
+      ]
+    },
+    {
+      "id": "eiken5_195",
+      "word": "ruler",
+      "reading": "ルーラー",
+      "jpTranslation": "じょうぎ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "School",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I use a ruler."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_195.mp3",
+      "imageUrl": "images/eiken5/eiken5_195.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "school"
+      ]
+    },
+    {
+      "id": "eiken5_196",
+      "word": "bag",
+      "reading": "バッグ",
+      "jpTranslation": "かばん",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "School",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "My bag is heavy."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_196.mp3",
+      "imageUrl": "images/eiken5/eiken5_196.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "school"
+      ]
+    },
+    {
+      "id": "eiken5_197",
+      "word": "chair",
+      "reading": "チェア",
+      "jpTranslation": "いす",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "School",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I sit on a chair."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_197.mp3",
+      "imageUrl": "images/eiken5/eiken5_197.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "school"
+      ]
+    },
+    {
+      "id": "eiken5_198",
+      "word": "board",
+      "reading": "ボード",
+      "jpTranslation": "こくばん",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "School",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "The teacher writes on the board."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_198.mp3",
+      "imageUrl": "images/eiken5/eiken5_198.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "school"
+      ]
+    },
+    {
+      "id": "eiken5_199",
+      "word": "notebook",
+      "reading": "ノートブック",
+      "jpTranslation": "ノート",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "School",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I write in my notebook."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_199.mp3",
+      "imageUrl": "images/eiken5/eiken5_199.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "school"
+      ]
+    },
+    {
+      "id": "eiken5_200",
+      "word": "lesson",
+      "reading": "レッスン",
+      "jpTranslation": "じゅぎょう",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "School",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "The lesson is fun."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_200.mp3",
+      "imageUrl": "images/eiken5/eiken5_200.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "school"
+      ]
+    },
+    {
+      "id": "eiken5_201",
+      "word": "homework",
+      "reading": "ホームワーク",
+      "jpTranslation": "しゅくだい",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "School",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I do my homework."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_201.mp3",
+      "imageUrl": "images/eiken5/eiken5_201.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "school"
+      ]
+    },
+    {
+      "id": "eiken5_202",
+      "word": "test",
+      "reading": "テスト",
+      "jpTranslation": "テスト",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "School",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I take a test."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_202.mp3",
+      "imageUrl": "images/eiken5/eiken5_202.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "school"
+      ]
+    },
+    {
+      "id": "eiken5_203",
+      "word": "grade",
+      "reading": "グレード",
+      "jpTranslation": "せいせき",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "School",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I got a good grade."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_203.mp3",
+      "imageUrl": "images/eiken5/eiken5_203.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "school"
+      ]
+    },
+    {
+      "id": "eiken5_204",
+      "word": "library",
+      "reading": "ライブラリー",
+      "jpTranslation": "としょかん",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "School",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I go to the library."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_204.mp3",
+      "imageUrl": "images/eiken5/eiken5_204.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "school"
+      ]
+    },
+    {
+      "id": "eiken5_205",
+      "word": "subject",
+      "reading": "サブジェクト",
+      "jpTranslation": "かもく",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "School",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "Math is my favorite subject."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_205.mp3",
+      "imageUrl": "images/eiken5/eiken5_205.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "school"
+      ]
+    },
+    {
+      "id": "eiken5_206",
+      "word": "English",
+      "reading": "イングリッシュ",
+      "jpTranslation": "えいご",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "School",
+      "pos": [
+        "noun",
+        "adjective"
+      ],
+      "exampleSentences": [
+        "I study English."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_206.mp3",
+      "imageUrl": "images/eiken5/eiken5_206.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "school"
+      ]
+    },
+    {
+      "id": "eiken5_207",
+      "word": "math",
+      "reading": "マス",
+      "jpTranslation": "さんすう",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "School",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I like math."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_207.mp3",
+      "imageUrl": "images/eiken5/eiken5_207.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "school"
+      ]
+    },
+    {
+      "id": "eiken5_208",
+      "word": "science",
+      "reading": "サイエンス",
+      "jpTranslation": "りか",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "School",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "Science is interesting."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_208.mp3",
+      "imageUrl": "images/eiken5/eiken5_208.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "school"
+      ]
+    },
+    {
+      "id": "eiken5_209",
+      "word": "music",
+      "reading": "ミュージック",
+      "jpTranslation": "おんがく",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "School",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I like music class."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_209.mp3",
+      "imageUrl": "images/eiken5/eiken5_209.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "school"
+      ]
+    },
+    {
+      "id": "eiken5_210",
+      "word": "art",
+      "reading": "アート",
+      "jpTranslation": "ずこう",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "School",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "Art is fun."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_210.mp3",
+      "imageUrl": "images/eiken5/eiken5_210.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "school"
+      ]
+    },
+    {
+      "id": "eiken5_211",
+      "word": "today",
+      "reading": "トゥデイ",
+      "jpTranslation": "きょう",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Time_Weather",
+      "pos": [
+        "noun",
+        "adverb"
+      ],
+      "exampleSentences": [
+        "Today is sunny."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_211.mp3",
+      "imageUrl": "images/eiken5/eiken5_211.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "time_weather"
+      ]
+    },
+    {
+      "id": "eiken5_212",
+      "word": "morning",
+      "reading": "モーニング",
+      "jpTranslation": "あさ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Time_Weather",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I eat breakfast in the morning."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_212.mp3",
+      "imageUrl": "images/eiken5/eiken5_212.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "time_weather"
+      ]
+    },
+    {
+      "id": "eiken5_213",
+      "word": "afternoon",
+      "reading": "アフタヌーン",
+      "jpTranslation": "ごご",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Time_Weather",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "School ends in the afternoon."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_213.mp3",
+      "imageUrl": "images/eiken5/eiken5_213.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "time_weather"
+      ]
+    },
+    {
+      "id": "eiken5_214",
+      "word": "evening",
+      "reading": "イブニング",
+      "jpTranslation": "ゆうがた",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Time_Weather",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I play in the evening."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_214.mp3",
+      "imageUrl": "images/eiken5/eiken5_214.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "time_weather"
+      ]
+    },
+    {
+      "id": "eiken5_215",
+      "word": "night",
+      "reading": "ナイト",
+      "jpTranslation": "よる",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Time_Weather",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I sleep at night."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_215.mp3",
+      "imageUrl": "images/eiken5/eiken5_215.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "time_weather"
+      ]
+    },
+    {
+      "id": "eiken5_216",
+      "word": "sunny",
+      "reading": "サニー",
+      "jpTranslation": "はれ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Time_Weather",
+      "pos": [
+        "adjective"
+      ],
+      "exampleSentences": [
+        "Today is sunny."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_216.mp3",
+      "imageUrl": "images/eiken5/eiken5_216.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "time_weather"
+      ]
+    },
+    {
+      "id": "eiken5_217",
+      "word": "rain",
+      "reading": "レイン",
+      "jpTranslation": "あめ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Time_Weather",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I like the rain."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_217.mp3",
+      "imageUrl": "images/eiken5/eiken5_217.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "time_weather"
+      ]
+    },
+    {
+      "id": "eiken5_218",
+      "word": "snow",
+      "reading": "スノウ",
+      "jpTranslation": "ゆき",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Time_Weather",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I play in the snow."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_218.mp3",
+      "imageUrl": "images/eiken5/eiken5_218.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "time_weather"
+      ]
+    },
+    {
+      "id": "eiken5_219",
+      "word": "wind",
+      "reading": "ウィンド",
+      "jpTranslation": "かぜ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Time_Weather",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "The wind is strong."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_219.mp3",
+      "imageUrl": "images/eiken5/eiken5_219.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "time_weather"
+      ]
+    },
+    {
+      "id": "eiken5_220",
+      "word": "cloud",
+      "reading": "クラウド",
+      "jpTranslation": "くも",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Time_Weather",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I see a cloud."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_220.mp3",
+      "imageUrl": "images/eiken5/eiken5_220.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "time_weather"
+      ]
+    },
+    {
+      "id": "eiken5_221",
+      "word": "season",
+      "reading": "シーズン",
+      "jpTranslation": "きせつ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Time_Weather",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "My favorite season is spring."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_221.mp3",
+      "imageUrl": "images/eiken5/eiken5_221.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "time_weather"
+      ]
+    },
+    {
+      "id": "eiken5_222",
+      "word": "spring",
+      "reading": "スプリング",
+      "jpTranslation": "はる",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Time_Weather",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "Spring is warm."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_222.mp3",
+      "imageUrl": "images/eiken5/eiken5_222.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "time_weather"
+      ]
+    },
+    {
+      "id": "eiken5_223",
+      "word": "summer",
+      "reading": "サマー",
+      "jpTranslation": "なつ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Time_Weather",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "Summer is hot."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_223.mp3",
+      "imageUrl": "images/eiken5/eiken5_223.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "time_weather"
+      ]
+    },
+    {
+      "id": "eiken5_224",
+      "word": "fall",
+      "reading": "フォール",
+      "jpTranslation": "あき",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Time_Weather",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "Fall is cool."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_224.mp3",
+      "imageUrl": "images/eiken5/eiken5_224.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "time_weather"
+      ]
+    },
+    {
+      "id": "eiken5_225",
+      "word": "winter",
+      "reading": "ウィンター",
+      "jpTranslation": "ふゆ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Time_Weather",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "Winter is cold."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_225.mp3",
+      "imageUrl": "images/eiken5/eiken5_225.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "time_weather"
+      ]
+    },
+    {
+      "id": "eiken5_226",
+      "word": "day",
+      "reading": "デイ",
+      "jpTranslation": "ひ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Time_Weather",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "Have a nice day!"
+      ],
+      "audioUrl": "audio/eiken5/eiken5_226.mp3",
+      "imageUrl": "images/eiken5/eiken5_226.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "time_weather"
+      ]
+    },
+    {
+      "id": "eiken5_227",
+      "word": "week",
+      "reading": "ウィーク",
+      "jpTranslation": "しゅう",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Time_Weather",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I study every week."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_227.mp3",
+      "imageUrl": "images/eiken5/eiken5_227.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "time_weather"
+      ]
+    },
+    {
+      "id": "eiken5_228",
+      "word": "month",
+      "reading": "マンス",
+      "jpTranslation": "つき",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Time_Weather",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I study every month."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_228.mp3",
+      "imageUrl": "images/eiken5/eiken5_228.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "time_weather"
+      ]
+    },
+    {
+      "id": "eiken5_229",
+      "word": "year",
+      "reading": "イアー",
+      "jpTranslation": "とし",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Time_Weather",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I am ten years old."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_229.mp3",
+      "imageUrl": "images/eiken5/eiken5_229.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "time_weather"
+      ]
+    },
+    {
+      "id": "eiken5_230",
+      "word": "hour",
+      "reading": "アワー",
+      "jpTranslation": "じかん（一時間）",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Time_Weather",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "One hour passes."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_230.mp3",
+      "imageUrl": "images/eiken5/eiken5_230.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "time_weather"
+      ]
+    },
+    {
+      "id": "eiken5_231",
+      "word": "minute",
+      "reading": "ミニット",
+      "jpTranslation": "ふん・ぷん",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Time_Weather",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "Wait five minutes."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_231.mp3",
+      "imageUrl": "images/eiken5/eiken5_231.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "time_weather"
+      ]
+    },
+    {
+      "id": "eiken5_232",
+      "word": "time",
+      "reading": "タイム",
+      "jpTranslation": "じかん",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Time_Weather",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "What time is it?"
+      ],
+      "audioUrl": "audio/eiken5/eiken5_232.mp3",
+      "imageUrl": "images/eiken5/eiken5_232.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "time_weather"
+      ]
+    },
+    {
+      "id": "eiken5_233",
+      "word": "now",
+      "reading": "ナウ",
+      "jpTranslation": "いま",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Time_Weather",
+      "pos": [
+        "adverb"
+      ],
+      "exampleSentences": [
+        "I am busy now."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_233.mp3",
+      "imageUrl": "images/eiken5/eiken5_233.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "time_weather"
+      ]
+    },
+    {
+      "id": "eiken5_234",
+      "word": "yesterday",
+      "reading": "イエスタデイ",
+      "jpTranslation": "きのう",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Time_Weather",
+      "pos": [
+        "noun",
+        "adverb"
+      ],
+      "exampleSentences": [
+        "Yesterday was fun."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_234.mp3",
+      "imageUrl": "images/eiken5/eiken5_234.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "time_weather"
+      ]
+    },
+    {
+      "id": "eiken5_235",
+      "word": "tomorrow",
+      "reading": "トゥモロー",
+      "jpTranslation": "あした",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Time_Weather",
+      "pos": [
+        "noun",
+        "adverb"
+      ],
+      "exampleSentences": [
+        "See you tomorrow!"
+      ],
+      "audioUrl": "audio/eiken5/eiken5_235.mp3",
+      "imageUrl": "images/eiken5/eiken5_235.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "time_weather"
+      ]
+    },
+    {
+      "id": "eiken5_236",
+      "word": "hello",
+      "reading": "ハロー",
+      "jpTranslation": "こんにちは",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Greetings_Social",
+      "pos": [
+        "interjection"
+      ],
+      "exampleSentences": [
+        "Hello! How are you?"
+      ],
+      "audioUrl": "audio/eiken5/eiken5_236.mp3",
+      "imageUrl": "images/eiken5/eiken5_236.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "greetings_social"
+      ]
+    },
+    {
+      "id": "eiken5_237",
+      "word": "goodbye",
+      "reading": "グッバイ",
+      "jpTranslation": "さようなら",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Greetings_Social",
+      "pos": [
+        "interjection"
+      ],
+      "exampleSentences": [
+        "Goodbye! See you!"
+      ],
+      "audioUrl": "audio/eiken5/eiken5_237.mp3",
+      "imageUrl": "images/eiken5/eiken5_237.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "greetings_social"
+      ]
+    },
+    {
+      "id": "eiken5_238",
+      "word": "please",
+      "reading": "プリーズ",
+      "jpTranslation": "おねがいします",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Greetings_Social",
+      "pos": [
+        "interjection",
+        "adverb"
+      ],
+      "exampleSentences": [
+        "Please help me."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_238.mp3",
+      "imageUrl": "images/eiken5/eiken5_238.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "greetings_social"
+      ]
+    },
+    {
+      "id": "eiken5_239",
+      "word": "thank you",
+      "reading": "サンキュー",
+      "jpTranslation": "ありがとう",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Greetings_Social",
+      "pos": [
+        "phrase"
+      ],
+      "exampleSentences": [
+        "Thank you very much!"
+      ],
+      "audioUrl": "audio/eiken5/eiken5_239.mp3",
+      "imageUrl": "images/eiken5/eiken5_239.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "greetings_social"
+      ]
+    },
+    {
+      "id": "eiken5_240",
+      "word": "sorry",
+      "reading": "ソーリー",
+      "jpTranslation": "ごめんなさい",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Greetings_Social",
+      "pos": [
+        "interjection"
+      ],
+      "exampleSentences": [
+        "I am sorry."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_240.mp3",
+      "imageUrl": "images/eiken5/eiken5_240.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "greetings_social"
+      ]
+    },
+    {
+      "id": "eiken5_241",
+      "word": "yes",
+      "reading": "イエス",
+      "jpTranslation": "はい",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Greetings_Social",
+      "pos": [
+        "interjection"
+      ],
+      "exampleSentences": [
+        "Yes, I can!"
+      ],
+      "audioUrl": "audio/eiken5/eiken5_241.mp3",
+      "imageUrl": "images/eiken5/eiken5_241.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "greetings_social"
+      ]
+    },
+    {
+      "id": "eiken5_242",
+      "word": "no",
+      "reading": "ノー",
+      "jpTranslation": "いいえ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Greetings_Social",
+      "pos": [
+        "interjection"
+      ],
+      "exampleSentences": [
+        "No, I can't."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_242.mp3",
+      "imageUrl": "images/eiken5/eiken5_242.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "greetings_social"
+      ]
+    },
+    {
+      "id": "eiken5_243",
+      "word": "okay",
+      "reading": "オーケー",
+      "jpTranslation": "オーケー",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Greetings_Social",
+      "pos": [
+        "interjection"
+      ],
+      "exampleSentences": [
+        "Okay, let's go!"
+      ],
+      "audioUrl": "audio/eiken5/eiken5_243.mp3",
+      "imageUrl": "images/eiken5/eiken5_243.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "greetings_social"
+      ]
+    },
+    {
+      "id": "eiken5_244",
+      "word": "good morning",
+      "reading": "グッドモーニング",
+      "jpTranslation": "おはようございます",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Greetings_Social",
+      "pos": [
+        "phrase"
+      ],
+      "exampleSentences": [
+        "Good morning, everyone!"
+      ],
+      "audioUrl": "audio/eiken5/eiken5_244.mp3",
+      "imageUrl": "images/eiken5/eiken5_244.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "greetings_social"
+      ]
+    },
+    {
+      "id": "eiken5_245",
+      "word": "good night",
+      "reading": "グッドナイト",
+      "jpTranslation": "おやすみなさい",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Greetings_Social",
+      "pos": [
+        "phrase"
+      ],
+      "exampleSentences": [
+        "Good night, mom."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_245.mp3",
+      "imageUrl": "images/eiken5/eiken5_245.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "greetings_social"
+      ]
+    },
+    {
+      "id": "eiken5_246",
+      "word": "welcome",
+      "reading": "ウェルカム",
+      "jpTranslation": "ようこそ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Greetings_Social",
+      "pos": [
+        "interjection"
+      ],
+      "exampleSentences": [
+        "Welcome to our school!"
+      ],
+      "audioUrl": "audio/eiken5/eiken5_246.mp3",
+      "imageUrl": "images/eiken5/eiken5_246.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "greetings_social"
+      ]
+    },
+    {
+      "id": "eiken5_247",
+      "word": "excuse me",
+      "reading": "エクスキューズミー",
+      "jpTranslation": "すみません",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Greetings_Social",
+      "pos": [
+        "phrase"
+      ],
+      "exampleSentences": [
+        "Excuse me, where is the school?"
+      ],
+      "audioUrl": "audio/eiken5/eiken5_247.mp3",
+      "imageUrl": "images/eiken5/eiken5_247.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "greetings_social"
+      ]
+    },
+    {
+      "id": "eiken5_248",
+      "word": "nice to meet you",
+      "reading": "ナイストゥミートユー",
+      "jpTranslation": "はじめまして",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Greetings_Social",
+      "pos": [
+        "phrase"
+      ],
+      "exampleSentences": [
+        "Nice to meet you!"
+      ],
+      "audioUrl": "audio/eiken5/eiken5_248.mp3",
+      "imageUrl": "images/eiken5/eiken5_248.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "greetings_social"
+      ]
+    },
+    {
+      "id": "eiken5_249",
+      "word": "how are you",
+      "reading": "ハウアーユー",
+      "jpTranslation": "おげんきですか",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Greetings_Social",
+      "pos": [
+        "phrase"
+      ],
+      "exampleSentences": [
+        "How are you today?"
+      ],
+      "audioUrl": "audio/eiken5/eiken5_249.mp3",
+      "imageUrl": "images/eiken5/eiken5_249.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "greetings_social"
+      ]
+    },
+    {
+      "id": "eiken5_250",
+      "word": "help",
+      "reading": "ヘルプ",
+      "jpTranslation": "たすけて・ヘルプ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Greetings_Social",
+      "pos": [
+        "interjection",
+        "noun"
+      ],
+      "exampleSentences": [
+        "Help! I need water."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_250.mp3",
+      "imageUrl": "images/eiken5/eiken5_250.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "greetings_social"
+      ]
+    },
+    {
+      "id": "eiken5_251",
+      "word": "question",
+      "reading": "クエスチョン",
+      "jpTranslation": "しつもん",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Greetings_Social",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I have a question."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_251.mp3",
+      "imageUrl": "images/eiken5/eiken5_251.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "greetings_social"
+      ]
+    },
+    {
+      "id": "eiken5_252",
+      "word": "answer",
+      "reading": "アンサー",
+      "jpTranslation": "こたえ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Greetings_Social",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "What is the answer?"
+      ],
+      "audioUrl": "audio/eiken5/eiken5_252.mp3",
+      "imageUrl": "images/eiken5/eiken5_252.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "greetings_social"
+      ]
+    },
+    {
+      "id": "eiken5_253",
+      "word": "understand",
+      "reading": "アンダースタンド",
+      "jpTranslation": "わかる",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Greetings_Social",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "I understand."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_253.mp3",
+      "imageUrl": "images/eiken5/eiken5_253.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "greetings_social"
+      ]
+    },
+    {
+      "id": "eiken5_254",
+      "word": "repeat",
+      "reading": "リピート",
+      "jpTranslation": "くりかえす",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Greetings_Social",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "Please repeat that."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_254.mp3",
+      "imageUrl": "images/eiken5/eiken5_254.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "greetings_social"
+      ]
+    },
+    {
+      "id": "eiken5_255",
+      "word": "slowly",
+      "reading": "スロウリー",
+      "jpTranslation": "ゆっくり",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Greetings_Social",
+      "pos": [
+        "adverb"
+      ],
+      "exampleSentences": [
+        "Please speak slowly."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_255.mp3",
+      "imageUrl": "images/eiken5/eiken5_255.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "greetings_social"
+      ]
+    },
+    {
+      "id": "eiken5_256",
+      "word": "again",
+      "reading": "アゲイン",
+      "jpTranslation": "もういちど",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Greetings_Social",
+      "pos": [
+        "adverb"
+      ],
+      "exampleSentences": [
+        "Please say it again."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_256.mp3",
+      "imageUrl": "images/eiken5/eiken5_256.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "greetings_social"
+      ]
+    },
+    {
+      "id": "eiken5_257",
+      "word": "together",
+      "reading": "トゥギャザー",
+      "jpTranslation": "いっしょに",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Greetings_Social",
+      "pos": [
+        "adverb"
+      ],
+      "exampleSentences": [
+        "Let's go together!"
+      ],
+      "audioUrl": "audio/eiken5/eiken5_257.mp3",
+      "imageUrl": "images/eiken5/eiken5_257.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "greetings_social"
+      ]
+    },
+    {
+      "id": "eiken5_258",
+      "word": "ready",
+      "reading": "レディ",
+      "jpTranslation": "じゅんびできた",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Greetings_Social",
+      "pos": [
+        "adjective"
+      ],
+      "exampleSentences": [
+        "Are you ready?"
+      ],
+      "audioUrl": "audio/eiken5/eiken5_258.mp3",
+      "imageUrl": "images/eiken5/eiken5_258.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "greetings_social"
+      ]
+    },
+    {
+      "id": "eiken5_259",
+      "word": "start",
+      "reading": "スタート",
+      "jpTranslation": "はじめる",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Greetings_Social",
+      "pos": [
+        "verb",
+        "noun"
+      ],
+      "exampleSentences": [
+        "Let's start!"
+      ],
+      "audioUrl": "audio/eiken5/eiken5_259.mp3",
+      "imageUrl": "images/eiken5/eiken5_259.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "greetings_social"
+      ]
+    },
+    {
+      "id": "eiken5_260",
+      "word": "finish",
+      "reading": "フィニッシュ",
+      "jpTranslation": "おわる",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Greetings_Social",
+      "pos": [
+        "verb"
+      ],
+      "exampleSentences": [
+        "I finish my work."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_260.mp3",
+      "imageUrl": "images/eiken5/eiken5_260.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "greetings_social"
+      ]
+    },
+    {
+      "id": "eiken5_261",
+      "word": "head",
+      "reading": "ヘッド",
+      "jpTranslation": "あたま",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Body",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "My head hurts."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_261.mp3",
+      "imageUrl": "images/eiken5/eiken5_261.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "body"
+      ]
+    },
+    {
+      "id": "eiken5_262",
+      "word": "hand",
+      "reading": "ハンド",
+      "jpTranslation": "て",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Body",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "Please raise your hand."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_262.mp3",
+      "imageUrl": "images/eiken5/eiken5_262.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "body"
+      ]
+    },
+    {
+      "id": "eiken5_263",
+      "word": "eye",
+      "reading": "アイ",
+      "jpTranslation": "め",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Body",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I close my eyes."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_263.mp3",
+      "imageUrl": "images/eiken5/eiken5_263.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "body"
+      ]
+    },
+    {
+      "id": "eiken5_264",
+      "word": "ear",
+      "reading": "イアー",
+      "jpTranslation": "みみ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Body",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I use my ears."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_264.mp3",
+      "imageUrl": "images/eiken5/eiken5_264.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "body"
+      ]
+    },
+    {
+      "id": "eiken5_265",
+      "word": "nose",
+      "reading": "ノーズ",
+      "jpTranslation": "はな",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Body",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "My nose is cold."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_265.mp3",
+      "imageUrl": "images/eiken5/eiken5_265.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "body"
+      ]
+    },
+    {
+      "id": "eiken5_266",
+      "word": "mouth",
+      "reading": "マウス",
+      "jpTranslation": "くち",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Body",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "Open your mouth."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_266.mp3",
+      "imageUrl": "images/eiken5/eiken5_266.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "body"
+      ]
+    },
+    {
+      "id": "eiken5_267",
+      "word": "face",
+      "reading": "フェイス",
+      "jpTranslation": "かお",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Body",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "She has a kind face."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_267.mp3",
+      "imageUrl": "images/eiken5/eiken5_267.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "body"
+      ]
+    },
+    {
+      "id": "eiken5_268",
+      "word": "hair",
+      "reading": "ヘアー",
+      "jpTranslation": "かみ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Body",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "Her hair is long."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_268.mp3",
+      "imageUrl": "images/eiken5/eiken5_268.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "body"
+      ]
+    },
+    {
+      "id": "eiken5_269",
+      "word": "arm",
+      "reading": "アーム",
+      "jpTranslation": "うで",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Body",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I hurt my arm."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_269.mp3",
+      "imageUrl": "images/eiken5/eiken5_269.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "body"
+      ]
+    },
+    {
+      "id": "eiken5_270",
+      "word": "leg",
+      "reading": "レッグ",
+      "jpTranslation": "あし（足）",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Body",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "My leg is tired."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_270.mp3",
+      "imageUrl": "images/eiken5/eiken5_270.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "body"
+      ]
+    },
+    {
+      "id": "eiken5_271",
+      "word": "foot",
+      "reading": "フット",
+      "jpTranslation": "あし（脚）",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Body",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "My foot is big."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_271.mp3",
+      "imageUrl": "images/eiken5/eiken5_271.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "body"
+      ]
+    },
+    {
+      "id": "eiken5_272",
+      "word": "finger",
+      "reading": "フィンガー",
+      "jpTranslation": "ゆび",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Body",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I count on my fingers."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_272.mp3",
+      "imageUrl": "images/eiken5/eiken5_272.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "body"
+      ]
+    },
+    {
+      "id": "eiken5_273",
+      "word": "back",
+      "reading": "バック",
+      "jpTranslation": "せなか",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Body",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "My back is strong."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_273.mp3",
+      "imageUrl": "images/eiken5/eiken5_273.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "body"
+      ]
+    },
+    {
+      "id": "eiken5_274",
+      "word": "shoulder",
+      "reading": "ショルダー",
+      "jpTranslation": "かた",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Body",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "She has strong shoulders."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_274.mp3",
+      "imageUrl": "images/eiken5/eiken5_274.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "body"
+      ]
+    },
+    {
+      "id": "eiken5_275",
+      "word": "stomach",
+      "reading": "ストマック",
+      "jpTranslation": "おなか",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Body",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "My stomach is full."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_275.mp3",
+      "imageUrl": "images/eiken5/eiken5_275.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "body"
+      ]
+    },
+    {
+      "id": "eiken5_276",
+      "word": "tooth",
+      "reading": "トゥース",
+      "jpTranslation": "は",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Body",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I brush my teeth."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_276.mp3",
+      "imageUrl": "images/eiken5/eiken5_276.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "body"
+      ]
+    },
+    {
+      "id": "eiken5_277",
+      "word": "lip",
+      "reading": "リップ",
+      "jpTranslation": "くちびる",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Body",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "She has red lips."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_277.mp3",
+      "imageUrl": "images/eiken5/eiken5_277.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "body"
+      ]
+    },
+    {
+      "id": "eiken5_278",
+      "word": "neck",
+      "reading": "ネック",
+      "jpTranslation": "くび",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Body",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I have a long neck."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_278.mp3",
+      "imageUrl": "images/eiken5/eiken5_278.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "body"
+      ]
+    },
+    {
+      "id": "eiken5_279",
+      "word": "knee",
+      "reading": "ニー",
+      "jpTranslation": "ひざ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Body",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I hurt my knee."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_279.mp3",
+      "imageUrl": "images/eiken5/eiken5_279.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "body"
+      ]
+    },
+    {
+      "id": "eiken5_280",
+      "word": "chest",
+      "reading": "チェスト",
+      "jpTranslation": "むね",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Body",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I take a deep breath."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_280.mp3",
+      "imageUrl": "images/eiken5/eiken5_280.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "body"
+      ]
+    },
+    {
+      "id": "eiken5_281",
+      "word": "home",
+      "reading": "ホーム",
+      "jpTranslation": "いえ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Places",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I go home after school."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_281.mp3",
+      "imageUrl": "images/eiken5/eiken5_281.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "places"
+      ]
+    },
+    {
+      "id": "eiken5_282",
+      "word": "school",
+      "reading": "スクール",
+      "jpTranslation": "がっこう",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Places",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I walk to school."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_282.mp3",
+      "imageUrl": "images/eiken5/eiken5_282.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "places"
+      ]
+    },
+    {
+      "id": "eiken5_283",
+      "word": "park",
+      "reading": "パーク",
+      "jpTranslation": "こうえん",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Places",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I play at the park."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_283.mp3",
+      "imageUrl": "images/eiken5/eiken5_283.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "places"
+      ]
+    },
+    {
+      "id": "eiken5_284",
+      "word": "shop",
+      "reading": "ショップ",
+      "jpTranslation": "おみせ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Places",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I buy things at the shop."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_284.mp3",
+      "imageUrl": "images/eiken5/eiken5_284.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "places"
+      ]
+    },
+    {
+      "id": "eiken5_285",
+      "word": "hospital",
+      "reading": "ホスピタル",
+      "jpTranslation": "びょういん",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Places",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I go to the hospital."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_285.mp3",
+      "imageUrl": "images/eiken5/eiken5_285.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "places"
+      ]
+    },
+    {
+      "id": "eiken5_286",
+      "word": "station",
+      "reading": "ステーション",
+      "jpTranslation": "えき",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Places",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I wait at the station."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_286.mp3",
+      "imageUrl": "images/eiken5/eiken5_286.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "places"
+      ]
+    },
+    {
+      "id": "eiken5_287",
+      "word": "restaurant",
+      "reading": "レストラン",
+      "jpTranslation": "レストラン",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Places",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "We eat at a restaurant."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_287.mp3",
+      "imageUrl": "images/eiken5/eiken5_287.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "places"
+      ]
+    },
+    {
+      "id": "eiken5_288",
+      "word": "library",
+      "reading": "ライブラリー",
+      "jpTranslation": "としょかん",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Places",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I study at the library."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_288.mp3",
+      "imageUrl": "images/eiken5/eiken5_288.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "places"
+      ]
+    },
+    {
+      "id": "eiken5_289",
+      "word": "zoo",
+      "reading": "ズー",
+      "jpTranslation": "どうぶつえん",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Places",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I visit the zoo."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_289.mp3",
+      "imageUrl": "images/eiken5/eiken5_289.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "places"
+      ]
+    },
+    {
+      "id": "eiken5_290",
+      "word": "pool",
+      "reading": "プール",
+      "jpTranslation": "プール",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Places",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I swim in the pool."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_290.mp3",
+      "imageUrl": "images/eiken5/eiken5_290.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "places"
+      ]
+    },
+    {
+      "id": "eiken5_291",
+      "word": "gym",
+      "reading": "ジム",
+      "jpTranslation": "たいいくかん",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Places",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I exercise at the gym."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_291.mp3",
+      "imageUrl": "images/eiken5/eiken5_291.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "places"
+      ]
+    },
+    {
+      "id": "eiken5_292",
+      "word": "kitchen",
+      "reading": "キッチン",
+      "jpTranslation": "だいどころ",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Places",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "Mom cooks in the kitchen."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_292.mp3",
+      "imageUrl": "images/eiken5/eiken5_292.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "places"
+      ]
+    },
+    {
+      "id": "eiken5_293",
+      "word": "room",
+      "reading": "ルーム",
+      "jpTranslation": "へや",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Places",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I clean my room."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_293.mp3",
+      "imageUrl": "images/eiken5/eiken5_293.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "places"
+      ]
+    },
+    {
+      "id": "eiken5_294",
+      "word": "door",
+      "reading": "ドア",
+      "jpTranslation": "ドア",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Places",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "Please open the door."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_294.mp3",
+      "imageUrl": "images/eiken5/eiken5_294.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "places"
+      ]
+    },
+    {
+      "id": "eiken5_295",
+      "word": "window",
+      "reading": "ウィンドー",
+      "jpTranslation": "まど",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Places",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I look out the window."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_295.mp3",
+      "imageUrl": "images/eiken5/eiken5_295.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "places"
+      ]
+    },
+    {
+      "id": "eiken5_296",
+      "word": "street",
+      "reading": "ストリート",
+      "jpTranslation": "みち",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Places",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I walk on the street."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_296.mp3",
+      "imageUrl": "images/eiken5/eiken5_296.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "places"
+      ]
+    },
+    {
+      "id": "eiken5_297",
+      "word": "city",
+      "reading": "シティ",
+      "jpTranslation": "まち",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Places",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "Tokyo is a big city."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_297.mp3",
+      "imageUrl": "images/eiken5/eiken5_297.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "places"
+      ]
+    },
+    {
+      "id": "eiken5_298",
+      "word": "country",
+      "reading": "カントリー",
+      "jpTranslation": "くに",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Places",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "Japan is my country."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_298.mp3",
+      "imageUrl": "images/eiken5/eiken5_298.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "places"
+      ]
+    },
+    {
+      "id": "eiken5_299",
+      "word": "world",
+      "reading": "ワールド",
+      "jpTranslation": "せかい",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Places",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "The world is big."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_299.mp3",
+      "imageUrl": "images/eiken5/eiken5_299.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "places"
+      ]
+    },
+    {
+      "id": "eiken5_300",
+      "word": "Japan",
+      "reading": "ジャパン",
+      "jpTranslation": "にほん",
+      "cefrLevel": "A1",
+      "eikenLevel": "5",
+      "category": "Places",
+      "pos": [
+        "noun"
+      ],
+      "exampleSentences": [
+        "I live in Japan."
+      ],
+      "audioUrl": "audio/eiken5/eiken5_300.mp3",
+      "imageUrl": "images/eiken5/eiken5_300.jpg",
+      "fsrsState": "new",
+      "tags": [
+        "eiken5",
+        "A1",
+        "places"
+      ]
+    }
+  ]
+}
