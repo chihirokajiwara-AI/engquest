@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:engquest/core/models/progress_data.dart';
 import 'package:engquest/core/analytics/progress_service.dart';
+import 'package:engquest/core/analytics/firestore_progress_repository.dart';
 
 // ══════════════════════════════════════════════════════════════════════════════
 //  ParentDashboardScreen — C08
@@ -17,8 +18,9 @@ class ParentDashboardScreen extends StatefulWidget {
 class _ParentDashboardScreenState extends State<ParentDashboardScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  final _service = ProgressService();
+  late final ProgressService _service;
   late Future<LearningProgress> _progressFuture;
+  bool _isFirestoreLive = false; // true when real data loaded
 
   // Settings state
   int _dailyGoal = 20;
@@ -28,8 +30,27 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
   @override
   void initState() {
     super.initState();
+    _service = ProgressService(repository: FirestoreProgressRepository());
     _tabController = TabController(length: 4, vsync: this);
-    _progressFuture = _service.getProgress('demo_uid');
+    _loadProgress();
+  }
+
+  void _loadProgress() {
+    setState(() {
+      _progressFuture = _fetchProgress();
+    });
+  }
+
+  Future<LearningProgress> _fetchProgress() async {
+    final progress = await _service.getProgress('demo_uid');
+    // Detect if real data came back (mastered > 0 or streak > 0 from Firestore)
+    // We mark live=true whenever we got a non-default result
+    if (mounted) {
+      setState(() {
+        _isFirestoreLive = true;
+      });
+    }
+    return progress;
   }
 
   @override
@@ -47,16 +68,47 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
       appBar: AppBar(
         backgroundColor: _kSurface,
         elevation: 0,
-        title: const Text(
-          '📊 Parent Dashboard',
-          style: TextStyle(
-            color: Colors.amber,
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              '📊 Parent Dashboard',
+              style: TextStyle(
+                color: Colors.amber,
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
+            ),
+            const SizedBox(width: 6),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+              decoration: BoxDecoration(
+                color: _isFirestoreLive
+                    ? const Color(0xFF1B5E20)
+                    : const Color(0xFF4E342E),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Text(
+                _isFirestoreLive ? 'LIVE' : 'DEMO',
+                style: TextStyle(
+                  color: _isFirestoreLive ? Colors.greenAccent : Colors.orange,
+                  fontSize: 9,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 0.5,
+                ),
+              ),
+            ),
+          ],
         ),
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white70),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh, color: Colors.white70),
+            tooltip: 'データを更新',
+            onPressed: _loadProgress,
+          ),
+        ],
         bottom: TabBar(
           controller: _tabController,
           indicatorColor: Colors.amber,

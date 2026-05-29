@@ -26,6 +26,8 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../core/analytics/firestore_progress_repository.dart';
+import '../../core/analytics/progress_service.dart';
 import '../../core/firebase/auth_service.dart';
 import '../../core/fsrs/firestore_card_repository.dart';
 import '../../core/fsrs/fsrs_algorithm.dart';
@@ -369,11 +371,47 @@ class _BattleScreenState extends State<BattleScreen>
     if (nextIdx >= _queue.length) {
       setState(() => _sessionDone = true);
       _starsCtrl.forward();
+      _recordSessionToFirestore();
       return;
     }
 
     setState(() => _queueIdx = nextIdx);
     _resetFlip();
+  }
+
+  // ── Session persistence ────────────────────────────────────────────────────
+
+  /// Writes session stats to Firestore after session completes.
+  /// Fire-and-forget — offline Firestore cache will sync when connection returns.
+  void _recordSessionToFirestore() {
+    final uid = _userId;
+    if (uid == null) return;
+
+    final total = _sessionResults.length;
+    if (total == 0) return;
+
+    final gradeSum = _sessionResults.fold(
+        0.0, (sum, r) => sum + r.grade.index1.toDouble());
+    final avgScore = gradeSum / total;
+
+    // Count 'review' state cards as mastered
+    final masteredCount = _deck.where((c) => c.state == CardState.review).length;
+
+    final progressService = ProgressService(
+      repository: FirestoreProgressRepository(),
+    );
+
+    progressService.recordSession(
+      uid: uid,
+      wordsPracticed: total,
+      minutes: 1, // approximate; real timer would need to track start time
+      avgScore: avgScore,
+      totalMastered: masteredCount,
+      totalPracticed: _deck.length,
+      streak: 1, // server will recalculate from session history
+    ).catchError((_) {
+      // Non-fatal: offline writes queued by Firestore SDK
+    });
   }
 
   // ── Build ──────────────────────────────────────────────────────────────────
