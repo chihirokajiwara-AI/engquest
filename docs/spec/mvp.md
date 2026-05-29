@@ -58,9 +58,9 @@ Native-equivalent English cognition in Japanese children, age 4–18.
 | C02 | CEFR-Tagged Content DB (300 words, A1) | `done` | 2026-05-29 | lib/data/content/vocab_a1.dart — 300語 const List, JSON + Dart model + repository + unit tests |
 | C03 | Firebase Project Setup + Auth | `done` | 2026-05-29 | lib/core/firebase/ — FirebaseConfig.initialize() + AuthService (anonymous auth, COPPA準拠) |
 | C04 | Flutter App Scaffold + Navigation | `done` | 2026-05-29 | lib/main.dart + app.dart + world_map_screen.dart — 3ゾーンナビゲーション実装済み |
-| C05 | Battle Module (Retrieval Loop) | `done` | 2026-05-29 | FSRS-4.5 Dart全公式実装 + カードフリップUI + 4段階評価 + セッションサマリー |
-| C06 | Voice Module (Pronunciation Coach) | `done` | 2026-05-29 | VoiceService + Levenshtein評価 + PlatformChannel stub + デモモード完全動作 |
-| C07 | Dialog Module (Conversational AI) | `done` | 2026-05-29 | ClaudeClient (haiku) + DialogService (3シナリオ) + オフラインフォールバック |
+| C05 | Battle Module (Retrieval Loop) | `done` | 2026-05-29 | FSRS-4.5 Dart全公式実装 + カードフリップUI + 4段階評価 + セッションサマリー; **P1-6 age filter**: `childAge` parameter + `_filterVocabByAge()` (age<8→動物/色/食べ物/家族20語, age≥8→全30語) + OnboardingResult.ageYearsをWorldMapScreen経由でwire済み |
+| C06 | Voice Module (Pronunciation Coach) | `done` | 2026-05-29 | VoiceService + Levenshtein評価 + PlatformChannel stub + デモモード完全動作; **詳細実装仕様**: docs/spec/voice_integration_spec.md (iOS whisper_ggml_plus + Android cloud Whisper + VoiceModelGate UI + EventChannel progress) |
+| C07 | Dialog Module (Conversational AI) | `done` | 2026-05-29 | ClaudeClient (haiku) + DialogService (3シナリオ) + オフラインフォールバック; **P1-4 polish**: オフラインメッセージ日本語化「今はオフラインです。接続を確認してください。」+ 入力欄「英語で話しかけよう...」+ UI説明文日本語化 + NPC名日本語ラベル |
 | C08 | Parent Dashboard | `done` | 2026-05-29 | 4タブ (Home/Progress/Schedule/Settings) + MockData完全表示 + ストリーク/英検準備度 |
 | C09 | Analytics + A/B Framework | `done` | 2026-05-29 | lib/core/analytics/analytics_service.dart — AnalyticsSink interface + FirebaseAnalyticsAdapter + AbFramework (FNV-1a 50/50 deterministic split) + AnalyticsService facade + unit tests |
 | C10 | Onboarding Flow | `done` | 2026-05-29 | lib/features/onboarding/onboarding_flow.dart — 4ステップ: 年齢スライダー + CEFRミニテスト3問 + アバター選択5体 + 目標設定 + OnboardingResult model |

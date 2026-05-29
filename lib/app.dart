@@ -49,6 +49,13 @@ class OnboardingStorage {
     return _prefs!.getBool(_kComplete);
   }
 
+  /// Returns the stored child age (years). Defaults to 8 if not set.
+  static int get ageYears {
+    if (_prefs == null) return 8;
+    final age = _prefs!.getInt(_kAge);
+    return age > 0 ? age : 8;
+  }
+
   // ── Async save / load ────────────────────────────────────────────────────
 
   static Future<void> save(OnboardingResult result) async {
@@ -166,7 +173,7 @@ class _AppEntryPointState extends State<_AppEntryPoint> {
       );
     }
     if (_onboardingComplete) {
-      return const WorldMapScreen();
+      return WorldMapScreen(childAge: OnboardingStorage.ageYears);
     }
     return OnboardingFlow(onComplete: _handleOnboardingComplete);
   }

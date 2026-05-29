@@ -68,6 +68,45 @@ const List<VocabItem> _kSeedVocab = [
   VocabItem(id: 'eiken5_030', word: 'park',   reading: 'パーク',     jpTranslation: 'こうえん',   cefrLevel: 'A1', eikenLevel: '5', pos: ['noun'],      exampleSentences: ['Let\'s go to the park.']),
 ];
 
+// ── Age-appropriate vocabulary filter ────────────────────────────────────────
+
+/// Word IDs suitable for young learners (age < 8).
+/// Focus: concrete nouns (animals, colors, food, family) + simple verbs.
+const Set<String> _kYoungLearnerIds = {
+  'eiken5_001', // cat
+  'eiken5_002', // dog
+  'eiken5_003', // apple
+  'eiken5_006', // red
+  'eiken5_007', // big
+  'eiken5_009', // eat
+  'eiken5_010', // water
+  'eiken5_012', // happy
+  'eiken5_013', // play
+  'eiken5_015', // blue
+  'eiken5_016', // mother
+  'eiken5_017', // father
+  'eiken5_019', // small
+  'eiken5_020', // bird
+  'eiken5_021', // fish
+  'eiken5_022', // tree
+  'eiken5_023', // green
+  'eiken5_024', // sing
+  'eiken5_027', // white
+  'eiken5_029', // milk
+};
+
+/// Returns vocab filtered by age:
+///   age < 8  → young learner set (animals + colors + food + family)
+///   age >= 8 → full A1 deck
+List<VocabItem> _filterVocabByAge(int age) {
+  if (age < 8) {
+    return _kSeedVocab
+        .where((v) => _kYoungLearnerIds.contains(v.id))
+        .toList();
+  }
+  return List<VocabItem>.from(_kSeedVocab);
+}
+
 // ── Session result per card ───────────────────────────────────────────────────
 class _CardResult {
   final String word;
@@ -87,9 +126,17 @@ class _XpPopup {
 /// FSRS-based vocabulary flashcard battle screen — UI Polish v2 + Firestore persistence.
 ///
 /// [repository] — injectable for testing; defaults to FirestoreFsrsCardRepository.
+/// [childAge]   — filters vocabulary by age (age < 8 → animals/colors/food/family only).
 class BattleScreen extends StatefulWidget {
   final FsrsCardRepository? repository;
-  const BattleScreen({super.key, this.repository});
+  /// Child's age in years (from OnboardingResult). Defaults to 8 (full A1 deck).
+  final int childAge;
+
+  const BattleScreen({
+    super.key,
+    this.repository,
+    this.childAge = 8,
+  });
 
   @override
   State<BattleScreen> createState() => _BattleScreenState();
@@ -191,8 +238,8 @@ class _BattleScreenState extends State<BattleScreen>
     if (!mounted) return;
     _userId = uid;
 
-    // 2. Load vocab list
-    _vocab = List<VocabItem>.from(_kSeedVocab);
+    // 2. Load vocab list — filtered by child's age
+    _vocab = _filterVocabByAge(widget.childAge);
     final vocabIds = _vocab.map((v) => v.id).toList();
 
     // 3. Load persisted cards from Firestore (or InMemory fallback)

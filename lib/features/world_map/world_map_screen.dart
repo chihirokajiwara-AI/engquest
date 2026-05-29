@@ -9,6 +9,7 @@
 //   - Day streak badge: 🔥 N日連続 when streak > 0
 
 import 'package:flutter/material.dart';
+import 'package:engquest/features/battle/battle_screen.dart';
 import 'package:engquest/features/parent_dashboard/parent_dashboard_screen.dart';
 
 // ── Mock player data (will come from Riverpod/Firestore in next sprint) ──────
@@ -72,7 +73,9 @@ final List<_ZoneDef> _kZones = [
 // ── WorldMapScreen ────────────────────────────────────────────────────────────
 
 class WorldMapScreen extends StatefulWidget {
-  const WorldMapScreen({super.key});
+  /// Child's age in years — passed to BattleScreen for vocabulary filtering.
+  final int childAge;
+  const WorldMapScreen({super.key, this.childAge = 8});
 
   @override
   State<WorldMapScreen> createState() => _WorldMapScreenState();
@@ -176,6 +179,16 @@ class _WorldMapScreenState extends State<WorldMapScreen>
                               context,
                               MaterialPageRoute(
                                   builder: (_) => zone.pushTarget!),
+                            );
+                          } else if (zone.route == '/battle') {
+                            // Pass childAge for age-appropriate vocab filtering
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => BattleScreen(
+                                  childAge: widget.childAge,
+                                ),
+                              ),
                             );
                           } else {
                             Navigator.pushNamed(context, zone.route);

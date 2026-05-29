@@ -11,22 +11,22 @@ extension DialogScenarioX on DialogScenario {
   String get label {
     switch (this) {
       case DialogScenario.greetNpc:
-        return 'Village Greeting';
+        return 'むらびとにあいさつ';
       case DialogScenario.shopDialog:
-        return 'Shop';
+        return 'おみせでかいもの';
       case DialogScenario.battleIntro:
-        return 'Battle';
+        return 'バトルのはじまり';
     }
   }
 
   String get npcName {
     switch (this) {
       case DialogScenario.greetNpc:
-        return 'Villager';
+        return 'むらびと Elder';
       case DialogScenario.shopDialog:
-        return 'Merchant';
+        return 'Merchant ショップ';
       case DialogScenario.battleIntro:
-        return 'Knight';
+        return 'Knight ナイト';
     }
   }
 

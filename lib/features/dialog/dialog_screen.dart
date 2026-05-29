@@ -33,7 +33,7 @@ class DialogScenariosScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Choose who to talk with:',
+              '誰と話す？',
               style: TextStyle(color: Colors.white70, fontSize: 16),
             ),
             const SizedBox(height: 20),
@@ -62,9 +62,9 @@ class _ScenarioCard extends StatelessWidget {
   };
 
   static const Map<DialogScenario, String> _descriptions = {
-    DialogScenario.greetNpc: 'Practice greetings and introductions',
-    DialogScenario.shopDialog: 'Learn numbers, items, and transactions',
-    DialogScenario.battleIntro: 'Use action words and encouragement',
+    DialogScenario.greetNpc: '👋 あいさつ・自己紹介を練習しよう',
+    DialogScenario.shopDialog: '🛍️ かずとものの名前を練習しよう',
+    DialogScenario.battleIntro: '⚔️ アクションことばを練習しよう',
   };
 
   @override
@@ -304,7 +304,7 @@ class _DialogScreenState extends State<DialogScreen> {
               controller: _textController,
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
-                hintText: 'Type your message...',
+                hintText: '英語で話しかけよう...',
                 hintStyle: const TextStyle(color: Colors.white38),
                 filled: true,
                 fillColor: const Color(0xFF2A2A40),
@@ -493,7 +493,7 @@ class _OfflineBanner extends StatelessWidget {
       color: const Color(0xFF5D4037),
       padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
       child: const Text(
-        '📴 Offline mode — using built-in responses. Add API key in app_config.dart.',
+        '📴 今はオフラインです。接続を確認してください。',
         style: TextStyle(color: Colors.orange, fontSize: 11),
         textAlign: TextAlign.center,
       ),
