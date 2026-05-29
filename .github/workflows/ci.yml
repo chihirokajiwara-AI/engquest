@@ -52,6 +52,13 @@ jobs:
       - name: Verify audio assets
         run: python3 scripts/verify_audio_assets.py
 
+      # ── Native audio manifest contract ─────────────────────────────────────
+      # Asserts assets/content/audio_manifest.json covers all 300 words with a
+      # schema that AudioManifestEntry.fromJson (tts_service.dart) can parse
+      # (required non-null storagePath etc.), and that web/public/ is gone.
+      - name: Verify native audio manifest
+        run: python3 scripts/test_audio_manifest.py
+
       # ── Analyze ───────────────────────────────────────────────────────────
       - name: Flutter analyze
         run: flutter analyze --fatal-infos --fatal-warnings
