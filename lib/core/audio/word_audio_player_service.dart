@@ -4,10 +4,6 @@
 // Plays TTS-generated word audio during Battle flashcard sessions.
 // Architecture: TtsService (fetch/cache) → WordAudioPlayerService (play)
 //
-// audioplayers integration is STUBBED (commented) — add audioplayers ^5.2.1
-// to pubspec.yaml in the next sprint. All method signatures and flow are
-// production-ready; only the actual AudioPlayer.play() call is gated.
-//
 // Usage (from BattleScreen):
 //   final _audioPlayer = WordAudioPlayerService();
 //   await _audioPlayer.initialize();
@@ -17,6 +13,7 @@
 
 import 'dart:typed_data';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 
 import 'tts_service.dart';
@@ -27,6 +24,7 @@ enum WordAudioState { idle, loading, playing, error }
 /// WordAudioPlayerService — manages TTS fetch + audio playback for Battle
 class WordAudioPlayerService extends ChangeNotifier {
   final TtsService _tts;
+  final AudioPlayer _audioPlayer;
 
   WordAudioState _state = WordAudioState.idle;
   String? _currentVocabId;
@@ -35,8 +33,9 @@ class WordAudioPlayerService extends ChangeNotifier {
   // Pre-fetched audio cache for current session (vocabId → result)
   final Map<String, TtsAudioResult> _sessionCache = {};
 
-  WordAudioPlayerService({TtsService? ttsService})
-      : _tts = ttsService ?? TtsService();
+  WordAudioPlayerService({TtsService? ttsService, AudioPlayer? audioPlayer})
+      : _tts = ttsService ?? TtsService(),
+        _audioPlayer = audioPlayer ?? AudioPlayer();
 
   WordAudioState get state => _state;
   String? get currentVocabId => _currentVocabId;
@@ -88,9 +87,9 @@ class WordAudioPlayerService extends ChangeNotifier {
         return;
       }
 
-      // Play the audio bytes
-      await _playAudioBytes(result.audioBytes!);
+      // Play the audio bytes (sets state to playing, then idle on completion)
       _setState(WordAudioState.playing);
+      await _playAudioBytes(result.audioBytes!);
     } catch (e) {
       _lastError = e.toString();
       _setState(WordAudioState.error);
@@ -101,7 +100,7 @@ class WordAudioPlayerService extends ChangeNotifier {
   /// Stop current playback
   Future<void> stop() async {
     if (_state == WordAudioState.idle) return;
-    // TODO: await _audioPlayer.stop();
+    await _audioPlayer.stop();
     _setState(WordAudioState.idle);
     _currentVocabId = null;
   }
@@ -119,7 +118,7 @@ class WordAudioPlayerService extends ChangeNotifier {
 
   @override
   void dispose() {
-    // TODO: _audioPlayer.dispose();
+    _audioPlayer.dispose();
     super.dispose();
   }
 
@@ -130,20 +129,15 @@ class WordAudioPlayerService extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Play raw audio bytes via audioplayers package
-  /// STUB: audioplayers ^5.2.1 not yet added to pubspec.yaml
-  /// When adding: uncomment + add dependency
+  /// Play raw MP3 audio bytes via audioplayers
   Future<void> _playAudioBytes(Uint8List bytes) async {
-    // TODO (next sprint — add audioplayers ^5.2.1):
-    //
-    // final source = BytesSource(bytes);
-    // await _audioPlayer.play(source);
-    // await _audioPlayer.onPlayerComplete.first; // wait for completion
-    //
-    // For now: simulate 300ms playback delay as UX placeholder
-    if (kDebugMode) {
-      debugPrint('[WordAudioPlayer] STUB: would play ${bytes.length} bytes of audio');
-      await Future.delayed(const Duration(milliseconds: 300));
+    final source = BytesSource(bytes);
+    await _audioPlayer.play(source);
+    // Wait for playback to complete before transitioning state
+    await _audioPlayer.onPlayerComplete.first;
+    if (_state == WordAudioState.playing) {
+      _setState(WordAudioState.idle);
+      _currentVocabId = null;
     }
   }
 }

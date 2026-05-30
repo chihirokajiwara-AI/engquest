@@ -31,6 +31,8 @@ dependencies:
   http: ^1.1.0
   # Crypto (analytics hashing)
   crypto: ^3.0.3
+  # Audio playback
+  audioplayers: ^5.2.1
   # UI
   cupertino_icons: ^1.0.6
 
