@@ -46,6 +46,8 @@ class FirestoreProgressRepository {
   DocumentReference<Map<String, dynamic>> _sessionDoc(String uid, String dateKey) =>
       _db.collection('users').doc(uid).collection('sessions').doc(dateKey);
 
+  // ignore: unused_element - reserved for future batch queries on sessions
+  // ignore: unused_element
   CollectionReference<Map<String, dynamic>> _sessionsCol(String uid) =>
       _db.collection('users').doc(uid).collection('sessions');
 

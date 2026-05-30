@@ -9,17 +9,19 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  # Firebase
+  # Firebase (web + iOS + Android)
   firebase_core: ^4.9.0
   firebase_auth: ^6.5.1
   cloud_firestore: ^6.4.1
   firebase_analytics: ^12.4.1
   firebase_messaging: ^16.2.2
-  # Notifications
-  flutter_local_notifications: ^21.0.0
+  # Notifications — flutter_local_notifications removed (web no-op stub,
+  # mobile notifications handled via firebase_messaging for now).
+  # Re-add when implementing local scheduled reminders on mobile.
   timezone: ^0.11.0
-  # SRS / Data
-  sqflite: ^2.3.2
+  # SRS / Data — sqflite removed (using InMemoryFsrsCardRepository +
+  # Firestore; sqflite will be re-added when offline-first mobile sync
+  # is implemented)
   path: ^1.9.0
   # Persistence / Prefs
   shared_preferences: ^2.2.0

@@ -209,7 +209,8 @@ void main() {
   group('BattleSession — next card', () {
     test('session advances to next card after grading', () {
       final session = BattleSession(_testVocab);
-      final firstWord = session.currentVocab.word;
+      // Verify session has a valid card before grading
+      expect(session.currentVocab.word, isNotEmpty);
       session.grade(Grade.good);
       // Should show a different card (assuming queue order differs)
       expect(session.isComplete, isFalse);

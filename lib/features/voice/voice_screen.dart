@@ -77,6 +77,8 @@ class _VoiceScreenState extends State<VoiceScreen>
 
   // Per-word attempt tracking
   final List<VoiceResult> _sessionResults = [];
+  // ignore: unused_field - tracked for future retry-limit feature
+  // ignore: unused_field
   int _retryCount = 0;
 
   // ── Countdown timer ────────────────────────────────────────────────────────

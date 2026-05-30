@@ -91,7 +91,7 @@ All core components C01-C19 are implemented. See docs/spec/mvp.md for details.
 - [ ] T00e: Remove web_static/ — duplicates Flutter app (1,600-line standalone HTML), no longer needed
 
 ### Priority 1 — Trial Readiness
-- [ ] T01: Mobile build (iOS/Android) — resolve Firebase package versions for mobile
+- [x] T01: Mobile build (iOS/Android) — resolve Firebase package versions for mobile
 - [ ] T02: Real Whisper integration — replace demo VoiceService with whisper_ggml_plus (iOS) / cloud (Android)
 - [ ] T03: App Store / Play Store preparation — COPPA compliance review, screenshots, listing
 - [ ] T04: Parent onboarding flow — email signup for parents, child account linking
