@@ -7,6 +7,9 @@
 ///
 /// Firebase Analytics is stubbed behind an interface so tests can inject
 /// a no-op implementation without depending on native Firebase plugins.
+library;
+
+import 'package:firebase_analytics/firebase_analytics.dart';
 
 // ---------------------------------------------------------------------------
 // Event constants
@@ -85,32 +88,29 @@ class NoOpAnalytics implements AnalyticsSink {
   Future<void> setUserProperty(String name, String value) async {}
 }
 
-/// Stub Firebase implementation.
-/// Replace body with real `firebase_analytics` package calls when
-/// the Firebase plugin is wired up in pubspec.yaml.
+/// Production Firebase Analytics implementation.
+///
+/// Delegates all calls to [FirebaseAnalytics.instance]. The optional
+/// constructor parameter allows injecting a mock for integration tests.
 class FirebaseAnalyticsAdapter implements AnalyticsSink {
-  /// In production, inject `FirebaseAnalytics.instance` here.
-  FirebaseAnalyticsAdapter();
+  final FirebaseAnalytics _analytics;
+
+  FirebaseAnalyticsAdapter({FirebaseAnalytics? analytics})
+      : _analytics = analytics ?? FirebaseAnalytics.instance;
 
   @override
   Future<void> logEvent(String name, {Map<String, Object>? parameters}) async {
-    // TODO: await _analytics.logEvent(name: name, parameters: parameters);
-    // Stubbed — prints in debug mode only
-    assert(() {
-      // ignore: avoid_print
-      print('[Analytics] $name ${parameters ?? {}}');
-      return true;
-    }());
+    await _analytics.logEvent(name: name, parameters: parameters);
   }
 
   @override
   Future<void> setUserId(String uid) async {
-    // TODO: await _analytics.setUserId(id: uid);
+    await _analytics.setUserId(id: uid);
   }
 
   @override
   Future<void> setUserProperty(String name, String value) async {
-    // TODO: await _analytics.setUserProperty(name: name, value: value);
+    await _analytics.setUserProperty(name: name, value: value);
   }
 }
 
@@ -180,14 +180,40 @@ class AbFramework {
 ///
 /// Usage:
 /// ```dart
-/// final analytics = AnalyticsService(sink: FirebaseAnalyticsAdapter());
-/// await analytics.logBattleAnswer(wordId: 'eiken5_042', grade: 3, latencyMs: 850);
+/// // In main.dart:
+/// AnalyticsService.initialize(firebaseAvailable: true);
+///
+/// // Anywhere in the app:
+/// await AnalyticsService.instance.logBattleAnswer(wordId: 'eiken5_042', grade: 3, latencyMs: 850);
 /// ```
 class AnalyticsService {
   final AnalyticsSink sink;
   final AbFramework _ab;
 
   DateTime? _sessionStart;
+
+  /// App-wide singleton. Initialized via [initialize] in main.dart.
+  static AnalyticsService? _instance;
+
+  /// Returns the app-wide singleton. Falls back to [NoOpAnalytics] if
+  /// [initialize] has not been called yet.
+  static AnalyticsService get instance =>
+      _instance ??= AnalyticsService(sink: NoOpAnalytics());
+
+  /// Creates the singleton with the appropriate sink based on Firebase
+  /// availability. Call once in main.dart after Firebase init.
+  static void initialize({required bool firebaseAvailable}) {
+    _instance = AnalyticsService(
+      sink: firebaseAvailable
+          ? FirebaseAnalyticsAdapter()
+          : NoOpAnalytics(),
+    );
+  }
+
+  /// Reset the singleton (for testing only).
+  static void resetForTesting() {
+    _instance = null;
+  }
 
   AnalyticsService({
     required this.sink,
