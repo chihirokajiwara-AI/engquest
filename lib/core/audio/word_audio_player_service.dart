@@ -11,8 +11,6 @@
 //   await _audioPlayer.playWord(vocabId: 'eiken5_001', word: 'cat');
 //   // Auto-plays on flip, can also be triggered by tap on speaker icon.
 
-import 'dart:typed_data';
-
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 

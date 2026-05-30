@@ -84,7 +84,7 @@ All core components C01-C19 are implemented. See docs/spec/mvp.md for details.
 ## Task Queue (Post-MVP)
 
 ### Priority 0 — Hermes Debt Cleanup (CRITICAL)
-- [ ] T00a: Fix WordAudioPlayerService — replace stub with real audioplayers playback (currently just debugPrint) — **CODE DONE**: audioplayers ^5.2.1 added to pubspec.yaml, stub replaced with real AudioPlayer.play(BytesSource). Blocked: `flutter pub get` hangs (dart binary stuck in dyld_start on macOS 26). Run `flutter pub get && flutter analyze && flutter test` to verify, then mark [x].
+- [x] T00a: Fix WordAudioPlayerService — replace stub with real audioplayers playback (currently just debugPrint)
 - [ ] T00b: Fix SoundService — implement real sound effects (flip, correct, wrong, level-up) — currently 100% no-op
 - [ ] T00c: Fix AnalyticsService — wire Firebase Analytics (logEvent, setUserId, setUserProperty are no-ops)
 - [ ] T00d: Production logging cleanup — gate 27 debugPrint calls behind kDebugMode, remove bare print() in analytics

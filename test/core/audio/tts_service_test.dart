@@ -9,6 +9,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:engquest/core/audio/tts_service.dart';
@@ -65,6 +66,17 @@ const _kManifestJson = '''
 // ── AudioManifestEntry tests ──────────────────────────────────────────────────
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  // Mock audioplayers platform channel to prevent MissingPluginException
+  setUp(() {
+    const channel = MethodChannel('xyz.luan/audioplayers');
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, (MethodCall methodCall) async {
+      return null;
+    });
+  });
+
   group('AudioManifestEntry', () {
     test('fromJson parses all fields correctly', () {
       final json = {
