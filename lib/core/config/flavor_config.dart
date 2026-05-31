@@ -78,7 +78,8 @@ class FlavorConfig {
   /// Whether a paid Stripe subscription is required to access locked content.
   final bool paymentRequired;
 
-  /// Set of CEFR grade labels that are always free in this flavor.
+  /// Set of Eiken grade labels (e.g. "5", "4", "3", "pre2", "2", "pre1")
+  /// that are always free in this flavor.
   /// Empty means all grades are locked behind payment (except explicit free content).
   final Set<String> freeGrades;
 
@@ -87,11 +88,11 @@ class FlavorConfig {
   bool get isEdilabFlavor => flavor == Flavor.edilab;
   bool get isAkenFlavor => flavor == Flavor.aken;
 
-  /// Returns true if the given CEFR [grade] (e.g. "A1", "A2") is accessible
-  /// without payment for this flavor.
+  /// Returns true if the given Eiken [grade] (e.g. "5", "4", "pre2") is
+  /// accessible without payment for this flavor.
   bool isGradeFree(String grade) {
     if (!paymentRequired) return true;
-    return freeGrades.contains(grade.toUpperCase());
+    return freeGrades.contains(grade.toLowerCase());
   }
 
   // ── Factory ───────────────────────────────────────────────────────────────
@@ -117,8 +118,8 @@ class FlavorConfig {
           primaryColor: 0xFF7C4DFF, // deep purple — distinct brand accent
           splashText: '英検合格への冒険、始まる！',
           paymentRequired: true,
-          // Grade 5 (roughly A1) is free; all others require subscription.
-          freeGrades: {'A1'},
+          // Grade 5 is free; all others require ¥999/month subscription.
+          freeGrades: {'5'},
         );
     }
   }
