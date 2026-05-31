@@ -7,6 +7,7 @@
 import 'package:flutter/material.dart';
 import 'eiken_exam_config.dart';
 import 'vocab_grammar_practice_screen.dart';
+import 'word_ordering_practice_screen.dart';
 
 class ExamPracticeScreen extends StatelessWidget {
   const ExamPracticeScreen({
@@ -152,9 +153,18 @@ class ExamPracticeScreen extends StatelessWidget {
             ),
           ),
         );
+      case ExamSectionType.wordOrdering:
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => WordOrderingPracticeScreen(
+              eikenGrade: eikenGrade,
+              section: section,
+            ),
+          ),
+        );
       case ExamSectionType.conversationComplete:
       case ExamSectionType.readingComprehension:
-      case ExamSectionType.wordOrdering:
       case ExamSectionType.listening:
       case ExamSectionType.writing:
       case ExamSectionType.speaking:
