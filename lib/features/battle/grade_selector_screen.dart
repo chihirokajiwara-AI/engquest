@@ -77,7 +77,6 @@ const _grades = [
     description: '大学中級レベル・3,000語',
     icon: Icons.military_tech,
     color: Color(0xFFFFD700),
-    hasContent: false, // not yet generated
   ),
 ];
 
