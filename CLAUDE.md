@@ -116,9 +116,9 @@ All core components C01-C19 are implemented. See docs/spec/mvp.md for details.
 - [x] T27: Eiken 2級 vocabulary — 800 words
 - [ ] T28: Eiken 準1級 vocabulary — 3,000 words
 - [ ] T29: Part 4 reading comprehension passages + questions
-- [ ] T30: Stripe billing integration
+- [x] T30: Stripe billing integration + backend proxy
 - [ ] T31: AI character generation — player/monster/world assets
-- [ ] T32: Backend proxy for Claude API key security
+- [x] T32: Backend proxy for Claude API key security
 
 ### Priority 3 — v2 Features
 - [ ] T09: Crafting module (grammar) — sentence construction puzzles
