@@ -40,6 +40,8 @@ import '../../core/fsrs/firestore_card_repository.dart';
 import '../../core/fsrs/fsrs_algorithm.dart';
 import '../../core/fsrs/fsrs_card.dart';
 import '../../core/fsrs/fsrs_card_repository.dart';
+import '../../core/gamification/achievement.dart';
+import '../../core/gamification/achievement_service.dart';
 import '../../core/gamification/xp_service.dart';
 import '../../core/gamification/xp_profile.dart';
 import '../../core/sound/sound_service.dart';
@@ -107,6 +109,7 @@ class _BattleScreenState extends State<BattleScreen>
   final _auth = AuthService();
   final _vocabRepo = VocabRepository();
   final _xpService = XpService();
+  final _achievementService = AchievementService();
   String? _userId;
   bool _repoLoading = true; // true while we await uid + loadDeck
 
@@ -396,6 +399,101 @@ class _BattleScreenState extends State<BattleScreen>
     ).catchError((_) {
       // Non-fatal: offline writes queued by Firestore SDK
     });
+
+    // Check achievements after session (T06)
+    _checkAchievements(uid, masteredCount, total);
+  }
+
+  // ── Achievement check (T06) ───────────────────────────────────────────────
+
+  void _checkAchievements(String uid, int masteredCount, int totalPracticed) {
+    final profile = _xpService.currentProfile(uid);
+    _achievementService.checkAndUpdate(
+      uid: uid,
+      totalMastered: masteredCount,
+      currentStreak: 1, // streak is computed server-side; best-effort here
+      totalPracticed: totalPracticed,
+      level: profile?.level ?? 1,
+    ).then((newlyUnlocked) {
+      if (newlyUnlocked.isNotEmpty && mounted) {
+        _showAchievementUnlocked(newlyUnlocked);
+      }
+    }).catchError((_) {});
+  }
+
+  void _showAchievementUnlocked(List<String> ids) {
+    if (!mounted) return;
+    final def = achievementDefById(ids.first);
+    if (def == null) return;
+
+    showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (ctx) {
+        Future.delayed(const Duration(seconds: 3), () {
+          if (ctx.mounted) Navigator.of(ctx, rootNavigator: true).pop();
+        });
+
+        return Dialog(
+          backgroundColor: const Color(0xFF1A1A2E),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+            side: BorderSide(color: def.gradient.first.withAlpha(160)),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(28),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'バッジ獲得！',
+                  style: TextStyle(
+                    color: Colors.amber,
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Container(
+                  width: 64,
+                  height: 64,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: LinearGradient(colors: def.gradient),
+                  ),
+                  child: Icon(def.icon, color: Colors.white, size: 32),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  def.titleJa,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  def.descriptionJa,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(color: Colors.white60, fontSize: 14),
+                ),
+                if (ids.length > 1) ...[
+                  const SizedBox(height: 8),
+                  Text(
+                    '+${ids.length - 1}個のバッジも獲得！',
+                    style: TextStyle(
+                      color: Colors.amber.withAlpha(180),
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   // ── Level-up dialog (P2-7) ────────────────────────────────────────────────

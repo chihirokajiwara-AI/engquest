@@ -18,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:engquest/core/firebase/auth_service.dart';
 import 'package:engquest/core/gamification/xp_profile.dart';
 import 'package:engquest/core/gamification/xp_service.dart';
+import 'package:engquest/features/achievements/achievements_screen.dart';
 import 'package:engquest/features/battle/battle_screen.dart';
 import 'package:engquest/features/parent_dashboard/parent_dashboard_screen.dart';
 
@@ -72,6 +73,14 @@ final List<_ZoneDef> _kZones = [
     icon:     Icons.mic_none_rounded,
     gradient: [const Color(0xFF2E7D32), const Color(0xFF1B5E20)],
     route:    '/voice',
+  ),
+  _ZoneDef(
+    label:    'Trophy Room',
+    subtitle: 'Badges — バッジコレクション',
+    icon:     Icons.emoji_events_outlined,
+    gradient: [const Color(0xFFFF8F00), const Color(0xFFE65100)],
+    route:    '/achievements',
+    pushTarget: const AchievementsScreen(),
   ),
   _ZoneDef(
     label:    "Scholar's Tower",

@@ -4,6 +4,7 @@ import 'package:engquest/features/battle/battle_screen.dart';
 import 'package:engquest/features/voice/voice_screen.dart';
 import 'package:engquest/features/dialog/dialog_screen.dart';
 import 'package:engquest/features/onboarding/onboarding_flow.dart';
+import 'package:engquest/features/achievements/achievements_screen.dart';
 import 'package:engquest/features/legal/parental_consent_gate.dart';
 import 'package:engquest/features/legal/privacy_policy_screen.dart';
 import 'package:engquest/features/legal/terms_of_service_screen.dart';
@@ -128,6 +129,7 @@ class EngQuestApp extends StatelessWidget {
         '/battle': (context) => BattleScreen(childAge: OnboardingStorage.ageYears),
         '/voice': (context) => const VoiceScreen(),
         '/dialog': (context) => const DialogScenariosScreen(),
+        '/achievements': (context) => const AchievementsScreen(),
         '/world': (context) => WorldMapScreen(childAge: OnboardingStorage.ageYears),
         '/privacy': (context) => const PrivacyPolicyScreen(),
         '/terms': (context) => const TermsOfServiceScreen(),
