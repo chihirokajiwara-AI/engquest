@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // ---------------------------------------------------------------------------
@@ -14,7 +15,7 @@ import 'package:flutter/material.dart';
 /// No-op on web.
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(dynamic message) async {
-  debugPrint('[FCM] Background handler called (no-op on web)');
+  if (kDebugMode) debugPrint('[FCM] Background handler called (no-op on web)');
 }
 
 /// Manages push notifications (FCM) and local scheduled reminders.
@@ -29,7 +30,7 @@ class NotificationService {
 
   /// Initialise the service. No-op on web.
   Future<void> init({bool firebaseAvailable = false}) async {
-    debugPrint('[NotificationService] Web stub — notifications disabled.');
+    if (kDebugMode) debugPrint('[NotificationService] Web stub — notifications disabled.');
   }
 
   /// Requests notification permission. Always returns false on web.

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:engquest/core/analytics/analytics_service.dart';
 import 'package:engquest/core/firebase/firebase_config.dart';
@@ -17,7 +18,7 @@ void main() async {
     await FirebaseConfig.initialize();
     firebaseAvailable = true;
   } catch (e) {
-    debugPrint('[Firebase] Init skipped: $e');
+    if (kDebugMode) debugPrint('[Firebase] Init skipped: $e');
   }
 
   // 3. Analytics — wire Firebase Analytics or no-op fallback.

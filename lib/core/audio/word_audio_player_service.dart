@@ -52,9 +52,9 @@ class WordAudioPlayerService extends ChangeNotifier {
     try {
       final results = await _tts.prefetchBatch(words);
       _sessionCache.addAll(results);
-      debugPrint('[WordAudioPlayer] prefetch: ${_sessionCache.length} words ready');
+      if (kDebugMode) debugPrint('[WordAudioPlayer] prefetch: ${_sessionCache.length} words ready');
     } catch (e) {
-      debugPrint('[WordAudioPlayer] prefetch error (non-fatal): $e');
+      if (kDebugMode) debugPrint('[WordAudioPlayer] prefetch error (non-fatal): $e');
     }
   }
 
@@ -81,7 +81,7 @@ class WordAudioPlayerService extends ChangeNotifier {
       if (!result.isAvailable) {
         _lastError = result.error ?? 'Audio not available';
         _setState(WordAudioState.error);
-        debugPrint('[WordAudioPlayer] audio unavailable for $vocabId: $_lastError');
+        if (kDebugMode) debugPrint('[WordAudioPlayer] audio unavailable for $vocabId: $_lastError');
         return;
       }
 
@@ -91,7 +91,7 @@ class WordAudioPlayerService extends ChangeNotifier {
     } catch (e) {
       _lastError = e.toString();
       _setState(WordAudioState.error);
-      debugPrint('[WordAudioPlayer] playback error for $vocabId: $e');
+      if (kDebugMode) debugPrint('[WordAudioPlayer] playback error for $vocabId: $e');
     }
   }
 
@@ -161,7 +161,7 @@ class WordAudioAutoPlay {
     if (!autoPlay) return;
     // Fire-and-forget: audio is enhancement, not blocker
     player.playWord(vocabId: vocabId, word: word).catchError((e) {
-      debugPrint('[WordAudioAutoPlay] error: $e');
+      if (kDebugMode) debugPrint('[WordAudioAutoPlay] error: $e');
       return; // suppress
     });
   }

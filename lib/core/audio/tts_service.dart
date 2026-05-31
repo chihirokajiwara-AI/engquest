@@ -6,7 +6,6 @@
 // On mobile, audio is cached to the app documents directory.
 
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -197,13 +196,15 @@ class TtsService {
       _manifest = AudioManifest.fromJson(jsonData);
 
       _initialized = true;
-      debugPrint('[TtsService] initialized — manifest: '
-          '${_manifest!.totalWords} words, '
-          '${_manifest!.pendingWords} pending, '
-          '${_manifest!.readyWords} ready');
+      if (kDebugMode) {
+        debugPrint('[TtsService] initialized — manifest: '
+            '${_manifest!.totalWords} words, '
+            '${_manifest!.pendingWords} pending, '
+            '${_manifest!.readyWords} ready');
+      }
     } catch (e) {
       // Non-fatal: app works without audio
-      debugPrint('[TtsService] initialization failed (non-fatal): $e');
+      if (kDebugMode) debugPrint('[TtsService] initialization failed (non-fatal): $e');
     }
   }
 
@@ -232,7 +233,7 @@ class TtsService {
       final fromApi = await _fetchFromGoogleTts(vocabId, word);
       if (fromApi != null) return fromApi;
     } else {
-      debugPrint('[TtsService] API key not configured — skipping TTS fetch for "$word"');
+      if (kDebugMode) debugPrint('[TtsService] API key not configured — skipping TTS fetch for "$word"');
     }
 
     // 3. Unavailable
@@ -263,7 +264,7 @@ class TtsService {
     }
 
     final ready = results.values.where((r) => r.isAvailable).length;
-    debugPrint('[TtsService] prefetch complete: $ready/${words.length} words ready');
+    if (kDebugMode) debugPrint('[TtsService] prefetch complete: $ready/${words.length} words ready');
     return results;
   }
 
@@ -296,7 +297,7 @@ class TtsService {
   /// Clear local audio cache
   Future<void> clearCache() async {
     _memoryCache.clear();
-    debugPrint('[TtsService] cache cleared');
+    if (kDebugMode) debugPrint('[TtsService] cache cleared');
   }
 
   // ── Private helpers ───────────────────────────────────────────────────────
@@ -320,14 +321,14 @@ class TtsService {
       ).timeout(const Duration(seconds: 10));
 
       if (response.statusCode != 200) {
-        debugPrint('[TtsService] Google TTS API error ${response.statusCode}: ${response.body}');
+        if (kDebugMode) debugPrint('[TtsService] Google TTS API error ${response.statusCode}: ${response.body}');
         return null;
       }
 
       final json = jsonDecode(response.body) as Map<String, dynamic>;
       final audioContent = json['audioContent'] as String?;
       if (audioContent == null || audioContent.isEmpty) {
-        debugPrint('[TtsService] empty audioContent for $word');
+        if (kDebugMode) debugPrint('[TtsService] empty audioContent for $word');
         return null;
       }
 
@@ -336,7 +337,7 @@ class TtsService {
 
       // Cache in memory
       _memoryCache[_cacheKey(vocabId, word)] = audioBytes;
-      debugPrint('[TtsService] fetched + cached: $vocabId ($word) — ${audioBytes.length} bytes');
+      if (kDebugMode) debugPrint('[TtsService] fetched + cached: $vocabId ($word) — ${audioBytes.length} bytes');
 
       return TtsAudioResult(
         vocabId: vocabId,
@@ -345,7 +346,7 @@ class TtsService {
         source: TtsAudioSource.googleTtsApi,
       );
     } catch (e) {
-      debugPrint('[TtsService] fetch error for $word: $e');
+      if (kDebugMode) debugPrint('[TtsService] fetch error for $word: $e');
       return null;
     }
   }

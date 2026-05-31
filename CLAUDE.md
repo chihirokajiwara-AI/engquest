@@ -87,7 +87,7 @@ All core components C01-C19 are implemented. See docs/spec/mvp.md for details.
 - [x] T00a: Fix WordAudioPlayerService — replace stub with real audioplayers playback (currently just debugPrint)
 - [x] T00b: Fix SoundService — implement real sound effects (flip, correct, wrong, level-up) — synthesized WAV playback via audioplayers
 - [x] T00c: Fix AnalyticsService — wire Firebase Analytics (logEvent, setUserId, setUserProperty are no-ops)
-- [ ] T00d: Production logging cleanup — gate 27 debugPrint calls behind kDebugMode, remove bare print() in analytics
+- [x] T00d: Production logging cleanup — gate 27 debugPrint calls behind kDebugMode, remove bare print() in analytics
 - [ ] T00e: Remove web_static/ — duplicates Flutter app (1,600-line standalone HTML), no longer needed
 
 ### Priority 1 — Trial Readiness

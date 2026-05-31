@@ -75,8 +75,10 @@ class PreferencesService {
       final sp = await SharedPreferences.getInstance();
       _instance = PreferencesService._internal(sp);
     } catch (e) {
-      debugPrint('[PreferencesService] SharedPreferences unavailable, '
-          'falling back to in-memory store: $e');
+      if (kDebugMode) {
+        debugPrint('[PreferencesService] SharedPreferences unavailable, '
+            'falling back to in-memory store: $e');
+      }
       _instance = PreferencesService._internal(null);
     }
     return _instance!;
