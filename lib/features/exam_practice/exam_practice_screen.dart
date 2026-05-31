@@ -7,6 +7,7 @@
 import 'package:flutter/material.dart';
 import 'conversation_practice_screen.dart';
 import 'eiken_exam_config.dart';
+import 'reading_practice_screen.dart';
 import 'vocab_grammar_practice_screen.dart';
 import 'word_ordering_practice_screen.dart';
 
@@ -175,6 +176,15 @@ class ExamPracticeScreen extends StatelessWidget {
           ),
         );
       case ExamSectionType.readingComprehension:
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => ReadingPracticeScreen(
+              eikenGrade: eikenGrade,
+              section: section,
+            ),
+          ),
+        );
       case ExamSectionType.listening:
       case ExamSectionType.writing:
       case ExamSectionType.speaking:
