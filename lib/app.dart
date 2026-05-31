@@ -4,6 +4,8 @@ import 'package:engquest/features/battle/battle_screen.dart';
 import 'package:engquest/features/voice/voice_screen.dart';
 import 'package:engquest/features/dialog/dialog_screen.dart';
 import 'package:engquest/features/onboarding/onboarding_flow.dart';
+import 'package:engquest/features/legal/parental_consent_gate.dart';
+import 'package:engquest/features/legal/privacy_policy_screen.dart';
 import 'package:engquest/core/storage/preferences_service.dart';
 
 // ---------------------------------------------------------------------------
@@ -14,6 +16,7 @@ import 'package:engquest/core/storage/preferences_service.dart';
 /// [PreferencesService] (backed by SharedPreferences with in-memory fallback).
 class OnboardingStorage {
   static const _kComplete = 'onboarding_complete';
+  static const _kConsent = 'parental_consent';
   static const _kAge = 'onboarding_age';
   static const _kCefr = 'onboarding_cefr';
   static const _kAvatar = 'onboarding_avatar';
@@ -37,6 +40,18 @@ class OnboardingStorage {
   }
 
   // ── Synchronous read (uses cached instance) ──────────────────────────────
+
+  /// Returns true if parental consent has been given.
+  static bool get hasConsent {
+    if (_prefs == null) return false;
+    return _prefs!.getBool(_kConsent);
+  }
+
+  /// Persists that parental consent was given.
+  static Future<void> saveConsent() async {
+    final p = await _lazyPrefs();
+    await p.setBool(_kConsent, true);
+  }
 
   /// Returns true if onboarding has been completed.
   ///
@@ -112,6 +127,7 @@ class EngQuestApp extends StatelessWidget {
         '/voice': (context) => const VoiceScreen(),
         '/dialog': (context) => const DialogScenariosScreen(),
         '/world': (context) => WorldMapScreen(childAge: OnboardingStorage.ageYears),
+        '/privacy': (context) => const PrivacyPolicyScreen(),
       },
     );
   }
