@@ -201,7 +201,7 @@ class _OnboardingFlowState extends State<OnboardingFlow>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1A1A2E),
+      backgroundColor: const Color(0xFFF5F7FA),
       body: SafeArea(
         child: Column(
           children: [
@@ -289,8 +289,8 @@ class _ProgressBar extends StatelessWidget {
               margin: const EdgeInsets.symmetric(horizontal: 2),
               decoration: BoxDecoration(
                 color: active
-                    ? const Color(0xFFFFD700) // gold
-                    : Colors.white24,
+                    ? const Color(0xFFFFC107) // amber gold
+                    : const Color(0xFFCFD8DC),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -327,7 +327,7 @@ class _StepAge extends StatelessWidget {
           const Text(
             '🏰 ENG Quest へようこそ！',
             style: TextStyle(
-              color: Color(0xFFFFD700),
+              color: Color(0xFF4FC3F7),
               fontSize: 26,
               fontWeight: FontWeight.bold,
             ),
@@ -336,7 +336,7 @@ class _StepAge extends StatelessWidget {
           const SizedBox(height: 12),
           const Text(
             '何才ですか？',
-            style: TextStyle(color: Colors.white70, fontSize: 16),
+            style: TextStyle(color: Color(0xFF607D8B), fontSize: 16),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 48),
@@ -344,7 +344,7 @@ class _StepAge extends StatelessWidget {
           Text(
             '$age さい',
             style: const TextStyle(
-              color: Colors.white,
+              color: Color(0xFF263238),
               fontSize: 56,
               fontWeight: FontWeight.bold,
             ),
@@ -357,22 +357,24 @@ class _StepAge extends StatelessWidget {
             min: 4,
             max: 18,
             divisions: 14,
-            activeColor: const Color(0xFFFFD700),
-            inactiveColor: Colors.white24,
+            activeColor: const Color(0xFFFFC107),
+            inactiveColor: const Color(0xFFCFD8DC),
             onChanged: (v) => onAgeChanged(v.round()),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: const [
-              Text('4さい', style: TextStyle(color: Colors.white38, fontSize: 12)),
-              Text('18さい', style: TextStyle(color: Colors.white38, fontSize: 12)),
+              Text('4さい',
+                  style: TextStyle(color: Color(0xFF90A4AE), fontSize: 12)),
+              Text('18さい',
+                  style: TextStyle(color: Color(0xFF90A4AE), fontSize: 12)),
             ],
           ),
           const Spacer(),
           ElevatedButton(
             onPressed: onNext,
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFFFD700),
+              backgroundColor: const Color(0xFFFFC107),
               foregroundColor: Colors.black,
               padding: const EdgeInsets.symmetric(vertical: 16),
               shape: RoundedRectangleBorder(
@@ -414,21 +416,28 @@ class _StepPlacement extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             'えいごチェック ${questionIndex + 1}/$total',
-            style: const TextStyle(color: Colors.white54, fontSize: 14),
+            style: const TextStyle(color: Color(0xFF607D8B), fontSize: 14),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 24),
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: const Color(0xFF16213E),
+              color: Colors.white,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: const Color(0xFFFFD700), width: 1.5),
+              border: Border.all(color: const Color(0xFFFFC107), width: 1.5),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF4FC3F7).withAlpha(30),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
             ),
             child: Text(
               question.question,
               style: const TextStyle(
-                color: Colors.white,
+                color: Color(0xFF263238),
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
               ),
@@ -442,8 +451,9 @@ class _StepPlacement extends StatelessWidget {
               child: OutlinedButton(
                 onPressed: () => onAnswer(i == question.correctIndex),
                 style: OutlinedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  side: const BorderSide(color: Colors.white24),
+                  foregroundColor: const Color(0xFF263238),
+                  backgroundColor: Colors.white,
+                  side: const BorderSide(color: Color(0xFFB0BEC5)),
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12)),
@@ -481,7 +491,7 @@ class _PlacementResult extends StatelessWidget {
           Text(
             placement.label,
             style: const TextStyle(
-              color: Color(0xFFFFD700),
+              color: Color(0xFF4FC3F7),
               fontSize: 32,
               fontWeight: FontWeight.bold,
             ),
@@ -489,14 +499,14 @@ class _PlacementResult extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             placement.description,
-            style: const TextStyle(color: Colors.white70, fontSize: 16),
+            style: const TextStyle(color: Color(0xFF607D8B), fontSize: 16),
             textAlign: TextAlign.center,
           ),
           const Spacer(),
           ElevatedButton(
             onPressed: onNext,
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFFFD700),
+              backgroundColor: const Color(0xFFFFC107),
               foregroundColor: Colors.black,
               padding:
                   const EdgeInsets.symmetric(vertical: 16, horizontal: 48),
@@ -540,7 +550,7 @@ class _StepAvatar extends StatelessWidget {
           const Text(
             '仲間を選ぼう！',
             style: TextStyle(
-              color: Color(0xFFFFD700),
+              color: Color(0xFF4FC3F7),
               fontSize: 24,
               fontWeight: FontWeight.bold,
             ),
@@ -560,15 +570,22 @@ class _StepAvatar extends StatelessWidget {
                     duration: const Duration(milliseconds: 200),
                     decoration: BoxDecoration(
                       color: selected
-                          ? const Color(0xFFFFD700).withOpacity(0.15)
-                          : const Color(0xFF16213E),
+                          ? const Color(0xFFFFC107).withOpacity(0.15)
+                          : Colors.white,
                       border: Border.all(
                         color: selected
-                            ? const Color(0xFFFFD700)
-                            : Colors.white12,
+                            ? const Color(0xFFFFC107)
+                            : const Color(0xFFE0E0E0),
                         width: selected ? 2 : 1,
                       ),
                       borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withAlpha(12),
+                          blurRadius: 4,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -578,12 +595,12 @@ class _StepAvatar extends StatelessWidget {
                         const SizedBox(height: 4),
                         Text(av.name,
                             style: const TextStyle(
-                                color: Colors.white,
+                                color: Color(0xFF263238),
                                 fontSize: 13,
                                 fontWeight: FontWeight.bold)),
                         Text(av.jobTitle,
                             style: const TextStyle(
-                                color: Colors.white54, fontSize: 11)),
+                                color: Color(0xFF607D8B), fontSize: 11)),
                       ],
                     ),
                   ),
@@ -595,7 +612,7 @@ class _StepAvatar extends StatelessWidget {
           ElevatedButton(
             onPressed: onNext,
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFFFD700),
+              backgroundColor: const Color(0xFFFFC107),
               foregroundColor: Colors.black,
               padding: const EdgeInsets.symmetric(vertical: 16),
               shape: RoundedRectangleBorder(
@@ -645,7 +662,7 @@ class _StepGoal extends StatelessWidget {
           Text(
             '${avatar.emoji} ${avatar.name}、準備はいい？',
             style: const TextStyle(
-              color: Color(0xFFFFD700),
+              color: Color(0xFF4FC3F7),
               fontSize: 22,
               fontWeight: FontWeight.bold,
             ),
@@ -654,13 +671,13 @@ class _StepGoal extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             '${placement.label}からスタート',
-            style: const TextStyle(color: Colors.white54, fontSize: 14),
+            style: const TextStyle(color: Color(0xFF607D8B), fontSize: 14),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 32),
           const Text(
             '毎日の目標',
-            style: TextStyle(color: Colors.white70, fontSize: 16),
+            style: TextStyle(color: Color(0xFF263238), fontSize: 16),
           ),
           const SizedBox(height: 12),
           Row(
@@ -676,21 +693,30 @@ class _StepGoal extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       decoration: BoxDecoration(
                         color: selected
-                            ? const Color(0xFFFFD700)
-                            : const Color(0xFF16213E),
+                            ? const Color(0xFFFFC107)
+                            : Colors.white,
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
                           color: selected
-                              ? const Color(0xFFFFD700)
-                              : Colors.white12,
+                              ? const Color(0xFFFFC107)
+                              : const Color(0xFFE0E0E0),
                         ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withAlpha(10),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
                       ),
                       child: Column(
                         children: [
                           Text(
                             '$min',
                             style: TextStyle(
-                              color: selected ? Colors.black : Colors.white,
+                              color: selected
+                                  ? Colors.black
+                                  : const Color(0xFF263238),
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
                             ),
@@ -698,8 +724,9 @@ class _StepGoal extends StatelessWidget {
                           Text(
                             'ふん',
                             style: TextStyle(
-                              color:
-                                  selected ? Colors.black87 : Colors.white54,
+                              color: selected
+                                  ? Colors.black87
+                                  : const Color(0xFF607D8B),
                               fontSize: 11,
                             ),
                           ),
@@ -716,14 +743,23 @@ class _StepGoal extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: const Color(0xFF16213E),
+              color: Colors.white,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.white12),
+              border: Border.all(color: const Color(0xFFE0E0E0)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withAlpha(12),
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                ),
+              ],
             ),
             child: Column(
               children: [
                 _SummaryRow(label: 'レベル', value: placement.label),
-                _SummaryRow(label: 'キャラ', value: '${avatar.emoji} ${avatar.name}'),
+                _SummaryRow(
+                    label: 'キャラ',
+                    value: '${avatar.emoji} ${avatar.name}'),
                 _SummaryRow(label: '目標', value: '毎日$goalMinutesふん'),
               ],
             ),
@@ -732,7 +768,7 @@ class _StepGoal extends StatelessWidget {
           ElevatedButton(
             onPressed: onFinish,
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFFFD700),
+              backgroundColor: const Color(0xFFFFC107),
               foregroundColor: Colors.black,
               padding: const EdgeInsets.symmetric(vertical: 16),
               shape: RoundedRectangleBorder(
@@ -760,10 +796,10 @@ class _SummaryRow extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label,
-              style: const TextStyle(color: Colors.white54, fontSize: 14)),
+              style: const TextStyle(color: Color(0xFF607D8B), fontSize: 14)),
           Text(value,
               style: const TextStyle(
-                  color: Colors.white,
+                  color: Color(0xFF263238),
                   fontSize: 14,
                   fontWeight: FontWeight.w600)),
         ],

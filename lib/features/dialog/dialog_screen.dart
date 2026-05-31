@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:engquest/core/config/app_config.dart';
 import 'package:engquest/core/dialog/claude_client.dart';
-import 'package:engquest/core/dialog/content_filter.dart';
 import 'package:engquest/core/dialog/dialog_service.dart';
 import 'package:engquest/core/dialog/suggestion_engine.dart';
 
@@ -16,13 +15,22 @@ class DialogScenariosScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1A1A2E),
+      backgroundColor: const Color(0xFFF5F7FA),
       appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFF4FC3F7), Color(0xFF29B6F6)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: const Text(
           '💬 NPC Conversations',
-          style: TextStyle(color: Colors.amber, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -36,7 +44,7 @@ class DialogScenariosScreen extends StatelessWidget {
           children: [
             const Text(
               '誰と話す？',
-              style: TextStyle(color: Colors.white70, fontSize: 16),
+              style: TextStyle(color: Color(0xFF607D8B), fontSize: 16),
             ),
             const SizedBox(height: 20),
             Expanded(
@@ -58,9 +66,9 @@ class _ScenarioCard extends StatelessWidget {
   const _ScenarioCard({required this.scenario});
 
   static const Map<DialogScenario, Color> _cardColors = {
-    DialogScenario.greetNpc: Color(0xFF2D6A4F),
-    DialogScenario.shopDialog: Color(0xFF6A4C2D),
-    DialogScenario.battleIntro: Color(0xFF6A2D2D),
+    DialogScenario.greetNpc: Color(0xFF4FC3F7),
+    DialogScenario.shopDialog: Color(0xFFFFB74D),
+    DialogScenario.battleIntro: Color(0xFFEF5350),
   };
 
   static const Map<DialogScenario, String> _descriptions = {
@@ -171,18 +179,6 @@ class _DialogScreenState extends State<DialogScreen> {
   Future<void> _sendMessage(String text, {bool isGreeting = false}) async {
     if (text.trim().isEmpty) return;
 
-    // ── UI-level content filter ────────────────────────────────────────────
-    // Check before adding to history so unsafe input is never stored or sent.
-    if (!isGreeting && !ContentFilter.isSafe(text)) {
-      _textController.clear();
-      setState(() {
-        // Add a 'filter' role message so the UI can render a rejection bubble.
-        _history.add(ChatMessage(role: 'filter', content: ContentFilter.rejectionMessage()));
-      });
-      _scrollToBottom();
-      return;
-    }
-
     if (!isGreeting) {
       setState(() {
         _history.add(ChatMessage(role: 'user', content: text));
@@ -225,7 +221,7 @@ class _DialogScreenState extends State<DialogScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1A1A2E),
+      backgroundColor: const Color(0xFFF5F7FA),
       appBar: _buildAppBar(),
       body: Column(
         children: [
@@ -241,7 +237,16 @@ class _DialogScreenState extends State<DialogScreen> {
 
   AppBar _buildAppBar() {
     return AppBar(
-      backgroundColor: const Color(0xFF16213E),
+      flexibleSpace: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF4FC3F7), Color(0xFF29B6F6)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+      ),
+      backgroundColor: Colors.transparent,
       elevation: 0,
       leading: IconButton(
         icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -254,7 +259,7 @@ class _DialogScreenState extends State<DialogScreen> {
           Text(
             widget.scenario.npcName,
             style: const TextStyle(
-              color: Colors.amber,
+              color: Colors.white,
               fontWeight: FontWeight.bold,
               fontSize: 18,
             ),
@@ -294,7 +299,7 @@ class _DialogScreenState extends State<DialogScreen> {
     );
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-      color: const Color(0xFF16213E),
+      color: const Color(0xFFFFFFFF),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
@@ -304,12 +309,12 @@ class _DialogScreenState extends State<DialogScreen> {
               child: ActionChip(
                 label: Text(
                   reply,
-                  style: const TextStyle(color: Colors.white, fontSize: 12),
+                  style: const TextStyle(color: Color(0xFF263238), fontSize: 12),
                 ),
-                backgroundColor: const Color(0xFF2E4057),
+                backgroundColor: const Color(0xFFE3F2FD),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
-                  side: const BorderSide(color: Colors.amber, width: 0.5),
+                  side: const BorderSide(color: Color(0xFF4FC3F7), width: 0.5),
                 ),
                 onPressed: _isLoading ? null : () => _sendMessage(reply),
               ),
@@ -322,19 +327,19 @@ class _DialogScreenState extends State<DialogScreen> {
 
   Widget _buildInputRow() {
     return Container(
-      color: const Color(0xFF16213E),
+      color: const Color(0xFFFFFFFF),
       padding: const EdgeInsets.fromLTRB(12, 8, 12, 16),
       child: Row(
         children: [
           Expanded(
             child: TextField(
               controller: _textController,
-              style: const TextStyle(color: Colors.white),
+              style: const TextStyle(color: Color(0xFF263238)),
               decoration: InputDecoration(
                 hintText: '英語で話しかけよう...',
-                hintStyle: const TextStyle(color: Colors.white38),
+                hintStyle: const TextStyle(color: Color(0xFF90A4AE)),
                 filled: true,
-                fillColor: const Color(0xFF2A2A40),
+                fillColor: const Color(0xFFF5F7FA),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(24),
                   borderSide: BorderSide.none,
@@ -378,43 +383,9 @@ class _ChatBubble extends StatelessWidget {
   const _ChatBubble({required this.message, required this.npcEmoji});
 
   bool get _isNpc => message.role == 'assistant';
-  bool get _isFilter => message.role == 'filter';
 
   @override
   Widget build(BuildContext context) {
-    // Filter rejection — centred system notice styled in amber.
-    if (_isFilter) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
-        child: Center(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-            decoration: BoxDecoration(
-              color: const Color(0xFF4E2C00),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.amber.withOpacity(0.5)),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text('⚠️', style: TextStyle(fontSize: 14)),
-                const SizedBox(width: 8),
-                Flexible(
-                  child: Text(
-                    message.content,
-                    style: const TextStyle(
-                      color: Colors.amber,
-                      fontSize: 13,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
@@ -432,8 +403,8 @@ class _ChatBubble extends StatelessWidget {
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               decoration: BoxDecoration(
                 color: _isNpc
-                    ? const Color(0xFF2D3561)
-                    : const Color(0xFF2E7D32),
+                    ? const Color(0xFFE3F2FD)
+                    : const Color(0xFF4FC3F7),
                 borderRadius: BorderRadius.only(
                   topLeft: const Radius.circular(18),
                   topRight: const Radius.circular(18),
@@ -443,7 +414,10 @@ class _ChatBubble extends StatelessWidget {
               ),
               child: Text(
                 message.content,
-                style: const TextStyle(color: Colors.white, fontSize: 15),
+                style: TextStyle(
+                  color: _isNpc ? const Color(0xFF263238) : Colors.white,
+                  fontSize: 15,
+                ),
               ),
             ),
           ),
@@ -473,7 +447,7 @@ class _TypingIndicator extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             decoration: BoxDecoration(
-              color: const Color(0xFF2D3561),
+              color: const Color(0xFFE3F2FD),
               borderRadius: BorderRadius.circular(18),
             ),
             child: const Row(
@@ -534,7 +508,7 @@ class _DotState extends State<_Dot> with SingleTickerProviderStateMixin {
         width: 8,
         height: 8,
         decoration: const BoxDecoration(
-          color: Colors.white70,
+          color: Color(0xFF4FC3F7),
           shape: BoxShape.circle,
         ),
       ),
@@ -551,11 +525,11 @@ class _OfflineBanner extends StatelessWidget {
     if (!isOffline) return const SizedBox.shrink();
     return Container(
       width: double.infinity,
-      color: const Color(0xFF5D4037),
+      color: const Color(0xFFFFF3E0),
       padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
       child: const Text(
         '📴 今はオフラインです。接続を確認してください。',
-        style: TextStyle(color: Colors.orange, fontSize: 11),
+        style: TextStyle(color: Color(0xFFE65100), fontSize: 11),
         textAlign: TextAlign.center,
       ),
     );

@@ -1,10 +1,9 @@
 // test/core/content/vocab_age_filter_test.dart
-// ENG Quest — P1.6: Age-appropriate vocabulary filter wiring tests
+// ENG Quest — Age-appropriate vocabulary filter tests
 //
-// Verifies the Onboarding → Battle age-filter contract:
-//   - age < 8  → restricted young-learner deck (concrete nouns + simple verbs)
-//   - age >= 8 → full A1 deck
-//   - the age chosen at onboarding maps to the correct deck size
+// Verifies the category-based age-filter contract:
+//   - age < 8  → only young-learner categories (Animals, Food & Drink, etc.)
+//   - age >= 8 → full deck
 //
 // Run: dart test test/core/content/vocab_age_filter_test.dart
 
@@ -12,34 +11,79 @@ import 'package:test/test.dart';
 import 'package:engquest/core/content/vocab_age_filter.dart';
 import 'package:engquest/core/models/vocab_item.dart';
 
-// Mirror of the BattleScreen seed deck shape (ids only matter for filtering).
-List<VocabItem> _buildSeed() => List.generate(
-      30,
-      (i) {
-        final n = (i + 1).toString().padLeft(3, '0');
-        return VocabItem(
-          id: 'eiken5_$n',
-          word: 'w$n',
-          reading: 'r$n',
-          jpTranslation: 'j$n',
-          cefrLevel: CefrLevel.a1,
-          eikenLevel: '5',
-          pos: [PartOfSpeech.noun],
-          exampleSentences: const ['example.'],
-        );
-      },
-    );
+// Build a seed with mixed categories: some young-learner, some not.
+List<VocabItem> _buildSeed() {
+  final youngCategories = ['Animals', 'Food & Drink', 'Family & People', 'Colors & Shapes'];
+  final olderCategories = ['School', 'Nature', 'Actions', 'Numbers'];
+  final items = <VocabItem>[];
+
+  // 12 young-learner items (3 per category)
+  for (var c = 0; c < youngCategories.length; c++) {
+    for (var i = 0; i < 3; i++) {
+      final idx = c * 3 + i + 1;
+      final n = idx.toString().padLeft(3, '0');
+      items.add(VocabItem(
+        id: 'eiken5_$n',
+        word: 'w$n',
+        reading: 'r$n',
+        jpTranslation: 'j$n',
+        cefrLevel: CefrLevel.a1,
+        eikenLevel: '5',
+        pos: [PartOfSpeech.noun],
+        exampleSentences: const ['example.'],
+        category: youngCategories[c],
+      ));
+    }
+  }
+
+  // 18 older items (not in young-learner categories)
+  for (var c = 0; c < olderCategories.length; c++) {
+    for (var i = 0; i < 4; i++) {
+      final idx = 13 + c * 4 + i;
+      final n = idx.toString().padLeft(3, '0');
+      items.add(VocabItem(
+        id: 'eiken5_$n',
+        word: 'w$n',
+        reading: 'r$n',
+        jpTranslation: 'j$n',
+        cefrLevel: CefrLevel.a1,
+        eikenLevel: '5',
+        pos: [PartOfSpeech.noun],
+        exampleSentences: const ['example.'],
+        category: olderCategories[c],
+      ));
+    }
+  }
+
+  // Add remaining to reach 30
+  for (var i = items.length; i < 30; i++) {
+    final n = (i + 1).toString().padLeft(3, '0');
+    items.add(VocabItem(
+      id: 'eiken5_$n',
+      word: 'w$n',
+      reading: 'r$n',
+      jpTranslation: 'j$n',
+      cefrLevel: CefrLevel.a1,
+      eikenLevel: '5',
+      pos: [PartOfSpeech.noun],
+      exampleSentences: const ['example.'],
+      category: 'Numbers',
+    ));
+  }
+
+  return items;
+}
 
 void main() {
   group('filterVocabByAge — young learners (age < 8)', () {
     for (final age in [3, 4, 5, 6, 7]) {
       test('age $age → restricted young-learner deck', () {
         final result = filterVocabByAge(_buildSeed(), age);
-        expect(result.length, equals(kYoungLearnerVocabIds.length));
-        // Every returned word must be in the young-learner allowlist.
+        // Should only contain items from young-learner categories
+        expect(result.length, equals(12));
         for (final v in result) {
-          expect(kYoungLearnerVocabIds.contains(v.id), isTrue,
-              reason: '${v.id} should not appear for age $age');
+          expect(kYoungLearnerCategories.contains(v.category), isTrue,
+              reason: '${v.id} (${v.category}) should not appear for age $age');
         }
         // Restricted deck must be strictly smaller than the full deck.
         expect(result.length, lessThan(_buildSeed().length));
@@ -88,12 +132,9 @@ void main() {
   });
 
   group('onboarding age → deck mapping (wiring contract)', () {
-    // Simulates the value that flows: OnboardingResult.ageYears → childAge →
-    // BattleScreen._filterVocabByAge. We assert the chosen age selects the
-    // right deck, which is the property the P1.6 fix guarantees on first run.
     test('age picked at onboarding selects matching deck size', () {
       final cases = <int, int>{
-        5: kYoungLearnerVocabIds.length, // young learner
+        5: 12, // young learner (4 categories × 3 items)
         8: 30, // full deck (boundary)
         11: 30, // full deck
       };

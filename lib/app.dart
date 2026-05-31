@@ -4,11 +4,6 @@ import 'package:engquest/features/battle/battle_screen.dart';
 import 'package:engquest/features/voice/voice_screen.dart';
 import 'package:engquest/features/dialog/dialog_screen.dart';
 import 'package:engquest/features/onboarding/onboarding_flow.dart';
-import 'package:engquest/features/achievements/achievements_screen.dart';
-import 'package:engquest/features/legal/parental_consent_gate.dart';
-import 'package:engquest/features/legal/privacy_policy_screen.dart';
-import 'package:engquest/features/legal/terms_of_service_screen.dart';
-import 'package:engquest/features/parent_dashboard/parent_login_screen.dart';
 import 'package:engquest/core/storage/preferences_service.dart';
 
 // ---------------------------------------------------------------------------
@@ -19,7 +14,6 @@ import 'package:engquest/core/storage/preferences_service.dart';
 /// [PreferencesService] (backed by SharedPreferences with in-memory fallback).
 class OnboardingStorage {
   static const _kComplete = 'onboarding_complete';
-  static const _kConsent = 'parental_consent';
   static const _kAge = 'onboarding_age';
   static const _kCefr = 'onboarding_cefr';
   static const _kAvatar = 'onboarding_avatar';
@@ -43,18 +37,6 @@ class OnboardingStorage {
   }
 
   // ── Synchronous read (uses cached instance) ──────────────────────────────
-
-  /// Returns true if parental consent has been given.
-  static bool get hasConsent {
-    if (_prefs == null) return false;
-    return _prefs!.getBool(_kConsent);
-  }
-
-  /// Persists that parental consent was given.
-  static Future<void> saveConsent() async {
-    final p = await _lazyPrefs();
-    await p.setBool(_kConsent, true);
-  }
 
   /// Returns true if onboarding has been completed.
   ///
@@ -113,12 +95,38 @@ class EngQuestApp extends StatelessWidget {
       title: 'ENG Quest',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF2E7D32), // RPG forest green
-          brightness: Brightness.dark,
+        colorScheme: ColorScheme.light(
+          primary: const Color(0xFF4FC3F7),       // sky blue
+          secondary: const Color(0xFFFFB74D),     // warm orange/gold
+          surface: const Color(0xFFFFFFFF),       // white
+          error: const Color(0xFFEF5350),         // error red
+          onPrimary: Colors.white,
+          onSecondary: Colors.black87,
+          onSurface: const Color(0xFF263238),     // dark blue-gray
+          onError: Colors.white,
         ),
+        scaffoldBackgroundColor: const Color(0xFFF5F7FA),
         useMaterial3: true,
         fontFamily: 'Roboto',
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xFF4FC3F7),
+          foregroundColor: Colors.white,
+          elevation: 0,
+        ),
+        cardTheme: CardThemeData(
+          color: Colors.white,
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        ),
       ),
       // Entry point: check onboarding flag and route accordingly
       home: const _AppEntryPoint(),
@@ -129,11 +137,7 @@ class EngQuestApp extends StatelessWidget {
         '/battle': (context) => BattleScreen(childAge: OnboardingStorage.ageYears),
         '/voice': (context) => const VoiceScreen(),
         '/dialog': (context) => const DialogScenariosScreen(),
-        '/achievements': (context) => const AchievementsScreen(),
         '/world': (context) => WorldMapScreen(childAge: OnboardingStorage.ageYears),
-        '/privacy': (context) => const PrivacyPolicyScreen(),
-        '/terms': (context) => const TermsOfServiceScreen(),
-        '/parent-login': (context) => const ParentLoginScreen(),
       },
     );
   }
@@ -157,7 +161,6 @@ class _AppEntryPoint extends StatefulWidget {
 }
 
 class _AppEntryPointState extends State<_AppEntryPoint> {
-  bool _hasConsent = false;
   bool _onboardingComplete = false;
   bool _loading = true;
 
@@ -176,11 +179,9 @@ class _AppEntryPointState extends State<_AppEntryPoint> {
   Future<void> _loadPrefs() async {
     // Ensure PreferencesService is initialised (real SharedPreferences).
     await OnboardingStorage.init();
-    final consent = OnboardingStorage.hasConsent;
     final complete = OnboardingStorage.isComplete;
     if (mounted) {
       setState(() {
-        _hasConsent = consent;
         _onboardingComplete = complete;
         // For returning users, read the persisted age now that prefs are warm.
         if (complete) _childAge = OnboardingStorage.ageYears;
@@ -189,13 +190,14 @@ class _AppEntryPointState extends State<_AppEntryPoint> {
     }
   }
 
-  Future<void> _handleConsent() async {
-    await OnboardingStorage.saveConsent();
-    if (!mounted) return;
-    setState(() => _hasConsent = true);
-  }
-
   Future<void> _handleOnboardingComplete(OnboardingResult result) async {
+    // Persist the result, then transition.  We must await the write so the
+    // synchronous [OnboardingStorage.ageYears] getter (and any later route
+    // rebuild) reflects the chosen age — otherwise the WorldMap/Battle vocab
+    // filter falls back to the default age 8 on the very first session, which
+    // is exactly when age-appropriate filtering matters most. We also pass the
+    // age directly from [result] so the first render is correct regardless of
+    // storage timing.
     await OnboardingStorage.save(result);
     if (!mounted) return;
     setState(() {
@@ -209,15 +211,12 @@ class _AppEntryPointState extends State<_AppEntryPoint> {
     if (_loading) {
       // Minimal splash while SharedPreferences warms up (<100 ms typically).
       return const Scaffold(
-        backgroundColor: Color(0xFF1B2838),
-        body: Center(child: CircularProgressIndicator()),
+        backgroundColor: Color(0xFFF5F7FA),
+        body: Center(child: CircularProgressIndicator(color: Color(0xFF4FC3F7))),
       );
     }
     if (_onboardingComplete) {
       return WorldMapScreen(childAge: _childAge);
-    }
-    if (!_hasConsent) {
-      return ParentalConsentGate(onConsented: _handleConsent);
     }
     return OnboardingFlow(onComplete: _handleOnboardingComplete);
   }

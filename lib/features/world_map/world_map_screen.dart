@@ -18,7 +18,6 @@ import 'package:flutter/material.dart';
 import 'package:engquest/core/firebase/auth_service.dart';
 import 'package:engquest/core/gamification/xp_profile.dart';
 import 'package:engquest/core/gamification/xp_service.dart';
-import 'package:engquest/features/achievements/achievements_screen.dart';
 import 'package:engquest/features/battle/battle_screen.dart';
 import 'package:engquest/features/parent_dashboard/parent_dashboard_screen.dart';
 
@@ -48,45 +47,30 @@ class _ZoneDef {
 final List<_ZoneDef> _kZones = [
   _ZoneDef(
     label:    'Blacksmith',
-    subtitle: 'Battle — 単語と戦え！(英検5級)',
+    subtitle: 'Battle — 単語と戦え！',
     icon:     Icons.shield_outlined,
-    gradient: [const Color(0xFFB71C1C), const Color(0xFF7F0000)],
+    gradient: [const Color(0xFFFF7043), const Color(0xFFE64A19)],  // warm red-orange
     route:    '/battle',
-  ),
-  _ZoneDef(
-    label:    'Dark Forest',
-    subtitle: 'Battle — もっと強い単語！(英検4級)',
-    icon:     Icons.park_outlined,
-    gradient: [const Color(0xFFE65100), const Color(0xFFBF360C)],
-    route:    '/battle-a2',
   ),
   _ZoneDef(
     label:    'Town Crier',
     subtitle: 'Dialog — NPCと話そう',
     icon:     Icons.chat_bubble_outline,
-    gradient: [const Color(0xFF1565C0), const Color(0xFF0D47A1)],
+    gradient: [const Color(0xFF29B6F6), const Color(0xFF0288D1)],  // sky blue
     route:    '/dialog',
   ),
   _ZoneDef(
     label:    'Echo Cave',
     subtitle: 'Voice — 声に出して練習',
     icon:     Icons.mic_none_rounded,
-    gradient: [const Color(0xFF2E7D32), const Color(0xFF1B5E20)],
+    gradient: [const Color(0xFF66BB6A), const Color(0xFF388E3C)],  // emerald green
     route:    '/voice',
-  ),
-  _ZoneDef(
-    label:    'Trophy Room',
-    subtitle: 'Badges — バッジコレクション',
-    icon:     Icons.emoji_events_outlined,
-    gradient: [const Color(0xFFFF8F00), const Color(0xFFE65100)],
-    route:    '/achievements',
-    pushTarget: const AchievementsScreen(),
   ),
   _ZoneDef(
     label:    "Scholar's Tower",
     subtitle: 'Parent — 成長を確認',
     icon:     Icons.admin_panel_settings_outlined,
-    gradient: [const Color(0xFF4A148C), const Color(0xFF311B92)],
+    gradient: [const Color(0xFFAB47BC), const Color(0xFF7B1FA2)],  // purple
     route:    '/parent',
     pushTarget: const ParentDashboardScreen(),
   ),
@@ -175,13 +159,22 @@ class _WorldMapScreenState extends State<WorldMapScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1A1A2E),
+      backgroundColor: const Color(0xFFF5F7FA),
       appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFF4FC3F7), Color(0xFF29B6F6)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: const Text(
           '🏰 Village Square',
-          style: TextStyle(color: Colors.amber, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),
@@ -208,7 +201,7 @@ class _WorldMapScreenState extends State<WorldMapScreen>
                 'Where will you go?',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Colors.white70,
+                  color: Color(0xFF607D8B),
                   fontSize: 15,
                   fontStyle: FontStyle.italic,
                 ),
@@ -237,21 +230,12 @@ class _WorldMapScreenState extends State<WorldMapScreen>
                                   builder: (_) => zone.pushTarget!),
                             );
                           } else if (zone.route == '/battle') {
+                            // Pass childAge for age-appropriate vocab filtering
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (_) => BattleScreen(
                                   childAge: widget.childAge,
-                                ),
-                              ),
-                            );
-                          } else if (zone.route == '/battle-a2') {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => BattleScreen(
-                                  childAge: widget.childAge,
-                                  cefrLevel: 'A2',
                                 ),
                               ),
                             );
@@ -286,9 +270,16 @@ class _XpLoadingSkeleton extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       height: 72,
       decoration: BoxDecoration(
-        color: const Color(0xFF16213E),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFFFD700).withAlpha(30)),
+        border: Border.all(color: const Color(0xFFFFC107).withAlpha(60)),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF4FC3F7).withAlpha(30),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Row(
         children: [
@@ -297,8 +288,9 @@ class _XpLoadingSkeleton extends StatelessWidget {
             height: 48,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.white12,
-              border: Border.all(color: Colors.white12, width: 2),
+              color: const Color(0xFFF5F7FA),
+              border: Border.all(
+                  color: const Color(0xFF4FC3F7).withAlpha(60), width: 2),
             ),
           ),
           const SizedBox(width: 12),
@@ -307,12 +299,13 @@ class _XpLoadingSkeleton extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(height: 14, width: 80, color: Colors.white12),
+                Container(
+                    height: 14, width: 80, color: const Color(0xFFE0E0E0)),
                 const SizedBox(height: 8),
                 Container(
                   height: 6,
                   decoration: BoxDecoration(
-                    color: Colors.white12,
+                    color: const Color(0xFFE0E0E0),
                     borderRadius: BorderRadius.circular(3),
                   ),
                 ),
@@ -349,12 +342,12 @@ class _PlayerStatsBar extends StatelessWidget {
       margin: const EdgeInsets.fromLTRB(16, 8, 16, 0),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: const Color(0xFF16213E),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFFFD700).withAlpha(60)),
+        border: Border.all(color: const Color(0xFFFFC107).withAlpha(80)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withAlpha(60),
+            color: const Color(0xFF4FC3F7).withAlpha(40),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -368,9 +361,9 @@ class _PlayerStatsBar extends StatelessWidget {
             height: 48,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: const Color(0xFF0F3460),
+              color: const Color(0xFFE3F2FD),
               border: Border.all(
-                color: const Color(0xFFFFD700).withAlpha(160),
+                color: const Color(0xFFFFC107).withAlpha(200),
                 width: 2,
               ),
             ),
@@ -392,7 +385,7 @@ class _PlayerStatsBar extends StatelessWidget {
                     Text(
                       'Lv.$level',
                       style: const TextStyle(
-                        color: Color(0xFFFFD700),
+                        color: Color(0xFFFFC107),
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                       ),
@@ -401,7 +394,7 @@ class _PlayerStatsBar extends StatelessWidget {
                     Text(
                       '$xp / $xpToNext XP',
                       style: const TextStyle(
-                        color: Colors.white54,
+                        color: Color(0xFF607D8B),
                         fontSize: 12,
                       ),
                     ),
@@ -413,9 +406,9 @@ class _PlayerStatsBar extends StatelessWidget {
                   child: LinearProgressIndicator(
                     value: xpFraction,
                     minHeight: 7,
-                    backgroundColor: Colors.white12,
+                    backgroundColor: const Color(0xFFE0E0E0),
                     valueColor: const AlwaysStoppedAnimation<Color>(
-                      Color(0xFFFFD700),
+                      Color(0xFFFFC107),
                     ),
                   ),
                 ),
