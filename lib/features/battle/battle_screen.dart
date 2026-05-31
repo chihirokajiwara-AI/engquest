@@ -183,6 +183,9 @@ class _BattleScreenState extends State<BattleScreen>
       duration: const Duration(milliseconds: 1800),
     );
     _starsAnim = CurvedAnimation(parent: _starsCtrl, curve: Curves.easeOut);
+    _sound.loadPreferences().then((_) {
+      if (mounted) setState(() {});
+    });
     _initDeckAsync();
   }
 
@@ -318,6 +321,7 @@ class _BattleScreenState extends State<BattleScreen>
 
     // Show popup only when XP > 0 (Again gives no XP — no popup)
     if (xpGain > 0) {
+      _sound.playXpGain();
       setState(() => _xpPopups.add(_XpPopup(xpGain, popupId)));
       Future.delayed(const Duration(milliseconds: 900), () {
         if (mounted) setState(() => _xpPopups.removeWhere((p) => p.id == popupId));
@@ -356,6 +360,8 @@ class _BattleScreenState extends State<BattleScreen>
 
     final nextIdx = _queueIdx + 1;
     if (nextIdx >= _queue.length) {
+      _sound.playSessionComplete();
+      HapticFeedback.heavyImpact();
       setState(() => _sessionDone = true);
       _starsCtrl.forward();
       _recordSessionToFirestore();
@@ -426,6 +432,8 @@ class _BattleScreenState extends State<BattleScreen>
 
   void _showAchievementUnlocked(List<String> ids) {
     if (!mounted) return;
+    _sound.playAchievement();
+    HapticFeedback.heavyImpact();
     final def = achievementDefById(ids.first);
     if (def == null) return;
 
@@ -505,6 +513,8 @@ class _BattleScreenState extends State<BattleScreen>
   /// Auto-dismisses after 3 seconds; user can also tap to dismiss.
   void _showLevelUpDialog(XpProfile newProfile) {
     if (!mounted) return;
+    _sound.playLevelUp();
+    HapticFeedback.heavyImpact();
     showDialog<void>(
       context: context,
       barrierDismissible: true,
@@ -642,12 +652,25 @@ class _BattleScreenState extends State<BattleScreen>
         ],
       ),
       actions: [
+        IconButton(
+          icon: Icon(
+            _sound.muted ? Icons.volume_off : Icons.volume_up,
+            color: Colors.black45,
+            size: 22,
+          ),
+          tooltip: _sound.muted ? 'サウンドON' : 'サウンドOFF',
+          onPressed: () {
+            setState(() => _sound.muted = !_sound.muted);
+          },
+        ),
         if (!_repoLoading && !_sessionDone)
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-            child: Text(
-              '${_doneCards + 1} / $_totalCards',
-              style: const TextStyle(color: Colors.black45, fontSize: 14),
+            padding: const EdgeInsets.only(right: 16),
+            child: Center(
+              child: Text(
+                '${_doneCards + 1} / $_totalCards',
+                style: const TextStyle(color: Colors.black45, fontSize: 14),
+              ),
             ),
           ),
       ],

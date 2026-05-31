@@ -19,6 +19,9 @@ abstract class PrefKeys {
   static const String reminderHour = 'reminder_hour';
   static const String reminderMinute = 'reminder_minute';
 
+  // Sound preferences
+  static const String soundMuted = 'sound_muted';
+
   // Legacy keys kept for backward-compat with OnboardingStorage
   static const String onboardingAge = 'onboarding_age';
   static const String onboardingCefr = 'onboarding_cefr';

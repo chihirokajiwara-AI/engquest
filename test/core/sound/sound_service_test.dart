@@ -3,7 +3,6 @@
 
 import 'dart:typed_data';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:engquest/core/sound/sound_service.dart';
 
@@ -53,6 +52,21 @@ void main() {
     test('playLevelUp does not throw when muted', () {
       service.muted = true;
       expect(() => service.playLevelUp(), returnsNormally);
+    });
+
+    test('playAchievement does not throw when muted', () {
+      service.muted = true;
+      expect(() => service.playAchievement(), returnsNormally);
+    });
+
+    test('playSessionComplete does not throw when muted', () {
+      service.muted = true;
+      expect(() => service.playSessionComplete(), returnsNormally);
+    });
+
+    test('playXpGain does not throw when muted', () {
+      service.muted = true;
+      expect(() => service.playXpGain(), returnsNormally);
     });
   });
 
@@ -114,6 +128,21 @@ void main() {
       _expectApproxDurationMs(wav, 600);
     });
 
+    test('achievement sound has expected duration (~400ms)', () {
+      final wav = SoundServiceTestHelper.generateAchievementSound();
+      _expectApproxDurationMs(wav, 400);
+    });
+
+    test('session complete sound has expected duration (~500ms)', () {
+      final wav = SoundServiceTestHelper.generateSessionCompleteSound();
+      _expectApproxDurationMs(wav, 500);
+    });
+
+    test('xp gain sound has expected duration (~80ms)', () {
+      final wav = SoundServiceTestHelper.generateXpGainSound();
+      _expectApproxDurationMs(wav, 80);
+    });
+
     test('all generators produce non-empty WAV data', () {
       // Minimum WAV: 44 byte header + at least 2 bytes of audio
       expect(SoundServiceTestHelper.generateFlipSound().length,
@@ -124,6 +153,12 @@ void main() {
           greaterThan(44));
       expect(SoundServiceTestHelper.generateLevelUpSound().length,
           greaterThan(44));
+      expect(SoundServiceTestHelper.generateAchievementSound().length,
+          greaterThan(44));
+      expect(SoundServiceTestHelper.generateSessionCompleteSound().length,
+          greaterThan(44));
+      expect(SoundServiceTestHelper.generateXpGainSound().length,
+          greaterThan(44));
     });
 
     test('WAV file size field matches actual data', () {
@@ -132,6 +167,9 @@ void main() {
         SoundServiceTestHelper.generateCorrectSound(),
         SoundServiceTestHelper.generateWrongSound(),
         SoundServiceTestHelper.generateLevelUpSound(),
+        SoundServiceTestHelper.generateAchievementSound(),
+        SoundServiceTestHelper.generateSessionCompleteSound(),
+        SoundServiceTestHelper.generateXpGainSound(),
       ]) {
         final data = ByteData.sublistView(wav);
         final riffSize = data.getUint32(4, Endian.little);
@@ -170,4 +208,7 @@ class SoundServiceTestHelper {
   static Uint8List generateCorrectSound() => SoundService.generateCorrectSound();
   static Uint8List generateWrongSound() => SoundService.generateWrongSound();
   static Uint8List generateLevelUpSound() => SoundService.generateLevelUpSound();
+  static Uint8List generateAchievementSound() => SoundService.generateAchievementSound();
+  static Uint8List generateSessionCompleteSound() => SoundService.generateSessionCompleteSound();
+  static Uint8List generateXpGainSound() => SoundService.generateXpGainSound();
 }
