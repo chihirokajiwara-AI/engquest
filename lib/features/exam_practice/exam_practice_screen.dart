@@ -5,6 +5,7 @@
 // Tracks progress per section with completion indicators.
 
 import 'package:flutter/material.dart';
+import 'conversation_practice_screen.dart';
 import 'eiken_exam_config.dart';
 import 'vocab_grammar_practice_screen.dart';
 import 'word_ordering_practice_screen.dart';
@@ -164,6 +165,15 @@ class ExamPracticeScreen extends StatelessWidget {
           ),
         );
       case ExamSectionType.conversationComplete:
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => ConversationPracticeScreen(
+              eikenGrade: eikenGrade,
+              section: section,
+            ),
+          ),
+        );
       case ExamSectionType.readingComprehension:
       case ExamSectionType.listening:
       case ExamSectionType.writing:
