@@ -61,15 +61,10 @@ void main() {
     });
 
     test('all pos values are valid', () {
-      const validPos = {
-        'noun', 'verb', 'adjective', 'adverb', 'preposition',
-        'conjunction', 'pronoun', 'interjection', 'phrase',
-      };
+      // pos is now List<PartOfSpeech> — all enum values are inherently valid
       for (final v in kSeedVocabA2) {
-        for (final p in v.pos) {
-          expect(validPos.contains(p), isTrue,
-              reason: '${v.word} has invalid pos: $p');
-        }
+        expect(v.pos.isNotEmpty, isTrue,
+            reason: '\${v.word} has empty pos list');
       }
     });
 
