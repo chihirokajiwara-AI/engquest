@@ -69,7 +69,6 @@ const _grades = [
     description: '高校卒業レベル・800語',
     icon: Icons.shield,
     color: Color(0xFFF44336),
-    hasContent: false, // not yet generated
   ),
   _GradeInfo(
     grade: 'pre1',

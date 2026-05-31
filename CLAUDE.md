@@ -113,7 +113,7 @@ All core components C01-C19 are implemented. See docs/spec/mvp.md for details.
 - [x] T24: Part 3 word ordering (語句の並びかえ) practice
 - [x] T25: Content pipeline scripts — validation, cross-grade check, audio gen
 - [x] T26: Eiken 3級 vocabulary — 1,300 words
-- [ ] T27: Eiken 2級 vocabulary — 800 words
+- [x] T27: Eiken 2級 vocabulary — 800 words
 - [ ] T28: Eiken 準1級 vocabulary — 3,000 words
 - [ ] T29: Part 4 reading comprehension passages + questions
 - [ ] T30: Stripe billing integration
