@@ -19,6 +19,7 @@ import 'package:engquest/core/firebase/auth_service.dart';
 import 'package:engquest/core/gamification/xp_profile.dart';
 import 'package:engquest/core/gamification/xp_service.dart';
 import 'package:engquest/features/battle/grade_selector_screen.dart';
+import 'package:engquest/features/exam_practice/exam_practice_screen.dart';
 import 'package:engquest/features/parent_dashboard/parent_dashboard_screen.dart';
 
 // ── Mock player data (fallback when Firestore unavailable) ───────────────────
@@ -65,6 +66,13 @@ final List<_ZoneDef> _kZones = [
     icon:     Icons.mic_none_rounded,
     gradient: [const Color(0xFF66BB6A), const Color(0xFF388E3C)],  // emerald green
     route:    '/voice',
+  ),
+  _ZoneDef(
+    label:    'Arena',
+    subtitle: 'Exam — 英検模擬試験',
+    icon:     Icons.assignment_outlined,
+    gradient: [const Color(0xFFFF7043), const Color(0xFFD84315)],  // deep orange
+    route:    '/exam',
   ),
   _ZoneDef(
     label:    "Scholar's Tower",
@@ -236,6 +244,17 @@ class _WorldMapScreenState extends State<WorldMapScreen>
                               MaterialPageRoute(
                                 builder: (_) => GradeSelectorScreen(
                                   childAge: widget.childAge,
+                                ),
+                              ),
+                            );
+                          } else if (zone.route == '/exam') {
+                            // Exam practice — default to grade 5 for now
+                            // TODO: Grade selector for exam mode too
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const ExamPracticeScreen(
+                                  eikenGrade: '5',
                                 ),
                               ),
                             );
