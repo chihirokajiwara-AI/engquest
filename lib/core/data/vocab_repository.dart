@@ -64,21 +64,34 @@ class VocabFilter {
 ///   final words = repo.getByCategory('Animals');
 ///   final dueCards = repo.filterBy(VocabFilter(fsrsState: FsrsState.review));
 class VocabRepository {
-  static const String _assetPath = 'assets/data/eiken5_vocab.json';
+  /// Maps Eiken grade codes to their JSON asset paths.
+  static const Map<String, String> _assetPaths = {
+    '5': 'assets/data/eiken5_vocab.json',
+    '4': 'assets/data/eiken4_vocab.json',
+    '3': 'assets/data/eiken3_vocab.json',
+    'pre2': 'assets/data/eiken_pre2_vocab.json',
+    '2': 'assets/data/eiken2_vocab.json',
+    'pre1': 'assets/data/eiken_pre1_vocab.json',
+  };
 
   List<VocabItem> _words = [];
   VocabDatabaseMeta? _meta;
   bool _initialized = false;
+  String _loadedGrade = '';
 
   bool get isInitialized => _initialized;
   VocabDatabaseMeta? get meta => _meta;
   int get totalWords => _words.length;
+  String get loadedGrade => _loadedGrade;
 
-  /// Load the vocabulary database from bundled asset
-  Future<void> initialize() async {
-    if (_initialized) return;
+  /// Load the vocabulary database from bundled asset.
+  /// [eikenGrade] selects which file to load (default "5").
+  Future<void> initialize({String eikenGrade = '5'}) async {
+    // Allow re-initialization for a different grade
+    if (_initialized && _loadedGrade == eikenGrade) return;
 
-    final jsonString = await rootBundle.loadString(_assetPath);
+    final path = _assetPaths[eikenGrade] ?? _assetPaths['5']!;
+    final jsonString = await rootBundle.loadString(path);
     final json = jsonDecode(jsonString) as Map<String, dynamic>;
 
     _meta = VocabDatabaseMeta.fromJson(json);
@@ -87,6 +100,7 @@ class VocabRepository {
         .toList();
 
     _initialized = true;
+    _loadedGrade = eikenGrade;
   }
 
   /// Get all words

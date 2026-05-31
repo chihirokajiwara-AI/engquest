@@ -18,7 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:engquest/core/firebase/auth_service.dart';
 import 'package:engquest/core/gamification/xp_profile.dart';
 import 'package:engquest/core/gamification/xp_service.dart';
-import 'package:engquest/features/battle/battle_screen.dart';
+import 'package:engquest/features/battle/grade_selector_screen.dart';
 import 'package:engquest/features/parent_dashboard/parent_dashboard_screen.dart';
 
 // ── Mock player data (fallback when Firestore unavailable) ───────────────────
@@ -230,11 +230,11 @@ class _WorldMapScreenState extends State<WorldMapScreen>
                                   builder: (_) => zone.pushTarget!),
                             );
                           } else if (zone.route == '/battle') {
-                            // Pass childAge for age-appropriate vocab filtering
+                            // Navigate to grade selector (then to battle)
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => BattleScreen(
+                                builder: (_) => GradeSelectorScreen(
                                   childAge: widget.childAge,
                                 ),
                               ),

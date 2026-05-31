@@ -72,11 +72,14 @@ class BattleScreen extends StatefulWidget {
   final FsrsCardRepository? repository;
   /// Child's age in years (from OnboardingResult). Defaults to 8 (full A1 deck).
   final int childAge;
+  /// Eiken grade to study (e.g. "5", "4", "3", "pre2"). Defaults to "5".
+  final String eikenGrade;
 
   const BattleScreen({
     super.key,
     this.repository,
     this.childAge = 8,
+    this.eikenGrade = '5',
   });
 
   /// Computes elapsed session time in whole minutes, rounded to the nearest
@@ -205,7 +208,7 @@ class _BattleScreenState extends State<BattleScreen>
     _userId = uid;
 
     // 2. Load vocab list from repository — filtered by child's age
-    await _vocabRepo.initialize();
+    await _vocabRepo.initialize(eikenGrade: widget.eikenGrade);
     _vocab = filterVocabByAge(_vocabRepo.getAll().toList(), widget.childAge);
     final vocabIds = _vocab.map((v) => v.id).toList();
 
