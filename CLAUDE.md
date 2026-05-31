@@ -93,7 +93,7 @@ All core components C01-C19 are implemented. See docs/spec/mvp.md for details.
 ### Priority 1 — Trial Readiness
 - [x] T01: Mobile build (iOS/Android) — resolve Firebase package versions for mobile
 - [x] T02: Real speech recognition — replace demo VoiceService with cross-platform speech_to_text (Web Speech API / Apple Speech / Google Speech)
-- [ ] T03: App Store / Play Store preparation — COPPA compliance review, screenshots, listing
+- [x] T03: App Store / Play Store preparation — COPPA compliance review, screenshots, listing
 - [ ] T04: Parent onboarding flow — email signup for parents, child account linking
 
 ### Priority 2 — Content & Engagement

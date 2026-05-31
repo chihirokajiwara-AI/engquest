@@ -92,11 +92,28 @@ class NoOpAnalytics implements AnalyticsSink {
 ///
 /// Delegates all calls to [FirebaseAnalytics.instance]. The optional
 /// constructor parameter allows injecting a mock for integration tests.
+///
+/// COPPA compliance: ad personalization is disabled by default via
+/// [setConsent] in the constructor. No ad SDKs are present, but this
+/// ensures Firebase itself does not use data for ad purposes.
 class FirebaseAnalyticsAdapter implements AnalyticsSink {
   final FirebaseAnalytics _analytics;
 
   FirebaseAnalyticsAdapter({FirebaseAnalytics? analytics})
-      : _analytics = analytics ?? FirebaseAnalytics.instance;
+      : _analytics = analytics ?? FirebaseAnalytics.instance {
+    _configureCoppaCompliance();
+  }
+
+  /// Disables ad personalization and ad storage for COPPA compliance.
+  /// Required for children's apps on both App Store and Play Store.
+  void _configureCoppaCompliance() {
+    _analytics.setConsent(
+      adStorageConsentGranted: false,
+      adPersonalizationSignalsConsentGranted: false,
+      adUserDataConsentGranted: false,
+      analyticsStorageConsentGranted: true,
+    );
+  }
 
   @override
   Future<void> logEvent(String name, {Map<String, Object>? parameters}) async {

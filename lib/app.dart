@@ -151,6 +151,7 @@ class _AppEntryPoint extends StatefulWidget {
 }
 
 class _AppEntryPointState extends State<_AppEntryPoint> {
+  bool _hasConsent = false;
   bool _onboardingComplete = false;
   bool _loading = true;
 
@@ -169,9 +170,11 @@ class _AppEntryPointState extends State<_AppEntryPoint> {
   Future<void> _loadPrefs() async {
     // Ensure PreferencesService is initialised (real SharedPreferences).
     await OnboardingStorage.init();
+    final consent = OnboardingStorage.hasConsent;
     final complete = OnboardingStorage.isComplete;
     if (mounted) {
       setState(() {
+        _hasConsent = consent;
         _onboardingComplete = complete;
         // For returning users, read the persisted age now that prefs are warm.
         if (complete) _childAge = OnboardingStorage.ageYears;
@@ -180,14 +183,13 @@ class _AppEntryPointState extends State<_AppEntryPoint> {
     }
   }
 
+  Future<void> _handleConsent() async {
+    await OnboardingStorage.saveConsent();
+    if (!mounted) return;
+    setState(() => _hasConsent = true);
+  }
+
   Future<void> _handleOnboardingComplete(OnboardingResult result) async {
-    // Persist the result, then transition.  We must await the write so the
-    // synchronous [OnboardingStorage.ageYears] getter (and any later route
-    // rebuild) reflects the chosen age — otherwise the WorldMap/Battle vocab
-    // filter falls back to the default age 8 on the very first session, which
-    // is exactly when age-appropriate filtering matters most. We also pass the
-    // age directly from [result] so the first render is correct regardless of
-    // storage timing.
     await OnboardingStorage.save(result);
     if (!mounted) return;
     setState(() {
@@ -207,6 +209,9 @@ class _AppEntryPointState extends State<_AppEntryPoint> {
     }
     if (_onboardingComplete) {
       return WorldMapScreen(childAge: _childAge);
+    }
+    if (!_hasConsent) {
+      return ParentalConsentGate(onConsented: _handleConsent);
     }
     return OnboardingFlow(onComplete: _handleOnboardingComplete);
   }
