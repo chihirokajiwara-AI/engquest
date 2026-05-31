@@ -102,6 +102,24 @@ All core components C01-C19 are implemented. See docs/spec/mvp.md for details.
 - [ ] T07: Sound effects & haptics — battle card flip sounds, XP gain chime, level-up fanfare
 - [ ] T08: Animated transitions — world map zone entry, battle start/end, dialog NPC appear
 
+### Priority 2.5 — A-KEN Quest (Commercial Product)
+- [x] T17: Flutter flavors — edilab (free) + aken (¥999/month) dual-product build
+- [x] T18: Bright theme — dark→bright fantasy RPG (#F5F7FA, #4FC3F7 sky blue)
+- [x] T19: Eiken grade selector — 5級〜準1級 picker + multi-grade VocabRepository
+- [x] T20: Paywall gate — premium upsell screen for locked grades
+- [x] T21: Exam practice mode — full Eiken exam structure (2024 reform)
+- [x] T22: Part 1 vocab/grammar cloze questions from vocab DB
+- [x] T23: Part 2 conversation completion practice
+- [x] T24: Part 3 word ordering (語句の並びかえ) practice
+- [x] T25: Content pipeline scripts — validation, cross-grade check, audio gen
+- [ ] T26: Eiken 3級 vocabulary — 1,300 words (generating)
+- [ ] T27: Eiken 2級 vocabulary — 800 words
+- [ ] T28: Eiken 準1級 vocabulary — 3,000 words
+- [ ] T29: Part 4 reading comprehension passages + questions
+- [ ] T30: Stripe billing integration
+- [ ] T31: AI character generation — player/monster/world assets
+- [ ] T32: Backend proxy for Claude API key security
+
 ### Priority 3 — v2 Features
 - [ ] T09: Crafting module (grammar) — sentence construction puzzles
 - [ ] T10: Guild module (discourse) — cooperative story writing
