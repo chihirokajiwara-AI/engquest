@@ -53,7 +53,6 @@ const _grades = [
     description: '中学卒業レベル・1,300語',
     icon: Icons.star,
     color: Color(0xFF9C27B0),
-    hasContent: false, // generating
   ),
   _GradeInfo(
     grade: 'pre2',
