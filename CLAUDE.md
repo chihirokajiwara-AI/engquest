@@ -99,7 +99,7 @@ All core components C01-C19 are implemented. See docs/spec/mvp.md for details.
 ### Priority 2 — Content & Engagement
 - [x] T05: A2 content expansion — 300 more words (英検4級), new world zone
 - [x] T06: Achievement/badge system — milestone rewards (10-day streak, 100 words mastered)
-- [ ] T07: Sound effects & haptics — battle card flip sounds, XP gain chime, level-up fanfare
+- [x] T07: Sound effects & haptics — battle card flip sounds, XP gain chime, level-up fanfare
 - [ ] T08: Animated transitions — world map zone entry, battle start/end, dialog NPC appear
 
 ### Priority 2.5 — A-KEN Quest (Commercial Product)
