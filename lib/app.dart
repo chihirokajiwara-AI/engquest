@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:engquest/core/config/flavor_config.dart';
 import 'package:engquest/features/world_map/world_map_screen.dart';
 import 'package:engquest/features/battle/battle_screen.dart';
 import 'package:engquest/features/voice/voice_screen.dart';
@@ -89,14 +90,29 @@ class OnboardingStorage {
 class EngQuestApp extends StatelessWidget {
   const EngQuestApp({super.key});
 
+  // Returns the active flavor config, or a safe edilab default when the
+  // flavor has not been explicitly set (e.g. running lib/main.dart directly).
+  static FlavorConfig get _flavor {
+    try {
+      return FlavorConfig.instance;
+    } catch (_) {
+      // Default to edilab when no flavor entry point was used.
+      FlavorConfig.setFlavor(Flavor.edilab);
+      return FlavorConfig.instance;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final flavor = _flavor;
+    final primaryColor = Color(flavor.primaryColor);
+
     return MaterialApp(
-      title: 'ENG Quest',
+      title: flavor.appName,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.light(
-          primary: const Color(0xFF4FC3F7),       // sky blue
+          primary: primaryColor,
           secondary: const Color(0xFFFFB74D),     // warm orange/gold
           surface: const Color(0xFFFFFFFF),       // white
           error: const Color(0xFFEF5350),         // error red
@@ -108,8 +124,8 @@ class EngQuestApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFFF5F7FA),
         useMaterial3: true,
         fontFamily: 'Roboto',
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFF4FC3F7),
+        appBarTheme: AppBarTheme(
+          backgroundColor: primaryColor,
           foregroundColor: Colors.white,
           elevation: 0,
         ),
@@ -210,9 +226,28 @@ class _AppEntryPointState extends State<_AppEntryPoint> {
   Widget build(BuildContext context) {
     if (_loading) {
       // Minimal splash while SharedPreferences warms up (<100 ms typically).
-      return const Scaffold(
-        backgroundColor: Color(0xFFF5F7FA),
-        body: Center(child: CircularProgressIndicator(color: Color(0xFF4FC3F7))),
+      // Uses flavor branding so each variant shows its own identity.
+      final flavor = EngQuestApp._flavor;
+      final primaryColor = Color(flavor.primaryColor);
+      return Scaffold(
+        backgroundColor: const Color(0xFFF5F7FA),
+        body: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircularProgressIndicator(color: primaryColor),
+              const SizedBox(height: 16),
+              Text(
+                flavor.splashText,
+                style: TextStyle(
+                  color: primaryColor,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
       );
     }
     if (_onboardingComplete) {

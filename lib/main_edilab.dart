@@ -1,3 +1,8 @@
+// Entry point for the [Flavor.edilab] build.
+//
+// Run with:
+//   flutter run  -t lib/main_edilab.dart
+//   flutter build web -t lib/main_edilab.dart
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:engquest/core/analytics/analytics_service.dart';
@@ -8,16 +13,13 @@ import 'package:engquest/core/storage/preferences_service.dart';
 import 'package:engquest/app.dart';
 
 void main() async {
-  // Default to edilab flavor when running the generic entry point.
-  // Use lib/main_edilab.dart or lib/main_aken.dart for explicit flavor builds.
+  // Set flavor BEFORE any widget code runs.
   FlavorConfig.setFlavor(Flavor.edilab);
 
   WidgetsFlutterBinding.ensureInitialized();
 
-  // 1. SharedPreferences — pre-warm so the first frame has data.
   await PreferencesService.getInstance();
 
-  // 2. Firebase initialization — skipped gracefully if placeholder keys.
   bool firebaseAvailable = false;
   try {
     await FirebaseConfig.initialize();
@@ -26,14 +28,9 @@ void main() async {
     if (kDebugMode) debugPrint('[Firebase] Init skipped: $e');
   }
 
-  // 3. Analytics — wire Firebase Analytics or no-op fallback.
   AnalyticsService.initialize(firebaseAvailable: firebaseAvailable);
 
-  // 4. Notifications (FCM + local scheduler).
   await NotificationService.instance.init(firebaseAvailable: firebaseAvailable);
-
-  // 4b. Schedule the daily review reminder (P2.10) — opted-in by default,
-  //     idempotent across launches, no-op if the user has opted out.
   await NotificationService.instance.setupReminders();
 
   runApp(const EngQuestApp());
