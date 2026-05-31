@@ -6,6 +6,7 @@ import 'package:engquest/features/dialog/dialog_screen.dart';
 import 'package:engquest/features/onboarding/onboarding_flow.dart';
 import 'package:engquest/features/legal/parental_consent_gate.dart';
 import 'package:engquest/features/legal/privacy_policy_screen.dart';
+import 'package:engquest/features/parent_dashboard/parent_login_screen.dart';
 import 'package:engquest/core/storage/preferences_service.dart';
 
 // ---------------------------------------------------------------------------
@@ -128,6 +129,7 @@ class EngQuestApp extends StatelessWidget {
         '/dialog': (context) => const DialogScenariosScreen(),
         '/world': (context) => WorldMapScreen(childAge: OnboardingStorage.ageYears),
         '/privacy': (context) => const PrivacyPolicyScreen(),
+        '/parent-login': (context) => const ParentLoginScreen(),
       },
     );
   }

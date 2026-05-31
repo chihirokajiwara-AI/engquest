@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:engquest/core/firebase/auth_service.dart';
+import 'package:engquest/core/firebase/parent_auth_service.dart';
 import 'package:engquest/core/models/progress_data.dart';
 import 'package:engquest/core/analytics/progress_service.dart';
 import 'package:engquest/core/analytics/firestore_progress_repository.dart';
@@ -9,7 +11,12 @@ import 'package:engquest/core/analytics/firestore_progress_repository.dart';
 // ══════════════════════════════════════════════════════════════════════════════
 
 class ParentDashboardScreen extends StatefulWidget {
-  const ParentDashboardScreen({super.key});
+  /// Optional child UID — if null, uses the current anonymous user's UID
+  /// (same-device access). If provided, fetches that child's data
+  /// (cross-device parent access).
+  final String? childUid;
+
+  const ParentDashboardScreen({super.key, this.childUid});
 
   @override
   State<ParentDashboardScreen> createState() => _ParentDashboardScreenState();
@@ -27,30 +34,66 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
   TimeOfDay _notifTime = const TimeOfDay(hour: 18, minute: 0);
   String _difficulty = 'Normal';
 
+  // Resolved child UID
+  String? _resolvedChildUid;
+
+  // Link code state
+  String? _linkCode;
+  bool _generatingCode = false;
+
+  final _auth = AuthService();
+  final _parentAuth = ParentAuthService();
+
   @override
   void initState() {
     super.initState();
     _service = ProgressService(repository: FirestoreProgressRepository());
     _tabController = TabController(length: 4, vsync: this);
+    _resolveUidAndLoad();
+  }
+
+  Future<void> _resolveUidAndLoad() async {
+    if (widget.childUid != null) {
+      _resolvedChildUid = widget.childUid;
+    } else {
+      // Same-device: use the child's own anonymous UID
+      try {
+        _resolvedChildUid = await _auth.getOrCreateUid();
+      } catch (_) {
+        _resolvedChildUid = 'offline';
+      }
+    }
     _loadProgress();
   }
 
   void _loadProgress() {
+    if (_resolvedChildUid == null) return;
     setState(() {
       _progressFuture = _fetchProgress();
     });
   }
 
   Future<LearningProgress> _fetchProgress() async {
-    final progress = await _service.getProgress('demo_uid');
-    // Detect if real data came back (mastered > 0 or streak > 0 from Firestore)
-    // We mark live=true whenever we got a non-default result
+    final progress = await _service.getProgress(_resolvedChildUid!);
     if (mounted) {
       setState(() {
         _isFirestoreLive = true;
       });
     }
     return progress;
+  }
+
+  Future<void> _generateLinkCode() async {
+    if (_generatingCode || _resolvedChildUid == null) return;
+    setState(() => _generatingCode = true);
+    try {
+      final code = await _parentAuth.generateLinkCode(_resolvedChildUid!);
+      if (mounted) setState(() => _linkCode = code);
+    } catch (_) {
+      // Firestore unavailable
+    } finally {
+      if (mounted) setState(() => _generatingCode = false);
+    }
   }
 
   @override
@@ -150,6 +193,9 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
                 onGoalChanged: (v) => setState(() => _dailyGoal = v),
                 onNotifChanged: (v) => setState(() => _notifTime = v),
                 onDifficultyChanged: (v) => setState(() => _difficulty = v),
+                linkCode: _linkCode,
+                generatingCode: _generatingCode,
+                onGenerateCode: _generateLinkCode,
               ),
             ],
           );
@@ -827,6 +873,9 @@ class _SettingsTab extends StatelessWidget {
   final ValueChanged<int> onGoalChanged;
   final ValueChanged<TimeOfDay> onNotifChanged;
   final ValueChanged<String> onDifficultyChanged;
+  final String? linkCode;
+  final bool generatingCode;
+  final VoidCallback onGenerateCode;
 
   const _SettingsTab({
     required this.dailyGoal,
@@ -835,6 +884,9 @@ class _SettingsTab extends StatelessWidget {
     required this.onGoalChanged,
     required this.onNotifChanged,
     required this.onDifficultyChanged,
+    required this.linkCode,
+    required this.generatingCode,
+    required this.onGenerateCode,
   });
 
   @override
@@ -948,6 +1000,85 @@ class _SettingsTab extends StatelessWidget {
                   contentPadding: EdgeInsets.zero,
                 );
               }),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+
+        // ── Link Code Generation ──────────────────────────────────────────
+        _Card(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                '🔗 リンクコード',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                '保護者のスマホからお子様の学習状況を確認するために、リンクコードを生成してください。',
+                style: TextStyle(color: Colors.white54, fontSize: 12, height: 1.4),
+              ),
+              const SizedBox(height: 12),
+              if (linkCode != null)
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF0F3460),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: const Color(0xFFFFD700).withAlpha(80)),
+                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        linkCode!,
+                        style: const TextStyle(
+                          color: Color(0xFFFFD700),
+                          fontSize: 36,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 8,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        '有効期限: 1時間',
+                        style: TextStyle(color: Colors.white38, fontSize: 11),
+                      ),
+                    ],
+                  ),
+                )
+              else
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    onPressed: generatingCode ? null : onGenerateCode,
+                    icon: generatingCode
+                        ? const SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.black54,
+                            ),
+                          )
+                        : const Icon(Icons.link),
+                    label: Text(generatingCode ? '生成中...' : 'コードを生成'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFFFD700),
+                      foregroundColor: Colors.black,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                ),
             ],
           ),
         ),

@@ -215,6 +215,19 @@ class _ParentalConsentGateState extends State<ParentalConsentGate> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
           ),
+          const SizedBox(height: 12),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed('/parent-login');
+            },
+            child: const Text(
+              '保護者としてログイン →',
+              style: TextStyle(
+                color: Colors.white38,
+                fontSize: 13,
+              ),
+            ),
+          ),
         ],
       ),
     );

@@ -94,7 +94,7 @@ All core components C01-C19 are implemented. See docs/spec/mvp.md for details.
 - [x] T01: Mobile build (iOS/Android) — resolve Firebase package versions for mobile
 - [x] T02: Real speech recognition — replace demo VoiceService with cross-platform speech_to_text (Web Speech API / Apple Speech / Google Speech)
 - [x] T03: App Store / Play Store preparation — COPPA compliance review, screenshots, listing
-- [ ] T04: Parent onboarding flow — email signup for parents, child account linking
+- [x] T04: Parent onboarding flow — email signup for parents, child account linking
 
 ### Priority 2 — Content & Engagement
 - [ ] T05: A2 content expansion — 300 more words (英検4級), new world zone
