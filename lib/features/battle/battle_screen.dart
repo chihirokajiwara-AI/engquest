@@ -149,9 +149,9 @@ class _BattleScreenState extends State<BattleScreen>
   late Animation<double>    _starsAnim;
 
   // ── Colours ────────────────────────────────────────────────────────────────
-  static const _bgColor    = Color(0xFF1A1A2E);
-  static const _cardFront  = Color(0xFF16213E);
-  static const _cardBack   = Color(0xFF0F3460);
+  static const _bgColor    = Color(0xFFF5F7FA);
+  static const _cardFront  = Color(0xFFFFFFFF);
+  static const _cardBack   = Color(0xFFE3F2FD);
   static const _accentGold = Color(0xFFFFD700);
 
   static const _gradeColors = {
@@ -435,7 +435,7 @@ class _BattleScreenState extends State<BattleScreen>
         });
 
         return Dialog(
-          backgroundColor: const Color(0xFF1A1A2E),
+          backgroundColor: const Color(0xFFFFFFFF),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(24),
             side: BorderSide(color: def.gradient.first.withAlpha(160)),
@@ -467,7 +467,7 @@ class _BattleScreenState extends State<BattleScreen>
                 Text(
                   def.titleJa,
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: Color(0xFF263238),
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -476,7 +476,7 @@ class _BattleScreenState extends State<BattleScreen>
                 Text(
                   def.descriptionJa,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.white60, fontSize: 14),
+                  style: const TextStyle(color: Colors.black54, fontSize: 14),
                 ),
                 if (ids.length > 1) ...[
                   const SizedBox(height: 8),
@@ -512,7 +512,7 @@ class _BattleScreenState extends State<BattleScreen>
         });
 
         return Dialog(
-          backgroundColor: const Color(0xFF1A1A2E),
+          backgroundColor: const Color(0xFFFFFFFF),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(24),
             side: const BorderSide(color: _accentGold, width: 2),
@@ -538,7 +538,7 @@ class _BattleScreenState extends State<BattleScreen>
                 Text(
                   'Lv.${newProfile.level} に到達！',
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: Color(0xFF263238),
                     fontSize: 20,
                   ),
                 ),
@@ -546,7 +546,7 @@ class _BattleScreenState extends State<BattleScreen>
                 Text(
                   '合計 ${newProfile.totalXp} XP',
                   style: const TextStyle(
-                    color: Colors.white60,
+                    color: Colors.black45,
                     fontSize: 14,
                   ),
                 ),
@@ -556,7 +556,7 @@ class _BattleScreenState extends State<BattleScreen>
                   borderRadius: BorderRadius.circular(8),
                   child: LinearProgressIndicator(
                     value: newProfile.levelProgress,
-                    backgroundColor: Colors.white12,
+                    backgroundColor: Colors.black12,
                     valueColor:
                         const AlwaysStoppedAnimation<Color>(_accentGold),
                     minHeight: 10,
@@ -565,7 +565,7 @@ class _BattleScreenState extends State<BattleScreen>
                 const SizedBox(height: 8),
                 Text(
                   '${newProfile.currentLevelXp} / ${newProfile.levelXpSpan} XP',
-                  style: const TextStyle(color: Colors.white54, fontSize: 12),
+                  style: const TextStyle(color: Colors.black45, fontSize: 12),
                 ),
               ],
             ),
@@ -603,7 +603,7 @@ class _BattleScreenState extends State<BattleScreen>
           Text(
             'カードを読み込んでいます…',
             style: const TextStyle(
-              color: Colors.white70,
+              color: Colors.black54,
               fontSize: 14,
               letterSpacing: 0.5,
             ),
@@ -618,7 +618,7 @@ class _BattleScreenState extends State<BattleScreen>
       backgroundColor: Colors.transparent,
       elevation: 0,
       leading: IconButton(
-        icon: const Icon(Icons.arrow_back, color: Colors.white70),
+        icon: const Icon(Icons.arrow_back, color: Colors.black54),
         onPressed: () => Navigator.maybePop(context),
       ),
       title: Row(
@@ -644,7 +644,7 @@ class _BattleScreenState extends State<BattleScreen>
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             child: Text(
               '${_doneCards + 1} / $_totalCards',
-              style: const TextStyle(color: Colors.white60, fontSize: 14),
+              style: const TextStyle(color: Colors.black45, fontSize: 14),
             ),
           ),
       ],
@@ -685,7 +685,7 @@ class _BattleScreenState extends State<BattleScreen>
         child: LinearProgressIndicator(
           value: progress,
           minHeight: 6,
-          backgroundColor: Colors.white12,
+          backgroundColor: Colors.black12,
           valueColor: const AlwaysStoppedAnimation<Color>(_accentGold),
         ),
       ),
@@ -754,7 +754,7 @@ class _BattleScreenState extends State<BattleScreen>
           Text(
             vocab.word,
             style: const TextStyle(
-              color: Colors.white,
+              color: Color(0xFF263238),
               fontSize: 48,
               fontWeight: FontWeight.bold,
               letterSpacing: 2,
@@ -764,7 +764,7 @@ class _BattleScreenState extends State<BattleScreen>
           Text(
             vocab.reading,
             style: const TextStyle(
-              color: Colors.white54,
+              color: Colors.black45,
               fontSize: 20,
             ),
           ),
@@ -787,7 +787,7 @@ class _BattleScreenState extends State<BattleScreen>
           const SizedBox(height: 32),
           const Text(
             'タップしてめくる',
-            style: TextStyle(color: Colors.white38, fontSize: 13),
+            style: TextStyle(color: Colors.black38, fontSize: 13),
           ),
         ],
       ),
@@ -808,7 +808,7 @@ class _BattleScreenState extends State<BattleScreen>
           Text(
             vocab.word,
             style: const TextStyle(
-              color: Colors.white60,
+              color: Colors.black45,
               fontSize: 22,
               fontWeight: FontWeight.w500,
             ),
@@ -817,7 +817,7 @@ class _BattleScreenState extends State<BattleScreen>
           Text(
             vocab.jpTranslation,
             style: const TextStyle(
-              color: Colors.white,
+              color: Color(0xFF263238),
               fontSize: 44,
               fontWeight: FontWeight.bold,
             ),
@@ -828,13 +828,13 @@ class _BattleScreenState extends State<BattleScreen>
               padding: const EdgeInsets.all(12),
               margin: const EdgeInsets.symmetric(horizontal: 8),
               decoration: BoxDecoration(
-                color: Colors.white.withAlpha(15),
+                color: Colors.black.withAlpha(10),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
                 example,
                 style: const TextStyle(
-                  color: Colors.white70,
+                  color: Colors.black54,
                   fontSize: 15,
                   fontStyle: FontStyle.italic,
                 ),
@@ -848,7 +848,7 @@ class _BattleScreenState extends State<BattleScreen>
               'S: ${card.stability.toStringAsFixed(1)}d  '
               'D: ${card.difficulty.toStringAsFixed(1)}  '
               'reps: ${card.reps}',
-              style: const TextStyle(color: Colors.white24, fontSize: 11),
+              style: const TextStyle(color: Colors.black26, fontSize: 11),
             ),
         ],
       ),
@@ -864,7 +864,7 @@ class _BattleScreenState extends State<BattleScreen>
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withAlpha(102),
+            color: Colors.black.withAlpha(25),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -880,7 +880,7 @@ class _BattleScreenState extends State<BattleScreen>
       padding: EdgeInsets.symmetric(vertical: 12),
       child: Text(
         '👆 カードをタップして答えを確認',
-        style: TextStyle(color: Colors.white38, fontSize: 13),
+        style: TextStyle(color: Colors.black38, fontSize: 13),
       ),
     );
   }
@@ -951,7 +951,7 @@ class _BattleScreenState extends State<BattleScreen>
                 const SizedBox(height: 8),
                 Text(
                   '$total 枚 完了',
-                  style: const TextStyle(color: Colors.white70, fontSize: 18),
+                  style: const TextStyle(color: Colors.black54, fontSize: 18),
                 ),
                 // XP earned
                 const SizedBox(height: 8),
@@ -990,7 +990,7 @@ class _BattleScreenState extends State<BattleScreen>
                       value: avgGrade.toStringAsFixed(2),
                       icon: '⭐',
                     ),
-                    const Divider(color: Colors.white12),
+                    const Divider(color: Colors.black12),
                     _StatTile(
                       label: '正確さ (Good + Easy)',
                       value: total > 0
@@ -1022,7 +1022,7 @@ class _BattleScreenState extends State<BattleScreen>
                   onPressed: () => Navigator.maybePop(context),
                   child: const Text(
                     'ホームへ戻る',
-                    style: TextStyle(color: Colors.white54),
+                    style: TextStyle(color: Colors.black54),
                   ),
                 ),
               ],
@@ -1166,7 +1166,7 @@ class _GradeButtonState extends State<_GradeButton>
               Text(
                 interval,
                 style: const TextStyle(
-                  color: Colors.white70,
+                  color: Colors.white,
                   fontSize: 10,
                 ),
               ),
@@ -1294,8 +1294,15 @@ class _SummaryCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
-        color: const Color(0xFF16213E),
+        color: const Color(0xFFFFFFFF),
         borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withAlpha(15),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1335,7 +1342,7 @@ class _SummaryRow extends StatelessWidget {
             width: 52,
             child: Text(
               label,
-              style: const TextStyle(color: Colors.white70, fontSize: 13),
+              style: const TextStyle(color: Colors.black54, fontSize: 13),
             ),
           ),
           Expanded(
@@ -1343,7 +1350,7 @@ class _SummaryRow extends StatelessWidget {
               borderRadius: BorderRadius.circular(3),
               child: LinearProgressIndicator(
                 value: pct,
-                backgroundColor: Colors.white12,
+                backgroundColor: Colors.black12,
                 valueColor: AlwaysStoppedAnimation<Color>(color),
                 minHeight: 6,
               ),
@@ -1352,7 +1359,7 @@ class _SummaryRow extends StatelessWidget {
           const SizedBox(width: 8),
           Text(
             '$count',
-            style: const TextStyle(color: Colors.white70, fontSize: 13),
+            style: const TextStyle(color: Colors.black54, fontSize: 13),
           ),
         ],
       ),
@@ -1381,13 +1388,13 @@ class _StatTile extends StatelessWidget {
           const SizedBox(width: 10),
           Text(
             label,
-            style: const TextStyle(color: Colors.white70, fontSize: 14),
+            style: const TextStyle(color: Colors.black54, fontSize: 14),
           ),
           const Spacer(),
           Text(
             value,
             style: const TextStyle(
-              color: Colors.white,
+              color: Color(0xFF263238),
               fontSize: 14,
               fontWeight: FontWeight.bold,
             ),
