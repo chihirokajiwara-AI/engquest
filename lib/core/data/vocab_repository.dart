@@ -1,6 +1,6 @@
 // lib/core/data/vocab_repository.dart
 // ENG Quest — Vocabulary Repository (C02: CEFR-Tagged Content DB)
-// Loads 300-word A1 database from bundled JSON asset; syncs with Firestore for user progress
+// Loads 600-word eiken5 database from bundled JSON asset; syncs with Firestore for user progress
 
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
@@ -64,7 +64,7 @@ class VocabFilter {
 ///   final words = repo.getByCategory('Animals');
 ///   final dueCards = repo.filterBy(VocabFilter(fsrsState: FsrsState.review));
 class VocabRepository {
-  static const String _assetPath = 'assets/data/vocab_a1_300.json';
+  static const String _assetPath = 'assets/data/eiken5_vocab.json';
 
   List<VocabItem> _words = [];
   VocabDatabaseMeta? _meta;
@@ -89,7 +89,7 @@ class VocabRepository {
     _initialized = true;
   }
 
-  /// Get all 300 words
+  /// Get all words
   List<VocabItem> getAll() {
     _assertInitialized();
     return List.unmodifiable(_words);

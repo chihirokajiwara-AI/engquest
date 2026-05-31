@@ -10,10 +10,10 @@
 //         → BattleScreen(childAge:)
 //           → filterVocabByAge(seed, childAge)   ← this file
 //
-// Keeping the threshold + young-learner ID set here (instead of as private
-// constants inside battle_screen.dart) lets us unit-test the age→deck mapping
-// directly, and guarantees the same logic is applied everywhere age filtering
-// is needed (web build, future placement screens, etc.).
+// Keeping the threshold + young-learner category set here (instead of as
+// private constants inside battle_screen.dart) lets us unit-test the
+// age→deck mapping directly, and guarantees the same logic is applied
+// everywhere age filtering is needed (web build, future placement screens, etc.).
 
 import '../models/vocab_item.dart';
 
@@ -24,33 +24,19 @@ import '../models/vocab_item.dart';
 /// Abstract adjectives and school/object vocabulary are deferred until age 8+.
 const int kYoungLearnerAgeThreshold = 8;
 
-/// Word IDs suitable for young learners (age < [kYoungLearnerAgeThreshold]).
-/// Focus: concrete nouns (animals, colors, food, family) + simple verbs.
-const Set<String> kYoungLearnerVocabIds = {
-  'eiken5_001', // cat
-  'eiken5_002', // dog
-  'eiken5_003', // apple
-  'eiken5_006', // red
-  'eiken5_007', // big
-  'eiken5_009', // eat
-  'eiken5_010', // water
-  'eiken5_012', // happy
-  'eiken5_013', // play
-  'eiken5_015', // blue
-  'eiken5_016', // mother
-  'eiken5_017', // father
-  'eiken5_019', // small
-  'eiken5_020', // bird
-  'eiken5_021', // fish
-  'eiken5_022', // tree
-  'eiken5_023', // green
-  'eiken5_024', // sing
-  'eiken5_027', // white
-  'eiken5_029', // milk
+/// Categories suitable for young learners (age < [kYoungLearnerAgeThreshold]).
+/// Focus: concrete, picturable vocabulary that maps naturally to early child literacy.
+/// With the 600-word dataset these categories provide ~95 words — enough
+/// for a full session without overwhelming very young learners.
+const Set<String> kYoungLearnerCategories = {
+  'Animals',
+  'Food & Drink',
+  'Family & People',
+  'Colors & Shapes',
 };
 
 /// Returns [source] filtered by [age]:
-///   age <  [kYoungLearnerAgeThreshold] → young-learner subset
+///   age <  [kYoungLearnerAgeThreshold] → young-learner category subset
 ///   age >= [kYoungLearnerAgeThreshold] → full deck (copy)
 ///
 /// Always returns a fresh list (never the input instance), so callers can
@@ -58,7 +44,7 @@ const Set<String> kYoungLearnerVocabIds = {
 List<VocabItem> filterVocabByAge(List<VocabItem> source, int age) {
   if (age < kYoungLearnerAgeThreshold) {
     return source
-        .where((v) => kYoungLearnerVocabIds.contains(v.id))
+        .where((v) => kYoungLearnerCategories.contains(v.category))
         .toList();
   }
   return List<VocabItem>.from(source);
