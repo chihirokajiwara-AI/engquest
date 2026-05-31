@@ -1,14 +1,20 @@
 // lib/core/voice/voice_service.dart
 // ENG Quest — C06 Voice Module
 //
-// Orchestrates microphone recording → Whisper transcription → pronunciation
-// evaluation.  The transcription layer is a platform-channel stub; the
-// evaluation logic (Levenshtein-based matching) is fully implemented.
+// Orchestrates speech recognition → pronunciation evaluation.
+//
+// Two modes:
+//   Real mode  — SpeechRecognitionService available → uses platform speech
+//                recognition (Web Speech API / Apple Speech / Google Speech).
+//   Demo mode  — no SpeechRecognitionService → cycles through mock words
+//                producing a realistic mix of correct / close / incorrect
+//                results so the UI can be exercised without a microphone.
 
 import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'platform_voice_channel.dart';
+import 'speech_recognition_service.dart';
 
 // ── Result types ──────────────────────────────────────────────────────────────
 
@@ -32,7 +38,8 @@ enum VoiceResult {
 
 /// Full result of evaluating a single pronunciation attempt.
 class PronunciationResult {
-  /// The text returned by Whisper (or the mock pipeline in demo mode).
+  /// The text returned by speech recognition (or the mock pipeline in demo
+  /// mode).
   final String transcribed;
 
   /// The target word the learner was asked to pronounce.
@@ -64,23 +71,26 @@ class PronunciationResult {
 
 // ── VoiceService ──────────────────────────────────────────────────────────────
 
-/// High-level voice service: record → transcribe → evaluate.
+/// High-level voice service: listen → evaluate.
+///
+/// ### Real mode
+/// When a [SpeechRecognitionService] is provided and available, the service
+/// uses platform speech recognition to transcribe the learner's speech in
+/// real time during the recording window.
 ///
 /// ### Demo mode
-/// When [PlatformVoiceChannel.demoMode] is true (or the native channel is
-/// unavailable), [recordAudio] returns empty bytes and [transcribeAudio]
-/// returns a mock word chosen from a fixed pool.  The demo intentionally
-/// produces a mix of correct / close / incorrect results so the UI can be
-/// exercised without a real microphone.
-///
-/// ### Production architecture (Spike S01)
-/// whisper_ggml_plus v1.5.2 + base.en model.
-/// Falls back to OpenAI Cloud Whisper API when on-device inference fails.
+/// When no [SpeechRecognitionService] is available (or it reports unavailable),
+/// the service simulates recording with a delay matching [recordingDuration]
+/// and returns a mock word from a fixed pool, producing varied results.
 class VoiceService {
-  VoiceService({PlatformVoiceChannel? channel})
-      : _channel = channel ?? PlatformVoiceChannel();
+  VoiceService({
+    PlatformVoiceChannel? channel,
+    SpeechRecognitionService? speechRecognition,
+  })  : _channel = channel ?? PlatformVoiceChannel(),
+        _speechRecognition = speechRecognition;
 
   final PlatformVoiceChannel _channel;
+  final SpeechRecognitionService? _speechRecognition;
 
   // Pool of mock words cycled during demo to produce varied results.
   static const List<String> _mockWords = [
@@ -88,25 +98,54 @@ class VoiceService {
   ];
   int _mockIdx = 0;
 
+  /// Whether real speech recognition is available.
+  bool get isRealRecognitionAvailable =>
+      _speechRecognition?.isAvailable ?? false;
+
+  /// Whether we are running in demo mode (no real recognition).
+  bool get isDemoMode => !isRealRecognitionAvailable;
+
   // ── Public API ─────────────────────────────────────────────────────────────
 
   /// Records audio, transcribes it, and evaluates pronunciation of
   /// [targetWord].
   ///
-  /// [recordingDuration] is typically 2–4 seconds for single-word targets.
+  /// In real mode, speech recognition listens for [recordingDuration].
+  /// In demo mode, a simulated delay of [recordingDuration] occurs before
+  /// returning a mock result.
   Future<PronunciationResult> evaluatePronunciation({
     required String targetWord,
     required Duration recordingDuration,
   }) async {
     final sw = Stopwatch()..start();
     try {
-      // 1. Record
-      final audio = await recordAudio(recordingDuration);
+      String recognised;
 
-      // 2. Transcribe
-      final recognised = await transcribeAudio(audio);
+      if (isRealRecognitionAvailable) {
+        // ── Real speech recognition ──
+        final result = await _speechRecognition!.listenForWord(
+          duration: recordingDuration,
+        );
+        recognised = result?.trim().toLowerCase() ?? '';
 
-      // 3. Evaluate
+        if (recognised.isEmpty) {
+          sw.stop();
+          return PronunciationResult(
+            transcribed: '',
+            target: targetWord,
+            result: VoiceResult.timeout,
+            confidence: 0.0,
+            latencyMs: sw.elapsedMilliseconds,
+          );
+        }
+      } else {
+        // ── Demo mode ──
+        // Simulate recording delay so the countdown stays in sync.
+        await Future<void>.delayed(recordingDuration);
+        recognised = _nextMockWord();
+      }
+
+      // Evaluate match
       final result = evaluateMatch(recognised, targetWord);
       final confidence = _confidenceFor(result);
 
@@ -133,19 +172,18 @@ class VoiceService {
   /// Records audio for [duration] using the device microphone.
   ///
   /// Returns raw PCM-16 bytes, or an empty [Uint8List] in demo mode.
+  /// Retained for backward compatibility; prefer [evaluatePronunciation].
   Future<Uint8List> recordAudio(Duration duration) async {
-    // Add a small real delay so callers can show a recording UI.
     final durationMs = duration.inMilliseconds;
     final audio = await _channel.recordForDuration(durationMs);
-    return audio ?? Uint8List(0); // empty bytes → demo / fallback
+    return audio ?? Uint8List(0);
   }
 
   /// Transcribes [audioData] via the Whisper platform channel.
   ///
-  /// Falls back to a deterministic mock sequence in demo mode so the full UI
-  /// flow can be exercised without hardware.
+  /// Falls back to a deterministic mock sequence in demo mode.
+  /// Retained for backward compatibility; prefer [evaluatePronunciation].
   Future<String> transcribeAudio(Uint8List audioData) async {
-    // In demo mode audioData is empty; skip the channel call.
     if (audioData.isEmpty || PlatformVoiceChannel.demoMode) {
       return _nextMockWord();
     }
@@ -175,6 +213,11 @@ class VoiceService {
     return VoiceResult.incorrect;
   }
 
+  /// Stop any active speech recognition session.
+  Future<void> stopListening() async {
+    await _speechRecognition?.stop();
+  }
+
   // ── Helpers ────────────────────────────────────────────────────────────────
 
   double _confidenceFor(VoiceResult result) {
@@ -202,7 +245,6 @@ class VoiceService {
     if (s.isEmpty) return t.length;
     if (t.isEmpty) return s.length;
 
-    // Use two rows for O(min(m,n)) space.
     final sLen = s.length;
     final tLen = t.length;
 

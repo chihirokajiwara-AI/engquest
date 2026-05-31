@@ -3,24 +3,23 @@
 //
 // Game flow:
 //   1. Word displayed in large text with illustrative emoji.
-//   2. "🎤 Tap to Speak" button → starts 3-second countdown recording.
-//   3. Recording ends → Whisper transcription → result feedback:
+//   2. "🎤 Tap to Speak" button → starts 3-second recording + countdown.
+//      - Real mode: speech recognition listens during countdown.
+//      - Demo mode: simulated recording with mock results.
+//   3. Recording ends → result feedback:
 //        ✅  correct   → card turns green + star burst animation
 //        ⚠️  close     → orange + pronunciation hint
 //        ❌  incorrect → red   + retry button
 //   4. "Next →" advances to the next word.
 //   5. After 10 words: session summary with accuracy score.
-//
-// Demo mode: PlatformVoiceChannel.demoMode = true (default).
-//   Recording is simulated with a 3-second Timer; VoiceService.transcribeAudio
-//   cycles through a mock word pool, producing a realistic mix of results.
 
 import 'dart:async';
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../../core/voice/platform_voice_channel.dart';
+import '../../core/voice/speech_recognition_service.dart';
 import '../../core/voice/voice_service.dart';
 
 // ── Vocabulary word list (10 A1 words for the session) ────────────────────────
@@ -49,17 +48,26 @@ const List<_VoiceWord> _kWordList = [
 // ── Screen state machine ──────────────────────────────────────────────────────
 
 enum _ScreenState {
-  idle,        // waiting for tap
-  countdown,   // recording in progress, countdown shown
-  evaluating,  // waiting for Whisper result
-  result,      // result displayed (correct / close / incorrect)
-  summary,     // session complete
+  initializing, // checking speech recognition availability
+  idle,         // waiting for tap
+  countdown,    // recording in progress, countdown shown
+  evaluating,   // waiting for result (brief transition)
+  result,       // result displayed (correct / close / incorrect)
+  summary,      // session complete
 }
 
 // ── VoiceScreen ───────────────────────────────────────────────────────────────
 
 class VoiceScreen extends StatefulWidget {
-  const VoiceScreen({super.key});
+  /// Optional pre-configured services for testing.
+  final VoiceService? voiceService;
+  final SpeechRecognitionService? speechRecognitionService;
+
+  const VoiceScreen({
+    super.key,
+    this.voiceService,
+    this.speechRecognitionService,
+  });
 
   @override
   State<VoiceScreen> createState() => _VoiceScreenState();
@@ -68,17 +76,17 @@ class VoiceScreen extends StatefulWidget {
 class _VoiceScreenState extends State<VoiceScreen>
     with TickerProviderStateMixin {
   // ── Services ───────────────────────────────────────────────────────────────
-  final VoiceService _voice = VoiceService();
+  late SpeechRecognitionService _speechService;
+  late VoiceService _voice;
 
   // ── Session state ──────────────────────────────────────────────────────────
   int _wordIndex = 0;                      // current word index (0–9)
-  _ScreenState _state = _ScreenState.idle;
+  _ScreenState _state = _ScreenState.initializing;
   PronunciationResult? _lastResult;
 
   // Per-word attempt tracking
   final List<VoiceResult> _sessionResults = [];
-  // ignore: unused_field - tracked for future retry-limit feature
-  // ignore: unused_field
+  // ignore: unused_field — tracked for future retry-limit feature
   int _retryCount = 0;
 
   // ── Countdown timer ────────────────────────────────────────────────────────
@@ -107,8 +115,6 @@ class _VoiceScreenState extends State<VoiceScreen>
   @override
   void initState() {
     super.initState();
-    // Ensure demo mode is active (no native plugin wired in Flutter web/tests).
-    PlatformVoiceChannel.demoMode = true;
 
     _starCtrl = AnimationController(
       vsync: this,
@@ -122,11 +128,36 @@ class _VoiceScreenState extends State<VoiceScreen>
     )..repeat(reverse: true);
     _pulseAnim = Tween<double>(begin: 0.95, end: 1.05)
         .animate(CurvedAnimation(parent: _pulseCtrl, curve: Curves.easeInOut));
+
+    _initializeSpeechRecognition();
+  }
+
+  Future<void> _initializeSpeechRecognition() async {
+    _speechService =
+        widget.speechRecognitionService ?? SpeechRecognitionService();
+
+    try {
+      await _speechService.initialize();
+    } catch (e) {
+      if (kDebugMode) {
+        debugPrint('Speech recognition init failed: $e');
+      }
+    }
+
+    _voice = widget.voiceService ??
+        VoiceService(
+          speechRecognition:
+              _speechService.isAvailable ? _speechService : null,
+        );
+
+    if (!mounted) return;
+    setState(() => _state = _ScreenState.idle);
   }
 
   @override
   void dispose() {
     _countdownTimer?.cancel();
+    _speechService.cancel();
     _starCtrl.dispose();
     _pulseCtrl.dispose();
     super.dispose();
@@ -158,20 +189,21 @@ class _VoiceScreenState extends State<VoiceScreen>
       _lastResult = null;
     });
 
+    // Visual countdown timer.
     _countdownTimer?.cancel();
     _countdownTimer = Timer.periodic(const Duration(seconds: 1), (t) {
       if (!mounted) { t.cancel(); return; }
       setState(() => _countdown--);
-      if (_countdown <= 0) {
-        t.cancel();
-        _evaluate();
-      }
+      if (_countdown <= 0) t.cancel();
     });
+
+    // Start evaluation concurrently — speech recognition listens during the
+    // countdown (real mode) or a simulated delay runs (demo mode).
+    _evaluateAsync();
   }
 
-  Future<void> _evaluate() async {
+  Future<void> _evaluateAsync() async {
     if (!mounted) return;
-    setState(() => _state = _ScreenState.evaluating);
 
     final result = await _voice.evaluatePronunciation(
       targetWord: _currentWord.word,
@@ -179,6 +211,14 @@ class _VoiceScreenState extends State<VoiceScreen>
     );
 
     if (!mounted) return;
+
+    // If the countdown is still ticking, show a brief evaluating state.
+    if (_state == _ScreenState.countdown) {
+      setState(() => _state = _ScreenState.evaluating);
+      await Future<void>.delayed(const Duration(milliseconds: 200));
+      if (!mounted) return;
+    }
+
     setState(() {
       _lastResult = result;
       _state      = _ScreenState.result;
@@ -227,9 +267,11 @@ class _VoiceScreenState extends State<VoiceScreen>
     return Scaffold(
       backgroundColor: _bgColor,
       appBar: _buildAppBar(),
-      body: _state == _ScreenState.summary
-          ? _buildSummary()
-          : _buildSessionBody(),
+      body: _state == _ScreenState.initializing
+          ? _buildInitializing()
+          : _state == _ScreenState.summary
+              ? _buildSummary()
+              : _buildSessionBody(),
     );
   }
 
@@ -242,7 +284,7 @@ class _VoiceScreenState extends State<VoiceScreen>
         onPressed: () => Navigator.maybePop(context),
       ),
       title: const Text(
-        '🗣️ Echo Cave',
+        'Echo Cave',
         style: TextStyle(
           color: _accentGold,
           fontWeight: FontWeight.bold,
@@ -250,7 +292,8 @@ class _VoiceScreenState extends State<VoiceScreen>
         ),
       ),
       actions: [
-        if (_state != _ScreenState.summary)
+        if (_state != _ScreenState.summary &&
+            _state != _ScreenState.initializing)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             child: Text(
@@ -262,12 +305,40 @@ class _VoiceScreenState extends State<VoiceScreen>
     );
   }
 
+  // ── Initializing ─────────────────────────────────────────────────────────
+
+  Widget _buildInitializing() {
+    return const Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          CircularProgressIndicator(color: _accentGold),
+          SizedBox(height: 16),
+          Text(
+            'マイクを準備中…\nSetting up microphone…',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white54, fontSize: 14, height: 1.6),
+          ),
+        ],
+      ),
+    );
+  }
+
   // ── Session body ───────────────────────────────────────────────────────────
 
   Widget _buildSessionBody() {
     return Column(
       children: [
         _buildProgressBar(),
+        // Mode indicator
+        if (_voice.isDemoMode)
+          const Padding(
+            padding: EdgeInsets.only(top: 4),
+            child: Text(
+              'デモモード / Demo Mode',
+              style: TextStyle(color: Colors.white30, fontSize: 11),
+            ),
+          ),
         Expanded(
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
@@ -389,6 +460,8 @@ class _VoiceScreenState extends State<VoiceScreen>
 
   Widget _buildResultArea() {
     switch (_state) {
+      case _ScreenState.initializing:
+        return const SizedBox.shrink();
       case _ScreenState.idle:
         return _buildIdleHint();
       case _ScreenState.countdown:
@@ -419,7 +492,13 @@ class _VoiceScreenState extends State<VoiceScreen>
             scale: _pulseAnim.value,
             child: child,
           ),
-          child: const Text('🎤', style: TextStyle(fontSize: 56)),
+          child: Icon(
+            Icons.mic,
+            size: 56,
+            color: _voice.isRealRecognitionAvailable
+                ? Colors.redAccent
+                : _accentGold,
+          ),
         ),
         const SizedBox(height: 12),
         Text(
@@ -431,9 +510,11 @@ class _VoiceScreenState extends State<VoiceScreen>
           ),
         ),
         const SizedBox(height: 4),
-        const Text(
-          '録音中… Recording…',
-          style: TextStyle(color: Colors.white60, fontSize: 14),
+        Text(
+          _voice.isRealRecognitionAvailable
+              ? '聞いています… Listening…'
+              : '録音中… Recording…',
+          style: const TextStyle(color: Colors.white60, fontSize: 14),
         ),
       ],
     );
@@ -462,8 +543,9 @@ class _VoiceScreenState extends State<VoiceScreen>
         return _buildCorrectFeedback(res);
       case VoiceResult.close:
         return _buildCloseFeedback(res);
-      case VoiceResult.incorrect:
       case VoiceResult.timeout:
+        return _buildTimeoutFeedback(res);
+      case VoiceResult.incorrect:
       case VoiceResult.error:
         return _buildIncorrectFeedback(res);
     }
@@ -523,6 +605,42 @@ class _VoiceScreenState extends State<VoiceScreen>
     );
   }
 
+  Widget _buildTimeoutFeedback(PronunciationResult res) {
+    return Column(
+      children: [
+        const Icon(Icons.mic_off, size: 40, color: Colors.white38),
+        const SizedBox(height: 8),
+        const Text(
+          '聞こえなかった… Didn\'t catch that!',
+          style: TextStyle(
+            color: Colors.white60,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 6),
+        const Text(
+          'Speak clearly into the microphone',
+          style: TextStyle(color: Colors.white38, fontSize: 13),
+        ),
+        const SizedBox(height: 16),
+        ElevatedButton.icon(
+          onPressed: _retryRecording,
+          icon: const Icon(Icons.refresh, size: 18),
+          label: const Text('もう一度 / Retry'),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: _accentGold.withAlpha(180),
+            foregroundColor: Colors.black,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildIncorrectFeedback(PronunciationResult res) {
     final heard = res.transcribed.isEmpty ? '(silence)' : '"${res.transcribed}"';
     return Column(
@@ -570,16 +688,17 @@ class _VoiceScreenState extends State<VoiceScreen>
 
   Widget _buildActionButton() {
     switch (_state) {
-      case _ScreenState.idle:
-        return _buildMicButton();
+      case _ScreenState.initializing:
       case _ScreenState.countdown:
       case _ScreenState.evaluating:
-        return const SizedBox.shrink(); // no button while recording/analysing
+        return const SizedBox.shrink();
+      case _ScreenState.idle:
+        return _buildMicButton();
       case _ScreenState.result:
         // Show "Next" (skip retry in incorrect — retry button is above)
         if (_lastResult?.result == VoiceResult.incorrect ||
-            _lastResult?.result == VoiceResult.error) {
-          // Show a "skip" button below the retry button
+            _lastResult?.result == VoiceResult.error ||
+            _lastResult?.result == VoiceResult.timeout) {
           return TextButton(
             onPressed: _advance,
             child: const Text(
@@ -595,46 +714,45 @@ class _VoiceScreenState extends State<VoiceScreen>
   }
 
   Widget _buildMicButton() {
-    return AnimatedBuilder(
-      animation: _pulseAnim,
-      builder: (ctx, child) => Transform.scale(
-        scale: _state == _ScreenState.idle ? 1.0 : _pulseAnim.value,
-        child: child,
-      ),
-      child: GestureDetector(
-        onTap: _startRecording,
-        child: Container(
-          width: 120,
-          height: 120,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: const RadialGradient(
-              colors: [Color(0xFF7C4DFF), Color(0xFF3D1A8C)],
+    return GestureDetector(
+      onTap: _startRecording,
+      child: Container(
+        width: 120,
+        height: 120,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: const RadialGradient(
+            colors: [Color(0xFF7C4DFF), Color(0xFF3D1A8C)],
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF7C4DFF).withAlpha(120),
+              blurRadius: 24,
+              spreadRadius: 4,
             ),
-            boxShadow: [
-              BoxShadow(
-                color: const Color(0xFF7C4DFF).withAlpha(120),
-                blurRadius: 24,
-                spreadRadius: 4,
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.mic,
+              size: 40,
+              color: _voice.isRealRecognitionAvailable
+                  ? Colors.greenAccent
+                  : Colors.white,
+            ),
+            const SizedBox(height: 4),
+            const Text(
+              'Tap to\nSpeak',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
               ),
-            ],
-          ),
-          child: const Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('🎤', style: TextStyle(fontSize: 40)),
-              SizedBox(height: 4),
-              Text(
-                'Tap to\nSpeak',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -654,7 +772,7 @@ class _VoiceScreenState extends State<VoiceScreen>
           fontWeight: FontWeight.bold,
         ),
       ),
-      child: Text(isLast ? '結果を見る / Results 🏆' : '次の単語 / Next →'),
+      child: Text(isLast ? '結果を見る / Results' : '次の単語 / Next →'),
     );
   }
 
