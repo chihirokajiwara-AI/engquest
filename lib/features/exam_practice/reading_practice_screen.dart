@@ -3,13 +3,16 @@
 //
 // Displays a short passage (email, notice, article) then asks
 // multiple-choice comprehension questions about it.
+// Supports two modes:
+//   1. Standard comprehension — read passage, answer questions about content
+//   2. Passage fill-in (空所補充) — passage has blanks, choose what fits
 
 import 'package:flutter/material.dart';
 import 'eiken_exam_config.dart';
 
 class _ReadingPassage {
   final String title;
-  final String type; // "email", "notice", "article"
+  final String type; // "email", "notice", "article", "letter", "ad"
   final String content;
   final List<_ComprehensionQuestion> questions;
 
@@ -60,7 +63,7 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
   @override
   void initState() {
     super.initState();
-    _passages = _getPassages(widget.eikenGrade);
+    _passages = _getPassages(widget.eikenGrade, widget.section.id);
     _totalQuestions =
         _passages.fold(0, (sum, p) => sum + p.questions.length);
   }
@@ -97,6 +100,11 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
     }
   }
 
+  bool get _isPassageFillIn {
+    final id = widget.section.id;
+    return id == '2_r2' || id == 'p1_r2';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -117,9 +125,9 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
           icon: const Icon(Icons.close, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text(
-          '長文読解',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        title: Text(
+          _isPassageFillIn ? '長文語句空所補充' : '長文読解',
+          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),
@@ -132,6 +140,13 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
   Widget _buildReading() {
     final passage = _passages[_passageIdx];
     final question = _currentQuestion;
+
+    // Calculate overall progress
+    int answeredSoFar = 0;
+    for (int i = 0; i < _passageIdx; i++) {
+      answeredSoFar += _passages[i].questions.length;
+    }
+    answeredSoFar += _questionIdx;
 
     return Column(
       children: [
@@ -155,10 +170,41 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
                   ),
                 ),
               ),
-              const Spacer(),
+              const SizedBox(width: 8),
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(4),
+                  child: LinearProgressIndicator(
+                    value: _totalQuestions > 0
+                        ? (answeredSoFar + (_answered ? 1 : 0)) / _totalQuestions
+                        : 0,
+                    backgroundColor: Colors.grey[200],
+                    valueColor:
+                        const AlwaysStoppedAnimation<Color>(Color(0xFF4FC3F7)),
+                    minHeight: 6,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
               Text(
-                '問${_questionIdx + 1}/${passage.questions.length}',
+                '${answeredSoFar + 1}/$_totalQuestions',
                 style: TextStyle(color: Colors.grey[600], fontSize: 13),
+              ),
+              const SizedBox(width: 8),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF4CAF50).withAlpha(20),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Text(
+                  '✓$_correctCount',
+                  style: const TextStyle(
+                    color: Color(0xFF4CAF50),
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ],
           ),
@@ -351,242 +397,1084 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
 
   // ── Passage banks ─────────────────────────────────────────────────────────
 
-  static List<_ReadingPassage> _getPassages(String grade) {
-    if (grade == '5') {
-      return const [
-        _ReadingPassage(
-          title: 'School Notice',
-          type: 'notice',
-          content:
-              'Dear Students,\n\n'
-              'We will have a school festival on Saturday, November 15. '
-              'The festival starts at 10:00 a.m. and finishes at 3:00 p.m. '
-              'Each class will have a food shop or a game shop. '
-              'Class 5-A will sell rice balls. Class 5-B will have a fishing game. '
-              'Please come and enjoy the festival with your family!\n\n'
-              'From: Mr. Tanaka',
-          questions: [
-            _ComprehensionQuestion(
-              question: 'When is the school festival?',
-              choices: [
-                'On Friday, November 14',
-                'On Saturday, November 15',
-                'On Sunday, November 16',
-                'On Monday, November 17',
-              ],
-              correctIdx: 1,
-            ),
-            _ComprehensionQuestion(
-              question: 'What will Class 5-A do?',
-              choices: [
-                'Have a fishing game',
-                'Sell rice balls',
-                'Sell drinks',
-                'Have a card game',
-              ],
-              correctIdx: 1,
-            ),
-          ],
-        ),
-        _ReadingPassage(
-          title: '',
-          type: 'email',
-          content:
-              'Hi Tom,\n\n'
-              'Thank you for your email. I am happy to hear about your new dog. '
-              'What is his name? I also have a pet. I have a cat. Her name is Mimi. '
-              'She is three years old. She likes to sleep on my bed. '
-              'Do you want to see a picture of her?\n\n'
-              'Your friend,\nYuki',
-          questions: [
-            _ComprehensionQuestion(
-              question: 'What pet does Yuki have?',
-              choices: [
-                'A dog',
-                'A bird',
-                'A cat',
-                'A rabbit',
-              ],
-              correctIdx: 2,
-            ),
-            _ComprehensionQuestion(
-              question: 'Where does Mimi like to sleep?',
-              choices: [
-                'On the sofa',
-                'On the floor',
-                "On Yuki's bed",
-                'In the kitchen',
-              ],
-              correctIdx: 2,
-            ),
-          ],
-        ),
-      ];
-    } else if (grade == '4') {
-      return const [
-        _ReadingPassage(
-          title: 'Summer Camp',
-          type: 'article',
-          content:
-              'Last summer, I went to a camp in the mountains with my classmates. '
-              'We stayed there for three days. On the first day, we hiked to a lake '
-              'and went swimming. The water was very cold, but it was fun. '
-              'On the second day, we cooked curry and rice for dinner. '
-              'I cut the vegetables and my friend Tom cooked the rice. '
-              'It was the best curry I ever had. On the last day, we cleaned our rooms '
-              'and said goodbye to each other. I want to go back next year.',
-          questions: [
-            _ComprehensionQuestion(
-              question: 'How long did they stay at the camp?',
-              choices: [
-                'Two days',
-                'Three days',
-                'Four days',
-                'One week',
-              ],
-              correctIdx: 1,
-            ),
-            _ComprehensionQuestion(
-              question: 'What did they do on the first day?',
-              choices: [
-                'Cooked curry',
-                'Cleaned their rooms',
-                'Went swimming in a lake',
-                'Said goodbye',
-              ],
-              correctIdx: 2,
-            ),
-            _ComprehensionQuestion(
-              question: 'Who cooked the rice?',
-              choices: [
-                'The writer',
-                'Tom',
-                'The teacher',
-                'Everyone together',
-              ],
-              correctIdx: 1,
-            ),
-          ],
-        ),
-        _ReadingPassage(
-          title: 'City Library Newsletter',
-          type: 'notice',
-          content:
-              'Midtown Public Library\nSpring Events 2026\n\n'
-              '• Reading Club (every Saturday, 2:00-3:30 p.m.)\n'
-              '  Join us to read and discuss books! This month: "The Secret Garden"\n\n'
-              '• Children\'s Art Workshop (March 20, 10:00 a.m.)\n'
-              '  Make your own picture book! Materials provided. Ages 6-12.\n'
-              '  *Please sign up at the front desk by March 15.\n\n'
-              '• Movie Night (March 28, 6:00 p.m.)\n'
-              '  Free movie showing for all ages. Popcorn and drinks available.\n\n'
-              'The library is closed on Mondays and national holidays.',
-          questions: [
-            _ComprehensionQuestion(
-              question: 'How often is the Reading Club?',
-              choices: [
-                'Every day',
-                'Every Saturday',
-                'Once a month',
-                'Twice a week',
-              ],
-              correctIdx: 1,
-            ),
-            _ComprehensionQuestion(
-              question: 'What must you do to join the Art Workshop?',
-              choices: [
-                'Buy materials',
-                'Be over 12 years old',
-                'Sign up by March 15',
-                'Come with a parent',
-              ],
-              correctIdx: 2,
-            ),
-          ],
-        ),
-      ];
-    } else {
-      // Grade 3+
-      return const [
-        _ReadingPassage(
-          title: 'Working from Home',
-          type: 'article',
-          content:
-              'Since 2020, many companies have allowed their employees to work from home. '
-              'A recent survey found that 65% of office workers prefer a mix of home and '
-              'office work. They say working from home saves time because they do not need '
-              'to commute. However, some workers feel lonely and find it hard to separate '
-              'work time from personal time.\n\n'
-              'Many companies are now creating "hybrid" work policies. Employees come to '
-              'the office two or three days a week for meetings and teamwork, and work from '
-              'home on other days. This approach seems to make both employers and employees happy.',
-          questions: [
-            _ComprehensionQuestion(
-              question: 'What percentage of workers prefer hybrid work?',
-              choices: ['35%', '50%', '65%', '80%'],
-              correctIdx: 2,
-            ),
-            _ComprehensionQuestion(
-              question:
-                  'What is one problem of working from home mentioned in the article?',
-              choices: [
-                'It costs more money',
-                'Workers feel lonely',
-                'Companies lose customers',
-                'Computers break easily',
-              ],
-              correctIdx: 1,
-            ),
-            _ComprehensionQuestion(
-              question: 'In hybrid work, how often do employees go to the office?',
-              choices: [
-                'Every day',
-                'Once a week',
-                'Two or three days a week',
-                'Once a month',
-              ],
-              correctIdx: 2,
-            ),
-          ],
-        ),
-        _ReadingPassage(
-          title: '',
-          type: 'email',
-          content:
-              'Dear Ms. Johnson,\n\n'
-              'I am writing to ask about the volunteer program at Green Park Zoo. '
-              'I am a second-year high school student and I am very interested in '
-              'working with animals. I read on your website that volunteers help feed '
-              'the animals and clean their areas.\n\n'
-              'I am available every Saturday from April. Could you please send me '
-              'more information about how to apply? I would also like to know if there '
-              'is a minimum age requirement.\n\n'
-              'Thank you for your time.\n'
-              'Sincerely,\nKenta Yamada',
-          questions: [
-            _ComprehensionQuestion(
-              question: 'Why is Kenta writing this email?',
-              choices: [
-                'To complain about the zoo',
-                'To ask about a volunteer program',
-                'To buy tickets for the zoo',
-                'To report a lost animal',
-              ],
-              correctIdx: 1,
-            ),
-            _ComprehensionQuestion(
-              question: 'When is Kenta available to volunteer?',
-              choices: [
-                'Every day after school',
-                'Sundays in March',
-                'Saturdays from April',
-                'During summer vacation only',
-              ],
-              correctIdx: 2,
-            ),
-          ],
-        ),
-      ];
+  static List<_ReadingPassage> _getPassages(String grade, String sectionId) {
+    // Passage fill-in sections (Grade 2 / Pre-1)
+    if (sectionId == '2_r2') return _grade2FillIn;
+    if (sectionId == 'p1_r2') return _pre1FillIn;
+
+    // Standard reading comprehension
+    switch (grade) {
+      case '5':
+        return _grade5Passages;
+      case '4':
+        return _grade4Passages;
+      case '3':
+        return _grade3Passages;
+      case 'pre2':
+        return _pre2Passages;
+      case '2':
+        return _grade2Passages;
+      case 'pre1':
+        return _pre1Passages;
+      default:
+        return _grade3Passages;
     }
   }
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // GRADE 5 (A1) — Simple notices, short emails (4 questions)
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  static const _grade5Passages = [
+    _ReadingPassage(
+      title: 'School Notice',
+      type: 'notice',
+      content:
+          'Dear Students,\n\n'
+          'We will have a school festival on Saturday, November 15. '
+          'The festival starts at 10:00 a.m. and finishes at 3:00 p.m. '
+          'Each class will have a food shop or a game shop. '
+          'Class 5-A will sell rice balls. Class 5-B will have a fishing game. '
+          'Please come and enjoy the festival with your family!\n\n'
+          'From: Mr. Tanaka',
+      questions: [
+        _ComprehensionQuestion(
+          question: 'When is the school festival?',
+          choices: [
+            'On Friday, November 14',
+            'On Saturday, November 15',
+            'On Sunday, November 16',
+            'On Monday, November 17',
+          ],
+          correctIdx: 1,
+        ),
+        _ComprehensionQuestion(
+          question: 'What will Class 5-A do?',
+          choices: [
+            'Have a fishing game',
+            'Sell rice balls',
+            'Sell drinks',
+            'Have a card game',
+          ],
+          correctIdx: 1,
+        ),
+      ],
+    ),
+    _ReadingPassage(
+      title: '',
+      type: 'email',
+      content:
+          'Hi Tom,\n\n'
+          'Thank you for your email. I am happy to hear about your new dog. '
+          'What is his name? I also have a pet. I have a cat. Her name is Mimi. '
+          'She is three years old. She likes to sleep on my bed. '
+          'Do you want to see a picture of her?\n\n'
+          'Your friend,\nYuki',
+      questions: [
+        _ComprehensionQuestion(
+          question: 'What pet does Yuki have?',
+          choices: [
+            'A dog',
+            'A bird',
+            'A cat',
+            'A rabbit',
+          ],
+          correctIdx: 2,
+        ),
+        _ComprehensionQuestion(
+          question: 'Where does Mimi like to sleep?',
+          choices: [
+            'On the sofa',
+            'On the floor',
+            "On Yuki's bed",
+            'In the kitchen',
+          ],
+          correctIdx: 2,
+        ),
+      ],
+    ),
+  ];
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // GRADE 4 (A1-A2) — Articles, newsletters, short stories (5 questions)
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  static const _grade4Passages = [
+    _ReadingPassage(
+      title: 'Summer Camp',
+      type: 'article',
+      content:
+          'Last summer, I went to a camp in the mountains with my classmates. '
+          'We stayed there for three days. On the first day, we hiked to a lake '
+          'and went swimming. The water was very cold, but it was fun. '
+          'On the second day, we cooked curry and rice for dinner. '
+          'I cut the vegetables and my friend Tom cooked the rice. '
+          'It was the best curry I ever had. On the last day, we cleaned our rooms '
+          'and said goodbye to each other. I want to go back next year.',
+      questions: [
+        _ComprehensionQuestion(
+          question: 'How long did they stay at the camp?',
+          choices: [
+            'Two days',
+            'Three days',
+            'Four days',
+            'One week',
+          ],
+          correctIdx: 1,
+        ),
+        _ComprehensionQuestion(
+          question: 'What did they do on the first day?',
+          choices: [
+            'Cooked curry',
+            'Cleaned their rooms',
+            'Went swimming in a lake',
+            'Said goodbye',
+          ],
+          correctIdx: 2,
+        ),
+        _ComprehensionQuestion(
+          question: 'Who cooked the rice?',
+          choices: [
+            'The writer',
+            'Tom',
+            'The teacher',
+            'Everyone together',
+          ],
+          correctIdx: 1,
+        ),
+      ],
+    ),
+    _ReadingPassage(
+      title: 'City Library Newsletter',
+      type: 'notice',
+      content:
+          'Midtown Public Library\nSpring Events 2026\n\n'
+          '• Reading Club (every Saturday, 2:00-3:30 p.m.)\n'
+          '  Join us to read and discuss books! This month: "The Secret Garden"\n\n'
+          '• Children\'s Art Workshop (March 20, 10:00 a.m.)\n'
+          '  Make your own picture book! Materials provided. Ages 6-12.\n'
+          '  *Please sign up at the front desk by March 15.\n\n'
+          '• Movie Night (March 28, 6:00 p.m.)\n'
+          '  Free movie showing for all ages. Popcorn and drinks available.\n\n'
+          'The library is closed on Mondays and national holidays.',
+      questions: [
+        _ComprehensionQuestion(
+          question: 'How often is the Reading Club?',
+          choices: [
+            'Every day',
+            'Every Saturday',
+            'Once a month',
+            'Twice a week',
+          ],
+          correctIdx: 1,
+        ),
+        _ComprehensionQuestion(
+          question: 'What must you do to join the Art Workshop?',
+          choices: [
+            'Buy materials',
+            'Be over 12 years old',
+            'Sign up by March 15',
+            'Come with a parent',
+          ],
+          correctIdx: 2,
+        ),
+      ],
+    ),
+  ];
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // GRADE 3 (A2) — Notices, letters, explanatory texts (10 questions)
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  static const _grade3Passages = [
+    _ReadingPassage(
+      title: 'Community Center Notice',
+      type: 'notice',
+      content:
+          'Greenville Community Center\nSummer Programs 2026\n\n'
+          'We are happy to announce our summer programs for young people!\n\n'
+          '1. Swimming Lessons (July 1-31)\n'
+          '   - Beginners: Mon & Wed, 9:00-10:00 a.m.\n'
+          '   - Intermediate: Tue & Thu, 9:00-10:00 a.m.\n'
+          '   - Fee: \$50 per person (includes pool use)\n\n'
+          '2. English Drama Camp (August 5-9)\n'
+          '   - Ages 10-15\n'
+          '   - 10:00 a.m. - 3:00 p.m. daily\n'
+          '   - Fee: \$80 (lunch included)\n'
+          '   - Final performance on August 9 at 6:00 p.m.\n\n'
+          'Registration opens June 1. Please call (555) 234-5678 or visit '
+          'our website: www.greenvillecc.org\n'
+          '*Early bird discount: 10% off if you register before June 15.',
+      questions: [
+        _ComprehensionQuestion(
+          question: 'When do swimming lessons for beginners take place?',
+          choices: [
+            'Monday and Wednesday mornings',
+            'Tuesday and Thursday mornings',
+            'Every day in July',
+            'Weekends only',
+          ],
+          correctIdx: 0,
+        ),
+        _ComprehensionQuestion(
+          question: 'What is included in the English Drama Camp fee?',
+          choices: [
+            'A swimming pool pass',
+            'Lunch',
+            'A costume',
+            'Transportation',
+          ],
+          correctIdx: 1,
+        ),
+        _ComprehensionQuestion(
+          question: 'How can you get 10% off?',
+          choices: [
+            'By joining both programs',
+            'By being under 10 years old',
+            'By registering before June 15',
+            'By paying in cash',
+          ],
+          correctIdx: 2,
+        ),
+      ],
+    ),
+    _ReadingPassage(
+      title: '',
+      type: 'email',
+      content:
+          'Dear Mr. and Mrs. Tanaka,\n\n'
+          'Thank you for letting your son Kenji stay with our family during his '
+          'school trip to Australia. He was a wonderful guest! He helped my mother '
+          'cook dinner on Tuesday and played soccer with my younger brother every '
+          'afternoon.\n\n'
+          'On Wednesday, we took Kenji to the beach. He said it was his first time '
+          'seeing the ocean in Australia. He was surprised that the water was so warm '
+          'in February. We also saw some dolphins near the shore.\n\n'
+          'Kenji gave us a beautiful Japanese fan as a gift. We put it on our wall '
+          'in the living room. Please tell Kenji he is welcome to visit again '
+          'anytime!\n\n'
+          'Best wishes,\nThe Smith Family',
+      questions: [
+        _ComprehensionQuestion(
+          question: 'What did Kenji do on Tuesday?',
+          choices: [
+            'Went to the beach',
+            'Played soccer all day',
+            'Helped cook dinner',
+            'Gave a gift to the family',
+          ],
+          correctIdx: 2,
+        ),
+        _ComprehensionQuestion(
+          question: 'Why was Kenji surprised at the beach?',
+          choices: [
+            'The beach was very crowded',
+            'The ocean water was warm in February',
+            'He saw sharks',
+            'The sand was red',
+          ],
+          correctIdx: 1,
+        ),
+        _ComprehensionQuestion(
+          question: 'Where did the Smith family put the Japanese fan?',
+          choices: [
+            'In Kenji\'s room',
+            'In the kitchen',
+            'On the living room wall',
+            'In the garden',
+          ],
+          correctIdx: 2,
+        ),
+      ],
+    ),
+    _ReadingPassage(
+      title: 'School Uniforms Around the World',
+      type: 'article',
+      content:
+          'Many countries have school uniforms, but they look very different. '
+          'In Japan, most junior high and high school students wear uniforms. '
+          'Boys often wear black or dark blue suits, and girls wear sailor-style '
+          'uniforms or blazers with skirts.\n\n'
+          'In England, many schools have uniforms too. Students usually wear a '
+          'white shirt, a tie, and dark trousers or a skirt. Some schools also '
+          'have a special hat or blazer with the school logo.\n\n'
+          'In Australia, because the weather is often hot, uniforms are usually '
+          'simple. Students wear polo shirts and shorts or light dresses. Many '
+          'schools require students to wear a hat outside to protect them from '
+          'the sun.\n\n'
+          'Some people think uniforms are good because all students look the same '
+          'and families save money on clothes. Other people think students should '
+          'choose their own clothes to show their personality.',
+      questions: [
+        _ComprehensionQuestion(
+          question: 'What do boys in Japan often wear to school?',
+          choices: [
+            'Polo shirts and shorts',
+            'Black or dark blue suits',
+            'A white shirt and tie',
+            'Jeans and a T-shirt',
+          ],
+          correctIdx: 1,
+        ),
+        _ComprehensionQuestion(
+          question: 'Why do Australian schools require hats?',
+          choices: [
+            'To look smart',
+            'To show the school logo',
+            'To protect students from the sun',
+            'Because it rains a lot',
+          ],
+          correctIdx: 2,
+        ),
+        _ComprehensionQuestion(
+          question: 'What is one reason people support school uniforms?',
+          choices: [
+            'Students can show their personality',
+            'They are more comfortable than other clothes',
+            'Families save money on clothes',
+            'Students can wear any color they like',
+          ],
+          correctIdx: 2,
+        ),
+        _ComprehensionQuestion(
+          question: 'In which country do students often wear ties to school?',
+          choices: [
+            'Japan',
+            'Australia',
+            'England',
+            'All three countries',
+          ],
+          correctIdx: 2,
+        ),
+      ],
+    ),
+  ];
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // PRE-2 (B1) — Longer articles, formal communications (7 questions)
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  static const _pre2Passages = [
+    _ReadingPassage(
+      title: 'The Rise of Electric Vehicles',
+      type: 'article',
+      content:
+          'Over the past decade, electric vehicles (EVs) have become increasingly '
+          'popular worldwide. In 2015, only about 1% of new cars sold globally were '
+          'electric. By 2025, that figure had risen to nearly 20%. Several factors '
+          'have driven this change.\n\n'
+          'First, governments in many countries have offered financial incentives, '
+          'such as tax reductions, to encourage people to buy EVs. Second, the cost '
+          'of batteries has dropped significantly — by about 80% since 2010 — making '
+          'electric cars more affordable. Third, growing awareness of climate change '
+          'has motivated consumers to seek greener transportation options.\n\n'
+          'However, challenges remain. Many rural areas still lack charging stations, '
+          'and some drivers worry about running out of power on long trips. Battery '
+          'production also raises environmental concerns, as mining lithium and cobalt '
+          'can damage ecosystems.\n\n'
+          'Despite these issues, most experts predict that EVs will account for the '
+          'majority of new car sales by 2035. Car manufacturers are investing billions '
+          'in EV technology, and several countries have announced plans to ban the sale '
+          'of new gasoline-powered cars within the next decade.',
+      questions: [
+        _ComprehensionQuestion(
+          question: 'What percentage of new cars sold globally were electric by 2025?',
+          choices: [
+            'About 1%',
+            'About 10%',
+            'Nearly 20%',
+            'Over 50%',
+          ],
+          correctIdx: 2,
+        ),
+        _ComprehensionQuestion(
+          question: 'How much have battery costs decreased since 2010?',
+          choices: [
+            'By about 20%',
+            'By about 50%',
+            'By about 80%',
+            'By about 95%',
+          ],
+          correctIdx: 2,
+        ),
+        _ComprehensionQuestion(
+          question: 'What is one challenge mentioned about EVs in rural areas?',
+          choices: [
+            'Cars are too expensive',
+            'There are not enough charging stations',
+            'People do not know about EVs',
+            'The roads are too rough for EVs',
+          ],
+          correctIdx: 1,
+        ),
+        _ComprehensionQuestion(
+          question: 'What environmental concern is raised about battery production?',
+          choices: [
+            'It uses too much water',
+            'Mining lithium and cobalt can damage ecosystems',
+            'Old batteries pollute rivers',
+            'Factory smoke causes air pollution',
+          ],
+          correctIdx: 1,
+        ),
+      ],
+    ),
+    _ReadingPassage(
+      title: '',
+      type: 'email',
+      content:
+          'Dear Ms. Nakamura,\n\n'
+          'I am writing to inform you about changes to our student exchange program '
+          'for next academic year. Due to increased demand, we have decided to expand '
+          'the program from two weeks to four weeks. The new dates will be from '
+          'July 10 to August 7, 2027.\n\n'
+          'In addition to the homestay experience, we are adding new activities. '
+          'Students will now have the opportunity to attend classes at a local high '
+          'school for two weeks, participate in community service projects, and take '
+          'weekend excursions to nearby cultural sites.\n\n'
+          'The program fee has been adjusted to reflect these additions. The new cost '
+          'is \$3,200 per student, which includes airfare, accommodation, meals, and '
+          'all activities. A deposit of \$500 is required by March 31 to secure a place.\n\n'
+          'We have 25 spots available for Japanese students this year. Given the '
+          'popularity of the program, I recommend that interested students apply '
+          'as soon as possible. Application forms are available on our website.\n\n'
+          'Please do not hesitate to contact me if you have any questions.\n\n'
+          'Sincerely,\nDavid Chen\nInternational Programs Coordinator',
+      questions: [
+        _ComprehensionQuestion(
+          question: 'How long will the exchange program be next year?',
+          choices: [
+            'Two weeks',
+            'Three weeks',
+            'Four weeks',
+            'Six weeks',
+          ],
+          correctIdx: 2,
+        ),
+        _ComprehensionQuestion(
+          question: 'What is a new activity added to the program?',
+          choices: [
+            'Learning to cook local food',
+            'Attending classes at a local high school',
+            'Working part-time at a company',
+            'Taking a language certification test',
+          ],
+          correctIdx: 1,
+        ),
+        _ComprehensionQuestion(
+          question: 'How much deposit must be paid by March 31?',
+          choices: [
+            '\$200',
+            '\$500',
+            '\$1,000',
+            '\$3,200',
+          ],
+          correctIdx: 1,
+        ),
+      ],
+    ),
+  ];
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // GRADE 2 (B1-B2) — Academic passages, news articles (12 questions)
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  static const _grade2Passages = [
+    _ReadingPassage(
+      title: 'The Science of Sleep',
+      type: 'article',
+      content:
+          'Sleep is essential for both physical and mental health, yet millions of '
+          'people around the world do not get enough of it. Research shows that adults '
+          'need between seven and nine hours of sleep per night, but surveys indicate '
+          'that nearly one-third of adults regularly sleep less than six hours.\n\n'
+          'During sleep, the brain goes through several cycles, each lasting about 90 '
+          'minutes. These cycles include light sleep, deep sleep, and REM (rapid eye '
+          'movement) sleep. Deep sleep is crucial for physical recovery — the body '
+          'repairs tissues and strengthens the immune system during this phase. REM '
+          'sleep, on the other hand, is essential for memory consolidation and emotional '
+          'processing.\n\n'
+          'Chronic sleep deprivation has been linked to numerous health problems, '
+          'including obesity, heart disease, diabetes, and depression. It also impairs '
+          'cognitive function, reducing attention span, decision-making ability, and '
+          'creativity. Studies have shown that driving after being awake for 24 hours '
+          'is comparable to driving with a blood alcohol level above the legal limit.\n\n'
+          'Experts recommend several strategies for improving sleep quality: maintaining '
+          'a consistent sleep schedule, avoiding screens for at least one hour before bed, '
+          'keeping the bedroom cool and dark, and limiting caffeine intake after noon.',
+      questions: [
+        _ComprehensionQuestion(
+          question: 'According to the passage, how long does each sleep cycle last?',
+          choices: [
+            'About 60 minutes',
+            'About 90 minutes',
+            'About 120 minutes',
+            'About 180 minutes',
+          ],
+          correctIdx: 1,
+        ),
+        _ComprehensionQuestion(
+          question: 'What happens during deep sleep?',
+          choices: [
+            'Dreams occur most frequently',
+            'The body repairs tissues and strengthens immunity',
+            'Memories are consolidated',
+            'The brain processes emotions',
+          ],
+          correctIdx: 1,
+        ),
+        _ComprehensionQuestion(
+          question: 'What comparison is made about sleep deprivation and driving?',
+          choices: [
+            'It is like driving in heavy rain',
+            'It is like driving without glasses',
+            'It is like driving above the speed limit',
+            'It is like driving with illegal blood alcohol levels',
+          ],
+          correctIdx: 3,
+        ),
+        _ComprehensionQuestion(
+          question: 'Which is NOT mentioned as a tip for better sleep?',
+          choices: [
+            'Keeping a regular sleep schedule',
+            'Exercising vigorously before bed',
+            'Avoiding screens before bed',
+            'Limiting afternoon caffeine',
+          ],
+          correctIdx: 1,
+        ),
+      ],
+    ),
+    _ReadingPassage(
+      title: 'Urban Farming: Growing Food in Cities',
+      type: 'article',
+      content:
+          'As urban populations continue to grow, an increasing number of city '
+          'residents are turning to urban farming — growing food in small spaces '
+          'within cities. This movement takes many forms, from rooftop gardens and '
+          'community plots to vertical farms housed in former warehouses.\n\n'
+          'One of the primary motivations for urban farming is food security. In '
+          'many low-income urban neighborhoods, fresh produce is difficult to find. '
+          'These areas, sometimes called "food deserts," may have convenience stores '
+          'and fast-food restaurants but lack grocery stores with affordable fruits '
+          'and vegetables. Urban farms can help fill this gap by providing locally '
+          'grown food directly to the community.\n\n'
+          'Environmental benefits are another driving force. Traditional agriculture '
+          'requires transporting food hundreds or even thousands of kilometers from '
+          'farm to table. Urban farming dramatically reduces this distance, cutting '
+          'carbon emissions associated with transportation. Additionally, green spaces '
+          'in cities help absorb rainwater, reduce the urban heat island effect, and '
+          'provide habitat for pollinators like bees.\n\n'
+          'Critics point out that urban farms cannot produce food at the same scale '
+          'as traditional agriculture and that the cost per unit of food is often '
+          'higher. Nevertheless, proponents argue that urban farming\'s greatest value '
+          'lies not in replacing conventional farming but in supplementing it while '
+          'building community connections and educating city dwellers about where '
+          'their food comes from.',
+      questions: [
+        _ComprehensionQuestion(
+          question: 'What is a "food desert" as described in the passage?',
+          choices: [
+            'A dry region where crops cannot grow',
+            'A neighborhood lacking stores with affordable fresh produce',
+            'A city with no restaurants',
+            'An area affected by drought',
+          ],
+          correctIdx: 1,
+        ),
+        _ComprehensionQuestion(
+          question: 'How does urban farming help the environment?',
+          choices: [
+            'It uses less water than traditional farming',
+            'It reduces transportation-related carbon emissions',
+            'It eliminates the need for pesticides',
+            'It prevents all types of flooding',
+          ],
+          correctIdx: 1,
+        ),
+        _ComprehensionQuestion(
+          question: 'What criticism of urban farming is mentioned?',
+          choices: [
+            'It causes noise pollution in cities',
+            'It uses dangerous chemicals',
+            'It cannot produce food at the same scale as traditional farming',
+            'It takes away housing space',
+          ],
+          correctIdx: 2,
+        ),
+        _ComprehensionQuestion(
+          question: 'According to proponents, what is urban farming\'s greatest value?',
+          choices: [
+            'Producing cheaper food than supermarkets',
+            'Completely replacing traditional agriculture',
+            'Supplementing farming while building community and education',
+            'Creating jobs for unemployed people',
+          ],
+          correctIdx: 2,
+        ),
+      ],
+    ),
+    _ReadingPassage(
+      title: '',
+      type: 'letter',
+      content:
+          'Dear Editor,\n\n'
+          'I am writing in response to last week\'s article about the city council\'s '
+          'proposal to ban cars from the downtown area on weekends. While I understand '
+          'the intention to reduce pollution and create a more pedestrian-friendly '
+          'environment, I believe the plan has several serious flaws.\n\n'
+          'First, many small business owners in the downtown area rely on weekend '
+          'customers who drive to their shops. A car ban could reduce foot traffic '
+          'for these businesses by 30-40%, according to a survey conducted by the '
+          'Chamber of Commerce. Several shop owners I spoke with said they might be '
+          'forced to close if the ban is implemented.\n\n'
+          'Second, the current public transportation system is not adequate to handle '
+          'the increased demand. Buses run only every 30 minutes on weekends, and the '
+          'nearest train station is a 20-minute walk from the main shopping district.\n\n'
+          'I suggest a compromise: instead of a complete ban, the council could create '
+          'car-free zones on certain streets while maintaining access roads for those '
+          'who need to drive. They could also invest in improving weekend bus service '
+          'before implementing any restrictions.\n\n'
+          'Sincerely,\nHiroshi Yamamoto',
+      questions: [
+        _ComprehensionQuestion(
+          question: 'What is the city council proposing?',
+          choices: [
+            'Building a new train station downtown',
+            'Banning cars from downtown on weekends',
+            'Closing small businesses on weekends',
+            'Increasing bus fares',
+          ],
+          correctIdx: 1,
+        ),
+        _ComprehensionQuestion(
+          question: 'According to the survey, how much could foot traffic decrease?',
+          choices: [
+            '10-20%',
+            '20-30%',
+            '30-40%',
+            '40-50%',
+          ],
+          correctIdx: 2,
+        ),
+        _ComprehensionQuestion(
+          question: 'What problem with public transport does the writer mention?',
+          choices: [
+            'Buses are too expensive',
+            'Trains do not run on weekends',
+            'Buses run only every 30 minutes on weekends',
+            'The bus stops are too far from homes',
+          ],
+          correctIdx: 2,
+        ),
+        _ComprehensionQuestion(
+          question: 'What does the writer suggest as a compromise?',
+          choices: [
+            'Cancel the plan entirely',
+            'Ban cars only on Sundays',
+            'Create car-free zones on certain streets only',
+            'Build a large parking lot outside downtown',
+          ],
+          correctIdx: 2,
+        ),
+      ],
+    ),
+  ];
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // GRADE 2 — Passage Fill-in (長文語句空所補充) (6 questions)
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  static const _grade2FillIn = [
+    _ReadingPassage(
+      title: 'The History of Vending Machines',
+      type: 'article',
+      content:
+          'Japan is famous for having more vending machines per person than any other '
+          'country — approximately one machine for every 23 people. These machines sell '
+          'everything from drinks and snacks to umbrellas and fresh flowers.\n\n'
+          'The first modern vending machine was invented in England in the 1880s. It '
+          'sold postcards. ( 1 ) In the early 1900s, vending machines selling '
+          'chewing gum appeared in New York subway stations. Japan got its first '
+          'vending machine in 1888, which sold tobacco.\n\n'
+          'Today, Japanese vending machines are among the most advanced in the world. '
+          'Many use facial recognition technology to ( 2 ) based on the customer\'s '
+          'apparent age and gender. For example, a machine might suggest hot coffee to '
+          'a middle-aged man on a cold morning, or a sweet juice to a young woman on '
+          'a summer afternoon.\n\n'
+          'The popularity of vending machines in Japan can be explained by several '
+          'factors. Japan has low crime rates, so machines are rarely vandalized or '
+          'robbed. ( 3 ) The country also has a culture of convenience and efficiency '
+          'that makes 24-hour automated sales attractive to consumers.',
+      questions: [
+        _ComprehensionQuestion(
+          question: 'Which phrase best fits in blank ( 1 )?',
+          choices: [
+            'However, these machines were not very popular at first.',
+            'The idea quickly spread to other countries.',
+            'Postcards were expensive in those days.',
+            'England stopped making vending machines soon after.',
+          ],
+          correctIdx: 1,
+        ),
+        _ComprehensionQuestion(
+          question: 'Which phrase best fits in blank ( 2 )?',
+          choices: [
+            'reduce the price of drinks',
+            'recommend products',
+            'count the number of customers',
+            'take photographs',
+          ],
+          correctIdx: 1,
+        ),
+        _ComprehensionQuestion(
+          question: 'Which phrase best fits in blank ( 3 )?',
+          choices: [
+            'This means owners do not need to worry about theft.',
+            'This is why Japan has fewer machines than other countries.',
+            'Japanese people prefer shopping at convenience stores.',
+            'The police regularly check the machines.',
+          ],
+          correctIdx: 0,
+        ),
+      ],
+    ),
+    _ReadingPassage(
+      title: 'How Colors Affect Our Mood',
+      type: 'article',
+      content:
+          'Color psychology is the study of how colors influence human emotions and '
+          'behavior. Businesses, hospitals, and schools have long used this knowledge '
+          'to create environments that ( 4 ).\n\n'
+          'Warm colors like red and orange are known to increase energy and excitement. '
+          'Restaurants often use red in their interior design because research shows it '
+          'can stimulate appetite. ( 5 ) This is why many fast-food chains use red '
+          'and yellow in their branding.\n\n'
+          'Cool colors such as blue and green have the opposite effect. They tend to '
+          'calm people down and reduce stress. Hospitals and clinics frequently paint '
+          'their walls in soft blue or green tones to help patients feel more relaxed. '
+          'Similarly, many tech companies use blue in their logos because it conveys '
+          'a sense of trust and reliability.\n\n'
+          'However, cultural differences play an important role in color perception. '
+          '( 6 ) In Western countries, white is associated with purity and weddings, '
+          'while in many East Asian cultures, white is traditionally worn at funerals. '
+          'This means that businesses operating internationally must carefully consider '
+          'how their color choices will be interpreted in different markets.',
+      questions: [
+        _ComprehensionQuestion(
+          question: 'Which phrase best fits in blank ( 4 )?',
+          choices: [
+            'save money on electricity',
+            'produce the desired psychological effect',
+            'make buildings look more modern',
+            'attract tourists from other countries',
+          ],
+          correctIdx: 1,
+        ),
+        _ComprehensionQuestion(
+          question: 'Which sentence best fits in blank ( 5 )?',
+          choices: [
+            'Blue is sometimes used in diet products to reduce hunger.',
+            'Yellow is believed to encourage quick decision-making.',
+            'Green makes people think of healthy food.',
+            'Purple is considered a royal color in many countries.',
+          ],
+          correctIdx: 1,
+        ),
+        _ComprehensionQuestion(
+          question: 'Which sentence best fits in blank ( 6 )?',
+          choices: [
+            'Some people are colorblind and cannot see certain colors.',
+            'Colors do not change meaning over time.',
+            'The same color can have very different meanings in different cultures.',
+            'Most businesses use the same colors worldwide.',
+          ],
+          correctIdx: 2,
+        ),
+      ],
+    ),
+  ];
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // PRE-1 (B2) — Complex academic passages (10 questions)
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  static const _pre1Passages = [
+    _ReadingPassage(
+      title: 'The Paradox of Choice',
+      type: 'article',
+      content:
+          'In his influential 2004 book, psychologist Barry Schwartz argued that '
+          'having too many options can actually make people less happy rather than '
+          'more so. This counterintuitive idea, which he called "the paradox of '
+          'choice," has since been supported by numerous psychological studies.\n\n'
+          'Schwartz distinguished between two types of decision-makers: "maximizers," '
+          'who always seek the absolute best option, and "satisficers," who choose '
+          'the first option that meets their criteria. His research found that '
+          'maximizers, despite often making objectively better choices, tend to feel '
+          'less satisfied with their decisions. They are plagued by counterfactual '
+          'thinking — imagining how other options might have turned out better.\n\n'
+          'A landmark study at a California grocery store demonstrated this effect. '
+          'When 24 varieties of jam were displayed, only 3% of shoppers made a '
+          'purchase. When just 6 varieties were offered, 30% bought jam. The extensive '
+          'selection, while initially attractive, ultimately overwhelmed consumers and '
+          'inhibited their ability to commit to a choice.\n\n'
+          'Critics of Schwartz\'s theory note that subsequent attempts to replicate '
+          'the jam study have yielded mixed results. They argue that the relationship '
+          'between choice and satisfaction is more nuanced than Schwartz suggests — '
+          'expertise, personal importance, and the nature of the decision all moderate '
+          'the effect. Nevertheless, the core insight that more is not always better '
+          'has influenced fields ranging from user interface design to public policy.',
+      questions: [
+        _ComprehensionQuestion(
+          question: 'What is the "paradox of choice"?',
+          choices: [
+            'People with fewer options make worse decisions',
+            'Having too many options can reduce satisfaction',
+            'All choices lead to the same outcome',
+            'People prefer not to make choices at all',
+          ],
+          correctIdx: 1,
+        ),
+        _ComprehensionQuestion(
+          question: 'According to Schwartz, what characterizes "maximizers"?',
+          choices: [
+            'They choose quickly without thinking',
+            'They avoid making decisions whenever possible',
+            'They always seek the absolute best option',
+            'They let others make decisions for them',
+          ],
+          correctIdx: 2,
+        ),
+        _ComprehensionQuestion(
+          question: 'What happened in the jam study when 24 varieties were displayed?',
+          choices: [
+            '30% of shoppers bought jam',
+            'Most shoppers bought multiple jars',
+            'Only 3% of shoppers made a purchase',
+            'Shoppers complained about the selection',
+          ],
+          correctIdx: 2,
+        ),
+        _ComprehensionQuestion(
+          question: 'What do critics say about Schwartz\'s theory?',
+          choices: [
+            'It has been completely disproven',
+            'The jam study could not be replicated at all',
+            'The relationship is more nuanced than Schwartz suggests',
+            'More choice always leads to better satisfaction',
+          ],
+          correctIdx: 2,
+        ),
+        _ComprehensionQuestion(
+          question: 'What does "counterfactual thinking" refer to in this context?',
+          choices: [
+            'Ignoring facts when making decisions',
+            'Imagining how other options might have turned out',
+            'Thinking about choices that do not exist',
+            'Making decisions based on false information',
+          ],
+          correctIdx: 1,
+        ),
+      ],
+    ),
+    _ReadingPassage(
+      title: 'Microplastics: An Invisible Threat',
+      type: 'article',
+      content:
+          'Microplastics — fragments of plastic smaller than five millimeters — have '
+          'become one of the most pervasive pollutants on Earth. Recent studies have '
+          'detected them in locations as remote as Arctic ice cores and as intimate '
+          'as human blood samples. The implications of this contamination are only '
+          'beginning to be understood.\n\n'
+          'These tiny particles enter the environment through multiple pathways. '
+          'When synthetic clothing is washed, thousands of microscopic fibers are '
+          'released into wastewater. Larger plastic items, such as bottles and bags, '
+          'gradually break down through exposure to sunlight and mechanical stress. '
+          'Even car tires shed microplastic particles as they wear against road '
+          'surfaces — a source that accounts for an estimated 28% of all microplastic '
+          'pollution in oceans.\n\n'
+          'The biological effects of microplastics remain a subject of active research. '
+          'Laboratory studies have shown that high concentrations can cause inflammation, '
+          'disrupt hormone function, and damage cells in fish and mammals. However, '
+          'translating these findings to real-world conditions is challenging because '
+          'laboratory exposures typically far exceed environmental concentrations.\n\n'
+          'Addressing the microplastics problem requires action at multiple levels. '
+          'Some countries have banned microbeads in cosmetics, and researchers are '
+          'developing biodegradable alternatives to conventional plastics. Wastewater '
+          'treatment plants can filter out up to 99% of microplastics, though the '
+          'remaining 1% still represents billions of particles annually given the '
+          'enormous volumes of water processed.',
+      questions: [
+        _ComprehensionQuestion(
+          question: 'What are microplastics defined as in the passage?',
+          choices: [
+            'Any type of plastic waste in the ocean',
+            'Plastic fragments smaller than five millimeters',
+            'Plastic that cannot be seen with the naked eye',
+            'Synthetic clothing fibers',
+          ],
+          correctIdx: 1,
+        ),
+        _ComprehensionQuestion(
+          question: 'According to the passage, what percentage of ocean microplastics '
+              'comes from car tires?',
+          choices: [
+            'About 10%',
+            'About 18%',
+            'About 28%',
+            'About 45%',
+          ],
+          correctIdx: 2,
+        ),
+        _ComprehensionQuestion(
+          question: 'Why is it difficult to apply laboratory findings about microplastics '
+              'to real-world conditions?',
+          choices: [
+            'Scientists cannot create microplastics in laboratories',
+            'Laboratory exposures typically exceed environmental concentrations',
+            'Animals behave differently in laboratories',
+            'Real-world microplastics are a different type',
+          ],
+          correctIdx: 1,
+        ),
+        _ComprehensionQuestion(
+          question: 'What limitation of wastewater treatment is mentioned?',
+          choices: [
+            'It cannot remove any microplastics',
+            'It is too expensive for most countries',
+            'The 1% that passes through still represents billions of particles',
+            'It only works for larger plastic pieces',
+          ],
+          correctIdx: 2,
+        ),
+        _ComprehensionQuestion(
+          question: 'Which source of microplastics is mentioned in relation to daily activities?',
+          choices: [
+            'Cooking with plastic utensils',
+            'Washing synthetic clothing',
+            'Drinking from plastic bottles',
+            'Using plastic shopping bags',
+          ],
+          correctIdx: 1,
+        ),
+      ],
+    ),
+  ];
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // PRE-1 — Passage Fill-in (長文語句空所補充) (6 questions)
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  static const _pre1FillIn = [
+    _ReadingPassage(
+      title: 'The Neuroscience of Habit Formation',
+      type: 'article',
+      content:
+          'Habits are automatic behaviors triggered by contextual cues. When we '
+          'perform an action repeatedly in the same context, the brain gradually '
+          'shifts control from the prefrontal cortex — responsible for conscious '
+          'decision-making — to the basal ganglia, a structure associated with '
+          'automatic routines. ( 1 )\n\n'
+          'Research by Phillippa Lally at University College London found that, on '
+          'average, it takes 66 days for a new behavior to become automatic, though '
+          'individual variation is enormous — ranging from 18 to 254 days. The '
+          'complexity of the behavior matters significantly. ( 2 ) More complex '
+          'habits, such as a 15-minute meditation practice, require considerably '
+          'more repetition.\n\n'
+          'One of the most effective strategies for building new habits is called '
+          '"habit stacking" — attaching a desired new behavior to an existing routine. '
+          'For instance, someone who wants to start flossing might do so immediately '
+          'after brushing their teeth. ( 3 ) The existing habit acts as a reliable '
+          'trigger, eliminating the need to remember or motivate oneself to perform '
+          'the new action.',
+      questions: [
+        _ComprehensionQuestion(
+          question: 'Which sentence best fits in blank ( 1 )?',
+          choices: [
+            'This is why habits feel effortless once established.',
+            'The prefrontal cortex is located at the front of the brain.',
+            'Most people have difficulty breaking bad habits.',
+            'Scientists first studied habits in the 1950s.',
+          ],
+          correctIdx: 0,
+        ),
+        _ComprehensionQuestion(
+          question: 'Which sentence best fits in blank ( 2 )?',
+          choices: [
+            'Lally\'s study was published in a medical journal.',
+            'Most participants in the study were university students.',
+            'Simple actions like drinking a glass of water after breakfast can become habitual within a few weeks.',
+            'Some researchers disagree with these findings.',
+          ],
+          correctIdx: 2,
+        ),
+        _ComprehensionQuestion(
+          question: 'Which sentence best fits in blank ( 3 )?',
+          choices: [
+            'Flossing is important for dental health.',
+            'By linking the new behavior to an established one, the brain can more easily encode the sequence.',
+            'Many dentists recommend flossing at least once a day.',
+            'However, this technique does not work for everyone.',
+          ],
+          correctIdx: 1,
+        ),
+      ],
+    ),
+    _ReadingPassage(
+      title: 'The Economics of Attention',
+      type: 'article',
+      content:
+          'In 1971, economist Herbert Simon observed that "a wealth of information '
+          'creates a poverty of attention." This insight has become increasingly '
+          'relevant in the digital age, where the average person encounters an '
+          'estimated 6,000 to 10,000 advertisements daily. ( 4 )\n\n'
+          'The "attention economy" refers to the marketplace in which human attention '
+          'is treated as a scarce resource that companies compete to capture. Social '
+          'media platforms, news outlets, and streaming services all employ '
+          'sophisticated algorithms designed to maximize user engagement — that is, '
+          'to keep people scrolling, watching, or clicking for as long as possible. '
+          '( 5 ) These techniques exploit fundamental aspects of human psychology, '
+          'such as our attraction to novelty and our sensitivity to social validation.\n\n'
+          'Some scholars argue that treating attention as a commodity has profound '
+          'implications for democracy. When citizens\' attention is fragmented across '
+          'countless competing sources of information, it becomes difficult to sustain '
+          'the kind of focused, deliberative thinking that democratic governance '
+          'requires. ( 6 ) Others counter that the abundance of information, while '
+          'challenging, ultimately empowers citizens by giving them access to diverse '
+          'perspectives that were previously unavailable.',
+      questions: [
+        _ComprehensionQuestion(
+          question: 'Which sentence best fits in blank ( 4 )?',
+          choices: [
+            'Simon won the Nobel Prize in Economics in 1978.',
+            'Attention has become the currency that drives the modern digital economy.',
+            'Most people enjoy watching advertisements.',
+            'Traditional media companies are no longer profitable.',
+          ],
+          correctIdx: 1,
+        ),
+        _ComprehensionQuestion(
+          question: 'Which sentence best fits in blank ( 5 )?',
+          choices: [
+            'Most users are aware of these strategies.',
+            'The internet was invented in the 1960s.',
+            'Features like infinite scrolling, autoplay, and push notifications are not accidental but carefully engineered.',
+            'Social media has many positive effects on society.',
+          ],
+          correctIdx: 2,
+        ),
+        _ComprehensionQuestion(
+          question: 'Which sentence best fits in blank ( 6 )?',
+          choices: [
+            'Democracy has existed for over two thousand years.',
+            'This concern has led some to call for regulations on algorithmic content curation.',
+            'Most politicians use social media effectively.',
+            'The problem is likely to solve itself over time.',
+          ],
+          correctIdx: 1,
+        ),
+      ],
+    ),
+  ];
 }
