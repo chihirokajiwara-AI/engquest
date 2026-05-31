@@ -46,8 +46,6 @@ class FirestoreProgressRepository {
   DocumentReference<Map<String, dynamic>> _sessionDoc(String uid, String dateKey) =>
       _db.collection('users').doc(uid).collection('sessions').doc(dateKey);
 
-  // ignore: unused_element - reserved for future batch queries on sessions
-  // ignore: unused_element
   CollectionReference<Map<String, dynamic>> _sessionsCol(String uid) =>
       _db.collection('users').doc(uid).collection('sessions');
 
@@ -274,6 +272,23 @@ class FirestoreProgressRepository {
       return snap.docs.length;
     } catch (_) {
       return 0;
+    }
+  }
+
+  // ── All cards (for category mastery + schedule computation) ───────────────
+
+  /// Returns all card documents as raw field maps.
+  /// Returns empty list on error (caller shows "no data" state).
+  Future<List<Map<String, dynamic>>> getAllCards(String uid) async {
+    try {
+      final snap = await _db
+          .collection('users')
+          .doc(uid)
+          .collection('cards')
+          .get(const GetOptions(source: Source.serverAndCache));
+      return snap.docs.map((d) => {'id': d.id, ...d.data()}).toList();
+    } catch (_) {
+      return [];
     }
   }
 }

@@ -175,7 +175,7 @@ class _ParentLoginScreenState extends State<ParentLoginScreen>
   void _navigateToDashboard(String childUid) {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (_) => ParentDashboardScreen(childUid: childUid),
+        builder: (_) => const ParentDashboardScreen(),
       ),
     );
   }

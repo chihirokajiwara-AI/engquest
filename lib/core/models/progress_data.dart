@@ -30,6 +30,51 @@ class DailyProgress {
       };
 }
 
+/// Per-category mastery data derived from real FSRS card states.
+class CategoryMastery {
+  /// Display name of the category (e.g. "Animals")
+  final String name;
+
+  /// Number of cards in this category in 'review' state (mastered)
+  final int masteredCount;
+
+  /// Total number of cards in this category
+  final int totalCount;
+
+  /// Mastery ratio 0.0–1.0 (masteredCount / totalCount)
+  double get ratio => totalCount > 0 ? masteredCount / totalCount : 0.0;
+
+  const CategoryMastery({
+    required this.name,
+    required this.masteredCount,
+    required this.totalCount,
+  });
+}
+
+/// FSRS-derived review schedule counts.
+class ReviewSchedule {
+  /// Cards due today (dueDate <= end-of-today or state is new/learning/relearning)
+  final int todayDue;
+
+  /// Cards due tomorrow
+  final int tomorrowDue;
+
+  /// Cards due within the next 7 days (inclusive of today)
+  final int weekDue;
+
+  const ReviewSchedule({
+    required this.todayDue,
+    required this.tomorrowDue,
+    required this.weekDue,
+  });
+
+  /// All zeros — used when no card data is available yet.
+  const ReviewSchedule.empty()
+      : todayDue = 0,
+        tomorrowDue = 0,
+        weekDue = 0;
+}
+
 class LearningProgress {
   final String uid;
   final int currentStreak;        // consecutive study days
@@ -40,6 +85,13 @@ class LearningProgress {
   final double eikenReadiness;    // 0-100
   final DateTime? nextReviewDue;  // earliest FSRS due date
 
+  /// Real category mastery from Firestore FSRS cards.
+  /// Empty list = no card data yet (show "no data" state in UI).
+  final List<CategoryMastery> categoryMastery;
+
+  /// Real review schedule from Firestore FSRS cards.
+  final ReviewSchedule reviewSchedule;
+
   const LearningProgress({
     required this.uid,
     required this.currentStreak,
@@ -49,6 +101,8 @@ class LearningProgress {
     required this.last7Days,
     required this.eikenReadiness,
     this.nextReviewDue,
+    this.categoryMastery = const [],
+    this.reviewSchedule = const ReviewSchedule.empty(),
   });
 
   factory LearningProgress.fromJson(Map<String, dynamic> json) {
@@ -65,6 +119,7 @@ class LearningProgress {
       nextReviewDue: json['nextReviewDue'] != null
           ? DateTime.parse(json['nextReviewDue'] as String)
           : null,
+      // categoryMastery and reviewSchedule are runtime-only; not serialized
     );
   }
 
