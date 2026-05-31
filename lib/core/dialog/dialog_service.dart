@@ -1,4 +1,5 @@
 import 'claude_client.dart';
+import 'content_filter.dart';
 
 /// The three NPC conversation scenarios available in the MVP.
 enum DialogScenario {
@@ -117,26 +118,39 @@ Never use complex grammar. Always stay in character as ${scenario.npcName}.''';
 
   /// Sends [userInput] to Claude (or returns an offline fallback) and returns
   /// the NPC's response text.
+  ///
+  /// Input is checked by [ContentFilter.isSafe] before being forwarded to the
+  /// API.  If the input is unsafe the method returns
+  /// [ContentFilter.rejectionMessage] without making a network call.
+  /// The model's response is also post-filtered via [ContentFilter.filterResponse].
   Future<String> chat({
     required DialogScenario scenario,
     required List<ChatMessage> history,
     required String userInput,
     String playerName = 'Hero',
   }) async {
+    // ── Input safety gate ─────────────────────────────────────────────────
+    final safeInput = ContentFilter.sanitize(userInput);
+    if (safeInput == null) {
+      return ContentFilter.rejectionMessage();
+    }
+
     if (_client.isOfflineMode) {
       return _nextOfflineResponse(scenario);
     }
 
     final messages = [
       ...history.map((m) => m.toMap()),
-      {'role': 'user', 'content': userInput},
+      {'role': 'user', 'content': safeInput},
     ];
 
     try {
-      return await _client.sendMessage(
+      final raw = await _client.sendMessage(
         systemPrompt: _systemPrompt(scenario, playerName),
         messages: messages,
       );
+      // ── Output safety gate ──────────────────────────────────────────────
+      return ContentFilter.filterResponse(raw);
     } on ClaudeOfflineException {
       return _nextOfflineResponse(scenario);
     } on ClaudeApiException catch (e) {

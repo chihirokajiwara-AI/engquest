@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'privacy_policy_screen.dart';
+import 'terms_of_service_screen.dart';
 
 /// ENG Quest — Parental Consent Gate (COPPA compliance)
 ///
@@ -189,6 +190,28 @@ class _ParentalConsentGateState extends State<ParentalConsentGate> {
               },
               child: const Text(
                 'プライバシーポリシーを読む →',
+                style: TextStyle(
+                  color: Color(0xFFFFD700),
+                  fontSize: 13,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
+          ),
+          // Tappable terms of service link
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) =>
+                        const TermsOfServiceScreen(showCloseButton: true),
+                  ),
+                );
+              },
+              child: const Text(
+                '利用規約を読む →',
                 style: TextStyle(
                   color: Color(0xFFFFD700),
                   fontSize: 13,

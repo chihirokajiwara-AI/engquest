@@ -1,31 +1,30 @@
 // lib/features/battle/battle_screen.dart
-// ENG Quest — C05 Battle Module: FSRS-4.5 Retrieval Loop (UI Polish v2 + P0.2 + P2-7)
+// ENG Quest — C05 Battle Module: FSRS-4.5 4-Choice Quiz (v3)
 //
 // Game flow:
-//   1. Build a deck of FSRSCards — loaded from Firestore (FirestoreFsrsCardRepository)
-//      Falls back to InMemory on first launch / offline
-//   2. Show the English word face-up ("cat")
-//   3. Tap to flip card → Japanese translation + example sentence
-//   4. Rate with 4 buttons: Again / Hard / Good / Easy
-//   5. FSRSAlgorithm.schedule() computes next due date
-//   6. Card state saved to Firestore immediately after grading
-//   7. Cycle through due cards; show session summary when done
-//   Progress persists across app restarts (Firestore offline cache)
+//   1. Show English word face-up with katakana reading
+//   2. Show 4 Japanese answer buttons (1 correct + 3 distractors)
+//   3. User taps an answer:
+//      CORRECT → card flips to green, shows example sentence, "+XP" animation,
+//                FSRS Grade.good applied
+//      WRONG   → card flips to red, correct answer highlighted,
+//                FSRS Grade.again applied
+//   4. After 1.5 s, advance automatically to the next card
+//   5. Session summary shown when all cards are graded
 //
-// P2-7 XP System additions:
-//   - Grade-aware XP (Again=0, Hard=5, Good=10, Easy=15) via XpService
-//   - Level-up detection + celebratory dialog (レベルアップ！🎉)
-//   - XP popup shows correct per-grade amount (not constant 10)
-//   - Session summary shows XP earned this session
+// XP System (P2-7):
+//   - Correct answer = Grade.good → +10 XP
+//   - Wrong answer   = Grade.again → +0 XP
+//   - Level-up detection + celebratory dialog
+//   - Session summary shows XP earned
 //
-// UI Polish sprint additions:
+// Animations:
 //   - 3D perspective card flip (400 ms, easeInOut)
-//   - Scale-bounce grade buttons (0.95→1.0, 150 ms)
 //   - Golden shimmer overlay on correct answer (300 ms)
 //   - Streak counter with fire emoji (🔥 × N) when streak ≥ 3
 //   - +XP floating text animation (TweenAnimationBuilder, 800 ms)
 //   - Animated star-burst on session complete (CustomPainter)
-//   - SoundService stubs + HapticFeedback
+//   - Scale-bounce answer buttons (0.95→1.0, 150 ms)
 
 import 'dart:math' as math;
 
@@ -42,10 +41,10 @@ import '../../core/fsrs/fsrs_card.dart';
 import '../../core/fsrs/fsrs_card_repository.dart';
 import '../../core/gamification/xp_service.dart';
 import '../../core/gamification/xp_profile.dart';
+import '../../core/models/vocab_item.dart';
 import '../../core/sound/sound_service.dart';
 import '../../data/content/vocab_a1.dart';
 import '../../data/content/vocab_a2.dart';
-import '../../data/models/vocab_item.dart';
 
 // ── Vocab source selection by CEFR level ────────────────────────────────────
 
@@ -74,7 +73,7 @@ class _XpPopup {
 
 // ── BattleScreen ─────────────────────────────────────────────────────────────
 
-/// FSRS-based vocabulary flashcard battle screen — UI Polish v2 + Firestore persistence.
+/// FSRS-based vocabulary flashcard battle screen — 4-choice quiz mode.
 ///
 /// [repository] — injectable for testing; defaults to FirestoreFsrsCardRepository.
 /// [childAge]   — filters vocabulary by age (age < 8 → animals/colors/food/family only).
@@ -140,13 +139,23 @@ class _BattleScreenState extends State<BattleScreen>
   DateTime? _sessionStartTime;
 
   // ── Streak ─────────────────────────────────────────────────────────────────
-  int _streak = 0; // consecutive Good/Easy answers
+  int _streak = 0; // consecutive correct answers
   int _totalXp = 0;
 
   // ── Card flip animation ────────────────────────────────────────────────────
   late AnimationController _flipCtrl;
   late Animation<double>    _flipAnim;
   bool _isFlipped = false;
+
+  // ── Quiz state ─────────────────────────────────────────────────────────────
+  /// The 4 shuffled answer choices for the current card (1 correct + 3 distractors)
+  List<String> _choices = const [];
+  /// null = not answered yet; true = correct; false = wrong
+  bool? _answerResult;
+  /// The answer the user actually tapped (null if not answered yet)
+  String? _selectedAnswer;
+  /// Prevents double-tap on answer buttons
+  bool _answerLocked = false;
 
   // ── Shimmer overlay (correct answer) ──────────────────────────────────────
   bool _showShimmer = false;
@@ -162,15 +171,12 @@ class _BattleScreenState extends State<BattleScreen>
   // ── Colours ────────────────────────────────────────────────────────────────
   static const _bgColor    = Color(0xFF1A1A2E);
   static const _cardFront  = Color(0xFF16213E);
-  static const _cardBack   = Color(0xFF0F3460);
+  static const _cardCorrect = Color(0xFF1B5E20); // dark green
+  static const _cardWrong   = Color(0xFFB71C1C); // dark red
   static const _accentGold = Color(0xFFFFD700);
 
-  static const _gradeColors = {
-    Grade.again: Color(0xFFE53935),
-    Grade.hard:  Color(0xFFF57C00),
-    Grade.good:  Color(0xFF43A047),
-    Grade.easy:  Color(0xFF1E88E5),
-  };
+  static const _correctColor = Color(0xFF43A047);
+  static const _wrongColor   = Color(0xFFE53935);
 
   // ── Lifecycle ──────────────────────────────────────────────────────────────
 
@@ -267,10 +273,41 @@ class _BattleScreenState extends State<BattleScreen>
       _xpPopups.clear();
       _starsCtrl.reset();
       _repoLoading = false;
+      _answerResult = null;
+      _selectedAnswer = null;
+      _answerLocked = false;
       // Session begins now — first card is visible. Capture start timestamp
       // so we can compute real elapsed minutes when the session completes.
       _sessionStartTime = DateTime.now();
     });
+    _buildChoicesForCurrent();
+  }
+
+  // ── Choice generation ──────────────────────────────────────────────────────
+
+  /// Builds the 4 shuffled answer choices for the current card.
+  /// Uses VocabItem.distractors if available; falls back to other words in deck.
+  void _buildChoicesForCurrent() {
+    if (_vocab.isEmpty || _queue.isEmpty) return;
+    final vocab = _currentVocab;
+    final correct = vocab.jpTranslation;
+
+    List<String> wrong;
+    if (vocab.distractors.isNotEmpty) {
+      // Use authored distractors (prefer first 3)
+      wrong = vocab.distractors.take(3).toList();
+    } else {
+      // Fallback: pick random jpTranslations from other deck items
+      final others = _vocab
+          .where((v) => v.id != vocab.id)
+          .map((v) => v.jpTranslation)
+          .toList();
+      others.shuffle(math.Random());
+      wrong = others.take(3).toList();
+    }
+
+    final choices = [correct, ...wrong.take(3)]..shuffle(math.Random());
+    setState(() => _choices = choices);
   }
 
   // ── Current card helpers ───────────────────────────────────────────────────
@@ -284,8 +321,7 @@ class _BattleScreenState extends State<BattleScreen>
 
   // ── Flip ───────────────────────────────────────────────────────────────────
 
-  void _flipCard() {
-    if (_isFlipped) return;
+  void _flipToResult(bool correct) {
     HapticFeedback.lightImpact();
     _sound.playFlip();
     setState(() => _isFlipped = true);
@@ -294,31 +330,60 @@ class _BattleScreenState extends State<BattleScreen>
 
   void _resetFlip() {
     _flipCtrl.reset();
-    setState(() => _isFlipped = false);
+    setState(() {
+      _isFlipped = false;
+      _answerResult = null;
+      _selectedAnswer = null;
+      _answerLocked = false;
+    });
+  }
+
+  // ── Answer handling ────────────────────────────────────────────────────────
+
+  void _onAnswerTapped(String answer) {
+    if (_answerLocked) return;
+    setState(() {
+      _answerLocked = true;
+      _selectedAnswer = answer;
+      _answerResult = answer == _currentVocab.jpTranslation;
+    });
+
+    final correct = _answerResult!;
+
+    if (correct) {
+      _sound.playCorrect();
+      HapticFeedback.mediumImpact();
+      // Golden shimmer on correct
+      setState(() => _showShimmer = true);
+      Future.delayed(const Duration(milliseconds: 300), () {
+        if (mounted) setState(() => _showShimmer = false);
+      });
+      _streak++;
+    } else {
+      _sound.playWrong();
+      HapticFeedback.heavyImpact();
+      _streak = 0;
+    }
+
+    // Flip card to show result after brief visual feedback
+    Future.delayed(const Duration(milliseconds: 150), () {
+      if (mounted) _flipToResult(correct);
+    });
+
+    // Grade: correct=good, wrong=again
+    final grade = correct ? Grade.good : Grade.again;
+    _gradeCard(grade);
+
+    // Auto-advance after 1.5 s
+    Future.delayed(const Duration(milliseconds: 1500), () {
+      if (mounted && _isFlipped) _advanceToNext();
+    });
   }
 
   // ── Grade ──────────────────────────────────────────────────────────────────
 
   void _gradeCard(Grade grade) {
-    HapticFeedback.mediumImpact();
-
-    final isCorrect = grade == Grade.good || grade == Grade.easy;
-    if (isCorrect) {
-      _sound.playCorrect();
-      // Shimmer
-      setState(() => _showShimmer = true);
-      Future.delayed(const Duration(milliseconds: 300), () {
-        if (mounted) setState(() => _showShimmer = false);
-      });
-      // Streak
-      _streak++;
-    } else {
-      _sound.playWrong();
-      _streak = 0;
-    }
-
-    // ── Grade-aware XP (P2-7) ─────────────────────────────────────────────
-    // XP per grade: Again=0, Hard=5, Good=10, Easy=15
+    // ── Grade-aware XP ────────────────────────────────────────────────────
     final xpGain = kGradeXp[grade.name.toLowerCase()] ?? 0;
     _totalXp += xpGain;
     final popupId = ++_xpPopupIdCounter;
@@ -360,7 +425,9 @@ class _BattleScreenState extends State<BattleScreen>
       final insertAt = math.min(_queueIdx + 3, _queue.length);
       _queue.insert(insertAt, _currentDeckIdx);
     }
+  }
 
+  void _advanceToNext() {
     final nextIdx = _queueIdx + 1;
     if (nextIdx >= _queue.length) {
       setState(() => _sessionDone = true);
@@ -371,6 +438,7 @@ class _BattleScreenState extends State<BattleScreen>
 
     setState(() => _queueIdx = nextIdx);
     _resetFlip();
+    _buildChoicesForCurrent();
   }
 
   // ── Session persistence ────────────────────────────────────────────────────
@@ -577,8 +645,8 @@ class _BattleScreenState extends State<BattleScreen>
             Expanded(
               child: _buildFlipCardWithShimmer(),
             ),
-            if (!_isFlipped) _buildTapHint(),
-            if (_isFlipped) _buildGradeButtons(),
+            // Answer buttons shown while card is face-up (not yet answered)
+            if (!_isFlipped) _buildAnswerButtons(),
             const SizedBox(height: 24),
           ],
         ),
@@ -613,7 +681,7 @@ class _BattleScreenState extends State<BattleScreen>
       child: Stack(
         children: [
           GestureDetector(
-            onTap: _isFlipped ? null : _flipCard,
+            // Card is not tappable — answers come from the choice buttons
             child: _buildFlipCard(),
           ),
           // Golden shimmer overlay on correct answer
@@ -692,7 +760,7 @@ class _BattleScreenState extends State<BattleScreen>
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
-                vocab.pos.first,
+                vocab.pos.first.name,
                 style: const TextStyle(
                   color: _accentGold,
                   fontSize: 12,
@@ -701,7 +769,7 @@ class _BattleScreenState extends State<BattleScreen>
             ),
           const SizedBox(height: 32),
           const Text(
-            'タップしてめくる',
+            '正しい日本語を選んでね',
             style: TextStyle(color: Colors.white38, fontSize: 13),
           ),
         ],
@@ -711,15 +779,30 @@ class _BattleScreenState extends State<BattleScreen>
 
   Widget _buildCardBack() {
     final vocab = _currentVocab;
-    final card  = _currentCard;
+    final correct = _answerResult ?? false;
     final example = vocab.exampleSentences.isNotEmpty
         ? vocab.exampleSentences.first
         : '';
+    final cardColor = correct ? _cardCorrect : _cardWrong;
+    final resultIcon = correct ? '✅' : '❌';
+    final resultLabel = correct ? 'せいかい！' : 'まちがい…';
+
     return _cardContainer(
-      color: _cardBack,
+      color: cardColor,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Text(resultIcon, style: const TextStyle(fontSize: 40)),
+          const SizedBox(height: 8),
+          Text(
+            resultLabel,
+            style: TextStyle(
+              color: correct ? _correctColor : _wrongColor,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 16),
           Text(
             vocab.word,
             style: const TextStyle(
@@ -728,7 +811,7 @@ class _BattleScreenState extends State<BattleScreen>
               fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 8),
           Text(
             vocab.jpTranslation,
             style: const TextStyle(
@@ -757,14 +840,6 @@ class _BattleScreenState extends State<BattleScreen>
               ),
             ),
           ],
-          const SizedBox(height: 16),
-          if (card.reps > 0)
-            Text(
-              'S: ${card.stability.toStringAsFixed(1)}d  '
-              'D: ${card.difficulty.toStringAsFixed(1)}  '
-              'reps: ${card.reps}',
-              style: const TextStyle(color: Colors.white24, fontSize: 11),
-            ),
         ],
       ),
     );
@@ -773,7 +848,7 @@ class _BattleScreenState extends State<BattleScreen>
   Widget _cardContainer({required Color color, required Widget child}) {
     return Container(
       width: double.infinity,
-      constraints: const BoxConstraints(minHeight: 320),
+      constraints: const BoxConstraints(minHeight: 280),
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(20),
@@ -790,36 +865,49 @@ class _BattleScreenState extends State<BattleScreen>
     );
   }
 
-  Widget _buildTapHint() {
-    return const Padding(
-      padding: EdgeInsets.symmetric(vertical: 12),
-      child: Text(
-        '👆 カードをタップして答えを確認',
-        style: TextStyle(color: Colors.white38, fontSize: 13),
-      ),
-    );
-  }
+  // ── 4-choice answer buttons ────────────────────────────────────────────────
 
-  // ── Grade buttons ──────────────────────────────────────────────────────────
+  Widget _buildAnswerButtons() {
+    if (_choices.isEmpty) return const SizedBox.shrink();
+    final correctAnswer = _currentVocab.jpTranslation;
 
-  Widget _buildGradeButtons() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Row(
-        children: Grade.values.map((g) {
-          return Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: _GradeButton(
-                grade: g,
-                color: _gradeColors[g]!,
-                fsrs: _fsrs,
-                card: _currentCard,
-                onTap: () => _gradeCard(g),
-              ),
-            ),
-          );
-        }).toList(),
+      child: Column(
+        children: [
+          Row(
+            children: _choices.take(2).map((choice) {
+              return Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                  child: _AnswerButton(
+                    label: choice,
+                    isCorrect: choice == correctAnswer,
+                    isSelected: choice == _selectedAnswer,
+                    isRevealed: _answerLocked,
+                    onTap: () => _onAnswerTapped(choice),
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+          Row(
+            children: _choices.skip(2).take(2).map((choice) {
+              return Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                  child: _AnswerButton(
+                    label: choice,
+                    isCorrect: choice == correctAnswer,
+                    isSelected: choice == _selectedAnswer,
+                    isRevealed: _answerLocked,
+                    onTap: () => _onAnswerTapped(choice),
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ],
       ),
     );
   }
@@ -828,6 +916,7 @@ class _BattleScreenState extends State<BattleScreen>
 
   Widget _buildSummary() {
     final total  = _sessionResults.length;
+    final correctCount = _sessionResults.where((r) => r.grade == Grade.good || r.grade == Grade.easy).length;
     final counts = <Grade, int>{for (final g in Grade.values) g: 0};
     for (final r in _sessionResults) {
       counts[r.grade] = (counts[r.grade] ?? 0) + 1;
@@ -835,6 +924,7 @@ class _BattleScreenState extends State<BattleScreen>
     final gradeSum = _sessionResults.fold(
         0.0, (sum, r) => sum + r.grade.index1.toDouble());
     final avgGrade = total > 0 ? gradeSum / total : 0.0;
+    final accuracy = total > 0 ? (correctCount / total * 100).round() : 0;
 
     return Stack(
       children: [
@@ -865,7 +955,7 @@ class _BattleScreenState extends State<BattleScreen>
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  '$total 枚 完了',
+                  '$total 問 完了',
                   style: const TextStyle(color: Colors.white70, fontSize: 18),
                 ),
                 // XP earned
@@ -888,30 +978,23 @@ class _BattleScreenState extends State<BattleScreen>
                 ),
                 const SizedBox(height: 32),
                 _SummaryCard(
-                  children: Grade.values.map((g) {
-                    return _SummaryRow(
-                      label: g.label,
-                      color: _gradeColors[g]!,
-                      count: counts[g] ?? 0,
-                      total: total,
-                    );
-                  }).toList(),
-                ),
-                const SizedBox(height: 16),
-                _SummaryCard(
                   children: [
+                    _StatTile(
+                      label: '正解率',
+                      value: '$accuracy%',
+                      icon: '🎯',
+                    ),
+                    const Divider(color: Colors.white12),
+                    _StatTile(
+                      label: '正解',
+                      value: '$correctCount / $total',
+                      icon: '✅',
+                    ),
+                    const Divider(color: Colors.white12),
                     _StatTile(
                       label: '平均評価',
                       value: avgGrade.toStringAsFixed(2),
                       icon: '⭐',
-                    ),
-                    const Divider(color: Colors.white12),
-                    _StatTile(
-                      label: '正確さ (Good + Easy)',
-                      value: total > 0
-                          ? '${(((counts[Grade.good]! + counts[Grade.easy]!) / total) * 100).round()}%'
-                          : '—',
-                      icon: '✅',
                     ),
                   ],
                 ),
@@ -982,28 +1065,28 @@ class _StreakBadge extends StatelessWidget {
   }
 }
 
-// ── Grade button widget (with scale-bounce) ────────────────────────────────────
+// ── 4-choice answer button (with scale-bounce) ─────────────────────────────────
 
-class _GradeButton extends StatefulWidget {
-  final Grade grade;
-  final Color color;
-  final FSRSAlgorithm fsrs;
-  final FSRSCard card;
+class _AnswerButton extends StatefulWidget {
+  final String label;
+  final bool isCorrect;
+  final bool isSelected;
+  final bool isRevealed;
   final VoidCallback onTap;
 
-  const _GradeButton({
-    required this.grade,
-    required this.color,
-    required this.fsrs,
-    required this.card,
+  const _AnswerButton({
+    required this.label,
+    required this.isCorrect,
+    required this.isSelected,
+    required this.isRevealed,
     required this.onTap,
   });
 
   @override
-  State<_GradeButton> createState() => _GradeButtonState();
+  State<_AnswerButton> createState() => _AnswerButtonState();
 }
 
-class _GradeButtonState extends State<_GradeButton>
+class _AnswerButtonState extends State<_AnswerButton>
     with SingleTickerProviderStateMixin {
   late AnimationController _scaleCtrl;
   late Animation<double> _scaleAnim;
@@ -1026,66 +1109,67 @@ class _GradeButtonState extends State<_GradeButton>
     super.dispose();
   }
 
-  String _intervalLabel() {
-    final simCard = widget.fsrs.schedule(widget.card, widget.grade, DateTime.now());
-    final due = simCard.dueDate;
-    if (due == null) return '—';
-    final diff = due.difference(DateTime.now());
-    final days = diff.inDays;
-    if (days <= 0) return '今すぐ';
-    if (days == 1) return '1日後';
-    return '$days 日後';
+  Color _buttonColor() {
+    if (!widget.isRevealed) {
+      return const Color(0xFF16213E);
+    }
+    if (widget.isCorrect) return const Color(0xFF2E7D32); // green
+    if (widget.isSelected) return const Color(0xFFC62828); // red (wrong selection)
+    return const Color(0xFF16213E).withAlpha(128); // dimmed unselected
+  }
+
+  Color _borderColor() {
+    if (!widget.isRevealed) return const Color(0xFF3D5AFE).withAlpha(128);
+    if (widget.isCorrect) return const Color(0xFF69F0AE);
+    if (widget.isSelected) return const Color(0xFFEF9A9A);
+    return Colors.white12;
   }
 
   @override
   Widget build(BuildContext context) {
-    final interval = _intervalLabel();
     return GestureDetector(
-      onTapDown: (_) => _scaleCtrl.forward(),
-      onTapUp: (_) {
-        _scaleCtrl.reverse();
-        widget.onTap();
-      },
-      onTapCancel: () => _scaleCtrl.reverse(),
+      onTapDown: widget.isRevealed ? null : (_) => _scaleCtrl.forward(),
+      onTapUp: widget.isRevealed
+          ? null
+          : (_) {
+              _scaleCtrl.reverse();
+              widget.onTap();
+            },
+      onTapCancel: widget.isRevealed ? null : () => _scaleCtrl.reverse(),
       child: AnimatedBuilder(
         animation: _scaleAnim,
         builder: (context, child) => Transform.scale(
           scale: _scaleAnim.value,
           child: child,
         ),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          constraints: const BoxConstraints(minHeight: 52),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
           decoration: BoxDecoration(
-            color: widget.color.withAlpha(204),
+            color: _buttonColor(),
             borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: _borderColor(), width: 1.5),
             boxShadow: [
               BoxShadow(
-                color: widget.color.withAlpha(77),
-                blurRadius: 8,
+                color: Colors.black.withAlpha(51),
+                blurRadius: 6,
                 offset: const Offset(0, 3),
               ),
             ],
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                widget.grade.label,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 13,
-                ),
+          child: Center(
+            child: Text(
+              widget.label,
+              style: TextStyle(
+                color: widget.isRevealed && !widget.isCorrect && !widget.isSelected
+                    ? Colors.white38
+                    : Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
               ),
-              const SizedBox(height: 2),
-              Text(
-                interval,
-                style: const TextStyle(
-                  color: Colors.white70,
-                  fontSize: 10,
-                ),
-              ),
-            ],
+              textAlign: TextAlign.center,
+            ),
           ),
         ),
       ),
@@ -1215,61 +1299,6 @@ class _SummaryCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: children,
-      ),
-    );
-  }
-}
-
-class _SummaryRow extends StatelessWidget {
-  final String label;
-  final Color  color;
-  final int    count;
-  final int    total;
-
-  const _SummaryRow({
-    required this.label,
-    required this.color,
-    required this.count,
-    required this.total,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final pct = total > 0 ? count / total : 0.0;
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        children: [
-          Container(
-            width: 10,
-            height: 10,
-            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-          ),
-          const SizedBox(width: 8),
-          SizedBox(
-            width: 52,
-            child: Text(
-              label,
-              style: const TextStyle(color: Colors.white70, fontSize: 13),
-            ),
-          ),
-          Expanded(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(3),
-              child: LinearProgressIndicator(
-                value: pct,
-                backgroundColor: Colors.white12,
-                valueColor: AlwaysStoppedAnimation<Color>(color),
-                minHeight: 6,
-              ),
-            ),
-          ),
-          const SizedBox(width: 8),
-          Text(
-            '$count',
-            style: const TextStyle(color: Colors.white70, fontSize: 13),
-          ),
-        ],
       ),
     );
   }

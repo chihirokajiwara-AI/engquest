@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:engquest/core/config/app_config.dart';
 import 'package:engquest/core/dialog/claude_client.dart';
+import 'package:engquest/core/dialog/content_filter.dart';
 import 'package:engquest/core/dialog/dialog_service.dart';
 import 'package:engquest/core/dialog/suggestion_engine.dart';
 
@@ -169,6 +170,18 @@ class _DialogScreenState extends State<DialogScreen> {
 
   Future<void> _sendMessage(String text, {bool isGreeting = false}) async {
     if (text.trim().isEmpty) return;
+
+    // ── UI-level content filter ────────────────────────────────────────────
+    // Check before adding to history so unsafe input is never stored or sent.
+    if (!isGreeting && !ContentFilter.isSafe(text)) {
+      _textController.clear();
+      setState(() {
+        // Add a 'filter' role message so the UI can render a rejection bubble.
+        _history.add(ChatMessage(role: 'filter', content: ContentFilter.rejectionMessage()));
+      });
+      _scrollToBottom();
+      return;
+    }
 
     if (!isGreeting) {
       setState(() {
@@ -365,9 +378,43 @@ class _ChatBubble extends StatelessWidget {
   const _ChatBubble({required this.message, required this.npcEmoji});
 
   bool get _isNpc => message.role == 'assistant';
+  bool get _isFilter => message.role == 'filter';
 
   @override
   Widget build(BuildContext context) {
+    // Filter rejection — centred system notice styled in amber.
+    if (_isFilter) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+        child: Center(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            decoration: BoxDecoration(
+              color: const Color(0xFF4E2C00),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.amber.withOpacity(0.5)),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text('⚠️', style: TextStyle(fontSize: 14)),
+                const SizedBox(width: 8),
+                Flexible(
+                  child: Text(
+                    message.content,
+                    style: const TextStyle(
+                      color: Colors.amber,
+                      fontSize: 13,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:engquest/features/legal/terms_of_service_screen.dart';
 import 'package:engquest/core/firebase/auth_service.dart';
 import 'package:engquest/core/firebase/parent_auth_service.dart';
 import 'package:engquest/core/models/progress_data.dart';
@@ -1079,6 +1080,46 @@ class _SettingsTab extends StatelessWidget {
                     ),
                   ),
                 ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 24),
+
+        // ── Legal links ───────────────────────────────────────────────────
+        _Card(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                '📄 法的情報',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Builder(
+                builder: (context) => ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  dense: true,
+                  leading: const Icon(Icons.description_outlined,
+                      color: Colors.amber, size: 20),
+                  title: const Text(
+                    '利用規約',
+                    style: TextStyle(color: Colors.white70, fontSize: 14),
+                  ),
+                  trailing: const Icon(Icons.chevron_right, color: Colors.white38),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) =>
+                            const TermsOfServiceScreen(showCloseButton: true),
+                      ),
+                    );
+                  },
+                ),
+              ),
             ],
           ),
         ),

@@ -96,6 +96,9 @@ class VocabItem extends Equatable {
   final String imageUrl;         // Firebase Storage path
   final FsrsState fsrsState;     // current learning state
   final List<String> tags;       // ["eiken5", "A1", "food"]
+  /// 3 wrong Japanese translations used as distractors in 4-choice quiz mode.
+  /// If empty, the battle screen falls back to generating distractors from the deck.
+  final List<String> distractors;
 
   const VocabItem({
     required this.id,
@@ -104,13 +107,14 @@ class VocabItem extends Equatable {
     required this.jpTranslation,
     required this.cefrLevel,
     required this.eikenLevel,
-    required this.category,
     required this.pos,
     required this.exampleSentences,
-    required this.audioUrl,
-    required this.imageUrl,
-    required this.fsrsState,
-    required this.tags,
+    this.category = '',
+    this.audioUrl = '',
+    this.imageUrl = '',
+    this.fsrsState = FsrsState.newCard,
+    this.tags = const [],
+    this.distractors = const [],
   });
 
   factory VocabItem.fromJson(Map<String, dynamic> json) {
@@ -121,20 +125,23 @@ class VocabItem extends Equatable {
       jpTranslation: json['jpTranslation'] as String,
       cefrLevel: CefrLevelExtension.fromString(json['cefrLevel'] as String),
       eikenLevel: json['eikenLevel'] as String,
-      category: json['category'] as String,
+      category: json['category'] as String? ?? '',
       pos: (json['pos'] as List<dynamic>)
           .map((p) => PartOfSpeechExtension.fromString(p as String))
           .toList(),
       exampleSentences: (json['exampleSentences'] as List<dynamic>)
           .map((s) => s as String)
           .toList(),
-      audioUrl: json['audioUrl'] as String,
-      imageUrl: json['imageUrl'] as String,
+      audioUrl: json['audioUrl'] as String? ?? '',
+      imageUrl: json['imageUrl'] as String? ?? '',
       fsrsState: FsrsStateExtension.fromString(
         json['fsrsState'] as String? ?? 'new',
       ),
-      tags: (json['tags'] as List<dynamic>)
+      tags: (json['tags'] as List<dynamic>? ?? [])
           .map((t) => t as String)
+          .toList(),
+      distractors: (json['distractors'] as List<dynamic>? ?? [])
+          .map((d) => d as String)
           .toList(),
     );
   }
@@ -153,11 +160,13 @@ class VocabItem extends Equatable {
     'imageUrl': imageUrl,
     'fsrsState': fsrsState.value,
     'tags': tags,
+    'distractors': distractors,
   };
 
   VocabItem copyWith({
     FsrsState? fsrsState,
     List<String>? exampleSentences,
+    List<String>? distractors,
   }) {
     return VocabItem(
       id: id,
@@ -173,6 +182,7 @@ class VocabItem extends Equatable {
       imageUrl: imageUrl,
       fsrsState: fsrsState ?? this.fsrsState,
       tags: tags,
+      distractors: distractors ?? this.distractors,
     );
   }
 

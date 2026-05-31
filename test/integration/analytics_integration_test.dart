@@ -16,7 +16,7 @@ import 'package:test/test.dart';
 import 'package:engquest/core/analytics/analytics_service.dart';
 import 'package:engquest/core/fsrs/fsrs_algorithm.dart';
 import 'package:engquest/core/fsrs/fsrs_card.dart';
-import 'package:engquest/data/models/vocab_item.dart';
+import 'package:engquest/core/models/vocab_item.dart';
 
 // ---------------------------------------------------------------------------
 // SpySink — captures all logged events for assertion
@@ -93,7 +93,7 @@ class InstrumentedBattleSession {
   Future<void> showCard() async {
     await analytics.logBattleCardShown(
       wordId: currentVocab.id,
-      cefrLevel: currentVocab.cefrLevel,
+      cefrLevel: currentVocab.cefrLevel.label,
     );
   }
 
@@ -150,17 +150,17 @@ extension AnalyticsServiceTestExt on AnalyticsService {
 const _testVocab = [
   VocabItem(
     id: 'a001', word: 'cat', reading: 'キャット', jpTranslation: 'ねこ',
-    cefrLevel: 'A1', eikenLevel: '5', pos: ['noun'],
+    cefrLevel: CefrLevel.a1, eikenLevel: '5', pos: [PartOfSpeech.noun],
     exampleSentences: ['I have a cat.'],
   ),
   VocabItem(
     id: 'a002', word: 'dog', reading: 'ドッグ', jpTranslation: 'いぬ',
-    cefrLevel: 'A1', eikenLevel: '5', pos: ['noun'],
+    cefrLevel: CefrLevel.a1, eikenLevel: '5', pos: [PartOfSpeech.noun],
     exampleSentences: ['My dog is big.'],
   ),
   VocabItem(
     id: 'a003', word: 'apple', reading: 'アップル', jpTranslation: 'りんご',
-    cefrLevel: 'A1', eikenLevel: '5', pos: ['noun'],
+    cefrLevel: CefrLevel.a1, eikenLevel: '5', pos: [PartOfSpeech.noun],
     exampleSentences: ['I eat an apple.'],
   ),
 ];

@@ -16,7 +16,7 @@ import 'package:test/test.dart';
 import 'package:engquest/features/onboarding/onboarding_flow.dart';
 import 'package:engquest/core/fsrs/fsrs_algorithm.dart';
 import 'package:engquest/core/fsrs/fsrs_card.dart';
-import 'package:engquest/data/models/vocab_item.dart';
+import 'package:engquest/core/models/vocab_item.dart';
 
 // ---------------------------------------------------------------------------
 // In-memory SharedPreferences stub
@@ -92,12 +92,12 @@ AppRoute resolveStartRoute(OnboardingPreferences prefs) {
 const _seedVocab = [
   VocabItem(
     id: 'eiken5_001', word: 'cat', reading: 'キャット', jpTranslation: 'ねこ',
-    cefrLevel: 'A1', eikenLevel: '5', pos: ['noun'],
+    cefrLevel: CefrLevel.a1, eikenLevel: '5', pos: [PartOfSpeech.noun],
     exampleSentences: ['I have a cat.'],
   ),
   VocabItem(
     id: 'eiken5_002', word: 'dog', reading: 'ドッグ', jpTranslation: 'いぬ',
-    cefrLevel: 'A1', eikenLevel: '5', pos: ['noun'],
+    cefrLevel: CefrLevel.a1, eikenLevel: '5', pos: [PartOfSpeech.noun],
     exampleSentences: ['My dog is big.'],
   ),
 ];

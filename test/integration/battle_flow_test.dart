@@ -9,7 +9,7 @@
 import 'package:test/test.dart';
 import 'package:engquest/core/fsrs/fsrs_algorithm.dart';
 import 'package:engquest/core/fsrs/fsrs_card.dart';
-import 'package:engquest/data/models/vocab_item.dart';
+import 'package:engquest/core/models/vocab_item.dart';
 
 // ---------------------------------------------------------------------------
 // Minimal in-memory battle session (mirrors BattleScreen logic without Flutter)
@@ -73,27 +73,27 @@ class BattleSession {
 const _testVocab = [
   VocabItem(
     id: 'test_001', word: 'cat', reading: 'キャット', jpTranslation: 'ねこ',
-    cefrLevel: 'A1', eikenLevel: '5', pos: ['noun'],
+    cefrLevel: CefrLevel.a1, eikenLevel: '5', pos: [PartOfSpeech.noun],
     exampleSentences: ['I have a cat.'],
   ),
   VocabItem(
     id: 'test_002', word: 'dog', reading: 'ドッグ', jpTranslation: 'いぬ',
-    cefrLevel: 'A1', eikenLevel: '5', pos: ['noun'],
+    cefrLevel: CefrLevel.a1, eikenLevel: '5', pos: [PartOfSpeech.noun],
     exampleSentences: ['My dog is big.'],
   ),
   VocabItem(
     id: 'test_003', word: 'apple', reading: 'アップル', jpTranslation: 'りんご',
-    cefrLevel: 'A1', eikenLevel: '5', pos: ['noun'],
+    cefrLevel: CefrLevel.a1, eikenLevel: '5', pos: [PartOfSpeech.noun],
     exampleSentences: ['I eat an apple.'],
   ),
   VocabItem(
     id: 'test_004', word: 'run', reading: 'ラン', jpTranslation: 'はしる',
-    cefrLevel: 'A1', eikenLevel: '5', pos: ['verb'],
+    cefrLevel: CefrLevel.a1, eikenLevel: '5', pos: [PartOfSpeech.verb],
     exampleSentences: ['I run every day.'],
   ),
   VocabItem(
     id: 'test_005', word: 'red', reading: 'レッド', jpTranslation: 'あか',
-    cefrLevel: 'A1', eikenLevel: '5', pos: ['adjective'],
+    cefrLevel: CefrLevel.a1, eikenLevel: '5', pos: [PartOfSpeech.adjective],
     exampleSentences: ['The apple is red.'],
   ),
 ];

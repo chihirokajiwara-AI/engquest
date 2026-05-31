@@ -10,7 +10,7 @@
 
 import 'package:test/test.dart';
 import 'package:engquest/core/content/vocab_age_filter.dart';
-import 'package:engquest/data/models/vocab_item.dart';
+import 'package:engquest/core/models/vocab_item.dart';
 
 // Mirror of the BattleScreen seed deck shape (ids only matter for filtering).
 List<VocabItem> _buildSeed() => List.generate(
@@ -22,9 +22,9 @@ List<VocabItem> _buildSeed() => List.generate(
           word: 'w$n',
           reading: 'r$n',
           jpTranslation: 'j$n',
-          cefrLevel: 'A1',
+          cefrLevel: CefrLevel.a1,
           eikenLevel: '5',
-          pos: const ['noun'],
+          pos: [PartOfSpeech.noun],
           exampleSentences: const ['example.'],
         );
       },

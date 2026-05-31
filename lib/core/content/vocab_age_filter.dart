@@ -15,7 +15,7 @@
 // directly, and guarantees the same logic is applied everywhere age filtering
 // is needed (web build, future placement screens, etc.).
 
-import '../../data/models/vocab_item.dart';
+import '../models/vocab_item.dart';
 
 /// Children below this age receive the restricted young-learner deck.
 ///
