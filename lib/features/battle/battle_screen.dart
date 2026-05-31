@@ -592,14 +592,27 @@ class _BattleScreenState extends State<BattleScreen>
 
   @override
   Widget build(BuildContext context) {
+    // Key changes when the body state changes, triggering AnimatedSwitcher.
+    final bodyKey = _repoLoading
+        ? const ValueKey('loading')
+        : _sessionDone
+            ? const ValueKey('summary')
+            : const ValueKey('session');
+    final body = _repoLoading
+        ? _buildLoadingSpinner()
+        : _sessionDone
+            ? _buildSummary()
+            : _buildCardSession();
+
     return Scaffold(
       backgroundColor: _bgColor,
       appBar: _buildAppBar(),
-      body: _repoLoading
-          ? _buildLoadingSpinner()
-          : _sessionDone
-              ? _buildSummary()
-              : _buildCardSession(),
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 400),
+        switchInCurve: Curves.easeOut,
+        switchOutCurve: Curves.easeIn,
+        child: KeyedSubtree(key: bodyKey, child: body),
+      ),
     );
   }
 

@@ -18,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:engquest/core/firebase/auth_service.dart';
 import 'package:engquest/core/gamification/xp_profile.dart';
 import 'package:engquest/core/gamification/xp_service.dart';
+import 'package:engquest/core/ui/page_transitions.dart';
 import 'package:engquest/features/battle/grade_selector_screen.dart';
 import 'package:engquest/features/exam_practice/exam_practice_screen.dart';
 import 'package:engquest/features/parent_dashboard/parent_dashboard_screen.dart';
@@ -234,25 +235,22 @@ class _WorldMapScreenState extends State<WorldMapScreen>
                           if (zone.pushTarget != null) {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
+                              FadeSlideRoute(
                                   builder: (_) => zone.pushTarget!),
                             );
                           } else if (zone.route == '/battle') {
-                            // Navigate to grade selector (then to battle)
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
+                              FadeSlideRoute(
                                 builder: (_) => GradeSelectorScreen(
                                   childAge: widget.childAge,
                                 ),
                               ),
                             );
                           } else if (zone.route == '/exam') {
-                            // Exam practice — default to grade 5 for now
-                            // TODO: Grade selector for exam mode too
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
+                              FadeSlideRoute(
                                 builder: (_) => const ExamPracticeScreen(
                                   eikenGrade: '5',
                                 ),

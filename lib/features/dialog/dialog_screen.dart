@@ -3,6 +3,7 @@ import 'package:engquest/core/config/app_config.dart';
 import 'package:engquest/core/dialog/claude_client.dart';
 import 'package:engquest/core/dialog/dialog_service.dart';
 import 'package:engquest/core/dialog/suggestion_engine.dart';
+import 'package:engquest/core/ui/page_transitions.dart';
 
 // ---------------------------------------------------------------------------
 // DialogScenariosScreen — pick a scenario to start chatting
@@ -88,7 +89,7 @@ class _ScenarioCard extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
+            FadeSlideRoute(
               builder: (_) => DialogScreen(scenario: scenario),
             ),
           );
@@ -376,60 +377,99 @@ class _DialogScreenState extends State<DialogScreen> {
 // Sub-widgets
 // ---------------------------------------------------------------------------
 
-class _ChatBubble extends StatelessWidget {
+class _ChatBubble extends StatefulWidget {
   final ChatMessage message;
   final String npcEmoji;
 
   const _ChatBubble({required this.message, required this.npcEmoji});
 
-  bool get _isNpc => message.role == 'assistant';
+  @override
+  State<_ChatBubble> createState() => _ChatBubbleState();
+}
+
+class _ChatBubbleState extends State<_ChatBubble>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctrl;
+  late final Animation<double> _fadeAnim;
+  late final Animation<Offset> _slideAnim;
+
+  bool get _isNpc => widget.message.role == 'assistant';
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 350),
+    );
+    final curved = CurvedAnimation(parent: _ctrl, curve: Curves.easeOutCubic);
+    _fadeAnim = Tween<double>(begin: 0.0, end: 1.0).animate(curved);
+    // NPC slides from left, user slides from right
+    _slideAnim = Tween<Offset>(
+      begin: Offset(_isNpc ? -0.15 : 0.15, 0.0),
+      end: Offset.zero,
+    ).animate(curved);
+    _ctrl.forward();
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Row(
-        mainAxisAlignment:
-            _isNpc ? MainAxisAlignment.start : MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          if (_isNpc) ...[
-            Text(npcEmoji, style: const TextStyle(fontSize: 28)),
-            const SizedBox(width: 8),
-          ],
-          Flexible(
-            child: Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              decoration: BoxDecoration(
-                color: _isNpc
-                    ? const Color(0xFFE3F2FD)
-                    : const Color(0xFF4FC3F7),
-                borderRadius: BorderRadius.only(
-                  topLeft: const Radius.circular(18),
-                  topRight: const Radius.circular(18),
-                  bottomLeft: Radius.circular(_isNpc ? 4 : 18),
-                  bottomRight: Radius.circular(_isNpc ? 18 : 4),
+    return FadeTransition(
+      opacity: _fadeAnim,
+      child: SlideTransition(
+        position: _slideAnim,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 6),
+          child: Row(
+            mainAxisAlignment:
+                _isNpc ? MainAxisAlignment.start : MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              if (_isNpc) ...[
+                Text(widget.npcEmoji, style: const TextStyle(fontSize: 28)),
+                const SizedBox(width: 8),
+              ],
+              Flexible(
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: _isNpc
+                        ? const Color(0xFFE3F2FD)
+                        : const Color(0xFF4FC3F7),
+                    borderRadius: BorderRadius.only(
+                      topLeft: const Radius.circular(18),
+                      topRight: const Radius.circular(18),
+                      bottomLeft: Radius.circular(_isNpc ? 4 : 18),
+                      bottomRight: Radius.circular(_isNpc ? 18 : 4),
+                    ),
+                  ),
+                  child: Text(
+                    widget.message.content,
+                    style: TextStyle(
+                      color: _isNpc ? const Color(0xFF263238) : Colors.white,
+                      fontSize: 15,
+                    ),
+                  ),
                 ),
               ),
-              child: Text(
-                message.content,
-                style: TextStyle(
-                  color: _isNpc ? const Color(0xFF263238) : Colors.white,
-                  fontSize: 15,
+              if (!_isNpc) ...[
+                const SizedBox(width: 8),
+                const CircleAvatar(
+                  radius: 14,
+                  backgroundColor: Color(0xFF4CAF50),
+                  child: Text('🧑', style: TextStyle(fontSize: 14)),
                 ),
-              ),
-            ),
+              ],
+            ],
           ),
-          if (!_isNpc) ...[
-            const SizedBox(width: 8),
-            const CircleAvatar(
-              radius: 14,
-              backgroundColor: Color(0xFF4CAF50),
-              child: Text('🧑', style: TextStyle(fontSize: 14)),
-            ),
-          ],
-        ],
+        ),
       ),
     );
   }
