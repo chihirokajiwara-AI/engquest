@@ -47,10 +47,17 @@ class _ZoneDef {
 final List<_ZoneDef> _kZones = [
   _ZoneDef(
     label:    'Blacksmith',
-    subtitle: 'Battle — 単語と戦え！',
-    icon:     Icons.shield_outlined,       // closest to sword in Material
+    subtitle: 'Battle — 単語と戦え！(英検5級)',
+    icon:     Icons.shield_outlined,
     gradient: [const Color(0xFFB71C1C), const Color(0xFF7F0000)],
     route:    '/battle',
+  ),
+  _ZoneDef(
+    label:    'Dark Forest',
+    subtitle: 'Battle — もっと強い単語！(英検4級)',
+    icon:     Icons.park_outlined,
+    gradient: [const Color(0xFFE65100), const Color(0xFFBF360C)],
+    route:    '/battle-a2',
   ),
   _ZoneDef(
     label:    'Town Crier',
@@ -221,12 +228,21 @@ class _WorldMapScreenState extends State<WorldMapScreen>
                                   builder: (_) => zone.pushTarget!),
                             );
                           } else if (zone.route == '/battle') {
-                            // Pass childAge for age-appropriate vocab filtering
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (_) => BattleScreen(
                                   childAge: widget.childAge,
+                                ),
+                              ),
+                            );
+                          } else if (zone.route == '/battle-a2') {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => BattleScreen(
+                                  childAge: widget.childAge,
+                                  cefrLevel: 'A2',
                                 ),
                               ),
                             );
