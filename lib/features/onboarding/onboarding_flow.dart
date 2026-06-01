@@ -760,6 +760,20 @@ class _StepGoal extends StatelessWidget {
             ),
           ),
           const Spacer(),
+          // Eiken trademark disclaimer — required for compliance.
+          const Padding(
+            padding: EdgeInsets.only(bottom: 12),
+            child: Text(
+              '英検®は公益財団法人日本英語検定協会の登録商標です。'
+              '本アプリは英検協会の公式アプリではありません。',
+              style: TextStyle(
+                color: Color(0xFFB0BEC5),
+                fontSize: 10,
+                height: 1.5,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
           ElevatedButton(
             onPressed: onFinish,
             style: ElevatedButton.styleFrom(

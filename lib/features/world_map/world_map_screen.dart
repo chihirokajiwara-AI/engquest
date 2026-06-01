@@ -176,14 +176,25 @@ class _WorldMapScreenState extends State<WorldMapScreen>
     return Scaffold(
       backgroundColor: const Color(0xFFF5F7FA),
       appBar: AppBar(
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF4FC3F7), Color(0xFF29B6F6)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
+        flexibleSpace: Builder(
+          builder: (context) {
+            final primary = Theme.of(context).colorScheme.primary;
+            // Derive a slightly darker shade for the gradient end stop so the
+            // AppBar looks consistent regardless of flavor primary color.
+            final darker = HSLColor.fromColor(primary)
+                .withLightness(
+                    (HSLColor.fromColor(primary).lightness - 0.08).clamp(0.0, 1.0))
+                .toColor();
+            return Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [primary, darker],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+            );
+          },
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
