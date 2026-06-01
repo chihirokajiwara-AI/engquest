@@ -68,7 +68,6 @@ class _VocabGrammarPracticeScreenState
 
         // Build choices: correct + 3 distractors, shuffled
         final choices = [word.word, ...word.distractors.take(3)];
-        final correctIdx = 0; // before shuffle
         choices.shuffle(_rng);
         final newCorrectIdx = choices.indexOf(word.word);
 

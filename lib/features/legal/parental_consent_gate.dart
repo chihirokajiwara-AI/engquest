@@ -76,10 +76,28 @@ class _ParentalConsentGateState extends State<ParentalConsentGate> {
     );
   }
 
+  /// Wraps fixed-height form content so it pins to the full height on tall
+  /// screens (the [Spacer] pushes the primary button to the bottom) but
+  /// scrolls instead of overflowing on short viewports / small devices.
+  Widget _scrollableFill(Widget child) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: (constraints.maxHeight - 48).clamp(0, double.infinity),
+            ),
+            child: IntrinsicHeight(child: child),
+          ),
+        );
+      },
+    );
+  }
+
   Widget _buildConsentForm() {
-    return Padding(
-      padding: const EdgeInsets.all(24),
-      child: Column(
+    return _scrollableFill(
+      Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: 32),
@@ -257,9 +275,8 @@ class _ParentalConsentGateState extends State<ParentalConsentGate> {
   }
 
   Widget _buildChallenge() {
-    return Padding(
-      padding: const EdgeInsets.all(24),
-      child: Column(
+    return _scrollableFill(
+      Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: 48),

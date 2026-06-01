@@ -46,9 +46,6 @@ class FirestoreProgressRepository {
   DocumentReference<Map<String, dynamic>> _sessionDoc(String uid, String dateKey) =>
       _db.collection('users').doc(uid).collection('sessions').doc(dateKey);
 
-  CollectionReference<Map<String, dynamic>> _sessionsCol(String uid) =>
-      _db.collection('users').doc(uid).collection('sessions');
-
   // ── Date key helper ───────────────────────────────────────────────────────
 
   static String _dateKey(DateTime dt) =>

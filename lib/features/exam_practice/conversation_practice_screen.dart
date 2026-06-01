@@ -4,7 +4,6 @@
 // Two speakers have a conversation with one blank line.
 // User picks the most natural response from 4 choices.
 
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'eiken_exam_config.dart';
 

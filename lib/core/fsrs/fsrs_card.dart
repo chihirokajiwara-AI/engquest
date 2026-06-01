@@ -79,8 +79,8 @@ class FSRSCard {
     this.difficulty = 0.0,
     this.reps       = 0,
     this.lapses     = 0,
-    this.dueDate    = null,
-    this.lastReview = null,
+    this.dueDate,
+    this.lastReview,
   });
 
   /// True when card should appear in today's session

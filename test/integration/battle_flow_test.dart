@@ -126,10 +126,15 @@ void main() {
   });
 
   group('BattleSession — grade card', () {
-    test('grading Good advances card to Learning state', () {
+    test('grading Good on a new card graduates it to Review state', () {
+      // This FSRS-4.5 scheduler runs WITHOUT learning steps (intervals are
+      // day-granular, min 1 day), so a new card rated Good/Hard/Easy graduates
+      // straight to Review; only Again keeps it in Learning for in-session
+      // re-study. This matches the sibling "Good does not re-queue" and
+      // "graded card has a future dueDate" tests, which assume Good → Review.
       final session = BattleSession(_testVocab);
       final after = session.grade(Grade.good);
-      expect(after.state, equals(CardState.learning));
+      expect(after.state, equals(CardState.review));
       expect(after.reps, equals(1));
       expect(after.stability, greaterThan(0));
     });
