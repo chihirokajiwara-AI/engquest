@@ -411,7 +411,7 @@ class _VoiceScreenState extends State<VoiceScreen>
 
   Widget _buildIdleHint() {
     return const Text(
-      'タップして発音しよう！\nSay the word!',
+      'タップして発音しよう！',
       textAlign: TextAlign.center,
       style: TextStyle(color: Color(0xFF607D8B), fontSize: 15, height: 1.6),
     );
@@ -439,7 +439,7 @@ class _VoiceScreenState extends State<VoiceScreen>
         ),
         const SizedBox(height: 4),
         const Text(
-          '録音中… Recording…',
+          '録音中…',
           style: TextStyle(color: Color(0xFF607D8B), fontSize: 14),
         ),
       ],
@@ -453,7 +453,7 @@ class _VoiceScreenState extends State<VoiceScreen>
         CircularProgressIndicator(color: _accentGold),
         SizedBox(height: 16),
         Text(
-          '認識中… Analysing…',
+          '認識中…',
           style: TextStyle(color: Colors.white60, fontSize: 14),
         ),
       ],
@@ -482,7 +482,7 @@ class _VoiceScreenState extends State<VoiceScreen>
         const Text('✅', style: TextStyle(fontSize: 40)),
         const SizedBox(height: 8),
         const Text(
-          'すごい！ Great job!',
+          'すごい！',
           style: TextStyle(
             color: Colors.greenAccent,
             fontSize: 22,
@@ -661,7 +661,7 @@ class _VoiceScreenState extends State<VoiceScreen>
           fontWeight: FontWeight.bold,
         ),
       ),
-      child: Text(isLast ? '結果を見る / Results 🏆' : '次の単語 / Next →'),
+      child: Text(isLast ? '結果を見る 🏆' : '次の単語 →'),
     );
   }
 

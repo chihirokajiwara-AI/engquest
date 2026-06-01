@@ -42,7 +42,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1A1A2E),
+      backgroundColor: const Color(0xFFF5F7FA),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -52,7 +52,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
         ),
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white70),
+          icon: const Icon(Icons.arrow_back, color: Color(0xFF263238)),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -84,7 +84,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
               const SizedBox(width: 8),
               Text(
                 '$unlockedCount / ${kAchievements.length} バッジ獲得',
-                style: const TextStyle(color: Colors.white70, fontSize: 14),
+                style: const TextStyle(color: Color(0xFF607D8B), fontSize: 14),
               ),
             ],
           ),
@@ -133,12 +133,12 @@ class _BadgeCard extends StatelessWidget {
                 end: Alignment.bottomRight,
               )
             : null,
-        color: isUnlocked ? null : const Color(0xFF16213E),
+        color: isUnlocked ? null : Colors.white,
         borderRadius: BorderRadius.circular(18),
         border: Border.all(
           color: isUnlocked
               ? Colors.amber.withAlpha(120)
-              : Colors.white.withAlpha(20),
+              : const Color(0xFFE0E0E0),
           width: isUnlocked ? 2 : 1,
         ),
         boxShadow: isUnlocked
@@ -164,16 +164,16 @@ class _BadgeCard extends StatelessWidget {
                 shape: BoxShape.circle,
                 color: isUnlocked
                     ? Colors.white.withAlpha(30)
-                    : Colors.white.withAlpha(10),
+                    : const Color(0xFFF5F7FA),
                 border: Border.all(
                   color: isUnlocked
                       ? Colors.white.withAlpha(80)
-                      : Colors.white.withAlpha(20),
+                      : const Color(0xFFE0E0E0),
                 ),
               ),
               child: Icon(
                 def.icon,
-                color: isUnlocked ? Colors.white : Colors.white38,
+                color: isUnlocked ? Colors.white : const Color(0xFFB0BEC5),
                 size: 26,
               ),
             ),
@@ -185,7 +185,7 @@ class _BadgeCard extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                color: isUnlocked ? Colors.white : Colors.white54,
+                color: isUnlocked ? Colors.white : const Color(0xFF607D8B),
                 fontWeight: FontWeight.bold,
                 fontSize: 13,
               ),
@@ -197,7 +197,7 @@ class _BadgeCard extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                color: isUnlocked ? Colors.white70 : Colors.white30,
+                color: isUnlocked ? Colors.white70 : const Color(0xFFB0BEC5),
                 fontSize: 11,
               ),
             ),
@@ -228,7 +228,7 @@ class _BadgeCard extends StatelessWidget {
                     child: LinearProgressIndicator(
                       value: progress,
                       minHeight: 5,
-                      backgroundColor: Colors.white12,
+                      backgroundColor: const Color(0xFFE0E0E0),
                       valueColor: AlwaysStoppedAnimation<Color>(
                         def.gradient.first.withAlpha(180),
                       ),
@@ -238,7 +238,7 @@ class _BadgeCard extends StatelessWidget {
                   Text(
                     '${state.progress} / ${def.target}',
                     style: const TextStyle(
-                      color: Colors.white38,
+                      color: Color(0xFFB0BEC5),
                       fontSize: 10,
                     ),
                   ),

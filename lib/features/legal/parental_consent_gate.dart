@@ -69,7 +69,7 @@ class _ParentalConsentGateState extends State<ParentalConsentGate> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1A1A2E),
+      backgroundColor: const Color(0xFFF5F7FA),
       body: SafeArea(
         child: _showingChallenge ? _buildChallenge() : _buildConsentForm(),
       ),
@@ -114,9 +114,16 @@ class _ParentalConsentGateState extends State<ParentalConsentGate> {
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: const Color(0xFF16213E),
+              color: Colors.white,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Colors.white12),
+              border: Border.all(color: const Color(0xFFE0E0E0)),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF4FC3F7).withAlpha(20),
+                  blurRadius: 8,
+                  offset: const Offset(0, 3),
+                ),
+              ],
             ),
             child: const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,7 +131,7 @@ class _ParentalConsentGateState extends State<ParentalConsentGate> {
                 Text(
                   'ENG Questへようこそ',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Color(0xFF263238),
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -138,7 +145,7 @@ class _ParentalConsentGateState extends State<ParentalConsentGate> {
                   '• 匿名認証を使用し、個人情報を保護します\n'
                   '• 発音練習でマイクを使用します（音声は端末内でのみ処理）',
                   style: TextStyle(
-                    color: Colors.white70,
+                    color: Color(0xFF607D8B),
                     fontSize: 14,
                     height: 1.5,
                   ),
@@ -182,7 +189,7 @@ class _ParentalConsentGateState extends State<ParentalConsentGate> {
                         const TextSpan(
                           text: 'に同意します',
                           style: TextStyle(
-                            color: Colors.white70,
+                            color: Color(0xFF607D8B),
                             fontSize: 14,
                           ),
                         ),
@@ -264,7 +271,7 @@ class _ParentalConsentGateState extends State<ParentalConsentGate> {
             child: const Text(
               '保護者としてログイン →',
               style: TextStyle(
-                color: Colors.white38,
+                color: Color(0xFF90A4AE),
                 fontSize: 13,
               ),
             ),
@@ -292,7 +299,7 @@ class _ParentalConsentGateState extends State<ParentalConsentGate> {
           const SizedBox(height: 16),
           const Text(
             '保護者の方が操作していることを確認します。\n下の計算の答えを入力してください。',
-            style: TextStyle(color: Colors.white70, fontSize: 14),
+            style: TextStyle(color: Color(0xFF607D8B), fontSize: 14),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 40),
@@ -300,14 +307,21 @@ class _ParentalConsentGateState extends State<ParentalConsentGate> {
           Container(
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: const Color(0xFF16213E),
+              color: Colors.white,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: const Color(0xFFFFD700), width: 1.5),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFFFFD700).withAlpha(40),
+                  blurRadius: 8,
+                  offset: const Offset(0, 3),
+                ),
+              ],
             ),
             child: Text(
               '$_a + $_b = ?',
               style: const TextStyle(
-                color: Colors.white,
+                color: Color(0xFF263238),
                 fontSize: 36,
                 fontWeight: FontWeight.bold,
               ),
@@ -319,21 +333,21 @@ class _ParentalConsentGateState extends State<ParentalConsentGate> {
             controller: _answerController,
             keyboardType: TextInputType.number,
             textAlign: TextAlign.center,
-            style: const TextStyle(color: Colors.white, fontSize: 24),
+            style: const TextStyle(color: Color(0xFF263238), fontSize: 24),
             decoration: InputDecoration(
               hintText: 'こたえ',
-              hintStyle: const TextStyle(color: Colors.white24),
+              hintStyle: const TextStyle(color: Color(0xFFB0BEC5)),
               errorText: _errorText,
               errorStyle: const TextStyle(color: Colors.redAccent),
               filled: true,
-              fillColor: const Color(0xFF16213E),
+              fillColor: Colors.white,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(color: Colors.white24),
+                borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(color: Colors.white24),
+                borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -363,7 +377,7 @@ class _ParentalConsentGateState extends State<ParentalConsentGate> {
             onPressed: () => setState(() => _showingChallenge = false),
             child: const Text(
               '← もどる',
-              style: TextStyle(color: Colors.white54, fontSize: 14),
+              style: TextStyle(color: Color(0xFF90A4AE), fontSize: 14),
             ),
           ),
         ],

@@ -835,7 +835,6 @@ class _BattleScreenState extends State<BattleScreen>
 
   Widget _buildCardBack() {
     final vocab = _currentVocab;
-    final card  = _currentCard;
     final example = vocab.exampleSentences.isNotEmpty
         ? vocab.exampleSentences.first
         : '';
@@ -882,13 +881,6 @@ class _BattleScreenState extends State<BattleScreen>
             ),
           ],
           const SizedBox(height: 16),
-          if (card.reps > 0)
-            Text(
-              'S: ${card.stability.toStringAsFixed(1)}d  '
-              'D: ${card.difficulty.toStringAsFixed(1)}  '
-              'reps: ${card.reps}',
-              style: const TextStyle(color: Colors.black26, fontSize: 11),
-            ),
         ],
       ),
     );
@@ -1178,7 +1170,7 @@ class _GradeButtonState extends State<_GradeButton>
           child: child,
         ),
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
+          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
           decoration: BoxDecoration(
             color: widget.color.withAlpha(204),
             borderRadius: BorderRadius.circular(12),
