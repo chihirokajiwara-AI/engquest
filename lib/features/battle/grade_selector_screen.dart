@@ -132,7 +132,8 @@ class GradeSelectorScreen extends StatelessWidget {
                       builder: (_) => GradeGateScreen(
                         eikenGrade: g.grade,
                         onSubscribe: () {
-                          // TODO: Stripe checkout
+                          // Purchase succeeded — pop back to grade selector
+                          // so the user can tap the now-unlocked grade.
                           Navigator.pop(context);
                         },
                       ),

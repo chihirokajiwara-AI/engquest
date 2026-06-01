@@ -35,6 +35,8 @@ dependencies:
   audioplayers: ^5.2.1
   # Speech recognition (Web Speech API / Apple Speech / Google Speech)
   speech_to_text: ^7.0.0
+  # In-app purchases (RevenueCat — unified iOS StoreKit 2 / Android GPBL / Web)
+  purchases_flutter: ^8.11.0
   # UI
   cupertino_icons: ^1.0.6
 

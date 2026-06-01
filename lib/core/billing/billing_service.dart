@@ -17,6 +17,7 @@
 //   - expired: subscription lapsed (reverts to free)
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart' show PlatformException;
 import 'package:purchases_flutter/purchases_flutter.dart';
 
 import '../config/flavor_config.dart';
@@ -173,13 +174,14 @@ class BillingService {
       final customerInfo = await Purchases.purchasePackage(package);
       _cached = _mapCustomerInfo(customerInfo);
       return _cached.hasAccess;
-    } on PurchasesErrorCode catch (e) {
-      if (e == PurchasesErrorCode.purchaseCancelledError) {
+    } on PlatformException catch (e) {
+      final errorCode = PurchasesErrorHelper.getErrorCode(e);
+      if (errorCode == PurchasesErrorCode.purchaseCancelledError) {
         // User cancelled — not an error.
         return false;
       }
       if (kDebugMode) {
-        debugPrint('BillingService.purchaseMonthly error: $e');
+        debugPrint('BillingService.purchaseMonthly error: $errorCode');
       }
       return false;
     } catch (e) {
@@ -208,17 +210,20 @@ class BillingService {
 
   // ── Subscription management ─────────────────────────────────────────────
 
-  /// Open the platform's subscription management page.
-  /// On iOS: App Store subscription settings.
-  /// On Android: Play Store subscription settings.
-  /// On Web: RevenueCat-hosted Stripe portal.
-  Future<void> showManageSubscriptions() async {
+  /// Returns the platform management URL for the active subscription.
+  /// On iOS: App Store subscription management URL.
+  /// On Android: Play Store subscription management URL.
+  /// On Web: RevenueCat-hosted Stripe portal URL.
+  /// Returns `null` if no active subscription or URL unavailable.
+  Future<String?> getManagementUrl() async {
     try {
-      await Purchases.showManageSubscriptions();
+      final customerInfo = await Purchases.getCustomerInfo();
+      return customerInfo.managementURL;
     } catch (e) {
       if (kDebugMode) {
-        debugPrint('BillingService.showManageSubscriptions error: $e');
+        debugPrint('BillingService.getManagementUrl error: $e');
       }
+      return null;
     }
   }
 
