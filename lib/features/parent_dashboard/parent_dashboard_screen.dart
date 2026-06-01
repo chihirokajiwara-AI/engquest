@@ -179,9 +179,8 @@ class _HomeTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final today = progress.last7Days.isNotEmpty ? progress.last7Days.last : null;
-    final nextHours = progress.nextReviewDue != null
-        ? progress.nextReviewDue!.difference(DateTime.now()).inHours
-        : null;
+    final nextHours =
+        progress.nextReviewDue?.difference(DateTime.now()).inHours;
 
     return ListView(
       padding: const EdgeInsets.all(20),
@@ -798,7 +797,7 @@ class _ReviewCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: _kSurface,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: color.withOpacity(0.4), width: 1),
+        border: Border.all(color: color.withAlpha(102), width: 1),
       ),
       child: Row(
         children: [
@@ -943,9 +942,15 @@ class _SettingsTab extends StatelessWidget {
               const SizedBox(height: 12),
               ...['Easy', 'Normal', 'Hard'].map((d) {
                 final selected = d == difficulty;
+                // RadioListTile.groupValue/onChanged are deprecated after
+                // Flutter 3.32 in favour of a RadioGroup ancestor, which does
+                // not exist in the CI toolchain (3.22). Suppress here until the
+                // CI Flutter version is aligned, then migrate to RadioGroup.
                 return RadioListTile<String>(
                   value: d,
+                  // ignore: deprecated_member_use
                   groupValue: difficulty,
+                  // ignore: deprecated_member_use
                   onChanged: (v) {
                     if (v != null) onDifficultyChanged(v);
                   },

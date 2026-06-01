@@ -570,7 +570,7 @@ class _StepAvatar extends StatelessWidget {
                     duration: const Duration(milliseconds: 200),
                     decoration: BoxDecoration(
                       color: selected
-                          ? const Color(0xFFFFC107).withOpacity(0.15)
+                          ? const Color(0xFFFFC107).withAlpha(38)
                           : Colors.white,
                       border: Border.all(
                         color: selected

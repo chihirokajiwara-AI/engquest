@@ -1,4 +1,4 @@
-/// ENG Quest — Progress data models (C08 Parent Dashboard)
+// ENG Quest — Progress data models (C08 Parent Dashboard)
 
 class DailyProgress {
   final DateTime date;

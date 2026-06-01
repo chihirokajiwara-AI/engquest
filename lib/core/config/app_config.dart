@@ -2,7 +2,7 @@
 /// Replace kClaudeApiKey with your actual Anthropic API key at runtime,
 /// or inject via environment variable / Firestore Secret.
 /// When set to 'REPLACE_WITH_KEY', the Dialog module runs in offline mode.
-library app_config;
+library;
 
 const String kClaudeApiKey = 'REPLACE_WITH_KEY';
 

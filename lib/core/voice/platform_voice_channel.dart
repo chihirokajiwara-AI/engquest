@@ -6,8 +6,6 @@
 // Future:  swapped for real iOS (AVAudioRecorder) / Android (MediaRecorder)
 //          + whisper_ggml_plus v1.5.2 + base.en model implementation.
 
-import 'dart:typed_data';
-
 import 'package:flutter/services.dart';
 
 /// Platform channel stub for voice recording and Whisper transcription.

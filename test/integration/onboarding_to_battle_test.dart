@@ -49,6 +49,7 @@ class OnboardingPreferences {
   static const String _keyAvatar = 'onboarding_avatar';
   static const String _keyGoal = 'onboarding_goal_minutes';
 
+  // ignore: library_private_types_in_public_api
   OnboardingPreferences(this._prefs);
 
   bool get isOnboardingComplete => _prefs.getBool(_keyComplete);

@@ -3,7 +3,7 @@
 // Run: flutter test test/core/data/vocab_repository_test.dart
 
 import 'package:flutter_test/flutter_test.dart';
-import '../../../lib/core/models/vocab_item.dart';
+import 'package:engquest/core/models/vocab_item.dart';
 
 // Test helpers — simulate JSON loading without Flutter assets
 Map<String, dynamic> makeTestWord({

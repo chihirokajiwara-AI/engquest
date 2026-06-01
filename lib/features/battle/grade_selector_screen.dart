@@ -16,7 +16,6 @@ class _GradeInfo {
   final String description;
   final IconData icon;
   final Color color;
-  final bool hasContent;
 
   const _GradeInfo({
     required this.grade,
@@ -25,7 +24,6 @@ class _GradeInfo {
     required this.description,
     required this.icon,
     required this.color,
-    this.hasContent = true,
   });
 }
 
@@ -127,16 +125,6 @@ class GradeSelectorScreen extends StatelessWidget {
               info: g,
               isLocked: isLocked,
               onTap: () {
-                if (!g.hasContent) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('${g.label}のコンテンツは準備中です'),
-                      duration: const Duration(seconds: 2),
-                    ),
-                  );
-                  return;
-                }
-
                 if (isLocked) {
                   Navigator.push(
                     context,
@@ -183,92 +171,85 @@ class _GradeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final opacity = info.hasContent ? 1.0 : 0.5;
-
-    return Opacity(
-      opacity: opacity,
-      child: Material(
-        color: Colors.white,
+    return Material(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(16),
+      elevation: 2,
+      shadowColor: info.color.withAlpha(40),
+      child: InkWell(
+        onTap: onTap,
         borderRadius: BorderRadius.circular(16),
-        elevation: 2,
-        shadowColor: info.color.withAlpha(40),
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(16),
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: info.color.withAlpha(60)),
-            ),
-            child: Row(
-              children: [
-                // Grade icon
-                Container(
-                  width: 52,
-                  height: 52,
-                  decoration: BoxDecoration(
-                    color: info.color.withAlpha(25),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(info.icon, color: info.color, size: 28),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: info.color.withAlpha(60)),
+          ),
+          child: Row(
+            children: [
+              // Grade icon
+              Container(
+                width: 52,
+                height: 52,
+                decoration: BoxDecoration(
+                  color: info.color.withAlpha(25),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                const SizedBox(width: 16),
-                // Text
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            info.label,
-                            style: const TextStyle(
-                              color: Color(0xFF263238),
-                              fontSize: 18,
+                child: Icon(info.icon, color: info.color, size: 28),
+              ),
+              const SizedBox(width: 16),
+              // Text
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          info.label,
+                          style: const TextStyle(
+                            color: Color(0xFF263238),
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: info.color.withAlpha(20),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            info.cefrLabel,
+                            style: TextStyle(
+                              color: info.color,
+                              fontSize: 11,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(width: 8),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 2),
-                            decoration: BoxDecoration(
-                              color: info.color.withAlpha(20),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Text(
-                              info.cefrLabel,
-                              style: TextStyle(
-                                color: info.color,
-                                fontSize: 11,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        info.description,
-                        style: TextStyle(
-                          color: Colors.grey[600],
-                          fontSize: 13,
                         ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      info.description,
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 13,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                // Lock or arrow
-                if (isLocked)
-                  const Icon(Icons.lock, color: Colors.grey, size: 22)
-                else if (!info.hasContent)
-                  const Icon(Icons.hourglass_empty, color: Colors.grey, size: 22)
-                else
-                  Icon(Icons.arrow_forward_ios,
-                      color: info.color.withAlpha(150), size: 18),
-              ],
-            ),
+              ),
+              // Lock or arrow
+              if (isLocked)
+                const Icon(Icons.lock, color: Colors.grey, size: 22)
+              else
+                Icon(Icons.arrow_forward_ios,
+                    color: info.color.withAlpha(150), size: 18),
+            ],
           ),
         ),
       ),

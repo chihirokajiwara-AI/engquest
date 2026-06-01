@@ -77,7 +77,6 @@ class _VoiceScreenState extends State<VoiceScreen>
 
   // Per-word attempt tracking
   final List<VoiceResult> _sessionResults = [];
-  int _retryCount = 0;
 
   // ── Countdown timer ────────────────────────────────────────────────────────
   static const int _recordSeconds = 3;
@@ -140,12 +139,10 @@ class _VoiceScreenState extends State<VoiceScreen>
 
   void _startRecording() {
     if (_state != _ScreenState.idle) return;
-    _retryCount = 0;
     _beginRecordingCycle();
   }
 
   void _retryRecording() {
-    _retryCount++;
     _beginRecordingCycle();
   }
 
@@ -204,7 +201,6 @@ class _VoiceScreenState extends State<VoiceScreen>
       _wordIndex++;
       _state      = _ScreenState.idle;
       _lastResult = null;
-      _retryCount = 0;
     });
   }
 
@@ -213,7 +209,6 @@ class _VoiceScreenState extends State<VoiceScreen>
       _wordIndex     = 0;
       _state         = _ScreenState.idle;
       _lastResult    = null;
-      _retryCount    = 0;
       _sessionResults.clear();
     });
   }

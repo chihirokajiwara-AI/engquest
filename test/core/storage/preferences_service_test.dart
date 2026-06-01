@@ -8,7 +8,7 @@ void main() {
   // ---------------------------------------------------------------------------
 
   /// Resets the singleton and sets mock initial values for SharedPreferences.
-  Future<PreferencesService> _freshPrefs([
+  Future<PreferencesService> freshPrefs([
     Map<String, Object> initialValues = const {},
   ]) async {
     SharedPreferences.setMockInitialValues(initialValues);
@@ -22,24 +22,24 @@ void main() {
 
   group('getBool / setBool', () {
     test('returns false for unknown key', () async {
-      final prefs = await _freshPrefs();
+      final prefs = await freshPrefs();
       expect(prefs.getBool('nonexistent_key'), isFalse);
     });
 
     test('stores and retrieves true', () async {
-      final prefs = await _freshPrefs();
+      final prefs = await freshPrefs();
       await prefs.setBool('onboarding_complete', true);
       expect(prefs.getBool('onboarding_complete'), isTrue);
     });
 
     test('stores and retrieves false', () async {
-      final prefs = await _freshPrefs({'onboarding_complete': true});
+      final prefs = await freshPrefs({'onboarding_complete': true});
       await prefs.setBool('onboarding_complete', false);
       expect(prefs.getBool('onboarding_complete'), isFalse);
     });
 
     test('survives multiple writes (last write wins)', () async {
-      final prefs = await _freshPrefs();
+      final prefs = await freshPrefs();
       await prefs.setBool('flag', true);
       await prefs.setBool('flag', false);
       await prefs.setBool('flag', true);
@@ -47,7 +47,7 @@ void main() {
     });
 
     test('initial value from SharedPreferences.setMockInitialValues', () async {
-      final prefs = await _freshPrefs({'onboarding_complete': true});
+      final prefs = await freshPrefs({'onboarding_complete': true});
       expect(prefs.getBool('onboarding_complete'), isTrue);
     });
   });
@@ -58,36 +58,36 @@ void main() {
 
   group('getString / setString round-trip', () {
     test('returns null for unknown key', () async {
-      final prefs = await _freshPrefs();
+      final prefs = await freshPrefs();
       expect(prefs.getString('uid'), isNull);
     });
 
     test('round-trip for uid', () async {
-      final prefs = await _freshPrefs();
+      final prefs = await freshPrefs();
       await prefs.setString('uid', 'user-abc-123');
       expect(prefs.getString('uid'), 'user-abc-123');
     });
 
     test('round-trip for cefr_placement', () async {
-      final prefs = await _freshPrefs();
+      final prefs = await freshPrefs();
       await prefs.setString(PrefKeys.cefrPlacement, 'a1');
       expect(prefs.getString(PrefKeys.cefrPlacement), 'a1');
     });
 
     test('round-trip for avatar_id with unicode', () async {
-      final prefs = await _freshPrefs();
+      final prefs = await freshPrefs();
       await prefs.setString(PrefKeys.avatarId, 'knight_⚔️');
       expect(prefs.getString(PrefKeys.avatarId), 'knight_⚔️');
     });
 
     test('overwrites previous value', () async {
-      final prefs = await _freshPrefs({'uid': 'old-value'});
+      final prefs = await freshPrefs({'uid': 'old-value'});
       await prefs.setString('uid', 'new-value');
       expect(prefs.getString('uid'), 'new-value');
     });
 
     test('initial value from setMockInitialValues', () async {
-      final prefs = await _freshPrefs({'uid': 'preset-uid'});
+      final prefs = await freshPrefs({'uid': 'preset-uid'});
       expect(prefs.getString('uid'), 'preset-uid');
     });
   });
@@ -98,18 +98,18 @@ void main() {
 
   group('getInt / setInt', () {
     test('returns 0 for unknown key', () async {
-      final prefs = await _freshPrefs();
+      final prefs = await freshPrefs();
       expect(prefs.getInt('age_years'), 0);
     });
 
     test('round-trip for age_years', () async {
-      final prefs = await _freshPrefs();
+      final prefs = await freshPrefs();
       await prefs.setInt(PrefKeys.ageYears, 8);
       expect(prefs.getInt(PrefKeys.ageYears), 8);
     });
 
     test('round-trip for daily_goal_minutes', () async {
-      final prefs = await _freshPrefs();
+      final prefs = await freshPrefs();
       await prefs.setInt(PrefKeys.dailyGoalMinutes, 15);
       expect(prefs.getInt(PrefKeys.dailyGoalMinutes), 15);
     });
@@ -121,13 +121,13 @@ void main() {
 
   group('remove and clear', () {
     test('remove deletes a key', () async {
-      final prefs = await _freshPrefs({'uid': 'to-remove'});
+      final prefs = await freshPrefs({'uid': 'to-remove'});
       await prefs.remove('uid');
       expect(prefs.getString('uid'), isNull);
     });
 
     test('clear removes all keys', () async {
-      final prefs = await _freshPrefs();
+      final prefs = await freshPrefs();
       await prefs.setBool('onboarding_complete', true);
       await prefs.setString('uid', 'abc');
       await prefs.setInt('age_years', 10);
