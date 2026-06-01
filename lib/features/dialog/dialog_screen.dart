@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:engquest/core/config/app_config.dart';
 import 'package:engquest/core/dialog/claude_client.dart';
 import 'package:engquest/core/dialog/dialog_service.dart';
 import 'package:engquest/core/dialog/suggestion_engine.dart';
@@ -135,7 +134,7 @@ class _ScenarioCard extends StatelessWidget {
 
 /// Chat UI for talking with an NPC in [scenario].
 /// Uses [DialogService] backed by [ClaudeClient]; falls back to offline
-/// canned responses when [kClaudeApiKey] is 'REPLACE_WITH_KEY'.
+/// canned responses when no backend is configured.
 class DialogScreen extends StatefulWidget {
   final DialogScenario scenario;
 
@@ -160,7 +159,7 @@ class _DialogScreenState extends State<DialogScreen> {
   void initState() {
     super.initState();
     _service = DialogService(
-      client: ClaudeClient(apiKey: kClaudeApiKey),
+      client: ClaudeClient(),
     );
     // Initial NPC greeting
     _addNpcGreeting();
@@ -226,7 +225,7 @@ class _DialogScreenState extends State<DialogScreen> {
       appBar: _buildAppBar(),
       body: Column(
         children: [
-          _OfflineBanner(isOffline: ClaudeClient(apiKey: kClaudeApiKey).isOfflineMode),
+          _OfflineBanner(isOffline: ClaudeClient().isOfflineMode),
           Expanded(child: _buildMessageList()),
           if (_isLoading) const _TypingIndicator(),
           _buildQuickReplies(),

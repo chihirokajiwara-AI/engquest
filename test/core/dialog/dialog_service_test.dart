@@ -59,9 +59,9 @@ void main() {
     late DialogService service;
 
     setUp(() {
-      // Force offline mode by using placeholder key
+      // Force offline mode by using empty backend URL
       service = DialogService(
-        client: ClaudeClient(apiKey: 'REPLACE_WITH_KEY'),
+        client: ClaudeClient(backendUrl: ''),
       );
     });
 

@@ -15,6 +15,14 @@ class AuthService {
     return user.uid;
   }
 
+  /// Returns a fresh Firebase ID token for server-side verification.
+  /// Returns null if not signed in.
+  Future<String?> getIdToken() async {
+    final user = _auth.currentUser;
+    if (user == null) return null;
+    return user.getIdToken();
+  }
+
   /// Stream of auth state changes
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 

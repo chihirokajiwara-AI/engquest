@@ -28,7 +28,7 @@
       "word": "convenience",
       "reading": "コンビニエンス",
       "jpTranslation": "便利さ",
-      "cefrLevel": "b1",
+      "cefrLevel": "B1",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -52,7 +52,7 @@
       "word": "furnish",
       "reading": "ファーニッシュ",
       "jpTranslation": "家具を備え付ける",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -76,7 +76,7 @@
       "word": "decoration",
       "reading": "デコレーション",
       "jpTranslation": "装飾",
-      "cefrLevel": "b1",
+      "cefrLevel": "B1",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -100,7 +100,7 @@
       "word": "possession",
       "reading": "ポゼッション",
       "jpTranslation": "所有物",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -124,7 +124,7 @@
       "word": "reside",
       "reading": "リザイド",
       "jpTranslation": "居住する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -148,7 +148,7 @@
       "word": "dwelling",
       "reading": "ドウェリング",
       "jpTranslation": "住居",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -172,7 +172,7 @@
       "word": "inhabitant",
       "reading": "インハビタント",
       "jpTranslation": "住民",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -196,7 +196,7 @@
       "word": "tenant",
       "reading": "テナント",
       "jpTranslation": "賃借人",
-      "cefrLevel": "b1",
+      "cefrLevel": "B1",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -220,7 +220,7 @@
       "word": "sanitation",
       "reading": "サニテーション",
       "jpTranslation": "衛生設備",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -244,7 +244,7 @@
       "word": "disposal",
       "reading": "ディスポーザル",
       "jpTranslation": "処分",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -268,7 +268,7 @@
       "word": "clutter",
       "reading": "クラッター",
       "jpTranslation": "散らかったもの",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -292,7 +292,7 @@
       "word": "assemble",
       "reading": "アセンブル",
       "jpTranslation": "組み立てる",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -316,7 +316,7 @@
       "word": "insulate",
       "reading": "インシュレート",
       "jpTranslation": "断熱する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -340,7 +340,7 @@
       "word": "ventilate",
       "reading": "ベンチレート",
       "jpTranslation": "換気する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -364,7 +364,7 @@
       "word": "residence",
       "reading": "レジデンス",
       "jpTranslation": "住居",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -388,7 +388,7 @@
       "word": "suburban",
       "reading": "サバーバン",
       "jpTranslation": "郊外の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -412,7 +412,7 @@
       "word": "inhabit",
       "reading": "インハビット",
       "jpTranslation": "住む",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -436,7 +436,7 @@
       "word": "discard",
       "reading": "ディスカード",
       "jpTranslation": "捨てる",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -460,7 +460,7 @@
       "word": "relocate",
       "reading": "リロケート",
       "jpTranslation": "移転する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -484,7 +484,7 @@
       "word": "furnishing",
       "reading": "ファーニッシング",
       "jpTranslation": "家具・備品",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -508,7 +508,7 @@
       "word": "durable",
       "reading": "デュラブル",
       "jpTranslation": "耐久性のある",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -532,7 +532,7 @@
       "word": "adjacent",
       "reading": "アジェイセント",
       "jpTranslation": "隣接した",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -556,7 +556,7 @@
       "word": "boundary",
       "reading": "バウンダリー",
       "jpTranslation": "境界",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -580,7 +580,7 @@
       "word": "premises",
       "reading": "プレミシズ",
       "jpTranslation": "建物・敷地",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -604,7 +604,7 @@
       "word": "plumbing",
       "reading": "プランビング",
       "jpTranslation": "配管設備",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -628,7 +628,7 @@
       "word": "occupant",
       "reading": "オキュパント",
       "jpTranslation": "居住者",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -652,7 +652,7 @@
       "word": "refurbish",
       "reading": "リファービッシュ",
       "jpTranslation": "改装する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -676,7 +676,7 @@
       "word": "spacious",
       "reading": "スペイシャス",
       "jpTranslation": "広々とした",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -700,7 +700,7 @@
       "word": "compact",
       "reading": "コンパクト",
       "jpTranslation": "小型の",
-      "cefrLevel": "b1",
+      "cefrLevel": "B1",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -724,7 +724,7 @@
       "word": "suburb",
       "reading": "サバーブ",
       "jpTranslation": "郊外",
-      "cefrLevel": "b1",
+      "cefrLevel": "B1",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -748,7 +748,7 @@
       "word": "vicinity",
       "reading": "ビシニティ",
       "jpTranslation": "近辺",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -772,7 +772,7 @@
       "word": "rubbish",
       "reading": "ラビッシュ",
       "jpTranslation": "ごみ",
-      "cefrLevel": "b1",
+      "cefrLevel": "B1",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -796,7 +796,7 @@
       "word": "belongings",
       "reading": "ビロンギングズ",
       "jpTranslation": "持ち物",
-      "cefrLevel": "b1",
+      "cefrLevel": "B1",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -820,7 +820,7 @@
       "word": "applaud",
       "reading": "アプロード",
       "jpTranslation": "称賛する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -844,7 +844,7 @@
       "word": "abundant",
       "reading": "アバンダント",
       "jpTranslation": "豊富な",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -868,7 +868,7 @@
       "word": "litter",
       "reading": "リッター",
       "jpTranslation": "ごみを散らかす",
-      "cefrLevel": "b1",
+      "cefrLevel": "B1",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -892,7 +892,7 @@
       "word": "fixtures",
       "reading": "フィクスチャーズ",
       "jpTranslation": "設備・備品",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -916,7 +916,7 @@
       "word": "scenic",
       "reading": "シーニック",
       "jpTranslation": "景色の良い",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -940,7 +940,7 @@
       "word": "expedition",
       "reading": "エクスペディション",
       "jpTranslation": "遠征",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -964,7 +964,7 @@
       "word": "embark",
       "reading": "エンバーク",
       "jpTranslation": "乗り込む",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -988,7 +988,7 @@
       "word": "disembark",
       "reading": "ディスエンバーク",
       "jpTranslation": "下船する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -1012,7 +1012,7 @@
       "word": "voyage",
       "reading": "ボヤージュ",
       "jpTranslation": "航海",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -1036,7 +1036,7 @@
       "word": "luxury",
       "reading": "ラグジュアリー",
       "jpTranslation": "贅沢",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -1060,7 +1060,7 @@
       "word": "cuisine",
       "reading": "クイジーン",
       "jpTranslation": "料理",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -1084,7 +1084,7 @@
       "word": "cultural",
       "reading": "カルチュラル",
       "jpTranslation": "文化的な",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -1108,7 +1108,7 @@
       "word": "charter",
       "reading": "チャーター",
       "jpTranslation": "チャーターする",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -1132,7 +1132,7 @@
       "word": "accommodation",
       "reading": "アコモデーション",
       "jpTranslation": "宿泊施設",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -1156,7 +1156,7 @@
       "word": "leisure",
       "reading": "レジャー",
       "jpTranslation": "余暇",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -1180,7 +1180,7 @@
       "word": "recreation",
       "reading": "レクリエーション",
       "jpTranslation": "レクリエーション",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -1204,7 +1204,7 @@
       "word": "picturesque",
       "reading": "ピクチャレスク",
       "jpTranslation": "絵のように美しい",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -1228,7 +1228,7 @@
       "word": "baggage",
       "reading": "バゲージ",
       "jpTranslation": "手荷物",
-      "cefrLevel": "b1",
+      "cefrLevel": "B1",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -1252,7 +1252,7 @@
       "word": "peak season",
       "reading": "ピークシーズン",
       "jpTranslation": "繁忙期",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -1276,7 +1276,7 @@
       "word": "en route",
       "reading": "アンルート",
       "jpTranslation": "途中で",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adverb"
@@ -1300,7 +1300,7 @@
       "word": "complimentary",
       "reading": "コンプリメンタリー",
       "jpTranslation": "無料の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -1324,7 +1324,7 @@
       "word": "check-in",
       "reading": "チェックイン",
       "jpTranslation": "チェックイン",
-      "cefrLevel": "b1",
+      "cefrLevel": "B1",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -1348,7 +1348,7 @@
       "word": "check-out",
       "reading": "チェックアウト",
       "jpTranslation": "チェックアウト",
-      "cefrLevel": "b1",
+      "cefrLevel": "B1",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -1372,7 +1372,7 @@
       "word": "boarding",
       "reading": "ボーディング",
       "jpTranslation": "搭乗",
-      "cefrLevel": "b1",
+      "cefrLevel": "B1",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -1396,7 +1396,7 @@
       "word": "excite",
       "reading": "エクサイト",
       "jpTranslation": "興奮させる",
-      "cefrLevel": "b1",
+      "cefrLevel": "B1",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -1420,7 +1420,7 @@
       "word": "cardiovascular",
       "reading": "カーディオバスキュラー",
       "jpTranslation": "心臓血管の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -1444,7 +1444,7 @@
       "word": "respiratory",
       "reading": "レスピラトリー",
       "jpTranslation": "呼吸器の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -1468,7 +1468,7 @@
       "word": "hereditary",
       "reading": "ヘレディタリー",
       "jpTranslation": "遺伝性の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -1492,7 +1492,7 @@
       "word": "disorder",
       "reading": "ディスオーダー",
       "jpTranslation": "障害",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -1516,7 +1516,7 @@
       "word": "dehydration",
       "reading": "ディハイドレーション",
       "jpTranslation": "脱水",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -1540,7 +1540,7 @@
       "word": "metabolism",
       "reading": "メタボリズム",
       "jpTranslation": "代謝",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -1564,7 +1564,7 @@
       "word": "sanitary",
       "reading": "サニタリー",
       "jpTranslation": "衛生的な",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -1588,7 +1588,7 @@
       "word": "contamination",
       "reading": "コンタミネーション",
       "jpTranslation": "汚染",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -1612,7 +1612,7 @@
       "word": "hygiene",
       "reading": "ハイジーン",
       "jpTranslation": "衛生",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -1636,7 +1636,7 @@
       "word": "sterile",
       "reading": "ステライル",
       "jpTranslation": "無菌の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -1660,7 +1660,7 @@
       "word": "sedative",
       "reading": "セダティブ",
       "jpTranslation": "鎮静剤",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -1684,7 +1684,7 @@
       "word": "scan",
       "reading": "スキャン",
       "jpTranslation": "スキャン",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -1708,7 +1708,7 @@
       "word": "swelling",
       "reading": "スウェリング",
       "jpTranslation": "腫れ",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -1732,7 +1732,7 @@
       "word": "contagious",
       "reading": "コンテイジャス",
       "jpTranslation": "伝染性の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -1756,7 +1756,7 @@
       "word": "disability",
       "reading": "ディサビリティ",
       "jpTranslation": "障害",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -1780,7 +1780,7 @@
       "word": "longevity",
       "reading": "ロンジェヴィティ",
       "jpTranslation": "長寿",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -1804,7 +1804,7 @@
       "word": "prosthetic",
       "reading": "プロスセティック",
       "jpTranslation": "義肢の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -1828,7 +1828,7 @@
       "word": "ailment",
       "reading": "エイルメント",
       "jpTranslation": "軽い病気",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -1852,7 +1852,7 @@
       "word": "inoculation",
       "reading": "イノキュレーション",
       "jpTranslation": "予防接種",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -1876,7 +1876,7 @@
       "word": "perseverance",
       "reading": "パーシビアランス",
       "jpTranslation": "忍耐力",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -1900,7 +1900,7 @@
       "word": "frustration",
       "reading": "フラストレーション",
       "jpTranslation": "欲求不満",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -1924,7 +1924,7 @@
       "word": "melancholy",
       "reading": "メランコリー",
       "jpTranslation": "憂鬱",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -1948,7 +1948,7 @@
       "word": "arrogance",
       "reading": "アロガンス",
       "jpTranslation": "傲慢",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -1972,7 +1972,7 @@
       "word": "humility",
       "reading": "ヒュミリティ",
       "jpTranslation": "謙虚さ",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -1996,7 +1996,7 @@
       "word": "bitterness",
       "reading": "ビタネス",
       "jpTranslation": "苦しみ",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -2020,7 +2020,7 @@
       "word": "jealousy",
       "reading": "ジェラシー",
       "jpTranslation": "嫉妬",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -2044,7 +2044,7 @@
       "word": "optimism",
       "reading": "オプティミズム",
       "jpTranslation": "楽観主義",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -2068,7 +2068,7 @@
       "word": "pessimism",
       "reading": "ペシミズム",
       "jpTranslation": "悲観主義",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -2092,7 +2092,7 @@
       "word": "resentment",
       "reading": "レセントメント",
       "jpTranslation": "恨み",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -2116,7 +2116,7 @@
       "word": "tranquility",
       "reading": "トランクィリティ",
       "jpTranslation": "静けさ",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -2140,7 +2140,7 @@
       "word": "dignity",
       "reading": "ディグニティ",
       "jpTranslation": "尊厳",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -2164,7 +2164,7 @@
       "word": "consent",
       "reading": "コンセント",
       "jpTranslation": "同意",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -2188,7 +2188,7 @@
       "word": "distress",
       "reading": "ディストレス",
       "jpTranslation": "苦悩",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -2212,7 +2212,7 @@
       "word": "loneliness",
       "reading": "ロンリネス",
       "jpTranslation": "孤独",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -2236,7 +2236,7 @@
       "word": "modesty",
       "reading": "モデスティ",
       "jpTranslation": "謙虚さ",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -2260,7 +2260,7 @@
       "word": "temperament",
       "reading": "テンパーメント",
       "jpTranslation": "気質",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -2284,7 +2284,7 @@
       "word": "sentiment",
       "reading": "センティメント",
       "jpTranslation": "感情",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -2308,7 +2308,7 @@
       "word": "affinity",
       "reading": "アフィニティ",
       "jpTranslation": "親近感",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -2332,7 +2332,7 @@
       "word": "remorse",
       "reading": "リモース",
       "jpTranslation": "後悔",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -2356,7 +2356,7 @@
       "word": "elation",
       "reading": "イレイション",
       "jpTranslation": "喜び",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -2380,7 +2380,7 @@
       "word": "despair",
       "reading": "ディスペア",
       "jpTranslation": "絶望",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -2404,7 +2404,7 @@
       "word": "gratitude",
       "reading": "グラティチュード",
       "jpTranslation": "感謝",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -2428,7 +2428,7 @@
       "word": "compassionate",
       "reading": "コンパッショネート",
       "jpTranslation": "思いやりのある",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -2452,7 +2452,7 @@
       "word": "sincere",
       "reading": "シンシア",
       "jpTranslation": "誠実な",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -2476,7 +2476,7 @@
       "word": "assertive",
       "reading": "アサーティブ",
       "jpTranslation": "積極的な",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -2500,7 +2500,7 @@
       "word": "impulsive",
       "reading": "インパルシブ",
       "jpTranslation": "衝動的な",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -2524,7 +2524,7 @@
       "word": "witty",
       "reading": "ウィティ",
       "jpTranslation": "機知のある",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -2548,7 +2548,7 @@
       "word": "sympathetic",
       "reading": "シンパセティック",
       "jpTranslation": "共感的な",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -2572,7 +2572,7 @@
       "word": "awe",
       "reading": "オー",
       "jpTranslation": "畏敬の念",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -2596,7 +2596,7 @@
       "word": "bewilderment",
       "reading": "ビウィルダーメント",
       "jpTranslation": "当惑",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -2620,7 +2620,7 @@
       "word": "indignation",
       "reading": "インディグネーション",
       "jpTranslation": "憤慨",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -2644,7 +2644,7 @@
       "word": "exasperation",
       "reading": "エグザスパレーション",
       "jpTranslation": "苛立ち",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -2668,7 +2668,7 @@
       "word": "anticipation",
       "reading": "アンティシペーション",
       "jpTranslation": "期待",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -2692,7 +2692,7 @@
       "word": "hemisphere",
       "reading": "ヘミスフィア",
       "jpTranslation": "半球",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -2716,7 +2716,7 @@
       "word": "erosion",
       "reading": "イロージョン",
       "jpTranslation": "侵食",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -2740,7 +2740,7 @@
       "word": "avalanche",
       "reading": "アバランシュ",
       "jpTranslation": "雪崩",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -2764,7 +2764,7 @@
       "word": "cyclone",
       "reading": "サイクロン",
       "jpTranslation": "サイクロン",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -2788,7 +2788,7 @@
       "word": "condensation",
       "reading": "コンデンセーション",
       "jpTranslation": "結露",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -2812,7 +2812,7 @@
       "word": "evaporation",
       "reading": "エバポレーション",
       "jpTranslation": "蒸発",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -2836,7 +2836,7 @@
       "word": "ultraviolet",
       "reading": "アルトラバイオレット",
       "jpTranslation": "紫外線の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -2860,7 +2860,7 @@
       "word": "ozone",
       "reading": "オゾン",
       "jpTranslation": "オゾン",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -2884,7 +2884,7 @@
       "word": "frigid",
       "reading": "フリジッド",
       "jpTranslation": "極寒の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -2908,7 +2908,7 @@
       "word": "arid",
       "reading": "エリッド",
       "jpTranslation": "乾燥した",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -2932,7 +2932,7 @@
       "word": "temperate",
       "reading": "テンパレート",
       "jpTranslation": "温暖な",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -2956,7 +2956,7 @@
       "word": "permafrost",
       "reading": "パーマフロスト",
       "jpTranslation": "永久凍土",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -2980,7 +2980,7 @@
       "word": "heatwave",
       "reading": "ヒートウェーブ",
       "jpTranslation": "熱波",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -3004,7 +3004,7 @@
       "word": "thunderstorm",
       "reading": "サンダーストーム",
       "jpTranslation": "雷雨",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -3028,7 +3028,7 @@
       "word": "equatorial",
       "reading": "イクワトリアル",
       "jpTranslation": "赤道の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -3052,7 +3052,7 @@
       "word": "vortex",
       "reading": "ボルテックス",
       "jpTranslation": "渦",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -3076,7 +3076,7 @@
       "word": "seasonal",
       "reading": "シーズナル",
       "jpTranslation": "季節的な",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -3100,7 +3100,7 @@
       "word": "atmospheric",
       "reading": "アトモスフェリック",
       "jpTranslation": "大気の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -3124,7 +3124,7 @@
       "word": "windchill",
       "reading": "ウィンドチル",
       "jpTranslation": "体感温度",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -3148,7 +3148,7 @@
       "word": "updraft",
       "reading": "アップドラフト",
       "jpTranslation": "上昇気流",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -3172,7 +3172,7 @@
       "word": "barometric",
       "reading": "バロメトリック",
       "jpTranslation": "気圧の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -3196,7 +3196,7 @@
       "word": "fog",
       "reading": "フォグ",
       "jpTranslation": "濃霧",
-      "cefrLevel": "b1",
+      "cefrLevel": "B1",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -3220,7 +3220,7 @@
       "word": "weather pattern",
       "reading": "ウェザーパターン",
       "jpTranslation": "気象パターン",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -3244,7 +3244,7 @@
       "word": "articulate",
       "reading": "アーティキュレート",
       "jpTranslation": "明確に表現する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -3268,7 +3268,7 @@
       "word": "convey",
       "reading": "コンベイ",
       "jpTranslation": "伝える",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -3292,7 +3292,7 @@
       "word": "correspondence",
       "reading": "コレスポンデンス",
       "jpTranslation": "文通・通信",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -3316,7 +3316,7 @@
       "word": "rhetoric",
       "reading": "レトリック",
       "jpTranslation": "修辞法",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -3340,7 +3340,7 @@
       "word": "persuasion",
       "reading": "パースウェイジョン",
       "jpTranslation": "説得",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -3364,7 +3364,7 @@
       "word": "misinterpret",
       "reading": "ミスインタープレット",
       "jpTranslation": "誤解する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -3388,7 +3388,7 @@
       "word": "concise",
       "reading": "コンサイス",
       "jpTranslation": "簡潔な",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -3412,7 +3412,7 @@
       "word": "contradict",
       "reading": "コントラディクト",
       "jpTranslation": "矛盾する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -3436,7 +3436,7 @@
       "word": "confirmation",
       "reading": "コンファーメーション",
       "jpTranslation": "確認",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -3460,7 +3460,7 @@
       "word": "inquiry",
       "reading": "インクワイアリー",
       "jpTranslation": "問い合わせ",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -3484,7 +3484,7 @@
       "word": "citation",
       "reading": "サイテーション",
       "jpTranslation": "引用",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -3508,7 +3508,7 @@
       "word": "literal",
       "reading": "リテラル",
       "jpTranslation": "文字通りの",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -3532,7 +3532,7 @@
       "word": "figurative",
       "reading": "フィギュラティブ",
       "jpTranslation": "比喩的な",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -3556,7 +3556,7 @@
       "word": "medium",
       "reading": "ミーディアム",
       "jpTranslation": "媒体",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -3580,7 +3580,7 @@
       "word": "multilingual",
       "reading": "マルチリンガル",
       "jpTranslation": "多言語の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -3604,7 +3604,7 @@
       "word": "terminology",
       "reading": "ターミノロジー",
       "jpTranslation": "専門用語",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -3628,7 +3628,7 @@
       "word": "acronym",
       "reading": "アクロニム",
       "jpTranslation": "頭字語",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -3652,7 +3652,7 @@
       "word": "clarification",
       "reading": "クラリフィケーション",
       "jpTranslation": "明確化",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -3676,7 +3676,7 @@
       "word": "rebut",
       "reading": "リバット",
       "jpTranslation": "反論する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -3700,7 +3700,7 @@
       "word": "syntax",
       "reading": "シンタックス",
       "jpTranslation": "構文",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -3724,7 +3724,7 @@
       "word": "intonation",
       "reading": "イントネーション",
       "jpTranslation": "イントネーション",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -3748,7 +3748,7 @@
       "word": "abbreviation",
       "reading": "アブリビエーション",
       "jpTranslation": "略語",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -3772,7 +3772,7 @@
       "word": "enunciate",
       "reading": "イナンシエート",
       "jpTranslation": "明瞭に発音する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -3796,7 +3796,7 @@
       "word": "judiciary",
       "reading": "ジュディシャリー",
       "jpTranslation": "司法",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -3820,7 +3820,7 @@
       "word": "bureaucracy",
       "reading": "ビュロクラシー",
       "jpTranslation": "官僚制度",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -3844,7 +3844,7 @@
       "word": "ambassador",
       "reading": "アンバサダー",
       "jpTranslation": "大使",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -3868,7 +3868,7 @@
       "word": "civilian",
       "reading": "シビリアン",
       "jpTranslation": "市民",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -3892,7 +3892,7 @@
       "word": "rebellion",
       "reading": "レベリオン",
       "jpTranslation": "反乱",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -3916,7 +3916,7 @@
       "word": "liberation",
       "reading": "リベレーション",
       "jpTranslation": "解放",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -3940,7 +3940,7 @@
       "word": "prosecution",
       "reading": "プロセキューション",
       "jpTranslation": "起訴",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -3964,7 +3964,7 @@
       "word": "abolish",
       "reading": "アボリッシュ",
       "jpTranslation": "廃止する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -3988,7 +3988,7 @@
       "word": "enact",
       "reading": "エナクト",
       "jpTranslation": "制定する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -4012,7 +4012,7 @@
       "word": "ratify",
       "reading": "ラティファイ",
       "jpTranslation": "批准する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -4036,7 +4036,7 @@
       "word": "repeal",
       "reading": "リピール",
       "jpTranslation": "廃止する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -4060,7 +4060,7 @@
       "word": "jurisdiction",
       "reading": "ジュリスディクション",
       "jpTranslation": "管轄",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -4084,7 +4084,7 @@
       "word": "statute",
       "reading": "スタチュート",
       "jpTranslation": "法令",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -4108,7 +4108,7 @@
       "word": "clause",
       "reading": "クロース",
       "jpTranslation": "条項",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -4132,7 +4132,7 @@
       "word": "institution",
       "reading": "インスティチューション",
       "jpTranslation": "機関",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -4156,7 +4156,7 @@
       "word": "initiative",
       "reading": "イニシアティブ",
       "jpTranslation": "取り組み",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -4180,7 +4180,7 @@
       "word": "civil",
       "reading": "シビル",
       "jpTranslation": "市民の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -4204,7 +4204,7 @@
       "word": "federal",
       "reading": "フェデラル",
       "jpTranslation": "連邦の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -4228,7 +4228,7 @@
       "word": "probation",
       "reading": "プロベーション",
       "jpTranslation": "試用期間",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -4252,7 +4252,7 @@
       "word": "redundancy",
       "reading": "リダンダンシー",
       "jpTranslation": "余剰人員",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -4276,7 +4276,7 @@
       "word": "remuneration",
       "reading": "リミュネレーション",
       "jpTranslation": "報酬",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -4300,7 +4300,7 @@
       "word": "enterprise",
       "reading": "エンタープライズ",
       "jpTranslation": "企業",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -4324,7 +4324,7 @@
       "word": "recruitment",
       "reading": "リクルートメント",
       "jpTranslation": "採用",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -4348,7 +4348,7 @@
       "word": "outsource",
       "reading": "アウトソース",
       "jpTranslation": "外注する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -4372,7 +4372,7 @@
       "word": "subcontract",
       "reading": "サブコントラクト",
       "jpTranslation": "下請けに出す",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -4396,7 +4396,7 @@
       "word": "portfolio",
       "reading": "ポートフォリオ",
       "jpTranslation": "ポートフォリオ",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -4420,7 +4420,7 @@
       "word": "hierarchy",
       "reading": "ハイアラーキー",
       "jpTranslation": "階層",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -4444,7 +4444,7 @@
       "word": "restructure",
       "reading": "リストラクチャー",
       "jpTranslation": "再編する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -4468,7 +4468,7 @@
       "word": "workload",
       "reading": "ワークロード",
       "jpTranslation": "仕事量",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -4492,7 +4492,7 @@
       "word": "appraisal",
       "reading": "アプレイザル",
       "jpTranslation": "評価",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -4516,7 +4516,7 @@
       "word": "profit margin",
       "reading": "プロフィットマージン",
       "jpTranslation": "利益率",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -4540,7 +4540,7 @@
       "word": "managerial",
       "reading": "マネジェリアル",
       "jpTranslation": "管理職の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -4564,7 +4564,7 @@
       "word": "phishing",
       "reading": "フィッシング",
       "jpTranslation": "フィッシング",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -4588,7 +4588,7 @@
       "word": "simulation",
       "reading": "シミュレーション",
       "jpTranslation": "シミュレーション",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -4612,7 +4612,7 @@
       "word": "robotics",
       "reading": "ロボティクス",
       "jpTranslation": "ロボット工学",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -4636,7 +4636,7 @@
       "word": "nanotechnology",
       "reading": "ナノテクノロジー",
       "jpTranslation": "ナノテクノロジー",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -4660,7 +4660,7 @@
       "word": "satellite",
       "reading": "サテライト",
       "jpTranslation": "衛星",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -4684,7 +4684,7 @@
       "word": "transmission",
       "reading": "トランスミッション",
       "jpTranslation": "伝送",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -4708,7 +4708,7 @@
       "word": "compatibility",
       "reading": "コンパティビリティ",
       "jpTranslation": "互換性",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -4732,7 +4732,7 @@
       "word": "binary",
       "reading": "バイナリー",
       "jpTranslation": "二進法の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -4756,7 +4756,7 @@
       "word": "pixel",
       "reading": "ピクセル",
       "jpTranslation": "ピクセル",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -4780,7 +4780,7 @@
       "word": "protocol",
       "reading": "プロトコル",
       "jpTranslation": "プロトコル",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -4804,7 +4804,7 @@
       "word": "source code",
       "reading": "ソースコード",
       "jpTranslation": "ソースコード",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -4828,7 +4828,7 @@
       "word": "debug",
       "reading": "デバッグ",
       "jpTranslation": "デバッグする",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -4852,7 +4852,7 @@
       "word": "deploy",
       "reading": "デプロイ",
       "jpTranslation": "展開する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -4876,7 +4876,7 @@
       "word": "data breach",
       "reading": "データブリーチ",
       "jpTranslation": "データ漏洩",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -4900,7 +4900,7 @@
       "word": "digital footprint",
       "reading": "デジタルフットプリント",
       "jpTranslation": "デジタルフットプリント",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -4924,7 +4924,7 @@
       "word": "biometrics",
       "reading": "バイオメトリクス",
       "jpTranslation": "生体認証",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -4948,7 +4948,7 @@
       "word": "version control",
       "reading": "バージョンコントロール",
       "jpTranslation": "バージョン管理",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -4972,7 +4972,7 @@
       "word": "cybercrime",
       "reading": "サイバークライム",
       "jpTranslation": "サイバー犯罪",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -4996,7 +4996,7 @@
       "word": "connectivity",
       "reading": "コネクティビティ",
       "jpTranslation": "接続性",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -5020,7 +5020,7 @@
       "word": "precision",
       "reading": "プレシジョン",
       "jpTranslation": "精密さ",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -5044,7 +5044,7 @@
       "word": "organism",
       "reading": "オーガニズム",
       "jpTranslation": "生物",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -5068,7 +5068,7 @@
       "word": "friction",
       "reading": "フリクション",
       "jpTranslation": "摩擦",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -5092,7 +5092,7 @@
       "word": "camouflage",
       "reading": "カモフラージュ",
       "jpTranslation": "カモフラージュ",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -5116,7 +5116,7 @@
       "word": "migrate",
       "reading": "マイグレート",
       "jpTranslation": "移住する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -5140,7 +5140,7 @@
       "word": "hibernate",
       "reading": "ハイバーネート",
       "jpTranslation": "冬眠する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -5164,7 +5164,7 @@
       "word": "decompose",
       "reading": "ディコンポーズ",
       "jpTranslation": "分解する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -5188,7 +5188,7 @@
       "word": "absorption",
       "reading": "アブソープション",
       "jpTranslation": "吸収",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -5212,7 +5212,7 @@
       "word": "periodic table",
       "reading": "ピリオディックテーブル",
       "jpTranslation": "周期表",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -5236,7 +5236,7 @@
       "word": "chemical reaction",
       "reading": "ケミカルリアクション",
       "jpTranslation": "化学反応",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -5260,7 +5260,7 @@
       "word": "pollinate",
       "reading": "ポリネート",
       "jpTranslation": "受粉させる",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -5284,7 +5284,7 @@
       "word": "ecosystem service",
       "reading": "エコシステムサービス",
       "jpTranslation": "生態系サービス",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -5308,7 +5308,7 @@
       "word": "tectonic",
       "reading": "テクトニック",
       "jpTranslation": "地殻の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -5332,7 +5332,7 @@
       "word": "amateur",
       "reading": "アマチュア",
       "jpTranslation": "アマチュア",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -5356,7 +5356,7 @@
       "word": "discipline",
       "reading": "ディシプリン",
       "jpTranslation": "規律",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -5380,7 +5380,7 @@
       "word": "rivalry",
       "reading": "ライバルリー",
       "jpTranslation": "ライバル関係",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -5404,7 +5404,7 @@
       "word": "coordination",
       "reading": "コーオーディネーション",
       "jpTranslation": "協調性",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -5428,7 +5428,7 @@
       "word": "tactic",
       "reading": "タクティック",
       "jpTranslation": "戦術",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -5452,7 +5452,7 @@
       "word": "elimination",
       "reading": "エリミネーション",
       "jpTranslation": "敗退",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -5476,7 +5476,7 @@
       "word": "qualify",
       "reading": "クオリファイ",
       "jpTranslation": "予選を通過する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -5500,7 +5500,7 @@
       "word": "disqualify",
       "reading": "ディスクオリファイ",
       "jpTranslation": "失格にする",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -5524,7 +5524,7 @@
       "word": "obstacle",
       "reading": "オブスタクル",
       "jpTranslation": "障害物",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -5548,7 +5548,7 @@
       "word": "relay",
       "reading": "リレー",
       "jpTranslation": "リレー",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -5572,7 +5572,7 @@
       "word": "gymnasium",
       "reading": "ジムナジアム",
       "jpTranslation": "体育館",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -5596,7 +5596,7 @@
       "word": "sculpture",
       "reading": "スカルプチャー",
       "jpTranslation": "彫刻",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -5620,7 +5620,7 @@
       "word": "embroidery",
       "reading": "エンブロイダリー",
       "jpTranslation": "刺繍",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -5644,7 +5644,7 @@
       "word": "craftsmanship",
       "reading": "クラフツマンシップ",
       "jpTranslation": "職人技",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -5668,7 +5668,7 @@
       "word": "rehearsal",
       "reading": "リハーサル",
       "jpTranslation": "リハーサル",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -5692,7 +5692,7 @@
       "word": "audition",
       "reading": "オーディション",
       "jpTranslation": "オーディション",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -5716,7 +5716,7 @@
       "word": "memoir",
       "reading": "メモワール",
       "jpTranslation": "回顧録",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -5740,7 +5740,7 @@
       "word": "biography",
       "reading": "バイオグラフィ",
       "jpTranslation": "伝記",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -5764,7 +5764,7 @@
       "word": "fiction",
       "reading": "フィクション",
       "jpTranslation": "フィクション",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -5788,7 +5788,7 @@
       "word": "nonfiction",
       "reading": "ノンフィクション",
       "jpTranslation": "ノンフィクション",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -5812,7 +5812,7 @@
       "word": "anthology",
       "reading": "アンソロジー",
       "jpTranslation": "アンソロジー",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -5836,7 +5836,7 @@
       "word": "improvise",
       "reading": "インプロバイズ",
       "jpTranslation": "即興で行う",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -5860,7 +5860,7 @@
       "word": "compose",
       "reading": "コンポーズ",
       "jpTranslation": "作曲する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -5884,7 +5884,7 @@
       "word": "rehearse",
       "reading": "リハース",
       "jpTranslation": "リハーサルをする",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -5908,7 +5908,7 @@
       "word": "choreography",
       "reading": "コリオグラフィ",
       "jpTranslation": "振り付け",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -5932,7 +5932,7 @@
       "word": "premiere",
       "reading": "プレミア",
       "jpTranslation": "初演",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -5956,7 +5956,7 @@
       "word": "portray",
       "reading": "ポートレイ",
       "jpTranslation": "描写する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -5980,7 +5980,7 @@
       "word": "spectacle",
       "reading": "スペクタクル",
       "jpTranslation": "見世物",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -6004,7 +6004,7 @@
       "word": "acrobatics",
       "reading": "アクロバティクス",
       "jpTranslation": "曲芸",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -6028,7 +6028,7 @@
       "word": "improvisation",
       "reading": "インプロビゼーション",
       "jpTranslation": "即興",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -6052,7 +6052,7 @@
       "word": "syllabus",
       "reading": "シラバス",
       "jpTranslation": "シラバス",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -6076,7 +6076,7 @@
       "word": "tutorial",
       "reading": "チュートリアル",
       "jpTranslation": "個別指導",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -6100,7 +6100,7 @@
       "word": "undergraduate",
       "reading": "アンダーグラジュエート",
       "jpTranslation": "学部生",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -6124,7 +6124,7 @@
       "word": "postgraduate",
       "reading": "ポストグラジュエート",
       "jpTranslation": "大学院生",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -6148,7 +6148,7 @@
       "word": "dean",
       "reading": "ディーン",
       "jpTranslation": "学部長",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -6172,7 +6172,7 @@
       "word": "exchange program",
       "reading": "エクスチェンジプログラム",
       "jpTranslation": "交換留学",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -6196,7 +6196,7 @@
       "word": "specialize",
       "reading": "スペシャライズ",
       "jpTranslation": "専門にする",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -6220,7 +6220,7 @@
       "word": "transaction",
       "reading": "トランザクション",
       "jpTranslation": "取引",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -6244,7 +6244,7 @@
       "word": "deflation",
       "reading": "デフレーション",
       "jpTranslation": "デフレ",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -6268,7 +6268,7 @@
       "word": "surplus",
       "reading": "サープラス",
       "jpTranslation": "余剰",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -6292,7 +6292,7 @@
       "word": "deficit",
       "reading": "デフィシット",
       "jpTranslation": "赤字",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -6316,7 +6316,7 @@
       "word": "credit score",
       "reading": "クレジットスコア",
       "jpTranslation": "クレジットスコア",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -6340,7 +6340,7 @@
       "word": "appreciation",
       "reading": "アプリシエーション",
       "jpTranslation": "値上がり",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -6364,7 +6364,7 @@
       "word": "commodity",
       "reading": "コモディティ",
       "jpTranslation": "商品",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -6388,7 +6388,7 @@
       "word": "brand loyalty",
       "reading": "ブランドロイヤルティ",
       "jpTranslation": "ブランドロイヤリティ",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -6412,7 +6412,7 @@
       "word": "monopoly",
       "reading": "モノポリー",
       "jpTranslation": "独占",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -6436,7 +6436,7 @@
       "word": "credit",
       "reading": "クレジット",
       "jpTranslation": "信用",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -6460,7 +6460,7 @@
       "word": "capital",
       "reading": "キャピタル",
       "jpTranslation": "資本",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -6484,7 +6484,7 @@
       "word": "bid",
       "reading": "ビッド",
       "jpTranslation": "入札する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -6508,7 +6508,7 @@
       "word": "estimate",
       "reading": "エスティメート",
       "jpTranslation": "見積もる",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -6532,7 +6532,7 @@
       "word": "reimburse",
       "reading": "リインバース",
       "jpTranslation": "払い戻す",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -6556,7 +6556,7 @@
       "word": "debit",
       "reading": "デビット",
       "jpTranslation": "借方",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -6580,7 +6580,7 @@
       "word": "reimbursement",
       "reading": "リインバースメント",
       "jpTranslation": "払い戻し",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -6604,7 +6604,7 @@
       "word": "simultaneous",
       "reading": "シマルテニアス",
       "jpTranslation": "同時の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -6628,7 +6628,7 @@
       "word": "consecutive",
       "reading": "コンセキュティブ",
       "jpTranslation": "連続した",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -6652,7 +6652,7 @@
       "word": "intermittent",
       "reading": "インターミテント",
       "jpTranslation": "断続的な",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -6676,7 +6676,7 @@
       "word": "subsequent",
       "reading": "サブシークウェント",
       "jpTranslation": "その後の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -6700,7 +6700,7 @@
       "word": "prior",
       "reading": "プライア",
       "jpTranslation": "以前の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -6724,7 +6724,7 @@
       "word": "prolonged",
       "reading": "プロロングド",
       "jpTranslation": "長引いた",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -6748,7 +6748,7 @@
       "word": "temporary",
       "reading": "テンポラリー",
       "jpTranslation": "一時的な",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -6772,7 +6772,7 @@
       "word": "instantaneous",
       "reading": "インスタンテイニアス",
       "jpTranslation": "瞬間的な",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -6796,7 +6796,7 @@
       "word": "recurring",
       "reading": "リカーリング",
       "jpTranslation": "繰り返す",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -6820,7 +6820,7 @@
       "word": "eventual",
       "reading": "イベンチュアル",
       "jpTranslation": "最終的な",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -6844,7 +6844,7 @@
       "word": "imminent",
       "reading": "イミネント",
       "jpTranslation": "差し迫った",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -6868,7 +6868,7 @@
       "word": "transient",
       "reading": "トランジェント",
       "jpTranslation": "一過性の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -6892,7 +6892,7 @@
       "word": "perpetual",
       "reading": "パーペチュアル",
       "jpTranslation": "永続的な",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -6916,7 +6916,7 @@
       "word": "swift",
       "reading": "スウィフト",
       "jpTranslation": "素早い",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -6940,7 +6940,7 @@
       "word": "postpone",
       "reading": "ポストポーン",
       "jpTranslation": "延期する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -6964,7 +6964,7 @@
       "word": "suspend",
       "reading": "サスペンド",
       "jpTranslation": "一時停止する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -6988,7 +6988,7 @@
       "word": "lapse",
       "reading": "ラプス",
       "jpTranslation": "経過する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -7012,7 +7012,7 @@
       "word": "expire",
       "reading": "エクスパイア",
       "jpTranslation": "期限が切れる",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -7036,7 +7036,7 @@
       "word": "elapse",
       "reading": "イラプス",
       "jpTranslation": "経過する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -7060,7 +7060,7 @@
       "word": "epoch",
       "reading": "エポック",
       "jpTranslation": "新時代",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -7084,7 +7084,7 @@
       "word": "sequence",
       "reading": "シークエンス",
       "jpTranslation": "順序",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -7108,7 +7108,7 @@
       "word": "punctuality",
       "reading": "パンクチュアリティ",
       "jpTranslation": "時間厳守",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -7132,7 +7132,7 @@
       "word": "regularly",
       "reading": "レギュラリー",
       "jpTranslation": "定期的に",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adverb"
@@ -7156,7 +7156,7 @@
       "word": "provisional",
       "reading": "プロビジョナル",
       "jpTranslation": "仮の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -7180,7 +7180,7 @@
       "word": "periodically",
       "reading": "ピリオディカリー",
       "jpTranslation": "定期的に",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adverb"
@@ -7204,7 +7204,7 @@
       "word": "recurrent",
       "reading": "リカレント",
       "jpTranslation": "繰り返し起きる",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -7228,7 +7228,7 @@
       "word": "benefactor",
       "reading": "ベネファクター",
       "jpTranslation": "後援者",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -7252,7 +7252,7 @@
       "word": "estrange",
       "reading": "エストレンジ",
       "jpTranslation": "疎遠にする",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -7276,7 +7276,7 @@
       "word": "reconcile",
       "reading": "レコンサイル",
       "jpTranslation": "和解する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -7300,7 +7300,7 @@
       "word": "betray",
       "reading": "ビトレイ",
       "jpTranslation": "裏切る",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -7324,7 +7324,7 @@
       "word": "commitment",
       "reading": "コミットメント",
       "jpTranslation": "責任・献身",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -7348,7 +7348,7 @@
       "word": "obligation",
       "reading": "オブリゲーション",
       "jpTranslation": "義務",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -7372,7 +7372,7 @@
       "word": "mediate",
       "reading": "メディエート",
       "jpTranslation": "仲介する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -7396,7 +7396,7 @@
       "word": "rapport",
       "reading": "ラポール",
       "jpTranslation": "信頼関係",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -7420,7 +7420,7 @@
       "word": "empathize",
       "reading": "エンパサイズ",
       "jpTranslation": "共感する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -7444,7 +7444,7 @@
       "word": "dependency",
       "reading": "ディペンデンシー",
       "jpTranslation": "依存",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -7468,7 +7468,7 @@
       "word": "separation",
       "reading": "セパレーション",
       "jpTranslation": "別離",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -7492,7 +7492,7 @@
       "word": "superior",
       "reading": "スピリア",
       "jpTranslation": "上司・上位者",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -7516,7 +7516,7 @@
       "word": "subordinate",
       "reading": "サボーディネート",
       "jpTranslation": "部下",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -7540,7 +7540,7 @@
       "word": "admiration",
       "reading": "アドミレーション",
       "jpTranslation": "尊敬",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -7564,7 +7564,7 @@
       "word": "attachment",
       "reading": "アタッチメント",
       "jpTranslation": "愛着",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -7588,7 +7588,7 @@
       "word": "esteem",
       "reading": "エスティーム",
       "jpTranslation": "尊重",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -7612,7 +7612,7 @@
       "word": "resent",
       "reading": "リゼント",
       "jpTranslation": "恨む",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -7636,7 +7636,7 @@
       "word": "disappoint",
       "reading": "ディサポイント",
       "jpTranslation": "がっかりさせる",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -7660,7 +7660,7 @@
       "word": "discourage",
       "reading": "ディスカレッジ",
       "jpTranslation": "意欲をそぐ",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -7684,7 +7684,7 @@
       "word": "sacrifice",
       "reading": "サクリファイス",
       "jpTranslation": "犠牲にする",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -7708,7 +7708,7 @@
       "word": "confront",
       "reading": "コンフロント",
       "jpTranslation": "対決する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -7732,7 +7732,7 @@
       "word": "estrangement",
       "reading": "エストレンジメント",
       "jpTranslation": "疎遠",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -7756,7 +7756,7 @@
       "word": "kinship",
       "reading": "キンシップ",
       "jpTranslation": "親族関係",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -7780,7 +7780,7 @@
       "word": "cobblestone",
       "reading": "コブルストーン",
       "jpTranslation": "石畳",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -7804,7 +7804,7 @@
       "word": "windowsill",
       "reading": "ウィンドウシル",
       "jpTranslation": "窓台",
-      "cefrLevel": "b1",
+      "cefrLevel": "B1",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -7828,7 +7828,7 @@
       "word": "corridor",
       "reading": "コリドー",
       "jpTranslation": "廊下",
-      "cefrLevel": "b1",
+      "cefrLevel": "B1",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -7852,7 +7852,7 @@
       "word": "loft",
       "reading": "ロフト",
       "jpTranslation": "屋根裏部屋",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -7876,7 +7876,7 @@
       "word": "rooftop",
       "reading": "ルーフトップ",
       "jpTranslation": "屋上",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -7900,7 +7900,7 @@
       "word": "terrace",
       "reading": "テラス",
       "jpTranslation": "テラス",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -7924,7 +7924,7 @@
       "word": "fireplace",
       "reading": "ファイアープレイス",
       "jpTranslation": "暖炉",
-      "cefrLevel": "b1",
+      "cefrLevel": "B1",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -7948,7 +7948,7 @@
       "word": "chimney",
       "reading": "チムニー",
       "jpTranslation": "煙突",
-      "cefrLevel": "b1",
+      "cefrLevel": "B1",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -7972,7 +7972,7 @@
       "word": "staircase",
       "reading": "ステアケース",
       "jpTranslation": "階段",
-      "cefrLevel": "b1",
+      "cefrLevel": "B1",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -7996,7 +7996,7 @@
       "word": "letterbox",
       "reading": "レターボックス",
       "jpTranslation": "郵便受け",
-      "cefrLevel": "b1",
+      "cefrLevel": "B1",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -8020,7 +8020,7 @@
       "word": "cutlery",
       "reading": "カトラリー",
       "jpTranslation": "カトラリー",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -8044,7 +8044,7 @@
       "word": "crockery",
       "reading": "クロッカリー",
       "jpTranslation": "陶器類",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -8068,7 +8068,7 @@
       "word": "spatula",
       "reading": "スパチュラ",
       "jpTranslation": "ヘラ",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -8092,7 +8092,7 @@
       "word": "chopping board",
       "reading": "チョッピングボード",
       "jpTranslation": "まな板",
-      "cefrLevel": "b1",
+      "cefrLevel": "B1",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -8116,7 +8116,7 @@
       "word": "napkin",
       "reading": "ナプキン",
       "jpTranslation": "ナプキン",
-      "cefrLevel": "b1",
+      "cefrLevel": "B1",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -8140,7 +8140,7 @@
       "word": "tablecloth",
       "reading": "テーブルクロス",
       "jpTranslation": "テーブルクロス",
-      "cefrLevel": "b1",
+      "cefrLevel": "B1",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -8164,7 +8164,7 @@
       "word": "ironing",
       "reading": "アイロニング",
       "jpTranslation": "アイロンがけ",
-      "cefrLevel": "b1",
+      "cefrLevel": "B1",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -8188,7 +8188,7 @@
       "word": "sustainable living",
       "reading": "サステナブルリビング",
       "jpTranslation": "持続可能な生活",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -8212,7 +8212,7 @@
       "word": "energy efficient",
       "reading": "エネルギーエフィシェント",
       "jpTranslation": "省エネの",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -8236,7 +8236,7 @@
       "word": "water conservation",
       "reading": "ウォーターコンサーベーション",
       "jpTranslation": "水の保全",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -8260,7 +8260,7 @@
       "word": "urban farming",
       "reading": "アーバンファーミング",
       "jpTranslation": "都市農業",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -8284,7 +8284,7 @@
       "word": "organic food",
       "reading": "オーガニックフード",
       "jpTranslation": "オーガニック食品",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -8308,7 +8308,7 @@
       "word": "fair trade",
       "reading": "フェアトレード",
       "jpTranslation": "フェアトレード",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -8332,7 +8332,7 @@
       "word": "minimalism",
       "reading": "ミニマリズム",
       "jpTranslation": "ミニマリズム",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -8356,7 +8356,7 @@
       "word": "digital detox",
       "reading": "デジタルデトックス",
       "jpTranslation": "デジタルデトックス",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -8380,7 +8380,7 @@
       "word": "sleep hygiene",
       "reading": "スリープハイジーン",
       "jpTranslation": "睡眠衛生",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -8404,7 +8404,7 @@
       "word": "screen time",
       "reading": "スクリーンタイム",
       "jpTranslation": "スクリーンタイム",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -8428,7 +8428,7 @@
       "word": "plastic-free",
       "reading": "プラスティックフリー",
       "jpTranslation": "プラスチックフリーの",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -8452,7 +8452,7 @@
       "word": "ethical consumption",
       "reading": "エシカルコンサンプション",
       "jpTranslation": "倫理的消費",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -8476,7 +8476,7 @@
       "word": "food miles",
       "reading": "フードマイルズ",
       "jpTranslation": "フードマイル",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -8500,7 +8500,7 @@
       "word": "circular economy",
       "reading": "サーキュラーエコノミー",
       "jpTranslation": "循環型経済",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -8524,7 +8524,7 @@
       "word": "upcycling",
       "reading": "アップサイクリング",
       "jpTranslation": "アップサイクリング",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -8548,7 +8548,7 @@
       "word": "clean energy",
       "reading": "クリーンエナジー",
       "jpTranslation": "クリーンエネルギー",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -8572,7 +8572,7 @@
       "word": "wind turbine",
       "reading": "ウィンドタービン",
       "jpTranslation": "風力タービン",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -8596,7 +8596,7 @@
       "word": "emissions trading",
       "reading": "エミッションズトレーディング",
       "jpTranslation": "排出権取引",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -8620,7 +8620,7 @@
       "word": "centerpiece",
       "reading": "センターピース",
       "jpTranslation": "中心となるもの",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -8644,7 +8644,7 @@
       "word": "tour guide",
       "reading": "ツアーガイド",
       "jpTranslation": "観光ガイド",
-      "cefrLevel": "b1",
+      "cefrLevel": "B1",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -8668,7 +8668,7 @@
       "word": "all-inclusive",
       "reading": "オールインクルーシブ",
       "jpTranslation": "全込みの",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -8692,7 +8692,7 @@
       "word": "bellhop",
       "reading": "ベルホップ",
       "jpTranslation": "ベルボーイ",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -8716,7 +8716,7 @@
       "word": "minibar",
       "reading": "ミニバー",
       "jpTranslation": "ミニバー",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -8740,7 +8740,7 @@
       "word": "bed and breakfast",
       "reading": "ベッドアンドブレックファスト",
       "jpTranslation": "B&B",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -8764,7 +8764,7 @@
       "word": "caravan",
       "reading": "キャラバン",
       "jpTranslation": "キャラバン",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -8788,7 +8788,7 @@
       "word": "kayak",
       "reading": "カヤック",
       "jpTranslation": "カヤック",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -8812,7 +8812,7 @@
       "word": "paragliding",
       "reading": "パラグライディング",
       "jpTranslation": "パラグライダー",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -8836,7 +8836,7 @@
       "word": "snorkeling",
       "reading": "スノーケリング",
       "jpTranslation": "シュノーケリング",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -8860,7 +8860,7 @@
       "word": "scuba diving",
       "reading": "スキューバダイビング",
       "jpTranslation": "スキューバダイビング",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -8884,7 +8884,7 @@
       "word": "bungee jumping",
       "reading": "バンジージャンプ",
       "jpTranslation": "バンジージャンプ",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -8908,7 +8908,7 @@
       "word": "skydiving",
       "reading": "スカイダイビング",
       "jpTranslation": "スカイダイビング",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -8932,7 +8932,7 @@
       "word": "self-catering",
       "reading": "セルフケイタリング",
       "jpTranslation": "自炊の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -8956,7 +8956,7 @@
       "word": "hitchhike",
       "reading": "ヒッチハイク",
       "jpTranslation": "ヒッチハイクする",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -8980,7 +8980,7 @@
       "word": "motorhome",
       "reading": "モーターホーム",
       "jpTranslation": "モーターホーム",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9004,7 +9004,7 @@
       "word": "sustainable tourism",
       "reading": "サステナブルツーリズム",
       "jpTranslation": "持続可能な観光",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9028,7 +9028,7 @@
       "word": "ecotourism",
       "reading": "エコツーリズム",
       "jpTranslation": "エコツーリズム",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9052,7 +9052,7 @@
       "word": "voluntourism",
       "reading": "ボランツーリズム",
       "jpTranslation": "ボランティア旅行",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9076,7 +9076,7 @@
       "word": "gap year",
       "reading": "ギャップイヤー",
       "jpTranslation": "ギャップイヤー",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9100,7 +9100,7 @@
       "word": "working holiday",
       "reading": "ワーキングホリデー",
       "jpTranslation": "ワーキングホリデー",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9124,7 +9124,7 @@
       "word": "digital nomad",
       "reading": "デジタルノマド",
       "jpTranslation": "デジタルノマド",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9148,7 +9148,7 @@
       "word": "culture shock",
       "reading": "カルチャーショック",
       "jpTranslation": "カルチャーショック",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9172,7 +9172,7 @@
       "word": "expatriate",
       "reading": "エクスパトリエート",
       "jpTranslation": "海外在住者",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9196,7 +9196,7 @@
       "word": "co-working space",
       "reading": "コーワーキングスペース",
       "jpTranslation": "コワーキングスペース",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9220,7 +9220,7 @@
       "word": "reverse culture shock",
       "reading": "リバースカルチャーショック",
       "jpTranslation": "逆カルチャーショック",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9244,7 +9244,7 @@
       "word": "repatriation",
       "reading": "リパトリエーション",
       "jpTranslation": "本国帰還",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9268,7 +9268,7 @@
       "word": "emigration",
       "reading": "エミグレーション",
       "jpTranslation": "移民",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9292,7 +9292,7 @@
       "word": "tonsil",
       "reading": "トンシル",
       "jpTranslation": "扁桃腺",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9316,7 +9316,7 @@
       "word": "appendix",
       "reading": "アペンディックス",
       "jpTranslation": "虫垂",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9340,7 +9340,7 @@
       "word": "capillary",
       "reading": "キャピラリー",
       "jpTranslation": "毛細血管",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9364,7 +9364,7 @@
       "word": "adrenaline",
       "reading": "アドレナリン",
       "jpTranslation": "アドレナリン",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9388,7 +9388,7 @@
       "word": "serotonin",
       "reading": "セロトニン",
       "jpTranslation": "セロトニン",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9412,7 +9412,7 @@
       "word": "cortisol",
       "reading": "コルチゾール",
       "jpTranslation": "コルチゾール",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9436,7 +9436,7 @@
       "word": "insulin",
       "reading": "インスリン",
       "jpTranslation": "インスリン",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9460,7 +9460,7 @@
       "word": "cholesterol",
       "reading": "コレステロール",
       "jpTranslation": "コレステロール",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9484,7 +9484,7 @@
       "word": "detox",
       "reading": "デトックス",
       "jpTranslation": "デトックス",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9508,7 +9508,7 @@
       "word": "fasting",
       "reading": "ファスティング",
       "jpTranslation": "断食",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9532,7 +9532,7 @@
       "word": "clinical trial",
       "reading": "クリニカルトライアル",
       "jpTranslation": "臨床試験",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9556,7 +9556,7 @@
       "word": "contraindication",
       "reading": "コントラインディケーション",
       "jpTranslation": "禁忌",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9580,7 +9580,7 @@
       "word": "chiropractic",
       "reading": "カイロプラクティック",
       "jpTranslation": "カイロプラクティック",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9604,7 +9604,7 @@
       "word": "homeopathy",
       "reading": "ホメオパシー",
       "jpTranslation": "ホメオパシー",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9628,7 +9628,7 @@
       "word": "caloric intake",
       "reading": "カロリックインテイク",
       "jpTranslation": "カロリー摂取",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9652,7 +9652,7 @@
       "word": "body mass index",
       "reading": "ボディマスインデックス",
       "jpTranslation": "体格指数",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9676,7 +9676,7 @@
       "word": "melatonin",
       "reading": "メラトニン",
       "jpTranslation": "メラトニン",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9700,7 +9700,7 @@
       "word": "preventive medicine",
       "reading": "プリベンティブメディシン",
       "jpTranslation": "予防医学",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9724,7 +9724,7 @@
       "word": "palliative care",
       "reading": "パリアティブケア",
       "jpTranslation": "緩和ケア",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9748,7 +9748,7 @@
       "word": "geriatrics",
       "reading": "ジェリアトリクス",
       "jpTranslation": "老年医学",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9772,7 +9772,7 @@
       "word": "oncology",
       "reading": "オンコロジー",
       "jpTranslation": "腫瘍学",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9796,7 +9796,7 @@
       "word": "cardiology",
       "reading": "カーディオロジー",
       "jpTranslation": "心臓学",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9820,7 +9820,7 @@
       "word": "neurology",
       "reading": "ニューロロジー",
       "jpTranslation": "神経学",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9844,7 +9844,7 @@
       "word": "anesthesia",
       "reading": "アネスシーア",
       "jpTranslation": "麻酔",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9868,7 +9868,7 @@
       "word": "biopsy",
       "reading": "バイオプシー",
       "jpTranslation": "生検",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9892,7 +9892,7 @@
       "word": "remission",
       "reading": "レミッション",
       "jpTranslation": "寛解",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9916,7 +9916,7 @@
       "word": "ophthalmology",
       "reading": "オフサルモロジー",
       "jpTranslation": "眼科学",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9940,7 +9940,7 @@
       "word": "endocrinology",
       "reading": "エンドクリノロジー",
       "jpTranslation": "内分泌学",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9964,7 +9964,7 @@
       "word": "pulmonology",
       "reading": "プルモノロジー",
       "jpTranslation": "肺臓学",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -9988,7 +9988,7 @@
       "word": "mammography",
       "reading": "マモグラフィー",
       "jpTranslation": "マンモグラフィー",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -10012,7 +10012,7 @@
       "word": "urinalysis",
       "reading": "ユリナリシス",
       "jpTranslation": "尿検査",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -10036,7 +10036,7 @@
       "word": "pathology",
       "reading": "パソロジー",
       "jpTranslation": "病理学",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -10060,7 +10060,7 @@
       "word": "intermittent fasting",
       "reading": "インターミテントファスティング",
       "jpTranslation": "間欠的断食",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -10084,7 +10084,7 @@
       "word": "naturopathy",
       "reading": "ネイチャロパシー",
       "jpTranslation": "自然療法",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -10108,7 +10108,7 @@
       "word": "orthopedics",
       "reading": "オーソペディクス",
       "jpTranslation": "整形外科",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -10132,7 +10132,7 @@
       "word": "dermatology",
       "reading": "ダーマトロジー",
       "jpTranslation": "皮膚科",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -10156,7 +10156,7 @@
       "word": "colonoscopy",
       "reading": "コロノスコピー",
       "jpTranslation": "大腸内視鏡",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -10180,7 +10180,7 @@
       "word": "echocardiogram",
       "reading": "エコーカーディオグラム",
       "jpTranslation": "心エコー図",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -10204,7 +10204,7 @@
       "word": "blood count",
       "reading": "ブラッドカウント",
       "jpTranslation": "血球数",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -10228,7 +10228,7 @@
       "word": "elate",
       "reading": "イレイト",
       "jpTranslation": "有頂天にする",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -10252,7 +10252,7 @@
       "word": "exhilarate",
       "reading": "エグジラレート",
       "jpTranslation": "大喜びさせる",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -10276,7 +10276,7 @@
       "word": "disillusion",
       "reading": "ディシルージョン",
       "jpTranslation": "幻滅させる",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -10300,7 +10300,7 @@
       "word": "mortify",
       "reading": "モーティファイ",
       "jpTranslation": "恥ずかしい思いをさせる",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -10324,7 +10324,7 @@
       "word": "intimidate",
       "reading": "インティミデート",
       "jpTranslation": "怖がらせる",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -10348,7 +10348,7 @@
       "word": "antagonize",
       "reading": "アンタゴナイズ",
       "jpTranslation": "敵対させる",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -10372,7 +10372,7 @@
       "word": "reassure",
       "reading": "リアシュア",
       "jpTranslation": "安心させる",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -10396,7 +10396,7 @@
       "word": "pacify",
       "reading": "パシファイ",
       "jpTranslation": "なだめる",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -10420,7 +10420,7 @@
       "word": "soothe",
       "reading": "スーズ",
       "jpTranslation": "なだめる",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -10444,7 +10444,7 @@
       "word": "unnerve",
       "reading": "アンナーブ",
       "jpTranslation": "動揺させる",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -10468,7 +10468,7 @@
       "word": "dishearten",
       "reading": "ディスハートン",
       "jpTranslation": "落胆させる",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -10492,7 +10492,7 @@
       "word": "embolden",
       "reading": "エンボールドン",
       "jpTranslation": "勇気づける",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -10516,7 +10516,7 @@
       "word": "appease",
       "reading": "アピーズ",
       "jpTranslation": "なだめる",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -10540,7 +10540,7 @@
       "word": "agitate",
       "reading": "アジテート",
       "jpTranslation": "動揺させる",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -10564,7 +10564,7 @@
       "word": "perplex",
       "reading": "パープレックス",
       "jpTranslation": "当惑させる",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -10588,7 +10588,7 @@
       "word": "bewilder",
       "reading": "ビウィルダー",
       "jpTranslation": "当惑させる",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -10612,7 +10612,7 @@
       "word": "baffle",
       "reading": "バフル",
       "jpTranslation": "困惑させる",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -10636,7 +10636,7 @@
       "word": "fluster",
       "reading": "フラスター",
       "jpTranslation": "あわてさせる",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -10660,7 +10660,7 @@
       "word": "vex",
       "reading": "ベックス",
       "jpTranslation": "いらだたせる",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -10684,7 +10684,7 @@
       "word": "taunt",
       "reading": "トーント",
       "jpTranslation": "あざける",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -10708,7 +10708,7 @@
       "word": "vindicate",
       "reading": "ビンディケート",
       "jpTranslation": "潔白を証明する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -10732,7 +10732,7 @@
       "word": "exonerate",
       "reading": "エグゾネレート",
       "jpTranslation": "無罪を証明する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -10756,7 +10756,7 @@
       "word": "denounce",
       "reading": "ディナウンス",
       "jpTranslation": "非難する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -10780,7 +10780,7 @@
       "word": "censure",
       "reading": "センシャー",
       "jpTranslation": "厳しく批判する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -10804,7 +10804,7 @@
       "word": "provoke",
       "reading": "プロボーク",
       "jpTranslation": "挑発する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -10828,7 +10828,7 @@
       "word": "psychological wellbeing",
       "reading": "サイコロジカルウェルビーイング",
       "jpTranslation": "心理的健康",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -10852,7 +10852,7 @@
       "word": "self-regulation",
       "reading": "セルフレギュレーション",
       "jpTranslation": "自己調整",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -10876,7 +10876,7 @@
       "word": "social skills",
       "reading": "ソーシャルスキルズ",
       "jpTranslation": "社会的スキル",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -10900,7 +10900,7 @@
       "word": "mindfulness",
       "reading": "マインドフルネス",
       "jpTranslation": "マインドフルネス",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -10924,7 +10924,7 @@
       "word": "meditation",
       "reading": "メディテーション",
       "jpTranslation": "瞑想",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -10948,7 +10948,7 @@
       "word": "cognitive behavioral therapy",
       "reading": "コグニティブビヘイビオラルセラピー",
       "jpTranslation": "認知行動療法",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -10972,7 +10972,7 @@
       "word": "impostor syndrome",
       "reading": "インポスターシンドローム",
       "jpTranslation": "インポスター症候群",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -10996,7 +10996,7 @@
       "word": "compassion fatigue",
       "reading": "コンパッションファティーグ",
       "jpTranslation": "共感疲労",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -11020,7 +11020,7 @@
       "word": "post-traumatic stress",
       "reading": "ポストトラウマティックストレス",
       "jpTranslation": "心的外傷後ストレス",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -11044,7 +11044,7 @@
       "word": "panic attack",
       "reading": "パニックアタック",
       "jpTranslation": "パニック発作",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -11068,7 +11068,7 @@
       "word": "obsession",
       "reading": "オブセッション",
       "jpTranslation": "強迫観念",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -11092,7 +11092,7 @@
       "word": "compulsion",
       "reading": "コンパルジョン",
       "jpTranslation": "強迫行為",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -11116,7 +11116,7 @@
       "word": "damp",
       "reading": "ダンプ",
       "jpTranslation": "湿った",
-      "cefrLevel": "b1",
+      "cefrLevel": "B1",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -11140,7 +11140,7 @@
       "word": "muggy",
       "reading": "マギー",
       "jpTranslation": "蒸し暑い",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -11164,7 +11164,7 @@
       "word": "balmy",
       "reading": "バーミー",
       "jpTranslation": "温暖な",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -11188,7 +11188,7 @@
       "word": "sweltering",
       "reading": "スウェルタリング",
       "jpTranslation": "うだるように暑い",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -11212,7 +11212,7 @@
       "word": "blistering",
       "reading": "ブリスタリング",
       "jpTranslation": "焼けるように暑い",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -11236,7 +11236,7 @@
       "word": "brisk",
       "reading": "ブリスク",
       "jpTranslation": "さわやかな",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -11260,7 +11260,7 @@
       "word": "blustery",
       "reading": "ブラスタリー",
       "jpTranslation": "強風の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -11284,7 +11284,7 @@
       "word": "torrential rain",
       "reading": "トレンシャルレイン",
       "jpTranslation": "土砂降り",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -11308,7 +11308,7 @@
       "word": "flash flood",
       "reading": "フラッシュフラッド",
       "jpTranslation": "鉄砲水",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -11332,7 +11332,7 @@
       "word": "storm surge",
       "reading": "ストームサージ",
       "jpTranslation": "高潮",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -11356,7 +11356,7 @@
       "word": "sea breeze",
       "reading": "シーブリーズ",
       "jpTranslation": "海風",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -11380,7 +11380,7 @@
       "word": "trade wind",
       "reading": "トレードウィンド",
       "jpTranslation": "貿易風",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -11404,7 +11404,7 @@
       "word": "jet stream",
       "reading": "ジェットストリーム",
       "jpTranslation": "ジェット気流",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -11428,7 +11428,7 @@
       "word": "dew point",
       "reading": "デューポイント",
       "jpTranslation": "露点",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -11452,7 +11452,7 @@
       "word": "cloud cover",
       "reading": "クラウドカバー",
       "jpTranslation": "雲量",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -11476,7 +11476,7 @@
       "word": "heavy downpour",
       "reading": "ヘビーダウンポア",
       "jpTranslation": "大雨",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -11500,7 +11500,7 @@
       "word": "tidal wave",
       "reading": "タイダルウェイブ",
       "jpTranslation": "津波",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -11524,7 +11524,7 @@
       "word": "parched",
       "reading": "パーチト",
       "jpTranslation": "乾燥した",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -11548,7 +11548,7 @@
       "word": "turbulent",
       "reading": "タービュレント",
       "jpTranslation": "激しい",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -11572,7 +11572,7 @@
       "word": "coral bleaching",
       "reading": "コーラルブリーチング",
       "jpTranslation": "サンゴの白化",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -11596,7 +11596,7 @@
       "word": "verbal",
       "reading": "バーバル",
       "jpTranslation": "言語の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -11620,7 +11620,7 @@
       "word": "nonverbal",
       "reading": "ノンバーバル",
       "jpTranslation": "非言語の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -11644,7 +11644,7 @@
       "word": "facial expression",
       "reading": "フェイシャルエクスプレッション",
       "jpTranslation": "表情",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -11668,7 +11668,7 @@
       "word": "active listening",
       "reading": "アクティブリスニング",
       "jpTranslation": "積極的傾聴",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -11692,7 +11692,7 @@
       "word": "roundtable",
       "reading": "ラウンドテーブル",
       "jpTranslation": "円卓会議",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -11716,7 +11716,7 @@
       "word": "moderator",
       "reading": "モデレーター",
       "jpTranslation": "司会者",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -11740,7 +11740,7 @@
       "word": "facilitator",
       "reading": "ファシリテーター",
       "jpTranslation": "進行役",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -11764,7 +11764,7 @@
       "word": "hypothetical",
       "reading": "ハイポセティカル",
       "jpTranslation": "仮定の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -11788,7 +11788,7 @@
       "word": "rhetorical",
       "reading": "レトリカル",
       "jpTranslation": "修辞的な",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -11812,7 +11812,7 @@
       "word": "panel discussion",
       "reading": "パネルディスカッション",
       "jpTranslation": "パネルディスカッション",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -11836,7 +11836,7 @@
       "word": "chairperson",
       "reading": "チェアパーソン",
       "jpTranslation": "議長",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -11860,7 +11860,7 @@
       "word": "mirroring",
       "reading": "ミラーリング",
       "jpTranslation": "ミラーリング",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -11884,7 +11884,7 @@
       "word": "colloquial",
       "reading": "コロキアル",
       "jpTranslation": "口語的な",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -11908,7 +11908,7 @@
       "word": "public speaking",
       "reading": "パブリックスピーキング",
       "jpTranslation": "スピーチ",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -11932,7 +11932,7 @@
       "word": "keynote address",
       "reading": "キーノートアドレス",
       "jpTranslation": "基調演説",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -11956,7 +11956,7 @@
       "word": "cross-cultural communication",
       "reading": "クロスカルチュラルコミュニケーション",
       "jpTranslation": "異文化間コミュニケーション",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -11980,7 +11980,7 @@
       "word": "cultural sensitivity",
       "reading": "カルチュラルセンシティビティ",
       "jpTranslation": "文化的感受性",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12004,7 +12004,7 @@
       "word": "euphemism",
       "reading": "ユーフェミズム",
       "jpTranslation": "婉曲表現",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12028,7 +12028,7 @@
       "word": "foreshadowing",
       "reading": "フォアシャドウイング",
       "jpTranslation": "伏線",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12052,7 +12052,7 @@
       "word": "confirmation bias",
       "reading": "コンファーメーションバイアス",
       "jpTranslation": "確証バイアス",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12076,7 +12076,7 @@
       "word": "mainstream media",
       "reading": "メインストリームメディア",
       "jpTranslation": "主流メディア",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12100,7 +12100,7 @@
       "word": "simile",
       "reading": "シミリ",
       "jpTranslation": "直喩",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12124,7 +12124,7 @@
       "word": "alliteration",
       "reading": "アリタレーション",
       "jpTranslation": "頭韻法",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12148,7 +12148,7 @@
       "word": "onomatopoeia",
       "reading": "オノマトペ",
       "jpTranslation": "擬音語",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12172,7 +12172,7 @@
       "word": "narrative structure",
       "reading": "ナラティブストラクチャー",
       "jpTranslation": "物語構成",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12196,7 +12196,7 @@
       "word": "plot twist",
       "reading": "プロットツイスト",
       "jpTranslation": "どんでん返し",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12220,7 +12220,7 @@
       "word": "civil liberties",
       "reading": "シビルリバティーズ",
       "jpTranslation": "市民的自由",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12244,7 +12244,7 @@
       "word": "due process",
       "reading": "デュープロセス",
       "jpTranslation": "法的手続き",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12268,7 +12268,7 @@
       "word": "burden of proof",
       "reading": "バーデンオブプルーフ",
       "jpTranslation": "立証責任",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12292,7 +12292,7 @@
       "word": "admissible",
       "reading": "アドミッシブル",
       "jpTranslation": "採用できる",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -12316,7 +12316,7 @@
       "word": "cross-examination",
       "reading": "クロスエグザミネーション",
       "jpTranslation": "反対尋問",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12340,7 +12340,7 @@
       "word": "deliberation",
       "reading": "デリバレーション",
       "jpTranslation": "慎重な審議",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12364,7 +12364,7 @@
       "word": "conviction",
       "reading": "コンビクション",
       "jpTranslation": "有罪判決",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12388,7 +12388,7 @@
       "word": "parole",
       "reading": "パロール",
       "jpTranslation": "仮釈放",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12412,7 +12412,7 @@
       "word": "incarceration",
       "reading": "インカーセレーション",
       "jpTranslation": "収監",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12436,7 +12436,7 @@
       "word": "recidivism",
       "reading": "リシディビズム",
       "jpTranslation": "再犯",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12460,7 +12460,7 @@
       "word": "restorative justice",
       "reading": "レストラティブジャスティス",
       "jpTranslation": "修復的司法",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12484,7 +12484,7 @@
       "word": "deterrent",
       "reading": "ディタレント",
       "jpTranslation": "抑止力",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12508,7 +12508,7 @@
       "word": "capital punishment",
       "reading": "キャピタルパニッシュメント",
       "jpTranslation": "死刑",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12532,7 +12532,7 @@
       "word": "habeas corpus",
       "reading": "ハビアスコーパス",
       "jpTranslation": "人身保護令状",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12556,7 +12556,7 @@
       "word": "reintegration",
       "reading": "リインテグレーション",
       "jpTranslation": "社会復帰",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12580,7 +12580,7 @@
       "word": "punitive",
       "reading": "ピュニティブ",
       "jpTranslation": "懲罰的な",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -12604,7 +12604,7 @@
       "word": "freedom of expression",
       "reading": "フリーダムオブエクスプレッション",
       "jpTranslation": "表現の自由",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12628,7 +12628,7 @@
       "word": "separation of powers",
       "reading": "セパレーションオブパワーズ",
       "jpTranslation": "三権分立",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12652,7 +12652,7 @@
       "word": "checks and balances",
       "reading": "チェックスアンドバランシズ",
       "jpTranslation": "抑制と均衡",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12676,7 +12676,7 @@
       "word": "trade union",
       "reading": "トレードユニオン",
       "jpTranslation": "労働組合",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12700,7 +12700,7 @@
       "word": "social welfare",
       "reading": "ソーシャルウェルフェア",
       "jpTranslation": "社会福祉",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12724,7 +12724,7 @@
       "word": "grassroots",
       "reading": "グラスルーツ",
       "jpTranslation": "草の根の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -12748,7 +12748,7 @@
       "word": "freedom of assembly",
       "reading": "フリーダムオブアセンブリ",
       "jpTranslation": "集会の自由",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12772,7 +12772,7 @@
       "word": "gerrymandering",
       "reading": "ジェリマンダリング",
       "jpTranslation": "ゲリマンダリング",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12796,7 +12796,7 @@
       "word": "voter suppression",
       "reading": "ボーターサプレッション",
       "jpTranslation": "投票妨害",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12820,7 +12820,7 @@
       "word": "electoral college",
       "reading": "エレクトラルカレッジ",
       "jpTranslation": "選挙人団",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12844,7 +12844,7 @@
       "word": "opposition party",
       "reading": "オポジションパーティ",
       "jpTranslation": "野党",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12868,7 +12868,7 @@
       "word": "proportional representation",
       "reading": "プロポーショナルレプリゼンテーション",
       "jpTranslation": "比例代表制",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12892,7 +12892,7 @@
       "word": "filibuster",
       "reading": "フィリバスター",
       "jpTranslation": "議事妨害",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12916,7 +12916,7 @@
       "word": "special interest group",
       "reading": "スペシャルインタレストグループ",
       "jpTranslation": "特定利益団体",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12940,7 +12940,7 @@
       "word": "think tank",
       "reading": "シンクタンク",
       "jpTranslation": "シンクタンク",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -12964,7 +12964,7 @@
       "word": "disenfranchised",
       "reading": "ディスエンフランチャイズド",
       "jpTranslation": "選挙権を剥奪された",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -12988,7 +12988,7 @@
       "word": "judicial review",
       "reading": "ジュディシャルレビュー",
       "jpTranslation": "司法審査",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13012,7 +13012,7 @@
       "word": "executive order",
       "reading": "エグゼクティブオーダー",
       "jpTranslation": "大統領令",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13036,7 +13036,7 @@
       "word": "legislative process",
       "reading": "レジスレーティブプロセス",
       "jpTranslation": "立法過程",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13060,7 +13060,7 @@
       "word": "pressure group",
       "reading": "プレッシャーグループ",
       "jpTranslation": "圧力団体",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13084,7 +13084,7 @@
       "word": "head office",
       "reading": "ヘッドオフィス",
       "jpTranslation": "本社",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13108,7 +13108,7 @@
       "word": "branch office",
       "reading": "ブランチオフィス",
       "jpTranslation": "支社",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13132,7 +13132,7 @@
       "word": "hot-desking",
       "reading": "ホットデスキング",
       "jpTranslation": "フリーアドレス",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13156,7 +13156,7 @@
       "word": "flexi-time",
       "reading": "フレキシタイム",
       "jpTranslation": "フレックスタイム",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13180,7 +13180,7 @@
       "word": "zero-hours contract",
       "reading": "ゼロアワーズコントラクト",
       "jpTranslation": "ゼロ時間契約",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13204,7 +13204,7 @@
       "word": "performance review",
       "reading": "パフォーマンスレビュー",
       "jpTranslation": "業績評価",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13228,7 +13228,7 @@
       "word": "key performance indicator",
       "reading": "キーパフォーマンスインジケーター",
       "jpTranslation": "重要業績評価指標",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13252,7 +13252,7 @@
       "word": "swot analysis",
       "reading": "スウォットアナリシス",
       "jpTranslation": "SWOT分析",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13276,7 +13276,7 @@
       "word": "agile",
       "reading": "アジャイル",
       "jpTranslation": "アジャイルの",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -13300,7 +13300,7 @@
       "word": "open plan",
       "reading": "オープンプラン",
       "jpTranslation": "オープンプランの",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -13324,7 +13324,7 @@
       "word": "job share",
       "reading": "ジョブシェア",
       "jpTranslation": "ジョブシェア",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13348,7 +13348,7 @@
       "word": "compassionate leave",
       "reading": "コンパッショネートリーブ",
       "jpTranslation": "特別休暇",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13372,7 +13372,7 @@
       "word": "360-degree feedback",
       "reading": "サンロクゼロフィードバック",
       "jpTranslation": "360度フィードバック",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13396,7 +13396,7 @@
       "word": "root cause analysis",
       "reading": "ルートコーズアナリシス",
       "jpTranslation": "根本原因分析",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13420,7 +13420,7 @@
       "word": "kanban",
       "reading": "カンバン",
       "jpTranslation": "かんばん",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13444,7 +13444,7 @@
       "word": "corporate social responsibility",
       "reading": "コーポレートソーシャルレスポンシビリティ",
       "jpTranslation": "企業の社会的責任",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13468,7 +13468,7 @@
       "word": "intellectual property",
       "reading": "インテレクチュアルプロパティ",
       "jpTranslation": "知的財産",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13492,7 +13492,7 @@
       "word": "non-disclosure agreement",
       "reading": "ノンディスクロージャーアグリーメント",
       "jpTranslation": "秘密保持契約",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13516,7 +13516,7 @@
       "word": "severance package",
       "reading": "セバランスパッケージ",
       "jpTranslation": "退職金パッケージ",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13540,7 +13540,7 @@
       "word": "onboarding",
       "reading": "オンボーディング",
       "jpTranslation": "新入社員研修",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13564,7 +13564,7 @@
       "word": "talent acquisition",
       "reading": "タレントアクイジション",
       "jpTranslation": "採用",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13588,7 +13588,7 @@
       "word": "return on investment",
       "reading": "リターンオンインベストメント",
       "jpTranslation": "投資利益率",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13612,7 +13612,7 @@
       "word": "fiscal policy",
       "reading": "フィスカルポリシー",
       "jpTranslation": "財政政策",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13636,7 +13636,7 @@
       "word": "monetary policy",
       "reading": "モネタリーポリシー",
       "jpTranslation": "金融政策",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13660,7 +13660,7 @@
       "word": "trade surplus",
       "reading": "トレードサープラス",
       "jpTranslation": "貿易黒字",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13684,7 +13684,7 @@
       "word": "offboarding",
       "reading": "オフボーディング",
       "jpTranslation": "退職手続き",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13708,7 +13708,7 @@
       "word": "bereavement leave",
       "reading": "ビリーブメントリーブ",
       "jpTranslation": "忌引き",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13732,7 +13732,7 @@
       "word": "proprietary",
       "reading": "プロプライエタリー",
       "jpTranslation": "独占的な",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -13756,7 +13756,7 @@
       "word": "beta version",
       "reading": "ベータバージョン",
       "jpTranslation": "ベータ版",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13780,7 +13780,7 @@
       "word": "patch",
       "reading": "パッチ",
       "jpTranslation": "パッチ",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13804,7 +13804,7 @@
       "word": "bug fix",
       "reading": "バグフィックス",
       "jpTranslation": "バグ修正",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13828,7 +13828,7 @@
       "word": "unit test",
       "reading": "ユニットテスト",
       "jpTranslation": "ユニットテスト",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13852,7 +13852,7 @@
       "word": "microservice",
       "reading": "マイクロサービス",
       "jpTranslation": "マイクロサービス",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13876,7 +13876,7 @@
       "word": "containerization",
       "reading": "コンテナリゼーション",
       "jpTranslation": "コンテナ化",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13900,7 +13900,7 @@
       "word": "devops",
       "reading": "デブオプス",
       "jpTranslation": "DevOps",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13924,7 +13924,7 @@
       "word": "continuous integration",
       "reading": "コンティニュアスインテグレーション",
       "jpTranslation": "継続的インテグレーション",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13948,7 +13948,7 @@
       "word": "serverless",
       "reading": "サーバーレス",
       "jpTranslation": "サーバーレス",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -13972,7 +13972,7 @@
       "word": "edge computing",
       "reading": "エッジコンピューティング",
       "jpTranslation": "エッジコンピューティング",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -13996,7 +13996,7 @@
       "word": "neural network",
       "reading": "ニューラルネットワーク",
       "jpTranslation": "ニューラルネットワーク",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14020,7 +14020,7 @@
       "word": "natural language processing",
       "reading": "ナチュラルランゲージプロセッシング",
       "jpTranslation": "自然言語処理",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14044,7 +14044,7 @@
       "word": "hotfix",
       "reading": "ホットフィックス",
       "jpTranslation": "緊急修正",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14068,7 +14068,7 @@
       "word": "stress test",
       "reading": "ストレステスト",
       "jpTranslation": "ストレステスト",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14092,7 +14092,7 @@
       "word": "search engine optimization",
       "reading": "サーチエンジンオプティミゼーション",
       "jpTranslation": "検索エンジン最適化",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14116,7 +14116,7 @@
       "word": "conversion rate",
       "reading": "コンバージョンレート",
       "jpTranslation": "転換率",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14140,7 +14140,7 @@
       "word": "data privacy",
       "reading": "データプライバシー",
       "jpTranslation": "データプライバシー",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14164,7 +14164,7 @@
       "word": "facial recognition",
       "reading": "フェイシャルレコグニション",
       "jpTranslation": "顔認識",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14188,7 +14188,7 @@
       "word": "broadband",
       "reading": "ブロードバンド",
       "jpTranslation": "ブロードバンド",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14212,7 +14212,7 @@
       "word": "fiber optic",
       "reading": "ファイバーオプティック",
       "jpTranslation": "光ファイバー",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14236,7 +14236,7 @@
       "word": "5g",
       "reading": "ファイブジー",
       "jpTranslation": "5G",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14260,7 +14260,7 @@
       "word": "wearable technology",
       "reading": "ウェアラブルテクノロジー",
       "jpTranslation": "ウェアラブル技術",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14284,7 +14284,7 @@
       "word": "voice assistant",
       "reading": "ボイスアシスタント",
       "jpTranslation": "音声アシスタント",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14308,7 +14308,7 @@
       "word": "geolocation",
       "reading": "ジオロケーション",
       "jpTranslation": "位置情報",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14332,7 +14332,7 @@
       "word": "metadata",
       "reading": "メタデータ",
       "jpTranslation": "メタデータ",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14356,7 +14356,7 @@
       "word": "digital rights",
       "reading": "デジタルライツ",
       "jpTranslation": "デジタル権利",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14380,7 +14380,7 @@
       "word": "net neutrality",
       "reading": "ネットニュートラリティ",
       "jpTranslation": "ネット中立性",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14404,7 +14404,7 @@
       "word": "terms of service",
       "reading": "タームズオブサービス",
       "jpTranslation": "利用規約",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14428,7 +14428,7 @@
       "word": "cookie policy",
       "reading": "クッキーポリシー",
       "jpTranslation": "クッキーポリシー",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14452,7 +14452,7 @@
       "word": "bounce rate",
       "reading": "バウンスレート",
       "jpTranslation": "直帰率",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14476,7 +14476,7 @@
       "word": "impressions",
       "reading": "インプレッションズ",
       "jpTranslation": "インプレッション数",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14500,7 +14500,7 @@
       "word": "infrastructure as code",
       "reading": "インフラストラクチャーアズコード",
       "jpTranslation": "コードとしてのインフラ",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14524,7 +14524,7 @@
       "word": "solvent",
       "reading": "ソルベント",
       "jpTranslation": "溶媒",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14548,7 +14548,7 @@
       "word": "crystallization",
       "reading": "クリスタリゼーション",
       "jpTranslation": "結晶化",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14572,7 +14572,7 @@
       "word": "sublimation",
       "reading": "サブリメーション",
       "jpTranslation": "昇華",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14596,7 +14596,7 @@
       "word": "diffusion",
       "reading": "ディフュージョン",
       "jpTranslation": "拡散",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14620,7 +14620,7 @@
       "word": "osmosis",
       "reading": "オスモシス",
       "jpTranslation": "浸透",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14644,7 +14644,7 @@
       "word": "transpiration",
       "reading": "トランスピレーション",
       "jpTranslation": "蒸散",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14668,7 +14668,7 @@
       "word": "respiration",
       "reading": "レスピレーション",
       "jpTranslation": "呼吸",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14692,7 +14692,7 @@
       "word": "fermentation",
       "reading": "ファーメンテーション",
       "jpTranslation": "発酵",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14716,7 +14716,7 @@
       "word": "ionization",
       "reading": "イオナイゼーション",
       "jpTranslation": "イオン化",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14740,7 +14740,7 @@
       "word": "radioactivity",
       "reading": "レイディオアクティビティ",
       "jpTranslation": "放射能",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14764,7 +14764,7 @@
       "word": "half-life",
       "reading": "ハーフライフ",
       "jpTranslation": "半減期",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14788,7 +14788,7 @@
       "word": "resonance",
       "reading": "レゾナンス",
       "jpTranslation": "共鳴",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14812,7 +14812,7 @@
       "word": "refraction",
       "reading": "リフラクション",
       "jpTranslation": "屈折",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14836,7 +14836,7 @@
       "word": "diffraction",
       "reading": "ディフラクション",
       "jpTranslation": "回折",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14860,7 +14860,7 @@
       "word": "electromagnetic",
       "reading": "エレクトロマグネティック",
       "jpTranslation": "電磁の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -14884,7 +14884,7 @@
       "word": "marine biology",
       "reading": "マリンバイオロジー",
       "jpTranslation": "海洋生物学",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14908,7 +14908,7 @@
       "word": "marine conservation",
       "reading": "マリンコンサーベーション",
       "jpTranslation": "海洋保護",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14932,7 +14932,7 @@
       "word": "overfishing",
       "reading": "オーバーフィッシング",
       "jpTranslation": "乱獲",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14956,7 +14956,7 @@
       "word": "trophic level",
       "reading": "トロフィックレベル",
       "jpTranslation": "栄養段階",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -14980,7 +14980,7 @@
       "word": "endothermic",
       "reading": "エンドサーミック",
       "jpTranslation": "吸熱の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -15004,7 +15004,7 @@
       "word": "exothermic",
       "reading": "エクゾサーミック",
       "jpTranslation": "発熱の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -15028,7 +15028,7 @@
       "word": "entropy",
       "reading": "エントロピー",
       "jpTranslation": "エントロピー",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15052,7 +15052,7 @@
       "word": "activation energy",
       "reading": "アクティベーションエナジー",
       "jpTranslation": "活性化エネルギー",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15076,7 +15076,7 @@
       "word": "covalent bond",
       "reading": "コバレントボンド",
       "jpTranslation": "共有結合",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15100,7 +15100,7 @@
       "word": "ionic bond",
       "reading": "イオニックボンド",
       "jpTranslation": "イオン結合",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15124,7 +15124,7 @@
       "word": "hydrogen bond",
       "reading": "ハイドロジェンボンド",
       "jpTranslation": "水素結合",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15148,7 +15148,7 @@
       "word": "ph scale",
       "reading": "ピーエイチスケール",
       "jpTranslation": "pH値",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15172,7 +15172,7 @@
       "word": "buffer solution",
       "reading": "バッファーソリューション",
       "jpTranslation": "緩衝液",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15196,7 +15196,7 @@
       "word": "titration",
       "reading": "タイトレーション",
       "jpTranslation": "滴定",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15220,7 +15220,7 @@
       "word": "galvanic cell",
       "reading": "ガルバニックセル",
       "jpTranslation": "ガルバニック電池",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15244,7 +15244,7 @@
       "word": "fluid dynamics",
       "reading": "フルイドダイナミクス",
       "jpTranslation": "流体力学",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15268,7 +15268,7 @@
       "word": "invasive species",
       "reading": "インベイシブスピーシーズ",
       "jpTranslation": "外来種",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15292,7 +15292,7 @@
       "word": "afforestation",
       "reading": "アフォレステーション",
       "jpTranslation": "新規植林",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15316,7 +15316,7 @@
       "word": "water table",
       "reading": "ウォーターテーブル",
       "jpTranslation": "地下水位",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15340,7 +15340,7 @@
       "word": "bycatch",
       "reading": "バイキャッチ",
       "jpTranslation": "混獲",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15364,7 +15364,7 @@
       "word": "groundwater",
       "reading": "グラウンドウォーター",
       "jpTranslation": "地下水",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15388,7 +15388,7 @@
       "word": "land degradation",
       "reading": "ランドデグラデーション",
       "jpTranslation": "土地劣化",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15412,7 +15412,7 @@
       "word": "enthalpy",
       "reading": "エンタルピー",
       "jpTranslation": "エンタルピー",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15436,7 +15436,7 @@
       "word": "molar mass",
       "reading": "モーラーマス",
       "jpTranslation": "モル質量",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15460,7 +15460,7 @@
       "word": "electron configuration",
       "reading": "エレクトロンコンフィギュレーション",
       "jpTranslation": "電子配置",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15484,7 +15484,7 @@
       "word": "valence electron",
       "reading": "バレンスエレクトロン",
       "jpTranslation": "価電子",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15508,7 +15508,7 @@
       "word": "electrolysis",
       "reading": "エレクトロリシス",
       "jpTranslation": "電気分解",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15532,7 +15532,7 @@
       "word": "wave-particle duality",
       "reading": "ウェーブパーティクルデュアリティ",
       "jpTranslation": "波粒二重性",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15556,7 +15556,7 @@
       "word": "oxidation state",
       "reading": "オキシデーションステート",
       "jpTranslation": "酸化数",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15580,7 +15580,7 @@
       "word": "noble gas",
       "reading": "ノーブルガス",
       "jpTranslation": "希ガス",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15604,7 +15604,7 @@
       "word": "periodic law",
       "reading": "ピリオディックロー",
       "jpTranslation": "周期律",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15628,7 +15628,7 @@
       "word": "decathlon",
       "reading": "デカスロン",
       "jpTranslation": "十種競技",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15652,7 +15652,7 @@
       "word": "hurdle",
       "reading": "ハードル",
       "jpTranslation": "ハードル",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15676,7 +15676,7 @@
       "word": "javelin",
       "reading": "ジャベリン",
       "jpTranslation": "やり投げ",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15700,7 +15700,7 @@
       "word": "discus",
       "reading": "ディスカス",
       "jpTranslation": "円盤投げ",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15724,7 +15724,7 @@
       "word": "sailing",
       "reading": "セーリング",
       "jpTranslation": "ヨット競技",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15748,7 +15748,7 @@
       "word": "polo",
       "reading": "ポロ",
       "jpTranslation": "ポロ",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15772,7 +15772,7 @@
       "word": "lacrosse",
       "reading": "ラクロス",
       "jpTranslation": "ラクロス",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15796,7 +15796,7 @@
       "word": "canoeing",
       "reading": "カノーイング",
       "jpTranslation": "カヌー競技",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15820,7 +15820,7 @@
       "word": "biathlon",
       "reading": "バイアスロン",
       "jpTranslation": "バイアスロン",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15844,7 +15844,7 @@
       "word": "synchronized swimming",
       "reading": "シンクロナイズドスイミング",
       "jpTranslation": "シンクロナイズドスイミング",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15868,7 +15868,7 @@
       "word": "trapeze",
       "reading": "トラピーズ",
       "jpTranslation": "空中ブランコ",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15892,7 +15892,7 @@
       "word": "sparring",
       "reading": "スパーリング",
       "jpTranslation": "スパーリング",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15916,7 +15916,7 @@
       "word": "weightlifting",
       "reading": "ウェイトリフティング",
       "jpTranslation": "重量挙げ",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15940,7 +15940,7 @@
       "word": "parkour",
       "reading": "パルクール",
       "jpTranslation": "パルクール",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15964,7 +15964,7 @@
       "word": "podium finish",
       "reading": "ポジウムフィニッシュ",
       "jpTranslation": "表彰台",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -15988,7 +15988,7 @@
       "word": "world record",
       "reading": "ワールドレコード",
       "jpTranslation": "世界記録",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16012,7 +16012,7 @@
       "word": "tiebreaker",
       "reading": "タイブレーカー",
       "jpTranslation": "タイブレーク",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16036,7 +16036,7 @@
       "word": "penalty shootout",
       "reading": "ペナルティシュートアウト",
       "jpTranslation": "PKシュートアウト",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16060,7 +16060,7 @@
       "word": "world ranking",
       "reading": "ワールドランキング",
       "jpTranslation": "世界ランキング",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16084,7 +16084,7 @@
       "word": "prize money",
       "reading": "プライズマネー",
       "jpTranslation": "賞金",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16108,7 +16108,7 @@
       "word": "cross-country running",
       "reading": "クロスカントリーランニング",
       "jpTranslation": "クロスカントリー",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16132,7 +16132,7 @@
       "word": "olympic qualifier",
       "reading": "オリンピッククオリファイアー",
       "jpTranslation": "オリンピック予選",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16156,7 +16156,7 @@
       "word": "sudden death",
       "reading": "サドンデス",
       "jpTranslation": "サドンデス",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16180,7 +16180,7 @@
       "word": "extra time",
       "reading": "エクストラタイム",
       "jpTranslation": "延長戦",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16204,7 +16204,7 @@
       "word": "road cycling",
       "reading": "ロードサイクリング",
       "jpTranslation": "ロードサイクリング",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16228,7 +16228,7 @@
       "word": "time trial",
       "reading": "タイムトライアル",
       "jpTranslation": "タイムトライアル",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16252,7 +16252,7 @@
       "word": "grand prix",
       "reading": "グランプリ",
       "jpTranslation": "グランプリ",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16276,7 +16276,7 @@
       "word": "seeding",
       "reading": "シーディング",
       "jpTranslation": "シード",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16300,7 +16300,7 @@
       "word": "handicap",
       "reading": "ハンディキャップ",
       "jpTranslation": "ハンデ",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16324,7 +16324,7 @@
       "word": "pentathlon",
       "reading": "ペンタスロン",
       "jpTranslation": "五種競技",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16348,7 +16348,7 @@
       "word": "equestrian",
       "reading": "エクエストリアン",
       "jpTranslation": "馬術の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -16372,7 +16372,7 @@
       "word": "vocational training",
       "reading": "ボケイショナルトレーニング",
       "jpTranslation": "職業訓練",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16396,7 +16396,7 @@
       "word": "prerequisite",
       "reading": "プレレクイジット",
       "jpTranslation": "前提条件",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16420,7 +16420,7 @@
       "word": "matriculation",
       "reading": "マトリキュレーション",
       "jpTranslation": "入学",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16444,7 +16444,7 @@
       "word": "sabbatical",
       "reading": "サバティカル",
       "jpTranslation": "研究休暇",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16468,7 +16468,7 @@
       "word": "tenure",
       "reading": "テニュア",
       "jpTranslation": "終身在職権",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16492,7 +16492,7 @@
       "word": "adjunct",
       "reading": "アジャンクト",
       "jpTranslation": "非常勤の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -16516,7 +16516,7 @@
       "word": "correspondence course",
       "reading": "コレスポンデンスコース",
       "jpTranslation": "通信教育",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16540,7 +16540,7 @@
       "word": "learning outcome",
       "reading": "ラーニングアウトカム",
       "jpTranslation": "学習成果",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16564,7 +16564,7 @@
       "word": "constructive criticism",
       "reading": "コンストラクティブクリティシズム",
       "jpTranslation": "建設的な批判",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16588,7 +16588,7 @@
       "word": "fieldwork",
       "reading": "フィールドワーク",
       "jpTranslation": "フィールドワーク",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16612,7 +16612,7 @@
       "word": "flipped classroom",
       "reading": "フリップドクラスルーム",
       "jpTranslation": "反転授業",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16636,7 +16636,7 @@
       "word": "project-based learning",
       "reading": "プロジェクトベースドラーニング",
       "jpTranslation": "プロジェクト型学習",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16660,7 +16660,7 @@
       "word": "differentiation",
       "reading": "ディファレンシエーション",
       "jpTranslation": "差別化指導",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16684,7 +16684,7 @@
       "word": "diagnostic test",
       "reading": "ダイアグノスティックテスト",
       "jpTranslation": "診断テスト",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16708,7 +16708,7 @@
       "word": "peer tutoring",
       "reading": "ピアチュータリング",
       "jpTranslation": "ピアチュータリング",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16732,7 +16732,7 @@
       "word": "formative feedback",
       "reading": "フォーマティブフィードバック",
       "jpTranslation": "形成的フィードバック",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16756,7 +16756,7 @@
       "word": "summative assessment",
       "reading": "サマティブアセスメント",
       "jpTranslation": "総括的評価",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16780,7 +16780,7 @@
       "word": "portfolio assessment",
       "reading": "ポートフォリオアセスメント",
       "jpTranslation": "ポートフォリオ評価",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16804,7 +16804,7 @@
       "word": "gifted education",
       "reading": "ギフテッドエデュケーション",
       "jpTranslation": "英才教育",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16828,7 +16828,7 @@
       "word": "collaborative learning",
       "reading": "コラボラティブラーニング",
       "jpTranslation": "協働学習",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16852,7 +16852,7 @@
       "word": "zone of proximal development",
       "reading": "ゾーンオブプロクシマルデベロップメント",
       "jpTranslation": "最近接発達領域",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16876,7 +16876,7 @@
       "word": "independent study",
       "reading": "インデペンデントスタディ",
       "jpTranslation": "独立研究",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16900,7 +16900,7 @@
       "word": "hedge fund",
       "reading": "ヘッジファンド",
       "jpTranslation": "ヘッジファンド",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16924,7 +16924,7 @@
       "word": "initial public offering",
       "reading": "イニシャルパブリックオファリング",
       "jpTranslation": "新規株式公開",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16948,7 +16948,7 @@
       "word": "accounts receivable",
       "reading": "アカウンツレシーバブル",
       "jpTranslation": "売掛金",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16972,7 +16972,7 @@
       "word": "accounts payable",
       "reading": "アカウンツペイアブル",
       "jpTranslation": "買掛金",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -16996,7 +16996,7 @@
       "word": "working capital",
       "reading": "ワーキングキャピタル",
       "jpTranslation": "運転資金",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17020,7 +17020,7 @@
       "word": "fixed cost",
       "reading": "フィックストコスト",
       "jpTranslation": "固定費",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17044,7 +17044,7 @@
       "word": "variable cost",
       "reading": "バリアブルコスト",
       "jpTranslation": "変動費",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17068,7 +17068,7 @@
       "word": "austerity",
       "reading": "オースタリティ",
       "jpTranslation": "緊縮財政",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17092,7 +17092,7 @@
       "word": "quantitative easing",
       "reading": "クォンティタティブイージング",
       "jpTranslation": "量的緩和",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17116,7 +17116,7 @@
       "word": "economic stimulus",
       "reading": "エコノミックスティミュラス",
       "jpTranslation": "経済刺激策",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17140,7 +17140,7 @@
       "word": "national debt",
       "reading": "ナショナルデット",
       "jpTranslation": "国債",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17164,7 +17164,7 @@
       "word": "credit crunch",
       "reading": "クレジットクランチ",
       "jpTranslation": "信用収縮",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17188,7 +17188,7 @@
       "word": "progressive tax",
       "reading": "プログレッシブタックス",
       "jpTranslation": "累進税",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17212,7 +17212,7 @@
       "word": "value added tax",
       "reading": "バリューアデッドタックス",
       "jpTranslation": "付加価値税",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17236,7 +17236,7 @@
       "word": "market equilibrium",
       "reading": "マーケットイクイリブリアム",
       "jpTranslation": "市場均衡",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17260,7 +17260,7 @@
       "word": "price elasticity",
       "reading": "プライスエラスティシティ",
       "jpTranslation": "価格弾力性",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17284,7 +17284,7 @@
       "word": "government intervention",
       "reading": "ガバメントインターベンション",
       "jpTranslation": "政府介入",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17308,7 +17308,7 @@
       "word": "sovereign wealth fund",
       "reading": "ソブリンウェルスファンド",
       "jpTranslation": "政府系ファンド",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17332,7 +17332,7 @@
       "word": "solvency",
       "reading": "ソルベンシー",
       "jpTranslation": "支払い能力",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17356,7 +17356,7 @@
       "word": "crowdfunding",
       "reading": "クラウドファンディング",
       "jpTranslation": "クラウドファンディング",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17380,7 +17380,7 @@
       "word": "mutual fund",
       "reading": "ミューチュアルファンド",
       "jpTranslation": "投資信託",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17404,7 +17404,7 @@
       "word": "collateral",
       "reading": "コラテラル",
       "jpTranslation": "担保",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17428,7 +17428,7 @@
       "word": "liquidity",
       "reading": "リクイディティ",
       "jpTranslation": "流動性",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17452,7 +17452,7 @@
       "word": "amortization",
       "reading": "アモーティゼーション",
       "jpTranslation": "償却",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17476,7 +17476,7 @@
       "word": "equity",
       "reading": "エクイティ",
       "jpTranslation": "株式・資本",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17500,7 +17500,7 @@
       "word": "market share",
       "reading": "マーケットシェア",
       "jpTranslation": "市場占有率",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17524,7 +17524,7 @@
       "word": "trade deficit",
       "reading": "トレードデフィシット",
       "jpTranslation": "貿易赤字",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17548,7 +17548,7 @@
       "word": "import duty",
       "reading": "インポートデューティ",
       "jpTranslation": "輸入関税",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17572,7 +17572,7 @@
       "word": "net profit",
       "reading": "ネットプロフィット",
       "jpTranslation": "純利益",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17596,7 +17596,7 @@
       "word": "operating cost",
       "reading": "オペレーティングコスト",
       "jpTranslation": "運営費",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17620,7 +17620,7 @@
       "word": "breakeven point",
       "reading": "ブレークイーブンポイント",
       "jpTranslation": "損益分岐点",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17644,7 +17644,7 @@
       "word": "market capitalization",
       "reading": "マーケットキャピタリゼーション",
       "jpTranslation": "時価総額",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17668,7 +17668,7 @@
       "word": "balance of payments",
       "reading": "バランスオブペイメンツ",
       "jpTranslation": "国際収支",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17692,7 +17692,7 @@
       "word": "arbitrage",
       "reading": "アービトラージ",
       "jpTranslation": "裁定取引",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17716,7 +17716,7 @@
       "word": "price ceiling",
       "reading": "プライスシーリング",
       "jpTranslation": "価格上限",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17740,7 +17740,7 @@
       "word": "price floor",
       "reading": "プライスフロア",
       "jpTranslation": "価格下限",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17764,7 +17764,7 @@
       "word": "consumer confidence",
       "reading": "コンシューマーコンフィデンス",
       "jpTranslation": "消費者信頼感",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17788,7 +17788,7 @@
       "word": "fiscal year",
       "reading": "フィスカルイヤー",
       "jpTranslation": "会計年度",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17812,7 +17812,7 @@
       "word": "calendar year",
       "reading": "カレンダーイヤー",
       "jpTranslation": "暦年",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17836,7 +17836,7 @@
       "word": "turnaround time",
       "reading": "ターンアラウンドタイム",
       "jpTranslation": "処理時間",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17860,7 +17860,7 @@
       "word": "lead time",
       "reading": "リードタイム",
       "jpTranslation": "リードタイム",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17884,7 +17884,7 @@
       "word": "real-time",
       "reading": "リアルタイム",
       "jpTranslation": "リアルタイムの",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -17908,7 +17908,7 @@
       "word": "prospective",
       "reading": "プロスペクティブ",
       "jpTranslation": "予期される",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -17932,7 +17932,7 @@
       "word": "expiry",
       "reading": "エクスパイリー",
       "jpTranslation": "満期",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -17956,7 +17956,7 @@
       "word": "cyclical",
       "reading": "サイクリカル",
       "jpTranslation": "周期的な",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -17980,7 +17980,7 @@
       "word": "biweekly",
       "reading": "バイウィークリー",
       "jpTranslation": "隔週の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -18004,7 +18004,7 @@
       "word": "hindsight",
       "reading": "ハインドサイト",
       "jpTranslation": "後知恵",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -18028,7 +18028,7 @@
       "word": "foresight",
       "reading": "フォーサイト",
       "jpTranslation": "先見の明",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -18052,7 +18052,7 @@
       "word": "tardiness",
       "reading": "タードゥニス",
       "jpTranslation": "遅刻",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -18076,7 +18076,7 @@
       "word": "urgency",
       "reading": "アージェンシー",
       "jpTranslation": "緊急性",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -18100,7 +18100,7 @@
       "word": "priority",
       "reading": "プライオリティ",
       "jpTranslation": "優先事項",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -18124,7 +18124,7 @@
       "word": "multitasking",
       "reading": "マルチタスキング",
       "jpTranslation": "マルチタスク",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -18148,7 +18148,7 @@
       "word": "contemporaneous",
       "reading": "コンテンポラニアス",
       "jpTranslation": "同時代の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -18172,7 +18172,7 @@
       "word": "prolific",
       "reading": "プロリフィック",
       "jpTranslation": "多作な",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -18196,7 +18196,7 @@
       "word": "beneficiary",
       "reading": "ベネフィシャリー",
       "jpTranslation": "受益者",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -18220,7 +18220,7 @@
       "word": "mediator",
       "reading": "ミーディエーター",
       "jpTranslation": "仲介者",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -18244,7 +18244,7 @@
       "word": "arbitrator",
       "reading": "アービトレーター",
       "jpTranslation": "仲裁人",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -18268,7 +18268,7 @@
       "word": "surrogate",
       "reading": "サロゲート",
       "jpTranslation": "代理の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -18292,7 +18292,7 @@
       "word": "confidant",
       "reading": "コンフィダント",
       "jpTranslation": "腹心の友",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -18316,7 +18316,7 @@
       "word": "adversary",
       "reading": "アドバーサリー",
       "jpTranslation": "敵",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -18340,7 +18340,7 @@
       "word": "accomplice",
       "reading": "アコンプリス",
       "jpTranslation": "共犯者",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -18364,7 +18364,7 @@
       "word": "rift",
       "reading": "リフト",
       "jpTranslation": "亀裂",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -18388,7 +18388,7 @@
       "word": "dissolution",
       "reading": "ディソリューション",
       "jpTranslation": "解消",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -18412,7 +18412,7 @@
       "word": "lineage",
       "reading": "リニッジ",
       "jpTranslation": "血統",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -18436,7 +18436,7 @@
       "word": "genealogy",
       "reading": "ジニアロジー",
       "jpTranslation": "家系学",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -18460,7 +18460,7 @@
       "word": "patronage",
       "reading": "パトロネージ",
       "jpTranslation": "後援",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -18484,7 +18484,7 @@
       "word": "cohabitation",
       "reading": "コハビテーション",
       "jpTranslation": "同居",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -18508,7 +18508,7 @@
       "word": "codependency",
       "reading": "コーディペンデンシー",
       "jpTranslation": "共依存",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -18532,7 +18532,7 @@
       "word": "gaslighting",
       "reading": "ガスライティング",
       "jpTranslation": "ガスライティング",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -18556,7 +18556,7 @@
       "word": "healthy boundaries",
       "reading": "ヘルシーバウンダリーズ",
       "jpTranslation": "健全な境界",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -18580,7 +18580,7 @@
       "word": "civil partnership",
       "reading": "シビルパートナーシップ",
       "jpTranslation": "シビルパートナーシップ",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -18604,7 +18604,7 @@
       "word": "long-distance relationship",
       "reading": "ロングディスタンスリレーションシップ",
       "jpTranslation": "遠距離恋愛",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -18628,7 +18628,7 @@
       "word": "unconditional love",
       "reading": "アンコンディショナルラブ",
       "jpTranslation": "無条件の愛",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -18652,7 +18652,7 @@
       "word": "emotional abuse",
       "reading": "エモーショナルアビュース",
       "jpTranslation": "精神的虐待",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -18676,7 +18676,7 @@
       "word": "narcissism",
       "reading": "ナルシシズム",
       "jpTranslation": "自己愛",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -18700,7 +18700,7 @@
       "word": "manipulation",
       "reading": "マニピュレーション",
       "jpTranslation": "操作",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -18724,7 +18724,7 @@
       "word": "toxic relationship",
       "reading": "トキシックリレーションシップ",
       "jpTranslation": "有害な関係",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -18748,7 +18748,7 @@
       "word": "nonviolent communication",
       "reading": "ノンバイオレントコミュニケーション",
       "jpTranslation": "非暴力コミュニケーション",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -18772,7 +18772,7 @@
       "word": "empathic listening",
       "reading": "エンパシックリスニング",
       "jpTranslation": "共感的傾聴",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -18796,7 +18796,7 @@
       "word": "validation",
       "reading": "バリデーション",
       "jpTranslation": "承認",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -18820,7 +18820,7 @@
       "word": "affirmation",
       "reading": "アファーメーション",
       "jpTranslation": "肯定",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -18844,7 +18844,7 @@
       "word": "conflict resolution",
       "reading": "コンフリクトレゾリューション",
       "jpTranslation": "紛争解決",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -18868,7 +18868,7 @@
       "word": "feuding",
       "reading": "フューディング",
       "jpTranslation": "仲たがい",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -18892,7 +18892,7 @@
       "word": "constitutional",
       "reading": "コンスティテューショナル",
       "jpTranslation": "憲法上の",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -18916,7 +18916,7 @@
       "word": "secondment",
       "reading": "セカンドメント",
       "jpTranslation": "出向",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -18940,7 +18940,7 @@
       "word": "hierarchical",
       "reading": "ハイアラーキカル",
       "jpTranslation": "階層的な",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -18964,7 +18964,7 @@
       "word": "severance",
       "reading": "セバランス",
       "jpTranslation": "退職金",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -18988,7 +18988,7 @@
       "word": "lucrative",
       "reading": "ルークラティブ",
       "jpTranslation": "儲かる",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -19012,7 +19012,7 @@
       "word": "matriculate",
       "reading": "マトリキュレート",
       "jpTranslation": "入学する",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "verb"
@@ -19036,7 +19036,7 @@
       "word": "sequential",
       "reading": "シーケンシャル",
       "jpTranslation": "順序立てた",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -19060,7 +19060,7 @@
       "word": "momentary",
       "reading": "モーメンタリー",
       "jpTranslation": "瞬間的な",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -19084,7 +19084,7 @@
       "word": "forthcoming",
       "reading": "フォースカミング",
       "jpTranslation": "近々予定されている",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -19108,7 +19108,7 @@
       "word": "belated",
       "reading": "ビレイテッド",
       "jpTranslation": "遅れた",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -19132,7 +19132,7 @@
       "word": "magistrate",
       "reading": "マジストレート",
       "jpTranslation": "治安判事",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -19156,7 +19156,7 @@
       "word": "constituency",
       "reading": "コンスティテュエンシー",
       "jpTranslation": "選挙区",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"
@@ -19180,7 +19180,7 @@
       "word": "bureaucratic",
       "reading": "ビュロークラティック",
       "jpTranslation": "官僚的な",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "adjective"
@@ -19204,7 +19204,7 @@
       "word": "ratification",
       "reading": "ラティフィケーション",
       "jpTranslation": "批准",
-      "cefrLevel": "b2",
+      "cefrLevel": "B2",
       "eikenLevel": "2",
       "pos": [
         "noun"

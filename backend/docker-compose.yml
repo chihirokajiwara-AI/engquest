@@ -5,16 +5,33 @@ services:
     build: .
     container_name: aken-backend
     ports:
-      - "3001:3001"
+      - "127.0.0.1:3001:3001"  # Bind to localhost only — nginx proxies externally
     environment:
       - PORT=3001
+      - NODE_ENV=production
       - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY:-}
       - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET:-}
       - CLAUDE_API_KEY=${CLAUDE_API_KEY:-}
       - STRIPE_PRICE_ID=${STRIPE_PRICE_ID:-price_aken_monthly_999}
+      - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID:-}
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS:-https://akenquest.jp,https://www.akenquest.jp}
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/firebase-service-account.json
+    volumes:
+      # Mount Firebase service account key (do NOT bake into image)
+      - ./firebase-service-account.json:/app/firebase-service-account.json:ro
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3001/health"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
+    read_only: true          # Read-only filesystem
+    tmpfs:
+      - /tmp:noexec,nosuid   # Writable tmp with no exec
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.5'
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

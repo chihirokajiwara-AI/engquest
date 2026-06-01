@@ -62,10 +62,14 @@ whisper_models/
 *.swo
 .DS_Store
 
-# Environment
+# Environment & Secrets
 .env
 .env.local
 *.env
+**/firebase-service-account.json
+**/service-account*.json
+backend/node_modules/
+backend/package-lock.json
 
 # Generated
 lib/generated/

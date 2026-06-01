@@ -84,6 +84,18 @@ class BillingService {
     return hasPremiumAccess;
   }
 
+  /// Build authorization headers with Firebase ID token.
+  Future<Map<String, String>> _authHeaders() async {
+    final headers = <String, String>{
+      'Content-Type': 'application/json',
+    };
+    final token = await _auth.getIdToken();
+    if (token != null) {
+      headers['Authorization'] = 'Bearer $token';
+    }
+    return headers;
+  }
+
   /// Fetch latest subscription status from backend.
   Future<SubscriptionInfo> refreshStatus() async {
     if (FlavorConfig.instance.isEdilabFlavor) {
@@ -93,9 +105,10 @@ class BillingService {
 
     try {
       final uid = await _auth.getOrCreateUid();
+      final headers = await _authHeaders();
       final response = await http.get(
         Uri.parse('$_backendUrl/billing/status?uid=$uid'),
-        headers: {'Content-Type': 'application/json'},
+        headers: headers,
       ).timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
@@ -115,12 +128,12 @@ class BillingService {
   Future<String?> createCheckoutSession() async {
     try {
       final uid = await _auth.getOrCreateUid();
+      final headers = await _authHeaders();
       final response = await http.post(
         Uri.parse('$_backendUrl/billing/checkout'),
-        headers: {'Content-Type': 'application/json'},
+        headers: headers,
         body: jsonEncode({
           'uid': uid,
-          'price_id': 'price_aken_monthly_999', // Stripe Price ID
           'trial_days': 7,
         }),
       ).timeout(const Duration(seconds: 15));
@@ -139,9 +152,10 @@ class BillingService {
   Future<String?> getCustomerPortalUrl() async {
     try {
       final uid = await _auth.getOrCreateUid();
+      final headers = await _authHeaders();
       final response = await http.post(
         Uri.parse('$_backendUrl/billing/portal'),
-        headers: {'Content-Type': 'application/json'},
+        headers: headers,
         body: jsonEncode({'uid': uid}),
       ).timeout(const Duration(seconds: 15));
 
