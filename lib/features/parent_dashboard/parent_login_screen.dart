@@ -203,12 +203,12 @@ class _ParentLoginScreenState extends State<ParentLoginScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1A1A2E),
+      backgroundColor: const Color(0xFFF5F7FA),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white70),
+          icon: const Icon(Icons.arrow_back, color: Color(0xFF263238)),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: const Text(
@@ -233,8 +233,9 @@ class _ParentLoginScreenState extends State<ParentLoginScreen>
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 24),
           decoration: BoxDecoration(
-            color: const Color(0xFF16213E),
+            color: const Color(0xFFE8EEF3),
             borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: const Color(0xFFE0E0E0)),
           ),
           child: TabBar(
             controller: _tabCtrl,
@@ -243,7 +244,7 @@ class _ParentLoginScreenState extends State<ParentLoginScreen>
               borderRadius: BorderRadius.circular(12),
             ),
             labelColor: Colors.black,
-            unselectedLabelColor: Colors.white54,
+            unselectedLabelColor: const Color(0xFF607D8B),
             labelStyle: const TextStyle(fontWeight: FontWeight.bold),
             dividerHeight: 0,
             tabs: const [
@@ -275,7 +276,7 @@ class _ParentLoginScreenState extends State<ParentLoginScreen>
         children: [
           const Text(
             'お子様の学習状況を確認するために\n保護者アカウントでログインしてください',
-            style: TextStyle(color: Colors.white70, fontSize: 14, height: 1.5),
+            style: TextStyle(color: Color(0xFF607D8B), fontSize: 14, height: 1.5),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 24),
@@ -316,7 +317,7 @@ class _ParentLoginScreenState extends State<ParentLoginScreen>
         children: [
           const Text(
             '保護者アカウントを作成して\nお子様の進捗を見守りましょう',
-            style: TextStyle(color: Colors.white70, fontSize: 14, height: 1.5),
+            style: TextStyle(color: Color(0xFF607D8B), fontSize: 14, height: 1.5),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 24),
@@ -367,9 +368,16 @@ class _ParentLoginScreenState extends State<ParentLoginScreen>
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: const Color(0xFF16213E),
+              color: Colors.white,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: const Color(0xFFFFD700).withAlpha(60)),
+              border: Border.all(color: const Color(0xFFFFD700).withAlpha(100)),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF4FC3F7).withAlpha(20),
+                  blurRadius: 8,
+                  offset: const Offset(0, 3),
+                ),
+              ],
             ),
             child: const Column(
               children: [
@@ -378,7 +386,7 @@ class _ParentLoginScreenState extends State<ParentLoginScreen>
                 Text(
                   'お子様のアカウントをリンク',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Color(0xFF263238),
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
@@ -389,7 +397,7 @@ class _ParentLoginScreenState extends State<ParentLoginScreen>
                   'コードの取得方法：\n'
                   'お子様のアプリ → Scholar\'s Tower → 設定タブ → リンクコード生成',
                   style: TextStyle(
-                    color: Colors.white70,
+                    color: Color(0xFF607D8B),
                     fontSize: 13,
                     height: 1.5,
                   ),
@@ -438,7 +446,7 @@ class _ParentLoginScreenState extends State<ParentLoginScreen>
             },
             child: const Text(
               'ログアウト',
-              style: TextStyle(color: Colors.white54, fontSize: 14),
+              style: TextStyle(color: Color(0xFF90A4AE), fontSize: 14),
             ),
           ),
         ],
@@ -461,19 +469,19 @@ class _ParentLoginScreenState extends State<ParentLoginScreen>
       obscureText: obscure,
       keyboardType: keyboardType,
       textAlign: textAlign,
-      style: style ?? const TextStyle(color: Colors.white, fontSize: 16),
+      style: style ?? const TextStyle(color: Color(0xFF263238), fontSize: 16),
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: const TextStyle(color: Colors.white38),
+        labelStyle: const TextStyle(color: Color(0xFF90A4AE)),
         filled: true,
-        fillColor: const Color(0xFF16213E),
+        fillColor: Colors.white,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.white24),
+          borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.white24),
+          borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),

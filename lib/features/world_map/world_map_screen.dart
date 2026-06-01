@@ -48,36 +48,36 @@ class _ZoneDef {
 
 final List<_ZoneDef> _kZones = [
   _ZoneDef(
-    label:    'Blacksmith',
-    subtitle: 'Battle — 単語と戦え！',
+    label:    '鍛冶屋',
+    subtitle: 'Blacksmith — 単語と戦え！',
     icon:     Icons.shield_outlined,
     gradient: [const Color(0xFFFF7043), const Color(0xFFE64A19)],  // warm red-orange
     route:    '/battle',
   ),
   _ZoneDef(
-    label:    'Town Crier',
-    subtitle: 'Dialog — NPCと話そう',
+    label:    '広場',
+    subtitle: 'Town Crier — NPCと話そう',
     icon:     Icons.chat_bubble_outline,
     gradient: [const Color(0xFF29B6F6), const Color(0xFF0288D1)],  // sky blue
     route:    '/dialog',
   ),
   _ZoneDef(
-    label:    'Echo Cave',
-    subtitle: 'Voice — 声に出して練習',
+    label:    'こだまの洞窟',
+    subtitle: 'Echo Cave — 声に出して練習',
     icon:     Icons.mic_none_rounded,
     gradient: [const Color(0xFF66BB6A), const Color(0xFF388E3C)],  // emerald green
     route:    '/voice',
   ),
   _ZoneDef(
-    label:    'Arena',
-    subtitle: 'Exam — 英検模擬試験',
+    label:    '闘技場',
+    subtitle: 'Arena — 英検模擬試験',
     icon:     Icons.assignment_outlined,
     gradient: [const Color(0xFFFF7043), const Color(0xFFD84315)],  // deep orange
     route:    '/exam',
   ),
   _ZoneDef(
-    label:    "Scholar's Tower",
-    subtitle: 'Parent — 成長を確認',
+    label:    '学者の塔',
+    subtitle: "Scholar's Tower — 成長を確認",
     icon:     Icons.admin_panel_settings_outlined,
     gradient: [const Color(0xFFAB47BC), const Color(0xFF7B1FA2)],  // purple
     route:    '/parent',
@@ -207,7 +207,7 @@ class _WorldMapScreenState extends State<WorldMapScreen>
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 4),
               child: Text(
-                'Where will you go?',
+                'どこへ行く？',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Color(0xFF607D8B),

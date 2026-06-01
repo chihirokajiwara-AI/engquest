@@ -16,14 +16,15 @@ class PrivacyPolicyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1A1A2E),
+      backgroundColor: const Color(0xFFF5F7FA),
       appBar: AppBar(
-        backgroundColor: const Color(0xFF16213E),
+        backgroundColor: Colors.white,
+        elevation: 1,
         title: const Text(
           'プライバシーポリシー',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Color(0xFF263238), fontWeight: FontWeight.bold),
         ),
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: const IconThemeData(color: Color(0xFF263238)),
         leading: showCloseButton
             ? IconButton(
                 icon: const Icon(Icons.close),
@@ -151,7 +152,7 @@ class _Section extends StatelessWidget {
           Text(
             body,
             style: const TextStyle(
-              color: Colors.white70,
+              color: Color(0xFF546E7A),
               fontSize: 14,
               height: 1.6,
             ),

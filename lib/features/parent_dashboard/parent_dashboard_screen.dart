@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:engquest/core/models/progress_data.dart';
 import 'package:engquest/core/analytics/progress_service.dart';
 import 'package:engquest/core/analytics/firestore_progress_repository.dart';
+import 'package:engquest/core/firebase/auth_service.dart';
 
 // ══════════════════════════════════════════════════════════════════════════════
 //  ParentDashboardScreen — C08
@@ -19,13 +20,13 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   late final ProgressService _service;
+  final _auth = AuthService();
   late Future<LearningProgress> _progressFuture;
-  bool _isFirestoreLive = false; // true when real data loaded
 
   // Settings state
   int _dailyGoal = 20;
   TimeOfDay _notifTime = const TimeOfDay(hour: 18, minute: 0);
-  String _difficulty = 'Normal';
+  String _difficulty = '標準';
 
   @override
   void initState() {
@@ -42,15 +43,8 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
   }
 
   Future<LearningProgress> _fetchProgress() async {
-    final progress = await _service.getProgress('demo_uid');
-    // Detect if real data came back (mastered > 0 or streak > 0 from Firestore)
-    // We mark live=true whenever we got a non-default result
-    if (mounted) {
-      setState(() {
-        _isFirestoreLive = true;
-      });
-    }
-    return progress;
+    final uid = await _auth.getOrCreateUid();
+    return _service.getProgress(uid);
   }
 
   @override
@@ -77,37 +71,13 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text(
-              '📊 Parent Dashboard',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-              ),
-            ),
-            const SizedBox(width: 6),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-              decoration: BoxDecoration(
-                color: _isFirestoreLive
-                    ? const Color(0xFF1B5E20)
-                    : const Color(0xFF4E342E),
-                borderRadius: BorderRadius.circular(6),
-              ),
-              child: Text(
-                _isFirestoreLive ? 'LIVE' : 'DEMO',
-                style: TextStyle(
-                  color: _isFirestoreLive ? Colors.greenAccent : Colors.orange,
-                  fontSize: 9,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 0.5,
-                ),
-              ),
-            ),
-          ],
+        title: const Text(
+          '📊 保護者ダッシュボード',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
         ),
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
@@ -124,10 +94,10 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
           labelColor: Colors.white,
           unselectedLabelColor: Colors.white60,
           tabs: const [
-            Tab(icon: Icon(Icons.home_rounded), text: 'Home'),
-            Tab(icon: Icon(Icons.bar_chart_rounded), text: 'Progress'),
-            Tab(icon: Icon(Icons.calendar_today_rounded), text: 'Schedule'),
-            Tab(icon: Icon(Icons.settings_rounded), text: 'Settings'),
+            Tab(icon: Icon(Icons.home_rounded), text: 'ホーム'),
+            Tab(icon: Icon(Icons.bar_chart_rounded), text: '学習記録'),
+            Tab(icon: Icon(Icons.calendar_today_rounded), text: 'スケジュール'),
+            Tab(icon: Icon(Icons.settings_rounded), text: '設定'),
           ],
         ),
       ),
@@ -187,7 +157,7 @@ class _HomeTab extends StatelessWidget {
       children: [
         // ── Greeting ──────────────────────────────────────────────────────
         const Text(
-          "Your child's learning today",
+          'お子様の今日の学習',
           style: TextStyle(color: Color(0xFF607D8B), fontSize: 14),
         ),
         const SizedBox(height: 20),
@@ -202,7 +172,7 @@ class _HomeTab extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${progress.currentStreak} day streak!',
+                    '${progress.currentStreak}日連続！',
                     style: const TextStyle(
                       color: Colors.amber,
                       fontSize: 22,
@@ -210,7 +180,7 @@ class _HomeTab extends StatelessWidget {
                     ),
                   ),
                   const Text(
-                    'Keep up the amazing work!',
+                    'この調子でがんばろう！',
                     style: TextStyle(color: Color(0xFF607D8B), fontSize: 13),
                   ),
                 ],
@@ -226,7 +196,7 @@ class _HomeTab extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                "📚 Today's Session",
+                '📚 今日のセッション',
                 style: TextStyle(
                   color: Color(0xFF263238),
                   fontSize: 16,
@@ -238,19 +208,19 @@ class _HomeTab extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   _StatPill(
-                    label: 'Words',
+                    label: '単語数',
                     value: '${today?.wordsPracticed ?? 0}',
                     icon: Icons.spellcheck,
                     color: const Color(0xFF66BB6A),
                   ),
                   _StatPill(
-                    label: 'Minutes',
+                    label: '分',
                     value: '${today?.sessionMinutes ?? 0}',
                     icon: Icons.timer,
                     color: const Color(0xFF4FC3F7),
                   ),
                   _StatPill(
-                    label: 'Avg Score',
+                    label: '平均スコア',
                     value: today != null
                         ? today.averageScore.toStringAsFixed(1)
                         : '—',
@@ -272,7 +242,7 @@ class _HomeTab extends StatelessWidget {
               Row(
                 children: [
                   const Text(
-                    '🏆 Eiken Readiness',
+                    '🏆 英検準備度',
                     style: TextStyle(
                       color: Color(0xFF263238),
                       fontSize: 16,
@@ -326,13 +296,13 @@ class _HomeTab extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      'Next Review Due',
+                      '次の復習',
                       style: TextStyle(color: Color(0xFF607D8B), fontSize: 13),
                     ),
                     Text(
                       nextHours <= 0
-                          ? 'Now!'
-                          : 'In $nextHours hour${nextHours == 1 ? '' : 's'}',
+                          ? '今すぐ！'
+                          : '$nextHours時間後',
                       style: const TextStyle(
                         color: Color(0xFFAB47BC),
                         fontSize: 18,
@@ -353,7 +323,7 @@ class _HomeTab extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                '📖 Overall Vocabulary',
+                '📖 語彙全体',
                 style: TextStyle(
                   color: Color(0xFF263238),
                   fontSize: 16,
@@ -365,7 +335,7 @@ class _HomeTab extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '${progress.totalWordsMastered} / 300 mastered',
+                    '${progress.totalWordsMastered} / 300 習得済み',
                     style: const TextStyle(color: Color(0xFF607D8B), fontSize: 14),
                   ),
                   Text(
@@ -402,9 +372,9 @@ class _HomeTab extends StatelessWidget {
   }
 
   String _readinessLabel(double r) {
-    if (r >= 80) return '🌟 On track for Eiken Grade 5!';
-    if (r >= 50) return '📈 Good progress — keep it up!';
-    return '💪 More practice needed';
+    if (r >= 80) return '🌟 英検5級合格ペースです！';
+    if (r >= 50) return '📈 順調に進んでいます！';
+    return '💪 もう少し練習しましょう';
   }
 }
 
@@ -437,7 +407,7 @@ class _ProgressTab extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                '📊 Last 7 Days',
+                '📊 直近7日間',
                 style: TextStyle(
                   color: Color(0xFF263238),
                   fontSize: 16,
@@ -460,7 +430,7 @@ class _ProgressTab extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                '📅 Study Calendar',
+                '📅 学習カレンダー',
                 style: TextStyle(
                   color: Color(0xFF263238),
                   fontSize: 16,
@@ -480,7 +450,7 @@ class _ProgressTab extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                '🗂️ Category Mastery',
+                '🗂️ カテゴリ別習得',
                 style: TextStyle(
                   color: Color(0xFF263238),
                   fontSize: 16,
@@ -566,7 +536,7 @@ class _BarChartPainter extends CustomPainter {
   }
 
   String _dayLabel(DateTime d) {
-    const names = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const names = ['月', '火', '水', '木', '金', '土', '日'];
     return names[d.weekday - 1];
   }
 
@@ -694,8 +664,8 @@ class _ScheduleTab extends StatelessWidget {
               Expanded(
                 child: Text(
                   onTrack
-                      ? 'Your child is on track!\nKeep the momentum going 🚀'
-                      : 'A little more practice today\nwill make a big difference!',
+                      ? '順調に進んでいます！\nこの調子でがんばろう 🚀'
+                      : '今日少し練習すると\n大きな差がつきますよ！',
                   style: TextStyle(
                     color: onTrack ? const Color(0xFF66BB6A) : const Color(0xFFFFB74D),
                     fontSize: 15,
@@ -709,7 +679,7 @@ class _ScheduleTab extends StatelessWidget {
         const SizedBox(height: 20),
 
         const Text(
-          'Upcoming Reviews',
+          '予定されている復習',
           style: TextStyle(
             color: Color(0xFF263238),
             fontSize: 18,
@@ -720,21 +690,21 @@ class _ScheduleTab extends StatelessWidget {
 
         // ── Review schedule cards ─────────────────────────────────────────
         _ReviewCard(
-          period: 'Today',
+          period: '今日',
           count: todayDue,
           icon: '📖',
           color: const Color(0xFFEF5350),
         ),
         const SizedBox(height: 12),
         _ReviewCard(
-          period: 'Tomorrow',
+          period: '明日',
           count: tomorrowDue,
           icon: '📚',
           color: const Color(0xFFFFB74D),
         ),
         const SizedBox(height: 12),
         _ReviewCard(
-          period: 'This Week',
+          period: '今週',
           count: weekDue,
           icon: '🗓️',
           color: const Color(0xFF4FC3F7),
@@ -748,7 +718,7 @@ class _ScheduleTab extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  '⏰ Next Scheduled Review',
+                  '⏰ 次回予定の復習',
                   style: TextStyle(
                     color: Color(0xFF263238),
                     fontSize: 15,
@@ -772,9 +742,9 @@ class _ScheduleTab extends StatelessWidget {
 
   String _formatDateTime(DateTime dt) {
     final diff = dt.difference(DateTime.now());
-    if (diff.inMinutes < 60) return 'In ${diff.inMinutes} minutes';
-    if (diff.inHours < 24) return 'In ${diff.inHours} hours';
-    return 'Tomorrow';
+    if (diff.inMinutes < 60) return '${diff.inMinutes}分後';
+    if (diff.inHours < 24) return '${diff.inHours}時間後';
+    return '明日';
   }
 }
 
@@ -809,7 +779,7 @@ class _ReviewCard extends StatelessWidget {
               Text(period,
                   style: const TextStyle(color: Color(0xFF607D8B), fontSize: 13)),
               Text(
-                '$count words',
+                '$count 単語',
                 style: TextStyle(
                   color: color,
                   fontSize: 18,
@@ -856,7 +826,7 @@ class _SettingsTab extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                '🎯 Daily Word Goal',
+                '🎯 1日の目標単語数',
                 style: TextStyle(
                   color: Color(0xFF263238),
                   fontSize: 16,
@@ -882,7 +852,7 @@ class _SettingsTab extends StatelessWidget {
                         ),
                       ),
                       child: Text(
-                        '$g words',
+                        '$g 単語',
                         style: TextStyle(
                           color: selected ? Colors.black : const Color(0xFF607D8B),
                           fontWeight: FontWeight.bold,
@@ -903,7 +873,7 @@ class _SettingsTab extends StatelessWidget {
             contentPadding: EdgeInsets.zero,
             leading: const Icon(Icons.notifications_active,
                 color: Color(0xFFAB47BC), size: 28),
-            title: const Text('Reminder Time',
+            title: const Text('リマインダー時刻',
                 style: TextStyle(color: Color(0xFF263238), fontSize: 15)),
             subtitle: Text(
               notifTime.format(context),
@@ -932,7 +902,7 @@ class _SettingsTab extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                '⚡ Difficulty',
+                '⚡ 難易度',
                 style: TextStyle(
                   color: Color(0xFF263238),
                   fontSize: 16,
@@ -940,7 +910,7 @@ class _SettingsTab extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 12),
-              ...['Easy', 'Normal', 'Hard'].map((d) {
+              ...['やさしい', '標準', 'むずかしい'].map((d) {
                 final selected = d == difficulty;
                 // RadioListTile.groupValue/onChanged are deprecated after
                 // Flutter 3.32 in favour of a RadioGroup ancestor, which does
