@@ -31,14 +31,23 @@ class ExamPracticeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F7FA),
       appBar: AppBar(
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF4FC3F7), Color(0xFF29B6F6)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
+        flexibleSpace: Builder(
+          builder: (ctx) {
+            final primary = Theme.of(ctx).colorScheme.primary;
+            final darker = HSLColor.fromColor(primary)
+                .withLightness(
+                    (HSLColor.fromColor(primary).lightness - 0.08).clamp(0.0, 1.0))
+                .toColor();
+            return Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [primary, darker],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+            );
+          },
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -210,7 +219,7 @@ class _InfoChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Icon(icon, color: const Color(0xFF4FC3F7), size: 24),
+        Icon(icon, color: Theme.of(context).colorScheme.primary, size: 24),
         const SizedBox(height: 4),
         Text(
           label,

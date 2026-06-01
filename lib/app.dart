@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:engquest/core/config/flavor_config.dart';
 import 'package:engquest/features/world_map/world_map_screen.dart';
 import 'package:engquest/features/battle/battle_screen.dart';
@@ -123,7 +124,9 @@ class EngQuestApp extends StatelessWidget {
         ),
         scaffoldBackgroundColor: const Color(0xFFF5F7FA),
         useMaterial3: true,
-        fontFamily: 'Roboto',
+        // Noto Sans JP — supports all Japanese kana/kanji used in child UI.
+        // Falls back to system font offline; google_fonts caches after first load.
+        textTheme: GoogleFonts.notoSansJpTextTheme(),
         appBarTheme: AppBarTheme(
           backgroundColor: primaryColor,
           foregroundColor: Colors.white,
