@@ -1,11 +1,16 @@
 // lib/features/paywall/grade_gate_screen.dart
 // A-KEN Quest — Grade lock screen shown when users access premium content.
 //
-// Displays:
-//   - Which grade they're trying to access
-//   - What's included in the subscription
-//   - CTA to subscribe (¥999/month) via RevenueCat native IAP
-//   - Restore purchases button
+// Conversion-optimised redesign (2026-06):
+//   - Trial as hero: large amber badge is the first thing parents see
+//   - Social proof: static learner count
+//   - Free vs Premium comparison table
+//   - RPG emoji feature list matching app fantasy theme
+//   - Gradient CTA button
+//   - Trust signals below the fold
+//
+// Billing integration is unchanged:
+//   purchaseMonthly() and restorePurchases() from BillingService (RevenueCat).
 //
 // For edilab flavor, this screen is never shown (all grades free).
 
@@ -113,88 +118,73 @@ class _GradeGateScreenState extends State<GradeGateScreen> {
   @override
   Widget build(BuildContext context) {
     final flavor = FlavorConfig.instance;
+    final colorScheme = Theme.of(context).colorScheme;
+    final primaryColor = Color(flavor.primaryColor);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA),
+      backgroundColor: colorScheme.surface,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF263238)),
-          onPressed:
-              widget.onBack ?? () => Navigator.of(context).pop(),
+          icon: Icon(
+            Icons.arrow_back,
+            color: colorScheme.onSurface,
+          ),
+          onPressed: widget.onBack ?? () => Navigator.of(context).pop(),
         ),
       ),
       body: SafeArea(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Spacer(flex: 1),
-              // Lock icon
-              Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  color: Color(flavor.primaryColor).withAlpha(30),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.lock_outline,
-                  size: 48,
-                  color: Color(flavor.primaryColor),
-                ),
-              ),
-              const SizedBox(height: 24),
-              // Title
+              const SizedBox(height: 8),
+
+              // ── Hero trial badge ──────────────────────────────────────────
+              _TrialHeroBadge(),
+
+              const SizedBox(height: 20),
+
+              // ── Title ─────────────────────────────────────────────────────
               Text(
-                '$_gradeDisplayコンテンツ',
-                style: const TextStyle(
-                  color: Color(0xFF263238),
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                'このレベルの問題を解くには\nプレミアムプランが必要です',
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  fontSize: 16,
-                  height: 1.5,
-                ),
+                '$_gradeDisplayで合格しよう',
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      color: colorScheme.onSurface,
+                      fontWeight: FontWeight.bold,
+                    ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 32),
-              // Features list
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withAlpha(12),
-                      blurRadius: 12,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    _featureRow(Icons.auto_stories, '全英検レベル対応（5級〜準1級）'),
-                    const SizedBox(height: 12),
-                    _featureRow(Icons.psychology, 'AIスペースドリピティション'),
-                    const SizedBox(height: 12),
-                    _featureRow(Icons.record_voice_over, '発音練習＆AI会話'),
-                    const SizedBox(height: 12),
-                    _featureRow(Icons.trending_up, '保護者ダッシュボード'),
-                    const SizedBox(height: 12),
-                    _featureRow(Icons.all_inclusive, '広告なし・無制限アクセス'),
-                  ],
-                ),
+              const SizedBox(height: 8),
+
+              // ── Social proof ──────────────────────────────────────────────
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('⭐', style: TextStyle(fontSize: 14)),
+                  const SizedBox(width: 4),
+                  Text(
+                    '3,000人以上が学習中',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: colorScheme.onSurface.withAlpha(153),
+                          fontWeight: FontWeight.w500,
+                        ),
+                  ),
+                ],
               ),
-              // Error message
+
+              const SizedBox(height: 28),
+
+              // ── Free vs Premium comparison ────────────────────────────────
+              _ComparisonCard(primaryColor: primaryColor),
+
+              const SizedBox(height: 28),
+
+              // ── RPG feature list ──────────────────────────────────────────
+              _FeatureListCard(primaryColor: primaryColor),
+
+              // ── Error message ─────────────────────────────────────────────
               if (_errorMessage != null) ...[
                 const SizedBox(height: 16),
                 Text(
@@ -203,96 +193,481 @@ class _GradeGateScreenState extends State<GradeGateScreen> {
                   textAlign: TextAlign.center,
                 ),
               ],
-              const Spacer(flex: 1),
-              // Subscribe CTA
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: _purchasing ? null : _handlePurchase,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(flavor.primaryColor),
-                    foregroundColor: Colors.white,
-                    disabledBackgroundColor:
-                        Color(flavor.primaryColor).withAlpha(128),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    elevation: 2,
-                  ),
-                  child: _purchasing
-                      ? const SizedBox(
-                          width: 24,
-                          height: 24,
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                            strokeWidth: 2.5,
-                          ),
-                        )
-                      : const Text(
-                          '月額¥999で始める',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                ),
+
+              const SizedBox(height: 32),
+
+              // ── Primary CTA ───────────────────────────────────────────────
+              _GradientCTAButton(
+                primaryColor: primaryColor,
+                purchasing: _purchasing,
+                onTap: _handlePurchase,
               ),
+
               const SizedBox(height: 12),
-              // Price context
+
+              // ── Price clarification ────────────────────────────────────────
               Text(
-                '7日間無料トライアル • いつでもキャンセル可能',
-                style: TextStyle(
-                  color: Colors.grey[500],
-                  fontSize: 13,
-                ),
+                'トライアル後 月額¥999（いつでも解約可能）',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: colorScheme.onSurface.withAlpha(153),
+                    ),
+                textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 8),
-              // Restore purchases
+
+              const SizedBox(height: 20),
+
+              // ── Trust signals ─────────────────────────────────────────────
+              _TrustSignalsRow(),
+
+              const SizedBox(height: 16),
+
+              // ── Restore purchases ─────────────────────────────────────────
               TextButton(
                 onPressed: _purchasing ? null : _handleRestore,
                 child: Text(
                   '以前の購入を復元',
                   style: TextStyle(
-                    color: Color(flavor.primaryColor),
+                    color: primaryColor,
                     fontSize: 14,
                   ),
                 ),
               ),
-              const SizedBox(height: 4),
-              // Free tier reminder
+
+              // ── Free tier escape hatch ────────────────────────────────────
               TextButton(
-                onPressed:
-                    widget.onBack ?? () => Navigator.of(context).pop(),
+                onPressed: widget.onBack ?? () => Navigator.of(context).pop(),
                 child: Text(
                   '英検5級は無料で学習できます',
                   style: TextStyle(
-                    color: Colors.grey[600],
+                    color: colorScheme.onSurface.withAlpha(128),
                     fontSize: 14,
                   ),
                 ),
               ),
-              const Spacer(flex: 1),
+
+              const SizedBox(height: 24),
             ],
           ),
         ),
       ),
     );
   }
+}
 
-  Widget _featureRow(IconData icon, String text) {
-    return Row(
-      children: [
-        Icon(icon, size: 20, color: const Color(0xFF4CAF50)),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Text(
-            text,
-            style: const TextStyle(
-              color: Color(0xFF263238),
-              fontSize: 14,
+// ── Sub-widgets ──────────────────────────────────────────────────────────────
+
+/// Hero amber badge that makes the 7-day free trial unmissable.
+class _TrialHeroBadge extends StatelessWidget {
+  const _TrialHeroBadge();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Color(0xFFFFB300), Color(0xFFFF8F00)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(50),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFFFFB300).withAlpha(80),
+            blurRadius: 16,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Text('🎁', style: TextStyle(fontSize: 22)),
+          const SizedBox(width: 8),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                '7日間無料トライアル',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 0.3,
+                ),
+              ),
+              Text(
+                'クレジットカード登録不要',
+                style: TextStyle(
+                  color: Colors.white.withAlpha(220),
+                  fontSize: 11,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Free vs Premium two-column comparison.
+class _ComparisonCard extends StatelessWidget {
+  const _ComparisonCard({required this.primaryColor});
+
+  final Color primaryColor;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerHighest.withAlpha(120),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withAlpha(80),
+        ),
+      ),
+      child: Column(
+        children: [
+          // Header row
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            decoration: BoxDecoration(
+              color: colorScheme.outlineVariant.withAlpha(60),
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(15),
+              ),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    '無料',
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                          color: colorScheme.onSurface.withAlpha(153),
+                          fontWeight: FontWeight.bold,
+                        ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Container(
+                  width: 1,
+                  height: 20,
+                  color: colorScheme.outlineVariant.withAlpha(100),
+                ),
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.workspace_premium,
+                          size: 14, color: primaryColor),
+                      const SizedBox(width: 4),
+                      Text(
+                        'プレミアム',
+                        style:
+                            Theme.of(context).textTheme.labelLarge?.copyWith(
+                                  color: primaryColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
+          // Comparison rows
+          _comparisonRow(
+            context,
+            label: '対応グレード',
+            freeValue: '5級のみ',
+            premiumValue: '5級〜準1級',
+            highlight: true,
+            primaryColor: primaryColor,
+          ),
+          _comparisonRow(
+            context,
+            label: '模擬試験',
+            freeValue: '✕',
+            premiumValue: '✓',
+            primaryColor: primaryColor,
+          ),
+          _comparisonRow(
+            context,
+            label: 'AIチューター',
+            freeValue: '✕',
+            premiumValue: '✓',
+            primaryColor: primaryColor,
+          ),
+          _comparisonRow(
+            context,
+            label: '学習記録',
+            freeValue: '✕',
+            premiumValue: '✓',
+            primaryColor: primaryColor,
+            isLast: true,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _comparisonRow(
+    BuildContext context, {
+    required String label,
+    required String freeValue,
+    required String premiumValue,
+    required Color primaryColor,
+    bool highlight = false,
+    bool isLast = false,
+  }) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final dividerColor = colorScheme.outlineVariant.withAlpha(60);
+
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(color: dividerColor),
+          bottom: isLast
+              ? BorderSide.none
+              : BorderSide.none, // bottom handled by next row's top
+        ),
+        borderRadius: isLast
+            ? const BorderRadius.vertical(bottom: Radius.circular(15))
+            : BorderRadius.zero,
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              freeValue,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: colorScheme.onSurface.withAlpha(128),
+                  ),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              label,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: colorScheme.onSurface.withAlpha(180),
+                    fontWeight: FontWeight.w600,
+                  ),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              premiumValue,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: highlight ? primaryColor : Colors.green.shade600,
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// RPG-themed feature list with emoji icons.
+class _FeatureListCard extends StatelessWidget {
+  const _FeatureListCard({required this.primaryColor});
+
+  final Color primaryColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withAlpha(15),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'プレミアムでできること',
+            style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: primaryColor,
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+          const SizedBox(height: 16),
+          _featureItem(context, '⚔️', '全級対応', '英検5級〜準1級を完全網羅'),
+          const SizedBox(height: 12),
+          _featureItem(context, '📚', '本番形式の模擬試験', '2024年改訂版に完全対応'),
+          const SizedBox(height: 12),
+          _featureItem(context, '🧙', 'AIチューター', '苦手を自動発見してサポート'),
+          const SizedBox(height: 12),
+          _featureItem(context, '📊', '保護者ダッシュボード', '学習進捗をひと目で確認'),
+        ],
+      ),
+    );
+  }
+
+  Widget _featureItem(
+    BuildContext context,
+    String emoji,
+    String title,
+    String subtitle,
+  ) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(emoji, style: const TextStyle(fontSize: 22)),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurface,
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+              Text(
+                subtitle,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withAlpha(153),
+                    ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Large gradient CTA button.
+class _GradientCTAButton extends StatelessWidget {
+  const _GradientCTAButton({
+    required this.primaryColor,
+    required this.purchasing,
+    required this.onTap,
+  });
+
+  final Color primaryColor;
+  final bool purchasing;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    // Derive a darker shade for the gradient end.
+    final hsl = HSLColor.fromColor(primaryColor);
+    final darkerColor = hsl
+        .withLightness((hsl.lightness - 0.12).clamp(0.0, 1.0))
+        .toColor();
+
+    return SizedBox(
+      width: double.infinity,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: purchasing
+              ? null
+              : LinearGradient(
+                  colors: [primaryColor, darkerColor],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+          color: purchasing ? primaryColor.withAlpha(128) : null,
+          borderRadius: BorderRadius.circular(14),
+          boxShadow: purchasing
+              ? null
+              : [
+                  BoxShadow(
+                    color: primaryColor.withAlpha(90),
+                    blurRadius: 16,
+                    offset: const Offset(0, 6),
+                  ),
+                ],
+        ),
+        child: ElevatedButton(
+          onPressed: purchasing ? null : onTap,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.transparent,
+            foregroundColor: Colors.white,
+            disabledBackgroundColor: Colors.transparent,
+            shadowColor: Colors.transparent,
+            padding: const EdgeInsets.symmetric(vertical: 18),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(14),
+            ),
+            elevation: 0,
+          ),
+          child: purchasing
+              ? const SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                    strokeWidth: 2.5,
+                  ),
+                )
+              : const Text(
+                  '無料で始める  →',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Trust signal row: secure payment + platform badges.
+class _TrustSignalsRow extends StatelessWidget {
+  const _TrustSignalsRow();
+
+  @override
+  Widget build(BuildContext context) {
+    final subtleColor =
+        Theme.of(context).colorScheme.onSurface.withAlpha(100);
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(Icons.lock_outline, size: 13, color: subtleColor),
+        const SizedBox(width: 4),
+        Text(
+          '安全な決済',
+          style: TextStyle(color: subtleColor, fontSize: 11),
+        ),
+        const SizedBox(width: 16),
+        Icon(Icons.apple, size: 13, color: subtleColor),
+        const SizedBox(width: 2),
+        Text(
+          'App Store',
+          style: TextStyle(color: subtleColor, fontSize: 11),
+        ),
+        const SizedBox(width: 16),
+        Icon(Icons.android, size: 13, color: subtleColor),
+        const SizedBox(width: 2),
+        Text(
+          'Google Play',
+          style: TextStyle(color: subtleColor, fontSize: 11),
         ),
       ],
     );
