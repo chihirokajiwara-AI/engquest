@@ -132,6 +132,25 @@ All core components C01-C19 are implemented. See docs/spec/mvp.md for details.
 - [ ] T15: Localization framework — parent UI in Japanese, future expansion
 - [ ] T16: Analytics dashboard — Firebase Analytics + BigQuery export
 
+### Priority 0.5 — Discovered Debt (2026-06-01 audit)
+- [x] T33: Fix 14 failing tests at root cause (consent-gate overflow, reminders
+  default stub, FSRS test self-contradiction, vocab enum-vs-string) — suite now
+  437 green; `flutter analyze --fatal-infos --fatal-warnings` fully clean.
+- [x] T34: Commit wired-in files left untracked (content_filter, terms_of_service)
+  that committed code referenced — a clean checkout previously failed to compile.
+- [ ] T35: Resolve audio asset contract. `verify_audio_assets.py` requires 300 A1
+  MP3s in web/audio/a1 + web/audio (flat); both are empty (were tracked, dropped),
+  so CI is red on audio. Playback path (TtsService.getAudioForWord → Google TTS
+  API/memory → BytesSource) does not use web/audio, and possibly not bundled
+  assets/audio/a1 either. DECIDE: (a) restore web MP3s, (b) retire the stale web
+  check post-T00e, and/or (c) wire offline bundled-audio loading. Blocks tracking
+  the 英検4/5/準2 vocab JSONs (kept untracked in working tree until resolved).
+- [ ] T36: Align CI Flutter to 3.44.x (currently 3.22.x, vs project requirement
+  3.44+); resolve the 3.44↔3.22 formatter drift (59 files) so CI format is green.
+- [ ] T37: Re-enable autonomous loop ONLY behind a hard gate (analyze 0 + test 0
+  failures + clean-checkout compile + untracked-file handling); it was archived
+  2026-06-01 after committing red tests and leaving the tree non-compiling.
+
 ## Hermes Audit Summary (2026-05-30)
 Hermes (hermes-engquest) built the MVP in 4 days (39 commits, 9,200 LOC).
 Velocity was excellent but left significant technical debt:
