@@ -257,12 +257,27 @@ class _DialogScreenState extends State<DialogScreen> {
         children: [
           Text(widget.scenario.npcEmoji, style: const TextStyle(fontSize: 28)),
           const SizedBox(width: 10),
-          Text(
-            widget.scenario.npcName,
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.scenario.npcName,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                ),
+                const Text(
+                  'AI搭載 (Anthropic Claude)',
+                  style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 10,
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
+              ],
             ),
           ),
         ],

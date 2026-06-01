@@ -106,9 +106,27 @@ class DialogService {
 
   DialogService({required ClaudeClient client}) : _client = client;
 
+  /// Hardcoded child-safety system prompt prefix.
+  ///
+  /// This is prepended to every NPC system prompt to enforce age-appropriate
+  /// content boundaries at the model level (defense-in-depth alongside the
+  /// client-side [ContentFilter]).
+  static const String _childSafetyPrefix = '''You are an English learning tutor for Japanese children ages 4-18 studying for the Eiken (英検) exam.
+Rules:
+- Only discuss English learning, vocabulary, grammar, and age-appropriate educational topics
+- Never discuss violence, adult content, politics, religion, or controversial topics
+- Respond in simple, encouraging language appropriate for the student's level
+- If asked about non-educational topics, redirect to English learning
+- Use Japanese for explanations, English for the target language content
+
+''';
+
   /// Builds the NPC system prompt for [scenario] and [playerName].
+  ///
+  /// The prompt is prefixed with [_childSafetyPrefix] to enforce child-safe
+  /// content at the model level.
   String _systemPrompt(DialogScenario scenario, String playerName) {
-    return '''You are a friendly NPC in an English learning RPG for Japanese children (age 6–12).
+    return '''${_childSafetyPrefix}You are a friendly NPC in an English learning RPG for Japanese children (age 6–12).
 Use only A1 CEFR English vocabulary. Maximum sentence length: 10 words.
 Keep responses under 3 sentences. Be encouraging and fun.
 The player's name is $playerName.

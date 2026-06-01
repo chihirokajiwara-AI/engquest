@@ -67,6 +67,11 @@ whisper_models/
 .env.local
 *.env
 
+# Backend (Node.js)
+backend/node_modules/
+backend/package-lock.json
+backend/serviceAccountKey*.json
+
 # Generated
 lib/generated/
 __pycache__/

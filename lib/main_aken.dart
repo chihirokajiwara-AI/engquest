@@ -5,6 +5,7 @@
 //   flutter build web -t lib/main_aken.dart
 //
 // Stripe billing is stubbed — integrate the real SDK when ready.
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:engquest/core/analytics/analytics_service.dart';
@@ -28,6 +29,23 @@ void main() async {
     firebaseAvailable = true;
   } catch (e) {
     if (kDebugMode) debugPrint('[Firebase] Init skipped: $e');
+  }
+
+  // COPPA/child-safety: disable AAID collection and ad-related analytics.
+  // All users are children (ages 4-18); we never collect advertising IDs.
+  if (firebaseAvailable) {
+    try {
+      await FirebaseAnalytics.instance
+          .setAnalyticsCollectionEnabled(true);
+      await FirebaseAnalytics.instance.setConsent(
+        adStorageConsentGranted: false,
+        adPersonalizationSignalsConsentGranted: false,
+        adUserDataConsentGranted: false,
+        analyticsStorageConsentGranted: true,
+      );
+    } catch (e) {
+      if (kDebugMode) debugPrint('[Analytics] Child config error: $e');
+    }
   }
 
   AnalyticsService.initialize(firebaseAvailable: firebaseAvailable);
