@@ -16,22 +16,50 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
+    signingConfigs {
+        create("release") {
+            keyAlias = System.getenv("KEY_ALIAS") ?: "akenquest"
+            keyPassword = System.getenv("KEY_PASSWORD") ?: ""
+            storeFile = file(System.getenv("STORE_FILE") ?: "keystore/release.jks")
+            storePassword = System.getenv("STORE_PASSWORD") ?: ""
+        }
+    }
+
     defaultConfig {
-        applicationId = "com.edilab.engquest"
+        // applicationId is overridden per flavor below.
         // minSdk 23 required by Firebase Auth / Firestore
         minSdk = 23
-        targetSdk = flutter.targetSdkVersion
+        targetSdk = 35
         versionCode = flutter.versionCode
         versionName = flutter.versionName
         // Enable multidex for Firebase
         multiDexEnabled = true
     }
 
+    flavorDimensions += "product"
+    productFlavors {
+        create("edilab") {
+            dimension = "product"
+            applicationId = "jp.co.aesthetic.engquest.edilab"
+            resValue("string", "app_name", "ENG Quest")
+        }
+        create("aken") {
+            dimension = "product"
+            applicationId = "jp.co.aesthetic.akenquest"
+            resValue("string", "app_name", "A-KEN Quest")
+        }
+    }
+
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+            // Use release signing when the keystore file exists (CI/CD),
+            // fall back to debug signing for local development.
+            val keystorePath = System.getenv("STORE_FILE") ?: "keystore/release.jks"
+            signingConfig = if (file(keystorePath).exists()) {
+                signingConfigs.getByName("release")
+            } else {
+                signingConfigs.getByName("debug")
+            }
         }
     }
 }

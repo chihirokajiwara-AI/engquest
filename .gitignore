@@ -19,6 +19,7 @@ android/gradlew.bat
 android/local.properties
 android/**/GeneratedPluginRegistrant.java
 android/app/google-services.json
+android/app/keystore/
 
 # iOS
 ios/*.mode1v3
