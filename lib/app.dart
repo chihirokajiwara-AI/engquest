@@ -6,6 +6,7 @@ import 'package:engquest/features/battle/battle_screen.dart';
 import 'package:engquest/features/voice/voice_screen.dart';
 import 'package:engquest/features/dialog/dialog_screen.dart';
 import 'package:engquest/features/onboarding/onboarding_flow.dart';
+import 'package:engquest/features/home/daily_home_screen.dart';
 import 'package:engquest/core/storage/preferences_service.dart';
 
 // ---------------------------------------------------------------------------
@@ -256,7 +257,7 @@ class _AppEntryPointState extends State<_AppEntryPoint> {
       );
     }
     if (_onboardingComplete) {
-      return WorldMapScreen(childAge: _childAge);
+      return DailyHomeScreen(childAge: _childAge);
     }
     return OnboardingFlow(onComplete: _handleOnboardingComplete);
   }
