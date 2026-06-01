@@ -2,6 +2,7 @@
 // Tests for A2 vocabulary data integrity and level selection logic.
 
 import 'package:test/test.dart';
+import 'package:engquest/core/models/vocab_item.dart';
 import 'package:engquest/data/content/vocab_a1.dart';
 import 'package:engquest/data/content/vocab_a2.dart';
 
@@ -38,7 +39,7 @@ void main() {
 
     test('all entries have cefrLevel A2', () {
       for (final v in kSeedVocabA2) {
-        expect(v.cefrLevel, 'A2', reason: '${v.word} has wrong cefrLevel');
+        expect(v.cefrLevel, CefrLevel.a2, reason: '${v.word} has wrong cefrLevel');
       }
     });
 
@@ -90,7 +91,7 @@ void main() {
 
     test('all entries have cefrLevel A1', () {
       for (final v in kSeedVocabA1) {
-        expect(v.cefrLevel, 'A1');
+        expect(v.cefrLevel, CefrLevel.a1);
       }
     });
 

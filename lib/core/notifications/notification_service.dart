@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import '../storage/preferences_service.dart';
+
 // ---------------------------------------------------------------------------
 // NotificationService — Web-safe stub
 // ---------------------------------------------------------------------------
@@ -40,10 +42,25 @@ class NotificationService {
   Future<String?> getFcmToken() async => null;
 
   /// Whether daily review reminders are enabled.
-  Future<bool> remindersEnabled() async => false;
+  ///
+  /// Preference-backed (SharedPreferences is web-safe). The flag is stored
+  /// inverted as [PrefKeys.remindersOptedOut], so a brand-new user with no
+  /// stored value is opted-IN by default (retention-first). Only the
+  /// scheduling side-effect needs platform channels; reading the preference
+  /// works on every platform.
+  Future<bool> remindersEnabled() async {
+    final prefs = await PreferencesService.getInstance();
+    return !prefs.getBool(PrefKeys.remindersOptedOut);
+  }
 
-  /// Persists the user's reminder on/off choice. No-op on web.
-  Future<void> setRemindersEnabled(bool enabled) async {}
+  /// Persists the user's reminder on/off choice (stored inverted).
+  ///
+  /// The (re)scheduling side-effect requires platform notification channels
+  /// and remains a no-op on web; the preference itself always persists.
+  Future<void> setRemindersEnabled(bool enabled) async {
+    final prefs = await PreferencesService.getInstance();
+    await prefs.setBool(PrefKeys.remindersOptedOut, !enabled);
+  }
 
   /// Persists a custom reminder time. No-op on web.
   Future<void> setReminderTime(TimeOfDay time) async {}
