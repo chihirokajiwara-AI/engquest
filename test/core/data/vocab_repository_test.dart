@@ -88,7 +88,8 @@ void main() {
         expect(FsrsStateExtension.fromString('new'), FsrsState.newCard);
         expect(FsrsStateExtension.fromString('learning'), FsrsState.learning);
         expect(FsrsStateExtension.fromString('review'), FsrsState.review);
-        expect(FsrsStateExtension.fromString('relearning'), FsrsState.relearning);
+        expect(
+            FsrsStateExtension.fromString('relearning'), FsrsState.relearning);
       });
 
       test('unknown FSRS state defaults to newCard', () {
@@ -116,7 +117,8 @@ void main() {
       test('parses multi-POS word correctly', () {
         final json = makeTestWord(pos: ['noun', 'adjective']);
         final item = VocabItem.fromJson(json);
-        expect(item.pos, containsAll([PartOfSpeech.noun, PartOfSpeech.adjective]));
+        expect(
+            item.pos, containsAll([PartOfSpeech.noun, PartOfSpeech.adjective]));
       });
 
       test('unknown POS defaults to unknown', () {
@@ -128,15 +130,28 @@ void main() {
   group('VocabItem real data validation', () {
     // Validate that our 300-word dataset structure is correct
     // by loading and parsing a subset of items programmatically
-    
+
     final testItems = [
-      makeTestWord(id: 'eiken5_001', word: 'cat', category: 'Animals',
-        reading: 'キャット', jpTranslation: 'ねこ'),
-      makeTestWord(id: 'eiken5_031', word: 'apple', category: 'Food',
-        reading: 'アップル', jpTranslation: 'りんご'),
-      makeTestWord(id: 'eiken5_256', word: 'hello', category: 'Greetings_Social',
-        reading: 'ハロー', jpTranslation: 'こんにちは',
-        pos: ['interjection'], tags: ['eiken5', 'A1', 'greetings_social']),
+      makeTestWord(
+          id: 'eiken5_001',
+          word: 'cat',
+          category: 'Animals',
+          reading: 'キャット',
+          jpTranslation: 'ねこ'),
+      makeTestWord(
+          id: 'eiken5_031',
+          word: 'apple',
+          category: 'Food',
+          reading: 'アップル',
+          jpTranslation: 'りんご'),
+      makeTestWord(
+          id: 'eiken5_256',
+          word: 'hello',
+          category: 'Greetings_Social',
+          reading: 'ハロー',
+          jpTranslation: 'こんにちは',
+          pos: ['interjection'],
+          tags: ['eiken5', 'A1', 'greetings_social']),
     ];
 
     test('all test items parse without error', () {
@@ -152,7 +167,8 @@ void main() {
     });
 
     test('toString contains id and word', () {
-      final item = VocabItem.fromJson(makeTestWord(id: 'eiken5_001', word: 'apple'));
+      final item =
+          VocabItem.fromJson(makeTestWord(id: 'eiken5_001', word: 'apple'));
       expect(item.toString(), contains('eiken5_001'));
       expect(item.toString(), contains('apple'));
     });

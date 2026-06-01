@@ -13,7 +13,12 @@ import 'package:engquest/core/models/vocab_item.dart';
 
 // Build a seed with mixed categories: some young-learner, some not.
 List<VocabItem> _buildSeed() {
-  final youngCategories = ['Animals', 'Food & Drink', 'Family & People', 'Colors & Shapes'];
+  final youngCategories = [
+    'Animals',
+    'Food & Drink',
+    'Family & People',
+    'Colors & Shapes'
+  ];
   final olderCategories = ['School', 'Nature', 'Actions', 'Numbers'];
   final items = <VocabItem>[];
 

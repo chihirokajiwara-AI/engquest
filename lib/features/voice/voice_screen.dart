@@ -34,26 +34,26 @@ class _VoiceWord {
 }
 
 const List<_VoiceWord> _kWordList = [
-  _VoiceWord('cat',    '🐱', '/kæt/'),
-  _VoiceWord('dog',    '🐶', '/dɒɡ/'),
-  _VoiceWord('apple',  '🍎', '/ˈæp.əl/'),
-  _VoiceWord('book',   '📚', '/bʊk/'),
-  _VoiceWord('bird',   '🐦', '/bɜːrd/'),
-  _VoiceWord('fish',   '🐟', '/fɪʃ/'),
-  _VoiceWord('tree',   '🌳', '/triː/'),
-  _VoiceWord('milk',   '🥛', '/mɪlk/'),
-  _VoiceWord('park',   '🏞️', '/pɑːrk/'),
+  _VoiceWord('cat', '🐱', '/kæt/'),
+  _VoiceWord('dog', '🐶', '/dɒɡ/'),
+  _VoiceWord('apple', '🍎', '/ˈæp.əl/'),
+  _VoiceWord('book', '📚', '/bʊk/'),
+  _VoiceWord('bird', '🐦', '/bɜːrd/'),
+  _VoiceWord('fish', '🐟', '/fɪʃ/'),
+  _VoiceWord('tree', '🌳', '/triː/'),
+  _VoiceWord('milk', '🥛', '/mɪlk/'),
+  _VoiceWord('park', '🏞️', '/pɑːrk/'),
   _VoiceWord('school', '🏫', '/skuːl/'),
 ];
 
 // ── Screen state machine ──────────────────────────────────────────────────────
 
 enum _ScreenState {
-  idle,        // waiting for tap
-  countdown,   // recording in progress, countdown shown
-  evaluating,  // waiting for Whisper result
-  result,      // result displayed (correct / close / incorrect)
-  summary,     // session complete
+  idle, // waiting for tap
+  countdown, // recording in progress, countdown shown
+  evaluating, // waiting for Whisper result
+  result, // result displayed (correct / close / incorrect)
+  summary, // session complete
 }
 
 // ── VoiceScreen ───────────────────────────────────────────────────────────────
@@ -71,7 +71,7 @@ class _VoiceScreenState extends State<VoiceScreen>
   final VoiceService _voice = VoiceService();
 
   // ── Session state ──────────────────────────────────────────────────────────
-  int _wordIndex = 0;                      // current word index (0–9)
+  int _wordIndex = 0; // current word index (0–9)
   _ScreenState _state = _ScreenState.idle;
   PronunciationResult? _lastResult;
 
@@ -85,19 +85,19 @@ class _VoiceScreenState extends State<VoiceScreen>
 
   // ── Star burst animation ───────────────────────────────────────────────────
   late AnimationController _starCtrl;
-  late Animation<double>    _starAnim;
+  late Animation<double> _starAnim;
 
   // ── Mic pulse animation ────────────────────────────────────────────────────
   late AnimationController _pulseCtrl;
-  late Animation<double>    _pulseAnim;
+  late Animation<double> _pulseAnim;
 
   // ── Colours ────────────────────────────────────────────────────────────────
-  static const _bgColor      = Color(0xFFF5F7FA);
-  static const _accentGold   = Color(0xFFFFC107);
-  static const _colorCorrect = Color(0xFF66BB6A);   // bright green
-  static const _colorClose   = Color(0xFFFF9800);   // amber orange
-  static const _colorWrong   = Color(0xFFEF5350);   // bright red
-  static const _colorIdle    = Color(0xFFFFFFFF);   // card background
+  static const _bgColor = Color(0xFFF5F7FA);
+  static const _accentGold = Color(0xFFFFC107);
+  static const _colorCorrect = Color(0xFF66BB6A); // bright green
+  static const _colorClose = Color(0xFFFF9800); // amber orange
+  static const _colorWrong = Color(0xFFEF5350); // bright red
+  static const _colorIdle = Color(0xFFFFFFFF); // card background
 
   // ── Lifecycle ──────────────────────────────────────────────────────────────
 
@@ -148,14 +148,17 @@ class _VoiceScreenState extends State<VoiceScreen>
 
   void _beginRecordingCycle() {
     setState(() {
-      _state     = _ScreenState.countdown;
+      _state = _ScreenState.countdown;
       _countdown = _recordSeconds;
       _lastResult = null;
     });
 
     _countdownTimer?.cancel();
     _countdownTimer = Timer.periodic(const Duration(seconds: 1), (t) {
-      if (!mounted) { t.cancel(); return; }
+      if (!mounted) {
+        t.cancel();
+        return;
+      }
       setState(() => _countdown--);
       if (_countdown <= 0) {
         t.cancel();
@@ -176,7 +179,7 @@ class _VoiceScreenState extends State<VoiceScreen>
     if (!mounted) return;
     setState(() {
       _lastResult = result;
-      _state      = _ScreenState.result;
+      _state = _ScreenState.result;
     });
 
     if (result.result == VoiceResult.correct) {
@@ -199,16 +202,16 @@ class _VoiceScreenState extends State<VoiceScreen>
 
     setState(() {
       _wordIndex++;
-      _state      = _ScreenState.idle;
+      _state = _ScreenState.idle;
       _lastResult = null;
     });
   }
 
   void _restartSession() {
     setState(() {
-      _wordIndex     = 0;
-      _state         = _ScreenState.idle;
-      _lastResult    = null;
+      _wordIndex = 0;
+      _state = _ScreenState.idle;
+      _lastResult = null;
       _sessionResults.clear();
     });
   }
@@ -293,9 +296,7 @@ class _VoiceScreenState extends State<VoiceScreen>
   // ── Progress bar ───────────────────────────────────────────────────────────
 
   Widget _buildProgressBar() {
-    final progress = _kWordList.isEmpty
-        ? 0.0
-        : _wordIndex / _kWordList.length;
+    final progress = _kWordList.isEmpty ? 0.0 : _wordIndex / _kWordList.length;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
       child: ClipRRect(
@@ -531,7 +532,8 @@ class _VoiceScreenState extends State<VoiceScreen>
   }
 
   Widget _buildIncorrectFeedback(PronunciationResult res) {
-    final heard = res.transcribed.isEmpty ? '(silence)' : '"${res.transcribed}"';
+    final heard =
+        res.transcribed.isEmpty ? '(silence)' : '"${res.transcribed}"';
     return Column(
       children: [
         const Text('❌', style: TextStyle(fontSize: 40)),
@@ -668,10 +670,11 @@ class _VoiceScreenState extends State<VoiceScreen>
   // ── Session summary ────────────────────────────────────────────────────────
 
   Widget _buildSummary() {
-    final total   = _sessionResults.length;
-    final correct = _sessionResults.where((r) => r == VoiceResult.correct).length;
-    final close   = _sessionResults.where((r) => r == VoiceResult.close).length;
-    final wrong   = total - correct - close;
+    final total = _sessionResults.length;
+    final correct =
+        _sessionResults.where((r) => r == VoiceResult.correct).length;
+    final close = _sessionResults.where((r) => r == VoiceResult.close).length;
+    final wrong = total - correct - close;
     final accuracy = total == 0 ? 0.0 : (correct + close * 0.5) / total;
 
     String grade;
@@ -714,9 +717,18 @@ class _VoiceScreenState extends State<VoiceScreen>
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _StatChip(label: 'Correct',   value: '$correct', color: const Color(0xFF66BB6A)),
-                _StatChip(label: 'Close',     value: '$close',   color: const Color(0xFFFF9800)),
-                _StatChip(label: 'Incorrect', value: '$wrong',   color: const Color(0xFFEF5350)),
+                _StatChip(
+                    label: 'Correct',
+                    value: '$correct',
+                    color: const Color(0xFF66BB6A)),
+                _StatChip(
+                    label: 'Close',
+                    value: '$close',
+                    color: const Color(0xFFFF9800)),
+                _StatChip(
+                    label: 'Incorrect',
+                    value: '$wrong',
+                    color: const Color(0xFFEF5350)),
               ],
             ),
             const SizedBox(height: 32),
@@ -729,10 +741,10 @@ class _VoiceScreenState extends State<VoiceScreen>
                 foregroundColor: Colors.black,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(24)),
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 32, vertical: 14),
-                textStyle: const TextStyle(
-                    fontSize: 16, fontWeight: FontWeight.bold),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+                textStyle:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
             const SizedBox(height: 12),
@@ -850,7 +862,7 @@ class _AccuracyRing extends StatelessWidget {
 class _StatChip extends StatelessWidget {
   final String label;
   final String value;
-  final Color  color;
+  final Color color;
 
   const _StatChip({
     required this.label,

@@ -77,13 +77,13 @@ class ReviewSchedule {
 
 class LearningProgress {
   final String uid;
-  final int currentStreak;        // consecutive study days
-  final int totalWordsMastered;   // Retrievability > 0.9
+  final int currentStreak; // consecutive study days
+  final int totalWordsMastered; // Retrievability > 0.9
   final int totalWordsPracticed;
-  final double masteryPercent;    // totalWordsMastered / 300
+  final double masteryPercent; // totalWordsMastered / 300
   final List<DailyProgress> last7Days;
-  final double eikenReadiness;    // 0-100
-  final DateTime? nextReviewDue;  // earliest FSRS due date
+  final double eikenReadiness; // 0-100
+  final DateTime? nextReviewDue; // earliest FSRS due date
 
   /// Real category mastery from Firestore FSRS cards.
   /// Empty list = no card data yet (show "no data" state in UI).

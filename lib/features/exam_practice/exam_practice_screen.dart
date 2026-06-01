@@ -48,7 +48,8 @@ class ExamPracticeScreen extends StatelessWidget {
         ),
         title: Text(
           '📝 ${exam.labelJa} 模擬試験',
-          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style:
+              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),

@@ -36,7 +36,8 @@ void main() {
     test('Lv.6 at exactly 2000 XP', () => expect(levelFromXp(2000), 6));
     test('Lv.7 at exactly 4000 XP', () => expect(levelFromXp(4000), 7));
     test('Lv.8 at exactly 7000 XP', () => expect(levelFromXp(7000), 8));
-    test('Lv.8 at 99999 XP (beyond max defined)', () => expect(levelFromXp(99999), 8));
+    test('Lv.8 at 99999 XP (beyond max defined)',
+        () => expect(levelFromXp(99999), 8));
   });
 
   // ── xpInCurrentLevel / xpNeededForLevel ────────────────────────────────────
@@ -99,7 +100,8 @@ void main() {
       final data = original.toFirestore();
       final restored = XpProfile.fromFirestore(uid, data);
       expect(restored.totalXp, 340);
-      expect(restored.level, levelFromXp(340));  // derived, not stored independently
+      expect(restored.level,
+          levelFromXp(340)); // derived, not stored independently
     });
 
     test('fromFirestore with missing totalXp defaults to 0', () {
@@ -154,8 +156,8 @@ void main() {
     });
 
     test('XP accumulates across multiple awards', () async {
-      await service.awardXp(uid, Grade.good);   // +10 = 10
-      await service.awardXp(uid, Grade.easy);   // +15 = 25
+      await service.awardXp(uid, Grade.good); // +10 = 10
+      await service.awardXp(uid, Grade.easy); // +15 = 25
       final result = await service.awardXp(uid, Grade.hard); // +5 = 30
       expect(result.after.totalXp, 30);
     });
@@ -210,8 +212,8 @@ void main() {
     });
 
     test('batch of [Good, Easy, Hard] awards 10+15+5=30 XP', () async {
-      final result = await service.awardXpBatch(
-          uid, [Grade.good, Grade.easy, Grade.hard]);
+      final result =
+          await service.awardXpBatch(uid, [Grade.good, Grade.easy, Grade.hard]);
       expect(result.after.totalXp, 30);
     });
 
@@ -285,9 +287,9 @@ void main() {
 
   group('kGradeXp constants', () {
     test('again = 0', () => expect(kGradeXp['again'], 0));
-    test('hard = 5',  () => expect(kGradeXp['hard'],  5));
-    test('good = 10', () => expect(kGradeXp['good'],  10));
-    test('easy = 15', () => expect(kGradeXp['easy'],  15));
+    test('hard = 5', () => expect(kGradeXp['hard'], 5));
+    test('good = 10', () => expect(kGradeXp['good'], 10));
+    test('easy = 15', () => expect(kGradeXp['easy'], 15));
   });
 
   // ── kLevelThresholds ordering ─────────────────────────────────────────────

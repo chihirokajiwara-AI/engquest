@@ -113,12 +113,12 @@ class EngQuestApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.light(
           primary: primaryColor,
-          secondary: const Color(0xFFFFB74D),     // warm orange/gold
-          surface: const Color(0xFFFFFFFF),       // white
-          error: const Color(0xFFEF5350),         // error red
+          secondary: const Color(0xFFFFB74D), // warm orange/gold
+          surface: const Color(0xFFFFFFFF), // white
+          error: const Color(0xFFEF5350), // error red
           onPrimary: Colors.white,
           onSecondary: Colors.black87,
-          onSurface: const Color(0xFF263238),     // dark blue-gray
+          onSurface: const Color(0xFF263238), // dark blue-gray
           onError: Colors.white,
         ),
         scaffoldBackgroundColor: const Color(0xFFF5F7FA),
@@ -150,10 +150,12 @@ class EngQuestApp extends StatelessWidget {
       // WorldMapScreen uses Navigator.push (not named route) to pass childAge.
       // The named '/battle' route is a fallback for direct navigation (childAge=8 default).
       routes: {
-        '/battle': (context) => BattleScreen(childAge: OnboardingStorage.ageYears),
+        '/battle': (context) =>
+            BattleScreen(childAge: OnboardingStorage.ageYears),
         '/voice': (context) => const VoiceScreen(),
         '/dialog': (context) => const DialogScenariosScreen(),
-        '/world': (context) => WorldMapScreen(childAge: OnboardingStorage.ageYears),
+        '/world': (context) =>
+            WorldMapScreen(childAge: OnboardingStorage.ageYears),
       },
     );
   }

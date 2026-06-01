@@ -22,7 +22,8 @@ class PrivacyPolicyScreen extends StatelessWidget {
         elevation: 1,
         title: const Text(
           'プライバシーポリシー',
-          style: TextStyle(color: Color(0xFF263238), fontWeight: FontWeight.bold),
+          style:
+              TextStyle(color: Color(0xFF263238), fontWeight: FontWeight.bold),
         ),
         iconTheme: const IconThemeData(color: Color(0xFF263238)),
         leading: showCloseButton

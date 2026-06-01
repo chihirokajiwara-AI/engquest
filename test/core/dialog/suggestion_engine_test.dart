@@ -56,7 +56,8 @@ void main() {
         lastNpcMessage: 'Hello! How are you today?',
       );
       expect(
-        out.any((c) => c.toLowerCase().contains('fine') ||
+        out.any((c) =>
+            c.toLowerCase().contains('fine') ||
             c.toLowerCase().contains('happy')),
         isTrue,
         reason: 'expected a feeling response, got $out',
@@ -69,7 +70,8 @@ void main() {
         lastNpcMessage: 'What is your name?',
       );
       expect(
-        out.any((c) => c.toLowerCase().contains('name') ||
+        out.any((c) =>
+            c.toLowerCase().contains('name') ||
             c.toLowerCase().contains('hero')),
         isTrue,
         reason: 'expected a name response, got $out',
@@ -82,7 +84,8 @@ void main() {
         lastNpcMessage: 'That costs 5 coins.',
       );
       expect(
-        out.any((c) => c.toLowerCase().contains('buy') ||
+        out.any((c) =>
+            c.toLowerCase().contains('buy') ||
             c.toLowerCase().contains('much') ||
             c.toLowerCase().contains('too much')),
         isTrue,
@@ -96,7 +99,8 @@ void main() {
         lastNpcMessage: 'Are you ready to fight?',
       );
       expect(
-        out.any((c) => c.toLowerCase().contains('ready') ||
+        out.any((c) =>
+            c.toLowerCase().contains('ready') ||
             c.toLowerCase().contains('fight') ||
             c.toLowerCase().contains('not yet')),
         isTrue,
@@ -110,7 +114,8 @@ void main() {
         lastNpcMessage: 'Goodbye, hero! See you soon.',
       );
       expect(
-        out.any((c) => c.toLowerCase().contains('bye') ||
+        out.any((c) =>
+            c.toLowerCase().contains('bye') ||
             c.toLowerCase().contains('see you')),
         isTrue,
         reason: 'expected a farewell, got $out',

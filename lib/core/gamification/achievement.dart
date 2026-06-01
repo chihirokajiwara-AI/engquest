@@ -9,10 +9,10 @@ import 'package:flutter/material.dart';
 
 /// Categories of achievements.
 enum AchievementCategory {
-  mastery,   // word mastery milestones
-  streak,    // consecutive day streaks
-  practice,  // total practice sessions / words practiced
-  level,     // XP level milestones
+  mastery, // word mastery milestones
+  streak, // consecutive day streaks
+  practice, // total practice sessions / words practiced
+  level, // XP level milestones
 }
 
 /// Static definition of an achievement badge.
@@ -23,8 +23,10 @@ class AchievementDef {
   final String descriptionJa;
   final IconData icon;
   final AchievementCategory category;
+
   /// The numeric target to unlock (e.g. 10 words, 7 days).
   final int target;
+
   /// Gradient colors for the badge card.
   final List<Color> gradient;
 
@@ -72,8 +74,7 @@ class AchievementState {
         if (unlockedAt != null) 'unlockedAt': unlockedAt!.toIso8601String(),
       };
 
-  factory AchievementState.fromFirestore(
-      String id, Map<String, dynamic> data) {
+  factory AchievementState.fromFirestore(String id, Map<String, dynamic> data) {
     DateTime? parsedDate;
     final raw = data['unlockedAt'];
     if (raw is String) {

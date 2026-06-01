@@ -111,7 +111,8 @@ class DialogService {
   /// This is prepended to every NPC system prompt to enforce age-appropriate
   /// content boundaries at the model level (defense-in-depth alongside the
   /// client-side [ContentFilter]).
-  static const String _childSafetyPrefix = '''You are an English learning tutor for Japanese children ages 4-18 studying for the Eiken (英検) exam.
+  static const String _childSafetyPrefix =
+      '''You are an English learning tutor for Japanese children ages 4-18 studying for the Eiken (英検) exam.
 Rules:
 - Only discuss English learning, vocabulary, grammar, and age-appropriate educational topics
 - Never discuss violence, adult content, politics, religion, or controversial topics

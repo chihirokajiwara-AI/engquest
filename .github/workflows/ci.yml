@@ -22,13 +22,13 @@ jobs:
         uses: actions/checkout@v4
 
       # ── Flutter setup ─────────────────────────────────────────────────────
-      - name: Set up Flutter 3.22.x
+      - name: Set up Flutter 3.44.x
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.22.x'
+          flutter-version: '3.44.x'
           channel: 'stable'
           cache: true
-          cache-key: 'flutter-${{ runner.os }}-3.22.x'
+          cache-key: 'flutter-${{ runner.os }}-3.44.x'
 
       # ── Pub cache ─────────────────────────────────────────────────────────
       - name: Cache pub dependencies
@@ -80,10 +80,62 @@ jobs:
           path: coverage/lcov.info
           retention-days: 30
 
+  # ── Android build check ─────────────────────────────────────────────────────
+  build-android:
+    name: Android Build Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter 3.44.x
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.44.x'
+          channel: 'stable'
+          cache: true
+          cache-key: 'flutter-${{ runner.os }}-3.44.x'
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build Android appbundle (edilab, debug)
+        run: flutter build appbundle --flavor edilab -t lib/main_edilab.dart --debug
+
+  # ── iOS build check ──────────────────────────────────────────────────────────
+  build-ios:
+    name: iOS Build Check
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter 3.44.x
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.44.x'
+          channel: 'stable'
+          cache: true
+          cache-key: 'flutter-${{ runner.os }}-3.44.x'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build iOS (edilab, no-codesign)
+        run: flutter build ios --flavor edilab -t lib/main_edilab.dart --no-codesign
+
   # ── Summary job (required status check) ────────────────────────────────────
   ci-pass:
     name: CI Pass
-    needs: analyze-and-test
+    needs: [analyze-and-test, build-android, build-ios]
     runs-on: ubuntu-latest
     if: always()
     steps:
@@ -91,6 +143,14 @@ jobs:
         run: |
           if [ "${{ needs.analyze-and-test.result }}" != "success" ]; then
             echo "❌ analyze-and-test failed"
+            exit 1
+          fi
+          if [ "${{ needs.build-android.result }}" != "success" ]; then
+            echo "❌ build-android failed"
+            exit 1
+          fi
+          if [ "${{ needs.build-ios.result }}" != "success" ]; then
+            echo "❌ build-ios failed"
             exit 1
           fi
           echo "✅ All CI checks passed"

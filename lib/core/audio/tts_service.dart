@@ -12,7 +12,13 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:http/http.dart' as http;
 
 /// Result of a TTS audio fetch operation
-enum TtsAudioSource { localCache, firebaseStorage, googleTtsApi, bundledAsset, unavailable }
+enum TtsAudioSource {
+  localCache,
+  firebaseStorage,
+  googleTtsApi,
+  bundledAsset,
+  unavailable
+}
 
 class TtsAudioResult {
   final String vocabId;
@@ -31,7 +37,8 @@ class TtsAudioResult {
     this.error,
   });
 
-  bool get isAvailable => source != TtsAudioSource.unavailable && audioBytes != null;
+  bool get isAvailable =>
+      source != TtsAudioSource.unavailable && audioBytes != null;
 }
 
 /// Audio manifest entry — matches assets/content/audio_manifest.json schema
@@ -70,15 +77,15 @@ class AudioManifestEntry {
   }
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'word': word,
-    'ipa': ipa,
-    'audioFile': audioFile,
-    'storagePath': storagePath,
-    'localCachePath': localCachePath,
-    'status': status,
-    'syllableCount': syllableCount,
-  };
+        'id': id,
+        'word': word,
+        'ipa': ipa,
+        'audioFile': audioFile,
+        'storagePath': storagePath,
+        'localCachePath': localCachePath,
+        'status': status,
+        'syllableCount': syllableCount,
+      };
 }
 
 /// Audio manifest — loaded from assets/content/audio_manifest.json
@@ -111,7 +118,8 @@ class AudioManifest {
   AudioManifestEntry? getById(String id) => _byId[id];
   AudioManifestEntry? getByWord(String word) {
     try {
-      return words.firstWhere((w) => w.word.toLowerCase() == word.toLowerCase());
+      return words
+          .firstWhere((w) => w.word.toLowerCase() == word.toLowerCase());
     } catch (_) {
       return null;
     }
@@ -136,20 +144,20 @@ class GoogleTtsConfig {
 
   /// Build the JSON body for Google TTS API
   static Map<String, dynamic> buildRequestBody(String text) => {
-    'input': {'text': text},
-    'voice': {
-      'languageCode': languageCode,
-      'name': voiceName,
-      'ssmlGender': 'FEMALE',
-    },
-    'audioConfig': {
-      'audioEncoding': audioEncoding,
-      'sampleRateHertz': 24000,
-      'speakingRate': 0.85, // slightly slower for children learning
-      'pitch': 0.0,
-      'effectsProfileId': ['small-bluetooth-speaker-class-device'],
-    },
-  };
+        'input': {'text': text},
+        'voice': {
+          'languageCode': languageCode,
+          'name': voiceName,
+          'ssmlGender': 'FEMALE',
+        },
+        'audioConfig': {
+          'audioEncoding': audioEncoding,
+          'sampleRateHertz': 24000,
+          'speakingRate': 0.85, // slightly slower for children learning
+          'pitch': 0.0,
+          'effectsProfileId': ['small-bluetooth-speaker-class-device'],
+        },
+      };
 }
 
 /// TTS Service — word audio for ENG Quest Battle flashcards
@@ -181,7 +189,8 @@ class TtsService {
   static void configure({required String apiKey}) {
     GoogleTtsConfig.apiKey = apiKey;
     if (kDebugMode) {
-      debugPrint('[TtsService] configured with API key: ${apiKey.substring(0, 8)}...');
+      debugPrint(
+          '[TtsService] configured with API key: ${apiKey.substring(0, 8)}...');
     }
   }
 
@@ -204,7 +213,9 @@ class TtsService {
       }
     } catch (e) {
       // Non-fatal: app works without audio
-      if (kDebugMode) debugPrint('[TtsService] initialization failed (non-fatal): $e');
+      if (kDebugMode) {
+        debugPrint('[TtsService] initialization failed (non-fatal): $e');
+      }
     }
   }
 
@@ -233,7 +244,10 @@ class TtsService {
       final fromApi = await _fetchFromGoogleTts(vocabId, word);
       if (fromApi != null) return fromApi;
     } else {
-      if (kDebugMode) debugPrint('[TtsService] API key not configured — skipping TTS fetch for "$word"');
+      if (kDebugMode) {
+        debugPrint(
+            '[TtsService] API key not configured — skipping TTS fetch for "$word"');
+      }
     }
 
     // 3. Unavailable
@@ -241,7 +255,8 @@ class TtsService {
       vocabId: vocabId,
       word: word,
       source: TtsAudioSource.unavailable,
-      error: 'Audio not available — run scripts/generate_tts_audio.py to pre-generate',
+      error:
+          'Audio not available — run scripts/generate_tts_audio.py to pre-generate',
     );
   }
 
@@ -264,7 +279,10 @@ class TtsService {
     }
 
     final ready = results.values.where((r) => r.isAvailable).length;
-    if (kDebugMode) debugPrint('[TtsService] prefetch complete: $ready/${words.length} words ready');
+    if (kDebugMode) {
+      debugPrint(
+          '[TtsService] prefetch complete: $ready/${words.length} words ready');
+    }
     return results;
   }
 
@@ -306,7 +324,8 @@ class TtsService {
     return '${vocabId}_${word.replaceAll(RegExp(r'[^a-z0-9]'), '_')}';
   }
 
-  Future<TtsAudioResult?> _fetchFromGoogleTts(String vocabId, String word) async {
+  Future<TtsAudioResult?> _fetchFromGoogleTts(
+      String vocabId, String word) async {
     final apiKey = GoogleTtsConfig.apiKey;
     if (apiKey == null) return null;
 
@@ -314,14 +333,19 @@ class TtsService {
       final url = Uri.parse('${GoogleTtsConfig.apiEndpoint}?key=$apiKey');
       final body = jsonEncode(GoogleTtsConfig.buildRequestBody(word));
 
-      final response = await http.post(
-        url,
-        headers: {'Content-Type': 'application/json'},
-        body: body,
-      ).timeout(const Duration(seconds: 10));
+      final response = await http
+          .post(
+            url,
+            headers: {'Content-Type': 'application/json'},
+            body: body,
+          )
+          .timeout(const Duration(seconds: 10));
 
       if (response.statusCode != 200) {
-        if (kDebugMode) debugPrint('[TtsService] Google TTS API error ${response.statusCode}: ${response.body}');
+        if (kDebugMode) {
+          debugPrint(
+              '[TtsService] Google TTS API error ${response.statusCode}: ${response.body}');
+        }
         return null;
       }
 
@@ -337,7 +361,10 @@ class TtsService {
 
       // Cache in memory
       _memoryCache[_cacheKey(vocabId, word)] = audioBytes;
-      if (kDebugMode) debugPrint('[TtsService] fetched + cached: $vocabId ($word) — ${audioBytes.length} bytes');
+      if (kDebugMode) {
+        debugPrint(
+            '[TtsService] fetched + cached: $vocabId ($word) — ${audioBytes.length} bytes');
+      }
 
       return TtsAudioResult(
         vocabId: vocabId,

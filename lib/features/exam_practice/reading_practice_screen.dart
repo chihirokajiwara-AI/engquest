@@ -64,8 +64,7 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
   void initState() {
     super.initState();
     _passages = _getPassages(widget.eikenGrade, widget.section.id);
-    _totalQuestions =
-        _passages.fold(0, (sum, p) => sum + p.questions.length);
+    _totalQuestions = _passages.fold(0, (sum, p) => sum + p.questions.length);
   }
 
   _ComprehensionQuestion get _currentQuestion =>
@@ -127,7 +126,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
         ),
         title: Text(
           _isPassageFillIn ? '長文語句空所補充' : '長文読解',
-          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style:
+              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),
@@ -176,7 +176,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
                   borderRadius: BorderRadius.circular(4),
                   child: LinearProgressIndicator(
                     value: _totalQuestions > 0
-                        ? (answeredSoFar + (_answered ? 1 : 0)) / _totalQuestions
+                        ? (answeredSoFar + (_answered ? 1 : 0)) /
+                            _totalQuestions
                         : 0,
                     backgroundColor: Colors.grey[200],
                     valueColor:
@@ -381,8 +382,7 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF4FC3F7),
               foregroundColor: Colors.white,
-              padding:
-                  const EdgeInsets.symmetric(vertical: 14, horizontal: 40),
+              padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 40),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -429,8 +429,7 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
     _ReadingPassage(
       title: 'School Notice',
       type: 'notice',
-      content:
-          'Dear Students,\n\n'
+      content: 'Dear Students,\n\n'
           'We will have a school festival on Saturday, November 15. '
           'The festival starts at 10:00 a.m. and finishes at 3:00 p.m. '
           'Each class will have a food shop or a game shop. '
@@ -463,8 +462,7 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
     _ReadingPassage(
       title: '',
       type: 'email',
-      content:
-          'Hi Tom,\n\n'
+      content: 'Hi Tom,\n\n'
           'Thank you for your email. I am happy to hear about your new dog. '
           'What is his name? I also have a pet. I have a cat. Her name is Mimi. '
           'She is three years old. She likes to sleep on my bed. '
@@ -547,8 +545,7 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
     _ReadingPassage(
       title: 'City Library Newsletter',
       type: 'notice',
-      content:
-          'Midtown Public Library\nSpring Events 2026\n\n'
+      content: 'Midtown Public Library\nSpring Events 2026\n\n'
           '• Reading Club (every Saturday, 2:00-3:30 p.m.)\n'
           '  Join us to read and discuss books! This month: "The Secret Garden"\n\n'
           '• Children\'s Art Workshop (March 20, 10:00 a.m.)\n'
@@ -590,8 +587,7 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
     _ReadingPassage(
       title: 'Community Center Notice',
       type: 'notice',
-      content:
-          'Greenville Community Center\nSummer Programs 2026\n\n'
+      content: 'Greenville Community Center\nSummer Programs 2026\n\n'
           'We are happy to announce our summer programs for young people!\n\n'
           '1. Swimming Lessons (July 1-31)\n'
           '   - Beginners: Mon & Wed, 9:00-10:00 a.m.\n'
@@ -641,8 +637,7 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
     _ReadingPassage(
       title: '',
       type: 'email',
-      content:
-          'Dear Mr. and Mrs. Tanaka,\n\n'
+      content: 'Dear Mr. and Mrs. Tanaka,\n\n'
           'Thank you for letting your son Kenji stay with our family during his '
           'school trip to Australia. He was a wonderful guest! He helped my mother '
           'cook dinner on Tuesday and played soccer with my younger brother every '
@@ -778,7 +773,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
           'of new gasoline-powered cars within the next decade.',
       questions: [
         _ComprehensionQuestion(
-          question: 'What percentage of new cars sold globally were electric by 2025?',
+          question:
+              'What percentage of new cars sold globally were electric by 2025?',
           choices: [
             'About 1%',
             'About 10%',
@@ -808,7 +804,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
           correctIdx: 1,
         ),
         _ComprehensionQuestion(
-          question: 'What environmental concern is raised about battery production?',
+          question:
+              'What environmental concern is raised about battery production?',
           choices: [
             'It uses too much water',
             'Mining lithium and cobalt can damage ecosystems',
@@ -822,8 +819,7 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
     _ReadingPassage(
       title: '',
       type: 'email',
-      content:
-          'Dear Ms. Nakamura,\n\n'
+      content: 'Dear Ms. Nakamura,\n\n'
           'I am writing to inform you about changes to our student exchange program '
           'for next academic year. Due to increased demand, we have decided to expand '
           'the program from two weeks to four weeks. The new dates will be from '
@@ -904,7 +900,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
           'keeping the bedroom cool and dark, and limiting caffeine intake after noon.',
       questions: [
         _ComprehensionQuestion(
-          question: 'According to the passage, how long does each sleep cycle last?',
+          question:
+              'According to the passage, how long does each sleep cycle last?',
           choices: [
             'About 60 minutes',
             'About 90 minutes',
@@ -924,7 +921,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
           correctIdx: 1,
         ),
         _ComprehensionQuestion(
-          question: 'What comparison is made about sleep deprivation and driving?',
+          question:
+              'What comparison is made about sleep deprivation and driving?',
           choices: [
             'It is like driving in heavy rain',
             'It is like driving without glasses',
@@ -1003,7 +1001,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
           correctIdx: 2,
         ),
         _ComprehensionQuestion(
-          question: 'According to proponents, what is urban farming\'s greatest value?',
+          question:
+              'According to proponents, what is urban farming\'s greatest value?',
           choices: [
             'Producing cheaper food than supermarkets',
             'Completely replacing traditional agriculture',
@@ -1017,8 +1016,7 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
     _ReadingPassage(
       title: '',
       type: 'letter',
-      content:
-          'Dear Editor,\n\n'
+      content: 'Dear Editor,\n\n'
           'I am writing in response to last week\'s article about the city council\'s '
           'proposal to ban cars from the downtown area on weekends. While I understand '
           'the intention to reduce pollution and create a more pedestrian-friendly '
@@ -1048,7 +1046,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
           correctIdx: 1,
         ),
         _ComprehensionQuestion(
-          question: 'According to the survey, how much could foot traffic decrease?',
+          question:
+              'According to the survey, how much could foot traffic decrease?',
           choices: [
             '10-20%',
             '20-30%',
@@ -1058,7 +1057,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
           correctIdx: 2,
         ),
         _ComprehensionQuestion(
-          question: 'What problem with public transport does the writer mention?',
+          question:
+              'What problem with public transport does the writer mention?',
           choices: [
             'Buses are too expensive',
             'Trains do not run on weekends',
@@ -1247,7 +1247,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
           correctIdx: 2,
         ),
         _ComprehensionQuestion(
-          question: 'What happened in the jam study when 24 varieties were displayed?',
+          question:
+              'What happened in the jam study when 24 varieties were displayed?',
           choices: [
             '30% of shoppers bought jam',
             'Most shoppers bought multiple jars',
@@ -1267,7 +1268,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
           correctIdx: 2,
         ),
         _ComprehensionQuestion(
-          question: 'What does "counterfactual thinking" refer to in this context?',
+          question:
+              'What does "counterfactual thinking" refer to in this context?',
           choices: [
             'Ignoring facts when making decisions',
             'Imagining how other options might have turned out',
@@ -1317,7 +1319,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
           correctIdx: 1,
         ),
         _ComprehensionQuestion(
-          question: 'According to the passage, what percentage of ocean microplastics '
+          question:
+              'According to the passage, what percentage of ocean microplastics '
               'comes from car tires?',
           choices: [
             'About 10%',
@@ -1328,7 +1331,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
           correctIdx: 2,
         ),
         _ComprehensionQuestion(
-          question: 'Why is it difficult to apply laboratory findings about microplastics '
+          question:
+              'Why is it difficult to apply laboratory findings about microplastics '
               'to real-world conditions?',
           choices: [
             'Scientists cannot create microplastics in laboratories',
@@ -1349,7 +1353,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
           correctIdx: 2,
         ),
         _ComprehensionQuestion(
-          question: 'Which source of microplastics is mentioned in relation to daily activities?',
+          question:
+              'Which source of microplastics is mentioned in relation to daily activities?',
           choices: [
             'Cooking with plastic utensils',
             'Washing synthetic clothing',

@@ -77,10 +77,10 @@ void main() {
     });
 
     test('groupName is correct string', () {
-      final t = AbAssignment(
-          experimentId: exp, group: AbGroup.treatment, seed: 0);
-      final c = AbAssignment(
-          experimentId: exp, group: AbGroup.control, seed: 1);
+      final t =
+          AbAssignment(experimentId: exp, group: AbGroup.treatment, seed: 0);
+      final c =
+          AbAssignment(experimentId: exp, group: AbGroup.control, seed: 1);
       expect(t.groupName, equals('treatment'));
       expect(c.groupName, equals('control'));
     });
@@ -91,8 +91,7 @@ void main() {
   // -----------------------------------------------------------------------
   group('AnalyticsService.logBattleAnswer', () {
     test('emits correct event with all params', () async {
-      await svc.logBattleAnswer(
-          wordId: 'eiken5_042', grade: 3, latencyMs: 850);
+      await svc.logBattleAnswer(wordId: 'eiken5_042', grade: 3, latencyMs: 850);
       expect(spy.events.length, equals(1));
       final e = spy.events.first;
       expect(e.name, equals(EngQuestEvent.battleCardAnswered));
@@ -106,8 +105,8 @@ void main() {
     test('startSession sets userId and logs sessionStart', () async {
       await svc.startSession('user_test_01');
       expect(spy.userId, equals('user_test_01'));
-      expect(spy.events.any((e) => e.name == EngQuestEvent.sessionStart),
-          isTrue);
+      expect(
+          spy.events.any((e) => e.name == EngQuestEvent.sessionStart), isTrue);
     });
 
     test('endSession logs sessionEnd with duration and word count', () async {
@@ -126,11 +125,9 @@ void main() {
     test('logs ab_group_assigned event and sets user property', () async {
       await svc.assignAndLogAbGroup(
           uid: 'user_x', experimentId: '30day_anki_trial');
-      expect(
-          spy.events.any((e) => e.name == EngQuestEvent.abGroupAssigned),
+      expect(spy.events.any((e) => e.name == EngQuestEvent.abGroupAssigned),
           isTrue);
-      expect(
-          spy.userProperties.containsKey('ab_30day_anki_trial'), isTrue);
+      expect(spy.userProperties.containsKey('ab_30day_anki_trial'), isTrue);
     });
 
     test('returns consistent assignment across calls', () async {
@@ -167,8 +164,7 @@ void main() {
   group('NoOpAnalytics', () {
     test('never throws', () async {
       final noop = NoOpAnalytics();
-      expect(
-          () async => noop.logEvent('any', parameters: {'k': 'v'}),
+      expect(() async => noop.logEvent('any', parameters: {'k': 'v'}),
           returnsNormally);
     });
   });

@@ -4,14 +4,16 @@
 // Displays:
 //   - Which grade they're trying to access
 //   - What's included in the subscription
-//   - CTA to subscribe (¥999/month)
+//   - CTA to subscribe (¥999/month) via RevenueCat native IAP
+//   - Restore purchases button
 //
 // For edilab flavor, this screen is never shown (all grades free).
 
 import 'package:flutter/material.dart';
+import '../../core/billing/billing_service.dart';
 import '../../core/config/flavor_config.dart';
 
-class GradeGateScreen extends StatelessWidget {
+class GradeGateScreen extends StatefulWidget {
   const GradeGateScreen({
     super.key,
     required this.eikenGrade,
@@ -22,18 +24,27 @@ class GradeGateScreen extends StatelessWidget {
   /// The Eiken grade the user tried to access (e.g. "4", "3", "pre2").
   final String eikenGrade;
 
-  /// Called when user taps the subscribe button.
+  /// Called when user successfully subscribes (or restores).
   final VoidCallback onSubscribe;
 
   /// Called when user taps back. If null, Navigator.pop is used.
   final VoidCallback? onBack;
 
+  @override
+  State<GradeGateScreen> createState() => _GradeGateScreenState();
+}
+
+class _GradeGateScreenState extends State<GradeGateScreen> {
+  final _billing = BillingService();
+  bool _purchasing = false;
+  String? _errorMessage;
+
   String get _gradeDisplay {
-    switch (eikenGrade) {
+    switch (widget.eikenGrade) {
       case '5':
         return '英検5級';
       case '4':
-        return '���検4級';
+        return '英検4級';
       case '3':
         return '英検3級';
       case 'pre2':
@@ -43,7 +54,59 @@ class GradeGateScreen extends StatelessWidget {
       case 'pre1':
         return '英検準1級';
       default:
-        return '英検$eikenGrade級';
+        return '英検${widget.eikenGrade}級';
+    }
+  }
+
+  Future<void> _handlePurchase() async {
+    setState(() {
+      _purchasing = true;
+      _errorMessage = null;
+    });
+
+    try {
+      await _billing.initialize();
+      final success = await _billing.purchaseMonthly();
+      if (success && mounted) {
+        widget.onSubscribe();
+      } else if (!success && mounted) {
+        // User cancelled or error — stay on screen.
+        setState(() => _purchasing = false);
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _purchasing = false;
+          _errorMessage = '購入に失敗しました。もう一度お試しください。';
+        });
+      }
+    }
+  }
+
+  Future<void> _handleRestore() async {
+    setState(() {
+      _purchasing = true;
+      _errorMessage = null;
+    });
+
+    try {
+      await _billing.initialize();
+      final success = await _billing.restorePurchases();
+      if (success && mounted) {
+        widget.onSubscribe();
+      } else if (mounted) {
+        setState(() {
+          _purchasing = false;
+          _errorMessage = '復元できるサブスクリプションが見つかりませんでした。';
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _purchasing = false;
+          _errorMessage = '復元に失敗しました。もう一度お試しください。';
+        });
+      }
     }
   }
 
@@ -58,7 +121,8 @@ class GradeGateScreen extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Color(0xFF263238)),
-          onPressed: onBack ?? () => Navigator.of(context).pop(),
+          onPressed:
+              widget.onBack ?? () => Navigator.of(context).pop(),
         ),
       ),
       body: SafeArea(
@@ -130,25 +194,48 @@ class GradeGateScreen extends StatelessWidget {
                   ],
                 ),
               ),
+              // Error message
+              if (_errorMessage != null) ...[
+                const SizedBox(height: 16),
+                Text(
+                  _errorMessage!,
+                  style: const TextStyle(color: Colors.red, fontSize: 13),
+                  textAlign: TextAlign.center,
+                ),
+              ],
               const Spacer(flex: 1),
               // Subscribe CTA
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: onSubscribe,
+                  onPressed: _purchasing ? null : _handlePurchase,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(flavor.primaryColor),
                     foregroundColor: Colors.white,
+                    disabledBackgroundColor:
+                        Color(flavor.primaryColor).withAlpha(128),
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                     elevation: 2,
                   ),
-                  child: const Text(
-                    '月額¥999で始める',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
+                  child: _purchasing
+                      ? const SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2.5,
+                          ),
+                        )
+                      : const Text(
+                          '月額¥999で始める',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                 ),
               ),
               const SizedBox(height: 12),
@@ -161,9 +248,22 @@ class GradeGateScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
+              // Restore purchases
+              TextButton(
+                onPressed: _purchasing ? null : _handleRestore,
+                child: Text(
+                  '以前の購入を復元',
+                  style: TextStyle(
+                    color: Color(flavor.primaryColor),
+                    fontSize: 14,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 4),
               // Free tier reminder
               TextButton(
-                onPressed: onBack ?? () => Navigator.of(context).pop(),
+                onPressed:
+                    widget.onBack ?? () => Navigator.of(context).pop(),
                 child: Text(
                   '英検5級は無料で学習できます',
                   style: TextStyle(

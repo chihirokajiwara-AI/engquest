@@ -193,7 +193,9 @@ void main() {
   });
 
   group('FSRS integration: persist → schedule → reload', () {
-    test('full review cycle: new → schedule → persist → reload → next interval grows', () async {
+    test(
+        'full review cycle: new → schedule → persist → reload → next interval grows',
+        () async {
       final fsrs = FSRSAlgorithm();
       final userId2 = 'user_cycle_test';
 

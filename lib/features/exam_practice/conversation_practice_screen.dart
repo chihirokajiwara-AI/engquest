@@ -329,8 +329,7 @@ class _ConversationPracticeScreenState
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF4FC3F7),
               foregroundColor: Colors.white,
-              padding:
-                  const EdgeInsets.symmetric(vertical: 14, horizontal: 40),
+              padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 40),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -557,7 +556,8 @@ class _ChatBubble extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: isLeft ? MainAxisAlignment.start : MainAxisAlignment.end,
+      mainAxisAlignment:
+          isLeft ? MainAxisAlignment.start : MainAxisAlignment.end,
       children: [
         if (isLeft) ...[
           CircleAvatar(
@@ -574,7 +574,9 @@ class _ChatBubble extends StatelessWidget {
             decoration: BoxDecoration(
               color: isBlank
                   ? const Color(0xFFFFF8E1)
-                  : (isLeft ? const Color(0xFFF5F5F5) : const Color(0xFFE3F2FD)),
+                  : (isLeft
+                      ? const Color(0xFFF5F5F5)
+                      : const Color(0xFFE3F2FD)),
               borderRadius: BorderRadius.circular(12),
               border: isBlank
                   ? Border.all(

@@ -52,9 +52,14 @@ class WordAudioPlayerService extends ChangeNotifier {
     try {
       final results = await _tts.prefetchBatch(words);
       _sessionCache.addAll(results);
-      if (kDebugMode) debugPrint('[WordAudioPlayer] prefetch: ${_sessionCache.length} words ready');
+      if (kDebugMode) {
+        debugPrint(
+            '[WordAudioPlayer] prefetch: ${_sessionCache.length} words ready');
+      }
     } catch (e) {
-      if (kDebugMode) debugPrint('[WordAudioPlayer] prefetch error (non-fatal): $e');
+      if (kDebugMode) {
+        debugPrint('[WordAudioPlayer] prefetch error (non-fatal): $e');
+      }
     }
   }
 
@@ -81,7 +86,10 @@ class WordAudioPlayerService extends ChangeNotifier {
       if (!result.isAvailable) {
         _lastError = result.error ?? 'Audio not available';
         _setState(WordAudioState.error);
-        if (kDebugMode) debugPrint('[WordAudioPlayer] audio unavailable for $vocabId: $_lastError');
+        if (kDebugMode) {
+          debugPrint(
+              '[WordAudioPlayer] audio unavailable for $vocabId: $_lastError');
+        }
         return;
       }
 
@@ -91,7 +99,9 @@ class WordAudioPlayerService extends ChangeNotifier {
     } catch (e) {
       _lastError = e.toString();
       _setState(WordAudioState.error);
-      if (kDebugMode) debugPrint('[WordAudioPlayer] playback error for $vocabId: $e');
+      if (kDebugMode) {
+        debugPrint('[WordAudioPlayer] playback error for $vocabId: $e');
+      }
     }
   }
 

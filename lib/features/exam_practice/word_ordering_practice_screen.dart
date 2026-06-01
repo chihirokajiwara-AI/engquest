@@ -85,8 +85,7 @@ class _WordOrderingPracticeScreenState
 
   void _checkAnswer() {
     final p = _problems[_currentIdx];
-    final isCorrect =
-        _selectedWords.join(' ').toLowerCase() ==
+    final isCorrect = _selectedWords.join(' ').toLowerCase() ==
         p.correctOrder.join(' ').toLowerCase();
     setState(() {
       _answered = true;
@@ -405,7 +404,16 @@ class _WordOrderingPracticeScreenState
       problems.addAll([
         _OrderingProblem(
           jpSentence: '私は昨日図書館で本を読みました。',
-          correctOrder: ['I', 'read', 'a', 'book', 'in', 'the', 'library', 'yesterday'],
+          correctOrder: [
+            'I',
+            'read',
+            'a',
+            'book',
+            'in',
+            'the',
+            'library',
+            'yesterday'
+          ],
         ),
         _OrderingProblem(
           jpSentence: '彼は私より背が高いです。',
@@ -413,7 +421,16 @@ class _WordOrderingPracticeScreenState
         ),
         _OrderingProblem(
           jpSentence: 'もし明日雨なら、家にいます。',
-          correctOrder: ['If', 'it', 'rains', 'tomorrow', 'I', 'will', 'stay', 'home'],
+          correctOrder: [
+            'If',
+            'it',
+            'rains',
+            'tomorrow',
+            'I',
+            'will',
+            'stay',
+            'home'
+          ],
         ),
         _OrderingProblem(
           jpSentence: 'この映画を見たことがありますか？',
@@ -421,7 +438,16 @@ class _WordOrderingPracticeScreenState
         ),
         _OrderingProblem(
           jpSentence: '彼女は3年間ピアノを弾いています。',
-          correctOrder: ['She', 'has', 'played', 'the', 'piano', 'for', 'three', 'years'],
+          correctOrder: [
+            'She',
+            'has',
+            'played',
+            'the',
+            'piano',
+            'for',
+            'three',
+            'years'
+          ],
         ),
       ]);
     } else {
@@ -429,23 +455,72 @@ class _WordOrderingPracticeScreenState
       problems.addAll([
         _OrderingProblem(
           jpSentence: '彼がその仕事を終えるのにどのくらいかかりましたか？',
-          correctOrder: ['How', 'long', 'did', 'it', 'take', 'him', 'to', 'finish', 'the', 'work'],
+          correctOrder: [
+            'How',
+            'long',
+            'did',
+            'it',
+            'take',
+            'him',
+            'to',
+            'finish',
+            'the',
+            'work'
+          ],
         ),
         _OrderingProblem(
           jpSentence: '私はあなたにそのパーティーに来てほしいです。',
-          correctOrder: ['I', 'want', 'you', 'to', 'come', 'to', 'the', 'party'],
+          correctOrder: [
+            'I',
+            'want',
+            'you',
+            'to',
+            'come',
+            'to',
+            'the',
+            'party'
+          ],
         ),
         _OrderingProblem(
           jpSentence: 'この本は世界中で読まれています。',
-          correctOrder: ['This', 'book', 'is', 'read', 'around', 'the', 'world'],
+          correctOrder: [
+            'This',
+            'book',
+            'is',
+            'read',
+            'around',
+            'the',
+            'world'
+          ],
         ),
         _OrderingProblem(
           jpSentence: '彼女が作ったケーキはとてもおいしかった。',
-          correctOrder: ['The', 'cake', 'she', 'made', 'was', 'very', 'delicious'],
+          correctOrder: [
+            'The',
+            'cake',
+            'she',
+            'made',
+            'was',
+            'very',
+            'delicious'
+          ],
         ),
         _OrderingProblem(
           jpSentence: '電車に乗り遅れないように早く起きました。',
-          correctOrder: ['I', 'got', 'up', 'early', 'so', 'that', 'I', 'would', 'not', 'miss', 'the', 'train'],
+          correctOrder: [
+            'I',
+            'got',
+            'up',
+            'early',
+            'so',
+            'that',
+            'I',
+            'would',
+            'not',
+            'miss',
+            'the',
+            'train'
+          ],
         ),
       ]);
     }

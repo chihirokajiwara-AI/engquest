@@ -45,8 +45,7 @@ void main() {
       final now = DateTime.now();
       for (var i = 0; i < 3; i++) {
         final day = now.subtract(Duration(days: i));
-        final key =
-            '${day.year.toString().padLeft(4, '0')}-'
+        final key = '${day.year.toString().padLeft(4, '0')}-'
             '${day.month.toString().padLeft(2, '0')}-'
             '${day.day.toString().padLeft(2, '0')}';
         await fakeDb
@@ -99,8 +98,7 @@ void main() {
     test('reads last7Days from session subcollection', () async {
       final now = DateTime.now();
       // Write today's session
-      final key =
-          '${now.year.toString().padLeft(4, '0')}-'
+      final key = '${now.year.toString().padLeft(4, '0')}-'
           '${now.month.toString().padLeft(2, '0')}-'
           '${now.day.toString().padLeft(2, '0')}';
       await fakeDb

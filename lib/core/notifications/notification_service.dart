@@ -32,7 +32,9 @@ class NotificationService {
 
   /// Initialise the service. No-op on web.
   Future<void> init({bool firebaseAvailable = false}) async {
-    if (kDebugMode) debugPrint('[NotificationService] Web stub — notifications disabled.');
+    if (kDebugMode) {
+      debugPrint('[NotificationService] Web stub — notifications disabled.');
+    }
   }
 
   /// Requests notification permission. Always returns false on web.

@@ -33,7 +33,12 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
     try {
       final uid = await _auth.getOrCreateUid();
       final states = await _achievementService.init(uid);
-      if (mounted) setState(() { _states = states; _loading = false; });
+      if (mounted) {
+        setState(() {
+          _states = states;
+          _loading = false;
+        });
+      }
     } catch (_) {
       if (mounted) setState(() => _loading = false);
     }
@@ -63,16 +68,13 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
   }
 
   Widget _buildGrid() {
-    final unlocked = kAchievements
-        .where((d) => _states[d.id]?.unlocked == true)
-        .toList();
-    final locked = kAchievements
-        .where((d) => _states[d.id]?.unlocked != true)
-        .toList();
+    final unlocked =
+        kAchievements.where((d) => _states[d.id]?.unlocked == true).toList();
+    final locked =
+        kAchievements.where((d) => _states[d.id]?.unlocked != true).toList();
     final sorted = [...unlocked, ...locked];
 
-    final unlockedCount =
-        _states.values.where((s) => s.unlocked).length;
+    final unlockedCount = _states.values.where((s) => s.unlocked).length;
 
     return Column(
       children: [

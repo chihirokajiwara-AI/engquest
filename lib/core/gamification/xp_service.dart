@@ -47,8 +47,7 @@ class XpAwardResult {
   });
 
   @override
-  String toString() =>
-      'XpAwardResult(+$xpGained XP, '
+  String toString() => 'XpAwardResult(+$xpGained XP, '
       'level ${before.level}→${after.level}, '
       'totalXp ${before.totalXp}→${after.totalXp})';
 }
@@ -127,7 +126,8 @@ class XpService {
       // Offline: Firestore queues the write; will sync on reconnect.
     });
 
-    final result = XpAwardResult(xpGained: xpGained, before: before, after: after);
+    final result =
+        XpAwardResult(xpGained: xpGained, before: before, after: after);
 
     if (result.didLevelUp) {
       levelUpNotifier.value = result;
@@ -138,8 +138,7 @@ class XpService {
 
   /// Awards XP for multiple grades in sequence (end-of-session batch).
   /// Returns the final [XpAwardResult] after all awards.
-  Future<XpAwardResult> awardXpBatch(
-      String uid, List<Grade> grades) async {
+  Future<XpAwardResult> awardXpBatch(String uid, List<Grade> grades) async {
     if (grades.isEmpty) {
       final profile = await init(uid);
       return XpAwardResult(xpGained: 0, before: profile, after: profile);
@@ -173,10 +172,14 @@ class XpService {
 
   int _xpForGrade(Grade grade) {
     switch (grade) {
-      case Grade.again: return kGradeXp['again']!;
-      case Grade.hard:  return kGradeXp['hard']!;
-      case Grade.good:  return kGradeXp['good']!;
-      case Grade.easy:  return kGradeXp['easy']!;
+      case Grade.again:
+        return kGradeXp['again']!;
+      case Grade.hard:
+        return kGradeXp['hard']!;
+      case Grade.good:
+        return kGradeXp['good']!;
+      case Grade.easy:
+        return kGradeXp['easy']!;
     }
   }
 

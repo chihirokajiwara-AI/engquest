@@ -89,5 +89,6 @@ void main() {
   // ignore: avoid_print
   print('Security rules test matrix: see comments in this file.');
   // ignore: avoid_print
-  print('Run JS suite: firebase emulators:exec "node test/firestore/firestore_rules_test.js"');
+  print(
+      'Run JS suite: firebase emulators:exec "node test/firestore/firestore_rules_test.js"');
 }

@@ -57,7 +57,7 @@ class VocabFilter {
 }
 
 /// Vocabulary repository — single source of truth for content DB
-/// 
+///
 /// Usage:
 ///   final repo = VocabRepository();
 ///   await repo.initialize();
@@ -129,10 +129,7 @@ class VocabRepository {
   List<String> getCategories() {
     _assertInitialized();
     final seen = <String>{};
-    return _words
-        .map((w) => w.category)
-        .where((c) => seen.add(c))
-        .toList();
+    return _words.map((w) => w.category).where((c) => seen.add(c)).toList();
   }
 
   /// Filter by multiple criteria
@@ -195,21 +192,27 @@ class VocabRepository {
     _assertInitialized();
     final stateCount = <String, int>{};
     for (final state in FsrsState.values) {
-      stateCount[state.value] = _words.where((w) => w.fsrsState == state).length;
+      stateCount[state.value] =
+          _words.where((w) => w.fsrsState == state).length;
     }
 
-    final reviewed = _words.where((w) => w.fsrsState != FsrsState.newCard).length;
-    final mastered = _words.where((w) => w.fsrsState == FsrsState.review).length;
+    final reviewed =
+        _words.where((w) => w.fsrsState != FsrsState.newCard).length;
+    final mastered =
+        _words.where((w) => w.fsrsState == FsrsState.review).length;
 
     return {
       'total': totalWords,
       'reviewed': reviewed,
       'mastered': mastered,
-      'masteryPercent': totalWords > 0 ? (mastered / totalWords * 100).round() : 0,
+      'masteryPercent':
+          totalWords > 0 ? (mastered / totalWords * 100).round() : 0,
       'byState': stateCount,
       'byCategory': {
         for (final cat in getCategories())
-          cat: getByCategory(cat).where((w) => w.fsrsState == FsrsState.review).length,
+          cat: getByCategory(cat)
+              .where((w) => w.fsrsState == FsrsState.review)
+              .length,
       },
     };
   }

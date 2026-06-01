@@ -241,8 +241,7 @@ class _OnboardingFlowState extends State<OnboardingFlow>
                   if (_qIndex < _placementQuestions.length - 1) {
                     setState(() => _qIndex++);
                   } else {
-                    setState(
-                        () => _placement = _scoreToCefr(_correctCount));
+                    setState(() => _placement = _scoreToCefr(_correctCount));
                   }
                 },
               );
@@ -508,8 +507,7 @@ class _PlacementResult extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFFFFC107),
               foregroundColor: Colors.black,
-              padding:
-                  const EdgeInsets.symmetric(vertical: 16, horizontal: 48),
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 48),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
             ),
@@ -590,8 +588,7 @@ class _StepAvatar extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(av.emoji,
-                            style: const TextStyle(fontSize: 36)),
+                        Text(av.emoji, style: const TextStyle(fontSize: 36)),
                         const SizedBox(height: 4),
                         Text(av.name,
                             style: const TextStyle(
@@ -692,9 +689,8 @@ class _StepGoal extends StatelessWidget {
                       duration: const Duration(milliseconds: 200),
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       decoration: BoxDecoration(
-                        color: selected
-                            ? const Color(0xFFFFC107)
-                            : Colors.white,
+                        color:
+                            selected ? const Color(0xFFFFC107) : Colors.white,
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
                           color: selected
@@ -758,8 +754,7 @@ class _StepGoal extends StatelessWidget {
               children: [
                 _SummaryRow(label: 'レベル', value: placement.label),
                 _SummaryRow(
-                    label: 'キャラ',
-                    value: '${avatar.emoji} ${avatar.name}'),
+                    label: 'キャラ', value: '${avatar.emoji} ${avatar.name}'),
                 _SummaryRow(label: '目標', value: '毎日$goalMinutesふん'),
               ],
             ),

@@ -83,8 +83,8 @@ void main() {
       expect(wav[2], 0x46); // F
       expect(wav[3], 0x46); // F
       // WAVE format
-      expect(wav[8], 0x57);  // W
-      expect(wav[9], 0x41);  // A
+      expect(wav[8], 0x57); // W
+      expect(wav[9], 0x41); // A
       expect(wav[10], 0x56); // V
       expect(wav[11], 0x45); // E
     });
@@ -145,20 +145,20 @@ void main() {
 
     test('all generators produce non-empty WAV data', () {
       // Minimum WAV: 44 byte header + at least 2 bytes of audio
-      expect(SoundServiceTestHelper.generateFlipSound().length,
-          greaterThan(44));
+      expect(
+          SoundServiceTestHelper.generateFlipSound().length, greaterThan(44));
       expect(SoundServiceTestHelper.generateCorrectSound().length,
           greaterThan(44));
-      expect(SoundServiceTestHelper.generateWrongSound().length,
-          greaterThan(44));
+      expect(
+          SoundServiceTestHelper.generateWrongSound().length, greaterThan(44));
       expect(SoundServiceTestHelper.generateLevelUpSound().length,
           greaterThan(44));
       expect(SoundServiceTestHelper.generateAchievementSound().length,
           greaterThan(44));
       expect(SoundServiceTestHelper.generateSessionCompleteSound().length,
           greaterThan(44));
-      expect(SoundServiceTestHelper.generateXpGainSound().length,
-          greaterThan(44));
+      expect(
+          SoundServiceTestHelper.generateXpGainSound().length, greaterThan(44));
     });
 
     test('WAV file size field matches actual data', () {
@@ -205,10 +205,14 @@ void _expectApproxDurationMs(Uint8List wav, int expectedMs) {
 /// Alias for readability — delegates to @visibleForTesting static methods.
 class SoundServiceTestHelper {
   static Uint8List generateFlipSound() => SoundService.generateFlipSound();
-  static Uint8List generateCorrectSound() => SoundService.generateCorrectSound();
+  static Uint8List generateCorrectSound() =>
+      SoundService.generateCorrectSound();
   static Uint8List generateWrongSound() => SoundService.generateWrongSound();
-  static Uint8List generateLevelUpSound() => SoundService.generateLevelUpSound();
-  static Uint8List generateAchievementSound() => SoundService.generateAchievementSound();
-  static Uint8List generateSessionCompleteSound() => SoundService.generateSessionCompleteSound();
+  static Uint8List generateLevelUpSound() =>
+      SoundService.generateLevelUpSound();
+  static Uint8List generateAchievementSound() =>
+      SoundService.generateAchievementSound();
+  static Uint8List generateSessionCompleteSound() =>
+      SoundService.generateSessionCompleteSound();
   static Uint8List generateXpGainSound() => SoundService.generateXpGainSound();
 }

@@ -28,16 +28,22 @@ class ExamSection {
 enum ExamSectionType {
   /// 4-choice vocabulary/grammar fill-in-the-blank
   vocabGrammar,
+
   /// Conversation completion (4-choice)
   conversationComplete,
+
   /// Reading comprehension (passages + questions)
   readingComprehension,
+
   /// Word ordering / sentence construction
   wordOrdering,
+
   /// Listening (dialogue + monologue)
   listening,
+
   /// Writing (opinion essay, email, summary) — 2024 reform
   writing,
+
   /// Speaking (interview-style)
   speaking,
 }

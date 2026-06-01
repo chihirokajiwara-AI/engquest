@@ -51,7 +51,7 @@ import '../../core/models/vocab_item.dart';
 // ── Session result per card ───────────────────────────────────────────────────
 class _CardResult {
   final String word;
-  final Grade  grade;
+  final Grade grade;
   const _CardResult(this.word, this.grade);
 }
 
@@ -70,8 +70,10 @@ class _XpPopup {
 /// [childAge]   — filters vocabulary by age (age < 8 → animals/colors/food/family only).
 class BattleScreen extends StatefulWidget {
   final FsrsCardRepository? repository;
+
   /// Child's age in years (from OnboardingResult). Defaults to 8 (full A1 deck).
   final int childAge;
+
   /// Eiken grade to study (e.g. "5", "4", "3", "pre2"). Defaults to "5".
   final String eikenGrade;
 
@@ -117,9 +119,9 @@ class _BattleScreenState extends State<BattleScreen>
   bool _repoLoading = true; // true while we await uid + loadDeck
 
   // ── Deck state ─────────────────────────────────────────────────────────────
-  List<VocabItem>  _vocab = const [];
-  List<FSRSCard>   _deck  = const [];
-  List<int>        _queue = const [];
+  List<VocabItem> _vocab = const [];
+  List<FSRSCard> _deck = const [];
+  List<int> _queue = const [];
   int _queueIdx = 0;
 
   // ── Session stats ──────────────────────────────────────────────────────────
@@ -137,7 +139,7 @@ class _BattleScreenState extends State<BattleScreen>
 
   // ── Card flip animation ────────────────────────────────────────────────────
   late AnimationController _flipCtrl;
-  late Animation<double>    _flipAnim;
+  late Animation<double> _flipAnim;
   bool _isFlipped = false;
 
   // ── Shimmer overlay (correct answer) ──────────────────────────────────────
@@ -149,19 +151,19 @@ class _BattleScreenState extends State<BattleScreen>
 
   // ── Session-complete star burst animation ──────────────────────────────────
   late AnimationController _starsCtrl;
-  late Animation<double>    _starsAnim;
+  late Animation<double> _starsAnim;
 
   // ── Colours ────────────────────────────────────────────────────────────────
-  static const _bgColor    = Color(0xFFF5F7FA);
-  static const _cardFront  = Color(0xFFFFFFFF);
-  static const _cardBack   = Color(0xFFE3F2FD);
+  static const _bgColor = Color(0xFFF5F7FA);
+  static const _cardFront = Color(0xFFFFFFFF);
+  static const _cardBack = Color(0xFFE3F2FD);
   static const _accentGold = Color(0xFFFFD700);
 
   static const _gradeColors = {
     Grade.again: Color(0xFFE53935),
-    Grade.hard:  Color(0xFFF57C00),
-    Grade.good:  Color(0xFF43A047),
-    Grade.easy:  Color(0xFF1E88E5),
+    Grade.hard: Color(0xFFF57C00),
+    Grade.good: Color(0xFF43A047),
+    Grade.easy: Color(0xFF1E88E5),
   };
 
   // ── Lifecycle ──────────────────────────────────────────────────────────────
@@ -225,12 +227,12 @@ class _BattleScreenState extends State<BattleScreen>
 
     // 4. Merge: use persisted state for known words, new card for unknowns
     final cardMap = {for (final c in persistedCards) c.vocabId: c};
-    final deck = vocabIds
-        .map((id) => cardMap[id] ?? FSRSCard(vocabId: id))
-        .toList();
+    final deck =
+        vocabIds.map((id) => cardMap[id] ?? FSRSCard(vocabId: id)).toList();
 
     // 5. Seed missing new cards to Firestore in batch (first launch)
-    final newCards = deck.where((c) => !cardMap.containsKey(c.vocabId)).toList();
+    final newCards =
+        deck.where((c) => !cardMap.containsKey(c.vocabId)).toList();
     if (newCards.isNotEmpty) {
       try {
         await _repository.saveCards(uid, newCards);
@@ -253,7 +255,8 @@ class _BattleScreenState extends State<BattleScreen>
 
     setState(() {
       _deck = deck;
-      _queue = queue.isNotEmpty ? queue : List.generate(deck.length, (i) => i)..shuffle(math.Random());
+      _queue = queue.isNotEmpty ? queue : List.generate(deck.length, (i) => i)
+        ..shuffle(math.Random());
       _queueIdx = 0;
       _sessionResults.clear();
       _sessionDone = false;
@@ -272,11 +275,11 @@ class _BattleScreenState extends State<BattleScreen>
   // ── Current card helpers ───────────────────────────────────────────────────
 
   int get _currentDeckIdx => _queue[_queueIdx];
-  VocabItem get _currentVocab  => _vocab[_currentDeckIdx];
-  FSRSCard  get _currentCard   => _deck[_currentDeckIdx];
+  VocabItem get _currentVocab => _vocab[_currentDeckIdx];
+  FSRSCard get _currentCard => _deck[_currentDeckIdx];
 
   int get _totalCards => _queue.length;
-  int get _doneCards  => _queueIdx;
+  int get _doneCards => _queueIdx;
 
   // ── Flip ───────────────────────────────────────────────────────────────────
 
@@ -324,7 +327,9 @@ class _BattleScreenState extends State<BattleScreen>
       _sound.playXpGain();
       setState(() => _xpPopups.add(_XpPopup(xpGain, popupId)));
       Future.delayed(const Duration(milliseconds: 900), () {
-        if (mounted) setState(() => _xpPopups.removeWhere((p) => p.id == popupId));
+        if (mounted) {
+          setState(() => _xpPopups.removeWhere((p) => p.id == popupId));
+        }
       });
     }
 
@@ -383,21 +388,24 @@ class _BattleScreenState extends State<BattleScreen>
     final total = _sessionResults.length;
     if (total == 0) return;
 
-    final gradeSum = _sessionResults.fold(
-        0.0, (sum, r) => sum + r.grade.index1.toDouble());
+    final gradeSum =
+        _sessionResults.fold(0.0, (sum, r) => sum + r.grade.index1.toDouble());
     final avgScore = gradeSum / total;
 
     // Count 'review' state cards as mastered
-    final masteredCount = _deck.where((c) => c.state == CardState.review).length;
+    final masteredCount =
+        _deck.where((c) => c.state == CardState.review).length;
 
     // Real elapsed study time (P0.1) — computed from session start timestamp.
-    final minutes = BattleScreen.elapsedMinutes(_sessionStartTime, DateTime.now());
+    final minutes =
+        BattleScreen.elapsedMinutes(_sessionStartTime, DateTime.now());
 
     final progressService = ProgressService(
       repository: FirestoreProgressRepository(),
     );
 
-    progressService.recordSession(
+    progressService
+        .recordSession(
       uid: uid,
       wordsPracticed: total,
       minutes: minutes,
@@ -405,7 +413,8 @@ class _BattleScreenState extends State<BattleScreen>
       totalMastered: masteredCount,
       totalPracticed: _deck.length,
       streak: 1, // server will recalculate from session history
-    ).catchError((_) {
+    )
+        .catchError((_) {
       // Non-fatal: offline writes queued by Firestore SDK
     });
 
@@ -417,13 +426,15 @@ class _BattleScreenState extends State<BattleScreen>
 
   void _checkAchievements(String uid, int masteredCount, int totalPracticed) {
     final profile = _xpService.currentProfile(uid);
-    _achievementService.checkAndUpdate(
+    _achievementService
+        .checkAndUpdate(
       uid: uid,
       totalMastered: masteredCount,
       currentStreak: 1, // streak is computed server-side; best-effort here
       totalPracticed: totalPracticed,
       level: profile?.level ?? 1,
-    ).then((newlyUnlocked) {
+    )
+        .then((newlyUnlocked) {
       if (newlyUnlocked.isNotEmpty && mounted) {
         _showAchievementUnlocked(newlyUnlocked);
       }
@@ -835,9 +846,8 @@ class _BattleScreenState extends State<BattleScreen>
 
   Widget _buildCardBack() {
     final vocab = _currentVocab;
-    final example = vocab.exampleSentences.isNotEmpty
-        ? vocab.exampleSentences.first
-        : '';
+    final example =
+        vocab.exampleSentences.isNotEmpty ? vocab.exampleSentences.first : '';
     return _cardContainer(
       color: _cardBack,
       child: Column(
@@ -943,13 +953,13 @@ class _BattleScreenState extends State<BattleScreen>
   // ── Session summary ────────────────────────────────────────────────────────
 
   Widget _buildSummary() {
-    final total  = _sessionResults.length;
+    final total = _sessionResults.length;
     final counts = <Grade, int>{for (final g in Grade.values) g: 0};
     for (final r in _sessionResults) {
       counts[r.grade] = (counts[r.grade] ?? 0) + 1;
     }
-    final gradeSum = _sessionResults.fold(
-        0.0, (sum, r) => sum + r.grade.index1.toDouble());
+    final gradeSum =
+        _sessionResults.fold(0.0, (sum, r) => sum + r.grade.index1.toDouble());
     final avgGrade = total > 0 ? gradeSum / total : 0.0;
 
     return Stack(
@@ -987,7 +997,8 @@ class _BattleScreenState extends State<BattleScreen>
                 // XP earned
                 const SizedBox(height: 8),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                   decoration: BoxDecoration(
                     color: _accentGold.withAlpha(30),
                     borderRadius: BorderRadius.circular(20),
@@ -1045,7 +1056,9 @@ class _BattleScreenState extends State<BattleScreen>
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    onPressed: () => setState(() { _initDeckAsync(); }),
+                    onPressed: () => setState(() {
+                      _initDeckAsync();
+                    }),
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -1143,7 +1156,8 @@ class _GradeButtonState extends State<_GradeButton>
   }
 
   String _intervalLabel() {
-    final simCard = widget.fsrs.schedule(widget.card, widget.grade, DateTime.now());
+    final simCard =
+        widget.fsrs.schedule(widget.card, widget.grade, DateTime.now());
     final due = simCard.dueDate;
     if (due == null) return '—';
     final diff = due.difference(DateTime.now());
@@ -1266,7 +1280,7 @@ class _StarBurstPainter extends CustomPainter {
     (_) => _StarParticle(
       angle: _rng.nextDouble() * 2 * math.pi,
       speed: 150 + _rng.nextDouble() * 250,
-      size:  6 + _rng.nextDouble() * 10,
+      size: 6 + _rng.nextDouble() * 10,
       color: [
         const Color(0xFFFFD700),
         const Color(0xFFFF8F00),
@@ -1345,9 +1359,9 @@ class _SummaryCard extends StatelessWidget {
 
 class _SummaryRow extends StatelessWidget {
   final String label;
-  final Color  color;
-  final int    count;
-  final int    total;
+  final Color color;
+  final int count;
+  final int total;
 
   const _SummaryRow({
     required this.label,

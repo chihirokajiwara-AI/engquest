@@ -35,8 +35,7 @@ class SuggestionEngine {
         ['Nice to meet you!', 'Thank you!', 'I am happy!']),
     _Rule(['hello', 'hi ', 'hi!', 'good morning'],
         ['Hello!', 'Hi!', 'Good morning!']),
-    _Rule(['goodbye', 'bye', 'see you'],
-        ['Goodbye!', 'See you!', 'Bye bye!']),
+    _Rule(['goodbye', 'bye', 'see you'], ['Goodbye!', 'See you!', 'Bye bye!']),
 
     // --- Shop / price ---
     _Rule(['how many', 'do you want'],

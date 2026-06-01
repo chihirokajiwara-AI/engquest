@@ -148,7 +148,8 @@ class _HomeTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final today = progress.last7Days.isNotEmpty ? progress.last7Days.last : null;
+    final today =
+        progress.last7Days.isNotEmpty ? progress.last7Days.last : null;
     final nextHours =
         progress.nextReviewDue?.difference(DateTime.now()).inHours;
 
@@ -290,7 +291,8 @@ class _HomeTab extends StatelessWidget {
           _Card(
             child: Row(
               children: [
-                const Icon(Icons.access_alarm, color: Color(0xFFAB47BC), size: 32),
+                const Icon(Icons.access_alarm,
+                    color: Color(0xFFAB47BC), size: 32),
                 const SizedBox(width: 16),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -300,9 +302,7 @@ class _HomeTab extends StatelessWidget {
                       style: TextStyle(color: Color(0xFF607D8B), fontSize: 13),
                     ),
                     Text(
-                      nextHours <= 0
-                          ? '今すぐ！'
-                          : '$nextHours時間後',
+                      nextHours <= 0 ? '今すぐ！' : '$nextHours時間後',
                       style: const TextStyle(
                         color: Color(0xFFAB47BC),
                         fontSize: 18,
@@ -336,7 +336,8 @@ class _HomeTab extends StatelessWidget {
                 children: [
                   Text(
                     '${progress.totalWordsMastered} / 300 習得済み',
-                    style: const TextStyle(color: Color(0xFF607D8B), fontSize: 14),
+                    style:
+                        const TextStyle(color: Color(0xFF607D8B), fontSize: 14),
                   ),
                   Text(
                     '${(progress.masteryPercent * 100).toStringAsFixed(0)}%',
@@ -494,7 +495,8 @@ class _BarChartPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     if (days.isEmpty) return;
-    final maxWords = days.map((d) => d.wordsPracticed).fold(0, (a, b) => a > b ? a : b);
+    final maxWords =
+        days.map((d) => d.wordsPracticed).fold(0, (a, b) => a > b ? a : b);
     if (maxWords == 0) return;
 
     const barPad = 8.0;
@@ -523,11 +525,13 @@ class _BarChartPainter extends CustomPainter {
       final dayName = _dayLabel(days[i].date);
       tp.text = TextSpan(text: dayName, style: textStyle);
       tp.layout();
-      tp.paint(canvas, Offset(x + barW / 2 - tp.width / 2, size.height - labelH + 4));
+      tp.paint(canvas,
+          Offset(x + barW / 2 - tp.width / 2, size.height - labelH + 4));
 
       // Value label
       if (days[i].wordsPracticed > 0) {
-        final valStyle = const TextStyle(color: Colors.amber, fontSize: 9, fontWeight: FontWeight.bold);
+        final valStyle = const TextStyle(
+            color: Colors.amber, fontSize: 9, fontWeight: FontWeight.bold);
         tp.text = TextSpan(text: '${days[i].wordsPracticed}', style: valStyle);
         tp.layout();
         tp.paint(canvas, Offset(x + barW / 2 - tp.width / 2, top - 14));
@@ -552,7 +556,8 @@ class _MiniCalendar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final studyDays = days.where((d) => d.wordsPracticed > 0).map((d) => d.date).toSet();
+    final studyDays =
+        days.where((d) => d.wordsPracticed > 0).map((d) => d.date).toSet();
 
     return Wrap(
       spacing: 8,
@@ -566,7 +571,8 @@ class _MiniCalendar extends StatelessWidget {
             color: studied ? const Color(0xFFFFC107) : const Color(0xFFF5F7FA),
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
-              color: studied ? const Color(0xFFFFC107) : const Color(0xFFE0E0E0),
+              color:
+                  studied ? const Color(0xFFFFC107) : const Color(0xFFE0E0E0),
               width: 1,
             ),
           ),
@@ -667,7 +673,9 @@ class _ScheduleTab extends StatelessWidget {
                       ? '順調に進んでいます！\nこの調子でがんばろう 🚀'
                       : '今日少し練習すると\n大きな差がつきますよ！',
                   style: TextStyle(
-                    color: onTrack ? const Color(0xFF66BB6A) : const Color(0xFFFFB74D),
+                    color: onTrack
+                        ? const Color(0xFF66BB6A)
+                        : const Color(0xFFFFB74D),
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
                   ),
@@ -777,7 +785,8 @@ class _ReviewCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(period,
-                  style: const TextStyle(color: Color(0xFF607D8B), fontSize: 13)),
+                  style:
+                      const TextStyle(color: Color(0xFF607D8B), fontSize: 13)),
               Text(
                 '$count 単語',
                 style: TextStyle(
@@ -845,16 +854,21 @@ class _SettingsTab extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 12),
                       decoration: BoxDecoration(
-                        color: selected ? const Color(0xFFFFC107) : const Color(0xFFF5F7FA),
+                        color: selected
+                            ? const Color(0xFFFFC107)
+                            : const Color(0xFFF5F7FA),
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: selected ? const Color(0xFFFFC107) : const Color(0xFFE0E0E0),
+                          color: selected
+                              ? const Color(0xFFFFC107)
+                              : const Color(0xFFE0E0E0),
                         ),
                       ),
                       child: Text(
                         '$g 単語',
                         style: TextStyle(
-                          color: selected ? Colors.black : const Color(0xFF607D8B),
+                          color:
+                              selected ? Colors.black : const Color(0xFF607D8B),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -879,8 +893,7 @@ class _SettingsTab extends StatelessWidget {
               notifTime.format(context),
               style: const TextStyle(color: Color(0xFFAB47BC), fontSize: 18),
             ),
-            trailing:
-                const Icon(Icons.chevron_right, color: Color(0xFF90A4AE)),
+            trailing: const Icon(Icons.chevron_right, color: Color(0xFF90A4AE)),
             onTap: () async {
               final picked = await showTimePicker(
                 context: context,
@@ -927,7 +940,9 @@ class _SettingsTab extends StatelessWidget {
                   title: Text(
                     d,
                     style: TextStyle(
-                      color: selected ? const Color(0xFFFFC107) : const Color(0xFF607D8B),
+                      color: selected
+                          ? const Color(0xFFFFC107)
+                          : const Color(0xFF607D8B),
                     ),
                   ),
                   activeColor: const Color(0xFFFFC107),

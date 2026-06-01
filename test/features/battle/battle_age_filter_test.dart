@@ -68,12 +68,18 @@ void main() {
 
     test('age 4 includes concrete animals: cat, dog, bird, fish', () {
       final ids = _filterIdsByAge(4).toSet();
-      expect(ids, containsAll({'eiken5_001', 'eiken5_002', 'eiken5_020', 'eiken5_021'}));
+      expect(
+          ids,
+          containsAll(
+              {'eiken5_001', 'eiken5_002', 'eiken5_020', 'eiken5_021'}));
     });
 
     test('age 4 includes primary colors: red, blue, green, white', () {
       final ids = _filterIdsByAge(4).toSet();
-      expect(ids, containsAll({'eiken5_006', 'eiken5_015', 'eiken5_023', 'eiken5_027'}));
+      expect(
+          ids,
+          containsAll(
+              {'eiken5_006', 'eiken5_015', 'eiken5_023', 'eiken5_027'}));
     });
 
     test('age 4 includes family words: mother, father', () {

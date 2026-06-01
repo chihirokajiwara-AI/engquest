@@ -94,7 +94,15 @@ class VoiceService {
 
   // Pool of mock words cycled during demo to produce varied results.
   static const List<String> _mockWords = [
-    'cat', 'kat', 'dog', 'apple', 'aple', 'xyz', 'book', 'buk', 'school',
+    'cat',
+    'kat',
+    'dog',
+    'apple',
+    'aple',
+    'xyz',
+    'book',
+    'buk',
+    'school',
   ];
   int _mockIdx = 0;
 

@@ -145,7 +145,7 @@ All core components C01-C19 are implemented. See docs/spec/mvp.md for details.
   assets/audio/a1 either. DECIDE: (a) restore web MP3s, (b) retire the stale web
   check post-T00e, and/or (c) wire offline bundled-audio loading. Blocks tracking
   the 英検4/5/準2 vocab JSONs (kept untracked in working tree until resolved).
-- [ ] T36: Align CI Flutter to 3.44.x (currently 3.22.x, vs project requirement
+- [x] T36: Align CI Flutter to 3.44.x (currently 3.22.x, vs project requirement
   3.44+); resolve the 3.44↔3.22 formatter drift (59 files) so CI format is green.
 - [ ] T37: Re-enable autonomous loop ONLY behind a hard gate (analyze 0 + test 0
   failures + clean-checkout compile + untracked-file handling); it was archived

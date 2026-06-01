@@ -75,10 +75,8 @@ void main() {
     });
 
     test('distant match returns incorrect', () {
-      expect(
-          service.evaluateMatch('helicopter', 'cat'), VoiceResult.incorrect);
-      expect(
-          service.evaluateMatch('xyzabc', 'cat'), VoiceResult.incorrect);
+      expect(service.evaluateMatch('helicopter', 'cat'), VoiceResult.incorrect);
+      expect(service.evaluateMatch('xyzabc', 'cat'), VoiceResult.incorrect);
     });
 
     test('borderline match (distance == 3) returns close', () {

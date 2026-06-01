@@ -72,8 +72,7 @@ void main() {
       final now = DateTime.now();
       // Add a session for yesterday
       final yesterday = now.subtract(const Duration(days: 1));
-      final key =
-          '${yesterday.year.toString().padLeft(4, '0')}-'
+      final key = '${yesterday.year.toString().padLeft(4, '0')}-'
           '${yesterday.month.toString().padLeft(2, '0')}-'
           '${yesterday.day.toString().padLeft(2, '0')}';
 
@@ -102,8 +101,7 @@ void main() {
     test('fills in zeros for days without sessions', () async {
       final now = DateTime.now();
       // Only add today's session
-      final todayKey =
-          '${now.year.toString().padLeft(4, '0')}-'
+      final todayKey = '${now.year.toString().padLeft(4, '0')}-'
           '${now.month.toString().padLeft(2, '0')}-'
           '${now.day.toString().padLeft(2, '0')}';
 
@@ -157,8 +155,7 @@ void main() {
       );
 
       final now = DateTime.now();
-      final key =
-          '${now.year.toString().padLeft(4, '0')}-'
+      final key = '${now.year.toString().padLeft(4, '0')}-'
           '${now.month.toString().padLeft(2, '0')}-'
           '${now.day.toString().padLeft(2, '0')}';
 
@@ -218,8 +215,7 @@ void main() {
       );
 
       final now = DateTime.now();
-      final key =
-          '${now.year.toString().padLeft(4, '0')}-'
+      final key = '${now.year.toString().padLeft(4, '0')}-'
           '${now.month.toString().padLeft(2, '0')}-'
           '${now.day.toString().padLeft(2, '0')}';
 
@@ -247,8 +243,7 @@ void main() {
 
     test('returns 1 when only today has a session', () async {
       final now = DateTime.now();
-      final key =
-          '${now.year.toString().padLeft(4, '0')}-'
+      final key = '${now.year.toString().padLeft(4, '0')}-'
           '${now.month.toString().padLeft(2, '0')}-'
           '${now.day.toString().padLeft(2, '0')}';
 
@@ -268,8 +263,7 @@ void main() {
       // Add sessions for today + 3 days back
       for (var i = 0; i < 4; i++) {
         final day = now.subtract(Duration(days: i));
-        final key =
-            '${day.year.toString().padLeft(4, '0')}-'
+        final key = '${day.year.toString().padLeft(4, '0')}-'
             '${day.month.toString().padLeft(2, '0')}-'
             '${day.day.toString().padLeft(2, '0')}';
         await fakeDb
@@ -291,8 +285,7 @@ void main() {
       final twoDaysAgo = now.subtract(const Duration(days: 2));
 
       for (final day in [today, twoDaysAgo]) {
-        final key =
-            '${day.year.toString().padLeft(4, '0')}-'
+        final key = '${day.year.toString().padLeft(4, '0')}-'
             '${day.month.toString().padLeft(2, '0')}-'
             '${day.day.toString().padLeft(2, '0')}';
         await fakeDb

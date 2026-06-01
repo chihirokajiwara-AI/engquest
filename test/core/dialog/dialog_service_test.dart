@@ -34,9 +34,12 @@ void main() {
 
     test('shopDialog quick replies include price-asking phrase', () {
       final replies = DialogScenario.shopDialog.quickReplies;
-      expect(replies.any((r) => r.toLowerCase().contains('much') ||
-          r.toLowerCase().contains('buy') ||
-          r.toLowerCase().contains('sell')), isTrue);
+      expect(
+          replies.any((r) =>
+              r.toLowerCase().contains('much') ||
+              r.toLowerCase().contains('buy') ||
+              r.toLowerCase().contains('sell')),
+          isTrue);
     });
 
     test('scenario labels are in Japanese', () {
@@ -126,9 +129,8 @@ void main() {
     });
 
     test('all scenarios have a non-empty scenarioDescription', () {
-      final descriptions = DialogScenario.values
-          .map((s) => s.scenarioDescription)
-          .toList();
+      final descriptions =
+          DialogScenario.values.map((s) => s.scenarioDescription).toList();
       for (final d in descriptions) {
         expect(d, isNotEmpty);
       }

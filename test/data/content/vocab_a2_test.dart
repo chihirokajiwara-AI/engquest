@@ -6,7 +6,6 @@ import 'package:engquest/core/models/vocab_item.dart';
 import 'package:engquest/data/content/vocab_a1.dart';
 import 'package:engquest/data/content/vocab_a2.dart';
 
-
 void main() {
   group('A2 vocabulary data integrity', () {
     test('contains exactly 300 words', () {
@@ -39,7 +38,8 @@ void main() {
 
     test('all entries have cefrLevel A2', () {
       for (final v in kSeedVocabA2) {
-        expect(v.cefrLevel, CefrLevel.a2, reason: '${v.word} has wrong cefrLevel');
+        expect(v.cefrLevel, CefrLevel.a2,
+            reason: '${v.word} has wrong cefrLevel');
       }
     });
 
@@ -52,7 +52,8 @@ void main() {
     test('all entries have non-empty fields', () {
       for (final v in kSeedVocabA2) {
         expect(v.word.isNotEmpty, isTrue, reason: '${v.id} has empty word');
-        expect(v.reading.isNotEmpty, isTrue, reason: '${v.id} has empty reading');
+        expect(v.reading.isNotEmpty, isTrue,
+            reason: '${v.id} has empty reading');
         expect(v.jpTranslation.isNotEmpty, isTrue,
             reason: '${v.id} has empty jpTranslation');
         expect(v.pos.isNotEmpty, isTrue, reason: '${v.id} has empty pos');

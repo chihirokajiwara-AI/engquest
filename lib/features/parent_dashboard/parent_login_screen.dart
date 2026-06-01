@@ -213,7 +213,8 @@ class _ParentLoginScreenState extends State<ParentLoginScreen>
         ),
         title: const Text(
           '保護者ログイン',
-          style: TextStyle(color: Color(0xFFFFD700), fontWeight: FontWeight.bold),
+          style:
+              TextStyle(color: Color(0xFFFFD700), fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),
@@ -276,7 +277,8 @@ class _ParentLoginScreenState extends State<ParentLoginScreen>
         children: [
           const Text(
             'お子様の学習状況を確認するために\n保護者アカウントでログインしてください',
-            style: TextStyle(color: Color(0xFF607D8B), fontSize: 14, height: 1.5),
+            style:
+                TextStyle(color: Color(0xFF607D8B), fontSize: 14, height: 1.5),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 24),
@@ -317,7 +319,8 @@ class _ParentLoginScreenState extends State<ParentLoginScreen>
         children: [
           const Text(
             '保護者アカウントを作成して\nお子様の進捗を見守りましょう',
-            style: TextStyle(color: Color(0xFF607D8B), fontSize: 14, height: 1.5),
+            style:
+                TextStyle(color: Color(0xFF607D8B), fontSize: 14, height: 1.5),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 24),

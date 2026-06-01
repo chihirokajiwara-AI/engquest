@@ -25,7 +25,7 @@ import 'package:engquest/features/parent_dashboard/parent_dashboard_screen.dart'
 
 // ── Mock player data (fallback when Firestore unavailable) ───────────────────
 const _kMockAvatarEmoji = '🧙';
-const _kMockStreak     = 0;  // shown when offline
+const _kMockStreak = 0; // shown when offline
 
 // ── Zone definition ──────────────────────────────────────────────────────────
 class _ZoneDef {
@@ -48,39 +48,45 @@ class _ZoneDef {
 
 final List<_ZoneDef> _kZones = [
   _ZoneDef(
-    label:    '鍛冶屋',
+    label: '鍛冶屋',
     subtitle: 'Blacksmith — 単語と戦え！',
-    icon:     Icons.shield_outlined,
-    gradient: [const Color(0xFFFF7043), const Color(0xFFE64A19)],  // warm red-orange
-    route:    '/battle',
+    icon: Icons.shield_outlined,
+    gradient: [
+      const Color(0xFFFF7043),
+      const Color(0xFFE64A19)
+    ], // warm red-orange
+    route: '/battle',
   ),
   _ZoneDef(
-    label:    '広場',
+    label: '広場',
     subtitle: 'Town Crier — NPCと話そう',
-    icon:     Icons.chat_bubble_outline,
-    gradient: [const Color(0xFF29B6F6), const Color(0xFF0288D1)],  // sky blue
-    route:    '/dialog',
+    icon: Icons.chat_bubble_outline,
+    gradient: [const Color(0xFF29B6F6), const Color(0xFF0288D1)], // sky blue
+    route: '/dialog',
   ),
   _ZoneDef(
-    label:    'こだまの洞窟',
+    label: 'こだまの洞窟',
     subtitle: 'Echo Cave — 声に出して練習',
-    icon:     Icons.mic_none_rounded,
-    gradient: [const Color(0xFF66BB6A), const Color(0xFF388E3C)],  // emerald green
-    route:    '/voice',
+    icon: Icons.mic_none_rounded,
+    gradient: [
+      const Color(0xFF66BB6A),
+      const Color(0xFF388E3C)
+    ], // emerald green
+    route: '/voice',
   ),
   _ZoneDef(
-    label:    '闘技場',
+    label: '闘技場',
     subtitle: 'Arena — 英検模擬試験',
-    icon:     Icons.assignment_outlined,
-    gradient: [const Color(0xFFFF7043), const Color(0xFFD84315)],  // deep orange
-    route:    '/exam',
+    icon: Icons.assignment_outlined,
+    gradient: [const Color(0xFFFF7043), const Color(0xFFD84315)], // deep orange
+    route: '/exam',
   ),
   _ZoneDef(
-    label:    '学者の塔',
+    label: '学者の塔',
     subtitle: "Scholar's Tower — 成長を確認",
-    icon:     Icons.admin_panel_settings_outlined,
-    gradient: [const Color(0xFFAB47BC), const Color(0xFF7B1FA2)],  // purple
-    route:    '/parent',
+    icon: Icons.admin_panel_settings_outlined,
+    gradient: [const Color(0xFFAB47BC), const Color(0xFF7B1FA2)], // purple
+    route: '/parent',
     pushTarget: const ParentDashboardScreen(),
   ),
 ];
@@ -99,12 +105,12 @@ class WorldMapScreen extends StatefulWidget {
 class _WorldMapScreenState extends State<WorldMapScreen>
     with TickerProviderStateMixin {
   late List<AnimationController> _slideCtls;
-  late List<Animation<Offset>>   _slideAnims;
+  late List<Animation<Offset>> _slideAnims;
 
   // ── XP / Level (P2-7) ──────────────────────────────────────────────────────
   final _xpService = XpService();
-  final _auth      = AuthService();
-  XpProfile? _xpProfile;  // null until loaded; UI shows skeleton
+  final _auth = AuthService();
+  XpProfile? _xpProfile; // null until loaded; UI shows skeleton
 
   @override
   void initState() {
@@ -220,7 +226,8 @@ class _WorldMapScreenState extends State<WorldMapScreen>
             // ── Zone cards ───────────────────────────────────────────────────
             Expanded(
               child: ListView.separated(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
                 itemCount: _kZones.length,
                 separatorBuilder: (_, __) => const SizedBox(height: 14),
                 itemBuilder: (context, i) {
@@ -235,8 +242,7 @@ class _WorldMapScreenState extends State<WorldMapScreen>
                           if (zone.pushTarget != null) {
                             Navigator.push(
                               context,
-                              FadeSlideRoute(
-                                  builder: (_) => zone.pushTarget!),
+                              FadeSlideRoute(builder: (_) => zone.pushTarget!),
                             );
                           } else if (zone.route == '/battle') {
                             Navigator.push(
@@ -434,8 +440,7 @@ class _PlayerStatsBar extends StatelessWidget {
           ),
           const SizedBox(width: 12),
           // Day streak badge
-          if (streak > 0)
-            _StreakBadge(streak: streak),
+          if (streak > 0) _StreakBadge(streak: streak),
         ],
       ),
     );

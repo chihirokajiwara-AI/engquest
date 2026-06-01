@@ -26,7 +26,9 @@ void main() {
       expect(AnalyticsService.instance.sink, isA<NoOpAnalytics>());
     });
 
-    test('initialize with firebaseAvailable=true selects FirebaseAnalyticsAdapter', () {
+    test(
+        'initialize with firebaseAvailable=true selects FirebaseAnalyticsAdapter',
+        () {
       // FirebaseAnalytics.instance requires a running Firebase app, so the
       // default constructor throws in a pure-Dart test environment. Instead,
       // we verify the branch logic by constructing AnalyticsService directly

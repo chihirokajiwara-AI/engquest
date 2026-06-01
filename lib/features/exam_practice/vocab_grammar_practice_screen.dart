@@ -55,8 +55,8 @@ class _VocabGrammarPracticeScreenState
 
       // Filter to words that have distractors and example sentences
       final eligible = allWords
-          .where((w) =>
-              w.distractors.length >= 3 && w.exampleSentences.isNotEmpty)
+          .where(
+              (w) => w.distractors.length >= 3 && w.exampleSentences.isNotEmpty)
           .toList()
         ..shuffle(_rng);
 
@@ -198,8 +198,7 @@ class _VocabGrammarPracticeScreenState
           LinearProgressIndicator(
             value: (_currentIdx + 1) / _questions.length,
             backgroundColor: Colors.grey[200],
-            valueColor:
-                const AlwaysStoppedAnimation<Color>(Color(0xFF4FC3F7)),
+            valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF4FC3F7)),
           ),
           const SizedBox(height: 24),
           // Cloze sentence
@@ -292,8 +291,9 @@ class _VocabGrammarPracticeScreenState
                             style: TextStyle(
                               color: textColor,
                               fontSize: 16,
-                              fontWeight:
-                                  isSelected ? FontWeight.w600 : FontWeight.normal,
+                              fontWeight: isSelected
+                                  ? FontWeight.w600
+                                  : FontWeight.normal,
                             ),
                           ),
                         ),

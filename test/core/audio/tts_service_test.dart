@@ -95,7 +95,8 @@ void main() {
       expect(entry.word, 'cat');
       expect(entry.ipa, '/kæt/');
       expect(entry.audioFile, 'eiken5_001_cat.mp3');
-      expect(entry.storagePath, 'gs://engquest-audio/tts/a1/eiken5_001_cat.mp3');
+      expect(
+          entry.storagePath, 'gs://engquest-audio/tts/a1/eiken5_001_cat.mp3');
       expect(entry.localCachePath, 'audio/a1/eiken5_001_cat.mp3');
       expect(entry.status, 'pending');
       expect(entry.syllableCount, 1);
@@ -212,7 +213,8 @@ void main() {
   // ── TtsAudioResult tests ──────────────────────────────────────────────────
 
   group('TtsAudioResult', () {
-    test('isAvailable = true when audioBytes present and source != unavailable', () {
+    test('isAvailable = true when audioBytes present and source != unavailable',
+        () {
       final result = TtsAudioResult(
         vocabId: 'eiken5_001',
         word: 'cat',
@@ -317,7 +319,8 @@ void main() {
       expect(() => player.dispose(), returnsNormally);
     });
 
-    test('getIpa delegates to TtsService (returns null when uninitialized)', () {
+    test('getIpa delegates to TtsService (returns null when uninitialized)',
+        () {
       final player = WordAudioPlayerService();
       expect(player.getIpa('eiken5_001'), isNull);
     });
@@ -373,12 +376,36 @@ void main() {
     // Verify all 30 seed vocab IDs are present in the manifest schema
     // (actual manifest is in assets/content/audio_manifest.json)
     final seedVocabIds = [
-      'eiken5_001', 'eiken5_002', 'eiken5_003', 'eiken5_004', 'eiken5_005',
-      'eiken5_006', 'eiken5_007', 'eiken5_008', 'eiken5_009', 'eiken5_010',
-      'eiken5_011', 'eiken5_012', 'eiken5_013', 'eiken5_014', 'eiken5_015',
-      'eiken5_016', 'eiken5_017', 'eiken5_018', 'eiken5_019', 'eiken5_020',
-      'eiken5_021', 'eiken5_022', 'eiken5_023', 'eiken5_024', 'eiken5_025',
-      'eiken5_026', 'eiken5_027', 'eiken5_028', 'eiken5_029', 'eiken5_030',
+      'eiken5_001',
+      'eiken5_002',
+      'eiken5_003',
+      'eiken5_004',
+      'eiken5_005',
+      'eiken5_006',
+      'eiken5_007',
+      'eiken5_008',
+      'eiken5_009',
+      'eiken5_010',
+      'eiken5_011',
+      'eiken5_012',
+      'eiken5_013',
+      'eiken5_014',
+      'eiken5_015',
+      'eiken5_016',
+      'eiken5_017',
+      'eiken5_018',
+      'eiken5_019',
+      'eiken5_020',
+      'eiken5_021',
+      'eiken5_022',
+      'eiken5_023',
+      'eiken5_024',
+      'eiken5_025',
+      'eiken5_026',
+      'eiken5_027',
+      'eiken5_028',
+      'eiken5_029',
+      'eiken5_030',
     ];
 
     test('all 30 vocab IDs follow expected naming convention', () {
@@ -393,9 +420,8 @@ void main() {
     });
 
     test('IDs are sequential from 001 to 030', () {
-      final numbers = seedVocabIds
-          .map((id) => int.parse(id.split('_')[1]))
-          .toList();
+      final numbers =
+          seedVocabIds.map((id) => int.parse(id.split('_')[1])).toList();
       for (var i = 0; i < numbers.length; i++) {
         expect(numbers[i], i + 1, reason: 'ID at index $i should be ${i + 1}');
       }

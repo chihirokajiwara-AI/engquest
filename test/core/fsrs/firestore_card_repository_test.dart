@@ -104,11 +104,14 @@ void main() {
       // new, learning, review, relearning
       final stateCards = [
         FSRSCard(vocabId: 's_new'),
-        fsrs.schedule(FSRSCard(vocabId: 's_learning'), Grade.again, DateTime.now()),
-        fsrs.schedule(FSRSCard(vocabId: 's_review'), Grade.good, DateTime.now()),
+        fsrs.schedule(
+            FSRSCard(vocabId: 's_learning'), Grade.again, DateTime.now()),
+        fsrs.schedule(
+            FSRSCard(vocabId: 's_review'), Grade.good, DateTime.now()),
         // relearning: schedule after lapse
         fsrs.schedule(
-          fsrs.schedule(FSRSCard(vocabId: 's_relearn'), Grade.good, DateTime.now()),
+          fsrs.schedule(
+              FSRSCard(vocabId: 's_relearn'), Grade.good, DateTime.now()),
           Grade.again,
           DateTime.now().add(const Duration(days: 5)),
         ),
@@ -183,7 +186,8 @@ void main() {
       // First review: Good → learning/review
       card = fsrs.schedule(card, Grade.good, now);
       // Second review: Easy → review state with far future dueDate
-      card = fsrs.schedule(card, Grade.easy, now.add(const Duration(minutes: 1)));
+      card =
+          fsrs.schedule(card, Grade.easy, now.add(const Duration(minutes: 1)));
 
       await repo.saveCard(uid, card);
       final dueNow = await repo.getDueCards(uid, now);
@@ -196,7 +200,8 @@ void main() {
       var card = FSRSCard(vocabId: 'past_due');
       final t0 = DateTime(2026, 1, 1);
       card = fsrs.schedule(card, Grade.good, t0);
-      card = fsrs.schedule(card, Grade.easy, t0.add(const Duration(minutes: 1)));
+      card =
+          fsrs.schedule(card, Grade.easy, t0.add(const Duration(minutes: 1)));
 
       await repo.saveCard(uid, card);
       // Check far in the future — card is definitely overdue
@@ -232,7 +237,8 @@ void main() {
     test('learning state cards are always due', () async {
       final fsrs = FSRSAlgorithm();
       // Again → learning state
-      final card = fsrs.schedule(FSRSCard(vocabId: 'learning_card'), Grade.again, DateTime.now());
+      final card = fsrs.schedule(
+          FSRSCard(vocabId: 'learning_card'), Grade.again, DateTime.now());
       expect(card.state, equals(CardState.learning));
       await repo.saveCard(uid, card);
 

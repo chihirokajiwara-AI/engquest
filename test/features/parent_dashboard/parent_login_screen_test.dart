@@ -40,8 +40,7 @@ void main() {
       expect(find.text('メールアドレス'), findsOneWidget);
       expect(find.text('パスワード（6文字以上）'), findsOneWidget);
       expect(find.text('パスワード（確認）'), findsOneWidget);
-      expect(
-          find.widgetWithText(ElevatedButton, 'アカウント作成'), findsOneWidget);
+      expect(find.widgetWithText(ElevatedButton, 'アカウント作成'), findsOneWidget);
     });
 
     testWidgets('login shows error when fields are empty', (tester) async {
@@ -51,8 +50,7 @@ void main() {
       await tester.tap(find.widgetWithText(ElevatedButton, 'ログイン'));
       await tester.pump();
 
-      expect(find.text('メールアドレスとパスワードを入力してください'),
-          findsOneWidget);
+      expect(find.text('メールアドレスとパスワードを入力してください'), findsOneWidget);
     });
 
     testWidgets('signup shows error when password too short', (tester) async {
@@ -66,12 +64,10 @@ void main() {
       final emailField = find.widgetWithText(TextField, 'メールアドレス');
       await tester.enterText(emailField, 'test@example.com');
 
-      final passwordField =
-          find.widgetWithText(TextField, 'パスワード（6文字以上）');
+      final passwordField = find.widgetWithText(TextField, 'パスワード（6文字以上）');
       await tester.enterText(passwordField, '123');
 
-      final confirmField =
-          find.widgetWithText(TextField, 'パスワード（確認）');
+      final confirmField = find.widgetWithText(TextField, 'パスワード（確認）');
       await tester.enterText(confirmField, '123');
 
       await tester.tap(find.widgetWithText(ElevatedButton, 'アカウント作成'));
@@ -91,12 +87,10 @@ void main() {
       final emailField = find.widgetWithText(TextField, 'メールアドレス');
       await tester.enterText(emailField, 'test@example.com');
 
-      final passwordField =
-          find.widgetWithText(TextField, 'パスワード（6文字以上）');
+      final passwordField = find.widgetWithText(TextField, 'パスワード（6文字以上）');
       await tester.enterText(passwordField, '123456');
 
-      final confirmField =
-          find.widgetWithText(TextField, 'パスワード（確認）');
+      final confirmField = find.widgetWithText(TextField, 'パスワード（確認）');
       await tester.enterText(confirmField, '654321');
 
       await tester.tap(find.widgetWithText(ElevatedButton, 'アカウント作成'));

@@ -92,13 +92,23 @@ AppRoute resolveStartRoute(OnboardingPreferences prefs) {
 
 const _seedVocab = [
   VocabItem(
-    id: 'eiken5_001', word: 'cat', reading: 'キャット', jpTranslation: 'ねこ',
-    cefrLevel: CefrLevel.a1, eikenLevel: '5', pos: [PartOfSpeech.noun],
+    id: 'eiken5_001',
+    word: 'cat',
+    reading: 'キャット',
+    jpTranslation: 'ねこ',
+    cefrLevel: CefrLevel.a1,
+    eikenLevel: '5',
+    pos: [PartOfSpeech.noun],
     exampleSentences: ['I have a cat.'],
   ),
   VocabItem(
-    id: 'eiken5_002', word: 'dog', reading: 'ドッグ', jpTranslation: 'いぬ',
-    cefrLevel: CefrLevel.a1, eikenLevel: '5', pos: [PartOfSpeech.noun],
+    id: 'eiken5_002',
+    word: 'dog',
+    reading: 'ドッグ',
+    jpTranslation: 'いぬ',
+    cefrLevel: CefrLevel.a1,
+    eikenLevel: '5',
+    pos: [PartOfSpeech.noun],
     exampleSentences: ['My dog is big.'],
   ),
 ];
@@ -249,7 +259,8 @@ void main() {
       expect(due.length, equals(deck.length));
     });
 
-    test('complete flow: fresh install → onboard → world map → battle ready', () {
+    test('complete flow: fresh install → onboard → world map → battle ready',
+        () {
       // 1. Fresh install → onboarding route
       expect(resolveStartRoute(onboardingPrefs), equals(AppRoute.onboarding));
 

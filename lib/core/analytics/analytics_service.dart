@@ -221,9 +221,7 @@ class AnalyticsService {
   /// availability. Call once in main.dart after Firebase init.
   static void initialize({required bool firebaseAvailable}) {
     _instance = AnalyticsService(
-      sink: firebaseAvailable
-          ? FirebaseAnalyticsAdapter()
-          : NoOpAnalytics(),
+      sink: firebaseAvailable ? FirebaseAnalyticsAdapter() : NoOpAnalytics(),
     );
   }
 
@@ -356,7 +354,8 @@ class AnalyticsService {
     required double retentionScore, // 0.0–1.0
   }) async {
     await sink.logEvent(EngQuestEvent.abRetentionTest, parameters: {
-      EngQuestParam.abGroup: group == AbGroup.treatment ? 'treatment' : 'control',
+      EngQuestParam.abGroup:
+          group == AbGroup.treatment ? 'treatment' : 'control',
       EngQuestParam.retentionScore: retentionScore,
     });
   }

@@ -72,9 +72,11 @@ class FirestoreFsrsCardRepository implements FsrsCardRepository {
         'stability': card.stability,
         'difficulty': card.difficulty,
         'state': card.state.value,
-        'dueDate': card.dueDate != null ? Timestamp.fromDate(card.dueDate!) : null,
-        'lastReview':
-            card.lastReview != null ? Timestamp.fromDate(card.lastReview!) : null,
+        'dueDate':
+            card.dueDate != null ? Timestamp.fromDate(card.dueDate!) : null,
+        'lastReview': card.lastReview != null
+            ? Timestamp.fromDate(card.lastReview!)
+            : null,
         'lapses': card.lapses,
         'repetitions': card.reps,
         'updatedAt': FieldValue.serverTimestamp(),
@@ -101,8 +103,7 @@ class FirestoreFsrsCardRepository implements FsrsCardRepository {
   Future<List<FSRSCard>> loadDeck(String userId) async {
     try {
       final snap = await _cardsCol(userId).get();
-      final firestoreCards =
-          snap.docs.map((d) => _fromSnapshot(d)).toList();
+      final firestoreCards = snap.docs.map((d) => _fromSnapshot(d)).toList();
 
       // Mirror to fallback so offline reads remain consistent
       await _fallback.saveCards(userId, firestoreCards);
@@ -161,9 +162,9 @@ class FirestoreFsrsCardRepository implements FsrsCardRepository {
     // filtering is simpler and correct for <=300 card decks.
     final all = await loadDeck(userId);
     return all.where((c) {
-      if (c.state == CardState.newCard) return true;   // Always show new cards
-      if (c.state == CardState.learning) return true;  // Show learning cards
-      if (c.state == CardState.relearning) return true;// Show relearning cards
+      if (c.state == CardState.newCard) return true; // Always show new cards
+      if (c.state == CardState.learning) return true; // Show learning cards
+      if (c.state == CardState.relearning) return true; // Show relearning cards
       // Review cards: due when dueDate is null or <= now
       return c.dueDate == null || !now.isBefore(c.dueDate!);
     }).toList();

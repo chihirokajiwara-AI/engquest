@@ -49,8 +49,9 @@ class SpySink implements AnalyticsSink {
 
   int countEvent(String name) => events.where((e) => e.name == name).length;
 
-  Map<String, Object>? paramsFor(String name) =>
-      events.firstWhere((e) => e.name == name, orElse: () => (name: '', params: null)).params;
+  Map<String, Object>? paramsFor(String name) => events
+      .firstWhere((e) => e.name == name, orElse: () => (name: '', params: null))
+      .params;
 }
 
 // ---------------------------------------------------------------------------
@@ -110,7 +111,8 @@ class InstrumentedBattleSession {
       latencyMs: latencyMs,
     );
 
-    if (after.state == CardState.learning || after.state == CardState.relearning) {
+    if (after.state == CardState.learning ||
+        after.state == CardState.relearning) {
       final insertAt = (queueIdx + 3).clamp(0, queue.length);
       queue.insert(insertAt, queue[queueIdx]);
     }
@@ -120,8 +122,7 @@ class InstrumentedBattleSession {
 
   /// Complete session and log summary.
   Future<void> completeSession(int wordsPracticed, double accuracy) async {
-    final durationSec =
-        DateTime.now().difference(_sessionStart).inSeconds;
+    final durationSec = DateTime.now().difference(_sessionStart).inSeconds;
     await analytics.logBattleSessionComplete(
       wordsPracticed: wordsPracticed,
       accuracy: accuracy,
@@ -149,18 +150,33 @@ extension AnalyticsServiceTestExt on AnalyticsService {
 
 const _testVocab = [
   VocabItem(
-    id: 'a001', word: 'cat', reading: 'キャット', jpTranslation: 'ねこ',
-    cefrLevel: CefrLevel.a1, eikenLevel: '5', pos: [PartOfSpeech.noun],
+    id: 'a001',
+    word: 'cat',
+    reading: 'キャット',
+    jpTranslation: 'ねこ',
+    cefrLevel: CefrLevel.a1,
+    eikenLevel: '5',
+    pos: [PartOfSpeech.noun],
     exampleSentences: ['I have a cat.'],
   ),
   VocabItem(
-    id: 'a002', word: 'dog', reading: 'ドッグ', jpTranslation: 'いぬ',
-    cefrLevel: CefrLevel.a1, eikenLevel: '5', pos: [PartOfSpeech.noun],
+    id: 'a002',
+    word: 'dog',
+    reading: 'ドッグ',
+    jpTranslation: 'いぬ',
+    cefrLevel: CefrLevel.a1,
+    eikenLevel: '5',
+    pos: [PartOfSpeech.noun],
     exampleSentences: ['My dog is big.'],
   ),
   VocabItem(
-    id: 'a003', word: 'apple', reading: 'アップル', jpTranslation: 'りんご',
-    cefrLevel: CefrLevel.a1, eikenLevel: '5', pos: [PartOfSpeech.noun],
+    id: 'a003',
+    word: 'apple',
+    reading: 'アップル',
+    jpTranslation: 'りんご',
+    cefrLevel: CefrLevel.a1,
+    eikenLevel: '5',
+    pos: [PartOfSpeech.noun],
     exampleSentences: ['I eat an apple.'],
   ),
 ];
@@ -209,7 +225,8 @@ void main() {
         await session.showCard();
         await session.gradeAndLog(Grade.good);
       }
-      expect(spy.countEvent(EngQuestEvent.battleCardShown), equals(_testVocab.length));
+      expect(spy.countEvent(EngQuestEvent.battleCardShown),
+          equals(_testVocab.length));
     });
 
     test('battleCardShown includes word_id and cefr_level', () async {
@@ -248,7 +265,8 @@ void main() {
     test('grade values map correctly to 1-4 scale', () async {
       for (final grade in Grade.values) {
         spy.reset();
-        final session = InstrumentedBattleSession([_testVocab.first], analytics);
+        final session =
+            InstrumentedBattleSession([_testVocab.first], analytics);
         await session.gradeAndLog(grade);
         final params = spy.paramsFor(EngQuestEvent.battleCardAnswered);
         expect(params?[EngQuestParam.grade], equals(grade.index1));
@@ -285,7 +303,8 @@ void main() {
 
   group('A/B group assignment', () {
     test('AB group assignment event is fired', () async {
-      await analytics.assignAndLogAbGroup(uid: 'user_001', experimentId: 'anki_vs_engquest');
+      await analytics.assignAndLogAbGroup(
+          uid: 'user_001', experimentId: 'anki_vs_engquest');
       expect(spy.hasEvent(EngQuestEvent.abGroupAssigned), isTrue);
     });
 
@@ -302,16 +321,16 @@ void main() {
 
     test('same uid always gets same group (deterministic)', () async {
       final a1 = await analytics.assignAndLogAbGroup(
-        uid: 'user_stable', experimentId: 'test_exp');
+          uid: 'user_stable', experimentId: 'test_exp');
       spy.reset();
       final a2 = await analytics.assignAndLogAbGroup(
-        uid: 'user_stable', experimentId: 'test_exp');
+          uid: 'user_stable', experimentId: 'test_exp');
       expect(a1.group, equals(a2.group));
     });
 
     test('user property is set for the experiment', () async {
       await analytics.assignAndLogAbGroup(
-        uid: 'user_prop_test', experimentId: 'anki_vs_engquest');
+          uid: 'user_prop_test', experimentId: 'anki_vs_engquest');
       expect(spy.userProperties.containsKey('ab_anki_vs_engquest'), isTrue);
     });
 

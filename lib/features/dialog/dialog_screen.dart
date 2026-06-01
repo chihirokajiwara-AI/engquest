@@ -114,7 +114,8 @@ class _ScenarioCard extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       _descriptions[scenario]!,
-                      style: const TextStyle(color: Colors.white70, fontSize: 13),
+                      style:
+                          const TextStyle(color: Colors.white70, fontSize: 13),
                     ),
                   ],
                 ),
@@ -324,7 +325,8 @@ class _DialogScreenState extends State<DialogScreen> {
               child: ActionChip(
                 label: Text(
                   reply,
-                  style: const TextStyle(color: Color(0xFF263238), fontSize: 12),
+                  style:
+                      const TextStyle(color: Color(0xFF263238), fontSize: 12),
                 ),
                 backgroundColor: const Color(0xFFE3F2FD),
                 shape: RoundedRectangleBorder(
@@ -372,9 +374,8 @@ class _DialogScreenState extends State<DialogScreen> {
             shape: const CircleBorder(),
             child: InkWell(
               customBorder: const CircleBorder(),
-              onTap: _isLoading
-                  ? null
-                  : () => _sendMessage(_textController.text),
+              onTap:
+                  _isLoading ? null : () => _sendMessage(_textController.text),
               child: const Padding(
                 padding: EdgeInsets.all(12),
                 child: Icon(Icons.send, color: Colors.black, size: 20),

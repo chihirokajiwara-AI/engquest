@@ -21,7 +21,8 @@ class BattleSession {
   late List<FSRSCard> deck;
   late List<int> queue;
   int queueIdx = 0;
-  final List<({String wordId, Grade grade, FSRSCard before, FSRSCard after})> history = [];
+  final List<({String wordId, Grade grade, FSRSCard before, FSRSCard after})>
+      history = [];
 
   BattleSession(this.vocab) {
     deck = vocab.map((v) => FSRSCard(vocabId: v.id)).toList();
@@ -45,10 +46,12 @@ class BattleSession {
     final before = currentCard;
     final after = fsrs.schedule(before, g, now);
     deck[currentDeckIdx] = after;
-    history.add((wordId: before.vocabId, grade: g, before: before, after: after));
+    history
+        .add((wordId: before.vocabId, grade: g, before: before, after: after));
 
     // Re-queue learning/relearning cards (same as BattleScreen logic)
-    if (after.state == CardState.learning || after.state == CardState.relearning) {
+    if (after.state == CardState.learning ||
+        after.state == CardState.relearning) {
       final insertAt = (queueIdx + 3).clamp(0, queue.length);
       queue.insert(insertAt, currentDeckIdx);
     }
@@ -72,28 +75,53 @@ class BattleSession {
 
 const _testVocab = [
   VocabItem(
-    id: 'test_001', word: 'cat', reading: 'キャット', jpTranslation: 'ねこ',
-    cefrLevel: CefrLevel.a1, eikenLevel: '5', pos: [PartOfSpeech.noun],
+    id: 'test_001',
+    word: 'cat',
+    reading: 'キャット',
+    jpTranslation: 'ねこ',
+    cefrLevel: CefrLevel.a1,
+    eikenLevel: '5',
+    pos: [PartOfSpeech.noun],
     exampleSentences: ['I have a cat.'],
   ),
   VocabItem(
-    id: 'test_002', word: 'dog', reading: 'ドッグ', jpTranslation: 'いぬ',
-    cefrLevel: CefrLevel.a1, eikenLevel: '5', pos: [PartOfSpeech.noun],
+    id: 'test_002',
+    word: 'dog',
+    reading: 'ドッグ',
+    jpTranslation: 'いぬ',
+    cefrLevel: CefrLevel.a1,
+    eikenLevel: '5',
+    pos: [PartOfSpeech.noun],
     exampleSentences: ['My dog is big.'],
   ),
   VocabItem(
-    id: 'test_003', word: 'apple', reading: 'アップル', jpTranslation: 'りんご',
-    cefrLevel: CefrLevel.a1, eikenLevel: '5', pos: [PartOfSpeech.noun],
+    id: 'test_003',
+    word: 'apple',
+    reading: 'アップル',
+    jpTranslation: 'りんご',
+    cefrLevel: CefrLevel.a1,
+    eikenLevel: '5',
+    pos: [PartOfSpeech.noun],
     exampleSentences: ['I eat an apple.'],
   ),
   VocabItem(
-    id: 'test_004', word: 'run', reading: 'ラン', jpTranslation: 'はしる',
-    cefrLevel: CefrLevel.a1, eikenLevel: '5', pos: [PartOfSpeech.verb],
+    id: 'test_004',
+    word: 'run',
+    reading: 'ラン',
+    jpTranslation: 'はしる',
+    cefrLevel: CefrLevel.a1,
+    eikenLevel: '5',
+    pos: [PartOfSpeech.verb],
     exampleSentences: ['I run every day.'],
   ),
   VocabItem(
-    id: 'test_005', word: 'red', reading: 'レッド', jpTranslation: 'あか',
-    cefrLevel: CefrLevel.a1, eikenLevel: '5', pos: [PartOfSpeech.adjective],
+    id: 'test_005',
+    word: 'red',
+    reading: 'レッド',
+    jpTranslation: 'あか',
+    cefrLevel: CefrLevel.a1,
+    eikenLevel: '5',
+    pos: [PartOfSpeech.adjective],
     exampleSentences: ['The apple is red.'],
   ),
 ];
@@ -206,8 +234,12 @@ void main() {
       final after = DateTime.now();
       final graded = session.history.first.after;
       expect(graded.lastReview, isNotNull);
-      expect(graded.lastReview!.isAfter(before.subtract(const Duration(seconds: 1))), isTrue);
-      expect(graded.lastReview!.isBefore(after.add(const Duration(seconds: 1))), isTrue);
+      expect(
+          graded.lastReview!
+              .isAfter(before.subtract(const Duration(seconds: 1))),
+          isTrue);
+      expect(graded.lastReview!.isBefore(after.add(const Duration(seconds: 1))),
+          isTrue);
     });
   });
 
@@ -248,7 +280,13 @@ void main() {
 
     test('grade counts sum to total history entries', () {
       final session = BattleSession(_testVocab);
-      final grades = [Grade.again, Grade.hard, Grade.good, Grade.easy, Grade.good];
+      final grades = [
+        Grade.again,
+        Grade.hard,
+        Grade.good,
+        Grade.easy,
+        Grade.good
+      ];
       for (var i = 0; i < session.queue.length && i < grades.length; i++) {
         if (session.isComplete) break;
         session.grade(grades[i]);
@@ -266,9 +304,9 @@ void main() {
       }
       final now = DateTime.now();
       final avgR = session.deck
-          .where((c) => c.reps > 0)
-          .map((c) => session.fsrs.retrievability(c, now))
-          .fold(0.0, (a, b) => a + b) /
+              .where((c) => c.reps > 0)
+              .map((c) => session.fsrs.retrievability(c, now))
+              .fold(0.0, (a, b) => a + b) /
           session.deck.where((c) => c.reps > 0).length;
       expect(avgR, greaterThan(0.5));
     });

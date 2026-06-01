@@ -35,8 +35,7 @@ void main() async {
   // All users are children (ages 4-18); we never collect advertising IDs.
   if (firebaseAvailable) {
     try {
-      await FirebaseAnalytics.instance
-          .setAnalyticsCollectionEnabled(true);
+      await FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
       await FirebaseAnalytics.instance.setConsent(
         adStorageConsentGranted: false,
         adPersonalizationSignalsConsentGranted: false,

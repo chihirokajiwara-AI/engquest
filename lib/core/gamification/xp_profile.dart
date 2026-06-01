@@ -18,15 +18,15 @@
 
 /// XP thresholds for each level (index 0 is unused; Lv.1 starts at index 1).
 const List<int> kLevelThresholds = [
-  0,     // placeholder (index 0)
-  0,     // Lv.1 — start
-  100,   // Lv.2
-  250,   // Lv.3
-  500,   // Lv.4
-  1000,  // Lv.5
-  2000,  // Lv.6
-  4000,  // Lv.7
-  7000,  // Lv.8 (max displayed; technically uncapped)
+  0, // placeholder (index 0)
+  0, // Lv.1 — start
+  100, // Lv.2
+  250, // Lv.3
+  500, // Lv.4
+  1000, // Lv.5
+  2000, // Lv.6
+  4000, // Lv.7
+  7000, // Lv.8 (max displayed; technically uncapped)
 ];
 
 /// Max level with a defined threshold.
@@ -72,9 +72,9 @@ int xpNeededForLevel(int level) {
 ///   Again = 0, Hard = 5, Good = 10, Easy = 15
 const Map<String, int> kGradeXp = {
   'again': 0,
-  'hard':  5,
-  'good':  10,
-  'easy':  15,
+  'hard': 5,
+  'good': 10,
+  'easy': 15,
 };
 
 // ── XpProfile model ──────────────────────────────────────────────────────────
