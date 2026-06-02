@@ -80,3 +80,13 @@ backend/serviceAccountKey*.json
 # Generated
 lib/generated/
 __pycache__/
+
+# Generated TTS audio (788MB, 9,575 files) — regenerate via scripts/generate_kokoro_audio.py
+# (local Kokoro, ¥0). Build artifact, not source. Source of truth = assets/data/*_vocab.json + the script.
+assets/audio/eiken5/*.mp3
+assets/audio/eiken4/*.mp3
+assets/audio/eiken3/*.mp3
+assets/audio/eiken_pre2/*.mp3
+assets/audio/eiken2/*.mp3
+assets/audio/eiken_pre1/*.mp3
+assets/audio/eiken*/*.wav
