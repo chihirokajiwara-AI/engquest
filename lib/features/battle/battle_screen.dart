@@ -44,6 +44,7 @@ import '../../core/gamification/achievement.dart';
 import '../../core/gamification/achievement_service.dart';
 import '../../core/gamification/xp_service.dart';
 import '../../core/gamification/xp_profile.dart';
+import '../../core/audio/word_audio_player_service.dart';
 import '../../core/sound/sound_service.dart';
 import '../../core/data/vocab_repository.dart';
 import '../../core/models/vocab_item.dart';
@@ -110,6 +111,7 @@ class _BattleScreenState extends State<BattleScreen>
   // ── FSRS engine + persistence ──────────────────────────────────────────────
   final FSRSAlgorithm _fsrs = FSRSAlgorithm();
   final _sound = SoundService();
+  final _wordAudio = WordAudioPlayerService();
   late final FsrsCardRepository _repository;
   final _auth = AuthService();
   final _vocabRepo = VocabRepository();
@@ -195,6 +197,7 @@ class _BattleScreenState extends State<BattleScreen>
   void dispose() {
     _flipCtrl.dispose();
     _starsCtrl.dispose();
+    _wordAudio.dispose();
     super.dispose();
   }
 
@@ -216,6 +219,15 @@ class _BattleScreenState extends State<BattleScreen>
     await _vocabRepo.initialize(eikenGrade: widget.eikenGrade);
     _vocab = filterVocabByAge(_vocabRepo.getAll().toList(), widget.childAge);
     final vocabIds = _vocab.map((v) => v.id).toList();
+
+    // 2.5. Prefetch word audio for this session (fire-and-forget)
+    _wordAudio.initialize().then((_) {
+      final audioWords = _vocab
+          .map((v) => (id: v.id, word: v.word))
+          .take(20) // prefetch first 20 to avoid blocking
+          .toList();
+      _wordAudio.prefetchSession(audioWords);
+    }).catchError((_) {});
 
     // 3. Load persisted cards from Firestore (or InMemory fallback)
     List<FSRSCard> persistedCards;
@@ -287,6 +299,12 @@ class _BattleScreenState extends State<BattleScreen>
     if (_isFlipped) return;
     HapticFeedback.lightImpact();
     _sound.playFlip();
+    // Auto-play word pronunciation on flip
+    WordAudioAutoPlay.trigger(
+      player: _wordAudio,
+      vocabId: _currentVocab.id,
+      word: _currentVocab.word,
+    );
     setState(() => _isFlipped = true);
     _flipCtrl.forward();
   }
@@ -810,7 +828,22 @@ class _BattleScreenState extends State<BattleScreen>
               letterSpacing: 2,
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
+          // Speaker icon — tap to hear pronunciation
+          IconButton(
+            icon: const Icon(Icons.volume_up_rounded),
+            iconSize: 28,
+            color: _accentGold,
+            tooltip: '発音を聞く',
+            onPressed: () {
+              WordAudioAutoPlay.trigger(
+                player: _wordAudio,
+                vocabId: vocab.id,
+                word: vocab.word,
+              );
+            },
+          ),
+          const SizedBox(height: 4),
           Text(
             vocab.reading,
             style: const TextStyle(

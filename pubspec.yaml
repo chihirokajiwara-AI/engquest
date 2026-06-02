@@ -54,6 +54,12 @@ flutter:
   assets:
     - assets/audio/
     - assets/audio/a1/
+    - assets/audio/eiken5/
+    - assets/audio/eiken4/
+    - assets/audio/eiken3/
+    - assets/audio/eiken_pre2/
+    - assets/audio/eiken2/
+    - assets/audio/eiken_pre1/
     - assets/images/
     - assets/images/categories/
     - assets/content/

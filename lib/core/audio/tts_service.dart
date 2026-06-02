@@ -220,7 +220,7 @@ class TtsService {
   }
 
   /// Get audio bytes for a vocab word.
-  /// Priority: memory cache -> local file cache -> Google TTS API -> unavailable
+  /// Priority: memory cache -> bundled asset -> Google TTS API -> unavailable
   ///
   /// [vocabId] — e.g. "eiken5_001"
   /// [word]    — e.g. "cat"
@@ -239,6 +239,10 @@ class TtsService {
       );
     }
 
+    // 1.5. Try bundled asset (Kokoro TTS pre-generated MP3s)
+    final fromAsset = await _loadBundledAsset(vocabId, word);
+    if (fromAsset != null) return fromAsset;
+
     // 2. Call Google TTS API (if key configured)
     if (GoogleTtsConfig.apiKey != null) {
       final fromApi = await _fetchFromGoogleTts(vocabId, word);
@@ -256,7 +260,7 @@ class TtsService {
       word: word,
       source: TtsAudioSource.unavailable,
       error:
-          'Audio not available — run scripts/generate_tts_audio.py to pre-generate',
+          'Audio not available — run scripts/generate_kokoro_audio.py to pre-generate',
     );
   }
 
@@ -322,6 +326,57 @@ class TtsService {
 
   String _cacheKey(String vocabId, String word) {
     return '${vocabId}_${word.replaceAll(RegExp(r'[^a-z0-9]'), '_')}';
+  }
+
+  /// Extract grade directory from vocabId (e.g. "eiken5_001" → "eiken5",
+  /// "eiken_pre2_042" → "eiken_pre2")
+  String? _gradeFromVocabId(String vocabId) {
+    final match = RegExp(r'^(eiken(?:_pre)?[0-9]+)_').firstMatch(vocabId);
+    return match?.group(1);
+  }
+
+  /// Sanitize word for filename matching (mirrors generate_kokoro_audio.py)
+  String _sanitizeWord(String word) {
+    return word
+        .toLowerCase()
+        .replaceAll(' ', '_')
+        .replaceAll("'", '')
+        .replaceAll('/', '_')
+        .replaceAll('\\', '_');
+  }
+
+  /// Try loading a pre-generated Kokoro TTS MP3 from bundled assets.
+  /// Asset path: assets/audio/{grade}/{vocabId}_{sanitized_word}.mp3
+  Future<TtsAudioResult?> _loadBundledAsset(
+      String vocabId, String word) async {
+    final grade = _gradeFromVocabId(vocabId);
+    if (grade == null) return null;
+
+    final safeWord = _sanitizeWord(word);
+    final assetPath = 'assets/audio/$grade/${vocabId}_$safeWord.mp3';
+
+    try {
+      final data = await rootBundle.load(assetPath);
+      final audioBytes = data.buffer.asUint8List();
+
+      // Cache in memory for subsequent requests
+      _memoryCache[_cacheKey(vocabId, word)] = audioBytes;
+
+      if (kDebugMode) {
+        debugPrint(
+            '[TtsService] loaded bundled asset: $assetPath (${audioBytes.length} bytes)');
+      }
+
+      return TtsAudioResult(
+        vocabId: vocabId,
+        word: word,
+        audioBytes: audioBytes,
+        source: TtsAudioSource.bundledAsset,
+      );
+    } catch (_) {
+      // Asset not found — fall through to next source
+      return null;
+    }
   }
 
   Future<TtsAudioResult?> _fetchFromGoogleTts(
