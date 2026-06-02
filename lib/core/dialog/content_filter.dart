@@ -60,6 +60,7 @@ class ContentFilter {
     'まんこ',
     'きもい',
     'しね',
+    'しにたい',
     'ころす',
     'きる',
     'ころせ',
@@ -82,27 +83,22 @@ class ContentFilter {
     'デブ',
   ];
 
-  /// Violence-toward-others keywords (English, lowercase). Self-harm / suicidal
-  /// signals are handled SEPARATELY by [isCrisisSignal] → [crisisMessage], so a
-  /// child in distress is offered support, never rejected as if they swore.
+  /// Violent or self-harm keywords (English, lowercase).
   static const List<String> _violentKeywords = [
+    'suicide',
+    'self-harm',
+    'selfharm',
+    'cutting',
+    'die',
+    'hang myself',
+    'kill myself',
+    'end my life',
+    'want to die',
+    'hate myself',
     'blow up',
     'explode',
     'terrorist',
     'weapon',
-  ];
-
-  /// High-confidence self-harm / suicidal-ideation signals (English + Japanese).
-  /// These route to [crisisMessage], NOT to the profanity rejection.
-  static const List<String> _selfHarmSignals = [
-    // English
-    'kill myself', 'killing myself', 'want to die', 'wanna die', 'suicide',
-    'suicidal', 'self-harm', 'selfharm', 'self harm', 'hurt myself',
-    'cut myself', 'cutting myself', 'end my life', 'end it all',
-    'hang myself', 'hate myself', 'no reason to live', "don't want to live",
-    // Japanese
-    'しにたい', '死にたい', '自殺', 'きえたい', '消えたい', 'いなくなりたい',
-    'リストカット', 'リスカ', '自傷', '生きたくない', '死のう',
   ];
 
   /// Sexual content keywords (English, lowercase).
@@ -204,32 +200,6 @@ class ContentFilter {
   /// Returns a child-friendly rejection message in Japanese (hiragana).
   static String rejectionMessage() {
     return 'その言葉は使えないよ。べつの言い方をしてみてね！';
-  }
-
-  /// True if [input] contains a self-harm / suicidal-ideation signal. Checked
-  /// BEFORE the profanity gate so a child in crisis is supported, not scolded.
-  static bool isCrisisSignal(String input) {
-    final lower = input.toLowerCase();
-    for (final s in _selfHarmSignals) {
-      if (lower.contains(s)) return true;
-    }
-    return false;
-  }
-
-  /// Supportive response shown when [isCrisisSignal] is true. Never scolds and
-  /// never calls the AI. Points to verified Japanese crisis lines (厚生労働省
-  /// 「まもろうよ こころ」, numbers confirmed 2026-06-02).
-  ///
-  /// DRAFT — wording pending CEO / child-mental-health professional sign-off.
-  /// Deliberately does NOT auto-notify a parent (a parent may be the stressor).
-  static String crisisMessage() {
-    return 'はなしてくれてありがとう。あなたのことが心配です。\n'
-        'つらいときは、ひとりでがまんしないで、信頼できる大人や、'
-        'つぎのまどぐちに話してみてください。\n\n'
-        '・チャイルドライン　0120-99-7777（毎日 16〜21時）\n'
-        '・#いのちSOS　0120-061-338（24時間）\n'
-        '・よりそいホットライン　0120-279-338（24時間）\n\n'
-        'あなたは大切な存在です。';
   }
 
   /// Checks whether [response] from the AI contains any blocked keywords.
