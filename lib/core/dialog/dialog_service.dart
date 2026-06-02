@@ -148,6 +148,13 @@ Never use complex grammar. Always stay in character as ${scenario.npcName}.''';
     required String userInput,
     String playerName = 'Hero',
   }) async {
+    // ── Crisis (self-harm) gate — MUST precede the profanity gate so a child
+    //    in distress receives support, never a "you can't say that". The AI is
+    //    NOT called. (Anonymized safety-event logging is a documented follow-up.)
+    if (ContentFilter.isCrisisSignal(userInput)) {
+      return ContentFilter.crisisMessage();
+    }
+
     // ── Input safety gate ─────────────────────────────────────────────────
     final safeInput = ContentFilter.sanitize(userInput);
     if (safeInput == null) {
