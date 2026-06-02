@@ -1,0 +1,420 @@
+[
+  {
+    "id": "eiken2_2141",
+    "word": "acclaim",
+    "reading": "アクレイム",
+    "jpTranslation": "称賛、絶賛する",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun", "verb"],
+    "category": "Communication",
+    "exampleSentences": [
+      "The film received widespread critical acclaim when it was released.",
+      "The scientist was acclaimed for her groundbreaking research on cancer."
+    ],
+    "distractors": ["criticism", "rejection", "condemnation"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2142",
+    "word": "accolade",
+    "reading": "アコレイド",
+    "jpTranslation": "称賛、賞",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Work & Jobs",
+    "exampleSentences": [
+      "Winning the national award was a great accolade for the young researcher.",
+      "Her work has earned numerous accolades from the scientific community."
+    ],
+    "distractors": ["criticism", "penalty", "dismissal"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2143",
+    "word": "adolescent",
+    "reading": "アドレスセント",
+    "jpTranslation": "青少年、思春期の",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun", "adjective"],
+    "category": "Health & Body",
+    "exampleSentences": [
+      "Adolescent mental health has become a major public health concern.",
+      "Many adolescents struggle to balance study, socializing, and personal interests."
+    ],
+    "distractors": ["toddler", "adult", "senior"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2144",
+    "word": "affiliation",
+    "reading": "アフィリエーション",
+    "jpTranslation": "所属、提携",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Work & Jobs",
+    "exampleSentences": [
+      "The researcher declared no commercial affiliation that could affect the study.",
+      "Political affiliation plays a major role in how people vote."
+    ],
+    "distractors": ["separation", "independence", "isolation"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2145",
+    "word": "agenda",
+    "reading": "アジェンダ",
+    "jpTranslation": "議題、課題",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Work & Jobs",
+    "exampleSentences": [
+      "Climate change is high on the political agenda in many countries.",
+      "Please review the agenda before attending the meeting tomorrow."
+    ],
+    "distractors": ["minutes", "proposal", "report"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2146",
+    "word": "aggregate",
+    "reading": "アグリゲイト",
+    "jpTranslation": "集合した、合計の",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["adjective", "noun"],
+    "category": "Science & Nature",
+    "exampleSentences": [
+      "The aggregate impact of small changes can be significant.",
+      "Researchers collected aggregate data from multiple studies."
+    ],
+    "distractors": ["individual", "separate", "isolated"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2147",
+    "word": "amend",
+    "reading": "アメンド",
+    "jpTranslation": "修正する、改正する",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["verb"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "The parliament voted to amend the constitution to guarantee new rights.",
+      "She asked to amend her statement after realizing she had made an error."
+    ],
+    "distractors": ["enforce", "repeal", "ignore"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2148",
+    "word": "artisan",
+    "reading": "アーティザン",
+    "jpTranslation": "職人、工芸家",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Work & Jobs",
+    "exampleSentences": [
+      "Local artisans produce handmade goods that reflect traditional craftsmanship.",
+      "The market featured artisan cheeses and handmade chocolates."
+    ],
+    "distractors": ["factory worker", "engineer", "technician"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2149",
+    "word": "assurance",
+    "reading": "アシュアランス",
+    "jpTranslation": "保証、確信",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Communication",
+    "exampleSentences": [
+      "The manager gave his assurance that the project would be completed on time.",
+      "Despite assurances from officials, public confidence remained low."
+    ],
+    "distractors": ["doubt", "uncertainty", "refusal"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2150",
+    "word": "backbone",
+    "reading": "バックボーン",
+    "jpTranslation": "基盤、中核、根幹",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Work & Jobs",
+    "exampleSentences": [
+      "Small businesses form the backbone of the national economy.",
+      "She showed backbone by standing up for her principles under pressure."
+    ],
+    "distractors": ["periphery", "obstacle", "weakness"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2151",
+    "word": "backlash",
+    "reading": "バックラッシュ",
+    "jpTranslation": "反発、逆風",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "The new policy faced a backlash from workers who felt it was unfair.",
+      "Social media can amplify any backlash against a company's decisions."
+    ],
+    "distractors": ["support", "approval", "endorsement"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2152",
+    "word": "bandwidth",
+    "reading": "バンドウィドス",
+    "jpTranslation": "帯域幅、処理能力",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Technology",
+    "exampleSentences": [
+      "Video streaming requires significantly more bandwidth than email.",
+      "The team lacks the bandwidth to take on additional projects this month."
+    ],
+    "distractors": ["speed", "frequency", "signal"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2153",
+    "word": "coexistence",
+    "reading": "コエグジステンス",
+    "jpTranslation": "共存",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "Peaceful coexistence between different ethnic groups is essential for stability.",
+      "The coexistence of traditional and modern values shapes Japanese society."
+    ],
+    "distractors": ["conflict", "rivalry", "competition"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2154",
+    "word": "colonialism",
+    "reading": "コロニアリズム",
+    "jpTranslation": "植民地主義",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "The legacy of colonialism continues to affect developing nations today.",
+      "Scholars debate the long-term economic impact of colonialism on Africa."
+    ],
+    "distractors": ["imperialism", "nationalism", "capitalism"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2155",
+    "word": "complementary",
+    "reading": "コンプリメンタリー",
+    "jpTranslation": "補完的な、相互補完する",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["adjective"],
+    "category": "Science & Nature",
+    "exampleSentences": [
+      "Solar and wind energy are complementary sources that can balance each other.",
+      "The two studies had complementary findings that reinforced each other."
+    ],
+    "distractors": ["conflicting", "contradictory", "opposing"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2156",
+    "word": "consensus",
+    "reading": "コンセンサス",
+    "jpTranslation": "合意、コンセンサス",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "There is broad scientific consensus that climate change is caused by humans.",
+      "The committee reached a consensus after hours of discussion."
+    ],
+    "distractors": ["disagreement", "division", "conflict"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2157",
+    "word": "constrain",
+    "reading": "コンストレイン",
+    "jpTranslation": "制約する、制限する",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["verb"],
+    "category": "Work & Jobs",
+    "exampleSentences": [
+      "Limited funding constrained the scope of the research project.",
+      "Environmental regulations constrain certain types of industrial development."
+    ],
+    "distractors": ["liberate", "encourage", "enable"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2158",
+    "word": "contemplate",
+    "reading": "コンテンプレイト",
+    "jpTranslation": "熟考する、考慮する",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["verb"],
+    "category": "Emotions & Personality",
+    "exampleSentences": [
+      "He sat quietly to contemplate his options before making a decision.",
+      "The company is contemplating a major restructuring of its operations."
+    ],
+    "distractors": ["ignore", "dismiss", "avoid"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2159",
+    "word": "cosmopolitan",
+    "reading": "コスモポリタン",
+    "jpTranslation": "国際的な、世界市民的な",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["adjective"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "Tokyo is a cosmopolitan city with residents from around the world.",
+      "She has a cosmopolitan outlook developed through years of international travel."
+    ],
+    "distractors": ["provincial", "local", "parochial"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2160",
+    "word": "curtail",
+    "reading": "カーテイル",
+    "jpTranslation": "削減する、制限する",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["verb"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "Budget cuts have forced the hospital to curtail several services.",
+      "The new law aims to curtail the spread of misinformation online."
+    ],
+    "distractors": ["expand", "increase", "extend"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2161",
+    "word": "debris",
+    "reading": "デブリ",
+    "jpTranslation": "破片、残骸",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Science & Nature",
+    "exampleSentences": [
+      "Rescue workers searched through the debris after the building collapsed.",
+      "Space debris poses a growing threat to active satellites."
+    ],
+    "distractors": ["structure", "foundation", "barrier"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2162",
+    "word": "decisive",
+    "reading": "ディサイシブ",
+    "jpTranslation": "決定的な、決断力のある",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["adjective"],
+    "category": "Emotions & Personality",
+    "exampleSentences": [
+      "Decisive action at the start of the crisis prevented many deaths.",
+      "A good leader must be decisive and able to act under pressure."
+    ],
+    "distractors": ["indecisive", "hesitant", "irresolute"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  }
+]

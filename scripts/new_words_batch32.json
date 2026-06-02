@@ -1,0 +1,40 @@
+[
+  {
+    "id": "eiken2_2163",
+    "word": "proliferate",
+    "reading": "プロリフェレイト",
+    "jpTranslation": "急増する、広まる",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["verb"],
+    "category": "Science & Nature",
+    "exampleSentences": [
+      "Social media platforms have proliferated rapidly over the past decade.",
+      "Invasive species can proliferate in environments where they have no natural predators."
+    ],
+    "distractors": ["decline", "disappear", "reduce"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2164",
+    "word": "validate",
+    "reading": "バリデイト",
+    "jpTranslation": "検証する、有効と認める",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["verb"],
+    "category": "Science & Nature",
+    "exampleSentences": [
+      "The experiment was repeated several times to validate the results.",
+      "Governments need to validate credentials before hiring foreign professionals."
+    ],
+    "distractors": ["invalidate", "reject", "ignore"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  }
+]

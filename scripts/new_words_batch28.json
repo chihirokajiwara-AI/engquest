@@ -1,0 +1,705 @@
+[
+  {
+    "id": "eiken2_1964",
+    "word": "adjacency",
+    "reading": "アジェイセンシー",
+    "jpTranslation": "隣接、近接",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Science & Nature",
+    "exampleSentences": [
+      "The adjacency of the two countries facilitates trade and cultural exchange.",
+      "Urban planners consider adjacency to schools and parks when designing neighborhoods."
+    ],
+    "distractors": ["distance", "separation", "remoteness"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1965",
+    "word": "advent",
+    "reading": "アドベント",
+    "jpTranslation": "到来、出現",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Technology",
+    "exampleSentences": [
+      "The advent of the internet transformed the way we access information.",
+      "With the advent of electric cars, demand for oil has begun to decline."
+    ],
+    "distractors": ["end", "disappearance", "decline"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1966",
+    "word": "adversity",
+    "reading": "アドバーシティ",
+    "jpTranslation": "逆境、困難",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Emotions & Personality",
+    "exampleSentences": [
+      "She showed remarkable resilience in the face of adversity.",
+      "Great leaders are often shaped by the adversity they overcome."
+    ],
+    "distractors": ["privilege", "ease", "comfort"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1967",
+    "word": "affirmative",
+    "reading": "アファーマティブ",
+    "jpTranslation": "肯定的な、賛成の",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["adjective"],
+    "category": "Communication",
+    "exampleSentences": [
+      "She gave an affirmative answer to the question.",
+      "Affirmative action policies aim to support underrepresented groups."
+    ],
+    "distractors": ["negative", "neutral", "ambiguous"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1968",
+    "word": "aggravate",
+    "reading": "アグラベイト",
+    "jpTranslation": "悪化させる、怒らせる",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["verb"],
+    "category": "Health & Body",
+    "exampleSentences": [
+      "Stress can aggravate symptoms of many chronic illnesses.",
+      "His rude behavior only served to aggravate the situation."
+    ],
+    "distractors": ["alleviate", "improve", "soothe"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1969",
+    "word": "agricultural",
+    "reading": "アグリカルチュラル",
+    "jpTranslation": "農業の",
+    "cefrLevel": "B1",
+    "eikenLevel": "2",
+    "pos": ["adjective"],
+    "category": "Science & Nature",
+    "exampleSentences": [
+      "Agricultural output has increased with the use of modern technology.",
+      "The government provides support for agricultural communities affected by drought."
+    ],
+    "distractors": ["industrial", "commercial", "urban"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1970",
+    "word": "alienation",
+    "reading": "エイリエネーション",
+    "jpTranslation": "疎外感、孤立化",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Emotions & Personality",
+    "exampleSentences": [
+      "Many young people experience a sense of alienation from mainstream society.",
+      "Urban isolation can lead to social alienation and mental health problems."
+    ],
+    "distractors": ["belonging", "integration", "connection"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1971",
+    "word": "allocation",
+    "reading": "アロケーション",
+    "jpTranslation": "配分、割り当て",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Work & Jobs",
+    "exampleSentences": [
+      "The allocation of resources must be fair and transparent.",
+      "Budget allocation decisions are made at the national level."
+    ],
+    "distractors": ["collection", "withdrawal", "elimination"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1972",
+    "word": "ambition",
+    "reading": "アンビション",
+    "jpTranslation": "野心、野望",
+    "cefrLevel": "B1",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Emotions & Personality",
+    "exampleSentences": [
+      "Her ambition to become a surgeon drove her through years of study.",
+      "The company's global ambition requires significant investment."
+    ],
+    "distractors": ["resignation", "indifference", "modesty"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1973",
+    "word": "amphibian",
+    "reading": "アンフィビアン",
+    "jpTranslation": "両生類",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Science & Nature",
+    "exampleSentences": [
+      "Frogs and salamanders are amphibians that can live both in water and on land.",
+      "Amphibian populations worldwide are declining due to habitat loss and pollution."
+    ],
+    "distractors": ["reptile", "mammal", "insect"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1974",
+    "word": "analogy",
+    "reading": "アナロジー",
+    "jpTranslation": "類推、比喩",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Communication",
+    "exampleSentences": [
+      "The teacher used an analogy comparing the heart to a pump.",
+      "An analogy can make complex ideas easier to understand."
+    ],
+    "distractors": ["contrast", "contradiction", "difference"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1975",
+    "word": "anticipation",
+    "reading": "アンティシペーション",
+    "jpTranslation": "予期、期待",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Emotions & Personality",
+    "exampleSentences": [
+      "Children wait in anticipation for their birthday celebrations.",
+      "The market rose in anticipation of positive economic data."
+    ],
+    "distractors": ["regret", "disappointment", "indifference"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1976",
+    "word": "antidote",
+    "reading": "アンティドウト",
+    "jpTranslation": "解毒剤、対策",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Health & Body",
+    "exampleSentences": [
+      "Laughter is sometimes described as the antidote to stress.",
+      "Doctors administered an antidote after the patient swallowed poison."
+    ],
+    "distractors": ["poison", "cause", "symptom"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1977",
+    "word": "appreciation",
+    "reading": "アプリシエーション",
+    "jpTranslation": "感謝、理解、価値上昇",
+    "cefrLevel": "B1",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Emotions & Personality",
+    "exampleSentences": [
+      "She expressed her appreciation for the support she received.",
+      "A deeper appreciation of history helps us understand the present."
+    ],
+    "distractors": ["ingratitude", "misunderstanding", "neglect"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1978",
+    "word": "aquifer",
+    "reading": "アクイファー",
+    "jpTranslation": "帯水層",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Science & Nature",
+    "exampleSentences": [
+      "Over-extraction of water from the aquifer has caused the water table to drop.",
+      "Many communities rely on underground aquifers for their drinking water."
+    ],
+    "distractors": ["reservoir", "glacier", "lake"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1979",
+    "word": "aspiration",
+    "reading": "アスパレーション",
+    "jpTranslation": "熱望、抱負",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Emotions & Personality",
+    "exampleSentences": [
+      "Her aspiration to become a scientist was supported by her teachers.",
+      "The country's aspirations for economic growth require significant reform."
+    ],
+    "distractors": ["regret", "disappointment", "resignation"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1980",
+    "word": "asylum",
+    "reading": "アサイラム",
+    "jpTranslation": "亡命、保護施設",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "The refugees applied for political asylum in a neighboring country.",
+      "The country has a legal obligation to consider asylum requests fairly."
+    ],
+    "distractors": ["deportation", "expulsion", "exile"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1981",
+    "word": "atrocity",
+    "reading": "アトロシティ",
+    "jpTranslation": "残虐行為",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "The atrocities committed during the war shocked the international community.",
+      "International law prohibits atrocities against civilian populations."
+    ],
+    "distractors": ["kindness", "mercy", "generosity"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1982",
+    "word": "authoritative",
+    "reading": "オーソリタティブ",
+    "jpTranslation": "権威ある、権威主義的な",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["adjective"],
+    "category": "Communication",
+    "exampleSentences": [
+      "He gave an authoritative account of the historical events.",
+      "The report is considered an authoritative source on the topic."
+    ],
+    "distractors": ["unreliable", "unofficial", "speculative"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1983",
+    "word": "automation",
+    "reading": "オートメーション",
+    "jpTranslation": "自動化",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Technology",
+    "exampleSentences": [
+      "Industrial automation has replaced many jobs previously done by humans.",
+      "The automation of routine tasks frees workers to focus on creative work."
+    ],
+    "distractors": ["manual labor", "outsourcing", "downsizing"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1984",
+    "word": "autonomous",
+    "reading": "オートノマス",
+    "jpTranslation": "自律的な、自治の",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["adjective"],
+    "category": "Technology",
+    "exampleSentences": [
+      "Autonomous vehicles are being tested on roads in several countries.",
+      "The region was granted autonomous status after years of negotiation."
+    ],
+    "distractors": ["controlled", "dependent", "remote"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1985",
+    "word": "beneficiary",
+    "reading": "ベネフィシアリー",
+    "jpTranslation": "受益者、恩恵を受ける人",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "The main beneficiaries of the new policy are low-income families.",
+      "She was named as a beneficiary in her uncle's will."
+    ],
+    "distractors": ["donor", "contributor", "provider"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1986",
+    "word": "biodiversity",
+    "reading": "バイオダイバーシティ",
+    "jpTranslation": "生物多様性",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Science & Nature",
+    "exampleSentences": [
+      "Tropical rainforests contain a huge range of biodiversity.",
+      "Loss of biodiversity threatens ecosystem stability."
+    ],
+    "distractors": ["monoculture", "uniformity", "homogeneity"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1987",
+    "word": "calibrate",
+    "reading": "キャリブレイト",
+    "jpTranslation": "較正する、調整する",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["verb"],
+    "category": "Science & Nature",
+    "exampleSentences": [
+      "Scientists calibrate their instruments before taking measurements.",
+      "The thermostat was carefully calibrated to maintain an exact temperature."
+    ],
+    "distractors": ["ignore", "estimate", "guess"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1988",
+    "word": "capitalism",
+    "reading": "キャピタリズム",
+    "jpTranslation": "資本主義",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "Capitalism drives economic growth through competition and private ownership.",
+      "Critics argue that capitalism leads to inequality and environmental damage."
+    ],
+    "distractors": ["communism", "socialism", "feudalism"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1989",
+    "word": "carbon footprint",
+    "reading": "カーボンフットプリント",
+    "jpTranslation": "炭素フットプリント",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Science & Nature",
+    "exampleSentences": [
+      "Taking fewer flights can significantly reduce your carbon footprint.",
+      "Companies are under pressure to measure and reduce their carbon footprint."
+    ],
+    "distractors": ["water footprint", "energy cost", "pollution index"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1990",
+    "word": "carcinogen",
+    "reading": "カーシノジェン",
+    "jpTranslation": "発がん性物質",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Health & Body",
+    "exampleSentences": [
+      "Tobacco smoke contains dozens of known carcinogens.",
+      "Prolonged exposure to carcinogens in the workplace increases cancer risk."
+    ],
+    "distractors": ["vitamin", "antioxidant", "nutrient"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1991",
+    "word": "cautious",
+    "reading": "コーシャス",
+    "jpTranslation": "慎重な、注意深い",
+    "cefrLevel": "B1",
+    "eikenLevel": "2",
+    "pos": ["adjective"],
+    "category": "Emotions & Personality",
+    "exampleSentences": [
+      "Investors have become more cautious in the face of economic uncertainty.",
+      "Be cautious when sharing personal information online."
+    ],
+    "distractors": ["reckless", "careless", "impulsive"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1992",
+    "word": "chronological",
+    "reading": "クロノロジカル",
+    "jpTranslation": "年代順の",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["adjective"],
+    "category": "Time & Frequency",
+    "exampleSentences": [
+      "Please list your work experience in reverse chronological order.",
+      "A chronological account of the events helped clarify what happened."
+    ],
+    "distractors": ["random", "alphabetical", "thematic"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1993",
+    "word": "cognition",
+    "reading": "コグニション",
+    "jpTranslation": "認知、思考能力",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Education",
+    "exampleSentences": [
+      "Sleep deprivation negatively affects cognition and memory.",
+      "The study examines how early childhood experiences shape cognition."
+    ],
+    "distractors": ["emotion", "instinct", "behavior"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1994",
+    "word": "collateral",
+    "reading": "コラテラル",
+    "jpTranslation": "担保、付随的な",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun", "adjective"],
+    "category": "Shopping & Money",
+    "exampleSentences": [
+      "The bank required collateral before approving the large loan.",
+      "Collateral damage is an unfortunate consequence of military operations."
+    ],
+    "distractors": ["debt", "interest", "profit"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1995",
+    "word": "commemorate",
+    "reading": "コメモレイト",
+    "jpTranslation": "記念する、慰霊する",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["verb"],
+    "category": "Daily Life",
+    "exampleSentences": [
+      "A ceremony was held to commemorate the victims of the disaster.",
+      "The city built a monument to commemorate its founding 300 years ago."
+    ],
+    "distractors": ["forget", "ignore", "dismiss"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1996",
+    "word": "compromise",
+    "reading": "コンプロマイズ",
+    "jpTranslation": "妥協、折衷案",
+    "cefrLevel": "B1",
+    "eikenLevel": "2",
+    "pos": ["noun", "verb"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "The two sides reached a compromise after lengthy negotiations.",
+      "You should never compromise your ethical standards for short-term gain."
+    ],
+    "distractors": ["conflict", "refusal", "escalation"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1997",
+    "word": "concurrence",
+    "reading": "コンカレンス",
+    "jpTranslation": "同意、同時発生",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Communication",
+    "exampleSentences": [
+      "The decision was made with the concurrence of all board members.",
+      "The concurrence of several factors led to the financial crisis."
+    ],
+    "distractors": ["disagreement", "opposition", "conflict"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1998",
+    "word": "degradable",
+    "reading": "デグレイダブル",
+    "jpTranslation": "分解可能な",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["adjective"],
+    "category": "Science & Nature",
+    "exampleSentences": [
+      "Biodegradable packaging reduces the amount of waste going to landfill.",
+      "Researchers are developing degradable materials to replace plastic."
+    ],
+    "distractors": ["permanent", "synthetic", "durable"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1999",
+    "word": "detain",
+    "reading": "ディテイン",
+    "jpTranslation": "拘留する、引き止める",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["verb"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "The suspect was detained by police for questioning.",
+      "Airport security can detain passengers if they raise security concerns."
+    ],
+    "distractors": ["release", "free", "acquit"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2000",
+    "word": "devastating",
+    "reading": "デバステイティング",
+    "jpTranslation": "壊滅的な、衝撃的な",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["adjective"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "The earthquake had a devastating impact on coastal communities.",
+      "The news of his sudden death was devastating for the entire team."
+    ],
+    "distractors": ["mild", "insignificant", "beneficial"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  }
+]

@@ -1,0 +1,952 @@
+[
+  {
+    "id": "eiken2_1767",
+    "word": "abolition",
+    "reading": "アボリション",
+    "jpTranslation": "廃止、廃絶",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "The abolition of slavery was a turning point in American history.",
+      "Many activists campaigned for the abolition of capital punishment."
+    ],
+    "distractors": ["addition", "adaptation", "absorption"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1768",
+    "word": "absorption",
+    "reading": "アブソープション",
+    "jpTranslation": "吸収",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Science & Nature",
+    "exampleSentences": [
+      "The absorption of nutrients occurs mainly in the small intestine.",
+      "Dark surfaces increase the absorption of solar heat."
+    ],
+    "distractors": ["emission", "reflection", "dispersion"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1769",
+    "word": "accelerate",
+    "reading": "アクセラレイト",
+    "jpTranslation": "加速させる",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["verb"],
+    "category": "Technology",
+    "exampleSentences": [
+      "New technology can accelerate the transition to clean energy.",
+      "The company aims to accelerate its product development cycle."
+    ],
+    "distractors": ["decelerate", "stabilize", "reverse"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1770",
+    "word": "accumulation",
+    "reading": "アキュミュレーション",
+    "jpTranslation": "蓄積、堆積",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Science & Nature",
+    "exampleSentences": [
+      "The accumulation of greenhouse gases is causing global warming.",
+      "Wealth accumulation requires consistent saving over many years."
+    ],
+    "distractors": ["reduction", "elimination", "dispersion"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1771",
+    "word": "allegation",
+    "reading": "アレゲーション",
+    "jpTranslation": "申し立て、主張",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "The politician denied all allegations of corruption.",
+      "Serious allegations were made against the company's management."
+    ],
+    "distractors": ["confirmation", "denial", "celebration"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1772",
+    "word": "alleviate",
+    "reading": "アリービエイト",
+    "jpTranslation": "緩和する、軽減する",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["verb"],
+    "category": "Health & Body",
+    "exampleSentences": [
+      "The new policy aims to alleviate poverty in rural areas.",
+      "Exercise can help alleviate symptoms of mild depression."
+    ],
+    "distractors": ["worsen", "amplify", "intensify"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1773",
+    "word": "amendment",
+    "reading": "アメンドメント",
+    "jpTranslation": "修正、改正",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "The amendment to the constitution was passed after years of debate.",
+      "The committee proposed an amendment to the existing law."
+    ],
+    "distractors": ["rejection", "dissolution", "verdict"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1774",
+    "word": "applicant",
+    "reading": "アプリカント",
+    "jpTranslation": "応募者、申請者",
+    "cefrLevel": "B1",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Work & Jobs",
+    "exampleSentences": [
+      "The company received over 200 applicants for the position.",
+      "Each applicant must submit a resume and cover letter."
+    ],
+    "distractors": ["employer", "supervisor", "contractor"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1775",
+    "word": "arbitrary",
+    "reading": "アービトラリー",
+    "jpTranslation": "恣意的な、任意の",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["adjective"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "The decision seemed arbitrary and lacked clear justification.",
+      "Citizens protested against the arbitrary use of police power."
+    ],
+    "distractors": ["systematic", "deliberate", "consistent"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1776",
+    "word": "assertion",
+    "reading": "アサーション",
+    "jpTranslation": "主張、断言",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Communication",
+    "exampleSentences": [
+      "His assertion that the project would succeed proved correct.",
+      "The report challenged the government's assertion about economic growth."
+    ],
+    "distractors": ["denial", "question", "withdrawal"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1777",
+    "word": "assign",
+    "reading": "アサイン",
+    "jpTranslation": "割り当てる、任命する",
+    "cefrLevel": "B1",
+    "eikenLevel": "2",
+    "pos": ["verb"],
+    "category": "Work & Jobs",
+    "exampleSentences": [
+      "The manager will assign tasks to each team member.",
+      "Students were assigned a research project on climate change."
+    ],
+    "distractors": ["dismiss", "withdraw", "neglect"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1778",
+    "word": "assumption",
+    "reading": "アサンプション",
+    "jpTranslation": "仮定、思い込み",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Education",
+    "exampleSentences": [
+      "His argument was based on the false assumption that everyone agreed.",
+      "Scientists must test every assumption before drawing conclusions."
+    ],
+    "distractors": ["proof", "certainty", "observation"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1779",
+    "word": "attain",
+    "reading": "アテイン",
+    "jpTranslation": "達成する、獲得する",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["verb"],
+    "category": "Education",
+    "exampleSentences": [
+      "She worked hard to attain a high score on her exams.",
+      "The company hopes to attain its sales target by year end."
+    ],
+    "distractors": ["lose", "abandon", "ignore"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1780",
+    "word": "attribution",
+    "reading": "アトリビューション",
+    "jpTranslation": "帰属、原因帰属",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Science & Nature",
+    "exampleSentences": [
+      "The attribution of climate change to human activity is widely accepted.",
+      "Proper attribution of sources is essential in academic writing."
+    ],
+    "distractors": ["denial", "separation", "isolation"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1781",
+    "word": "bacterial",
+    "reading": "バクテリアル",
+    "jpTranslation": "細菌の、バクテリアの",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["adjective"],
+    "category": "Health & Body",
+    "exampleSentences": [
+      "Bacterial infections can often be treated with antibiotics.",
+      "The researchers studied how bacterial growth is affected by temperature."
+    ],
+    "distractors": ["viral", "fungal", "chemical"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1782",
+    "word": "beneficial",
+    "reading": "ベネフィシャル",
+    "jpTranslation": "有益な、有利な",
+    "cefrLevel": "B1",
+    "eikenLevel": "2",
+    "pos": ["adjective"],
+    "category": "Health & Body",
+    "exampleSentences": [
+      "Regular exercise is beneficial for both physical and mental health.",
+      "The new trade agreement was beneficial to both countries."
+    ],
+    "distractors": ["harmful", "neutral", "damaging"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1783",
+    "word": "bilateral",
+    "reading": "バイラテラル",
+    "jpTranslation": "二国間の、双方の",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["adjective"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "The two countries signed a bilateral trade agreement.",
+      "Bilateral talks between the leaders ended in compromise."
+    ],
+    "distractors": ["multilateral", "domestic", "unilateral"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1784",
+    "word": "blueprint",
+    "reading": "ブループリント",
+    "jpTranslation": "青写真、設計図、計画",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Work & Jobs",
+    "exampleSentences": [
+      "The government released a blueprint for economic recovery.",
+      "The architect studied the blueprint before construction began."
+    ],
+    "distractors": ["obstacle", "outcome", "critique"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1785",
+    "word": "bribery",
+    "reading": "ブライバリー",
+    "jpTranslation": "贈収賄",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "The official was arrested on charges of bribery.",
+      "Bribery is a serious crime that undermines public trust."
+    ],
+    "distractors": ["negotiation", "donation", "taxation"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1786",
+    "word": "candid",
+    "reading": "キャンディッド",
+    "jpTranslation": "率直な、正直な",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["adjective"],
+    "category": "Communication",
+    "exampleSentences": [
+      "She gave a candid assessment of the project's weaknesses.",
+      "Being candid with your team builds trust and transparency."
+    ],
+    "distractors": ["deceptive", "vague", "evasive"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1787",
+    "word": "canopy",
+    "reading": "キャノピー",
+    "jpTranslation": "林冠、天蓋",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Science & Nature",
+    "exampleSentences": [
+      "The forest canopy blocks much of the sunlight from reaching the ground.",
+      "Many species of birds live in the tropical forest canopy."
+    ],
+    "distractors": ["root system", "soil layer", "riverbed"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1788",
+    "word": "catalyst",
+    "reading": "キャタリスト",
+    "jpTranslation": "触媒、促進要因",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Science & Nature",
+    "exampleSentences": [
+      "The discovery acted as a catalyst for further research.",
+      "Economic hardship was a catalyst for social reform."
+    ],
+    "distractors": ["barrier", "obstacle", "deterrent"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1789",
+    "word": "circulation",
+    "reading": "サーキュレーション",
+    "jpTranslation": "循環、流通",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Health & Body",
+    "exampleSentences": [
+      "Poor circulation can lead to cold hands and feet.",
+      "The circulation of information online has never been faster."
+    ],
+    "distractors": ["stagnation", "blockage", "restriction"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1790",
+    "word": "civic",
+    "reading": "シビック",
+    "jpTranslation": "市民の、公民の",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["adjective"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "Civic participation is essential for a healthy democracy.",
+      "The school taught students about their civic responsibilities."
+    ],
+    "distractors": ["military", "corporate", "private"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1791",
+    "word": "coherent",
+    "reading": "コヒーレント",
+    "jpTranslation": "一貫性のある、筋の通った",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["adjective"],
+    "category": "Communication",
+    "exampleSentences": [
+      "A coherent argument is essential for persuasive writing.",
+      "The government needs a more coherent policy on immigration."
+    ],
+    "distractors": ["contradictory", "scattered", "illogical"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1792",
+    "word": "coincide",
+    "reading": "コーインサイド",
+    "jpTranslation": "一致する、同時に起こる",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["verb"],
+    "category": "Time & Frequency",
+    "exampleSentences": [
+      "The conference dates coincide with my vacation, so I cannot attend.",
+      "The rise in temperatures seems to coincide with increased carbon emissions."
+    ],
+    "distractors": ["conflict", "diverge", "contradict"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1793",
+    "word": "compel",
+    "reading": "コンペル",
+    "jpTranslation": "強いる、余儀なくさせる",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["verb"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "The evidence compelled the judge to reconsider the verdict.",
+      "Economic pressure compelled the company to reduce its workforce."
+    ],
+    "distractors": ["permit", "discourage", "allow"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1794",
+    "word": "compliance",
+    "reading": "コンプライアンス",
+    "jpTranslation": "法令遵守、準拠",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Work & Jobs",
+    "exampleSentences": [
+      "All employees must undergo compliance training every year.",
+      "Compliance with safety regulations is mandatory in this industry."
+    ],
+    "distractors": ["violation", "defiance", "resistance"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1795",
+    "word": "concede",
+    "reading": "コンシード",
+    "jpTranslation": "認める、譲歩する",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["verb"],
+    "category": "Communication",
+    "exampleSentences": [
+      "The politician conceded defeat after the election results came in.",
+      "He finally conceded that his original plan had flaws."
+    ],
+    "distractors": ["deny", "insist", "maintain"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1796",
+    "word": "concession",
+    "reading": "コンセッション",
+    "jpTranslation": "譲歩、特権",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "Both sides made concessions to reach an agreement.",
+      "The government made tax concessions to attract foreign investment."
+    ],
+    "distractors": ["demand", "refusal", "claim"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1797",
+    "word": "confrontation",
+    "reading": "コンフロンテーション",
+    "jpTranslation": "対立、衝突",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "The confrontation between protesters and police was tense.",
+      "She avoided any direct confrontation with her colleagues."
+    ],
+    "distractors": ["cooperation", "reconciliation", "agreement"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1798",
+    "word": "consolidate",
+    "reading": "コンソリデイト",
+    "jpTranslation": "統合する、強固にする",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["verb"],
+    "category": "Work & Jobs",
+    "exampleSentences": [
+      "The two companies decided to consolidate their operations.",
+      "The new leader worked to consolidate support within the party."
+    ],
+    "distractors": ["separate", "divide", "fragment"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1799",
+    "word": "contamination",
+    "reading": "コンタミネーション",
+    "jpTranslation": "汚染、混入",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Science & Nature",
+    "exampleSentences": [
+      "Water contamination poses a serious risk to public health.",
+      "The factory was fined for soil contamination near the river."
+    ],
+    "distractors": ["purification", "filtration", "restoration"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1800",
+    "word": "contend",
+    "reading": "コンテンド",
+    "jpTranslation": "主張する、競う",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["verb"],
+    "category": "Communication",
+    "exampleSentences": [
+      "Researchers contend that the new findings challenge previous theories.",
+      "Several teams contend for the championship title each year."
+    ],
+    "distractors": ["concede", "withdraw", "agree"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1801",
+    "word": "conviction",
+    "reading": "コンビクション",
+    "jpTranslation": "有罪判決、確信",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "His conviction for fraud led to a five-year prison sentence.",
+      "She spoke with great conviction about the need for reform."
+    ],
+    "distractors": ["acquittal", "doubt", "hesitation"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1802",
+    "word": "correlation",
+    "reading": "コリレーション",
+    "jpTranslation": "相関関係",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Science & Nature",
+    "exampleSentences": [
+      "There is a strong correlation between exercise and mental health.",
+      "Researchers found a correlation between screen time and sleep problems."
+    ],
+    "distractors": ["contradiction", "reversal", "exception"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1803",
+    "word": "counterpart",
+    "reading": "カウンターパート",
+    "jpTranslation": "対応する人、相対する物",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Work & Jobs",
+    "exampleSentences": [
+      "The Japanese minister met with her American counterpart to discuss trade.",
+      "Online education has become the digital counterpart of classroom learning."
+    ],
+    "distractors": ["opponent", "rival", "stranger"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1804",
+    "word": "deferral",
+    "reading": "ディファーラル",
+    "jpTranslation": "延期、猶予",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Work & Jobs",
+    "exampleSentences": [
+      "The deferral of the project was due to budget constraints.",
+      "Students may request a deferral of their exam for medical reasons."
+    ],
+    "distractors": ["acceleration", "cancellation", "confirmation"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1805",
+    "word": "deforestation",
+    "reading": "デフォレステーション",
+    "jpTranslation": "森林破壊、森林伐採",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Science & Nature",
+    "exampleSentences": [
+      "Deforestation in the Amazon threatens thousands of species.",
+      "The government has pledged to halt deforestation by 2030."
+    ],
+    "distractors": ["reforestation", "irrigation", "cultivation"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1806",
+    "word": "degradation",
+    "reading": "デグラデーション",
+    "jpTranslation": "劣化、環境悪化",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Science & Nature",
+    "exampleSentences": [
+      "Soil degradation reduces agricultural productivity.",
+      "The degradation of coral reefs is accelerating due to ocean warming."
+    ],
+    "distractors": ["restoration", "improvement", "enhancement"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1807",
+    "word": "deliberation",
+    "reading": "デリベレーション",
+    "jpTranslation": "熟考、審議",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "After careful deliberation, the committee reached a decision.",
+      "The jury's deliberation lasted three days."
+    ],
+    "distractors": ["impulse", "reaction", "dismissal"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1808",
+    "word": "demographic",
+    "reading": "デモグラフィック",
+    "jpTranslation": "人口統計学的な、人口の",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["adjective"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "The demographic shift toward an older population presents challenges.",
+      "Marketers use demographic data to target specific audiences."
+    ],
+    "distractors": ["economic", "geographic", "political"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1809",
+    "word": "deprivation",
+    "reading": "デプリベーション",
+    "jpTranslation": "剥奪、欠乏",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "Sleep deprivation can seriously impair judgment and performance.",
+      "Children in poverty often suffer from nutritional deprivation."
+    ],
+    "distractors": ["provision", "abundance", "surplus"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1810",
+    "word": "designation",
+    "reading": "デジグネーション",
+    "jpTranslation": "指定、呼称",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "The area received the designation of a UNESCO World Heritage Site.",
+      "His official designation is Chief Financial Officer."
+    ],
+    "distractors": ["dismissal", "rejection", "removal"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1811",
+    "word": "detrimental",
+    "reading": "デトリメンタル",
+    "jpTranslation": "有害な、損害を与える",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["adjective"],
+    "category": "Health & Body",
+    "exampleSentences": [
+      "Excessive sugar consumption is detrimental to your health.",
+      "The new policy could have a detrimental effect on small businesses."
+    ],
+    "distractors": ["beneficial", "neutral", "positive"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1812",
+    "word": "diffusion",
+    "reading": "ディフュージョン",
+    "jpTranslation": "拡散、普及",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Science & Nature",
+    "exampleSentences": [
+      "The diffusion of information through social media is rapid.",
+      "Diffusion of gases occurs when they move from high to low concentration."
+    ],
+    "distractors": ["concentration", "accumulation", "containment"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1813",
+    "word": "diplomatic",
+    "reading": "ディプロマティック",
+    "jpTranslation": "外交的な、外交上の",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["adjective"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "The two countries restored diplomatic relations after years of tension.",
+      "A diplomatic solution to the conflict was reached through negotiations."
+    ],
+    "distractors": ["military", "economic", "cultural"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1814",
+    "word": "discourse",
+    "reading": "ディスコース",
+    "jpTranslation": "議論、言説",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Communication",
+    "exampleSentences": [
+      "Public discourse on climate change has intensified in recent years.",
+      "The academic discourse around this topic remains highly complex."
+    ],
+    "distractors": ["silence", "avoidance", "ignorance"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1815",
+    "word": "dismissal",
+    "reading": "ディスミッサル",
+    "jpTranslation": "解雇、却下",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Work & Jobs",
+    "exampleSentences": [
+      "The employee appealed his dismissal to the labor tribunal.",
+      "The dismissal of the lawsuit was a victory for the defendant."
+    ],
+    "distractors": ["promotion", "hiring", "approval"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_1816",
+    "word": "disposition",
+    "reading": "ディスポジション",
+    "jpTranslation": "性質、傾向",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Emotions & Personality",
+    "exampleSentences": [
+      "Her cheerful disposition made her popular with colleagues.",
+      "A calm disposition helps managers handle crises effectively."
+    ],
+    "distractors": ["behavior", "action", "decision"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  }
+]

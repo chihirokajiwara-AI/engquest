@@ -1,0 +1,762 @@
+[
+  {
+    "id": "eiken2_2101",
+    "word": "reside",
+    "reading": "リザイド",
+    "jpTranslation": "居住する",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["verb"],
+    "category": "Daily Life",
+    "exampleSentences": [
+      "She resides in Tokyo but was born in Osaka.",
+      "All employees who reside abroad must register with the consulate."
+    ],
+    "distractors": ["travel", "commute", "migrate"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2102",
+    "word": "resilience",
+    "reading": "リジリエンス",
+    "jpTranslation": "回復力、弾力性",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Emotions & Personality",
+    "exampleSentences": [
+      "The community showed remarkable resilience after the earthquake.",
+      "Building resilience in children prepares them for life's challenges."
+    ],
+    "distractors": ["fragility", "weakness", "vulnerability"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2103",
+    "word": "revert",
+    "reading": "リバート",
+    "jpTranslation": "元に戻る、逆戻りする",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["verb"],
+    "category": "Daily Life",
+    "exampleSentences": [
+      "After the new policy was abandoned, conditions reverted to their previous state.",
+      "Old habits are easy to revert to when under stress."
+    ],
+    "distractors": ["advance", "progress", "evolve"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2104",
+    "word": "revoke",
+    "reading": "リボウク",
+    "jpTranslation": "取り消す、撤回する",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["verb"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "The government threatened to revoke the company's operating license.",
+      "His driving license was revoked after a serious accident."
+    ],
+    "distractors": ["grant", "issue", "extend"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2105",
+    "word": "rhetoric",
+    "reading": "レトリック",
+    "jpTranslation": "レトリック、修辞",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Communication",
+    "exampleSentences": [
+      "The politician's rhetoric did not match his actual policies.",
+      "Effective rhetoric can persuade an audience even without strong evidence."
+    ],
+    "distractors": ["silence", "honesty", "sincerity"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2106",
+    "word": "robust",
+    "reading": "ロバスト",
+    "jpTranslation": "頑丈な、強固な",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["adjective"],
+    "category": "Science & Nature",
+    "exampleSentences": [
+      "The new system is more robust and resistant to cyberattacks.",
+      "A robust economy can withstand external shocks more effectively."
+    ],
+    "distractors": ["fragile", "weak", "brittle"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2107",
+    "word": "safeguard",
+    "reading": "セーフガード",
+    "jpTranslation": "保護策、守る",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun", "verb"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "New laws were introduced to safeguard the privacy of internet users.",
+      "The treaty includes safeguards against the misuse of nuclear technology."
+    ],
+    "distractors": ["threaten", "endanger", "weaken"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2108",
+    "word": "scarce",
+    "reading": "スケアス",
+    "jpTranslation": "乏しい、不足した",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["adjective"],
+    "category": "Science & Nature",
+    "exampleSentences": [
+      "Clean water is scarce in many parts of the developing world.",
+      "Skilled workers are becoming increasingly scarce in certain industries."
+    ],
+    "distractors": ["abundant", "plentiful", "sufficient"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2109",
+    "word": "segregate",
+    "reading": "セグリゲイト",
+    "jpTranslation": "分離する、区別する",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["verb"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "Schools were legally required to segregate students by race in the past.",
+      "Hospitals segregate patients with contagious diseases to prevent spread."
+    ],
+    "distractors": ["integrate", "include", "unite"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2110",
+    "word": "simulate",
+    "reading": "シミュレイト",
+    "jpTranslation": "シミュレートする、模擬する",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["verb"],
+    "category": "Technology",
+    "exampleSentences": [
+      "Computers can simulate the effects of climate change decades into the future.",
+      "Pilots train in simulators that simulate real flight conditions."
+    ],
+    "distractors": ["prevent", "stop", "reverse"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2111",
+    "word": "skepticism",
+    "reading": "スケプティシズム",
+    "jpTranslation": "懐疑主義、懐疑論",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Emotions & Personality",
+    "exampleSentences": [
+      "Public skepticism about the new policy has grown in recent months.",
+      "Healthy skepticism encourages critical thinking and evidence-based decisions."
+    ],
+    "distractors": ["faith", "credulity", "optimism"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2112",
+    "word": "solidarity",
+    "reading": "ソリダリティ",
+    "jpTranslation": "連帯、団結",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "Workers showed solidarity by striking together for better wages.",
+      "International solidarity is essential in responding to global crises."
+    ],
+    "distractors": ["division", "rivalry", "conflict"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2113",
+    "word": "speculation",
+    "reading": "スペキュレーション",
+    "jpTranslation": "推測、思索",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Communication",
+    "exampleSentences": [
+      "There is widespread speculation about who will be appointed as the next director.",
+      "Media speculation about the celebrity's life was largely unfounded."
+    ],
+    "distractors": ["confirmation", "certainty", "evidence"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2114",
+    "word": "stabilize",
+    "reading": "スタビライズ",
+    "jpTranslation": "安定させる",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["verb"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "International peacekeepers were sent to stabilize the conflict zone.",
+      "The central bank intervened to stabilize the currency."
+    ],
+    "distractors": ["destabilize", "undermine", "disrupt"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2115",
+    "word": "stereotype",
+    "reading": "ステレオタイプ",
+    "jpTranslation": "固定観念、ステレオタイプ",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun", "verb"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "Stereotypes about gender roles are harmful to both men and women.",
+      "He challenged the stereotype that scientists are antisocial."
+    ],
+    "distractors": ["reality", "individuality", "nuance"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2116",
+    "word": "stimulate",
+    "reading": "スティミュレイト",
+    "jpTranslation": "刺激する、活性化させる",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["verb"],
+    "category": "Science & Nature",
+    "exampleSentences": [
+      "Low interest rates stimulate borrowing and economic activity.",
+      "Creative activities stimulate brain development in children."
+    ],
+    "distractors": ["suppress", "reduce", "inhibit"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2117",
+    "word": "subjective",
+    "reading": "サブジェクティブ",
+    "jpTranslation": "主観的な",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["adjective"],
+    "category": "Communication",
+    "exampleSentences": [
+      "Art appreciation is largely subjective and varies from person to person.",
+      "A court must rely on objective evidence rather than subjective opinions."
+    ],
+    "distractors": ["objective", "factual", "empirical"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2118",
+    "word": "subsequent",
+    "reading": "サブシクウェント",
+    "jpTranslation": "その後の、続いて起こる",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["adjective"],
+    "category": "Time & Frequency",
+    "exampleSentences": [
+      "The initial experiment and subsequent tests confirmed the findings.",
+      "Subsequent events proved that the decision had been correct."
+    ],
+    "distractors": ["previous", "prior", "earlier"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2119",
+    "word": "suppress",
+    "reading": "サプレス",
+    "jpTranslation": "抑える、弾圧する",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["verb"],
+    "category": "Health & Body",
+    "exampleSentences": [
+      "Some medications suppress the immune system to prevent rejection after transplants.",
+      "The government tried to suppress information about the environmental disaster."
+    ],
+    "distractors": ["promote", "release", "express"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2120",
+    "word": "surge",
+    "reading": "サージ",
+    "jpTranslation": "急増、波状に増加する",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun", "verb"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "There has been a surge in demand for electric vehicles in recent years.",
+      "Energy prices surged following the disruption to supply chains."
+    ],
+    "distractors": ["decline", "drop", "fall"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2121",
+    "word": "suspend",
+    "reading": "サスペンド",
+    "jpTranslation": "停止する、中断する",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["verb"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "The athlete was suspended from competition pending an investigation.",
+      "The government suspended all flights due to the volcanic eruption."
+    ],
+    "distractors": ["continue", "resume", "extend"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2122",
+    "word": "sustainable",
+    "reading": "サステイナブル",
+    "jpTranslation": "持続可能な",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["adjective"],
+    "category": "Science & Nature",
+    "exampleSentences": [
+      "Companies must adopt sustainable business practices to reduce environmental impact.",
+      "Sustainable agriculture protects natural resources for future generations."
+    ],
+    "distractors": ["unsustainable", "destructive", "wasteful"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2123",
+    "word": "tackle",
+    "reading": "タックル",
+    "jpTranslation": "取り組む",
+    "cefrLevel": "B1",
+    "eikenLevel": "2",
+    "pos": ["verb"],
+    "category": "Work & Jobs",
+    "exampleSentences": [
+      "The government must tackle rising inequality before it becomes worse.",
+      "Engineers are working to tackle the problems caused by aging infrastructure."
+    ],
+    "distractors": ["avoid", "ignore", "delay"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2124",
+    "word": "tend",
+    "reading": "テンド",
+    "jpTranslation": "傾向がある、世話をする",
+    "cefrLevel": "B1",
+    "eikenLevel": "2",
+    "pos": ["verb"],
+    "category": "Daily Life",
+    "exampleSentences": [
+      "People tend to exercise more when the weather is good.",
+      "She tended the garden carefully every morning."
+    ],
+    "distractors": ["avoid", "resist", "refuse"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2125",
+    "word": "thesis",
+    "reading": "セシス",
+    "jpTranslation": "論文、論題",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Education",
+    "exampleSentences": [
+      "She spent three years writing her doctoral thesis on climate change.",
+      "The main thesis of the book is that globalization benefits everyone."
+    ],
+    "distractors": ["abstract", "summary", "index"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2126",
+    "word": "toxic",
+    "reading": "トクシック",
+    "jpTranslation": "有毒な、毒性の",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["adjective"],
+    "category": "Science & Nature",
+    "exampleSentences": [
+      "Toxic chemicals in the river have killed thousands of fish.",
+      "A toxic work environment can seriously harm employee mental health."
+    ],
+    "distractors": ["harmless", "beneficial", "purifying"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2127",
+    "word": "trait",
+    "reading": "トレイト",
+    "jpTranslation": "特性、特徴",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Science & Nature",
+    "exampleSentences": [
+      "Genetic traits are passed from parents to offspring.",
+      "Curiosity is a key personality trait of successful scientists."
+    ],
+    "distractors": ["behavior", "action", "decision"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2128",
+    "word": "treaty",
+    "reading": "トリーティ",
+    "jpTranslation": "条約",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "The two nations signed a peace treaty ending decades of conflict.",
+      "International environmental treaties set targets for reducing emissions."
+    ],
+    "distractors": ["agreement", "memorandum", "protocol"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2129",
+    "word": "tremendous",
+    "reading": "トリメンダス",
+    "jpTranslation": "非常に大きな、素晴らしい",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["adjective"],
+    "category": "Emotions & Personality",
+    "exampleSentences": [
+      "She showed tremendous courage in speaking out about the injustice.",
+      "The earthquake caused tremendous damage to the region's infrastructure."
+    ],
+    "distractors": ["minor", "negligible", "trivial"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2130",
+    "word": "tribal",
+    "reading": "トライバル",
+    "jpTranslation": "部族の",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["adjective"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "Tribal communities in the Amazon face threats from deforestation.",
+      "Traditional tribal knowledge has important applications in modern medicine."
+    ],
+    "distractors": ["modern", "urban", "industrial"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2131",
+    "word": "turnover",
+    "reading": "ターンオーバー",
+    "jpTranslation": "離職率、売上高",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Work & Jobs",
+    "exampleSentences": [
+      "High staff turnover is costly for companies and affects productivity.",
+      "The company's annual turnover exceeded one billion dollars."
+    ],
+    "distractors": ["retention", "profit", "investment"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2132",
+    "word": "unique",
+    "reading": "ユニーク",
+    "jpTranslation": "独自の、ユニークな",
+    "cefrLevel": "B1",
+    "eikenLevel": "2",
+    "pos": ["adjective"],
+    "category": "Daily Life",
+    "exampleSentences": [
+      "Japan has a unique blend of traditional culture and modern technology.",
+      "Each individual has a unique set of skills and experiences."
+    ],
+    "distractors": ["common", "ordinary", "typical"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2133",
+    "word": "upgrade",
+    "reading": "アップグレード",
+    "jpTranslation": "改善する、アップグレードする",
+    "cefrLevel": "B1",
+    "eikenLevel": "2",
+    "pos": ["verb", "noun"],
+    "category": "Technology",
+    "exampleSentences": [
+      "The company plans to upgrade its IT systems next year.",
+      "The software upgrade introduced several useful new features."
+    ],
+    "distractors": ["downgrade", "remove", "delete"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2134",
+    "word": "variance",
+    "reading": "バリアンス",
+    "jpTranslation": "差異、分散",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Science & Nature",
+    "exampleSentences": [
+      "There was significant variance in test scores between different schools.",
+      "Statistical variance measures how spread out data points are."
+    ],
+    "distractors": ["consistency", "uniformity", "sameness"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2135",
+    "word": "velocity",
+    "reading": "ベロシティ",
+    "jpTranslation": "速度、速さ",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Science & Nature",
+    "exampleSentences": [
+      "The velocity of light is approximately 300,000 kilometers per second.",
+      "The high velocity of the storm winds caused widespread damage."
+    ],
+    "distractors": ["direction", "mass", "acceleration"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2136",
+    "word": "verify",
+    "reading": "ベリファイ",
+    "jpTranslation": "確認する、検証する",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["verb"],
+    "category": "Science & Nature",
+    "exampleSentences": [
+      "Please verify your email address to complete the registration.",
+      "Scientists must verify their results through repeated experiments."
+    ],
+    "distractors": ["deny", "assume", "ignore"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2137",
+    "word": "volatile",
+    "reading": "ボラタイル",
+    "jpTranslation": "揮発性の、変動しやすい",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["adjective"],
+    "category": "Shopping & Money",
+    "exampleSentences": [
+      "Oil prices have been highly volatile due to geopolitical uncertainty.",
+      "Volatile chemicals must be stored in well-ventilated areas."
+    ],
+    "distractors": ["stable", "fixed", "consistent"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2138",
+    "word": "welfare",
+    "reading": "ウェルフェア",
+    "jpTranslation": "福祉、幸福",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["noun"],
+    "category": "Society & Rules",
+    "exampleSentences": [
+      "The government is committed to improving the welfare of all citizens.",
+      "Animal welfare laws protect pets and livestock from cruelty."
+    ],
+    "distractors": ["suffering", "neglect", "hardship"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2139",
+    "word": "withstand",
+    "reading": "ウィズスタンド",
+    "jpTranslation": "耐える、持ちこたえる",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["verb"],
+    "category": "Science & Nature",
+    "exampleSentences": [
+      "The dam was designed to withstand a major earthquake.",
+      "These plants can withstand extreme heat and drought conditions."
+    ],
+    "distractors": ["surrender", "collapse", "yield"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  },
+  {
+    "id": "eiken2_2140",
+    "word": "worthwhile",
+    "reading": "ワースワイル",
+    "jpTranslation": "価値のある、やりがいのある",
+    "cefrLevel": "B2",
+    "eikenLevel": "2",
+    "pos": ["adjective"],
+    "category": "Daily Life",
+    "exampleSentences": [
+      "Despite the challenges, the experience was thoroughly worthwhile.",
+      "Volunteering in the community is a worthwhile way to spend your time."
+    ],
+    "distractors": ["worthless", "pointless", "futile"],
+    "audioUrl": "",
+    "imageUrl": "",
+    "fsrsState": "new",
+    "tags": []
+  }
+]
