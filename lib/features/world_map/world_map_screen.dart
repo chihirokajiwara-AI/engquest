@@ -21,6 +21,7 @@ import 'package:engquest/core/gamification/xp_service.dart';
 import 'package:engquest/core/ui/page_transitions.dart';
 import 'package:engquest/features/battle/grade_selector_screen.dart';
 import 'package:engquest/features/exam_practice/exam_practice_screen.dart';
+import 'package:engquest/features/quest/quest_map_screen.dart';
 import 'package:engquest/features/parent_dashboard/parent_dashboard_screen.dart';
 
 // ── Mock player data (fallback when Firestore unavailable) ───────────────────
@@ -47,6 +48,14 @@ class _ZoneDef {
 }
 
 final List<_ZoneDef> _kZones = [
+  _ZoneDef(
+    label: 'ぼうけん',
+    subtitle: 'Quest — 街をめぐる英語の旅',
+    icon: Icons.map_outlined,
+    gradient: [const Color(0xFF4FC3F7), const Color(0xFF0288D1)],
+    route: '/quest',
+    pushTarget: const QuestMapScreen(),
+  ),
   _ZoneDef(
     label: '鍛冶屋',
     subtitle: 'Blacksmith — 単語と戦え！',
