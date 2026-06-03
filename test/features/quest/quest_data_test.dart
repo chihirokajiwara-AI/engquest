@@ -7,7 +7,8 @@ void main() {
   group('Quest towns', () {
     test('towns exist and run easiest → hardest', () {
       expect(kQuestTowns, isNotEmpty);
-      const order = ['5', '4', '3', 'pre2', '2', 'pre1'];
+      // 7 towns: 準2級プラス (pre2plus) bridges 準2級→2級 (英検 added it in 2025).
+      const order = ['5', '4', '3', 'pre2', 'pre2plus', '2', 'pre1'];
       expect(kQuestTowns.map((t) => t.eikenLevel).toList(), order);
     });
 
