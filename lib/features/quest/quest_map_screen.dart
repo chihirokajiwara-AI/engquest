@@ -22,10 +22,12 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
   static const _sky = Color(0xFF4FC3F7);
   static const _ink = Color(0xFF263238);
   static const _prefKey = 'quest_unlocked_index';
+  static const _levelKey = 'quest_start_level';
 
-  late final int _startIdx = startingTownIndex(widget.startLevel);
+  int _startIdx = 0;
   int _unlocked = 0;
   bool _loaded = false;
+  bool _needsPick = false;
 
   @override
   void initState() {
@@ -35,11 +37,32 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
 
   Future<void> _load() async {
     final prefs = await PreferencesService.getInstance();
+    final level = prefs.getString(_levelKey);
+    if (level == null) {
+      setState(() {
+        _needsPick = true;
+        _loaded = true;
+      });
+      return;
+    }
     final stored = prefs.getInt(_prefKey);
+    _startIdx = startingTownIndex(level);
     setState(() {
       _unlocked = stored < _startIdx ? _startIdx : stored;
+      _needsPick = false;
       _loaded = true;
     });
+  }
+
+  Future<void> _chooseLevel(String level) async {
+    final prefs = await PreferencesService.getInstance();
+    await prefs.setString(_levelKey, level);
+    _startIdx = startingTownIndex(level);
+    setState(() {
+      _unlocked = _startIdx;
+      _needsPick = false;
+    });
+    _saveUnlocked(_startIdx);
   }
 
   Future<void> _saveUnlocked(int idx) async {
@@ -81,15 +104,85 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
       body: SafeArea(
         child: !_loaded
             ? const Center(child: CircularProgressIndicator(color: _sky))
-            : ListView(
-                padding: const EdgeInsets.all(16),
-                children: [
-                  _prologueCard(),
-                  const SizedBox(height: 16),
-                  for (var i = 0; i < kQuestTowns.length; i++) _townTile(i),
-                ],
-              ),
+            : _needsPick
+                ? _buildLevelPicker()
+                : ListView(
+                    padding: const EdgeInsets.all(16),
+                    children: [
+                      _prologueCard(),
+                      const SizedBox(height: 16),
+                      for (var i = 0; i < kQuestTowns.length; i++) _townTile(i),
+                    ],
+                  ),
       ),
+    );
+  }
+
+  /// First-time level select: a student already at, say, 準2級 starts in the
+  /// 準2級 town instead of replaying the easy ones.
+  Widget _buildLevelPicker() {
+    return ListView(
+      padding: const EdgeInsets.all(20),
+      children: [
+        const SizedBox(height: 8),
+        const Text('どの級から はじめますか？',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: _ink, fontSize: 22, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 6),
+        const Text('いま持っている英検の級をえらぶと、その街から旅がはじまります。',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Color(0xFF607D8B), fontSize: 13)),
+        const SizedBox(height: 20),
+        for (final t in kQuestTowns)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: Material(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(14),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(14),
+                onTap: () => _chooseLevel(t.eikenLevel),
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: _sky.withAlpha(70)),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 46,
+                        height: 46,
+                        decoration: BoxDecoration(
+                            color: _sky.withAlpha(28),
+                            borderRadius: BorderRadius.circular(12)),
+                        child: Center(
+                            child: Text('英検${t.eikenLevel}',
+                                style: const TextStyle(
+                                    color: _sky, fontWeight: FontWeight.bold, fontSize: 12))),
+                      ),
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(t.name,
+                                style: const TextStyle(
+                                    color: _ink, fontSize: 16, fontWeight: FontWeight.bold)),
+                            Text('${t.cefr} ・ ${t.tagline}',
+                                style: const TextStyle(
+                                    color: Color(0xFF90A4AE), fontSize: 12)),
+                          ],
+                        ),
+                      ),
+                      const Icon(Icons.arrow_forward_ios, color: _sky, size: 16),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+      ],
     );
   }
 
