@@ -187,3 +187,15 @@ Prefix: feat, fix, refactor, test, docs, chore
 - Never force-push
 - Always verify `flutter analyze` passes before committing
 - If a task requires architectural decisions, document the decision in a comment and move on
+
+### Heavy jobs — NEVER run in the agent loop (enforced)
+Heavy/long work (ML training, model downloads, image/audio generation, long
+builds) must NEVER run synchronously in the tool loop. On 2026-06-03 this caused
+a 16-hour hang with the CEO unreachable. Root-cause fix, enforced by a
+PreToolUse(Bash) hook (`scripts/guard-heavy-jobs.sh`, registered in
+`.claude/settings.json`):
+- The hook **blocks** such commands unless routed through the sanctioned wrapper.
+- Run them only via: `scripts/safe-job.sh <name> <timeout_seconds> <command...>`
+  — detached + hard timeout + `logs/jobs/<name>.{log,status}`.
+- Poll status; **stop on `FAILED`/`TIMEOUT`** — never re-loop a failed job.
+- The hook is a backstop, not a sandbox: default to `safe-job.sh` for anything heavy.

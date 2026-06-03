@@ -90,3 +90,6 @@ assets/audio/eiken_pre2/*.mp3
 assets/audio/eiken2/*.mp3
 assets/audio/eiken_pre1/*.mp3
 assets/audio/eiken*/*.wav
+
+# runtime job logs (safe-job.sh)
+logs/
