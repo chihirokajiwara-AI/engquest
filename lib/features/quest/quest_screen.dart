@@ -254,9 +254,12 @@ class _QuestScreenState extends State<QuestScreen> {
                 textAlign: TextAlign.center,
                 style: const TextStyle(color: _ink, fontSize: 24, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
-            const Text('村のみんなと話せたね。つぎの街でも、英語で話してみよう！',
+            Text(
+                widget.town.cleared ??
+                    '村のみんなと話せたね。つぎの街でも、英語で話してみよう！',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Color(0xFF607D8B), fontSize: 14, height: 1.5)),
+                style: const TextStyle(
+                    color: Color(0xFF607D8B), fontSize: 14, height: 1.5)),
             const SizedBox(height: 28),
             _primaryButton('地図（ちず）にもどる', () => Navigator.of(context).pop(true)),
           ],

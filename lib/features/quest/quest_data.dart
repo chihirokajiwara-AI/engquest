@@ -47,6 +47,10 @@ class QuestTown {
   final String intro; // story text shown on entering the town
   final List<QuestEncounter> encounters;
 
+  /// Story payoff shown on the cleared screen: the recovered 声の石 and the
+  /// arc beat for this town. Optional so existing literals stay valid.
+  final String? cleared;
+
   const QuestTown({
     required this.id,
     required this.eikenLevel,
@@ -55,15 +59,16 @@ class QuestTown {
     required this.tagline,
     required this.intro,
     required this.encounters,
+    this.cleared,
   });
 }
 
 /// The hero's opening — revealed once, at the very start of the quest.
 const String kQuestPrologue =
-    'あなたは、じつは王子（おうじ）／王女（おうじょ）です。\n'
-    'ことばの力をとりもどす旅（たび）に出ました。\n'
-    'いろいろな街（まち）で人に出会い、こまったことを乗りこえながら、'
-    '英語（えいご）と心を成長させていきましょう。';
+    'あなたは、じつは王子（おうじ）／王女（おうじょ）。\n'
+    '魔王（まおう）サイレントが、世界（せかい）の「ことば」を食（た）べ、色（いろ）が消（き）えていく。\n'
+    'むねの石（いし）を手（て）に、声（こえ）の石（いし）を集（あつ）める旅（たび）へ。\n'
+    'ことばの力（ちから）で、世界（せかい）を取（と）りもどそう。';
 
 /// Towns in order, easiest → hardest. A player enters at the town matching
 /// their placement level; clearing a town unlocks the next.
@@ -74,44 +79,82 @@ const List<QuestTown> kQuestTowns = [
     cefr: 'A1',
     name: 'はじまりの村',
     tagline: 'やさしいあいさつの村',
-    intro: '旅のはじまりの村。村人たちは、かんたんな英語であいさつしてくれます。'
-        '正しいことばで答えて、村のみんなと仲よくなりましょう。',
+    intro: 'ここは旅（たび）のはじまりの村（むら）。けれど、みんな「ハロー」を忘（わす）れてしまった。'
+        '正（ただ）しいあいさつで、村（むら）に「ことば」をとりもどそう。',
+    cleared: '村（むら）に声（こえ）がもどった！ 最初（さいしょ）の〈声（こえ）の石（いし）〉がひかる。'
+        'スラが「ハロー！」と、はじめて言（い）えた。',
     encounters: [
+      QuestEncounter(
+        npcName: 'スラ',
+        npcEmoji: '🟢',
+        npcLine: '... ... (A small slime opens its mouth, but no word comes out.)',
+        npcLineJa: '小（ちい）さなスライムが口（くち）を開（あ）けるけれど、言葉（ことば）が出（で）てこない…',
+        choices: [
+          'Goodbye, slime!',
+          'Hello! Are you okay?',
+          'I am a slime.',
+          'Thank you very much.',
+        ],
+        correctIndex: 1,
+        onCorrect:
+            "H... Hello! ...I remember now — Hello! You gave me my word back. I'm Sura. Can I come with you?",
+      ),
       QuestEncounter(
         npcName: 'むらびと',
         npcEmoji: '🧑‍🌾',
-        npcLine: 'Hello! How are you?',
-        npcLineJa: 'こんにちは！ 元気ですか？',
-        choices: ["I'm fine, thank you.", 'Goodbye.', 'It is a cat.', 'No, thank you.'],
-        correctIndex: 0,
-        onCorrect: "Great! Have a nice day!",
+        npcLine: 'Good morning! How are you today?',
+        npcLineJa: 'おはよう！ 今日（きょう）は元気（げんき）ですか？',
+        choices: [
+          'I am a village.',
+          'Yes, it is a dog.',
+          "I'm fine, thank you.",
+          'You are welcome.',
+        ],
+        correctIndex: 2,
+        onCorrect: 'Wonderful! The village feels warmer already. Welcome, traveller!',
       ),
       QuestEncounter(
         npcName: 'おんなのこ',
         npcEmoji: '👧',
-        npcLine: "Hi! What's your name?",
-        npcLineJa: 'こんにちは！ お名前は？',
-        choices: ['My name is Alex.', 'I am fine.', 'It is Monday.', 'You are welcome.'],
+        npcLine: "What's your name?",
+        npcLineJa: 'お名前（なまえ）は？',
+        choices: [
+          'My name is Leo.',
+          "It's three o'clock.",
+          'I am eleven years old.',
+          'My name your name.',
+        ],
         correctIndex: 0,
-        onCorrect: 'Nice to meet you, Alex!',
+        onCorrect: 'Leo! Nice to meet you. Sura likes you too!',
       ),
       QuestEncounter(
         npcName: 'おじいさん',
         npcEmoji: '👴',
         npcLine: 'Where are you from?',
-        npcLineJa: 'どこから来たのですか？',
-        choices: ["I'm from Japan.", "I'm eleven.", 'It is a dog.', 'Good night.'],
-        correctIndex: 0,
-        onCorrect: 'Japan! That is far away. Welcome!',
+        npcLineJa: 'どこから来（き）たのですか？',
+        choices: [
+          'It is a red apple.',
+          "I'm from a far country.",
+          "I'm fine, thank you.",
+          'I am from happy.',
+        ],
+        correctIndex: 1,
+        onCorrect: 'A far country... and yet your eyes shine like royalty. Take care, young one.',
       ),
       QuestEncounter(
         npcName: 'おみせのひと',
         npcEmoji: '🧺',
-        npcLine: 'This is a red apple. Do you want it?',
-        npcLineJa: 'これは赤いりんごです。ほしいですか？',
-        choices: ['Yes, please.', 'I am sorry.', 'See you later.', 'It is raining.'],
-        correctIndex: 0,
-        onCorrect: 'Here you are! Take care on your journey.',
+        npcLine: 'These apples are fresh. Do you want one?',
+        npcLineJa: 'このりんごは新鮮（しんせん）です。ひとつ、いかが？',
+        choices: [
+          'No, I am sorry for you.',
+          'See you tomorrow.',
+          'It is a fresh.',
+          'Yes, please!',
+        ],
+        correctIndex: 3,
+        onCorrect:
+            'Here you are! Now the whole village has its voice back. Look — a stone is glowing in my basket. Take it!',
       ),
     ],
   ),
@@ -122,7 +165,10 @@ const List<QuestTown> kQuestTowns = [
     cefr: 'A2',
     name: '風（かぜ）の街',
     tagline: '毎日のくらしの街',
-    intro: '少し大きな街。人々は毎日のくらしについて、英語で話しかけてきます。',
+    intro: '風（かぜ）の街（まち）。毎日（まいにち）のくらしの言葉（ことば）が、風（かぜ）にさらわれて消（き）えかけている。'
+        '人々（ひとびと）の一日（いちにち）を、英語（えいご）でつないであげよう。',
+    cleared: '街（まち）に毎日（まいにち）のおしゃべりがもどった。二（ふた）つ目（め）の〈声（こえ）の石（いし）〉を手（て）に。'
+        '「魔王（まおう）は、しずけさを“へいわ”だと思（おも）っているらしい」とスラがつぶやく。',
     encounters: [
       QuestEncounter(
         npcName: "せんせい",
@@ -177,7 +223,10 @@ const List<QuestTown> kQuestTowns = [
     cefr: 'A2-B1',
     name: '学（まな）びの都（みやこ）',
     tagline: '学校と旅の都',
-    intro: '学校や旅の話題が飛びかう、にぎやかな都。',
+    intro: '学（まな）びの都（みやこ）。学校（がっこう）や旅（たび）の物語（ものがたり）が語（かた）られる場所（ばしょ）。'
+        'けれど、思（おも）い出（で）を語（かた）る言葉（ことば）が、少（すこ）しずつ抜（ぬ）け落（お）ちている。',
+    cleared: '人々（ひとびと）が、また自分（じぶん）の物語（ものがたり）を語（かた）り出（だ）した。三（みっ）つ目（め）の〈声（こえ）の石（いし）〉。'
+        '吟遊詩人（ぎんゆうしじん）ハーモニーが、とりもどした言葉（ことば）を歌（うた）にして空（そら）へ放（はな）つ。',
     encounters: [
       QuestEncounter(
         npcName: "せんせい",
@@ -232,52 +281,95 @@ const List<QuestTown> kQuestTowns = [
     cefr: 'B1',
     name: '社会（しゃかい）の港町（みなとまち）',
     tagline: '世の中を語る港町',
-    intro: '世の中の話題を、英語で語り合う港町。',
+    intro: '社会（しゃかい）の港町（みなとまち）。世（よ）の中（なか）を語（かた）り合（あ）う場所（ばしょ）。'
+        'ここで、魔王（まおう）の手（て）の者（もの）クワイエトが、人々（ひとびと）から「意見（いけん）」そのものを奪（うば）おうとしている。',
+    cleared: '港町（みなとまち）の人々（ひとびと）が、また「自分（じぶん）はこう思（おも）う」と言（い）えるようになった。四（よっ）つ目（め）の〈声（こえ）の石（いし）〉。'
+        'クワイエトは去（さ）りぎわ、ふり返（かえ）った――「…おまえの言葉（ことば）は、なぜ消（き）えない？」 遠（とお）くで魔王（まおう）サイレントの影（かげ）がうごめく。',
     encounters: [
       QuestEncounter(
-        npcName: "せんせい",
-        npcEmoji: "👩‍🏫",
-        npcLine: "I think reading books every day is really important. Do you agree?",
-        npcLineJa: "毎日本を読むことはとても大切だと思います。あなたはどう思いますか？",
-        choices: ["Yes, I agree. Reading helps us learn a lot.", "No, I don't like teachers.", "Books are very heavy to carry.", "I already had breakfast, thanks."],
-        correctIndex: 0,
-        onCorrect: "Exactly! Reading every day will make you much wiser. Keep it up!",
+        npcName: "ハーモニー",
+        npcEmoji: "🎶",
+        npcLine:
+            "I'm a bard. I sing the words people have lost. Why have you come to this harbour town?",
+        npcLineJa:
+            "私（わたし）は吟遊詩人（ぎんゆうしじん）。失（うしな）われた言葉（ことば）を歌（うた）にするの。なぜこの港町（みなとまち）へ？",
+        choices: [
+          "A bard is a person who sings songs for money.",
+          "I'm searching for the Stones of Voice to bring words back to the world.",
+          "Yes, harbours have many ships.",
+          "I came because to find the reason of stones.",
+        ],
+        correctIndex: 1,
+        onCorrect:
+            "Then our paths are one. I'll sing for you, hero. When you free a town's words, I'll carry them to the sky.",
       ),
       QuestEncounter(
         npcName: "りょうし",
         npcEmoji: "🎣",
-        npcLine: "I've been fishing here for twenty years. Have you ever tried fishing before?",
-        npcLineJa: "ここで20年間釣りをしています。釣りをしたことがありますか？",
-        choices: ["The sea is very blue today.", "Yes, I have. I caught a big fish once!", "No, I don't want any fish.", "Twenty is a big number."],
-        correctIndex: 1,
-        onCorrect: "Wonderful! Fishing teaches you patience. Come back and we'll fish together sometime!",
+        npcLine:
+            "These days, people argue instead of talking. What do you think makes a good conversation?",
+        npcLineJa:
+            "このごろ、人（ひと）は話（はな）し合（あ）わずに言（い）い争（あらそ）う。よい会話（かいわ）に大切（たいせつ）なものは何（なん）だと思（おも）う？",
+        choices: [
+          "Listening to the other person before you answer.",
+          "A conversation is when two people talk together.",
+          "I think fishing is harder than talking.",
+          "Because good, so people are happy always.",
+        ],
+        correctIndex: 0,
+        onCorrect:
+            "Wise beyond your years. If more people listened, this town wouldn't be losing its voice.",
       ),
       QuestEncounter(
         npcName: "しょうにん",
         npcEmoji: "🛍️",
-        npcLine: "These spices came all the way from a faraway land. Would you like to smell them?",
-        npcLineJa: "このスパイスは遠い国からやってきました。においを嗅いでみますか？",
-        choices: ["I don't have enough money today.", "Sure, I'd love to! What do they smell like?", "Spices are used in cooking.", "No, I came here by ship."],
-        correctIndex: 1,
-        onCorrect: "They smell like cinnamon and adventure! You have a curious spirit — I like that!",
-      ),
-      QuestEncounter(
-        npcName: "かいぞく",
-        npcEmoji: "🏴‍☠️",
-        npcLine: "I used to be a sailor, but I gave it up to live here peacefully. What do you think is more important — adventure or peace?",
-        npcLineJa: "昔は船乗りでしたが、ここで平和に暮らすために辞めました。冒険と平和、どちらが大切だと思いますか？",
-        choices: ["I prefer peace, but a little adventure makes life exciting.", "Ships are very big and expensive.", "I am looking for the harbor master.", "Peace is a country far away."],
-        correctIndex: 0,
-        onCorrect: "Ha! A wise answer! Maybe someday you'll find the perfect balance between the two.",
+        npcLine:
+            "Trade has been slow since people stopped sharing news. How could we bring the town together again?",
+        npcLineJa:
+            "人（ひと）が知（し）らせを伝（つた）え合（あ）わなくなってから、商売（しょうばい）が落（お）ちこんでいる。町（まち）をまた一（ひと）つにするには？",
+        choices: [
+          "Trade means buying and selling goods.",
+          "I don't have any money to buy your spices.",
+          "We could hold a market day where everyone meets and talks.",
+          "The town is together because it is one town.",
+        ],
+        correctIndex: 2,
+        onCorrect:
+            "A market day — brilliant! When people gather, words return. You have the heart of a leader.",
       ),
       QuestEncounter(
         npcName: "おかあさん",
         npcEmoji: "👩",
-        npcLine: "My children don't talk to me much anymore. How do you stay close to your family?",
-        npcLineJa: "子どもたちがあまり話しかけてくれなくなりました。家族と仲良くするにはどうしていますか？",
-        choices: ["Families are usually quite large.", "I don't have any brothers or sisters.", "I try to eat dinner together and share my day with them.", "You should move to a bigger house."],
-        correctIndex: 2,
-        onCorrect: "That's lovely advice. Sharing meals and stories really does bring families together. Thank you!",
+        npcLine:
+            "My son hasn't spoken a word in days. Do you think his silence will pass?",
+        npcLineJa:
+            "息子（むすこ）が何日（なんにち）も口（くち）をきかないの。このしずけさは、いつか終（お）わると思（おも）う？",
+        choices: [
+          "Silence is when there is no sound at all.",
+          "No, because boys are usually very loud.",
+          "Yes, your son will pass the test next week.",
+          "I believe it will, if we keep speaking to him with kindness.",
+        ],
+        correctIndex: 3,
+        onCorrect:
+            "Thank you. I won't give up on him. Kind words are stronger than any silence... aren't they?",
+      ),
+      QuestEncounter(
+        npcName: "クワイエト",
+        npcEmoji: "🌑",
+        npcLine:
+            "Stop. I serve Lord Silentus. He believes a silent world is a peaceful world — no lies, no quarrels. Why do you fight to bring words back?",
+        npcLineJa:
+            "止（と）まれ。私（わたし）は魔王（まおう）サイレントに仕（つか）える者（もの）。彼（かれ）は、しずかな世界（せかい）こそ平和（へいわ）だと信（しん）じている――嘘（うそ）も、争（あらそ）いもない。なぜ言葉（ことば）を取（と）りもどそうとする？",
+        choices: [
+          "Quiet is the opposite of loud.",
+          "Because without words, we can't share kindness, or say 'I love you', or ever be understood.",
+          "Because I want to win and get a big prize.",
+          "Yes, a silent world is very peaceful indeed.",
+        ],
+        correctIndex: 1,
+        onCorrect:
+            "...That answer should be easy to dismiss. Why does it linger in my mind? ...This isn't over, traveller. We will meet again — at the King's City.",
       ),
     ],
   ),
@@ -287,8 +379,10 @@ const List<QuestTown> kQuestTowns = [
     cefr: 'A2-B1',
     name: '試練（しれん）の橋（はし）',
     tagline: '2級への橋をわたる町',
-    intro: '準2級の先、2級へとつづく長い橋。ここでは「理由」や「もしも」を英語で語る力がためされる。'
-        '英検が2025年に新設した、準2級と2級のあいだの橋わたりの級です。',
+    intro: '準2級（じゅんにきゅう）の先（さき）、2級（にきゅう）へつづく長（なが）い橋（はし）。'
+        '2025年（ねん）に新（あら）たにかけられた橋（はし）だ。ここでは「理由（りゆう）」と「まとめ（要約・ようやく）」を語（かた）る力（ちから）がためされる。',
+    cleared: '橋（はし）の向（む）こうに、城（しろ）の灯（あか）りが見（み）えた。五（いつ）つ目（め）の〈声（こえ）の石（いし）〉を手（て）に。'
+        'ハーモニーが言（い）う――「のこる石（いし）はあと一（ひと）つ。王都（おうと）に、魔王（まおう）がいる」。',
     encounters: [
       QuestEncounter(
         npcName: "はしの番人",
@@ -343,7 +437,10 @@ const List<QuestTown> kQuestTowns = [
     cefr: 'B1-B2',
     name: '学者（がくしゃ）の城下町（じょうかまち）',
     tagline: '学問とビジネスの町',
-    intro: '学問やビジネスの言葉が交わされる、城下の町。',
+    intro: '学者（がくしゃ）の城下町（じょうかまち）。学問（がくもん）とビジネスの言葉（ことば）が交（か）わされる町（まち）。'
+        'ここまで来（こ）られる勇者（ゆうしゃ）は少（すく）ない。最後（さいご）の〈声（こえ）の石（いし）〉が、城（しろ）の奥（おく）に眠（ねむ）る。',
+    cleared: '六（むっ）つ目（め）――最後（さいご）の〈声（こえ）の石（いし）〉がそろった！ むねの石（いし）と合（あ）わせ、〈ことばの紋章（もんしょう）〉が完成（かんせい）する。'
+        'それは、あなたが王家（おうけ）の血（ち）をひく真（しん）の証（あかし）。王都（おうと）の門（もん）が、ひとりでに開（ひら）いた。',
     encounters: [
       QuestEncounter(
         npcName: "せんせい",
@@ -398,52 +495,95 @@ const List<QuestTown> kQuestTowns = [
     cefr: 'B2-C1',
     name: '王都（おうと）',
     tagline: '王の待つ都',
-    intro: 'すべての旅の果て、王の待つ大いなる都。',
+    intro: 'すべての旅（たび）の果（は）て、灰色（はいいろ）に沈（しず）んだ王都（おうと）。'
+        '玉座（ぎょくざ）に、口（くち）のない魔王（まおう）サイレントが座（すわ）っている。最後（さいご）の戦（たたか）いは――剣（けん）ではなく、言葉（ことば）。',
+    cleared: 'あなたの言葉（ことば）が、サイレントの胸（むね）に届（とど）いた。彼（かれ）に「声（こえ）」が返（かえ）り、灰色（はいいろ）の世界（せかい）に色（いろ）がもどっていく。'
+        'ことばは、しずけさより強（つよ）い。勇者（ゆうしゃ）よ――あなたの旅（たび）が、世界（せかい）を救（すく）った。',
     encounters: [
       QuestEncounter(
         npcName: "がくしゃ",
         npcEmoji: "🧙‍♂️",
-        npcLine: "Do you think technology has made people more connected, or more isolated?",
-        npcLineJa: "技術は人々をつなげたと思いますか、それとも孤立させたと思いますか？",
-        choices: ["It's a double-edged sword — it connects us globally but can isolate us locally.", "Yes, I think technology is very expensive.", "No, I don't have a smartphone.", "Connected means you use the internet every day."],
+        npcLine:
+            "The world has fallen grey and silent. Some scholars argue silence brings order. Where do you stand on that claim?",
+        npcLineJa:
+            "世界（せかい）は灰色（はいいろ）に沈（しず）み、しずまり返（かえ）った。しずけさが秩序（ちつじょ）をもたらすと説（と）く学者（がくしゃ）もいる。あなたはその主張（しゅちょう）をどう見（み）る？",
+        choices: [
+          "Order without expression isn't peace — it's a cage that merely looks calm.",
+          "Yes, technology is very expensive these days.",
+          "Silence simply means the absence of any sound.",
+          "I haven't studied that subject, so I cannot read it.",
+        ],
         correctIndex: 0,
-        onCorrect: "Beautifully put! That nuance is exactly what makes this debate so fascinating.",
+        onCorrect:
+            "A cage that looks calm... I shall remember that phrase. Go on — the throne room awaits a mind like yours.",
       ),
       QuestEncounter(
         npcName: "きぞく",
         npcEmoji: "👸",
-        npcLine: "The kingdom's new policy is controversial. What's your take on it?",
-        npcLineJa: "王国の新しい政策は議論を呼んでいます。あなたはどう思いますか？",
-        choices: ["I haven't formed a firm opinion yet — I'd like to hear both sides first.", "I think policies are made by the king.", "Controversial is a very difficult word to spell.", "Yes, the weather has been quite unpredictable lately."],
-        correctIndex: 0,
-        onCorrect: "A measured response — wise counsel is always welcome in this court!",
+        npcLine:
+            "Many fled the city in fear. If you reach the throne, will you destroy Silentus, or reason with him?",
+        npcLineJa:
+            "多（おお）くの者（もの）が恐（おそ）れて都（みやこ）を去（さ）った。玉座（ぎょくざ）にたどり着（つ）いたら、サイレントを滅（ほろ）ぼす？ それとも、語（かた）りかける？",
+        choices: [
+          "I will destroy him because villains must always be destroyed.",
+          "To reason is a verb that means to think carefully.",
+          "I'd rather understand why he silenced the world before deciding how to stop him.",
+          "Yes, the weather has been quite unpredictable lately.",
+        ],
+        correctIndex: 2,
+        onCorrect:
+            "Spoken like the heir this kingdom has prayed for. Show that crest at the gate — they will let you pass.",
       ),
       QuestEncounter(
-        npcName: "しょうにん",
-        npcEmoji: "🧳",
-        npcLine: "Trade between nations fosters peace, but it also creates dependency. Wouldn't you agree?",
-        npcLineJa: "国家間の貿易は平和を促進しますが、依存関係も生み出します。そう思いませんか？",
-        choices: ["Merchants travel very long distances to sell goods.", "I agree — interdependence can be both a bridge and a vulnerability.", "Trade means buying and selling things in a market.", "I don't think nations should talk to each other."],
+        npcName: "ハーモニー",
+        npcEmoji: "🎶",
+        npcLine:
+            "This is the final town. Once you walk through that door, there's no turning back. Are you ready to face him with nothing but your words?",
+        npcLineJa:
+            "ここが最後（さいご）の町（まち）。あの扉（とびら）をくぐれば、もう後（あと）戻（もど）りはできない。言葉（ことば）だけを武器（ぶき）に、彼（かれ）と向（む）き合（あ）う覚悟（かくご）はある？",
+        choices: [
+          "Ready is an adjective describing preparation.",
+          "I am. Words carried me this far — they won't fail me at the end.",
+          "No, I think I should bring a sword just in case.",
+          "Yes, because the door is made of heavy old wood.",
+        ],
         correctIndex: 1,
-        onCorrect: "Precisely! You grasp the paradox perfectly — that thinking will serve you well as a leader.",
+        onCorrect:
+            "Then I'll sing your story whatever happens. Go, hero of words. I'll be right behind you.",
       ),
       QuestEncounter(
-        npcName: "へいし",
-        npcEmoji: "⚔️",
-        npcLine: "Courage isn't the absence of fear — it's acting despite it. Have you ever felt that way?",
-        npcLineJa: "勇気とは恐れがないことではなく、恐れながらも行動することです。そう感じたことはありますか？",
-        choices: ["Fear is a very strong emotion that many people experience.", "I think soldiers should always be brave and never feel afraid.", "Absolutely — every time I've faced something daunting, pushing through changed me.", "Absence means something is not there or missing."],
+        npcName: "クワイエト",
+        npcEmoji: "🌫️",
+        npcLine:
+            "So you came. I've guarded this door for my lord... yet your words in the harbour have haunted me ever since. Tell me honestly — can words really heal what silence has broken?",
+        npcLineJa:
+            "やはり来（き）たか。私（わたし）はこの扉（とびら）を主（あるじ）のために守（まも）ってきた…だが、あの港町（みなとまち）での君（きみ）の言葉（ことば）が、ずっと胸（むね）を離（はな）れない。正直（しょうじき）に答（こた）えてくれ――言葉（ことば）は、しずけさが壊（こわ）したものを、本当（ほんとう）に癒（いや）せるのか？",
+        choices: [
+          "Heal is what a doctor does to a sick patient.",
+          "No, some things stay broken no matter what you say.",
+          "They can — because words let us forgive, and even an enemy can be heard and changed.",
+          "Of course, because I am stronger than you are.",
+        ],
         correctIndex: 2,
-        onCorrect: "That's the spirit of a true hero — growth through adversity. The kingdom needs people like you.",
+        onCorrect:
+            "...Then I was wrong to serve silence. Step aside — no, let me open this door for you myself. Save him, hero. Save us both.",
       ),
       QuestEncounter(
-        npcName: "しじん",
-        npcEmoji: "📜",
-        npcLine: "Literature preserves a culture's soul long after its buildings crumble. Do you believe that?",
-        npcLineJa: "文学は建物が崩れた後も、文化の魂を長く保ちます。そう信じますか？",
-        choices: ["Buildings are usually made of stone and can last for hundreds of years.", "I prefer reading adventure stories rather than poetry.", "Wholeheartedly — words outlive empires, carrying wisdom across generations.", "Literature is a subject studied in schools around the world."],
-        correctIndex: 2,
-        onCorrect: "Spoken like a true patron of the arts! Your words could inspire a great poem themselves.",
+        npcName: "サイレント",
+        npcEmoji: "🖤",
+        npcLine:
+            "(The mouthless king rises. A voice forms in your mind, not the air.) Words bring lies, wars, and grief. I devoured them so the world could finally rest. Tell me — why should the silence I built be undone?",
+        npcLineJa:
+            "（口（くち）のない王（おう）が立（た）ち上（あ）がる。声（こえ）は空気（くうき）ではなく、心（こころ）に直接（ちょくせつ）ひびく。）ことばは嘘（うそ）と戦（たたか）いと悲（かな）しみを生（う）む。だから私（わたし）はそれを食（た）べ、世界（せかい）を休（やす）ませた。問（と）おう――私（わたし）の築（きず）いたしずけさを、なぜ壊（こわ）すのか？",
+        choices: [
+          "Because I need the last Stone of Voice to win the game.",
+          "Silence is defined as the complete absence of sound.",
+          "You are simply an evil monster and you must be defeated.",
+          "Because the same words that wound can also comfort, forgive, and say 'I'm sorry' — silence only buries the pain, it never heals it.",
+        ],
+        correctIndex: 3,
+        onCorrect:
+            "(A crack of light splits the grey. A mouth — long forgotten — forms upon his face.) ...You... gave me back... my words. I only ever wanted the hurting to stop. Thank you, child. (Color floods back into the world. The ことばの紋章 blazes, and silence ends — not in defeat, but in being finally, truly heard.)",
       ),
     ],
   ),
