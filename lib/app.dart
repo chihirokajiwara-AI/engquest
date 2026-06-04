@@ -15,6 +15,7 @@ import 'package:engquest/features/achievements/achievements_screen.dart';
 import 'package:engquest/features/parent_dashboard/parent_dashboard_screen.dart';
 import 'package:engquest/features/home/daily_home_screen.dart';
 import 'package:engquest/core/storage/preferences_service.dart';
+import 'package:engquest/features/quest/ui/dq_ui.dart';
 
 // ---------------------------------------------------------------------------
 // Onboarding state management
@@ -114,47 +115,26 @@ class EngQuestApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final flavor = _flavor;
-    final primaryColor = Color(flavor.primaryColor);
 
     return MaterialApp(
       title: flavor.appName,
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.light(
-          primary: primaryColor,
-          secondary: const Color(0xFFFFB74D), // warm orange/gold
-          surface: const Color(0xFFFFFFFF), // white
-          error: const Color(0xFFEF5350), // error red
-          onPrimary: Colors.white,
-          onSecondary: Colors.black87,
-          onSurface: const Color(0xFF263238), // dark blue-gray
-          onError: Colors.white,
-        ),
-        scaffoldBackgroundColor: const Color(0xFFF5F7FA),
-        useMaterial3: true,
-        // Noto Sans JP — supports all Japanese kana/kanji used in child UI.
-        // Falls back to system font offline; google_fonts caches after first load.
-        textTheme: GoogleFonts.notoSansJpTextTheme(),
-        appBarTheme: AppBarTheme(
-          backgroundColor: primaryColor,
-          foregroundColor: Colors.white,
-          elevation: 0,
-        ),
-        cardTheme: CardThemeData(
-          color: Colors.white,
-          elevation: 2,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+      theme: _dqTheme(),
+      // Global responsive wrapper: the game is authored portrait. On tablet /
+      // desktop we centre it inside a max-480 column over the deep-night field
+      // rather than stretching the UI across a wide viewport. The flanks show
+      // the dqNight0 backdrop so the framed game reads as one focused window.
+      builder: (context, child) {
+        return ColoredBox(
+          color: dqNight0,
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 480),
+              child: child ?? const SizedBox.shrink(),
             ),
           ),
-        ),
-      ),
+        );
+      },
       // Entry point: check onboarding flag and route accordingly.
       // ?preview=<name> renders a single screen for design audit/screenshots.
       home: _previewFor(Uri.base.queryParameters['preview']),
@@ -171,6 +151,82 @@ class EngQuestApp extends StatelessWidget {
       },
     );
   }
+}
+
+// ---------------------------------------------------------------------------
+// 本格 (Dragon-Quest-grade) dark theme
+// ---------------------------------------------------------------------------
+
+/// Builds the app-wide dark RPG theme. Deep-night scaffold, gold/cream
+/// ColorScheme, serif (Noto Serif JP) typography rendered in cream ink, dark
+/// app bars and cards. Replaces the former bright pastel ThemeData. Individual
+/// quest scenes still compose [DqScene]/[DqDialogBox]/etc. for full atmosphere;
+/// this theme governs default Material chrome (dialogs, app bars, snackbars).
+ThemeData _dqTheme() {
+  const scheme = ColorScheme.dark(
+    primary: dqGold,
+    onPrimary: Color(0xFF2A1C00), // dark ink on gold buttons
+    secondary: dqGold,
+    onSecondary: Color(0xFF2A1C00),
+    surface: dqBox, // navy command-window fill
+    onSurface: dqInk, // cream ink
+    surfaceContainerHighest: dqNight1,
+    error: Color(0xFFE89090),
+    onError: Color(0xFF2A1C00),
+    outline: dqGoldDeep,
+  );
+
+  // Noto Serif JP applied over the dark base text theme, recoloured to cream
+  // ink so default Material text (dialogs, tooltips) reads on the night field.
+  final base = ThemeData.dark(useMaterial3: true);
+  final textTheme = GoogleFonts.notoSerifJpTextTheme(base.textTheme).apply(
+    bodyColor: dqInk,
+    displayColor: dqInk,
+  );
+
+  return ThemeData(
+    useMaterial3: true,
+    brightness: Brightness.dark,
+    colorScheme: scheme,
+    scaffoldBackgroundColor: dqNight0,
+    canvasColor: dqNight0,
+    textTheme: textTheme,
+    appBarTheme: const AppBarTheme(
+      backgroundColor: dqNight1,
+      foregroundColor: dqInk,
+      elevation: 0,
+      centerTitle: true,
+    ),
+    cardTheme: CardThemeData(
+      color: dqBox,
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+        side: const BorderSide(color: dqBorder, width: 1.5),
+      ),
+    ),
+    dialogTheme: DialogThemeData(
+      backgroundColor: dqBox,
+      surfaceTintColor: Colors.transparent,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: const BorderSide(color: dqBorder, width: 2),
+      ),
+    ),
+    iconTheme: const IconThemeData(color: dqGold),
+    progressIndicatorTheme: const ProgressIndicatorThemeData(color: dqGold),
+    dividerTheme: const DividerThemeData(color: dqGoldDeep, thickness: 1),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: dqGold,
+        foregroundColor: const Color(0xFF2A1C00),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: const BorderSide(color: dqBorder, width: 1.5),
+        ),
+      ),
+    ),
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -274,26 +330,27 @@ class _AppEntryPointState extends State<_AppEntryPoint> {
   Widget build(BuildContext context) {
     if (_loading) {
       // Minimal splash while SharedPreferences warms up (<100 ms typically).
-      // Uses flavor branding so each variant shows its own identity.
+      // Deep-night field with gold spinner so the first frame is already 本格.
       final flavor = EngQuestApp._flavor;
-      final primaryColor = Color(flavor.primaryColor);
       return Scaffold(
-        backgroundColor: const Color(0xFFF5F7FA),
-        body: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CircularProgressIndicator(color: primaryColor),
-              const SizedBox(height: 16),
-              Text(
-                flavor.splashText,
-                style: TextStyle(
-                  color: primaryColor,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
+        backgroundColor: dqNight0,
+        body: DecoratedBox(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [dqNight0, dqNight1, dqNight0],
+            ),
+          ),
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const CircularProgressIndicator(color: dqGold),
+                const SizedBox(height: 16),
+                Text(flavor.splashText, style: dqText(size: 14, color: dqInk)),
+              ],
+            ),
           ),
         ),
       );

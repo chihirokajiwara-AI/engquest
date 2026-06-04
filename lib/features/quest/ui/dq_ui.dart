@@ -230,3 +230,146 @@ class DqPortrait extends StatelessWidget {
     );
   }
 }
+
+/// Bilingual label helper. Renders `JP / EN` (CEO directive: English appears on
+/// every short label since the app teaches English). Pass [stacked] to lay the
+/// English under the Japanese (for tiles / large headings) instead of inline.
+/// [jpSize] sizes the Japanese line; the English line is rendered ~0.7× in gold.
+Widget dqBilingual(
+  String jp,
+  String en, {
+  double jpSize = 16,
+  Color jpColor = Colors.white,
+  Color enColor = dqGold,
+  bool stacked = false,
+  TextAlign align = TextAlign.start,
+}) {
+  final enSize = (jpSize * 0.7).clamp(10.0, 28.0).toDouble();
+  if (stacked) {
+    return Column(
+      crossAxisAlignment:
+          align == TextAlign.center ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(jp, textAlign: align, style: dqText(size: jpSize, w: FontWeight.w700, color: jpColor)),
+        const SizedBox(height: 2),
+        Text(en, textAlign: align, style: dqText(size: enSize, w: FontWeight.w600, color: enColor, spacing: 1)),
+      ],
+    );
+  }
+  return RichText(
+    textAlign: align,
+    text: TextSpan(children: [
+      TextSpan(text: jp, style: dqText(size: jpSize, w: FontWeight.w700, color: jpColor)),
+      TextSpan(text: '  /  ', style: dqText(size: enSize, w: FontWeight.w600, color: dqGoldDeep)),
+      TextSpan(text: en, style: dqText(size: enSize, w: FontWeight.w600, color: enColor, spacing: 1)),
+    ]),
+  );
+}
+
+/// A bordered navy panel for grouping content (stats, info, sections), with an
+/// optional gold section [title]. Quieter than [DqDialogBox] — no nameplate —
+/// for HUD blocks like 「もくひょう / Today's Goal」 or a stats grid.
+class DqPanel extends StatelessWidget {
+  final Widget child;
+  final String? title;
+  final EdgeInsetsGeometry padding;
+  const DqPanel({
+    super.key,
+    required this.child,
+    this.title,
+    this.padding = const EdgeInsets.fromLTRB(16, 14, 16, 16),
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: padding,
+      decoration: BoxDecoration(
+        color: dqBox.withAlpha(225),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: dqBorder, width: 2),
+        boxShadow: const [BoxShadow(color: Colors.black54, blurRadius: 10, offset: Offset(0, 3))],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (title != null) ...[
+            Text(title!.toUpperCase(),
+                style: dqText(size: 12, w: FontWeight.w800, color: dqGold, spacing: 2)),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 8),
+              child: Divider(color: dqGoldDeep, height: 1, thickness: 1),
+            ),
+          ],
+          child,
+        ],
+      ),
+    );
+  }
+}
+
+/// A command-style menu tile with a bilingual label (JP / EN) and an icon, for
+/// home-screen quick-start actions (単語バトル / Word Battle, etc.). Renders as a
+/// gold-bordered navy row with a leading icon medallion and a ▶ cursor; the
+/// optional [color] tints only the icon medallion (the frame stays dq palette,
+/// never candy-bright).
+class DqTile extends StatelessWidget {
+  final String jp;
+  final String en;
+  final IconData icon;
+  final Color? color;
+  final VoidCallback? onTap;
+  const DqTile({
+    super.key,
+    required this.jp,
+    required this.en,
+    required this.icon,
+    this.color,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final accent = color ?? dqGold;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [dqBox.withAlpha(235), dqNight1.withAlpha(235)],
+            ),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: dqBorder, width: 2),
+            boxShadow: const [BoxShadow(color: Colors.black54, blurRadius: 8, offset: Offset(0, 3))],
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 44,
+                height: 44,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: dqNight0,
+                  border: Border.all(color: accent, width: 2),
+                  boxShadow: [BoxShadow(color: accent.withAlpha(70), blurRadius: 8)],
+                ),
+                child: Icon(icon, color: accent, size: 24),
+              ),
+              const SizedBox(width: 14),
+              Expanded(child: dqBilingual(jp, en, jpSize: 16, stacked: true)),
+              const Icon(Icons.play_arrow, color: dqGold, size: 20),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

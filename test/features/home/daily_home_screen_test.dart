@@ -83,7 +83,7 @@ void main() {
   testWidgets('DailyHomeScreen shows greeting after loading', (tester) async {
     await tester.pumpWidget(_wrap());
     await _settle(tester);
-    expect(find.text('おかえり！'), findsOneWidget);
+    expect(find.textContaining('おかえり'), findsWidgets);
   });
 
   testWidgets('DailyHomeScreen shows quick action labels', (tester) async {
@@ -97,7 +97,7 @@ void main() {
   testWidgets('DailyHomeScreen shows world map link', (tester) async {
     await tester.pumpWidget(_wrap());
     await _settle(tester);
-    expect(find.text('ワールドマップを見る'), findsOneWidget);
+    expect(find.textContaining('ワールドマップ'), findsWidgets);
   });
 
   testWidgets('DailyHomeScreen shows streak section', (tester) async {
@@ -109,7 +109,7 @@ void main() {
   testWidgets('DailyHomeScreen shows today goal section', (tester) async {
     await tester.pumpWidget(_wrap());
     await _settle(tester);
-    expect(find.text('今日の目標'), findsOneWidget);
+    expect(find.textContaining('もくひょう'), findsWidgets);
   });
 
   testWidgets('DailyHomeScreen shows level badge', (tester) async {

@@ -1,16 +1,19 @@
 // lib/features/home/daily_home_screen.dart
-// ENG Quest — Daily Home Screen (Retention Hub)
+// A-KEN Quest — Daily Home Screen (Retention Hub), 本格 Dragon-Quest look.
 //
 // Shown to returning users (onboarding complete) on every app launch.
 // Displays:
-//   1. Greeting with avatar + level badge
-//   2. Streak card: fire emoji + X日連続 + weekly dot indicators
-//   3. Today's progress card: goal, session count, FSRS due count
-//   4. Quick action 2×2 grid: battle / exam / dialog / voice
-//   5. "ワールドマップ" bottom link to WorldMapScreen
+//   1. Greeting with framed avatar portrait + level badge
+//   2. Streak panel: fire + れんぞく/Streak count + weekly ✓ indicators
+//   3. Today's-goal panel: goal progress bar + total XP
+//   4. Quick-start command tiles: 単語バトル / 模擬試験 / 会話練習 / 発音チェック
+//   5. ワールドマップ / World Map gold action button
 //
 // Streak data is loaded via StreakService (SharedPreferences-backed).
 // XP/level data is loaded via XpService (Firestore-backed, offline-tolerant).
+//
+// Styled entirely with the shared dq_ui scene framework (DqScene / DqPanel /
+// DqTile / DqButton / dqText / dqBilingual). No bright pastel fills.
 
 import 'package:flutter/material.dart';
 import 'package:engquest/app.dart' show OnboardingStorage;
@@ -19,6 +22,7 @@ import 'package:engquest/core/gamification/xp_service.dart';
 import 'package:engquest/core/firebase/auth_service.dart';
 import 'package:engquest/core/ui/page_transitions.dart';
 import 'package:engquest/features/home/streak_service.dart';
+import 'package:engquest/features/quest/ui/dq_ui.dart';
 import 'package:engquest/features/battle/grade_selector_screen.dart';
 import 'package:engquest/features/dialog/dialog_screen.dart';
 import 'package:engquest/features/voice/voice_screen.dart';
@@ -36,22 +40,24 @@ const Map<String, String> _kAvatarEmoji = {
 String _avatarEmoji(String? avatarId) =>
     _kAvatarEmoji[avatarId] ?? '🧙';
 
-// ── Week day labels ───────────────────────────────────────────────────────────
+// ── Week day labels (bilingual ✓ indicators) ──────────────────────────────────
 
 const List<String> _kDayLabels = ['月', '火', '水', '木', '金', '土', '日'];
 
 // ── Quick action definition ───────────────────────────────────────────────────
 
 class _QuickAction {
-  final String label;
+  final String jp;
+  final String en;
   final IconData icon;
-  final List<Color> gradient;
+  final Color accent;
   final VoidCallback onTap;
 
   const _QuickAction({
-    required this.label,
+    required this.jp,
+    required this.en,
     required this.icon,
-    required this.gradient,
+    required this.accent,
     required this.onTap,
   });
 }
@@ -146,9 +152,10 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
 
   List<_QuickAction> _buildActions() => [
         _QuickAction(
-          label: '単語バトル',
+          jp: '単語バトル',
+          en: 'Word Battle',
           icon: Icons.shield_outlined,
-          gradient: const [Color(0xFFFF7043), Color(0xFFE64A19)],
+          accent: const Color(0xFFE08A5A),
           onTap: () => Navigator.of(context).push(
             FadeSlideRoute(
               builder: (_) => GradeSelectorScreen(childAge: widget.childAge),
@@ -156,9 +163,10 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
           ),
         ),
         _QuickAction(
-          label: '模擬試験',
+          jp: '模擬試験',
+          en: 'Mock Exam',
           icon: Icons.assignment_outlined,
-          gradient: const [Color(0xFF5C6BC0), Color(0xFF3949AB)],
+          accent: const Color(0xFF8A9AE0),
           onTap: () => Navigator.of(context).push(
             // Default to 英検5級 — the GradeSelectorScreen can refine grade.
             // We route via GradeSelectorScreen to let users pick their grade
@@ -169,17 +177,19 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
           ),
         ),
         _QuickAction(
-          label: '会話練習',
+          jp: '会話練習',
+          en: 'Talk',
           icon: Icons.chat_bubble_outline,
-          gradient: const [Color(0xFF29B6F6), Color(0xFF0288D1)],
+          accent: const Color(0xFF6FC3E0),
           onTap: () => Navigator.of(context).push(
             FadeSlideRoute(builder: (_) => const DialogScenariosScreen()),
           ),
         ),
         _QuickAction(
-          label: '発音チェック',
+          jp: '発音チェック',
+          en: 'Pronounce',
           icon: Icons.mic_none_rounded,
-          gradient: const [Color(0xFF66BB6A), Color(0xFF388E3C)],
+          accent: const Color(0xFF7FCB8A),
           onTap: () => Navigator.of(context).push(
             FadeSlideRoute(builder: (_) => const VoiceScreen()),
           ),
@@ -191,32 +201,32 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
   @override
   Widget build(BuildContext context) {
     if (_loading) {
-      return const Scaffold(
-        backgroundColor: Color(0xFFF5F7FA),
-        body: Center(child: CircularProgressIndicator()),
+      return const DqScene(
+        child: Center(
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(dqGold),
+          ),
+        ),
       );
     }
 
-    return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              _buildGreeting(context),
-              const SizedBox(height: 16),
-              _buildStreakCard(context),
-              const SizedBox(height: 16),
-              _buildTodayCard(context),
-              const SizedBox(height: 16),
-              _buildQuickActionsGrid(context),
-              const SizedBox(height: 24),
-              _buildWorldMapLink(context),
-              const SizedBox(height: 16),
-            ],
-          ),
+    return DqScene(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _buildGreeting(context),
+            const SizedBox(height: 16),
+            _buildStreakPanel(context),
+            const SizedBox(height: 14),
+            _buildTodayPanel(context),
+            const SizedBox(height: 18),
+            _buildQuickActions(context),
+            const SizedBox(height: 8),
+            _buildWorldMapButton(context),
+            const SizedBox(height: 16),
+          ],
         ),
       ),
     );
@@ -225,69 +235,40 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
   // ── Section: Greeting ─────────────────────────────────────────────────────
 
   Widget _buildGreeting(BuildContext context) {
-    final primary = Theme.of(context).colorScheme.primary;
     final level = _xpProfile?.level ?? 1;
 
     return Row(
       children: [
-        // Avatar circle
-        Container(
-          width: 56,
-          height: 56,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: LinearGradient(
-              colors: [primary, primary.withAlpha(180)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: primary.withAlpha(80),
-                blurRadius: 8,
-                offset: const Offset(0, 3),
-              ),
-            ],
-          ),
-          child: Center(
-            child: Text(
-              _avatarEmoji(_avatarId),
-              style: const TextStyle(fontSize: 28),
-            ),
-          ),
-        ),
+        DqPortrait(emoji: _avatarEmoji(_avatarId), size: 58),
         const SizedBox(width: 14),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'おかえり！',
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: const Color(0xFF263238),
-                    ),
+                'おかえり / Welcome back',
+                style: dqText(size: 20, w: FontWeight.w800, color: dqInk),
               ),
-              const SizedBox(height: 2),
-              Row(
-                children: [
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-                    decoration: BoxDecoration(
-                      color: primary,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      'Lv.$level',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+              const SizedBox(height: 6),
+              // Level nameplate — gold gradient crest.
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                decoration: BoxDecoration(
+                  gradient:
+                      const LinearGradient(colors: [dqGold, dqGoldDeep]),
+                  borderRadius: BorderRadius.circular(6),
+                  border: Border.all(color: dqBorder, width: 1.5),
+                ),
+                child: Text(
+                  'Lv.$level',
+                  style: dqText(
+                    size: 13,
+                    w: FontWeight.w800,
+                    color: const Color(0xFF2A1C00),
+                    spacing: 1,
                   ),
-                ],
+                ),
               ),
             ],
           ),
@@ -296,274 +277,216 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
     );
   }
 
-  // ── Section: Streak Card ──────────────────────────────────────────────────
+  // ── Section: Streak Panel ─────────────────────────────────────────────────
 
-  Widget _buildStreakCard(BuildContext context) {
-    final primary = Theme.of(context).colorScheme.primary;
+  Widget _buildStreakPanel(BuildContext context) {
     final streak = _streak.currentStreak;
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const Text('🔥', style: TextStyle(fontSize: 28)),
-                const SizedBox(width: 10),
-                Text(
-                  '$streak日連続',
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: const Color(0xFFFF7043),
-                      ),
+    return DqPanel(
+      title: 'れんぞく / Streak',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Text('🔥', style: TextStyle(fontSize: 30)),
+              const SizedBox(width: 10),
+              Text(
+                '$streak',
+                style: dqText(size: 32, w: FontWeight.w800, color: dqGold),
+              ),
+              const SizedBox(width: 6),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: Text(
+                  '日連続 / days',
+                  style: dqText(size: 14, w: FontWeight.w600, color: dqInk),
                 ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            // Weekly dot indicators
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: List.generate(7, (i) {
-                final studied = _streak.studiedOn(i);
-                return Column(
-                  children: [
-                    AnimatedContainer(
-                      duration: const Duration(milliseconds: 300),
-                      width: 32,
-                      height: 32,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: studied ? primary : const Color(0xFFE0E0E0),
-                        boxShadow: studied
-                            ? [
-                                BoxShadow(
-                                  color: primary.withAlpha(100),
-                                  blurRadius: 6,
-                                  offset: const Offset(0, 2),
-                                )
-                              ]
-                            : null,
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          // Weekly ✓ indicators
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: List.generate(7, (i) {
+              final studied = _streak.studiedOn(i);
+              return Column(
+                children: [
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    width: 32,
+                    height: 32,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: studied ? dqBox : dqNight0,
+                      border: Border.all(
+                        color: studied ? dqGold : dqGoldDeep.withAlpha(120),
+                        width: studied ? 2 : 1.5,
                       ),
-                      child: Center(
-                        child: studied
-                            ? const Text('✓',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ))
-                            : null,
-                      ),
+                      boxShadow: studied
+                          ? [
+                              BoxShadow(
+                                color: dqGold.withAlpha(80),
+                                blurRadius: 6,
+                              )
+                            ]
+                          : null,
                     ),
-                    const SizedBox(height: 6),
-                    Text(
-                      _kDayLabels[i],
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: studied
-                            ? primary
-                            : const Color(0xFF9E9E9E),
-                        fontWeight: studied
-                            ? FontWeight.bold
-                            : FontWeight.normal,
-                      ),
+                    child: Center(
+                      child: studied
+                          ? const Icon(Icons.check,
+                              color: dqGold, size: 16)
+                          : null,
                     ),
-                  ],
-                );
-              }),
-            ),
-          ],
-        ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    _kDayLabels[i],
+                    style: dqText(
+                      size: 11,
+                      w: studied ? FontWeight.w700 : FontWeight.w500,
+                      color: studied ? dqGold : dqInk.withAlpha(150),
+                    ),
+                  ),
+                ],
+              );
+            }),
+          ),
+        ],
       ),
     );
   }
 
   // ── Section: Today's Progress ─────────────────────────────────────────────
 
-  Widget _buildTodayCard(BuildContext context) {
-    final primary = Theme.of(context).colorScheme.primary;
+  Widget _buildTodayPanel(BuildContext context) {
     // Use streak.todayCount as a proxy for sessions completed today.
     // Target: 5 sessions per day (configurable goal).
     const dailyGoal = 5;
     final done = _streak.todayCount.clamp(0, dailyGoal);
     final progress = dailyGoal > 0 ? done / dailyGoal : 0.0;
+    final achieved = done >= dailyGoal;
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.today_outlined, color: primary, size: 22),
-                const SizedBox(width: 8),
-                Text(
-                  '今日の目標',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: const Color(0xFF263238),
-                      ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  '$done / $dailyGoal 回',
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: primary,
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                Text(
-                  done >= dailyGoal ? '達成！🎉' : 'あと${dailyGoal - done}回',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: const Color(0xFF757575),
-                      ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: LinearProgressIndicator(
-                value: progress.toDouble(),
-                minHeight: 10,
-                backgroundColor: const Color(0xFFE0E0E0),
-                valueColor: AlwaysStoppedAnimation<Color>(
-                  done >= dailyGoal ? const Color(0xFF66BB6A) : primary,
-                ),
+    return DqPanel(
+      title: 'もくひょう / Today\'s Goal',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                '$done / $dailyGoal 回',
+                style: dqText(size: 22, w: FontWeight.w800, color: dqGold),
               ),
-            ),
-            const SizedBox(height: 16),
-            // XP progress row
-            if (_xpProfile != null) ...[
-              const Divider(height: 1),
-              const SizedBox(height: 14),
-              Row(
-                children: [
-                  const Text('⭐', style: TextStyle(fontSize: 16)),
-                  const SizedBox(width: 8),
-                  Text(
-                    '総経験値: ${_xpProfile!.totalXp} XP',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: const Color(0xFF263238),
-                        ),
-                  ),
-                ],
+              Text(
+                achieved ? '達成！/ Done 🎉' : 'あと${dailyGoal - done}回 / to go',
+                style: dqText(
+                  size: 13,
+                  w: FontWeight.w600,
+                  color: achieved
+                      ? const Color(0xFF8BE08B)
+                      : dqInk.withAlpha(200),
+                ),
               ),
             ],
+          ),
+          const SizedBox(height: 10),
+          // Progress bar — cream-framed track, gold/green fill.
+          Container(
+            height: 12,
+            decoration: BoxDecoration(
+              color: dqNight0,
+              borderRadius: BorderRadius.circular(6),
+              border: Border.all(color: dqGoldDeep.withAlpha(140), width: 1),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(5),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: FractionallySizedBox(
+                  widthFactor: progress.toDouble().clamp(0.0, 1.0),
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: achieved
+                            ? const [Color(0xFF8BE08B), Color(0xFF4F9E55)]
+                            : const [dqGold, dqGoldDeep],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          // Total XP row.
+          if (_xpProfile != null) ...[
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 12),
+              child: Divider(color: dqGoldDeep, height: 1, thickness: 1),
+            ),
+            Row(
+              children: [
+                const Text('⭐', style: TextStyle(fontSize: 16)),
+                const SizedBox(width: 8),
+                Text(
+                  'けいけんち / Total XP',
+                  style: dqText(size: 13, w: FontWeight.w600, color: dqInk),
+                ),
+                const Spacer(),
+                Text(
+                  '${_xpProfile!.totalXp}',
+                  style: dqText(size: 15, w: FontWeight.w800, color: dqGold),
+                ),
+                const SizedBox(width: 4),
+                Text(
+                  'XP',
+                  style: dqText(size: 12, w: FontWeight.w600, color: dqGoldDeep),
+                ),
+              ],
+            ),
           ],
-        ),
+        ],
       ),
     );
   }
 
-  // ── Section: Quick Actions Grid ───────────────────────────────────────────
+  // ── Section: Quick-Start Command Tiles ────────────────────────────────────
 
-  Widget _buildQuickActionsGrid(BuildContext context) {
+  Widget _buildQuickActions(BuildContext context) {
     final actions = _buildActions();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'クイックスタート',
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: const Color(0xFF263238),
-              ),
+        Padding(
+          padding: const EdgeInsets.only(left: 2, bottom: 10),
+          child: Text(
+            'クエスト / Quests',
+            style: dqText(size: 13, w: FontWeight.w800, color: dqGold, spacing: 2),
+          ),
         ),
-        const SizedBox(height: 12),
-        GridView.count(
-          crossAxisCount: 2,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          mainAxisSpacing: 12,
-          crossAxisSpacing: 12,
-          childAspectRatio: 1.3,
-          children: actions.map((a) => _QuickActionCard(action: a)).toList(),
+        ...actions.map(
+          (a) => DqTile(
+            jp: a.jp,
+            en: a.en,
+            icon: a.icon,
+            color: a.accent,
+            onTap: a.onTap,
+          ),
         ),
       ],
     );
   }
 
-  // ── Section: World Map Link ───────────────────────────────────────────────
+  // ── Section: World Map Button ─────────────────────────────────────────────
 
-  Widget _buildWorldMapLink(BuildContext context) {
-    final primary = Theme.of(context).colorScheme.primary;
-    return OutlinedButton.icon(
-      onPressed: _goToWorldMap,
-      icon: Icon(Icons.map_outlined, color: primary),
-      label: Text(
-        'ワールドマップを見る',
-        style: TextStyle(
-          color: primary,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      style: OutlinedButton.styleFrom(
-        padding: const EdgeInsets.symmetric(vertical: 14),
-        side: BorderSide(color: primary, width: 1.5),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
-    );
-  }
-}
-
-// ── Quick Action Card widget ──────────────────────────────────────────────────
-
-class _QuickActionCard extends StatelessWidget {
-  final _QuickAction action;
-
-  const _QuickActionCard({required this.action});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: action.onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: action.gradient,
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: action.gradient.first.withAlpha(100),
-              blurRadius: 8,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(action.icon, color: Colors.white, size: 32),
-              const SizedBox(height: 8),
-              Text(
-                action.label,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 13,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-        ),
-      ),
+  Widget _buildWorldMapButton(BuildContext context) {
+    return DqButton(
+      label: 'ワールドマップ / World Map',
+      onTap: _goToWorldMap,
     );
   }
 }

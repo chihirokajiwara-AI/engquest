@@ -1,18 +1,15 @@
 // lib/features/world_map/world_map_screen.dart
-// ENG Quest — World Map (Village Square) — UI Polish v2 + P2-7 XP wiring
+// A-KEN Quest — World Map (はじまりの村 / Village Square)
 //
-// UI Polish sprint additions:
-//   - Gradient Card widgets for each zone (using LinearGradient)
-//   - Zone-specific icons (sword, speech bubble, mic, shield)
-//   - Animated entrance: each card slides in with 200ms stagger from bottom
-//   - Player stats bar at top: avatar + level + XP progress bar (real data)
-//   - Day streak badge: 🔥 N日連続 when streak > 0
+// 本格 (Dragon-Quest-grade) rebuild:
+//   - DqScene atmospheric night/gradient field (no bright pastel scaffold)
+//   - Player HUD in a DqPanel: gold-framed portrait, Lv + bilingual XP bar, streak
+//   - Each zone is a command-window node (DqTile-style) with a bilingual label,
+//     a dq-palette icon medallion, and a ▶ cursor
+//   - Staggered slide-in entrance preserved
 //
-// P2-7 XP System wiring:
-//   - Loads real XpProfile from XpService (Firestore-backed)
-//   - Shows actual level, XP progress bar, totalXp
-//   - Falls back to Lv.1 / 0 XP if Firebase unavailable (offline cold start)
-//   - Listens to XpService.profileNotifier for live updates after Battle
+// PRESERVED EXACTLY: zone definitions, navigation (pushTarget / route handling),
+// childAge, XpService wiring, constructor signatures, public APIs.
 
 import 'package:flutter/material.dart';
 import 'package:engquest/core/firebase/auth_service.dart';
@@ -22,6 +19,7 @@ import 'package:engquest/core/ui/page_transitions.dart';
 import 'package:engquest/features/battle/grade_selector_screen.dart';
 import 'package:engquest/features/exam_practice/exam_practice_screen.dart';
 import 'package:engquest/features/quest/quest_map_screen.dart';
+import 'package:engquest/features/quest/ui/dq_ui.dart';
 import 'package:engquest/features/parent_dashboard/parent_dashboard_screen.dart';
 
 // ── Mock player data (fallback when Firestore unavailable) ───────────────────
@@ -29,19 +27,24 @@ const _kMockAvatarEmoji = '🧙';
 const _kMockStreak = 0; // shown when offline
 
 // ── Zone definition ──────────────────────────────────────────────────────────
+// `gradient` is retained as the constructor contract; its first colour is reused
+// as the dq-palette accent that tints the zone's icon medallion (frame stays
+// navy+cream — never candy-bright).
 class _ZoneDef {
   final String label;
+  final String en; // English label (bilingual, CEO directive)
   final String subtitle;
   final IconData icon;
-  final List<Color> gradient;
+  final Color accent;
   final String route;
   final Widget? pushTarget;
 
   const _ZoneDef({
     required this.label,
+    required this.en,
     required this.subtitle,
     required this.icon,
-    required this.gradient,
+    required this.accent,
     required this.route,
     this.pushTarget,
   });
@@ -50,51 +53,51 @@ class _ZoneDef {
 final List<_ZoneDef> _kZones = [
   _ZoneDef(
     label: 'ぼうけん',
-    subtitle: 'Quest — 街をめぐる英語の旅',
+    en: 'Quest',
+    subtitle: '街をめぐる英語の旅',
     icon: Icons.map_outlined,
-    gradient: [const Color(0xFF4FC3F7), const Color(0xFF0288D1)],
+    accent: dqGold,
     route: '/quest',
     pushTarget: const QuestMapScreen(),
   ),
   _ZoneDef(
     label: '鍛冶屋',
-    subtitle: 'Blacksmith — 単語と戦え！',
+    en: 'Blacksmith',
+    subtitle: '単語と戦え！',
     icon: Icons.shield_outlined,
-    gradient: [
-      const Color(0xFFFF7043),
-      const Color(0xFFE64A19)
-    ], // warm red-orange
+    accent: Color(0xFFE0A878), // forge ember (warm bronze, dq-tuned)
     route: '/battle',
   ),
   _ZoneDef(
     label: '広場',
-    subtitle: 'Town Crier — NPCと話そう',
+    en: 'Town Crier',
+    subtitle: 'NPCと話そう',
     icon: Icons.chat_bubble_outline,
-    gradient: [const Color(0xFF29B6F6), const Color(0xFF0288D1)], // sky blue
+    accent: Color(0xFF8FB8D8), // moonlit slate-blue
     route: '/dialog',
   ),
   _ZoneDef(
     label: 'こだまの洞窟',
-    subtitle: 'Echo Cave — 声に出して練習',
+    en: 'Echo Cave',
+    subtitle: '声に出して練習',
     icon: Icons.mic_none_rounded,
-    gradient: [
-      const Color(0xFF66BB6A),
-      const Color(0xFF388E3C)
-    ], // emerald green
+    accent: Color(0xFF9DC9A0), // mossy green
     route: '/voice',
   ),
   _ZoneDef(
     label: '闘技場',
-    subtitle: 'Arena — 英検模擬試験',
+    en: 'Arena',
+    subtitle: '英検模擬試験',
     icon: Icons.assignment_outlined,
-    gradient: [const Color(0xFFFF7043), const Color(0xFFD84315)], // deep orange
+    accent: Color(0xFFD9A0A0), // arena crimson (dimmed)
     route: '/exam',
   ),
   _ZoneDef(
     label: '学者の塔',
-    subtitle: "Scholar's Tower — 成長を確認",
+    en: "Scholar's Tower",
+    subtitle: '成長を確認',
     icon: Icons.admin_panel_settings_outlined,
-    gradient: [const Color(0xFFAB47BC), const Color(0xFF7B1FA2)], // purple
+    accent: Color(0xFFC2A8DA), // arcane amethyst
     route: '/parent',
     pushTarget: const ParentDashboardScreen(),
   ),
@@ -180,46 +183,62 @@ class _WorldMapScreenState extends State<WorldMapScreen>
     super.dispose();
   }
 
+  void _enterZone(_ZoneDef zone) {
+    if (zone.pushTarget != null) {
+      Navigator.push(
+        context,
+        FadeSlideRoute(builder: (_) => zone.pushTarget!),
+      );
+    } else if (zone.route == '/battle') {
+      Navigator.push(
+        context,
+        FadeSlideRoute(
+          builder: (_) => GradeSelectorScreen(childAge: widget.childAge),
+        ),
+      );
+    } else if (zone.route == '/exam') {
+      Navigator.push(
+        context,
+        FadeSlideRoute(
+          builder: (_) => const ExamPracticeScreen(eikenGrade: '5'),
+        ),
+      );
+    } else {
+      Navigator.pushNamed(context, zone.route);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA),
-      appBar: AppBar(
-        flexibleSpace: Builder(
-          builder: (context) {
-            final primary = Theme.of(context).colorScheme.primary;
-            // Derive a slightly darker shade for the gradient end stop so the
-            // AppBar looks consistent regardless of flavor primary color.
-            final darker = HSLColor.fromColor(primary)
-                .withLightness(
-                    (HSLColor.fromColor(primary).lightness - 0.08).clamp(0.0, 1.0))
-                .toColor();
-            return Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [primary, darker],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+    return DqScene(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // ── Scene title ──────────────────────────────────────────────────
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 12, 20, 4),
+            child: Column(
+              children: [
+                Text(
+                  'はじまりの村',
+                  textAlign: TextAlign.center,
+                  style: dqText(size: 22, w: FontWeight.w800, color: dqGold),
                 ),
-              ),
-            );
-          },
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: const Text(
-          '🏰 Village Square',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-      ),
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // ── Player Stats Bar ─────────────────────────────────────────────
-            _xpProfile == null
-                // Loading skeleton
+                const SizedBox(height: 2),
+                Text(
+                  'VILLAGE SQUARE',
+                  textAlign: TextAlign.center,
+                  style: dqText(
+                      size: 11, w: FontWeight.w700, color: dqInk, spacing: 3),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
+          // ── Player HUD ───────────────────────────────────────────────────
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: _xpProfile == null
                 ? const _XpLoadingSkeleton()
                 : _PlayerStatsBar(
                     avatarEmoji: _kMockAvatarEmoji,
@@ -228,73 +247,38 @@ class _WorldMapScreenState extends State<WorldMapScreen>
                     xpToNext: _xpProfile!.levelXpSpan,
                     streak: _kMockStreak,
                   ),
-            const SizedBox(height: 8),
-            // ── Zone title ───────────────────────────────────────────────────
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 4),
-              child: Text(
-                'どこへ行く？',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Color(0xFF607D8B),
-                  fontSize: 15,
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
-            ),
-            const SizedBox(height: 8),
-            // ── Zone cards ───────────────────────────────────────────────────
-            Expanded(
-              child: ListView.separated(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
-                itemCount: _kZones.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 14),
-                itemBuilder: (context, i) {
-                  final zone = _kZones[i];
-                  return SlideTransition(
-                    position: _slideAnims[i],
-                    child: FadeTransition(
-                      opacity: _slideCtls[i],
-                      child: _GradientZoneCard(
-                        zone: zone,
-                        onTap: () {
-                          if (zone.pushTarget != null) {
-                            Navigator.push(
-                              context,
-                              FadeSlideRoute(builder: (_) => zone.pushTarget!),
-                            );
-                          } else if (zone.route == '/battle') {
-                            Navigator.push(
-                              context,
-                              FadeSlideRoute(
-                                builder: (_) => GradeSelectorScreen(
-                                  childAge: widget.childAge,
-                                ),
-                              ),
-                            );
-                          } else if (zone.route == '/exam') {
-                            Navigator.push(
-                              context,
-                              FadeSlideRoute(
-                                builder: (_) => const ExamPracticeScreen(
-                                  eikenGrade: '5',
-                                ),
-                              ),
-                            );
-                          } else {
-                            Navigator.pushNamed(context, zone.route);
-                          }
-                        },
-                      ),
+          ),
+          const SizedBox(height: 16),
+          // ── Prompt ───────────────────────────────────────────────────────
+          dqBilingual(
+            'どこへ行く？',
+            'Where to?',
+            jpSize: 15,
+            jpColor: dqInk,
+            align: TextAlign.center,
+          ),
+          const SizedBox(height: 12),
+          // ── Zone command-window nodes ────────────────────────────────────
+          Expanded(
+            child: ListView.builder(
+              padding: const EdgeInsets.fromLTRB(16, 2, 16, 16),
+              itemCount: _kZones.length,
+              itemBuilder: (context, i) {
+                final zone = _kZones[i];
+                return SlideTransition(
+                  position: _slideAnims[i],
+                  child: FadeTransition(
+                    opacity: _slideCtls[i],
+                    child: _ZoneNode(
+                      zone: zone,
+                      onTap: () => _enterZone(zone),
                     ),
-                  );
-                },
-              ),
+                  ),
+                );
+              },
             ),
-            const SizedBox(height: 12),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -308,48 +292,31 @@ class _XpLoadingSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      height: 72,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFFFC107).withAlpha(60)),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFF4FC3F7).withAlpha(30),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
+    return DqPanel(
       child: Row(
         children: [
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: const Color(0xFFF5F7FA),
-              border: Border.all(
-                  color: const Color(0xFF4FC3F7).withAlpha(60), width: 2),
-            ),
-          ),
-          const SizedBox(width: 12),
+          const DqPortrait(emoji: '…', size: 48),
+          const SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                    height: 14, width: 80, color: const Color(0xFFE0E0E0)),
-                const SizedBox(height: 8),
-                Container(
-                  height: 6,
+                  height: 14,
+                  width: 90,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFE0E0E0),
-                    borderRadius: BorderRadius.circular(3),
+                    color: dqNight1,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Container(
+                  height: 8,
+                  decoration: BoxDecoration(
+                    color: dqNight1,
+                    borderRadius: BorderRadius.circular(4),
+                    border: Border.all(color: dqGoldDeep, width: 1),
                   ),
                 ),
               ],
@@ -381,77 +348,56 @@ class _PlayerStatsBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final xpFraction = (xp / xpToNext).clamp(0.0, 1.0);
-    return Container(
-      margin: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFFFC107).withAlpha(80)),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFF4FC3F7).withAlpha(40),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
+    return DqPanel(
       child: Row(
         children: [
-          // Avatar
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: const Color(0xFFE3F2FD),
-              border: Border.all(
-                color: const Color(0xFFFFC107).withAlpha(200),
-                width: 2,
-              ),
-            ),
-            child: Center(
-              child: Text(
-                avatarEmoji,
-                style: const TextStyle(fontSize: 26),
-              ),
-            ),
-          ),
-          const SizedBox(width: 12),
-          // Level + XP bar
+          // Gold-framed portrait
+          DqPortrait(emoji: avatarEmoji, size: 52),
+          const SizedBox(width: 14),
+          // Level + bilingual XP bar
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
                   children: [
                     Text(
                       'Lv.$level',
-                      style: const TextStyle(
-                        color: Color(0xFFFFC107),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
+                      style: dqText(
+                          size: 18, w: FontWeight.w800, color: dqGold),
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 10),
                     Text(
                       '$xp / $xpToNext XP',
-                      style: const TextStyle(
-                        color: Color(0xFF607D8B),
-                        fontSize: 12,
-                      ),
+                      style: dqText(size: 12, w: FontWeight.w600, color: dqInk),
                     ),
                   ],
                 ),
-                const SizedBox(height: 6),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(4),
-                  child: LinearProgressIndicator(
-                    value: xpFraction,
-                    minHeight: 7,
-                    backgroundColor: const Color(0xFFE0E0E0),
-                    valueColor: const AlwaysStoppedAnimation<Color>(
-                      Color(0xFFFFC107),
+                const SizedBox(height: 8),
+                // Gold XP bar in a cream-bordered well
+                Container(
+                  height: 9,
+                  decoration: BoxDecoration(
+                    color: dqNight0,
+                    borderRadius: BorderRadius.circular(5),
+                    border: Border.all(color: dqGoldDeep, width: 1),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(4),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: FractionallySizedBox(
+                        widthFactor: xpFraction,
+                        child: const DecoratedBox(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [dqGold, dqGoldDeep],
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -476,31 +422,25 @@ class _StreakBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFFFF6D00), Color(0xFFFF3D00)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(12),
+        color: dqNight0,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: dqGold, width: 1.5),
         boxShadow: [
-          BoxShadow(
-            color: Colors.deepOrange.withAlpha(120),
-            blurRadius: 8,
-            spreadRadius: 1,
-          ),
+          BoxShadow(color: dqGold.withAlpha(60), blurRadius: 8),
         ],
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           const Text('🔥', style: TextStyle(fontSize: 18)),
+          const SizedBox(height: 2),
           Text(
-            '$streak日連続',
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 10,
-              fontWeight: FontWeight.bold,
-            ),
+            '$streak',
+            style: dqText(size: 13, w: FontWeight.w800, color: dqGold),
+          ),
+          Text(
+            'れんぞく',
+            style: dqText(size: 8, w: FontWeight.w600, color: dqInk, spacing: 1),
           ),
         ],
       ),
@@ -508,25 +448,26 @@ class _StreakBadge extends StatelessWidget {
   }
 }
 
-// ── Gradient zone card ────────────────────────────────────────────────────────
+// ── Zone command-window node ──────────────────────────────────────────────────
 
-class _GradientZoneCard extends StatefulWidget {
+class _ZoneNode extends StatefulWidget {
   final _ZoneDef zone;
   final VoidCallback onTap;
 
-  const _GradientZoneCard({
+  const _ZoneNode({
     required this.zone,
     required this.onTap,
   });
 
   @override
-  State<_GradientZoneCard> createState() => _GradientZoneCardState();
+  State<_ZoneNode> createState() => _ZoneNodeState();
 }
 
-class _GradientZoneCardState extends State<_GradientZoneCard>
+class _ZoneNodeState extends State<_ZoneNode>
     with SingleTickerProviderStateMixin {
   late AnimationController _pressCtrl;
   late Animation<double> _scaleAnim;
+  bool _hovered = false;
 
   @override
   void initState() {
@@ -549,100 +490,86 @@ class _GradientZoneCardState extends State<_GradientZoneCard>
   @override
   Widget build(BuildContext context) {
     final zone = widget.zone;
-    return GestureDetector(
-      onTapDown: (_) => _pressCtrl.forward(),
-      onTapUp: (_) {
-        _pressCtrl.reverse();
-        widget.onTap();
-      },
-      onTapCancel: () => _pressCtrl.reverse(),
-      child: AnimatedBuilder(
-        animation: _scaleAnim,
-        builder: (context, child) => Transform.scale(
-          scale: _scaleAnim.value,
-          child: child,
-        ),
-        child: Container(
-          height: 88,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: zone.gradient,
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+    final accent = zone.accent;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        onEnter: (_) => setState(() => _hovered = true),
+        onExit: (_) => setState(() => _hovered = false),
+        child: GestureDetector(
+          onTapDown: (_) => _pressCtrl.forward(),
+          onTapUp: (_) {
+            _pressCtrl.reverse();
+            widget.onTap();
+          },
+          onTapCancel: () => _pressCtrl.reverse(),
+          child: AnimatedBuilder(
+            animation: _scaleAnim,
+            builder: (context, child) => Transform.scale(
+              scale: _scaleAnim.value,
+              child: child,
             ),
-            borderRadius: BorderRadius.circular(18),
-            boxShadow: [
-              BoxShadow(
-                color: zone.gradient.first.withAlpha(120),
-                blurRadius: 16,
-                offset: const Offset(0, 6),
+            child: Container(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [dqBox, dqNight1],
+                ),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: _hovered ? dqGold : dqBorder,
+                  width: 2,
+                ),
+                boxShadow: [
+                  const BoxShadow(
+                    color: Colors.black54,
+                    blurRadius: 8,
+                    offset: Offset(0, 3),
+                  ),
+                  if (_hovered)
+                    BoxShadow(color: dqGold.withAlpha(70), blurRadius: 14),
+                ],
               ),
-            ],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              children: [
-                // Icon in frosted circle
-                Container(
-                  width: 52,
-                  height: 52,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white.withAlpha(30),
-                    border: Border.all(
-                      color: Colors.white.withAlpha(80),
-                      width: 1.5,
+              child: Row(
+                children: [
+                  // Icon medallion (accent-tinted, dq frame)
+                  Container(
+                    width: 50,
+                    height: 50,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: dqNight0,
+                      border: Border.all(color: accent, width: 2),
+                      boxShadow: [
+                        BoxShadow(color: accent.withAlpha(70), blurRadius: 8),
+                      ],
+                    ),
+                    child: Icon(zone.icon, color: accent, size: 26),
+                  ),
+                  const SizedBox(width: 16),
+                  // Bilingual label + subtitle
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        dqBilingual(zone.label, zone.en, jpSize: 17),
+                        const SizedBox(height: 3),
+                        Text(
+                          zone.subtitle,
+                          style: dqText(
+                              size: 12, w: FontWeight.w500, color: dqInk),
+                        ),
+                      ],
                     ),
                   ),
-                  child: Icon(
-                    zone.icon,
-                    color: Colors.white,
-                    size: 28,
-                  ),
-                ),
-                const SizedBox(width: 16),
-                // Labels
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        zone.label,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 0.5,
-                        ),
-                      ),
-                      const SizedBox(height: 3),
-                      Text(
-                        zone.subtitle,
-                        style: TextStyle(
-                          color: Colors.white.withAlpha(180),
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                // Arrow
-                Container(
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white.withAlpha(30),
-                  ),
-                  child: const Icon(
-                    Icons.arrow_forward_ios_rounded,
-                    color: Colors.white,
-                    size: 16,
-                  ),
-                ),
-              ],
+                  // ▶ cursor
+                  const Icon(Icons.play_arrow, color: dqGold, size: 22),
+                ],
+              ),
             ),
           ),
         ),

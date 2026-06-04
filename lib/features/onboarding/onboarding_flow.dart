@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../quest/ui/dq_ui.dart';
+
 /// ENG Quest — Onboarding Flow (C10)
 ///
 /// 4-step onboarding for new users:
@@ -10,6 +12,10 @@ import 'package:flutter/material.dart';
 ///
 /// On completion, calls [onComplete] with the resulting [OnboardingResult].
 /// The result is persisted by the parent widget (e.g. to SharedPreferences).
+///
+/// Visually this is the Dragon-Quest "賢者 asks you questions" opening: a dark
+/// atmospheric scene, a navy+cream command/dialogue window, ▶-cursor choices,
+/// serif text, and bilingual (日本語 / English) short labels.
 
 // ---------------------------------------------------------------------------
 // Data model
@@ -131,6 +137,25 @@ const List<AvatarOption> _avatars = [
   AvatarOption(id: 'rogue', emoji: '🗡️', name: 'ゼン', jobTitle: 'ローグ'),
 ];
 
+// English class names for the bilingual avatar labels (cosmetic only — does not
+// change the stored avatarId or the AvatarOption values).
+String _avatarClassEn(String jobTitle) {
+  switch (jobTitle) {
+    case 'ナイト':
+      return 'Knight';
+    case 'マジシャン':
+      return 'Mage';
+    case 'アーチャー':
+      return 'Archer';
+    case 'ヒーラー':
+      return 'Healer';
+    case 'ローグ':
+      return 'Rogue';
+    default:
+      return jobTitle;
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Main onboarding widget
 // ---------------------------------------------------------------------------
@@ -200,20 +225,17 @@ class _OnboardingFlowState extends State<OnboardingFlow>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA),
-      body: SafeArea(
-        child: Column(
-          children: [
-            _ProgressBar(step: _step, total: _totalSteps),
-            Expanded(
-              child: FadeTransition(
-                opacity: _fadeAnim,
-                child: _buildCurrentStep(),
-              ),
+    return DqScene(
+      child: Column(
+        children: [
+          _ProgressBar(step: _step, total: _totalSteps),
+          Expanded(
+            child: FadeTransition(
+              opacity: _fadeAnim,
+              child: _buildCurrentStep(),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -267,7 +289,7 @@ class _OnboardingFlowState extends State<OnboardingFlow>
 }
 
 // ---------------------------------------------------------------------------
-// Progress bar
+// Progress bar — a row of gold/dim "gems" tracking the 4 setup steps.
 // ---------------------------------------------------------------------------
 
 class _ProgressBar extends StatelessWidget {
@@ -284,13 +306,21 @@ class _ProgressBar extends StatelessWidget {
           final active = i <= step;
           return Expanded(
             child: Container(
-              height: 4,
-              margin: const EdgeInsets.symmetric(horizontal: 2),
+              height: 6,
+              margin: const EdgeInsets.symmetric(horizontal: 3),
               decoration: BoxDecoration(
-                color: active
-                    ? const Color(0xFFFFC107) // amber gold
-                    : const Color(0xFFCFD8DC),
-                borderRadius: BorderRadius.circular(2),
+                gradient: active
+                    ? const LinearGradient(colors: [dqGold, dqGoldDeep])
+                    : null,
+                color: active ? null : dqNight1,
+                borderRadius: BorderRadius.circular(3),
+                border: Border.all(
+                  color: active ? dqBorder : dqGoldDeep.withAlpha(90),
+                  width: 1,
+                ),
+                boxShadow: active
+                    ? [BoxShadow(color: dqGold.withAlpha(90), blurRadius: 6)]
+                    : null,
               ),
             ),
           );
@@ -301,7 +331,7 @@ class _ProgressBar extends StatelessWidget {
 }
 
 // ---------------------------------------------------------------------------
-// Step 1: Age input
+// Step 1: Age input — the Sage greets you and asks your age.
 // ---------------------------------------------------------------------------
 
 class _StepAge extends StatelessWidget {
@@ -318,70 +348,91 @@ class _StepAge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          const SizedBox(height: 8),
+          Center(
+            child: dqBilingual(
+              'ENG Quest へようこそ',
+              'Welcome, brave one',
+              jpSize: 22,
+              jpColor: dqGold,
+              stacked: true,
+              align: TextAlign.center,
+            ),
+          ),
           const SizedBox(height: 24),
-          const Text(
-            '🏰 ENG Quest へようこそ！',
-            style: TextStyle(
-              color: Color(0xFF4FC3F7),
-              fontSize: 26,
-              fontWeight: FontWeight.bold,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 12),
-          const Text(
-            '何才ですか？',
-            style: TextStyle(color: Color(0xFF607D8B), fontSize: 16),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 48),
-          // Age display
-          Text(
-            '$age さい',
-            style: const TextStyle(
-              color: Color(0xFF263238),
-              fontSize: 56,
-              fontWeight: FontWeight.bold,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 16),
-          // Slider
-          Slider(
-            value: age.toDouble(),
-            min: 4,
-            max: 18,
-            divisions: 14,
-            activeColor: const Color(0xFFFFC107),
-            inactiveColor: const Color(0xFFCFD8DC),
-            onChanged: (v) => onAgeChanged(v.round()),
-          ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Text('4さい',
-                  style: TextStyle(color: Color(0xFF90A4AE), fontSize: 12)),
-              Text('18さい',
-                  style: TextStyle(color: Color(0xFF90A4AE), fontSize: 12)),
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const DqPortrait(emoji: '🧙‍♂️', size: 52),
+              const SizedBox(width: 12),
+              Expanded(
+                child: DqDialogBox(
+                  speaker: '賢者 / Sage',
+                  child: Text(
+                    'ようこそ、勇者よ。旅をはじめる前に、'
+                    'いくつか たずねたいことがある。\nそなたは 何才かな？',
+                    style: dqText(size: 15, color: dqInk),
+                  ),
+                ),
+              ),
             ],
           ),
-          const Spacer(),
-          ElevatedButton(
-            onPressed: onNext,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFFFC107),
-              foregroundColor: Colors.black,
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)),
+          const SizedBox(height: 28),
+          DqPanel(
+            title: 'ねんれい / Age',
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Center(
+                  child: RichText(
+                    text: TextSpan(children: [
+                      TextSpan(
+                        text: '$age',
+                        style: dqText(size: 56, w: FontWeight.w800, color: dqGold),
+                      ),
+                      TextSpan(
+                        text: '  さい',
+                        style: dqText(size: 20, color: dqInk),
+                      ),
+                    ]),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                SliderTheme(
+                  data: SliderTheme.of(context).copyWith(
+                    activeTrackColor: dqGold,
+                    inactiveTrackColor: dqNight1,
+                    thumbColor: dqGold,
+                    overlayColor: dqGold.withAlpha(40),
+                    valueIndicatorColor: dqGoldDeep,
+                  ),
+                  child: Slider(
+                    value: age.toDouble(),
+                    min: 4,
+                    max: 18,
+                    divisions: 14,
+                    label: '$age',
+                    onChanged: (v) => onAgeChanged(v.round()),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('4さい',
+                        style: dqText(size: 12, color: dqInk, w: FontWeight.w500)),
+                    Text('18さい',
+                        style: dqText(size: 12, color: dqInk, w: FontWeight.w500)),
+                  ],
+                ),
+              ],
             ),
-            child: const Text('つぎへ →',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           ),
+          const Spacer(),
+          DqButton(label: 'つぎへ / Next ▶', onTap: onNext),
         ],
       ),
     );
@@ -389,7 +440,7 @@ class _StepAge extends StatelessWidget {
 }
 
 // ---------------------------------------------------------------------------
-// Step 2a: Placement question
+// Step 2a: Placement question — DQ command-window quiz.
 // ---------------------------------------------------------------------------
 
 class _StepPlacement extends StatelessWidget {
@@ -408,58 +459,35 @@ class _StepPlacement extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const SizedBox(height: 16),
-          Text(
-            'えいごチェック ${questionIndex + 1}/$total',
-            style: const TextStyle(color: Color(0xFF607D8B), fontSize: 14),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 24),
-          Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: const Color(0xFFFFC107), width: 1.5),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF4FC3F7).withAlpha(30),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ],
+          const SizedBox(height: 8),
+          Center(
+            child: dqBilingual(
+              'えいごチェック ${questionIndex + 1}/$total',
+              'Placement ${questionIndex + 1}/$total',
+              jpSize: 15,
+              jpColor: dqInk,
+              align: TextAlign.center,
             ),
+          ),
+          const SizedBox(height: 22),
+          DqDialogBox(
+            speaker: '賢者 / Sage',
             child: Text(
               question.question,
-              style: const TextStyle(
-                color: Color(0xFF263238),
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
+              style: dqText(size: 21, w: FontWeight.w700, color: dqInk),
               textAlign: TextAlign.center,
             ),
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: 26),
           ...List.generate(question.options.length, (i) {
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: OutlinedButton(
-                onPressed: () => onAnswer(i == question.correctIndex),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: const Color(0xFF263238),
-                  backgroundColor: Colors.white,
-                  side: const BorderSide(color: Color(0xFFB0BEC5)),
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                ),
-                child: Text(question.options[i],
-                    style: const TextStyle(fontSize: 16)),
-              ),
+            return DqChoice(
+              label: question.options[i],
+              showCursor: true,
+              onTap: () => onAnswer(i == question.correctIndex),
             );
           }),
         ],
@@ -469,7 +497,7 @@ class _StepPlacement extends StatelessWidget {
 }
 
 // ---------------------------------------------------------------------------
-// Step 2b: Placement result
+// Step 2b: Placement result — the Sage proclaims your starting rank.
 // ---------------------------------------------------------------------------
 
 class _PlacementResult extends StatelessWidget {
@@ -481,39 +509,44 @@ class _PlacementResult extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const SizedBox(height: 40),
-          const Text('🎉', style: TextStyle(fontSize: 64)),
-          const SizedBox(height: 16),
-          Text(
-            placement.label,
-            style: const TextStyle(
-              color: Color(0xFF4FC3F7),
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
+          const SizedBox(height: 24),
+          const Center(child: DqPortrait(emoji: '📜', size: 88)),
+          const SizedBox(height: 24),
+          DqPanel(
+            title: 'はんてい / Your Rank',
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Center(
+                  child: Text(
+                    placement.label,
+                    style: dqText(size: 30, w: FontWeight.w800, color: dqGold),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  placement.description,
+                  style: dqText(size: 15, color: dqInk),
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 8),
-          Text(
-            placement.description,
-            style: const TextStyle(color: Color(0xFF607D8B), fontSize: 16),
-            textAlign: TextAlign.center,
+          const SizedBox(height: 18),
+          DqDialogBox(
+            speaker: '賢者 / Sage',
+            child: Text(
+              'よし、そなたの ちからは わかった。\nさあ、旅の仲間を えらぼう。',
+              style: dqText(size: 15, color: dqInk),
+            ),
           ),
           const Spacer(),
-          ElevatedButton(
-            onPressed: onNext,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFFFC107),
-              foregroundColor: Colors.black,
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 48),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)),
-            ),
-            child: const Text('つぎへ →',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          ),
+          DqButton(label: 'つぎへ / Next ▶', onTap: onNext),
         ],
       ),
     );
@@ -521,7 +554,7 @@ class _PlacementResult extends StatelessWidget {
 }
 
 // ---------------------------------------------------------------------------
-// Step 3: Avatar selection
+// Step 3: Avatar selection — choose your party hero.
 // ---------------------------------------------------------------------------
 
 class _StepAvatar extends StatelessWidget {
@@ -540,92 +573,121 @@ class _StepAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const SizedBox(height: 16),
-          const Text(
-            '仲間を選ぼう！',
-            style: TextStyle(
-              color: Color(0xFF4FC3F7),
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
+          const SizedBox(height: 8),
+          Center(
+            child: dqBilingual(
+              '仲間を選ぼう',
+              'Choose Your Hero',
+              jpSize: 22,
+              jpColor: dqGold,
+              stacked: true,
+              align: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: 20),
           Expanded(
             child: GridView.count(
               crossAxisCount: 3,
               mainAxisSpacing: 12,
               crossAxisSpacing: 12,
+              childAspectRatio: 0.82,
               children: avatars.map((av) {
                 final selected = av.id == selectedId;
-                return GestureDetector(
+                return _AvatarCard(
+                  avatar: av,
+                  selected: selected,
                   onTap: () => onSelected(av.id),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    decoration: BoxDecoration(
-                      color: selected
-                          ? const Color(0xFFFFC107).withAlpha(38)
-                          : Colors.white,
-                      border: Border.all(
-                        color: selected
-                            ? const Color(0xFFFFC107)
-                            : const Color(0xFFE0E0E0),
-                        width: selected ? 2 : 1,
-                      ),
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withAlpha(12),
-                          blurRadius: 4,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(av.emoji, style: const TextStyle(fontSize: 36)),
-                        const SizedBox(height: 4),
-                        Text(av.name,
-                            style: const TextStyle(
-                                color: Color(0xFF263238),
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold)),
-                        Text(av.jobTitle,
-                            style: const TextStyle(
-                                color: Color(0xFF607D8B), fontSize: 11)),
-                      ],
-                    ),
-                  ),
                 );
               }).toList(),
             ),
           ),
           const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: onNext,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFFFC107),
-              foregroundColor: Colors.black,
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)),
-            ),
-            child: const Text('このこにする！',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          ),
+          DqButton(label: 'このこにする / Choose ▶', onTap: onNext),
         ],
       ),
     );
   }
 }
 
+class _AvatarCard extends StatelessWidget {
+  final AvatarOption avatar;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _AvatarCard({
+    required this.avatar,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: selected
+                ? [dqNight1.withAlpha(245), dqBox.withAlpha(245)]
+                : [dqBox.withAlpha(220), dqNight0.withAlpha(220)],
+          ),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: selected ? dqGold : dqGoldDeep.withAlpha(110),
+            width: selected ? 2.5 : 1.5,
+          ),
+          boxShadow: selected
+              ? [BoxShadow(color: dqGold.withAlpha(110), blurRadius: 12)]
+              : const [
+                  BoxShadow(
+                      color: Colors.black54, blurRadius: 6, offset: Offset(0, 3))
+                ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            DqPortrait(emoji: avatar.emoji, size: selected ? 46 : 42),
+            const SizedBox(height: 6),
+            Text(
+              avatar.name,
+              style: dqText(
+                size: 12,
+                w: FontWeight.w700,
+                color: selected ? dqGold : dqInk,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            Text(
+              _avatarClassEn(avatar.jobTitle),
+              style: dqText(
+                size: 10,
+                w: FontWeight.w600,
+                color: dqGoldDeep,
+                spacing: 1,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 // ---------------------------------------------------------------------------
-// Step 4: Daily goal + summary
+// Step 4: Daily goal + summary — the quest contract before you set out.
 // ---------------------------------------------------------------------------
 
 class _StepGoal extends StatelessWidget {
@@ -651,141 +713,123 @@ class _StepGoal extends StatelessWidget {
         orElse: () => _avatars.first);
 
     return Padding(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const SizedBox(height: 16),
-          Text(
-            '${avatar.emoji} ${avatar.name}、準備はいい？',
-            style: const TextStyle(
-              color: Color(0xFF4FC3F7),
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
-            textAlign: TextAlign.center,
-          ),
           const SizedBox(height: 8),
-          Text(
-            '${placement.label}からスタート',
-            style: const TextStyle(color: Color(0xFF607D8B), fontSize: 14),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 32),
-          const Text(
-            '毎日の目標',
-            style: TextStyle(color: Color(0xFF263238), fontSize: 16),
-          ),
-          const SizedBox(height: 12),
           Row(
-            children: _presets.map((min) {
-              final selected = min == goalMinutes;
-              return Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: GestureDetector(
-                    onTap: () => onGoalChanged(min),
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      decoration: BoxDecoration(
-                        color:
-                            selected ? const Color(0xFFFFC107) : Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: selected
-                              ? const Color(0xFFFFC107)
-                              : const Color(0xFFE0E0E0),
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              DqPortrait(emoji: avatar.emoji, size: 52),
+              const SizedBox(width: 12),
+              Expanded(
+                child: DqDialogBox(
+                  speaker: '${avatar.name} / ${_avatarClassEn(avatar.jobTitle)}',
+                  child: Text(
+                    '準備はいい？\n${placement.label} から旅を はじめよう！',
+                    style: dqText(size: 15, color: dqInk),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+          DqPanel(
+            title: 'まいにちの もくひょう / Daily Goal',
+            child: Row(
+              children: _presets.map((min) {
+                final selected = min == goalMinutes;
+                return Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: GestureDetector(
+                      onTap: () => onGoalChanged(min),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        decoration: BoxDecoration(
+                          gradient: selected
+                              ? const LinearGradient(colors: [dqGold, dqGoldDeep])
+                              : null,
+                          color: selected ? null : dqNight0.withAlpha(180),
+                          borderRadius: BorderRadius.circular(9),
+                          border: Border.all(
+                            color: selected ? dqBorder : dqGoldDeep.withAlpha(110),
+                            width: selected ? 2 : 1.5,
+                          ),
+                          boxShadow: selected
+                              ? [BoxShadow(color: dqGold.withAlpha(90), blurRadius: 8)]
+                              : null,
                         ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withAlpha(10),
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        children: [
-                          Text(
-                            '$min',
-                            style: TextStyle(
-                              color: selected
-                                  ? Colors.black
-                                  : const Color(0xFF263238),
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
+                        child: Column(
+                          children: [
+                            Text(
+                              '$min',
+                              style: dqText(
+                                size: 22,
+                                w: FontWeight.w800,
+                                color: selected
+                                    ? const Color(0xFF2A1C00)
+                                    : dqGold,
+                              ),
                             ),
-                          ),
-                          Text(
-                            'ふん',
-                            style: TextStyle(
-                              color: selected
-                                  ? Colors.black87
-                                  : const Color(0xFF607D8B),
-                              fontSize: 11,
+                            Text(
+                              'min',
+                              style: dqText(
+                                size: 11,
+                                w: FontWeight.w600,
+                                color: selected
+                                    ? const Color(0xFF2A1C00)
+                                    : dqInk,
+                                spacing: 1,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              );
-            }).toList(),
-          ),
-          const SizedBox(height: 32),
-          // Summary card
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: const Color(0xFFE0E0E0)),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withAlpha(12),
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
-                ),
-              ],
+                );
+              }).toList(),
             ),
+          ),
+          const SizedBox(height: 16),
+          // Summary panel — the quest contract.
+          DqPanel(
+            title: 'けいやく / Quest Contract',
             child: Column(
               children: [
-                _SummaryRow(label: 'レベル', value: placement.label),
+                _SummaryRow(jp: 'レベル', en: 'Level', value: placement.label),
+                const SizedBox(height: 6),
                 _SummaryRow(
-                    label: 'キャラ', value: '${avatar.emoji} ${avatar.name}'),
-                _SummaryRow(label: '目標', value: '毎日$goalMinutesふん'),
+                    jp: 'なかま',
+                    en: 'Hero',
+                    value: '${avatar.emoji} ${avatar.name}'),
+                const SizedBox(height: 6),
+                _SummaryRow(
+                    jp: 'もくひょう',
+                    en: 'Goal',
+                    value: '毎日 $goalMinutes min'),
               ],
             ),
           ),
           const Spacer(),
           // Eiken trademark disclaimer — required for compliance.
-          const Padding(
-            padding: EdgeInsets.only(bottom: 12),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 12),
             child: Text(
               '英検®は公益財団法人日本英語検定協会の登録商標です。'
               '本アプリは英検協会の公式アプリではありません。',
-              style: TextStyle(
-                color: Color(0xFFB0BEC5),
-                fontSize: 10,
-                height: 1.5,
-              ),
+              style: dqText(
+                size: 10,
+                w: FontWeight.w400,
+                color: dqInk.withAlpha(140),
+              ).copyWith(height: 1.5),
               textAlign: TextAlign.center,
             ),
           ),
-          ElevatedButton(
-            onPressed: onFinish,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFFFC107),
-              foregroundColor: Colors.black,
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)),
-            ),
-            child: const Text('ぼうけんをはじめる！🗺️',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          ),
+          DqButton(label: 'ぼうけんをはじめる / Begin Quest ▶', onTap: onFinish),
         ],
       ),
     );
@@ -793,24 +837,30 @@ class _StepGoal extends StatelessWidget {
 }
 
 class _SummaryRow extends StatelessWidget {
-  final String label;
+  final String jp;
+  final String en;
   final String value;
-  const _SummaryRow({required this.label, required this.value});
+  const _SummaryRow({required this.jp, required this.en, required this.value});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.symmetric(vertical: 2),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(label,
-              style: const TextStyle(color: Color(0xFF607D8B), fontSize: 14)),
-          Text(value,
-              style: const TextStyle(
-                  color: Color(0xFF263238),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600)),
+          Flexible(
+            child: dqBilingual(jp, en, jpSize: 14, jpColor: dqInk),
+          ),
+          const SizedBox(width: 12),
+          Flexible(
+            child: Text(
+              value,
+              style: dqText(size: 14, w: FontWeight.w700, color: dqGold),
+              textAlign: TextAlign.end,
+            ),
+          ),
         ],
       ),
     );
