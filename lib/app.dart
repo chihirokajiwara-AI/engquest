@@ -255,6 +255,14 @@ Widget _previewFor(String? name) {
       return const QuestMapScreen();
     case 'quest':
       return QuestScreen(town: kQuestTowns.first);
+    case 'quest5':
+      return QuestScreen(town: kQuestTowns[0], previewEncounterIndex: 3);
+    case 'quest4':
+      return QuestScreen(town: kQuestTowns[1], previewEncounterIndex: 9);
+    case 'quest3':
+      return QuestScreen(town: kQuestTowns[2], previewEncounterIndex: 12);
+    case 'quest2':
+      return QuestScreen(town: kQuestTowns[5], previewEncounterIndex: 12);
     case 'battle':
       return const BattleScreen(childAge: 8);
     case 'dialog':

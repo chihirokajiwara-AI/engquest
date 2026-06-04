@@ -11,7 +11,10 @@ import 'ui/dq_ui.dart';
 
 class QuestScreen extends StatefulWidget {
   final QuestTown town;
-  const QuestScreen({super.key, required this.town});
+
+  /// Design-audit only: jump straight to this encounter index (skips intro).
+  final int? previewEncounterIndex;
+  const QuestScreen({super.key, required this.town, this.previewEncounterIndex});
 
   @override
   State<QuestScreen> createState() => _QuestScreenState();
@@ -35,6 +38,16 @@ class _QuestScreenState extends State<QuestScreen> {
   int _index = 0;
   int? _picked;
   bool _revealed = false;
+
+  @override
+  void initState() {
+    super.initState();
+    final p = widget.previewEncounterIndex;
+    if (p != null && _hasEncounters) {
+      _phase = _Phase.encounter;
+      _index = p.clamp(0, widget.town.encounters.length - 1);
+    }
+  }
 
   QuestEncounter get _enc => widget.town.encounters[_index];
   bool get _hasEncounters => widget.town.encounters.isNotEmpty;
