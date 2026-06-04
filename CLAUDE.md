@@ -199,3 +199,19 @@ PreToolUse(Bash) hook (`scripts/guard-heavy-jobs.sh`, registered in
   — detached + hard timeout + `logs/jobs/<name>.{log,status}`.
 - Poll status; **stop on `FAILED`/`TIMEOUT`** — never re-loop a failed job.
 - The hook is a backstop, not a sandbox: default to `safe-job.sh` for anything heavy.
+
+### Governance — spec-freeze + content QA (added 2026-06-05, anti-churn)
+Root cause of stalled progress: the design flipped 4× in days (conversation →
+RPG → phonics-from-zero → hardening) and implementation kept getting buried.
+
+- **Spec-freeze gate.** Do NOT re-change a CEO-approved spec on your own. If a
+  design change seems needed, escalate to the CEO and get approval BEFORE
+  building. No wholesale spec-rejection right before/at implementation time.
+- **Content-QA checkpoint.** All AI-generated learning content (vocab
+  distractors, example sentences, phonics steps, 英検 problems) must pass the
+  `content-qa` subagent (.claude/agents/content-qa.md) BEFORE commit. This gate
+  exists because 7,923 distractors were once silently corrupted (English among
+  Japanese options) and shipped.
+- **Model:** keep Opus. Do NOT switch to `opusplan` — with `--channels` active,
+  plan mode is disabled so opusplan degrades to Sonnet (quality downgrade).
+  Reduce tokens via subagents + /compact, never by downgrading the main model.

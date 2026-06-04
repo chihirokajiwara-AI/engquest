@@ -93,3 +93,6 @@ assets/audio/eiken*/*.wav
 
 # runtime job logs (safe-job.sh)
 logs/
+.metadata
+flutter_01.log
+archive/
