@@ -2,7 +2,7 @@
   "version": "2.0.0",
   "created": "2026-05-31",
   "description": "英検準2級 vocabulary (1500 words)",
-  "totalWords": 1500,
+  "totalWords": 1431,
   "cefrLevel": "B1",
   "eikenLevel": "pre2",
   "categories": {
@@ -7612,9 +7612,9 @@
         "B1"
       ],
       "distractors": [
-        "単独機器",
-        "孤立システム",
-        "ローカルPC"
+        "監視(かんし)",
+        "炎症(えんしょう)",
+        "結論(けつろん)"
       ],
       "englishDefinition": "a system of connected computers or devices that share data and communicate with each other"
     },
@@ -8362,9 +8362,9 @@
         "B1"
       ],
       "distractors": [
-        "スマートフォン",
-        "ノートPC",
-        "デスクトップ"
+        "食物連鎖(しょくもつれんさ)",
+        "学位(がくい)",
+        "市民参加(しみんさんか)"
       ],
       "englishDefinition": "a portable flat-screen computing device operated mainly by touch, larger than a smartphone"
     },
@@ -8602,9 +8602,9 @@
         "B1"
       ],
       "distractors": [
-        "パスワード",
-        "PIN",
-        "カードキー"
+        "交差性(こうさせい)",
+        "セミナー",
+        "文化帝国主義(ぶんかていこくしゅぎ)"
       ],
       "englishDefinition": "relating to the measurement of unique physical characteristics, such as fingerprints or facial features, used to verify identity"
     },
@@ -8722,9 +8722,9 @@
         "B1"
       ],
       "distractors": [
-        "ユーザー名",
-        "IDカード",
-        "指紋認証"
+        "評価(ひょうか)",
+        "福祉(ふくし)",
+        "市場(しじょう)"
       ],
       "englishDefinition": "a secret string of characters used to verify a user's identity and control access to a system or account"
     },
@@ -11118,9 +11118,9 @@
         "B1"
       ],
       "distractors": [
-        "RNA",
-        "タンパク質",
-        "酵素"
+        "学位(がくい)",
+        "イデオロギー",
+        "感染(かんせん)"
       ],
       "englishDefinition": "the molecule inside cells that carries the genetic instructions for how a living organism develops and functions"
     },
@@ -12489,37 +12489,6 @@
       "englishDefinition": "the activity of starting and running new businesses, taking on financial risk in pursuit of profit"
     },
     {
-      "id": "eikenpre2_413",
-      "word": "startup",
-      "reading": "スタートアップ",
-      "jpTranslation": "新興企業(しんこうきぎょう)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Economics & Business",
-      "pos": [
-        "noun"
-      ],
-      "exampleSentences": [
-        "The Berlin startup disrupted the food-delivery market by offering thirty-minute grocery drops.",
-        "Working at a startup can mean long hours, but employees often receive equity in the company."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_413_startup.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "economics",
-        "business",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "大企業",
-        "老舗",
-        "公企業"
-      ],
-      "englishDefinition": "a newly established business, typically in technology, seeking rapid growth and outside investment"
-    },
-    {
       "id": "eikenpre2_414",
       "word": "venture capital",
       "reading": "ベンチャー・キャピタル",
@@ -12828,37 +12797,6 @@
         "国内生産"
       ],
       "englishDefinition": "hiring an outside company or individual to do work that was previously done internally"
-    },
-    {
-      "id": "eikenpre2_424",
-      "word": "globalization",
-      "reading": "グローバリゼーション",
-      "jpTranslation": "グローバル化(グローバルか)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Economics & Business",
-      "pos": [
-        "noun"
-      ],
-      "exampleSentences": [
-        "Globalization means a fashion trend in Tokyo can spread to London within days.",
-        "Many economists debate whether globalization raises living standards for developing nations."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_424_globalization.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "economics",
-        "business",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "地域化",
-        "孤立化",
-        "鎖国化"
-      ],
-      "englishDefinition": "the process by which businesses, cultures, and economies become connected worldwide"
     },
     {
       "id": "eikenpre2_425",
@@ -14089,36 +14027,6 @@
       "englishDefinition": "a firm belief in one's own abilities or in the reliability of something"
     },
     {
-      "id": "eikenpre2_465",
-      "word": "stress",
-      "reading": "ストレス",
-      "jpTranslation": "ストレス",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Psychology & Behavior",
-      "pos": [
-        "noun"
-      ],
-      "exampleSentences": [
-        "Chronic stress raises cortisol levels, which can weaken the immune system over time.",
-        "He managed exam stress by going for a run each evening rather than studying late."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_465_stress.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "psychology",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "リラックス",
-        "安心",
-        "平和"
-      ],
-      "englishDefinition": "mental or emotional strain caused by demanding or difficult circumstances"
-    },
-    {
       "id": "eikenpre2_466",
       "word": "anxiety disorder",
       "reading": "アングザイエティ・ディスオーダー",
@@ -14239,36 +14147,6 @@
       "englishDefinition": "the ability to recover quickly from difficulties or adapt well to adversity"
     },
     {
-      "id": "eikenpre2_470",
-      "word": "empathy",
-      "reading": "エンパシー",
-      "jpTranslation": "共感力(きょうかんりょく)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Psychology & Behavior",
-      "pos": [
-        "noun"
-      ],
-      "exampleSentences": [
-        "A good nurse shows empathy by listening carefully rather than rushing through each patient visit.",
-        "Reading fiction is said to develop empathy by letting readers experience other people's perspectives."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_470_empathy.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "psychology",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "無関心",
-        "冷淡",
-        "偏見"
-      ],
-      "englishDefinition": "the ability to understand and share the feelings of another person"
-    },
-    {
       "id": "eikenpre2_471",
       "word": "identity",
       "reading": "アイデンティティ",
@@ -14387,36 +14265,6 @@
         "知識"
       ],
       "englishDefinition": "a settled way of thinking or feeling about something that influences how one behaves"
-    },
-    {
-      "id": "eikenpre2_475",
-      "word": "bias",
-      "reading": "バイアス",
-      "jpTranslation": "認知バイアス(にんちバイアス)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Psychology & Behavior",
-      "pos": [
-        "noun"
-      ],
-      "exampleSentences": [
-        "Confirmation bias leads people to favor news that supports what they already believe.",
-        "The hiring process was redesigned to reduce unconscious bias against female applicants."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_475_bias.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "psychology",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "客観性",
-        "論理",
-        "理性"
-      ],
-      "englishDefinition": "an unfair inclination toward or against a person, group, or idea that distorts judgment"
     },
     {
       "id": "eikenpre2_476",
@@ -14592,9 +14440,9 @@
         "B1"
       ],
       "distractors": [
-        "EQ",
-        "学力",
-        "学歴"
+        "入学(にゅうがく)",
+        "マルウェア",
+        "スプリント"
       ],
       "englishDefinition": "a numerical score representing a person's reasoning and problem-solving ability relative to others"
     },
@@ -14622,9 +14470,9 @@
         "B1"
       ],
       "distractors": [
-        "IQ",
-        "学力",
-        "知識"
+        "議論(ぎろん)",
+        "研究室(けんきゅうしつ)",
+        "マーケティング"
       ],
       "englishDefinition": "a measure of one's ability to recognize, understand, and manage emotions in oneself and others"
     },
@@ -15257,37 +15105,6 @@
         "書籍学習"
       ],
       "englishDefinition": "the process of acquiring new behaviors by observing and imitating others in a social context"
-    },
-    {
-      "id": "eikenpre2_504",
-      "word": "democracy",
-      "reading": "デモクラシー",
-      "jpTranslation": "民主主義(みんしゅしゅぎ)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Politics & Law",
-      "pos": [
-        "noun"
-      ],
-      "exampleSentences": [
-        "A healthy democracy depends on citizens who vote and hold their representatives accountable.",
-        "The country transitioned from military rule to democracy after widespread protests in the capital."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_504_democracy.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "politics",
-        "law",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "独裁制",
-        "専制政治",
-        "王制"
-      ],
-      "englishDefinition": "a system of government in which citizens choose their leaders through free and fair elections"
     },
     {
       "id": "eikenpre2_505",
@@ -16065,37 +15882,6 @@
       "englishDefinition": "the official organization responsible for preventing crime and maintaining public order"
     },
     {
-      "id": "eikenpre2_530",
-      "word": "human rights",
-      "reading": "ヒューマン・ライツ",
-      "jpTranslation": "人権(じんけん)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Politics & Law",
-      "pos": [
-        "noun"
-      ],
-      "exampleSentences": [
-        "The UN report documented widespread human rights abuses in the conflict zone.",
-        "Advocates argued that mandatory detention of asylum seekers violated basic human rights."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_530_human_rights.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "politics",
-        "law",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "特権",
-        "義務",
-        "制限"
-      ],
-      "englishDefinition": "the basic rights and freedoms that every person is entitled to, regardless of nationality or background"
-    },
-    {
       "id": "eikenpre2_531",
       "word": "treaty",
       "reading": "トリーティ",
@@ -16745,37 +16531,6 @@
         "裁判官"
       ],
       "englishDefinition": "the person accused of a crime or sued in a legal case"
-    },
-    {
-      "id": "eikenpre2_552",
-      "word": "evidence",
-      "reading": "エビデンス2",
-      "jpTranslation": "証拠(しょうこ)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Politics & Law",
-      "pos": [
-        "noun"
-      ],
-      "exampleSentences": [
-        "Security camera footage provided key evidence that the suspect was at the scene.",
-        "The prosecution lacked enough evidence to convince the jury beyond reasonable doubt."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_552_evidence.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "politics",
-        "law",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "供述",
-        "弁論",
-        "疑惑"
-      ],
-      "englishDefinition": "facts, objects, or statements used in court to prove or disprove a claim"
     },
     {
       "id": "eikenpre2_553",
@@ -18349,36 +18104,6 @@
       "englishDefinition": "the ability to understand the meaning of what one reads, hears, or studies"
     },
     {
-      "id": "eikenpre2_605",
-      "word": "application",
-      "reading": "アプリケーション2",
-      "jpTranslation": "応用(おうよう)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Education",
-      "pos": [
-        "noun"
-      ],
-      "exampleSentences": [
-        "The real test of understanding physics is the application of formulas to solve practical problems.",
-        "Students struggled with the application of grammar rules when speaking under pressure."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_605_application.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "education",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "理論",
-        "暗記",
-        "試験"
-      ],
-      "englishDefinition": "the use of knowledge or a skill in a real or new situation"
-    },
-    {
       "id": "eikenpre2_606",
       "word": "inquiry-based learning",
       "reading": "インクワイアリー・ベースド・ラーニング",
@@ -18712,37 +18437,6 @@
       "englishDefinition": "an article in a newspaper or magazine that expresses the opinion of the editor or publication"
     },
     {
-      "id": "eikenpre2_617",
-      "word": "propaganda",
-      "reading": "プロパガンダ2",
-      "jpTranslation": "宣伝(せんでん)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Media & Communication",
-      "pos": [
-        "noun"
-      ],
-      "exampleSentences": [
-        "The government used propaganda posters to portray the enemy as dangerous and inhuman during the war.",
-        "Media education classes teach students to recognize propaganda techniques used in political advertising."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_617_propaganda.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "media",
-        "communication",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "事実",
-        "客観的情報",
-        "中立報道"
-      ],
-      "englishDefinition": "information, often biased or misleading, spread systematically to promote a particular political cause or point of view"
-    },
-    {
       "id": "eikenpre2_618",
       "word": "media literacy",
       "reading": "メディア・リテラシー",
@@ -18774,37 +18468,6 @@
       "englishDefinition": "the ability to critically analyze, evaluate, and create media content"
     },
     {
-      "id": "eikenpre2_619",
-      "word": "censorship",
-      "reading": "センサーシップ2",
-      "jpTranslation": "検閲(けんえつ)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Media & Communication",
-      "pos": [
-        "noun"
-      ],
-      "exampleSentences": [
-        "Journalists protested the government's censorship of articles critical of its immigration policy.",
-        "Internet censorship in some countries blocks access to foreign news websites entirely."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_619_censorship.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "media",
-        "communication",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "言論の自由",
-        "報道の自由",
-        "情報公開"
-      ],
-      "englishDefinition": "the suppression or restriction of speech, publications, or other content by an authority"
-    },
-    {
       "id": "eikenpre2_620",
       "word": "fake news",
       "reading": "フェイク・ニュース",
@@ -18834,37 +18497,6 @@
         "信頼情報"
       ],
       "englishDefinition": "false or misleading information presented as legitimate news to deceive readers"
-    },
-    {
-      "id": "eikenpre2_621",
-      "word": "social media",
-      "reading": "ソーシャル・メディア2",
-      "jpTranslation": "SNS",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Media & Communication",
-      "pos": [
-        "noun"
-      ],
-      "exampleSentences": [
-        "Politicians increasingly use social media to communicate directly with voters without editorial filters.",
-        "Constant scrolling through social media at night was disrupting her sleep and concentration."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_621_social_media.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "media",
-        "communication",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "伝統メディア",
-        "新聞",
-        "テレビ"
-      ],
-      "englishDefinition": "online platforms and apps that allow users to create, share, and interact with content and each other"
     },
     {
       "id": "eikenpre2_622",
@@ -18989,37 +18621,6 @@
         "アクセス禁止"
       ],
       "englishDefinition": "a regular payment made to receive a service or publication on an ongoing basis"
-    },
-    {
-      "id": "eikenpre2_626",
-      "word": "algorithm",
-      "reading": "アルゴリズム2",
-      "jpTranslation": "アルゴリズム",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Media & Communication",
-      "pos": [
-        "noun"
-      ],
-      "exampleSentences": [
-        "The platform's algorithm prioritizes posts with high engagement, making it harder for new creators to gain exposure.",
-        "Understanding how the recommendation algorithm works can help you discover content beyond your usual interests."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_626_algorithm.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "media",
-        "communication",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "人間の判断",
-        "編集選択",
-        "偶然"
-      ],
-      "englishDefinition": "a set of rules or calculations a computer follows to sort, rank, or recommend content"
     },
     {
       "id": "eikenpre2_627",
@@ -20069,9 +19670,9 @@
         "B1"
       ],
       "distractors": [
-        "個人ブログ",
-        "SNS投稿",
-        "口コミ"
+        "相互連結性(そうごれんけつせい)",
+        "出典(しゅってん)",
+        "相関関係(そうかんかんけい)"
       ],
       "englishDefinition": "a company or platform — such as a newspaper, TV channel, or website — that produces and distributes news and information"
     },
@@ -20448,68 +20049,6 @@
       "englishDefinition": "to give a valid reason or explanation for an action or belief"
     },
     {
-      "id": "eikenpre2_673",
-      "word": "negotiate",
-      "reading": "ニゴシエイト",
-      "jpTranslation": "交渉する(こうしょうする)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Advanced Verbs",
-      "pos": [
-        "verb"
-      ],
-      "exampleSentences": [
-        "Union representatives will negotiate a new salary agreement with management this week.",
-        "The two countries negotiated a trade deal that reduced tariffs significantly."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_673_negotiate.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "verbs",
-        "advanced",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "拒否する",
-        "受け入れる",
-        "無視する"
-      ],
-      "englishDefinition": "to discuss something with another party in order to reach a mutual agreement"
-    },
-    {
-      "id": "eikenpre2_674",
-      "word": "overcome",
-      "reading": "オーバーカム2",
-      "jpTranslation": "乗り越える(のりこえる)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Advanced Verbs",
-      "pos": [
-        "verb"
-      ],
-      "exampleSentences": [
-        "She overcame her stage fright by practicing her speech in front of friends.",
-        "The team overcame a ten-point deficit to win the game in overtime."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_674_overcome.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "verbs",
-        "advanced",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "諦める",
-        "失敗する",
-        "屈服する"
-      ],
-      "englishDefinition": "to successfully deal with or defeat a difficulty, obstacle, or opponent"
-    },
-    {
       "id": "eikenpre2_675",
       "word": "perceive",
       "reading": "パーシーブ",
@@ -20882,37 +20421,6 @@
       "englishDefinition": "to weaken or damage something gradually, especially authority or confidence"
     },
     {
-      "id": "eikenpre2_687",
-      "word": "upgrade",
-      "reading": "アップグレード2",
-      "jpTranslation": "向上させる(こうじょうさせる)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Advanced Verbs",
-      "pos": [
-        "verb"
-      ],
-      "exampleSentences": [
-        "The hospital upgraded its MRI machines to provide clearer diagnostic images.",
-        "She upgraded her programming skills by completing an online course in Python."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_687_upgrade.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "verbs",
-        "advanced",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "格下げする",
-        "悪化させる",
-        "弱める"
-      ],
-      "englishDefinition": "to improve something to a higher standard or more advanced version"
-    },
-    {
       "id": "eikenpre2_688",
       "word": "validate",
       "reading": "バリデイト",
@@ -21159,37 +20667,6 @@
         "拒否する"
       ],
       "englishDefinition": "to change behavior or form to suit new conditions or requirements"
-    },
-    {
-      "id": "eikenpre2_696",
-      "word": "advocate",
-      "reading": "アドボケイト2",
-      "jpTranslation": "主張する(しゅちょうする)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Advanced Verbs",
-      "pos": [
-        "verb"
-      ],
-      "exampleSentences": [
-        "The nonprofit advocates for stronger legal protections for migrant workers.",
-        "She has long advocated raising the minimum wage to reduce income inequality."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_696_advocate.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "verbs",
-        "advanced",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "反対する",
-        "否定する",
-        "批判する"
-      ],
-      "englishDefinition": "to publicly support or argue in favor of a cause or policy"
     },
     {
       "id": "eikenpre2_697",
@@ -21905,37 +21382,6 @@
       "englishDefinition": "to modify something to fit a specific person's preferences or requirements"
     },
     {
-      "id": "eikenpre2_720",
-      "word": "debate",
-      "reading": "ディベート2",
-      "jpTranslation": "議論する(ぎろんする)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Advanced Verbs",
-      "pos": [
-        "verb"
-      ],
-      "exampleSentences": [
-        "The students debated whether social media does more harm than good to teenagers.",
-        "Politicians debated the proposed law for three days before reaching a final vote."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_720_debate.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "verbs",
-        "advanced",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "無視する",
-        "避ける",
-        "同意する"
-      ],
-      "englishDefinition": "to discuss a topic formally by presenting arguments on opposing sides"
-    },
-    {
       "id": "eikenpre2_721",
       "word": "dedicate",
       "reading": "デディケイト",
@@ -21996,37 +21442,6 @@
         "失う"
       ],
       "englishDefinition": "to bring something to the place or person it is meant for"
-    },
-    {
-      "id": "eikenpre2_723",
-      "word": "demonstrate",
-      "reading": "デモンストレート",
-      "jpTranslation": "示す(しめす)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Advanced Verbs",
-      "pos": [
-        "verb"
-      ],
-      "exampleSentences": [
-        "The scientist demonstrated how the vaccine triggers an immune response.",
-        "Thousands gathered in the capital to demonstrate against the new policy."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_723_demonstrate.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "verbs",
-        "advanced",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "隠す",
-        "否定する",
-        "無視する"
-      ],
-      "englishDefinition": "to show clearly how something works or that something is true"
     },
     {
       "id": "eikenpre2_724",
@@ -22649,37 +22064,6 @@
       "englishDefinition": "to draw attention to something so it stands out as particularly important"
     },
     {
-      "id": "eikenpre2_744",
-      "word": "identify",
-      "reading": "アイデンティファイ2",
-      "jpTranslation": "特定する(とくていする)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Advanced Verbs",
-      "pos": [
-        "verb"
-      ],
-      "exampleSentences": [
-        "Detectives identified the suspect using security footage from a nearby shop.",
-        "The survey helped researchers identify which age groups lacked access to digital banking."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_744_identify.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "verbs",
-        "advanced",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "見落とす",
-        "無視する",
-        "混同する"
-      ],
-      "englishDefinition": "to recognize and correctly name someone or something"
-    },
-    {
       "id": "eikenpre2_745",
       "word": "improve",
       "reading": "インプルーブ",
@@ -22742,68 +22126,6 @@
       "englishDefinition": "to include or absorb something into a larger whole"
     },
     {
-      "id": "eikenpre2_747",
-      "word": "indicate",
-      "reading": "インディケイト2",
-      "jpTranslation": "示す(しめす)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Advanced Verbs",
-      "pos": [
-        "verb"
-      ],
-      "exampleSentences": [
-        "A rising temperature indicated that the patient's infection had not yet cleared.",
-        "Survey results indicate that most students prefer shorter, more frequent assignments."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_747_indicate.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "verbs",
-        "advanced",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "隠す",
-        "省略する",
-        "無視する"
-      ],
-      "englishDefinition": "to point to or suggest that something is true or likely"
-    },
-    {
-      "id": "eikenpre2_748",
-      "word": "influence",
-      "reading": "インフルエンス2",
-      "jpTranslation": "影響を与える(えいきょうをあたえる)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Advanced Verbs",
-      "pos": [
-        "verb"
-      ],
-      "exampleSentences": [
-        "Social media heavily influences the fashion choices of teenagers around the world.",
-        "His childhood in poverty influenced every policy decision he made as a senator."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_748_influence.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "verbs",
-        "advanced",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "無視する",
-        "妨げる",
-        "反対する"
-      ],
-      "englishDefinition": "to have an effect on how someone thinks, feels, or behaves"
-    },
-    {
       "id": "eikenpre2_749",
       "word": "integrate",
       "reading": "インテグレイト",
@@ -22833,37 +22155,6 @@
         "無視する"
       ],
       "englishDefinition": "to combine separate parts into a unified whole"
-    },
-    {
-      "id": "eikenpre2_750",
-      "word": "justify",
-      "reading": "ジャスティファイ2",
-      "jpTranslation": "正当化する(せいとうかする)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Advanced Verbs",
-      "pos": [
-        "verb"
-      ],
-      "exampleSentences": [
-        "The government struggled to justify spending cuts while military budgets kept rising.",
-        "She justified her late arrival by explaining that the train had broken down."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_750_justify.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "verbs",
-        "advanced",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "批判する",
-        "否定する",
-        "非難する"
-      ],
-      "englishDefinition": "to give a valid reason for an action or decision to show it was right"
     },
     {
       "id": "eikenpre2_751",
@@ -23021,37 +22312,6 @@
       "englishDefinition": "to find your way through a place or situation, especially a complex one"
     },
     {
-      "id": "eikenpre2_756",
-      "word": "obtain",
-      "reading": "オブテイン2",
-      "jpTranslation": "入手する(にゅうしゅする)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Advanced Verbs",
-      "pos": [
-        "verb"
-      ],
-      "exampleSentences": [
-        "Journalists obtained internal documents proving the company had ignored safety warnings.",
-        "You must obtain a visa before traveling to most countries in that region."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_756_obtain.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "verbs",
-        "advanced",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "失う",
-        "与える",
-        "放棄する"
-      ],
-      "englishDefinition": "to get or acquire something, especially through effort or a formal process"
-    },
-    {
       "id": "eikenpre2_757",
       "word": "optimize",
       "reading": "オプティマイズ",
@@ -23114,37 +22374,6 @@
       "englishDefinition": "to do better than someone or something else in a comparison"
     },
     {
-      "id": "eikenpre2_759",
-      "word": "overcome",
-      "reading": "オーバーカム3",
-      "jpTranslation": "克服する(こくふくする)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Advanced Verbs",
-      "pos": [
-        "verb"
-      ],
-      "exampleSentences": [
-        "He overcame his fear of public speaking by joining a debate club at school.",
-        "The team had to overcome serious funding shortages before the project could launch."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_759_overcome.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "verbs",
-        "advanced",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "屈服する",
-        "諦める",
-        "逃げる"
-      ],
-      "englishDefinition": "to succeed in dealing with a problem or difficulty"
-    },
-    {
       "id": "eikenpre2_760",
       "word": "overwhelm",
       "reading": "オーバーホエルム",
@@ -23205,37 +22434,6 @@
         "拒否する"
       ],
       "englishDefinition": "to take part in an activity or event with others"
-    },
-    {
-      "id": "eikenpre2_762",
-      "word": "perceive",
-      "reading": "パーシーブ2",
-      "jpTranslation": "知覚する(ちかくする)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Advanced Verbs",
-      "pos": [
-        "verb"
-      ],
-      "exampleSentences": [
-        "Many people perceive silence as awkward, though it can signal deep mutual comfort.",
-        "He perceived a slight hesitation in her voice and realized she was nervous."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_762_perceive.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "verbs",
-        "advanced",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "無視する",
-        "見落とす",
-        "誤解する"
-      ],
-      "englishDefinition": "to become aware of something through the senses or the mind"
     },
     {
       "id": "eikenpre2_763",
@@ -23360,37 +22558,6 @@
         "禁止する"
       ],
       "englishDefinition": "to support or actively encourage something, or to advertise a product or idea"
-    },
-    {
-      "id": "eikenpre2_767",
-      "word": "propose",
-      "reading": "プロポーズ2",
-      "jpTranslation": "提案する(ていあんする)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Advanced Verbs",
-      "pos": [
-        "verb"
-      ],
-      "exampleSentences": [
-        "The minister proposed a new tax on single-use plastics to reduce ocean pollution.",
-        "She proposed holding weekly check-ins so the team could stay aligned on goals."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_767_propose.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "verbs",
-        "advanced",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "反対する",
-        "拒否する",
-        "無視する"
-      ],
-      "englishDefinition": "to put forward an idea, plan, or suggestion for others to consider"
     },
     {
       "id": "eikenpre2_768",
@@ -23639,37 +22806,6 @@
         "忘れる"
       ],
       "englishDefinition": "to keep something or continue to have it rather than losing or giving it up"
-    },
-    {
-      "id": "eikenpre2_776",
-      "word": "reveal",
-      "reading": "リビール2",
-      "jpTranslation": "明らかにする(あきらかにする)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Advanced Verbs",
-      "pos": [
-        "verb"
-      ],
-      "exampleSentences": [
-        "The investigation revealed that the official had accepted bribes for over a decade.",
-        "Removing the wallpaper revealed beautiful original wooden panels underneath."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_776_reveal.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "verbs",
-        "advanced",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "隠す",
-        "秘密にする",
-        "偽る"
-      ],
-      "englishDefinition": "to make something known that was previously hidden or unknown"
     },
     {
       "id": "eikenpre2_777",
@@ -24042,37 +23178,6 @@
         "避ける"
       ],
       "englishDefinition": "to be likely to behave in a certain way or show a particular pattern"
-    },
-    {
-      "id": "eikenpre2_789",
-      "word": "transform",
-      "reading": "トランスフォーム2",
-      "jpTranslation": "変革する(へんかくする)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Advanced Verbs",
-      "pos": [
-        "verb"
-      ],
-      "exampleSentences": [
-        "The renovation completely transformed the abandoned warehouse into a modern art gallery.",
-        "Smartphones have transformed the way people communicate and consume news."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_789_transform.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "verbs",
-        "advanced",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "維持する",
-        "固定する",
-        "衰退させる"
-      ],
-      "englishDefinition": "to change something dramatically in form, appearance, or character"
     },
     {
       "id": "eikenpre2_790",
@@ -25191,37 +24296,6 @@
       "englishDefinition": "having great depth, seriousness, or far-reaching impact"
     },
     {
-      "id": "eikenpre2_826",
-      "word": "relevant",
-      "reading": "レレバント2",
-      "jpTranslation": "適切な(てきせつな)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Advanced Adjectives",
-      "pos": [
-        "adjective"
-      ],
-      "exampleSentences": [
-        "Only include work experience that is directly relevant to the job you are applying for.",
-        "The teacher asked students to cut out newspaper articles relevant to the topic of climate change."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_826_relevant.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "adjectives",
-        "advanced",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "無関係な",
-        "不適切な",
-        "的外れな"
-      ],
-      "englishDefinition": "closely connected to or appropriate for the matter being considered"
-    },
-    {
       "id": "eikenpre2_827",
       "word": "remarkable",
       "reading": "リマーカブル",
@@ -25313,37 +24387,6 @@
         "不安定な"
       ],
       "englishDefinition": "strong, well-built, and able to function effectively under demanding conditions"
-    },
-    {
-      "id": "eikenpre2_830",
-      "word": "significant",
-      "reading": "シグニフィカント3",
-      "jpTranslation": "著しい(いちじるしい)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Advanced Adjectives",
-      "pos": [
-        "adjective"
-      ],
-      "exampleSentences": [
-        "Air pollution has dropped by a significant amount since the city banned diesel trucks downtown.",
-        "There is a significant gap between students who have internet access at home and those who do not."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_830_significant.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "adjectives",
-        "advanced",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "わずかな",
-        "些細な",
-        "無意味な"
-      ],
-      "englishDefinition": "large or important enough to be worth noting or having a noticeable effect"
     },
     {
       "id": "eikenpre2_831",
@@ -25468,37 +24511,6 @@
         "不十分な"
       ],
       "englishDefinition": "large in size, value, or importance; more than just a little"
-    },
-    {
-      "id": "eikenpre2_835",
-      "word": "sustainable",
-      "reading": "サステイナブル2",
-      "jpTranslation": "持続可能な(じぞくかのうな)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Advanced Adjectives",
-      "pos": [
-        "adjective"
-      ],
-      "exampleSentences": [
-        "Organic farming can be sustainable if it maintains soil health and biodiversity over many years.",
-        "The airline invested in sustainable aviation fuel to reduce its carbon footprint."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_835_sustainable.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "adjectives",
-        "advanced",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "持続不可能な",
-        "短期的な",
-        "浪費的な"
-      ],
-      "englishDefinition": "able to be maintained over the long term without exhausting resources or causing lasting harm"
     },
     {
       "id": "eikenpre2_836",
@@ -25780,37 +24792,6 @@
       "englishDefinition": "absolutely necessary for something to function or survive"
     },
     {
-      "id": "eikenpre2_845",
-      "word": "vulnerable",
-      "reading": "バルネラブル2",
-      "jpTranslation": "弱点がある(じゃくてんがある)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Advanced Adjectives",
-      "pos": [
-        "adjective"
-      ],
-      "exampleSentences": [
-        "Young children are particularly vulnerable to respiratory infections in winter.",
-        "Without a firewall, your computer is vulnerable to hacking attempts."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_845_vulnerable.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "adjectives",
-        "advanced",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "強固な",
-        "安全な",
-        "安定した"
-      ],
-      "englishDefinition": "easily harmed or affected because of a lack of protection or strength"
-    },
-    {
       "id": "eikenpre2_846",
       "word": "widespread",
       "reading": "ワイドスプレッド",
@@ -25840,37 +24821,6 @@
         "まれな"
       ],
       "englishDefinition": "existing or happening over a large area or among many people"
-    },
-    {
-      "id": "eikenpre2_847",
-      "word": "abstract",
-      "reading": "アブストラクト2",
-      "jpTranslation": "抽象的な(ちゅうしょうてきな)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Advanced Adjectives",
-      "pos": [
-        "adjective"
-      ],
-      "exampleSentences": [
-        "Justice is an abstract concept that different cultures define differently.",
-        "Young children often struggle to understand abstract ideas like infinity."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_847_abstract.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "adjectives",
-        "advanced",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "具体的な",
-        "実用的な",
-        "明確な"
-      ],
-      "englishDefinition": "existing as an idea rather than as a concrete physical thing"
     },
     {
       "id": "eikenpre2_848",
@@ -26617,37 +25567,6 @@
       "englishDefinition": "not relying on or controlled by others; free to think or act for oneself"
     },
     {
-      "id": "eikenpre2_872",
-      "word": "inevitable",
-      "reading": "イネビタブル2",
-      "jpTranslation": "必然的な(ひつぜんてきな)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Advanced Adjectives",
-      "pos": [
-        "adjective"
-      ],
-      "exampleSentences": [
-        "Conflict between the two rival groups seemed inevitable given the long history of mistrust.",
-        "Change is inevitable; the key is learning to adapt to it quickly."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_872_inevitable.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "adjectives",
-        "advanced",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "偶発的な",
-        "避けられる",
-        "変えられる"
-      ],
-      "englishDefinition": "certain to happen and impossible to prevent"
-    },
-    {
       "id": "eikenpre2_873",
       "word": "influential",
       "reading": "インフルエンシャル",
@@ -26679,37 +25598,6 @@
       "englishDefinition": "having the power to shape opinions, decisions, or events"
     },
     {
-      "id": "eikenpre2_874",
-      "word": "inherent",
-      "reading": "インヒアレント2",
-      "jpTranslation": "本質的な(ほんしつてきな)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Advanced Adjectives",
-      "pos": [
-        "adjective"
-      ],
-      "exampleSentences": [
-        "There is an inherent tension between freedom of speech and the right not to be harassed online.",
-        "One inherent weakness of the proposal is that it depends entirely on volunteer labor."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_874_inherent.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "adjectives",
-        "advanced",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "外部の",
-        "後天的な",
-        "付加的な"
-      ],
-      "englishDefinition": "existing as a permanent and inseparable part of something's nature"
-    },
-    {
       "id": "eikenpre2_875",
       "word": "integrated",
       "reading": "インテグレイテッド",
@@ -26739,68 +25627,6 @@
         "バラバラな"
       ],
       "englishDefinition": "combining different parts into a unified whole that works together smoothly"
-    },
-    {
-      "id": "eikenpre2_876",
-      "word": "interactive",
-      "reading": "インタラクティブ2",
-      "jpTranslation": "双方向の(そうほうこうの)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Advanced Adjectives",
-      "pos": [
-        "adjective"
-      ],
-      "exampleSentences": [
-        "The museum's interactive exhibits let children handle ancient tools and try on costumes.",
-        "Students stayed more engaged during the interactive online lesson than during recorded lectures."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_876_interactive.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "adjectives",
-        "advanced",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "一方向の",
-        "受動的な",
-        "固定された"
-      ],
-      "englishDefinition": "involving two-way communication or active participation between people or systems"
-    },
-    {
-      "id": "eikenpre2_877",
-      "word": "logical",
-      "reading": "ロジカル2",
-      "jpTranslation": "合理的な(ごうりてきな)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Advanced Adjectives",
-      "pos": [
-        "adjective"
-      ],
-      "exampleSentences": [
-        "Given the evidence, arresting the primary suspect was the most logical course of action.",
-        "Her argument was logical and well-structured, making it difficult to find any flaws."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_877_logical.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "adjectives",
-        "advanced",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "非論理的な",
-        "感情的な",
-        "矛盾した"
-      ],
-      "englishDefinition": "following clear, sound reasoning that is consistent and well-founded"
     },
     {
       "id": "eikenpre2_878",
@@ -26894,37 +25720,6 @@
         "一つの"
       ],
       "englishDefinition": "consisting of more than one; many"
-    },
-    {
-      "id": "eikenpre2_881",
-      "word": "objective",
-      "reading": "オブジェクティブ2",
-      "jpTranslation": "客観的な(きゃっかんてきな)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Advanced Adjectives",
-      "pos": [
-        "adjective"
-      ],
-      "exampleSentences": [
-        "A good referee must remain objective and not favor either team.",
-        "Scientists strive to gather objective data rather than letting their expectations bias their results."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_881_objective.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "adjectives",
-        "advanced",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "主観的な",
-        "偏った",
-        "個人的な"
-      ],
-      "englishDefinition": "not influenced by personal feelings; based on facts rather than opinions"
     },
     {
       "id": "eikenpre2_882",
@@ -27142,37 +25937,6 @@
         "疑わしい"
       ],
       "englishDefinition": "consistently dependable and able to be trusted to do what is expected"
-    },
-    {
-      "id": "eikenpre2_889",
-      "word": "renewable",
-      "reading": "リニューアブル2",
-      "jpTranslation": "再生可能な(さいせいかのうな)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Advanced Adjectives",
-      "pos": [
-        "adjective"
-      ],
-      "exampleSentences": [
-        "The country plans to generate 80% of its electricity from renewable sources by 2040.",
-        "Solar power is a renewable alternative to coal because sunlight replenishes itself naturally."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_889_renewable.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "adjectives",
-        "advanced",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "消耗性の",
-        "一度限りの",
-        "永続しない"
-      ],
-      "englishDefinition": "able to be naturally restored or replaced, so it does not run out"
     },
     {
       "id": "eikenpre2_890",
@@ -28506,37 +27270,6 @@
         "同様に"
       ],
       "englishDefinition": "used to introduce a different choice or option"
-    },
-    {
-      "id": "eikenpre2_933",
-      "word": "approximately",
-      "reading": "アプロキシメットリー2",
-      "jpTranslation": "約(やく)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Advanced Adverbs",
-      "pos": [
-        "adverb"
-      ],
-      "exampleSentences": [
-        "The renovation will take approximately six weeks and cost around two million yen.",
-        "Approximately one in five teenagers in the survey reported feeling lonely at school."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_933_approximately.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "adverbs",
-        "advanced",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "正確に",
-        "ちょうど",
-        "厳密に"
-      ],
-      "englishDefinition": "close to a particular number or amount, but not exactly"
     },
     {
       "id": "eikenpre2_934",
@@ -31983,37 +30716,6 @@
       "englishDefinition": "used to introduce a contrasting or opposing point of view"
     },
     {
-      "id": "eikenpre2_1048",
-      "word": "in terms of",
-      "reading": "イン・タームズ・オブ2",
-      "jpTranslation": "〜の面では",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Idioms & Expressions",
-      "pos": [
-        "phrase"
-      ],
-      "exampleSentences": [
-        "In terms of fuel efficiency, electric vehicles outperform traditional petrol cars.",
-        "The two candidates are very different in terms of their approach to education reform."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_1048_in_terms_of.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "idioms",
-        "expressions",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "それとは無関係に",
-        "除いて",
-        "問わず"
-      ],
-      "englishDefinition": "when considering a specific aspect or category of something"
-    },
-    {
       "id": "eikenpre2_1049",
       "word": "as a result",
       "reading": "アズ・ア・リザルト",
@@ -32324,37 +31026,6 @@
       "englishDefinition": "taking all the relevant facts and circumstances into account before forming a judgment"
     },
     {
-      "id": "eikenpre2_1059",
-      "word": "in the long run",
-      "reading": "イン・ザ・ロング・ラン2",
-      "jpTranslation": "長期的には",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Idioms & Expressions",
-      "pos": [
-        "phrase"
-      ],
-      "exampleSentences": [
-        "Cutting corners on building safety may save money now but proves costly in the long run.",
-        "Learning to manage your emotions well pays off in the long run, both personally and professionally."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_1059_in_the_long_run.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "idioms",
-        "expressions",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "短期的には",
-        "今すぐには",
-        "一時的には"
-      ],
-      "englishDefinition": "over a long period of time, after all eventual effects have been considered"
-    },
-    {
       "id": "eikenpre2_1060",
       "word": "by all means",
       "reading": "バイ・オール・ミーンズ",
@@ -32632,37 +31303,6 @@
         "〜を犠牲にして"
       ],
       "englishDefinition": "in order to benefit someone or achieve a particular purpose"
-    },
-    {
-      "id": "eikenpre2_1069",
-      "word": "on a regular basis",
-      "reading": "オン・ア・レギュラー・ベイシス2",
-      "jpTranslation": "定期的に",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Idioms & Expressions",
-      "pos": [
-        "phrase"
-      ],
-      "exampleSentences": [
-        "Doctors recommend exercising on a regular basis to maintain cardiovascular health.",
-        "The team reviews its goals on a regular basis to ensure the project stays on track."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_1069_on_a_regular_basis.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "idioms",
-        "expressions",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "不定期に",
-        "たまに",
-        "偶発的に"
-      ],
-      "englishDefinition": "repeatedly at fixed or consistent intervals; regularly"
     },
     {
       "id": "eikenpre2_1070",
@@ -33905,37 +32545,6 @@
       "englishDefinition": "only if a specific requirement or stipulation is satisfied"
     },
     {
-      "id": "eikenpre2_1110",
-      "word": "provided that",
-      "reading": "プロバイデッド・ザット2",
-      "jpTranslation": "〜ならば",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Idioms & Expressions",
-      "pos": [
-        "phrase"
-      ],
-      "exampleSentences": [
-        "I will support the proposal provided that the environmental impact is properly assessed.",
-        "You can stay up late provided that you finish all your homework first."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_1110_provided_that.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "idioms",
-        "expressions",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "たとえ〜でも",
-        "〜にかかわらず",
-        "いつも"
-      ],
-      "englishDefinition": "only if; on the condition that something is the case"
-    },
-    {
       "id": "eikenpre2_1111",
       "word": "seeing that",
       "reading": "シーイング・ザット",
@@ -34337,37 +32946,6 @@
         "仮説形成"
       ],
       "englishDefinition": "the process of gathering and measuring information for research or analysis"
-    },
-    {
-      "id": "eikenpre2_1124",
-      "word": "peer review",
-      "reading": "ピア・レビュー2",
-      "jpTranslation": "査読(さどく)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Science & Research",
-      "pos": [
-        "noun"
-      ],
-      "exampleSentences": [
-        "The research findings were published only after passing a rigorous peer review process.",
-        "Peer review allows other experts to check a study for errors before it becomes public."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_1124_peer_review.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "science",
-        "research",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "自己評価",
-        "無評価",
-        "主観評価"
-      ],
-      "englishDefinition": "the evaluation of scientific work by other qualified experts in the same field"
     },
     {
       "id": "eikenpre2_1125",
@@ -36106,99 +34684,6 @@
       "englishDefinition": "able to be repeated by others under the same conditions with the same results"
     },
     {
-      "id": "eikenpre2_1181",
-      "word": "heritage",
-      "reading": "ヘリテージ2",
-      "jpTranslation": "文化遺産(ぶんかいさん)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Culture & Society",
-      "pos": [
-        "noun"
-      ],
-      "exampleSentences": [
-        "The ancient temple was listed as a UNESCO World Heritage Site to preserve it for future generations.",
-        "She felt proud of her cultural heritage and celebrated traditional festivals every year."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_1181_heritage.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "culture",
-        "society",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "現代文化",
-        "大衆文化",
-        "流行"
-      ],
-      "englishDefinition": "valued traditions, buildings, or culture passed down through generations within a society"
-    },
-    {
-      "id": "eikenpre2_1182",
-      "word": "stereotype",
-      "reading": "ステレオタイプ2",
-      "jpTranslation": "ステレオタイプ",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Culture & Society",
-      "pos": [
-        "noun"
-      ],
-      "exampleSentences": [
-        "The stereotype that all teenagers are lazy ignores how many volunteer and work part-time.",
-        "Movies often reinforce harmful stereotypes about certain nationalities or professions."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_1182_stereotype.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "culture",
-        "society",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "個性",
-        "多様性",
-        "独自性"
-      ],
-      "englishDefinition": "a fixed, oversimplified image or idea about a particular type of person or group"
-    },
-    {
-      "id": "eikenpre2_1183",
-      "word": "norm",
-      "reading": "ノーム2",
-      "jpTranslation": "規範(きはん)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Culture & Society",
-      "pos": [
-        "noun"
-      ],
-      "exampleSentences": [
-        "Working from home has become the norm for many office employees since the pandemic.",
-        "Social norms around gender roles vary greatly between different cultures."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_1183_norm.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "culture",
-        "society",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "規則",
-        "法律",
-        "禁止"
-      ],
-      "englishDefinition": "an accepted standard or pattern of behavior considered typical within a group or society"
-    },
-    {
       "id": "eikenpre2_1184",
       "word": "ritual",
       "reading": "リチュアル",
@@ -36259,37 +34744,6 @@
         "慣習"
       ],
       "englishDefinition": "a social or cultural prohibition against something considered offensive or unacceptable"
-    },
-    {
-      "id": "eikenpre2_1186",
-      "word": "assimilation",
-      "reading": "アシミレーション2",
-      "jpTranslation": "同化(どうか)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Culture & Society",
-      "pos": [
-        "noun"
-      ],
-      "exampleSentences": [
-        "Forced assimilation of indigenous children into mainstream schools destroyed many native languages.",
-        "Some immigrants choose assimilation while others prefer to maintain their original culture."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_1186_assimilation.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "culture",
-        "society",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "多様化",
-        "共存",
-        "独自性"
-      ],
-      "englishDefinition": "the process by which a person or group adopts the culture and customs of another dominant group"
     },
     {
       "id": "eikenpre2_1187",
@@ -36564,9 +35018,9 @@
         "B1"
       ],
       "distractors": [
-        "個人メディア",
-        "SNS",
-        "口コミ"
+        "標本(ひょうほん)",
+        "理想郷(りそうきょう)",
+        "認知負荷(にんちふか)"
       ],
       "englishDefinition": "communication channels such as television, newspapers, and online platforms that reach large audiences"
     },
@@ -39981,37 +38435,6 @@
       "englishDefinition": "a standard or principle used to judge, evaluate, or make a decision about something"
     },
     {
-      "id": "eikenpre2_1306",
-      "word": "perspective",
-      "reading": "パースペクティブ2",
-      "jpTranslation": "観点(かんてん)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Abstract Concepts",
-      "pos": [
-        "noun"
-      ],
-      "exampleSentences": [
-        "Reading novels from other cultures broadens your perspective on how differently people live.",
-        "From a historical perspective, the treaty was a turning point that prevented further conflict."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_1306_perspective.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "abstract",
-        "concepts",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "事実",
-        "証拠",
-        "データ"
-      ],
-      "englishDefinition": "a particular way of thinking about or viewing a situation, shaped by one's background, position, or experience"
-    },
-    {
       "id": "eikenpre2_1307",
       "word": "implication",
       "reading": "インプリケーション",
@@ -40384,37 +38807,6 @@
       "englishDefinition": "a comparison between two different things that share a similar structure, used to explain or clarify an idea"
     },
     {
-      "id": "eikenpre2_1319",
-      "word": "spectrum",
-      "reading": "スペクトラム2",
-      "jpTranslation": "スペクトル",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Abstract Concepts",
-      "pos": [
-        "noun"
-      ],
-      "exampleSentences": [
-        "Political opinions in the country span a broad spectrum, from far left to far right.",
-        "Autism is a spectrum condition, meaning its effects vary widely from one person to another."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_1319_spectrum.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "abstract",
-        "concepts",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "単点",
-        "二項対立",
-        "均一"
-      ],
-      "englishDefinition": "a continuous range of different positions, opinions, or conditions that vary between two extremes"
-    },
-    {
       "id": "eikenpre2_1320",
       "word": "threshold",
       "reading": "スレッショルド",
@@ -40508,68 +38900,6 @@
       "englishDefinition": "a thorough or radical change in form, character, or condition"
     },
     {
-      "id": "eikenpre2_1323",
-      "word": "evolution",
-      "reading": "エボリューション2",
-      "jpTranslation": "進化(しんか)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Abstract Concepts",
-      "pos": [
-        "noun"
-      ],
-      "exampleSentences": [
-        "The evolution of smartphones over twenty years has reshaped how people communicate.",
-        "Biologists study the evolution of species through fossil records and DNA analysis."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_1323_evolution.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "abstract",
-        "concepts",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "退化",
-        "固定",
-        "停止"
-      ],
-      "englishDefinition": "a gradual development or change over time, in nature or society"
-    },
-    {
-      "id": "eikenpre2_1324",
-      "word": "innovation",
-      "reading": "イノベーション2",
-      "jpTranslation": "革新(かくしん)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Abstract Concepts",
-      "pos": [
-        "noun"
-      ],
-      "exampleSentences": [
-        "The startup's innovation in battery design cut charging time by half.",
-        "Without innovation, companies risk falling behind faster-moving competitors."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_1324_innovation.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "abstract",
-        "concepts",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "保守",
-        "停滞",
-        "維持"
-      ],
-      "englishDefinition": "the introduction of a new idea, method, or product that brings meaningful change"
-    },
-    {
       "id": "eikenpre2_1325",
       "word": "revolution",
       "reading": "レボリューション",
@@ -40661,68 +38991,6 @@
         "新規"
       ],
       "englishDefinition": "an earlier event or decision that serves as an example or rule for future cases"
-    },
-    {
-      "id": "eikenpre2_1328",
-      "word": "paradox",
-      "reading": "パラドックス2",
-      "jpTranslation": "パラドックス",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Abstract Concepts",
-      "pos": [
-        "noun"
-      ],
-      "exampleSentences": [
-        "It's a paradox that wealthier nations often report lower average happiness scores.",
-        "The paradox of choice suggests that more options can leave people less satisfied."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_1328_paradox.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "abstract",
-        "concepts",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "単純な事実",
-        "明らかな真実",
-        "論理的結論"
-      ],
-      "englishDefinition": "a situation or statement that seems contradictory but may reveal a deeper truth"
-    },
-    {
-      "id": "eikenpre2_1329",
-      "word": "dynamic",
-      "reading": "ダイナミック2",
-      "jpTranslation": "力学(りきがく)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Abstract Concepts",
-      "pos": [
-        "noun"
-      ],
-      "exampleSentences": [
-        "The power dynamic in the office shifted when a new manager joined the team.",
-        "Researchers study the social dynamics of online communities to understand conflict."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_1329_dynamic.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "abstract",
-        "concepts",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "静的な状態",
-        "固定した関係",
-        "変化なし"
-      ],
-      "englishDefinition": "the forces or patterns of interaction that drive behavior within a system or group"
     },
     {
       "id": "eikenpre2_1330",
@@ -40849,68 +39117,6 @@
       "englishDefinition": "the strength or force that keeps something moving forward or developing"
     },
     {
-      "id": "eikenpre2_1334",
-      "word": "catalyst",
-      "reading": "カタリスト2",
-      "jpTranslation": "触媒(しょくばい)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Abstract Concepts",
-      "pos": [
-        "noun"
-      ],
-      "exampleSentences": [
-        "The financial crisis acted as a catalyst for sweeping banking regulation reforms.",
-        "Her speech was the catalyst that persuaded many undecided voters to support the bill."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_1334_catalyst.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "abstract",
-        "concepts",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "障害",
-        "抑制",
-        "妨げ"
-      ],
-      "englishDefinition": "a person or event that triggers or speeds up a significant change or process"
-    },
-    {
-      "id": "eikenpre2_1335",
-      "word": "barrier",
-      "reading": "バリアー2",
-      "jpTranslation": "障壁(しょうへき)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Abstract Concepts",
-      "pos": [
-        "noun"
-      ],
-      "exampleSentences": [
-        "High tuition fees remain a major barrier for students from low-income families.",
-        "Language differences can be a barrier to effective communication in multinational teams."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_1335_barrier.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "abstract",
-        "concepts",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "橋",
-        "機会",
-        "支援"
-      ],
-      "englishDefinition": "something that blocks progress, access, or connection between people or things"
-    },
-    {
       "id": "eikenpre2_1336",
       "word": "gap",
       "reading": "ギャップ",
@@ -40971,37 +39177,6 @@
         "完全性"
       ],
       "englishDefinition": "an empty space or a complete absence of something previously present"
-    },
-    {
-      "id": "eikenpre2_1338",
-      "word": "framework",
-      "reading": "フレームワーク2",
-      "jpTranslation": "フレームワーク",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Abstract Concepts",
-      "pos": [
-        "noun"
-      ],
-      "exampleSentences": [
-        "The new legal framework for data privacy requires companies to disclose how they use personal information.",
-        "Scientists use an evolutionary framework to interpret fossils and genetic evidence together."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_1338_framework.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "abstract",
-        "concepts",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "混乱",
-        "無秩序",
-        "ランダム"
-      ],
-      "englishDefinition": "a structured set of principles or rules used to organize thinking or guide action"
     },
     {
       "id": "eikenpre2_1339",
@@ -41283,37 +39458,6 @@
       "englishDefinition": "the right or ability to make one's own decisions and act independently"
     },
     {
-      "id": "eikenpre2_1348",
-      "word": "sovereignty",
-      "reading": "ソバリンティ2",
-      "jpTranslation": "主権(しゅけん)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Abstract Concepts",
-      "pos": [
-        "noun"
-      ],
-      "exampleSentences": [
-        "The treaty was seen as a threat to the country's sovereignty over its northern territories.",
-        "Debates about digital sovereignty focus on who controls national data stored on foreign servers."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_1348_sovereignty.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "abstract",
-        "concepts",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "従属",
-        "被支配",
-        "保護領"
-      ],
-      "englishDefinition": "the supreme authority of a state to govern itself without outside control"
-    },
-    {
       "id": "eikenpre2_1349",
       "word": "legitimacy",
       "reading": "レジティマシー",
@@ -41374,37 +39518,6 @@
         "不透明性"
       ],
       "englishDefinition": "the obligation to explain one's actions and accept responsibility for their outcomes"
-    },
-    {
-      "id": "eikenpre2_1351",
-      "word": "transparency",
-      "reading": "トランスパレンシー2",
-      "jpTranslation": "透明性(とうめいせい)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Abstract Concepts",
-      "pos": [
-        "noun"
-      ],
-      "exampleSentences": [
-        "The charity published detailed financial reports to demonstrate transparency to donors.",
-        "Greater transparency in pricing helps consumers make more informed decisions."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_1351_transparency.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "abstract",
-        "concepts",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "秘密主義",
-        "不透明性",
-        "隠蔽"
-      ],
-      "englishDefinition": "the quality of being open and honest so that others can see what is being done and why"
     },
     {
       "id": "eikenpre2_1352",
@@ -41622,37 +39735,6 @@
         "外れ"
       ],
       "englishDefinition": "the quality of being closely connected to or appropriate for the matter being considered"
-    },
-    {
-      "id": "eikenpre2_1359",
-      "word": "impact",
-      "reading": "インパクト2",
-      "jpTranslation": "インパクト",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Abstract Concepts",
-      "pos": [
-        "noun"
-      ],
-      "exampleSentences": [
-        "The new traffic policy had a significant impact on air quality in the city center.",
-        "Researchers measured the impact of the program on students' reading scores over three years."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_1359_impact.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "abstract",
-        "concepts",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "無関係",
-        "わずかな効果",
-        "微小変化"
-      ],
-      "englishDefinition": "a strong effect or influence that one thing has on another"
     },
     {
       "id": "eikenpre2_1360",
@@ -42089,37 +40171,6 @@
       "englishDefinition": "a self-reinforcing sequence where each positive outcome leads to another, compounding improvement"
     },
     {
-      "id": "eikenpre2_1374",
-      "word": "narrative",
-      "reading": "ナラティブ2",
-      "jpTranslation": "ナラティブ",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Abstract Concepts",
-      "pos": [
-        "noun"
-      ],
-      "exampleSentences": [
-        "The government tried to control the narrative by releasing its own data before journalists could.",
-        "Her personal narrative of overcoming illness made the audience connect with her message deeply."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_1374_narrative.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "abstract",
-        "concepts",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "データ",
-        "証拠",
-        "事実"
-      ],
-      "englishDefinition": "a spoken or written account of events, or the framing story used to shape how people understand a situation"
-    },
-    {
       "id": "eikenpre2_1375",
       "word": "paradigm shift",
       "reading": "パラダイム・シフト",
@@ -42304,37 +40355,6 @@
         "局所的な"
       ],
       "englishDefinition": "considering a whole system or person rather than focusing on separate parts in isolation"
-    },
-    {
-      "id": "eikenpre2_1381",
-      "word": "systemic",
-      "reading": "システミック2",
-      "jpTranslation": "システム全体の(システムぜんたいの)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Abstract Concepts",
-      "pos": [
-        "adjective"
-      ],
-      "exampleSentences": [
-        "Racial inequality is a systemic issue that affects hiring, housing, and education.",
-        "The hospital identified systemic failures in how it handled patient complaints."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_1381_systemic.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "abstract",
-        "concepts",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "個別の",
-        "局所的な",
-        "偶発的な"
-      ],
-      "englishDefinition": "relating to a whole system rather than one part of it"
     },
     {
       "id": "eikenpre2_1382",
@@ -42740,37 +40760,6 @@
       "englishDefinition": "a detailed and reasoned analysis that identifies both strengths and weaknesses"
     },
     {
-      "id": "eikenpre2_1395",
-      "word": "discourse",
-      "reading": "ディスコース2",
-      "jpTranslation": "ディスコース",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Abstract Concepts",
-      "pos": [
-        "noun"
-      ],
-      "exampleSentences": [
-        "Social media has shifted political discourse toward short, emotional statements.",
-        "The philosopher argued that academic discourse should be accessible to ordinary citizens."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_1395_discourse.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "abstract",
-        "concepts",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "独白",
-        "沈黙",
-        "個人思考"
-      ],
-      "englishDefinition": "written or spoken communication and discussion on a particular subject within a community"
-    },
-    {
       "id": "eikenpre2_1396",
       "word": "epistemology",
       "reading": "エピステモロジー",
@@ -43172,37 +41161,6 @@
         "事実"
       ],
       "englishDefinition": "a statement or assumption treated as a starting point from which a conclusion is drawn"
-    },
-    {
-      "id": "eikenpre2_1409",
-      "word": "bias",
-      "reading": "バイアス2",
-      "jpTranslation": "バイアス",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Abstract Concepts",
-      "pos": [
-        "noun"
-      ],
-      "exampleSentences": [
-        "The study revealed a confirmation bias — participants remembered evidence that matched their existing beliefs.",
-        "Hiring managers were trained to recognise unconscious bias in how they evaluated job applications."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_1409_bias.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "abstract",
-        "concepts",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "中立",
-        "客観性",
-        "公正"
-      ],
-      "englishDefinition": "a systematic tendency to favour or disfavour certain ideas, groups, or outcomes in an unfair way"
     },
     {
       "id": "eikenpre2_1410",
@@ -44476,37 +42434,6 @@
       "englishDefinition": "a structured meeting held after a project or sprint to reflect on what went well and what should change"
     },
     {
-      "id": "eikenpre2_1451",
-      "word": "velocity",
-      "reading": "ベロシティ2",
-      "jpTranslation": "ベロシティ・進捗速度",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Abstract Concepts",
-      "pos": [
-        "noun"
-      ],
-      "exampleSentences": [
-        "The team's velocity doubled after they stopped being interrupted by unplanned meetings.",
-        "Tracking velocity over several sprints helps managers predict when a project will finish."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_1451_velocity.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "abstract",
-        "concepts",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "停滞",
-        "後退",
-        "減速"
-      ],
-      "englishDefinition": "the rate at which a development team completes work during a fixed period, used to forecast progress"
-    },
-    {
       "id": "eikenpre2_1452",
       "word": "throughput",
       "reading": "スループット",
@@ -44784,37 +42711,6 @@
         "管理不足"
       ],
       "englishDefinition": "the practice of assigning responsibility for a task to another person while retaining overall accountability"
-    },
-    {
-      "id": "eikenpre2_1461",
-      "word": "accountability",
-      "reading": "アカウンタビリティ2",
-      "jpTranslation": "アカウンタビリティ",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Abstract Concepts",
-      "pos": [
-        "noun"
-      ],
-      "exampleSentences": [
-        "Public accountability for the leaked data pushed the company to overhaul its privacy policies.",
-        "When teammates know there is clear accountability, they are less likely to miss agreed deadlines."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_1461_accountability.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "abstract",
-        "concepts",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "無責任",
-        "責任転嫁",
-        "匿名性"
-      ],
-      "englishDefinition": "the obligation to accept responsibility for one's actions and explain them to others"
     },
     {
       "id": "eikenpre2_1462",
@@ -45807,37 +43703,6 @@
         "概念的な"
       ],
       "englishDefinition": "relating to carefully planned actions designed to achieve a specific short-term objective"
-    },
-    {
-      "id": "eikenpre2_1494",
-      "word": "strategic",
-      "reading": "ストラテジック2",
-      "jpTranslation": "戦略的な(せんりゃくてきな)",
-      "cefrLevel": "B1",
-      "eikenLevel": "pre2",
-      "category": "Abstract Concepts",
-      "pos": [
-        "adjective"
-      ],
-      "exampleSentences": [
-        "The company made a strategic decision to exit the smartphone market and focus on software instead.",
-        "Building a presence in Southeast Asia was a strategic move to diversify revenue away from Europe."
-      ],
-      "audioUrl": "assets/audio/b1/eikenpre2_1494_strategic.mp3",
-      "imageUrl": "",
-      "fsrsState": "new",
-      "tags": [
-        "abstract",
-        "concepts",
-        "pre2",
-        "B1"
-      ],
-      "distractors": [
-        "戦術的な",
-        "短期的な",
-        "場当たり的な"
-      ],
-      "englishDefinition": "relating to a long-term plan designed to achieve a major overall goal"
     },
     {
       "id": "eikenpre2_1495",
