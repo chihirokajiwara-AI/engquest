@@ -7,6 +7,12 @@ import 'package:engquest/features/voice/voice_screen.dart';
 import 'package:engquest/features/dialog/dialog_screen.dart';
 import 'package:engquest/features/onboarding/onboarding_flow.dart';
 import 'package:engquest/features/quest/quest_title_screen.dart';
+import 'package:engquest/features/quest/quest_screen.dart';
+import 'package:engquest/features/quest/quest_map_screen.dart';
+import 'package:engquest/features/quest/quest_data.dart';
+import 'package:engquest/features/exam_practice/exam_practice_screen.dart';
+import 'package:engquest/features/achievements/achievements_screen.dart';
+import 'package:engquest/features/parent_dashboard/parent_dashboard_screen.dart';
 import 'package:engquest/features/home/daily_home_screen.dart';
 import 'package:engquest/core/storage/preferences_service.dart';
 
@@ -149,8 +155,9 @@ class EngQuestApp extends StatelessWidget {
           ),
         ),
       ),
-      // Entry point: check onboarding flag and route accordingly
-      home: const _AppEntryPoint(),
+      // Entry point: check onboarding flag and route accordingly.
+      // ?preview=<name> renders a single screen for design audit/screenshots.
+      home: _previewFor(Uri.base.queryParameters['preview']),
       // NOTE: Named routes for Battle must carry childAge.
       // WorldMapScreen uses Navigator.push (not named route) to pass childAge.
       // The named '/battle' route is a fallback for direct navigation (childAge=8 default).
@@ -176,6 +183,39 @@ class EngQuestApp extends StatelessWidget {
 ///
 /// On onboarding completion, [OnboardingResult] is persisted via
 /// [OnboardingStorage.save] and the user is forwarded to the world map.
+/// Design-audit harness: `?preview=<name>` renders one screen in isolation so
+/// every page can be screenshotted. Returns the normal entry point otherwise.
+Widget _previewFor(String? name) {
+  switch (name) {
+    case 'title':
+      return QuestTitleScreen(onStart: () {});
+    case 'onboarding':
+      return OnboardingFlow(onComplete: (_) {});
+    case 'worldmap':
+      return const WorldMapScreen(childAge: 8);
+    case 'home':
+      return const DailyHomeScreen(childAge: 8);
+    case 'questmap':
+      return const QuestMapScreen();
+    case 'quest':
+      return QuestScreen(town: kQuestTowns.first);
+    case 'battle':
+      return const BattleScreen(childAge: 8);
+    case 'dialog':
+      return const DialogScenariosScreen();
+    case 'voice':
+      return const VoiceScreen();
+    case 'exam':
+      return const ExamPracticeScreen(eikenGrade: '5');
+    case 'achievements':
+      return const AchievementsScreen();
+    case 'parent':
+      return const ParentDashboardScreen();
+    default:
+      return const _AppEntryPoint();
+  }
+}
+
 class _AppEntryPoint extends StatefulWidget {
   const _AppEntryPoint();
 
