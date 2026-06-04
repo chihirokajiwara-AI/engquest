@@ -139,19 +139,23 @@ class QuestTitleScreen extends StatelessWidget {
     );
   }
 
-  // a small heraldic crest above the title (wings + gem)
-  Widget _crest() => SizedBox(
-        height: 40,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Transform.flip(flipX: true, child: const Icon(Icons.eco, color: _gold, size: 26)),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 2),
-              child: Icon(Icons.diamond, color: Color(0xFFBFE3FF), size: 22),
-            ),
-            const Icon(Icons.eco, color: _gold, size: 26),
-          ],
+  // Generated heraldic crest (wings + gem). Falls back to a simple mark.
+  Widget _crest() => Image.asset(
+        'assets/art/crest.png',
+        height: 96,
+        errorBuilder: (_, __, ___) => SizedBox(
+          height: 40,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Transform.flip(flipX: true, child: const Icon(Icons.eco, color: _gold, size: 26)),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 2),
+                child: Icon(Icons.diamond, color: Color(0xFFBFE3FF), size: 22),
+              ),
+              const Icon(Icons.eco, color: _gold, size: 26),
+            ],
+          ),
         ),
       );
 
@@ -202,9 +206,9 @@ class QuestTitleScreen extends StatelessWidget {
 
   Widget _menu() => Column(
         children: [
-          _menuItem('はじめる', selected: true, onTap: onStart),
+          _menuItem('はじめる / Start', selected: true, onTap: onStart),
           const SizedBox(height: 6),
-          _menuItem('つづきから', selected: false, onTap: onStart),
+          _menuItem('つづきから / Continue', selected: false, onTap: onStart),
         ],
       );
 
