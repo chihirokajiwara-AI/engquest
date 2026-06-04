@@ -6,6 +6,7 @@ import 'package:engquest/features/battle/battle_screen.dart';
 import 'package:engquest/features/voice/voice_screen.dart';
 import 'package:engquest/features/dialog/dialog_screen.dart';
 import 'package:engquest/features/onboarding/onboarding_flow.dart';
+import 'package:engquest/features/quest/quest_title_screen.dart';
 import 'package:engquest/features/home/daily_home_screen.dart';
 import 'package:engquest/core/storage/preferences_service.dart';
 
@@ -185,6 +186,7 @@ class _AppEntryPoint extends StatefulWidget {
 class _AppEntryPointState extends State<_AppEntryPoint> {
   bool _onboardingComplete = false;
   bool _loading = true;
+  bool _started = false; // title screen shows until the player taps はじめる
 
   /// The age to route into [WorldMapScreen] with.  Sourced either from
   /// persisted prefs (returning user) or directly from the just-completed
@@ -255,6 +257,9 @@ class _AppEntryPointState extends State<_AppEntryPoint> {
           ),
         ),
       );
+    }
+    if (!_started) {
+      return QuestTitleScreen(onStart: () => setState(() => _started = true));
     }
     if (_onboardingComplete) {
       return DailyHomeScreen(childAge: _childAge);
