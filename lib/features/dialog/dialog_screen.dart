@@ -3,6 +3,7 @@ import 'package:engquest/core/dialog/claude_client.dart';
 import 'package:engquest/core/dialog/dialog_service.dart';
 import 'package:engquest/core/dialog/suggestion_engine.dart';
 import 'package:engquest/core/ui/page_transitions.dart';
+import 'package:engquest/features/quest/ui/dq_ui.dart';
 
 // ---------------------------------------------------------------------------
 // DialogScenariosScreen — pick a scenario to start chatting
@@ -14,41 +15,26 @@ class DialogScenariosScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA),
-      appBar: AppBar(
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF4FC3F7), Color(0xFF29B6F6)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: const Text(
-          '💬 NPC Conversations',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
+    return DqScene(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              '誰と話す？',
-              style: TextStyle(color: Color(0xFF607D8B), fontSize: 16),
+            _DqHeader(
+              jp: '会話',
+              en: 'Talk',
+              onBack: () => Navigator.pop(context),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 4),
+            Padding(
+              padding: const EdgeInsets.only(left: 4, bottom: 14),
+              child: dqBilingual('誰と話す？', 'Who will you talk to?',
+                  jpSize: 14, jpColor: dqInk),
+            ),
             Expanded(
               child: ListView(
+                padding: const EdgeInsets.only(bottom: 16),
                 children: DialogScenario.values
                     .map((s) => _ScenarioCard(scenario: s))
                     .toList(),
@@ -65,26 +51,19 @@ class _ScenarioCard extends StatelessWidget {
   final DialogScenario scenario;
   const _ScenarioCard({required this.scenario});
 
-  static const Map<DialogScenario, Color> _cardColors = {
-    DialogScenario.greetNpc: Color(0xFF4FC3F7),
-    DialogScenario.shopDialog: Color(0xFFFFB74D),
-    DialogScenario.battleIntro: Color(0xFFEF5350),
-  };
-
-  static const Map<DialogScenario, String> _descriptions = {
-    DialogScenario.greetNpc: '👋 あいさつ・自己紹介を練習しよう',
-    DialogScenario.shopDialog: '🛍️ かずとものの名前を練習しよう',
-    DialogScenario.battleIntro: '⚔️ アクションことばを練習しよう',
+  /// Bilingual objective shown beneath the NPC name (JP / EN).
+  static const Map<DialogScenario, (String, String)> _objectives = {
+    DialogScenario.greetNpc: ('あいさつ・自己紹介', 'Greetings & introductions'),
+    DialogScenario.shopDialog: ('かず・ものの名前', 'Numbers & item names'),
+    DialogScenario.battleIntro: ('アクションことば', 'Action words'),
   };
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: _cardColors[scenario],
-      margin: const EdgeInsets.only(bottom: 16),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(16),
+    final obj = _objectives[scenario]!;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: GestureDetector(
         onTap: () {
           Navigator.push(
             context,
@@ -93,37 +72,67 @@ class _ScenarioCard extends StatelessWidget {
             ),
           );
         },
-        child: Padding(
-          padding: const EdgeInsets.all(20),
+        child: DqPanel(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
           child: Row(
             children: [
-              Text(scenario.npcEmoji, style: const TextStyle(fontSize: 48)),
-              const SizedBox(width: 16),
+              DqPortrait(emoji: scenario.npcEmoji, size: 56),
+              const SizedBox(width: 14),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      scenario.npcName,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      _descriptions[scenario]!,
-                      style:
-                          const TextStyle(color: Colors.white70, fontSize: 13),
-                    ),
+                    Text(scenario.npcName,
+                        style: dqText(size: 17, w: FontWeight.w700)),
+                    const SizedBox(height: 5),
+                    dqBilingual(obj.$1, obj.$2, jpSize: 12, jpColor: dqInk),
                   ],
                 ),
               ),
-              const Icon(Icons.chevron_right, color: Colors.white54),
+              const Icon(Icons.play_arrow, color: dqGold, size: 22),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// _DqHeader — dark header (back arrow + gold serif bilingual title)
+// ---------------------------------------------------------------------------
+
+class _DqHeader extends StatelessWidget {
+  final String jp;
+  final String en;
+  final VoidCallback onBack;
+  final Widget? trailing;
+  const _DqHeader({
+    required this.jp,
+    required this.en,
+    required this.onBack,
+    this.trailing,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 8, bottom: 6),
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: onBack,
+            behavior: HitTestBehavior.opaque,
+            child: const Padding(
+              padding: EdgeInsets.all(4),
+              child: Icon(Icons.arrow_back, color: dqGold, size: 26),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(child: dqBilingual(jp, en, jpSize: 22, jpColor: dqInk)),
+          if (trailing != null) trailing!,
+        ],
       ),
     );
   }
@@ -221,74 +230,36 @@ class _DialogScreenState extends State<DialogScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA),
-      appBar: _buildAppBar(),
-      body: Column(
-        children: [
-          _OfflineBanner(isOffline: ClaudeClient().isOfflineMode),
-          Expanded(child: _buildMessageList()),
-          if (_isLoading) const _TypingIndicator(),
-          _buildQuickReplies(),
-          _buildInputRow(),
-        ],
+    return DqScene(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        child: Column(
+          children: [
+            _buildHeader(),
+            _OfflineBanner(isOffline: ClaudeClient().isOfflineMode),
+            Expanded(child: _buildMessageList()),
+            if (_isLoading) const _TypingIndicator(),
+            _buildQuickReplies(),
+            _buildInputRow(),
+          ],
+        ),
       ),
     );
   }
 
-  AppBar _buildAppBar() {
-    return AppBar(
-      flexibleSpace: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFF4FC3F7), Color(0xFF29B6F6)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-      ),
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back, color: Colors.white),
-        onPressed: () => Navigator.pop(context),
-      ),
-      title: Row(
-        children: [
-          Text(widget.scenario.npcEmoji, style: const TextStyle(fontSize: 28)),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.scenario.npcName,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
-                ),
-                const Text(
-                  'AI搭載 (Anthropic Claude)',
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 10,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+  Widget _buildHeader() {
+    return _DqHeader(
+      jp: widget.scenario.npcName,
+      en: 'AI / Anthropic Claude',
+      onBack: () => Navigator.pop(context),
+      trailing: DqPortrait(emoji: widget.scenario.npcEmoji, size: 40),
     );
   }
 
   Widget _buildMessageList() {
     return ListView.builder(
       controller: _scrollController,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
       itemCount: _history.length,
       itemBuilder: (_, index) {
         final msg = _history[index];
@@ -314,26 +285,25 @@ class _DialogScreenState extends State<DialogScreen> {
       lastNpcMessage: _lastNpcMessage,
     );
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-      color: const Color(0xFFFFFFFF),
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
           children: suggestions.map((reply) {
             return Padding(
               padding: const EdgeInsets.only(right: 8),
-              child: ActionChip(
-                label: Text(
-                  reply,
-                  style:
-                      const TextStyle(color: Color(0xFF263238), fontSize: 12),
+              child: GestureDetector(
+                onTap: _isLoading ? null : () => _sendMessage(reply),
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: dqBox.withAlpha(220),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: dqGoldDeep, width: 1.5),
+                  ),
+                  child: Text(reply, style: dqText(size: 13, color: dqInk)),
                 ),
-                backgroundColor: const Color(0xFFE3F2FD),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  side: const BorderSide(color: Color(0xFF4FC3F7), width: 0.5),
-                ),
-                onPressed: _isLoading ? null : () => _sendMessage(reply),
               ),
             );
           }).toList(),
@@ -343,43 +313,56 @@ class _DialogScreenState extends State<DialogScreen> {
   }
 
   Widget _buildInputRow() {
-    return Container(
-      color: const Color(0xFFFFFFFF),
-      padding: const EdgeInsets.fromLTRB(12, 8, 12, 16),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 4, 0, 12),
       child: Row(
         children: [
           Expanded(
             child: TextField(
               controller: _textController,
-              style: const TextStyle(color: Color(0xFF263238)),
+              style: dqText(size: 15, color: Colors.white),
+              cursorColor: dqGold,
               decoration: InputDecoration(
-                hintText: '英語で話しかけよう...',
-                hintStyle: const TextStyle(color: Color(0xFF90A4AE)),
+                hintText: '英語で話しかけよう / Speak in English...',
+                hintStyle: dqText(size: 13, color: dqInk).copyWith(
+                  shadows: const [],
+                ),
                 filled: true,
-                fillColor: const Color(0xFFF5F7FA),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(24),
-                  borderSide: BorderSide.none,
+                fillColor: dqBox.withAlpha(220),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: dqBorder, width: 2),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: dqGold, width: 2),
                 ),
                 contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               ),
               textInputAction: TextInputAction.send,
               onSubmitted: _isLoading ? null : _sendMessage,
             ),
           ),
           const SizedBox(width: 8),
-          Material(
-            color: Colors.amber,
-            shape: const CircleBorder(),
-            child: InkWell(
-              customBorder: const CircleBorder(),
-              onTap:
-                  _isLoading ? null : () => _sendMessage(_textController.text),
-              child: const Padding(
-                padding: EdgeInsets.all(12),
-                child: Icon(Icons.send, color: Colors.black, size: 20),
+          GestureDetector(
+            onTap: _isLoading ? null : () => _sendMessage(_textController.text),
+            child: Container(
+              width: 48,
+              height: 48,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: _isLoading
+                    ? const LinearGradient(
+                        colors: [Color(0xFF5A5448), Color(0xFF3E3A32)])
+                    : const LinearGradient(colors: [dqGold, dqGoldDeep]),
+                border: Border.all(color: dqBorder, width: 1.5),
+                boxShadow: _isLoading
+                    ? null
+                    : [BoxShadow(color: dqGoldDeep.withAlpha(120), blurRadius: 10)],
               ),
+              child: const Icon(Icons.send, color: Color(0xFF2A1C00), size: 20),
             ),
           ),
         ],
@@ -447,40 +430,41 @@ class _ChatBubbleState extends State<_ChatBubble>
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               if (_isNpc) ...[
-                Text(widget.npcEmoji, style: const TextStyle(fontSize: 28)),
+                DqPortrait(emoji: widget.npcEmoji, size: 36),
                 const SizedBox(width: 8),
               ],
               Flexible(
                 child: Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 11),
                   decoration: BoxDecoration(
                     color: _isNpc
-                        ? const Color(0xFFE3F2FD)
-                        : const Color(0xFF4FC3F7),
+                        ? dqBox.withAlpha(235)
+                        : dqNight1.withAlpha(235),
                     borderRadius: BorderRadius.only(
-                      topLeft: const Radius.circular(18),
-                      topRight: const Radius.circular(18),
-                      bottomLeft: Radius.circular(_isNpc ? 4 : 18),
-                      bottomRight: Radius.circular(_isNpc ? 18 : 4),
+                      topLeft: const Radius.circular(10),
+                      topRight: const Radius.circular(10),
+                      bottomLeft: Radius.circular(_isNpc ? 2 : 10),
+                      bottomRight: Radius.circular(_isNpc ? 10 : 2),
+                    ),
+                    border: Border.all(
+                      color: _isNpc ? dqBorder : dqGold,
+                      width: 1.5,
                     ),
                   ),
                   child: Text(
                     widget.message.content,
-                    style: TextStyle(
-                      color: _isNpc ? const Color(0xFF263238) : Colors.white,
-                      fontSize: 15,
+                    style: dqText(
+                      size: 15,
+                      w: FontWeight.w500,
+                      color: _isNpc ? dqInk : Colors.white,
                     ),
                   ),
                 ),
               ),
               if (!_isNpc) ...[
                 const SizedBox(width: 8),
-                const CircleAvatar(
-                  radius: 14,
-                  backgroundColor: Color(0xFF4CAF50),
-                  child: Text('🧑', style: TextStyle(fontSize: 14)),
-                ),
+                const DqPortrait(emoji: '🧑', size: 30),
               ],
             ],
           ),
@@ -496,14 +480,15 @@ class _TypingIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
-              color: const Color(0xFFE3F2FD),
-              borderRadius: BorderRadius.circular(18),
+              color: dqBox.withAlpha(235),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: dqBorder, width: 1.5),
             ),
             child: const Row(
               mainAxisSize: MainAxisSize.min,
@@ -563,7 +548,7 @@ class _DotState extends State<_Dot> with SingleTickerProviderStateMixin {
         width: 8,
         height: 8,
         decoration: const BoxDecoration(
-          color: Color(0xFF4FC3F7),
+          color: dqGold,
           shape: BoxShape.circle,
         ),
       ),
@@ -580,11 +565,16 @@ class _OfflineBanner extends StatelessWidget {
     if (!isOffline) return const SizedBox.shrink();
     return Container(
       width: double.infinity,
-      color: const Color(0xFFFFF3E0),
-      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-      child: const Text(
-        '📴 今はオフラインです。接続を確認してください。',
-        style: TextStyle(color: Color(0xFFE65100), fontSize: 11),
+      margin: const EdgeInsets.only(bottom: 6),
+      decoration: BoxDecoration(
+        color: dqNight1.withAlpha(235),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: dqGoldDeep, width: 1.5),
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 12),
+      child: Text(
+        '📴 今はオフラインです / Offline — check your connection.',
+        style: dqText(size: 11, color: dqGold),
         textAlign: TextAlign.center,
       ),
     );

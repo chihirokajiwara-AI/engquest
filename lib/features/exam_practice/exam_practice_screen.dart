@@ -1,10 +1,14 @@
 // lib/features/exam_practice/exam_practice_screen.dart
-// A-KEN Quest — Exam Practice Mode
+// A-KEN Quest — Exam Practice Mode (模擬試験 / Mock Exam)
 //
 // Lets the user select which section of the Eiken exam to practice.
-// Tracks progress per section with completion indicators.
+// Restyled to the 本格 Dragon-Quest scene framework (dq_ui): dark atmospheric
+// field, navy+cream command windows, ▶cursor tiles, gold serif headings.
+// Behaviour, navigation, and eikenGrade handling are preserved exactly.
 
 import 'package:flutter/material.dart';
+
+import '../quest/ui/dq_ui.dart';
 import 'conversation_practice_screen.dart';
 import 'eiken_exam_config.dart';
 import 'reading_practice_screen.dart';
@@ -23,132 +27,102 @@ class ExamPracticeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final exam = kEikenExams[eikenGrade];
     if (exam == null) {
-      return Scaffold(
-        body: Center(child: Text('未対応のレベル: $eikenGrade')),
+      return DqScene(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            children: [
+              _DqHeader(
+                title: dqBilingual('模擬試験', 'Mock Exam', jpSize: 20),
+                onBack: () => Navigator.of(context).pop(),
+              ),
+              const Spacer(),
+              DqPanel(
+                child: Center(
+                  child: Text(
+                    '未対応のレベル: $eikenGrade',
+                    style: dqText(size: 16, color: dqInk),
+                  ),
+                ),
+              ),
+              const Spacer(),
+            ],
+          ),
+        ),
       );
     }
 
-    return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA),
-      appBar: AppBar(
-        flexibleSpace: Builder(
-          builder: (ctx) {
-            final primary = Theme.of(ctx).colorScheme.primary;
-            final darker = HSLColor.fromColor(primary)
-                .withLightness(
-                    (HSLColor.fromColor(primary).lightness - 0.08).clamp(0.0, 1.0))
-                .toColor();
-            return Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [primary, darker],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
-            );
-          },
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        title: Text(
-          '📝 ${exam.labelJa} 模擬試験',
-          style:
-              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-      ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Exam info header
-            Container(
-              margin: const EdgeInsets.all(16),
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withAlpha(12),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
+    return DqScene(
+      child: Column(
+        children: [
+          // Dark DQ header replaces the bright app bar.
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+            child: _DqHeader(
+              title: dqBilingual('${exam.labelJa} 模擬試験', 'Mock Exam', jpSize: 19),
+              onBack: () => Navigator.of(context).pop(),
+            ),
+          ),
+          // Exam info panel (試験時間 / 合格ライン / CEFR).
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 6, 16, 6),
+            child: DqPanel(
+              title: '試験概要 / Exam Overview',
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  _InfoChip(
+                  _DqInfoChip(
                     icon: Icons.timer_outlined,
                     label: '${exam.totalMinutes}分',
-                    subtitle: '試験時間',
+                    jp: '試験時間',
+                    en: 'Time',
                   ),
-                  _InfoChip(
+                  _DqInfoChip(
                     icon: Icons.check_circle_outline,
                     label: '${exam.passingScore}',
-                    subtitle: '合格ライン',
+                    jp: '合格ライン',
+                    en: 'Pass',
                   ),
-                  _InfoChip(
+                  _DqInfoChip(
                     icon: Icons.stars_outlined,
                     label: exam.cefrLevel,
-                    subtitle: 'CEFRレベル',
+                    jp: 'CEFRレベル',
+                    en: 'CEFR',
                   ),
                 ],
               ),
             ),
-            // Section list
-            Expanded(
-              child: ListView.separated(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                itemCount: exam.sections.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 10),
-                itemBuilder: (context, i) {
-                  final section = exam.sections[i];
-                  return _SectionCard(
-                    section: section,
-                    index: i + 1,
-                    onTap: () => _navigateToSection(context, section),
-                  );
-                },
-              ),
+          ),
+          // Section list — each part as a DQ command tile.
+          Expanded(
+            child: ListView.builder(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+              itemCount: exam.sections.length,
+              itemBuilder: (context, i) {
+                final section = exam.sections[i];
+                return _SectionTile(
+                  section: section,
+                  onTap: () => _navigateToSection(context, section),
+                );
+              },
             ),
-            // Full practice test button
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    // TODO: Full mock test mode (all sections sequential with timer)
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('フル模試モードは準備中です'),
-                      ),
-                    );
-                  },
-                  icon: const Icon(Icons.play_arrow),
-                  label: const Text(
-                    'フル模試を開始',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          // Full practice test button.
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
+            child: DqButton(
+              label: 'フル模試を開始  /  Start Full Mock',
+              onTap: () {
+                // TODO: Full mock test mode (all sections sequential with timer)
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('フル模試モードは準備中です'),
                   ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFFF7043),
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                ),
-              ),
+                );
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -205,49 +179,77 @@ class ExamPracticeScreen extends StatelessWidget {
   }
 }
 
-class _InfoChip extends StatelessWidget {
-  const _InfoChip({
-    required this.icon,
-    required this.label,
-    required this.subtitle,
-  });
+/// Dark DQ header: cream back arrow + gold serif bilingual title.
+class _DqHeader extends StatelessWidget {
+  const _DqHeader({required this.title, required this.onBack});
 
-  final IconData icon;
-  final String label;
-  final String subtitle;
+  final Widget title;
+  final VoidCallback onBack;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
       children: [
-        Icon(icon, color: Theme.of(context).colorScheme.primary, size: 24),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          style: const TextStyle(
-            color: Color(0xFF263238),
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+        GestureDetector(
+          onTap: onBack,
+          child: Container(
+            width: 40,
+            height: 40,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: dqBox.withAlpha(220),
+              shape: BoxShape.circle,
+              border: Border.all(color: dqBorder, width: 1.5),
+            ),
+            child: const Icon(Icons.arrow_back, color: dqInk, size: 20),
           ),
         ),
-        Text(
-          subtitle,
-          style: TextStyle(color: Colors.grey[600], fontSize: 11),
-        ),
+        const SizedBox(width: 14),
+        Expanded(child: title),
       ],
     );
   }
 }
 
-class _SectionCard extends StatelessWidget {
-  const _SectionCard({
+/// A single info stat inside the overview panel (gold icon + value + bilingual
+/// caption).
+class _DqInfoChip extends StatelessWidget {
+  const _DqInfoChip({
+    required this.icon,
+    required this.label,
+    required this.jp,
+    required this.en,
+  });
+
+  final IconData icon;
+  final String label;
+  final String jp;
+  final String en;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, color: dqGold, size: 24),
+        const SizedBox(height: 5),
+        Text(label, style: dqText(size: 18, w: FontWeight.w800, color: dqInk)),
+        const SizedBox(height: 2),
+        dqBilingual(jp, en, jpSize: 11, jpColor: dqInk, align: TextAlign.center, stacked: true),
+      ],
+    );
+  }
+}
+
+/// An exam section rendered as a DQ command tile: gold-framed navy row, leading
+/// icon medallion, bilingual section name, question/time meta, and a ▶ cursor.
+class _SectionTile extends StatelessWidget {
+  const _SectionTile({
     required this.section,
-    required this.index,
     required this.onTap,
   });
 
   final ExamSection section;
-  final int index;
   final VoidCallback onTap;
 
   IconData get _sectionIcon {
@@ -269,76 +271,56 @@ class _SectionCard extends StatelessWidget {
     }
   }
 
-  Color get _sectionColor {
-    switch (section.type) {
-      case ExamSectionType.vocabGrammar:
-        return const Color(0xFF4CAF50);
-      case ExamSectionType.conversationComplete:
-        return const Color(0xFF2196F3);
-      case ExamSectionType.readingComprehension:
-        return const Color(0xFF9C27B0);
-      case ExamSectionType.wordOrdering:
-        return const Color(0xFFFF9800);
-      case ExamSectionType.listening:
-        return const Color(0xFF00BCD4);
-      case ExamSectionType.writing:
-        return const Color(0xFFF44336);
-      case ExamSectionType.speaking:
-        return const Color(0xFFFFD700);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(12),
-      elevation: 1,
-      child: InkWell(
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: GestureDetector(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.all(14),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [dqBox.withAlpha(235), dqNight1.withAlpha(235)],
+            ),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: dqBorder, width: 2),
+            boxShadow: const [
+              BoxShadow(color: Colors.black54, blurRadius: 8, offset: Offset(0, 3)),
+            ],
+          ),
           child: Row(
             children: [
               Container(
                 width: 44,
                 height: 44,
+                alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: _sectionColor.withAlpha(20),
-                  borderRadius: BorderRadius.circular(10),
+                  shape: BoxShape.circle,
+                  color: dqNight0,
+                  border: Border.all(color: dqGold, width: 2),
+                  boxShadow: [BoxShadow(color: dqGold.withAlpha(70), blurRadius: 8)],
                 ),
-                child: Icon(_sectionIcon, color: _sectionColor, size: 22),
+                child: Icon(_sectionIcon, color: dqGold, size: 24),
               ),
               const SizedBox(width: 14),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      section.nameJa,
-                      style: const TextStyle(
-                        color: Color(0xFF263238),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
+                    dqBilingual(section.nameJa, section.nameEn, jpSize: 14, stacked: true),
+                    const SizedBox(height: 4),
                     Text(
                       '${section.questionCount}問 • ${section.timeLimitMinutes}分',
-                      style: TextStyle(
-                        color: Colors.grey[500],
-                        fontSize: 12,
-                      ),
+                      style: dqText(size: 12, w: FontWeight.w600, color: dqGoldDeep, spacing: 0.5),
                     ),
                   ],
                 ),
               ),
-              Icon(
-                Icons.arrow_forward_ios,
-                color: Colors.grey[400],
-                size: 16,
-              ),
+              const SizedBox(width: 8),
+              const Icon(Icons.play_arrow, color: dqGold, size: 20),
             ],
           ),
         ),

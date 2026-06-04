@@ -1,19 +1,23 @@
 // lib/features/voice/voice_screen.dart
-// ENG Quest — C06 Voice Module: Pronunciation Coach
+// ENG Quest — C06 Voice Module: Pronunciation Coach (発音 / Pronounce)
 //
 // Game flow:
-//   1. Word displayed in large text with illustrative emoji.
-//   2. "🎤 Tap to Speak" button → starts 3-second countdown recording.
+//   1. Word displayed in a DQ command-window panel with illustrative emoji.
+//   2. "発音する / Speak" record control → starts 3-second countdown recording.
 //   3. Recording ends → Whisper transcription → result feedback:
-//        ✅  correct   → card turns green + star burst animation
-//        ⚠️  close     → orange + pronunciation hint
-//        ❌  incorrect → red   + retry button
-//   4. "Next →" advances to the next word.
-//   5. After 10 words: session summary with accuracy score.
+//        ✅  correct   → gold "すごい！" + gold star burst animation
+//        ⚠️  close     → "もう少し！" + pronunciation hint
+//        ❌  incorrect → "もう一度！" + retry control
+//   4. "次の単語 / Next" advances to the next word.
+//   5. After 10 words: session summary with accuracy ring.
 //
 // Demo mode: PlatformVoiceChannel.demoMode = true (default).
 //   Recording is simulated with a 3-second Timer; VoiceService.transcribeAudio
 //   cycles through a mock word pool, producing a realistic mix of results.
+//
+// 本格 Dragon-Quest HD-2D styling via lib/features/quest/ui/dq_ui.dart:
+//   dark atmospheric DqScene root, navy+cream DqPanel / DqDialogBox, gold
+//   DqButton record control, serif bilingual labels. No bright pastel.
 
 import 'dart:async';
 import 'dart:math' as math;
@@ -22,6 +26,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/voice/platform_voice_channel.dart';
 import '../../core/voice/voice_service.dart';
+import '../quest/ui/dq_ui.dart';
 
 // ── Vocabulary word list (10 A1 words for the session) ────────────────────────
 
@@ -55,6 +60,11 @@ enum _ScreenState {
   result, // result displayed (correct / close / incorrect)
   summary, // session complete
 }
+
+// ── DQ result accents (frame/ink only — kept within the dark palette) ─────────
+const _dqCorrect = Color(0xFF8BE08B);
+const _dqClose = dqGold;
+const _dqWrong = Color(0xFFE89090);
 
 // ── VoiceScreen ───────────────────────────────────────────────────────────────
 
@@ -90,14 +100,6 @@ class _VoiceScreenState extends State<VoiceScreen>
   // ── Mic pulse animation ────────────────────────────────────────────────────
   late AnimationController _pulseCtrl;
   late Animation<double> _pulseAnim;
-
-  // ── Colours ────────────────────────────────────────────────────────────────
-  static const _bgColor = Color(0xFFF5F7FA);
-  static const _accentGold = Color(0xFFFFC107);
-  static const _colorCorrect = Color(0xFF66BB6A); // bright green
-  static const _colorClose = Color(0xFFFF9800); // amber orange
-  static const _colorWrong = Color(0xFFEF5350); // bright red
-  static const _colorIdle = Color(0xFFFFFFFF); // card background
 
   // ── Lifecycle ──────────────────────────────────────────────────────────────
 
@@ -220,50 +222,41 @@ class _VoiceScreenState extends State<VoiceScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: _bgColor,
-      appBar: _buildAppBar(),
-      body: _state == _ScreenState.summary
-          ? _buildSummary()
-          : _buildSessionBody(),
+    return DqScene(
+      child: Column(
+        children: [
+          _buildHeader(),
+          Expanded(
+            child: _state == _ScreenState.summary
+                ? _buildSummary()
+                : _buildSessionBody(),
+          ),
+        ],
+      ),
     );
   }
 
-  AppBar _buildAppBar() {
-    return AppBar(
-      flexibleSpace: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFF66BB6A), Color(0xFF388E3C)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+  // ── Dark header (back arrow + gold serif title + progress count) ────────────
+
+  Widget _buildHeader() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(8, 6, 16, 6),
+      child: Row(
+        children: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back, color: dqInk),
+            onPressed: () => Navigator.maybePop(context),
           ),
-        ),
-      ),
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back, color: Colors.white),
-        onPressed: () => Navigator.maybePop(context),
-      ),
-      title: const Text(
-        '🗣️ Echo Cave',
-        style: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-          fontSize: 20,
-        ),
-      ),
-      actions: [
-        if (_state != _ScreenState.summary)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-            child: Text(
+          Expanded(
+            child: dqBilingual('発音', 'Pronounce', jpSize: 20, stacked: true),
+          ),
+          if (_state != _ScreenState.summary)
+            Text(
               '${_wordIndex + 1} / ${_kWordList.length}',
-              style: const TextStyle(color: Colors.white60, fontSize: 14),
+              style: dqText(size: 14, color: dqGold, spacing: 1),
             ),
-          ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -275,14 +268,14 @@ class _VoiceScreenState extends State<VoiceScreen>
         _buildProgressBar(),
         Expanded(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
             child: Column(
               children: [
-                const SizedBox(height: 16),
+                const SizedBox(height: 12),
                 _buildWordCard(),
-                const SizedBox(height: 24),
+                const SizedBox(height: 22),
                 _buildResultArea(),
-                const SizedBox(height: 24),
+                const SizedBox(height: 22),
                 _buildActionButton(),
                 const SizedBox(height: 24),
               ],
@@ -298,33 +291,34 @@ class _VoiceScreenState extends State<VoiceScreen>
   Widget _buildProgressBar() {
     final progress = _kWordList.isEmpty ? 0.0 : _wordIndex / _kWordList.length;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(4),
         child: LinearProgressIndicator(
           value: progress,
           minHeight: 6,
-          backgroundColor: const Color(0xFFE0E0E0),
-          valueColor: const AlwaysStoppedAnimation<Color>(_accentGold),
+          backgroundColor: dqNight1,
+          valueColor: const AlwaysStoppedAnimation<Color>(dqGold),
         ),
       ),
     );
   }
 
-  // ── Word card ──────────────────────────────────────────────────────────────
+  // ── Word card (DQ command window) ──────────────────────────────────────────
 
   Widget _buildWordCard() {
-    Color cardColor = _colorIdle;
+    // Result-state accent tints the cream frame only — fill stays dark navy.
+    Color frame = dqBorder;
     if (_state == _ScreenState.result && _lastResult != null) {
       switch (_lastResult!.result) {
         case VoiceResult.correct:
-          cardColor = _colorCorrect;
+          frame = _dqCorrect;
           break;
         case VoiceResult.close:
-          cardColor = _colorClose;
+          frame = _dqClose;
           break;
         default:
-          cardColor = _colorWrong;
+          frame = _dqWrong;
           break;
       }
     }
@@ -335,17 +329,13 @@ class _VoiceScreenState extends State<VoiceScreen>
         AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           width: double.infinity,
-          padding: const EdgeInsets.symmetric(vertical: 36, horizontal: 24),
+          padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
           decoration: BoxDecoration(
-            color: cardColor,
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: const Color(0xFFE0E0E0)),
-            boxShadow: [
-              BoxShadow(
-                color: const Color(0xFF4FC3F7).withAlpha(40),
-                blurRadius: 20,
-                offset: const Offset(0, 8),
-              ),
+            color: dqBox.withAlpha(235),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: frame, width: 2.5),
+            boxShadow: const [
+              BoxShadow(color: Colors.black54, blurRadius: 14, offset: Offset(0, 5)),
             ],
           ),
           child: Column(
@@ -353,31 +343,24 @@ class _VoiceScreenState extends State<VoiceScreen>
               // Emoji illustration
               Text(
                 _currentWord.emoji,
-                style: const TextStyle(fontSize: 72),
+                style: const TextStyle(fontSize: 68),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 14),
               // Target word
               Text(
                 _currentWord.word.toUpperCase(),
-                style: TextStyle(
-                  color: cardColor == _colorIdle
-                      ? const Color(0xFF263238)
-                      : Colors.white,
-                  fontSize: 52,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 4,
+                style: dqText(
+                  size: 48,
+                  w: FontWeight.w800,
+                  color: dqInk,
+                  spacing: 4,
                 ),
               ),
               const SizedBox(height: 4),
               // Phonetic hint (always shown)
               Text(
                 _currentWord.phonetic,
-                style: TextStyle(
-                  color: cardColor == _colorIdle
-                      ? const Color(0xFF607D8B)
-                      : Colors.white70,
-                  fontSize: 16,
-                ),
+                style: dqText(size: 16, color: dqGold, spacing: 1),
               ),
             ],
           ),
@@ -411,53 +394,55 @@ class _VoiceScreenState extends State<VoiceScreen>
   }
 
   Widget _buildIdleHint() {
-    return const Text(
-      'タップして発音しよう！',
-      textAlign: TextAlign.center,
-      style: TextStyle(color: Color(0xFF607D8B), fontSize: 15, height: 1.6),
+    return DqDialogBox(
+      child: Text(
+        'タップして発音しよう！\nTap the button and say the word aloud.',
+        textAlign: TextAlign.center,
+        style: dqText(size: 15, color: dqInk),
+      ),
     );
   }
 
   Widget _buildCountdown() {
-    return Column(
-      children: [
-        AnimatedBuilder(
-          animation: _pulseAnim,
-          builder: (ctx, child) => Transform.scale(
-            scale: _pulseAnim.value,
-            child: child,
-          ),
-          child: const Text('🎤', style: TextStyle(fontSize: 56)),
+    return DqPanel(
+      child: Center(
+        child: Column(
+          children: [
+            AnimatedBuilder(
+              animation: _pulseAnim,
+              builder: (ctx, child) => Transform.scale(
+                scale: _pulseAnim.value,
+                child: child,
+              ),
+              child: const Icon(Icons.mic, color: dqGold, size: 52),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              '$_countdown',
+              style: dqText(size: 48, w: FontWeight.w800, color: dqGold),
+            ),
+            const SizedBox(height: 4),
+            dqBilingual('録音中…', 'Recording…',
+                jpSize: 14, align: TextAlign.center),
+          ],
         ),
-        const SizedBox(height: 12),
-        Text(
-          '$_countdown',
-          style: const TextStyle(
-            color: _accentGold,
-            fontSize: 48,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 4),
-        const Text(
-          '録音中…',
-          style: TextStyle(color: Color(0xFF607D8B), fontSize: 14),
-        ),
-      ],
+      ),
     );
   }
 
   Widget _buildEvaluating() {
-    return const Column(
-      children: [
-        SizedBox(height: 8),
-        CircularProgressIndicator(color: _accentGold),
-        SizedBox(height: 16),
-        Text(
-          '認識中…',
-          style: TextStyle(color: Colors.white60, fontSize: 14),
+    return DqPanel(
+      child: Center(
+        child: Column(
+          children: [
+            const SizedBox(height: 4),
+            const CircularProgressIndicator(color: dqGold),
+            const SizedBox(height: 16),
+            dqBilingual('認識中…', 'Analysing…',
+                jpSize: 14, align: TextAlign.center),
+          ],
         ),
-      ],
+      ),
     );
   }
 
@@ -478,100 +463,89 @@ class _VoiceScreenState extends State<VoiceScreen>
   }
 
   Widget _buildCorrectFeedback(PronunciationResult res) {
-    return Column(
-      children: [
-        const Text('✅', style: TextStyle(fontSize: 40)),
-        const SizedBox(height: 8),
-        const Text(
-          'すごい！',
-          style: TextStyle(
-            color: Colors.greenAccent,
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-          ),
+    return DqPanel(
+      child: Center(
+        child: Column(
+          children: [
+            const Icon(Icons.check_circle, color: _dqCorrect, size: 40),
+            const SizedBox(height: 8),
+            dqBilingual('すごい！', 'Perfect!',
+                jpSize: 22, jpColor: _dqCorrect, align: TextAlign.center),
+            const SizedBox(height: 6),
+            Text(
+              '"${res.transcribed}"',
+              style: dqText(size: 14, color: dqInk),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              '${res.latencyMs} ms',
+              style: dqText(size: 11, color: dqGoldDeep),
+            ),
+          ],
         ),
-        const SizedBox(height: 4),
-        Text(
-          '"${res.transcribed}"',
-          style: const TextStyle(color: Color(0xFF607D8B), fontSize: 14),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          '${res.latencyMs} ms',
-          style: const TextStyle(color: Color(0xFF90A4AE), fontSize: 11),
-        ),
-      ],
+      ),
     );
   }
 
   Widget _buildCloseFeedback(PronunciationResult res) {
-    return Column(
-      children: [
-        const Text('⚠️', style: TextStyle(fontSize: 40)),
-        const SizedBox(height: 8),
-        const Text(
-          'もう少し！ Almost there!',
-          style: TextStyle(
-            color: Colors.orange,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
+    return DqPanel(
+      child: Center(
+        child: Column(
+          children: [
+            const Icon(Icons.error_outline, color: _dqClose, size: 40),
+            const SizedBox(height: 8),
+            dqBilingual('もう少し！', 'Almost there!',
+                jpSize: 20, jpColor: _dqClose, align: TextAlign.center),
+            const SizedBox(height: 8),
+            Text(
+              'You said: "${res.transcribed}"',
+              textAlign: TextAlign.center,
+              style: dqText(size: 14, color: dqInk),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'Correct pronunciation: ${_currentWord.phonetic}',
+              textAlign: TextAlign.center,
+              style: dqText(size: 13, color: dqGold),
+            ),
+          ],
         ),
-        const SizedBox(height: 6),
-        Text(
-          'You said: "${res.transcribed}"',
-          style: const TextStyle(color: Color(0xFF607D8B), fontSize: 14),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          'Correct pronunciation: ${_currentWord.phonetic}',
-          style: const TextStyle(color: Color(0xFF607D8B), fontSize: 13),
-        ),
-      ],
+      ),
     );
   }
 
   Widget _buildIncorrectFeedback(PronunciationResult res) {
     final heard =
         res.transcribed.isEmpty ? '(silence)' : '"${res.transcribed}"';
-    return Column(
-      children: [
-        const Text('❌', style: TextStyle(fontSize: 40)),
-        const SizedBox(height: 8),
-        const Text(
-          'もう一度！ Try again!',
-          style: TextStyle(
-            color: Colors.redAccent,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 6),
-        Text(
-          'Heard: $heard',
-          style: const TextStyle(color: Colors.white60, fontSize: 13),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          'Target: ${_currentWord.phonetic}',
-          style: const TextStyle(color: Color(0xFF607D8B), fontSize: 13),
-        ),
-        const SizedBox(height: 16),
-        // Retry button (only for incorrect/error)
-        ElevatedButton.icon(
-          onPressed: _retryRecording,
-          icon: const Icon(Icons.refresh, size: 18),
-          label: const Text('もう一度 / Retry'),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFFEF5350).withAlpha(180),
-            foregroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
+    return DqPanel(
+      child: Center(
+        child: Column(
+          children: [
+            const Icon(Icons.cancel_outlined, color: _dqWrong, size: 40),
+            const SizedBox(height: 8),
+            dqBilingual('もう一度！', 'Try again!',
+                jpSize: 20, jpColor: _dqWrong, align: TextAlign.center),
+            const SizedBox(height: 8),
+            Text(
+              'Heard: $heard',
+              textAlign: TextAlign.center,
+              style: dqText(size: 13, color: dqInk),
             ),
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
-          ),
+            const SizedBox(height: 4),
+            Text(
+              'Target: ${_currentWord.phonetic}',
+              textAlign: TextAlign.center,
+              style: dqText(size: 13, color: dqGold),
+            ),
+            const SizedBox(height: 16),
+            // Retry button (only for incorrect/error)
+            DqButton(
+              label: 'もう一度 / Retry',
+              onTap: _retryRecording,
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
@@ -588,12 +562,12 @@ class _VoiceScreenState extends State<VoiceScreen>
         // Show "Next" (skip retry in incorrect — retry button is above)
         if (_lastResult?.result == VoiceResult.incorrect ||
             _lastResult?.result == VoiceResult.error) {
-          // Show a "skip" button below the retry button
+          // Show a "skip" control below the retry button
           return TextButton(
             onPressed: _advance,
-            child: const Text(
+            child: Text(
               'スキップ / Skip →',
-              style: TextStyle(color: Color(0xFF90A4AE), fontSize: 13),
+              style: dqText(size: 13, color: dqGoldDeep),
             ),
           );
         }
@@ -613,34 +587,31 @@ class _VoiceScreenState extends State<VoiceScreen>
       child: GestureDetector(
         onTap: _startRecording,
         child: Container(
-          width: 120,
-          height: 120,
+          width: 132,
+          height: 132,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             gradient: const RadialGradient(
-              colors: [Color(0xFF7C4DFF), Color(0xFF3D1A8C)],
+              colors: [dqNight1, dqNight0],
             ),
+            border: Border.all(color: dqGold, width: 2.5),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF7C4DFF).withAlpha(120),
-                blurRadius: 24,
-                spreadRadius: 4,
+                color: dqGold.withAlpha(90),
+                blurRadius: 22,
+                spreadRadius: 2,
               ),
             ],
           ),
-          child: const Column(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('🎤', style: TextStyle(fontSize: 40)),
-              SizedBox(height: 4),
+              const Icon(Icons.mic, color: dqGold, size: 42),
+              const SizedBox(height: 4),
               Text(
-                'Tap to\nSpeak',
+                '発音する\nSpeak',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: dqText(size: 13, w: FontWeight.w700, color: dqInk),
               ),
             ],
           ),
@@ -651,19 +622,9 @@ class _VoiceScreenState extends State<VoiceScreen>
 
   Widget _buildNextButton() {
     final isLast = _isLastWord;
-    return ElevatedButton(
-      onPressed: _advance,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: _accentGold,
-        foregroundColor: Colors.black,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
-        textStyle: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      child: Text(isLast ? '結果を見る 🏆' : '次の単語 →'),
+    return DqButton(
+      label: isLast ? '結果を見る / Results' : '次の単語 / Next',
+      onTap: _advance,
     );
   }
 
@@ -677,82 +638,71 @@ class _VoiceScreenState extends State<VoiceScreen>
     final wrong = total - correct - close;
     final accuracy = total == 0 ? 0.0 : (correct + close * 0.5) / total;
 
-    String grade;
-    String gradeEmoji;
+    String gradeJp;
+    String gradeEn;
     if (accuracy >= 0.9) {
-      grade = 'Excellent!';
-      gradeEmoji = '🌟';
+      gradeJp = 'おみごと！';
+      gradeEn = 'Excellent!';
     } else if (accuracy >= 0.7) {
-      grade = 'Great!';
-      gradeEmoji = '⭐';
+      gradeJp = 'すばらしい！';
+      gradeEn = 'Great!';
     } else if (accuracy >= 0.5) {
-      grade = 'Good try!';
-      gradeEmoji = '👍';
+      gradeJp = 'よくやった！';
+      gradeEn = 'Good try!';
     } else {
-      grade = 'Keep practising!';
-      gradeEmoji = '💪';
+      gradeJp = 'れんしゅうしよう！';
+      gradeEn = 'Keep practising!';
     }
 
     return Center(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.all(28),
+        padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(gradeEmoji, style: const TextStyle(fontSize: 72)),
-            const SizedBox(height: 16),
-            Text(
-              grade,
-              style: const TextStyle(
-                color: _accentGold,
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
+            DqPanel(
+              title: 'けっか / Result',
+              child: Center(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 4),
+                    dqBilingual(gradeJp, gradeEn,
+                        jpSize: 26, jpColor: dqGold, align: TextAlign.center),
+                    const SizedBox(height: 22),
+                    // Accuracy ring
+                    _AccuracyRing(accuracy: accuracy),
+                    const SizedBox(height: 24),
+                    // Stats row
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        _StatChip(
+                            label: 'Correct',
+                            value: '$correct',
+                            color: _dqCorrect),
+                        _StatChip(
+                            label: 'Close', value: '$close', color: _dqClose),
+                        _StatChip(
+                            label: 'Incorrect',
+                            value: '$wrong',
+                            color: _dqWrong),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 24),
-            // Accuracy ring
-            _AccuracyRing(accuracy: accuracy),
-            const SizedBox(height: 24),
-            // Stats row
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _StatChip(
-                    label: 'Correct',
-                    value: '$correct',
-                    color: const Color(0xFF66BB6A)),
-                _StatChip(
-                    label: 'Close',
-                    value: '$close',
-                    color: const Color(0xFFFF9800)),
-                _StatChip(
-                    label: 'Incorrect',
-                    value: '$wrong',
-                    color: const Color(0xFFEF5350)),
-              ],
+            DqButton(
+              label: 'もう一度 / Play again',
+              onTap: _restartSession,
             ),
-            const SizedBox(height: 32),
-            ElevatedButton.icon(
-              onPressed: _restartSession,
-              icon: const Icon(Icons.replay),
-              label: const Text('もう一度 / Play again'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: _accentGold,
-                foregroundColor: Colors.black,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24)),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
-                textStyle:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-            ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 14),
             TextButton(
               onPressed: () => Navigator.maybePop(context),
-              child: const Text(
+              child: Text(
                 '← ワールドマップに戻る / Back to Map',
-                style: TextStyle(color: Color(0xFF607D8B), fontSize: 13),
+                style: dqText(size: 13, color: dqGoldDeep),
               ),
             ),
           ],
@@ -790,7 +740,7 @@ class _StarBurstPainter extends CustomPainter {
     final maxRadius = size.width / 2;
     final opacity = (1.0 - progress).clamp(0.0, 1.0);
     final paint = Paint()
-      ..color = Colors.yellow.withAlpha((opacity * 200).round())
+      ..color = dqGold.withAlpha((opacity * 220).round())
       ..style = PaintingStyle.fill;
 
     for (int i = 0; i < 8; i++) {
@@ -825,13 +775,13 @@ class _AccuracyRing extends StatelessWidget {
           CircularProgressIndicator(
             value: accuracy,
             strokeWidth: 12,
-            backgroundColor: const Color(0xFFE0E0E0),
+            backgroundColor: dqNight1,
             valueColor: AlwaysStoppedAnimation<Color>(
               accuracy >= 0.7
-                  ? const Color(0xFF66BB6A)
+                  ? _dqCorrect
                   : accuracy >= 0.5
-                      ? const Color(0xFFFF9800)
-                      : const Color(0xFFEF5350),
+                      ? _dqClose
+                      : _dqWrong,
             ),
           ),
           Column(
@@ -839,15 +789,11 @@ class _AccuracyRing extends StatelessWidget {
             children: [
               Text(
                 '$pct%',
-                style: const TextStyle(
-                  color: Color(0xFF263238),
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: dqText(size: 32, w: FontWeight.w800, color: dqInk),
               ),
-              const Text(
+              Text(
                 'accuracy',
-                style: TextStyle(color: Color(0xFF607D8B), fontSize: 12),
+                style: dqText(size: 12, color: dqGold, spacing: 1),
               ),
             ],
           ),
@@ -876,15 +822,11 @@ class _StatChip extends StatelessWidget {
       children: [
         Text(
           value,
-          style: TextStyle(
-            color: color,
-            fontSize: 28,
-            fontWeight: FontWeight.bold,
-          ),
+          style: dqText(size: 28, w: FontWeight.w800, color: color),
         ),
         Text(
           label,
-          style: const TextStyle(color: Color(0xFF607D8B), fontSize: 12),
+          style: dqText(size: 12, color: dqInk),
         ),
       ],
     );

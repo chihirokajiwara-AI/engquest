@@ -3,10 +3,14 @@ import 'package:engquest/core/models/progress_data.dart';
 import 'package:engquest/core/analytics/progress_service.dart';
 import 'package:engquest/core/analytics/firestore_progress_repository.dart';
 import 'package:engquest/core/firebase/auth_service.dart';
+import 'package:engquest/features/quest/ui/dq_ui.dart';
 
 // ══════════════════════════════════════════════════════════════════════════════
 //  ParentDashboardScreen — C08
 //  4-tab parent view: Home · Progress · Schedule · Settings
+//  Restyled to the 本格 Dragon-Quest HD-2D look (dq_ui): dark atmospheric scene,
+//  navy+cream command-window panels, gold serif headings, bilingual labels.
+//  Slightly more restrained/adult than the child-facing quest screens.
 // ══════════════════════════════════════════════════════════════════════════════
 
 class ParentDashboardScreen extends StatefulWidget {
@@ -57,82 +61,131 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: _kBg,
-      appBar: AppBar(
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF4FC3F7), Color(0xFF29B6F6)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+    return DqScene(
+      child: Column(
+        children: [
+          _DqHeader(
+            onBack: () => Navigator.of(context).maybePop(),
+            onRefresh: _loadProgress,
+          ),
+          _DqTabBar(controller: _tabController),
+          Expanded(
+            child: FutureBuilder<LearningProgress>(
+              future: _progressFuture,
+              builder: (context, snap) {
+                if (snap.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(color: dqGold),
+                  );
+                }
+                if (snap.hasError) {
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: Text('Error: ${snap.error}',
+                          textAlign: TextAlign.center,
+                          style: dqText(
+                              size: 14, color: const Color(0xFFE89090))),
+                    ),
+                  );
+                }
+                final progress = snap.data!;
+                return TabBarView(
+                  controller: _tabController,
+                  children: [
+                    _HomeTab(progress: progress),
+                    _ProgressTab(progress: progress),
+                    _ScheduleTab(progress: progress),
+                    _SettingsTab(
+                      dailyGoal: _dailyGoal,
+                      notifTime: _notifTime,
+                      difficulty: _difficulty,
+                      onGoalChanged: (v) => setState(() => _dailyGoal = v),
+                      onNotifChanged: (v) => setState(() => _notifTime = v),
+                      onDifficultyChanged: (v) =>
+                          setState(() => _difficulty = v),
+                    ),
+                  ],
+                );
+              },
             ),
           ),
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: const Text(
-          '📊 保護者ダッシュボード',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
-        ),
-        centerTitle: true,
-        iconTheme: const IconThemeData(color: Colors.white),
-        actions: [
+        ],
+      ),
+    );
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+//  Dark header — replaces the bright sky-blue AppBar
+// ══════════════════════════════════════════════════════════════════════════════
+
+class _DqHeader extends StatelessWidget {
+  final VoidCallback onBack;
+  final VoidCallback onRefresh;
+  const _DqHeader({required this.onBack, required this.onRefresh});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(8, 6, 8, 6),
+      child: Row(
+        children: [
           IconButton(
-            icon: const Icon(Icons.refresh, color: Colors.white),
+            icon: const Icon(Icons.arrow_back, color: dqGold),
+            tooltip: '戻る',
+            onPressed: onBack,
+          ),
+          Expanded(
+            child: dqBilingual('保護者', 'Parents',
+                jpSize: 20, align: TextAlign.center),
+          ),
+          IconButton(
+            icon: const Icon(Icons.refresh, color: dqGold),
             tooltip: 'データを更新',
-            onPressed: _loadProgress,
+            onPressed: onRefresh,
           ),
         ],
-        bottom: TabBar(
-          controller: _tabController,
-          indicatorColor: Colors.white,
-          labelColor: Colors.white,
-          unselectedLabelColor: Colors.white60,
-          tabs: const [
-            Tab(icon: Icon(Icons.home_rounded), text: 'ホーム'),
-            Tab(icon: Icon(Icons.bar_chart_rounded), text: '学習記録'),
-            Tab(icon: Icon(Icons.calendar_today_rounded), text: 'スケジュール'),
-            Tab(icon: Icon(Icons.settings_rounded), text: '設定'),
-          ],
-        ),
       ),
-      body: FutureBuilder<LearningProgress>(
-        future: _progressFuture,
-        builder: (context, snap) {
-          if (snap.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(color: Colors.amber),
-            );
-          }
-          if (snap.hasError) {
-            return Center(
-              child: Text('Error: ${snap.error}',
-                  style: const TextStyle(color: Colors.redAccent)),
-            );
-          }
-          final progress = snap.data!;
-          return TabBarView(
-            controller: _tabController,
-            children: [
-              _HomeTab(progress: progress),
-              _ProgressTab(progress: progress),
-              _ScheduleTab(progress: progress),
-              _SettingsTab(
-                dailyGoal: _dailyGoal,
-                notifTime: _notifTime,
-                difficulty: _difficulty,
-                onGoalChanged: (v) => setState(() => _dailyGoal = v),
-                onNotifChanged: (v) => setState(() => _notifTime = v),
-                onDifficultyChanged: (v) => setState(() => _difficulty = v),
-              ),
-            ],
-          );
-        },
+    );
+  }
+}
+
+// ── Dark command-window tab bar ───────────────────────────────────────────────
+
+class _DqTabBar extends StatelessWidget {
+  final TabController controller;
+  const _DqTabBar({required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.fromLTRB(14, 0, 14, 8),
+      decoration: BoxDecoration(
+        color: dqBox.withAlpha(225),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: dqBorder, width: 2),
+      ),
+      child: TabBar(
+        controller: controller,
+        isScrollable: false,
+        indicator: BoxDecoration(
+          borderRadius: BorderRadius.circular(7),
+          gradient: const LinearGradient(colors: [dqGold, dqGoldDeep]),
+        ),
+        indicatorSize: TabBarIndicatorSize.tab,
+        indicatorPadding: const EdgeInsets.all(4),
+        dividerColor: Colors.transparent,
+        labelColor: const Color(0xFF2A1C00),
+        unselectedLabelColor: dqInk,
+        labelStyle: dqText(size: 11, w: FontWeight.w800, color: Colors.black),
+        unselectedLabelStyle: dqText(size: 11, w: FontWeight.w600, color: dqInk),
+        tabs: const [
+          Tab(icon: Icon(Icons.home_rounded, size: 18), text: 'ホーム'),
+          Tab(icon: Icon(Icons.bar_chart_rounded, size: 18), text: '記録'),
+          Tab(icon: Icon(Icons.calendar_today_rounded, size: 16), text: '予定'),
+          Tab(icon: Icon(Icons.settings_rounded, size: 18), text: '設定'),
+        ],
       ),
     );
   }
@@ -154,210 +207,156 @@ class _HomeTab extends StatelessWidget {
         progress.nextReviewDue?.difference(DateTime.now()).inHours;
 
     return ListView(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
       children: [
         // ── Greeting ──────────────────────────────────────────────────────
-        const Text(
-          'お子様の今日の学習',
-          style: TextStyle(color: Color(0xFF607D8B), fontSize: 14),
-        ),
-        const SizedBox(height: 20),
+        dqBilingual('お子様の今日の学習', "Today's Learning", jpSize: 13),
+        const SizedBox(height: 16),
 
         // ── Streak badge ──────────────────────────────────────────────────
-        _Card(
+        DqPanel(
           child: Row(
             children: [
-              const Text('🔥', style: TextStyle(fontSize: 40)),
+              const DqPortrait(emoji: '🔥', size: 52),
               const SizedBox(width: 16),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '${progress.currentStreak}日連続！',
-                    style: const TextStyle(
-                      color: Colors.amber,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      '${progress.currentStreak}日連続',
+                      style: dqText(
+                          size: 22, w: FontWeight.w800, color: dqGold),
                     ),
-                  ),
-                  const Text(
-                    'この調子でがんばろう！',
-                    style: TextStyle(color: Color(0xFF607D8B), fontSize: 13),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16),
-
-        // ── Today's summary ───────────────────────────────────────────────
-        _Card(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                '📚 今日のセッション',
-                style: TextStyle(
-                  color: Color(0xFF263238),
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+                    const SizedBox(height: 2),
+                    dqBilingual('この調子で', 'Keep the streak going', jpSize: 12),
+                  ],
                 ),
               ),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _StatPill(
-                    label: '単語数',
-                    value: '${today?.wordsPracticed ?? 0}',
-                    icon: Icons.spellcheck,
-                    color: const Color(0xFF66BB6A),
-                  ),
-                  _StatPill(
-                    label: '分',
-                    value: '${today?.sessionMinutes ?? 0}',
-                    icon: Icons.timer,
-                    color: const Color(0xFF4FC3F7),
-                  ),
-                  _StatPill(
-                    label: '平均スコア',
-                    value: today != null
-                        ? today.averageScore.toStringAsFixed(1)
-                        : '—',
-                    icon: Icons.star,
-                    color: const Color(0xFFFFB74D),
-                  ),
-                ],
+            ],
+          ),
+        ),
+        const SizedBox(height: 14),
+
+        // ── Today's summary ───────────────────────────────────────────────
+        DqPanel(
+          title: '今日のセッション / Today',
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _StatPill(
+                label: '単語 / Words',
+                value: '${today?.wordsPracticed ?? 0}',
+                icon: Icons.spellcheck,
+              ),
+              _StatPill(
+                label: '分 / Min',
+                value: '${today?.sessionMinutes ?? 0}',
+                icon: Icons.timer,
+              ),
+              _StatPill(
+                label: '平均 / Score',
+                value: today != null
+                    ? today.averageScore.toStringAsFixed(1)
+                    : '—',
+                icon: Icons.star,
               ),
             ],
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 14),
 
         // ── Eiken readiness ───────────────────────────────────────────────
-        _Card(
+        DqPanel(
+          title: '英検準備度 / Eiken Readiness',
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  const Text(
-                    '🏆 英検準備度',
-                    style: TextStyle(
-                      color: Color(0xFF263238),
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  Expanded(
+                    child: dqBilingual('合格までの目安', 'Progress', jpSize: 13),
                   ),
-                  const Spacer(),
                   Text(
                     '${progress.eikenReadiness.toStringAsFixed(1)}%',
-                    style: const TextStyle(
-                      color: Colors.amber,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: dqText(
+                        size: 18, w: FontWeight.w800, color: dqGold),
                   ),
                 ],
               ),
               const SizedBox(height: 12),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: LinearProgressIndicator(
-                  value: progress.eikenReadiness / 100,
-                  minHeight: 14,
-                  backgroundColor: const Color(0xFFE0E0E0),
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    _readinessColor(progress.eikenReadiness),
-                  ),
-                ),
+              _DqBar(
+                value: progress.eikenReadiness / 100,
+                color: _readinessColor(progress.eikenReadiness),
+                height: 14,
               ),
               const SizedBox(height: 8),
               Text(
                 _readinessLabel(progress.eikenReadiness),
-                style: TextStyle(
-                  color: _readinessColor(progress.eikenReadiness),
-                  fontSize: 12,
-                ),
+                style: dqText(
+                    size: 12,
+                    w: FontWeight.w600,
+                    color: _readinessColor(progress.eikenReadiness)),
               ),
             ],
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 14),
 
         // ── Next review ───────────────────────────────────────────────────
         if (nextHours != null)
-          _Card(
+          DqPanel(
             child: Row(
               children: [
-                const Icon(Icons.access_alarm,
-                    color: Color(0xFFAB47BC), size: 32),
+                const Icon(Icons.access_alarm, color: dqGold, size: 30),
                 const SizedBox(width: 16),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      '次の復習',
-                      style: TextStyle(color: Color(0xFF607D8B), fontSize: 13),
-                    ),
-                    Text(
-                      nextHours <= 0 ? '今すぐ！' : '$nextHours時間後',
-                      style: const TextStyle(
-                        color: Color(0xFFAB47BC),
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      dqBilingual('次の復習', 'Next Review', jpSize: 12),
+                      const SizedBox(height: 2),
+                      Text(
+                        nextHours <= 0 ? '今すぐ' : '$nextHours時間後',
+                        style: dqText(
+                            size: 18, w: FontWeight.w800, color: dqGold),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),
           ),
 
-        const SizedBox(height: 16),
+        const SizedBox(height: 14),
 
         // ── Overall mastery ───────────────────────────────────────────────
-        _Card(
+        DqPanel(
+          title: '語彙全体 / Vocabulary',
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                '📖 語彙全体',
-                style: TextStyle(
-                  color: Color(0xFF263238),
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 12),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '${progress.totalWordsMastered} / 300 習得済み',
-                    style:
-                        const TextStyle(color: Color(0xFF607D8B), fontSize: 14),
+                    '${progress.totalWordsMastered} / 300 習得',
+                    style: dqText(size: 14, w: FontWeight.w600, color: dqInk),
                   ),
                   Text(
                     '${(progress.masteryPercent * 100).toStringAsFixed(0)}%',
-                    style: const TextStyle(
-                      color: Color(0xFF66BB6A),
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: dqText(
+                        size: 14, w: FontWeight.w800, color: dqGold),
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(6),
-                child: LinearProgressIndicator(
-                  value: progress.masteryPercent,
-                  minHeight: 10,
-                  backgroundColor: const Color(0xFFE0E0E0),
-                  valueColor:
-                      const AlwaysStoppedAnimation<Color>(Color(0xFF66BB6A)),
-                ),
+              const SizedBox(height: 10),
+              _DqBar(
+                value: progress.masteryPercent,
+                color: const Color(0xFF8BE08B),
+                height: 10,
               ),
             ],
           ),
@@ -367,15 +366,15 @@ class _HomeTab extends StatelessWidget {
   }
 
   Color _readinessColor(double r) {
-    if (r >= 80) return const Color(0xFF66BB6A);
-    if (r >= 50) return const Color(0xFFFFB74D);
-    return const Color(0xFFEF5350);
+    if (r >= 80) return const Color(0xFF8BE08B);
+    if (r >= 50) return dqGold;
+    return const Color(0xFFE89090);
   }
 
   String _readinessLabel(double r) {
-    if (r >= 80) return '🌟 英検5級合格ペースです！';
-    if (r >= 50) return '📈 順調に進んでいます！';
-    return '💪 もう少し練習しましょう';
+    if (r >= 80) return '英検5級合格ペースです';
+    if (r >= 50) return '順調に進んでいます';
+    return 'もう少し練習しましょう';
   }
 }
 
@@ -400,72 +399,38 @@ class _ProgressTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
       children: [
         // ── 7-day bar chart ───────────────────────────────────────────────
-        _Card(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                '📊 直近7日間',
-                style: TextStyle(
-                  color: Color(0xFF263238),
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 16),
-              SizedBox(
-                height: 140,
-                child: _BarChart(days: progress.last7Days),
-              ),
-            ],
+        DqPanel(
+          title: '直近7日間 / Last 7 Days',
+          child: SizedBox(
+            height: 140,
+            child: _BarChart(days: progress.last7Days),
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 14),
 
         // ── Mini calendar ─────────────────────────────────────────────────
-        _Card(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                '📅 学習カレンダー',
-                style: TextStyle(
-                  color: Color(0xFF263238),
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 12),
-              _MiniCalendar(days: progress.last7Days),
-            ],
-          ),
+        DqPanel(
+          title: '学習カレンダー / Calendar',
+          child: _MiniCalendar(days: progress.last7Days),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 14),
 
         // ── Category mastery ──────────────────────────────────────────────
-        _Card(
+        DqPanel(
+          title: 'カテゴリ別習得 / By Category',
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                '🗂️ カテゴリ別習得',
-                style: TextStyle(
-                  color: Color(0xFF263238),
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 12),
-              ..._categories.map(
-                (c) => Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6),
-                  child: _CategoryBar(data: c),
-                ),
-              ),
-            ],
+            children: _categories
+                .map(
+                  (c) => Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    child: _CategoryBar(data: c),
+                  ),
+                )
+                .toList(),
           ),
         ),
       ],
@@ -504,9 +469,9 @@ class _BarChartPainter extends CustomPainter {
     final labelH = 20.0;
     final chartH = size.height - labelH;
 
-    final fillPaint = Paint()..color = const Color(0xFF4FC3F7);
-    final zeroPaint = Paint()..color = const Color(0xFFE0E0E0);
-    final textStyle = const TextStyle(color: Color(0xFF607D8B), fontSize: 10);
+    final fillPaint = Paint()..color = dqGold;
+    final zeroPaint = Paint()..color = dqNight1;
+    final textStyle = TextStyle(color: dqInk, fontSize: 10);
     final tp = TextPainter(textDirection: TextDirection.ltr);
 
     for (int i = 0; i < days.length; i++) {
@@ -531,7 +496,7 @@ class _BarChartPainter extends CustomPainter {
       // Value label
       if (days[i].wordsPracticed > 0) {
         final valStyle = const TextStyle(
-            color: Colors.amber, fontSize: 9, fontWeight: FontWeight.bold);
+            color: dqGold, fontSize: 9, fontWeight: FontWeight.bold);
         tp.text = TextSpan(text: '${days[i].wordsPracticed}', style: valStyle);
         tp.layout();
         tp.paint(canvas, Offset(x + barW / 2 - tp.width / 2, top - 14));
@@ -568,19 +533,18 @@ class _MiniCalendar extends StatelessWidget {
           width: 36,
           height: 36,
           decoration: BoxDecoration(
-            color: studied ? const Color(0xFFFFC107) : const Color(0xFFF5F7FA),
+            color: studied ? dqGold : dqNight0,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
-              color:
-                  studied ? const Color(0xFFFFC107) : const Color(0xFFE0E0E0),
-              width: 1,
+              color: studied ? dqGold : dqGoldDeep,
+              width: 1.5,
             ),
           ),
           child: Center(
             child: Text(
               '${d.date.day}',
               style: TextStyle(
-                color: studied ? Colors.black : const Color(0xFF90A4AE),
+                color: studied ? const Color(0xFF2A1C00) : dqInk,
                 fontSize: 13,
                 fontWeight: FontWeight.bold,
               ),
@@ -607,6 +571,11 @@ class _CategoryBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pct = (data.mastery * 100).toInt();
+    final color = data.mastery >= 0.8
+        ? const Color(0xFF8BE08B)
+        : data.mastery >= 0.5
+            ? dqGold
+            : const Color(0xFFE89090);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -614,27 +583,13 @@ class _CategoryBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(data.name,
-                style: const TextStyle(color: Color(0xFF607D8B), fontSize: 13)),
+                style: dqText(size: 13, w: FontWeight.w600, color: dqInk)),
             Text('$pct%',
-                style: const TextStyle(color: Color(0xFFFFC107), fontSize: 12)),
+                style: dqText(size: 12, w: FontWeight.w700, color: dqGold)),
           ],
         ),
-        const SizedBox(height: 4),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(4),
-          child: LinearProgressIndicator(
-            value: data.mastery,
-            minHeight: 8,
-            backgroundColor: const Color(0xFFE0E0E0),
-            valueColor: AlwaysStoppedAnimation<Color>(
-              data.mastery >= 0.8
-                  ? const Color(0xFF66BB6A)
-                  : data.mastery >= 0.5
-                      ? const Color(0xFFFFB74D)
-                      : const Color(0xFFEF5350),
-            ),
-          ),
-        ),
+        const SizedBox(height: 5),
+        _DqBar(value: data.mastery, color: color, height: 8),
       ],
     );
   }
@@ -658,90 +613,66 @@ class _ScheduleTab extends StatelessWidget {
     final onTrack = progress.currentStreak >= 3;
 
     return ListView(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
       children: [
         // ── Encouragement banner ──────────────────────────────────────────
-        _Card(
-          color: onTrack ? const Color(0xFF1B5E20) : const Color(0xFF4E342E),
+        DqDialogBox(
+          speaker: '師匠 / Mentor',
           child: Row(
             children: [
-              Text(onTrack ? '🌟' : '💪', style: const TextStyle(fontSize: 36)),
-              const SizedBox(width: 16),
+              Text(onTrack ? '🌟' : '💪', style: const TextStyle(fontSize: 32)),
+              const SizedBox(width: 14),
               Expanded(
                 child: Text(
                   onTrack
-                      ? '順調に進んでいます！\nこの調子でがんばろう 🚀'
-                      : '今日少し練習すると\n大きな差がつきますよ！',
-                  style: TextStyle(
-                    color: onTrack
-                        ? const Color(0xFF66BB6A)
-                        : const Color(0xFFFFB74D),
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                  ),
+                      ? '順調に進んでいます。\nこの調子でがんばりましょう。'
+                      : '今日少し練習すると、\n大きな差がつきますよ。',
+                  style: dqText(size: 14, w: FontWeight.w600, color: dqInk),
                 ),
               ),
             ],
           ),
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 18),
 
-        const Text(
-          '予定されている復習',
-          style: TextStyle(
-            color: Color(0xFF263238),
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
+        Padding(
+          padding: const EdgeInsets.only(left: 4, bottom: 10),
+          child: dqBilingual('予定されている復習', 'Scheduled Reviews', jpSize: 16),
         ),
-        const SizedBox(height: 12),
 
         // ── Review schedule cards ─────────────────────────────────────────
-        _ReviewCard(
+        const _ReviewCard(
           period: '今日',
+          periodEn: 'Today',
           count: todayDue,
-          icon: '📖',
-          color: const Color(0xFFEF5350),
+          icon: Icons.menu_book,
+          color: Color(0xFFE89090),
         ),
-        const SizedBox(height: 12),
-        _ReviewCard(
+        const SizedBox(height: 10),
+        const _ReviewCard(
           period: '明日',
+          periodEn: 'Tomorrow',
           count: tomorrowDue,
-          icon: '📚',
-          color: const Color(0xFFFFB74D),
+          icon: Icons.auto_stories,
+          color: dqGold,
         ),
-        const SizedBox(height: 12),
-        _ReviewCard(
+        const SizedBox(height: 10),
+        const _ReviewCard(
           period: '今週',
+          periodEn: 'This Week',
           count: weekDue,
-          icon: '🗓️',
-          color: const Color(0xFF4FC3F7),
+          icon: Icons.calendar_month,
+          color: Color(0xFF8BBFE8),
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 18),
 
         // ── Next due time ─────────────────────────────────────────────────
         if (progress.nextReviewDue != null)
-          _Card(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  '⏰ 次回予定の復習',
-                  style: TextStyle(
-                    color: Color(0xFF263238),
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  _formatDateTime(progress.nextReviewDue!),
-                  style: const TextStyle(
-                    color: Color(0xFFAB47BC),
-                    fontSize: 16,
-                  ),
-                ),
-              ],
+          DqPanel(
+            title: '次回予定の復習 / Next Due',
+            child: Text(
+              _formatDateTime(progress.nextReviewDue!),
+              style: dqText(size: 16, w: FontWeight.w700, color: dqGold),
             ),
           ),
       ],
@@ -758,11 +689,13 @@ class _ScheduleTab extends StatelessWidget {
 
 class _ReviewCard extends StatelessWidget {
   final String period;
+  final String periodEn;
   final int count;
-  final String icon;
+  final IconData icon;
   final Color color;
   const _ReviewCard({
     required this.period,
+    required this.periodEn,
     required this.count,
     required this.icon,
     required this.color,
@@ -771,31 +704,36 @@ class _ReviewCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
-        color: _kSurface,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: color.withAlpha(102), width: 1),
+        gradient: LinearGradient(
+          colors: [dqBox.withAlpha(235), dqNight1.withAlpha(235)],
+        ),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: dqBorder, width: 2),
+        boxShadow: const [
+          BoxShadow(color: Colors.black54, blurRadius: 8, offset: Offset(0, 3)),
+        ],
       ),
       child: Row(
         children: [
-          Text(icon, style: const TextStyle(fontSize: 28)),
-          const SizedBox(width: 16),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(period,
-                  style:
-                      const TextStyle(color: Color(0xFF607D8B), fontSize: 13)),
-              Text(
-                '$count 単語',
-                style: TextStyle(
-                  color: color,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
+          Container(
+            width: 44,
+            height: 44,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: dqNight0,
+              border: Border.all(color: color, width: 2),
+              boxShadow: [BoxShadow(color: color.withAlpha(70), blurRadius: 8)],
+            ),
+            child: Icon(icon, color: color, size: 22),
+          ),
+          const SizedBox(width: 14),
+          Expanded(child: dqBilingual(period, periodEn, jpSize: 14, stacked: true)),
+          Text(
+            '$count 単語',
+            style: dqText(size: 18, w: FontWeight.w800, color: dqGold),
           ),
         ],
       ),
@@ -827,73 +765,51 @@ class _SettingsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
       children: [
         // ── Daily goal ────────────────────────────────────────────────────
-        _Card(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                '🎯 1日の目標単語数',
-                style: TextStyle(
-                  color: Color(0xFF263238),
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [10, 20, 30].map((g) {
-                  final selected = g == dailyGoal;
-                  return GestureDetector(
-                    onTap: () => onGoalChanged(g),
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 12),
-                      decoration: BoxDecoration(
-                        color: selected
-                            ? const Color(0xFFFFC107)
-                            : const Color(0xFFF5F7FA),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: selected
-                              ? const Color(0xFFFFC107)
-                              : const Color(0xFFE0E0E0),
-                        ),
-                      ),
-                      child: Text(
-                        '$g 単語',
-                        style: TextStyle(
-                          color:
-                              selected ? Colors.black : const Color(0xFF607D8B),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+        DqPanel(
+          title: '1日の目標単語数 / Daily Goal',
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [10, 20, 30].map((g) {
+              final selected = g == dailyGoal;
+              return GestureDetector(
+                onTap: () => onGoalChanged(g),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 20, vertical: 12),
+                  decoration: BoxDecoration(
+                    gradient: selected
+                        ? const LinearGradient(colors: [dqGold, dqGoldDeep])
+                        : null,
+                    color: selected ? null : dqNight0,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: selected ? dqBorder : dqGoldDeep,
+                      width: selected ? 2 : 1.5,
                     ),
-                  );
-                }).toList(),
-              ),
-            ],
+                  ),
+                  child: Text(
+                    '$g 単語',
+                    style: dqText(
+                      size: 14,
+                      w: FontWeight.w800,
+                      color: selected ? const Color(0xFF2A1C00) : dqInk,
+                    ),
+                  ),
+                ),
+              );
+            }).toList(),
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 14),
 
         // ── Notification time ─────────────────────────────────────────────
-        _Card(
-          child: ListTile(
-            contentPadding: EdgeInsets.zero,
-            leading: const Icon(Icons.notifications_active,
-                color: Color(0xFFAB47BC), size: 28),
-            title: const Text('リマインダー時刻',
-                style: TextStyle(color: Color(0xFF263238), fontSize: 15)),
-            subtitle: Text(
-              notifTime.format(context),
-              style: const TextStyle(color: Color(0xFFAB47BC), fontSize: 18),
-            ),
-            trailing: const Icon(Icons.chevron_right, color: Color(0xFF90A4AE)),
+        DqPanel(
+          title: 'リマインダー時刻 / Reminder',
+          child: InkWell(
             onTap: () async {
               final picked = await showTimePicker(
                 context: context,
@@ -905,61 +821,68 @@ class _SettingsTab extends StatelessWidget {
               );
               if (picked != null) onNotifChanged(picked);
             },
-          ),
-        ),
-        const SizedBox(height: 16),
-
-        // ── Difficulty ────────────────────────────────────────────────────
-        _Card(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                '⚡ 難易度',
-                style: TextStyle(
-                  color: Color(0xFF263238),
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 12),
-              ...['やさしい', '標準', 'むずかしい'].map((d) {
-                final selected = d == difficulty;
-                // RadioListTile.groupValue/onChanged are deprecated after
-                // Flutter 3.32 in favour of a RadioGroup ancestor, which does
-                // not exist in the CI toolchain (3.22). Suppress here until the
-                // CI Flutter version is aligned, then migrate to RadioGroup.
-                return RadioListTile<String>(
-                  value: d,
-                  // ignore: deprecated_member_use
-                  groupValue: difficulty,
-                  // ignore: deprecated_member_use
-                  onChanged: (v) {
-                    if (v != null) onDifficultyChanged(v);
-                  },
-                  title: Text(
-                    d,
-                    style: TextStyle(
-                      color: selected
-                          ? const Color(0xFFFFC107)
-                          : const Color(0xFF607D8B),
+            child: Row(
+              children: [
+                const Icon(Icons.notifications_active, color: dqGold, size: 26),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Builder(
+                    builder: (context) => Text(
+                      notifTime.format(context),
+                      style: dqText(size: 18, w: FontWeight.w700, color: dqGold),
                     ),
                   ),
-                  activeColor: const Color(0xFFFFC107),
-                  dense: true,
-                  contentPadding: EdgeInsets.zero,
-                );
-              }),
-            ],
+                ),
+                const Icon(Icons.chevron_right, color: dqInk),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 14),
+
+        // ── Difficulty ────────────────────────────────────────────────────
+        DqPanel(
+          title: '難易度 / Difficulty',
+          child: Column(
+            children: ['やさしい', '標準', 'むずかしい'].map((d) {
+              final selected = d == difficulty;
+              return GestureDetector(
+                onTap: () => onDifficultyChanged(d),
+                behavior: HitTestBehavior.opaque,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 7),
+                  child: Row(
+                    children: [
+                      Icon(
+                        selected
+                            ? Icons.radio_button_checked
+                            : Icons.radio_button_unchecked,
+                        color: selected ? dqGold : dqGoldDeep,
+                        size: 22,
+                      ),
+                      const SizedBox(width: 12),
+                      Text(
+                        d,
+                        style: dqText(
+                          size: 15,
+                          w: selected ? FontWeight.w800 : FontWeight.w600,
+                          color: selected ? dqGold : dqInk,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }).toList(),
           ),
         ),
         const SizedBox(height: 24),
 
         // ── Version footer ────────────────────────────────────────────────
-        const Center(
+        Center(
           child: Text(
-            'ENG Quest v0.8 · Parent Dashboard C08',
-            style: TextStyle(color: Color(0xFFB0BEC5), fontSize: 11),
+            'A-KEN Quest v0.8 · Parent Dashboard C08',
+            style: dqText(size: 11, w: FontWeight.w500, color: dqGoldDeep),
           ),
         ),
       ],
@@ -971,32 +894,29 @@ class _SettingsTab extends StatelessWidget {
 //  Shared helpers
 // ══════════════════════════════════════════════════════════════════════════════
 
-const Color _kBg = Color(0xFFF5F7FA);
-const Color _kSurface = Color(0xFFFFFFFF);
-
-class _Card extends StatelessWidget {
-  final Widget child;
-  final Color? color;
-  const _Card({required this.child, this.color});
+/// A DQ-styled progress bar: dark night track + gold/accent fill, cream hairline.
+class _DqBar extends StatelessWidget {
+  final double value; // 0.0–1.0
+  final Color color;
+  final double height;
+  const _DqBar({required this.value, required this.color, this.height = 10});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: color ?? _kSurface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE0E0E0), width: 1),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFF4FC3F7).withAlpha(20),
-            blurRadius: 8,
-            offset: const Offset(0, 3),
-          ),
-        ],
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(color: dqGoldDeep, width: 1),
       ),
-      child: child,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(5),
+        child: LinearProgressIndicator(
+          value: value.clamp(0.0, 1.0),
+          minHeight: height,
+          backgroundColor: dqNight0,
+          valueColor: AlwaysStoppedAnimation<Color>(color),
+        ),
+      ),
     );
   }
 }
@@ -1005,30 +925,26 @@ class _StatPill extends StatelessWidget {
   final String label;
   final String value;
   final IconData icon;
-  final Color color;
   const _StatPill({
     required this.label,
     required this.value,
     required this.icon,
-    required this.color,
   });
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, color: color, size: 24),
+        Icon(icon, color: dqGold, size: 24),
         const SizedBox(height: 4),
         Text(
           value,
-          style: TextStyle(
-            color: color,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
+          style: dqText(size: 20, w: FontWeight.w800, color: dqGold),
         ),
+        const SizedBox(height: 2),
         Text(label,
-            style: const TextStyle(color: Color(0xFF90A4AE), fontSize: 11)),
+            style: dqText(size: 10, w: FontWeight.w600, color: dqInk)),
       ],
     );
   }

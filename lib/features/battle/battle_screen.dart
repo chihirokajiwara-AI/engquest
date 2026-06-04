@@ -48,6 +48,21 @@ import '../../core/audio/word_audio_player_service.dart';
 import '../../core/sound/sound_service.dart';
 import '../../core/data/vocab_repository.dart';
 import '../../core/models/vocab_item.dart';
+import '../quest/ui/dq_ui.dart';
+
+// ── Bilingual + interval labels for the Grade enum (DQ command-window tiles) ──
+String _gradeJp(Grade g) {
+  switch (g) {
+    case Grade.again:
+      return 'もういちど';
+    case Grade.hard:
+      return 'むずかしい';
+    case Grade.good:
+      return 'できた';
+    case Grade.easy:
+      return 'かんたん';
+  }
+}
 
 // ── Session result per card ───────────────────────────────────────────────────
 class _CardResult {
@@ -156,16 +171,13 @@ class _BattleScreenState extends State<BattleScreen>
   late Animation<double> _starsAnim;
 
   // ── Colours ────────────────────────────────────────────────────────────────
-  static const _bgColor = Color(0xFFF5F7FA);
-  static const _cardFront = Color(0xFFFFFFFF);
-  static const _cardBack = Color(0xFFE3F2FD);
-  static const _accentGold = Color(0xFFFFD700);
-
+  // Muted accents for the four grades — used only as small icon-medallion / dot
+  // tints inside the dq palette (never as candy-bright fills).
   static const _gradeColors = {
-    Grade.again: Color(0xFFE53935),
-    Grade.hard: Color(0xFFF57C00),
-    Grade.good: Color(0xFF43A047),
-    Grade.easy: Color(0xFF1E88E5),
+    Grade.again: Color(0xFFC76B6B), // dusty red
+    Grade.hard: Color(0xFFCB9A4E), // dim amber
+    Grade.good: Color(0xFF7FB87F), // sage green
+    Grade.easy: Color(0xFF6FA8C9), // slate blue
   };
 
   // ── Lifecycle ──────────────────────────────────────────────────────────────
@@ -475,22 +487,22 @@ class _BattleScreenState extends State<BattleScreen>
         });
 
         return Dialog(
-          backgroundColor: const Color(0xFFFFFFFF),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24),
-            side: BorderSide(color: def.gradient.first.withAlpha(160)),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(28),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          child: DqPanel(
+            padding: const EdgeInsets.all(26),
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Text(
-                  'バッジ獲得！',
-                  style: TextStyle(
-                    color: Colors.amber,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
+                Center(
+                  child: dqBilingual(
+                    'バッジ獲得！',
+                    'BADGE EARNED',
+                    jpSize: 20,
+                    jpColor: dqGold,
+                    stacked: true,
+                    align: TextAlign.center,
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -500,33 +512,22 @@ class _BattleScreenState extends State<BattleScreen>
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     gradient: LinearGradient(colors: def.gradient),
+                    border: Border.all(color: dqBorder, width: 2),
                   ),
                   child: Icon(def.icon, color: Colors.white, size: 32),
                 ),
-                const SizedBox(height: 12),
-                Text(
-                  def.titleJa,
-                  style: const TextStyle(
-                    color: Color(0xFF263238),
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  def.descriptionJa,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.black54, fontSize: 14),
-                ),
+                const SizedBox(height: 14),
+                Text(def.titleJa,
+                    textAlign: TextAlign.center,
+                    style: dqText(size: 18, w: FontWeight.w800, color: dqInk)),
+                const SizedBox(height: 6),
+                Text(def.descriptionJa,
+                    textAlign: TextAlign.center,
+                    style: dqText(size: 14, color: dqInk)),
                 if (ids.length > 1) ...[
                   const SizedBox(height: 8),
-                  Text(
-                    '+${ids.length - 1}個のバッジも獲得！',
-                    style: TextStyle(
-                      color: Colors.amber.withAlpha(180),
-                      fontSize: 12,
-                    ),
-                  ),
+                  Text('+${ids.length - 1}個のバッジも獲得！',
+                      style: dqText(size: 12, color: dqGoldDeep)),
                 ],
               ],
             ),
@@ -547,6 +548,7 @@ class _BattleScreenState extends State<BattleScreen>
     showDialog<void>(
       context: context,
       barrierDismissible: true,
+      barrierColor: Colors.black.withAlpha(180),
       builder: (ctx) {
         // Auto-close after 3 seconds
         Future.delayed(const Duration(seconds: 3), () {
@@ -554,61 +556,45 @@ class _BattleScreenState extends State<BattleScreen>
         });
 
         return Dialog(
-          backgroundColor: const Color(0xFFFFFFFF),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24),
-            side: const BorderSide(color: _accentGold, width: 2),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 28),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          child: DqPanel(
+            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 24),
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Star burst
                 const Text('🌟', style: TextStyle(fontSize: 56)),
                 const SizedBox(height: 12),
-                Text(
-                  'レベルアップ！',
-                  style: const TextStyle(
-                    color: _accentGold,
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 2,
+                Center(
+                  child: dqBilingual(
+                    'レベルアップ！',
+                    'LEVEL UP',
+                    jpSize: 26,
+                    jpColor: dqGold,
+                    stacked: true,
+                    align: TextAlign.center,
                   ),
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  'Lv.${newProfile.level} に到達！',
-                  style: const TextStyle(
-                    color: Color(0xFF263238),
-                    fontSize: 20,
-                  ),
-                ),
+                const SizedBox(height: 10),
+                Text('Lv.${newProfile.level} に到達！',
+                    style: dqText(size: 19, color: dqInk)),
                 const SizedBox(height: 4),
-                Text(
-                  '合計 ${newProfile.totalXp} XP',
-                  style: const TextStyle(
-                    color: Colors.black45,
-                    fontSize: 14,
-                  ),
-                ),
+                Text('合計 ${newProfile.totalXp} XP',
+                    style: dqText(size: 13, color: dqGoldDeep)),
                 const SizedBox(height: 20),
-                // XP progress bar for new level
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: LinearProgressIndicator(
                     value: newProfile.levelProgress,
-                    backgroundColor: Colors.black12,
-                    valueColor:
-                        const AlwaysStoppedAnimation<Color>(_accentGold),
+                    backgroundColor: dqNight0,
+                    valueColor: const AlwaysStoppedAnimation<Color>(dqGold),
                     minHeight: 10,
                   ),
                 ),
                 const SizedBox(height: 8),
-                Text(
-                  '${newProfile.currentLevelXp} / ${newProfile.levelXpSpan} XP',
-                  style: const TextStyle(color: Colors.black45, fontSize: 12),
-                ),
+                Text('${newProfile.currentLevelXp} / ${newProfile.levelXpSpan} XP',
+                    style: dqText(size: 12, color: dqGoldDeep)),
               ],
             ),
           ),
@@ -633,14 +619,19 @@ class _BattleScreenState extends State<BattleScreen>
             ? _buildSummary()
             : _buildCardSession();
 
-    return Scaffold(
-      backgroundColor: _bgColor,
-      appBar: _buildAppBar(),
-      body: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 400),
-        switchInCurve: Curves.easeOut,
-        switchOutCurve: Curves.easeIn,
-        child: KeyedSubtree(key: bodyKey, child: body),
+    return DqScene(
+      child: Column(
+        children: [
+          _buildHeader(),
+          Expanded(
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 400),
+              switchInCurve: Curves.easeOut,
+              switchOutCurve: Curves.easeIn,
+              child: KeyedSubtree(key: bodyKey, child: body),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -650,72 +641,51 @@ class _BattleScreenState extends State<BattleScreen>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const CircularProgressIndicator(
-            color: Color(0xFFFFD700),
-            strokeWidth: 3,
-          ),
+          const CircularProgressIndicator(color: dqGold, strokeWidth: 3),
           const SizedBox(height: 16),
-          Text(
-            'カードを読み込んでいます…',
-            style: const TextStyle(
-              color: Colors.black54,
-              fontSize: 14,
-              letterSpacing: 0.5,
-            ),
-          ),
+          Text('カードを読み込んでいます…', style: dqText(size: 14, color: dqInk)),
         ],
       ),
     );
   }
 
-  AppBar _buildAppBar() {
-    return AppBar(
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back, color: Colors.black54),
-        onPressed: () => Navigator.maybePop(context),
-      ),
-      title: Row(
-        mainAxisSize: MainAxisSize.min,
+  // ── Dark header (replaces the bright AppBar): back arrow + gold serif title,
+  // streak badge, mute toggle, and the N / total counter. ──────────────────────
+  Widget _buildHeader() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(6, 4, 12, 4),
+      child: Row(
         children: [
-          const Text(
-            '⚔️ Battle',
-            style: TextStyle(
-              color: _accentGold,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
+          IconButton(
+            icon: const Icon(Icons.arrow_back, color: dqInk),
+            onPressed: () => Navigator.maybePop(context),
           ),
+          Text('⚔', style: dqText(size: 20, color: dqGold)),
+          const SizedBox(width: 8),
+          dqBilingual('たんごバトル', 'Word Battle',
+              jpSize: 17, jpColor: dqGold, stacked: true),
           if (_streak >= 3) ...[
-            const SizedBox(width: 8),
+            const SizedBox(width: 10),
             _StreakBadge(streak: _streak),
           ],
+          const Spacer(),
+          IconButton(
+            icon: Icon(
+              _sound.muted ? Icons.volume_off : Icons.volume_up,
+              color: dqInk,
+              size: 22,
+            ),
+            tooltip: _sound.muted ? 'サウンドON' : 'サウンドOFF',
+            onPressed: () => setState(() => _sound.muted = !_sound.muted),
+          ),
+          if (!_repoLoading && !_sessionDone)
+            Padding(
+              padding: const EdgeInsets.only(left: 2),
+              child: Text('${_doneCards + 1} / $_totalCards',
+                  style: dqText(size: 14, color: dqGoldDeep)),
+            ),
         ],
       ),
-      actions: [
-        IconButton(
-          icon: Icon(
-            _sound.muted ? Icons.volume_off : Icons.volume_up,
-            color: Colors.black45,
-            size: 22,
-          ),
-          tooltip: _sound.muted ? 'サウンドON' : 'サウンドOFF',
-          onPressed: () {
-            setState(() => _sound.muted = !_sound.muted);
-          },
-        ),
-        if (!_repoLoading && !_sessionDone)
-          Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: Center(
-              child: Text(
-                '${_doneCards + 1} / $_totalCards',
-                style: const TextStyle(color: Colors.black45, fontSize: 14),
-              ),
-            ),
-          ),
-      ],
     );
   }
 
@@ -746,15 +716,23 @@ class _BattleScreenState extends State<BattleScreen>
 
   Widget _buildProgressBar() {
     final progress = _totalCards == 0 ? 0.0 : _doneCards / _totalCards;
+    // HP-style bar: cream-bordered navy track with a gold fill.
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(4),
-        child: LinearProgressIndicator(
-          value: progress,
-          minHeight: 6,
-          backgroundColor: Colors.black12,
-          valueColor: const AlwaysStoppedAnimation<Color>(_accentGold),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+      child: Container(
+        decoration: BoxDecoration(
+          color: dqNight0,
+          borderRadius: BorderRadius.circular(5),
+          border: Border.all(color: dqBorder, width: 1.5),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(4),
+          child: LinearProgressIndicator(
+            value: progress,
+            minHeight: 8,
+            backgroundColor: Colors.transparent,
+            valueColor: const AlwaysStoppedAnimation<Color>(dqGold),
+          ),
         ),
       ),
     );
@@ -777,11 +755,11 @@ class _BattleScreenState extends State<BattleScreen>
                 duration: const Duration(milliseconds: 300),
                 child: Container(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(10),
                     gradient: RadialGradient(
                       colors: [
-                        _accentGold.withAlpha(100),
-                        _accentGold.withAlpha(0),
+                        dqGold.withAlpha(110),
+                        dqGold.withAlpha(0),
                       ],
                       radius: 1.2,
                     ),
@@ -815,25 +793,25 @@ class _BattleScreenState extends State<BattleScreen>
   Widget _buildCardFace() {
     final vocab = _currentVocab;
     return _cardContainer(
-      color: _cardFront,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             vocab.word,
-            style: const TextStyle(
-              color: Color(0xFF263238),
-              fontSize: 48,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 2,
+            style: dqText(
+              size: 48,
+              w: FontWeight.w800,
+              color: dqInk,
+              spacing: 2,
             ),
+            textAlign: TextAlign.center,
           ),
           const SizedBox(height: 8),
           // Speaker icon — tap to hear pronunciation
           IconButton(
             icon: const Icon(Icons.volume_up_rounded),
             iconSize: 28,
-            color: _accentGold,
+            color: dqGold,
             tooltip: '発音を聞く',
             onPressed: () {
               WordAudioAutoPlay.trigger(
@@ -844,34 +822,21 @@ class _BattleScreenState extends State<BattleScreen>
             },
           ),
           const SizedBox(height: 4),
-          Text(
-            vocab.reading,
-            style: const TextStyle(
-              color: Colors.black45,
-              fontSize: 20,
-            ),
-          ),
-          const SizedBox(height: 8),
+          Text(vocab.reading, style: dqText(size: 18, color: dqGoldDeep)),
+          const SizedBox(height: 10),
           if (vocab.pos.isNotEmpty)
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               decoration: BoxDecoration(
-                border: Border.all(color: _accentGold.withAlpha(128)),
-                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: dqGold.withAlpha(150), width: 1.5),
+                borderRadius: BorderRadius.circular(6),
               ),
-              child: Text(
-                vocab.pos.first.name,
-                style: const TextStyle(
-                  color: _accentGold,
-                  fontSize: 12,
-                ),
-              ),
+              child: Text(vocab.pos.first.name,
+                  style: dqText(size: 12, color: dqGold)),
             ),
-          const SizedBox(height: 32),
-          const Text(
-            'タップしてめくる',
-            style: TextStyle(color: Colors.black38, fontSize: 13),
-          ),
+          const SizedBox(height: 28),
+          dqBilingual('タップしてめくる', 'Tap to flip',
+              jpSize: 13, jpColor: dqGoldDeep, enColor: dqGoldDeep),
         ],
       ),
     );
@@ -882,43 +847,29 @@ class _BattleScreenState extends State<BattleScreen>
     final example =
         vocab.exampleSentences.isNotEmpty ? vocab.exampleSentences.first : '';
     return _cardContainer(
-      color: _cardBack,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            vocab.word,
-            style: const TextStyle(
-              color: Colors.black45,
-              fontSize: 22,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
+          Text(vocab.word, style: dqText(size: 22, color: dqGoldDeep)),
           const SizedBox(height: 16),
           Text(
             vocab.jpTranslation,
-            style: const TextStyle(
-              color: Color(0xFF263238),
-              fontSize: 44,
-              fontWeight: FontWeight.bold,
-            ),
+            style: dqText(size: 42, w: FontWeight.w800, color: dqInk),
+            textAlign: TextAlign.center,
           ),
           if (example.isNotEmpty) ...[
-            const SizedBox(height: 20),
+            const SizedBox(height: 22),
             Container(
               padding: const EdgeInsets.all(12),
               margin: const EdgeInsets.symmetric(horizontal: 8),
               decoration: BoxDecoration(
-                color: Colors.black.withAlpha(10),
+                color: dqNight0.withAlpha(160),
                 borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: dqGoldDeep.withAlpha(120)),
               ),
               child: Text(
                 example,
-                style: const TextStyle(
-                  color: Colors.black54,
-                  fontSize: 15,
-                  fontStyle: FontStyle.italic,
-                ),
+                style: dqText(size: 15, w: FontWeight.w500, color: dqInk),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -929,33 +880,30 @@ class _BattleScreenState extends State<BattleScreen>
     );
   }
 
-  Widget _cardContainer({required Color color, required Widget child}) {
+  // The flashcard rendered as a DQ command/dialogue window: navy fill, cream
+  // double-border, deep shadow. (Both faces share this frame.)
+  Widget _cardContainer({required Widget child}) {
     return Container(
       width: double.infinity,
       constraints: const BoxConstraints(minHeight: 320),
       decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withAlpha(25),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
-          ),
+        color: dqBox.withAlpha(238),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: dqBorder, width: 2),
+        boxShadow: const [
+          BoxShadow(color: Colors.black54, blurRadius: 16, offset: Offset(0, 6)),
         ],
       ),
-      padding: const EdgeInsets.all(32),
+      padding: const EdgeInsets.all(28),
       child: child,
     );
   }
 
   Widget _buildTapHint() {
-    return const Padding(
-      padding: EdgeInsets.symmetric(vertical: 12),
-      child: Text(
-        '👆 カードをタップして答えを確認',
-        style: TextStyle(color: Colors.black38, fontSize: 13),
-      ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: dqBilingual('カードをタップして答えを確認', 'Tap the card to reveal',
+          jpSize: 13, jpColor: dqGoldDeep, enColor: dqGoldDeep),
     );
   }
 
@@ -965,13 +913,14 @@ class _BattleScreenState extends State<BattleScreen>
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: Grade.values.map((g) {
           return Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4),
               child: _GradeButton(
                 grade: g,
-                color: _gradeColors[g]!,
+                accent: _gradeColors[g]!,
                 fsrs: _fsrs,
                 card: _currentCard,
                 onTap: () => _gradeCard(g),
@@ -1013,61 +962,55 @@ class _BattleScreenState extends State<BattleScreen>
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text('🎉', style: TextStyle(fontSize: 64)),
-                const SizedBox(height: 16),
-                const Text(
+                const SizedBox(height: 12),
+                dqBilingual(
                   'セッション完了！',
-                  style: TextStyle(
-                    color: _accentGold,
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  'BATTLE CLEARED',
+                  jpSize: 26,
+                  jpColor: dqGold,
+                  stacked: true,
+                  align: TextAlign.center,
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  '$total 枚 完了',
-                  style: const TextStyle(color: Colors.black54, fontSize: 18),
-                ),
+                const SizedBox(height: 10),
+                Text('$total 枚 完了 / $total cards',
+                    style: dqText(size: 16, color: dqInk)),
                 // XP earned
-                const SizedBox(height: 8),
+                const SizedBox(height: 12),
                 Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
                   decoration: BoxDecoration(
-                    color: _accentGold.withAlpha(30),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: _accentGold.withAlpha(128)),
+                    color: dqNight0.withAlpha(180),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: dqGold.withAlpha(160), width: 1.5),
                   ),
-                  child: Text(
-                    '✨ +$_totalXp XP 獲得！',
-                    style: const TextStyle(
-                      color: _accentGold,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  child: Text('✨ +$_totalXp XP 獲得！',
+                      style: dqText(size: 16, w: FontWeight.w800, color: dqGold)),
                 ),
-                const SizedBox(height: 32),
+                const SizedBox(height: 28),
                 _SummaryCard(
+                  title: 'けっか / Results',
                   children: Grade.values.map((g) {
                     return _SummaryRow(
-                      label: g.label,
+                      label: '${_gradeJp(g)} / ${g.label}',
                       color: _gradeColors[g]!,
                       count: counts[g] ?? 0,
                       total: total,
                     );
                   }).toList(),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 14),
                 _SummaryCard(
+                  title: 'スタッツ / Stats',
                   children: [
                     _StatTile(
-                      label: '平均評価',
+                      label: '平均評価 / Avg. grade',
                       value: avgGrade.toStringAsFixed(2),
                       icon: '⭐',
                     ),
-                    const Divider(color: Colors.black12),
+                    const Divider(color: dqGoldDeep, height: 18),
                     _StatTile(
-                      label: '正確さ (Good + Easy)',
+                      label: '正確さ / Accuracy',
                       value: total > 0
                           ? '${(((counts[Grade.good]! + counts[Grade.easy]!) / total) * 100).round()}%'
                           : '—',
@@ -1075,31 +1018,20 @@ class _BattleScreenState extends State<BattleScreen>
                     ),
                   ],
                 ),
-                const SizedBox(height: 32),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton.icon(
-                    icon: const Icon(Icons.replay),
-                    label: const Text('もう一度'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: _accentGold,
-                      foregroundColor: Colors.black87,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    onPressed: () => setState(() {
-                      _initDeckAsync();
-                    }),
-                  ),
+                const SizedBox(height: 28),
+                DqButton(
+                  label: 'もういちど / Again',
+                  onTap: () => setState(() {
+                    _initDeckAsync();
+                  }),
                 ),
                 const SizedBox(height: 12),
-                TextButton(
-                  onPressed: () => Navigator.maybePop(context),
-                  child: const Text(
-                    'ホームへ戻る',
-                    style: TextStyle(color: Colors.black54),
+                GestureDetector(
+                  onTap: () => Navigator.maybePop(context),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    child: dqBilingual('ホームへ戻る', 'Back to town',
+                        jpSize: 14, jpColor: dqInk, enColor: dqGoldDeep),
                   ),
                 ),
               ],
@@ -1120,24 +1052,19 @@ class _StreakBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
       decoration: BoxDecoration(
-        color: const Color(0xFFFF6D00).withAlpha(220),
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.orange.withAlpha(100),
-            blurRadius: 8,
-            spreadRadius: 1,
-          ),
-        ],
+        gradient: const LinearGradient(colors: [dqGold, dqGoldDeep]),
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(color: dqBorder, width: 1.5),
+        boxShadow: [BoxShadow(color: dqGoldDeep.withAlpha(110), blurRadius: 8)],
       ),
       child: Text(
         '🔥 × $streak',
-        style: const TextStyle(
-          fontSize: 13,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
+        style: dqText(
+          size: 13,
+          w: FontWeight.w800,
+          color: const Color(0xFF2A1C00),
         ),
       ),
     );
@@ -1148,14 +1075,14 @@ class _StreakBadge extends StatelessWidget {
 
 class _GradeButton extends StatefulWidget {
   final Grade grade;
-  final Color color;
+  final Color accent;
   final FSRSAlgorithm fsrs;
   final FSRSCard card;
   final VoidCallback onTap;
 
   const _GradeButton({
     required this.grade,
-    required this.color,
+    required this.accent,
     required this.fsrs,
     required this.card,
     required this.onTap,
@@ -1203,6 +1130,8 @@ class _GradeButtonState extends State<_GradeButton>
   @override
   Widget build(BuildContext context) {
     final interval = _intervalLabel();
+    // A DQ command-window tile: cream-bordered navy fill, an accent dot for the
+    // grade, bilingual JP/EN label, and the FSRS next-interval underneath.
     return GestureDetector(
       onTapDown: (_) => _scaleCtrl.forward(),
       onTapUp: (_) {
@@ -1217,36 +1146,46 @@ class _GradeButtonState extends State<_GradeButton>
           child: child,
         ),
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
           decoration: BoxDecoration(
-            color: widget.color.withAlpha(204),
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
+            color: dqBox.withAlpha(225),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: dqBorder, width: 2),
+            boxShadow: const [
               BoxShadow(
-                color: widget.color.withAlpha(77),
-                blurRadius: 8,
-                offset: const Offset(0, 3),
-              ),
+                  color: Colors.black54, blurRadius: 6, offset: Offset(0, 3)),
             ],
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                widget.grade.label,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 13,
+              Container(
+                width: 12,
+                height: 12,
+                decoration: BoxDecoration(
+                  color: widget.accent,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: dqBorder, width: 1),
+                  boxShadow: [
+                    BoxShadow(color: widget.accent.withAlpha(120), blurRadius: 6)
+                  ],
                 ),
               ),
-              const SizedBox(height: 2),
+              const SizedBox(height: 6),
+              Text(
+                _gradeJp(widget.grade),
+                style: dqText(size: 12, w: FontWeight.w800, color: dqInk),
+                textAlign: TextAlign.center,
+              ),
+              Text(
+                widget.grade.label,
+                style: dqText(size: 9, w: FontWeight.w600, color: dqGold, spacing: 0.8),
+              ),
+              const SizedBox(height: 3),
               Text(
                 interval,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 10,
-                ),
+                style: dqText(size: 9, color: dqGoldDeep),
+                textAlign: TextAlign.center,
               ),
             ],
           ),
@@ -1279,18 +1218,7 @@ class _XpFloatLabel extends StatelessWidget {
               child: Center(
                 child: Text(
                   '+$xp XP',
-                  style: const TextStyle(
-                    color: Color(0xFFFFD700),
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    shadows: [
-                      Shadow(
-                        color: Colors.black54,
-                        blurRadius: 6,
-                        offset: Offset(1, 2),
-                      ),
-                    ],
-                  ),
+                  style: dqText(size: 22, w: FontWeight.w800, color: dqGold),
                 ),
               ),
             ),
@@ -1314,12 +1242,13 @@ class _StarBurstPainter extends CustomPainter {
       angle: _rng.nextDouble() * 2 * math.pi,
       speed: 150 + _rng.nextDouble() * 250,
       size: 6 + _rng.nextDouble() * 10,
+      // Muted gold/cream sparks — stays within the DQ palette.
       color: [
-        const Color(0xFFFFD700),
-        const Color(0xFFFF8F00),
-        const Color(0xFFFF4081),
-        const Color(0xFF40C4FF),
-        const Color(0xFF69F0AE),
+        dqGold,
+        dqGoldDeep,
+        dqInk,
+        const Color(0xFFD9B25A),
+        const Color(0xFFEED9A0),
       ][_rng.nextInt(5)],
     ),
   );
@@ -1363,25 +1292,13 @@ class _StarParticle {
 
 class _SummaryCard extends StatelessWidget {
   final List<Widget> children;
-  const _SummaryCard({required this.children});
+  final String? title;
+  const _SummaryCard({required this.children, this.title});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.only(bottom: 8),
-      decoration: BoxDecoration(
-        color: const Color(0xFFFFFFFF),
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withAlpha(15),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
+    return DqPanel(
+      title: title,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: children,
@@ -1407,38 +1324,47 @@ class _SummaryRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final pct = total > 0 ? count / total : 0.0;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.symmetric(vertical: 5),
       child: Row(
         children: [
           Container(
             width: 10,
             height: 10,
-            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+            decoration: BoxDecoration(
+              color: color,
+              shape: BoxShape.circle,
+              border: Border.all(color: dqBorder, width: 1),
+            ),
           ),
           const SizedBox(width: 8),
           SizedBox(
-            width: 52,
+            width: 92,
             child: Text(
               label,
-              style: const TextStyle(color: Colors.black54, fontSize: 13),
+              style: dqText(size: 11, w: FontWeight.w600, color: dqInk),
+              overflow: TextOverflow.ellipsis,
             ),
           ),
           Expanded(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(3),
-              child: LinearProgressIndicator(
-                value: pct,
-                backgroundColor: Colors.black12,
-                valueColor: AlwaysStoppedAnimation<Color>(color),
-                minHeight: 6,
+            child: Container(
+              decoration: BoxDecoration(
+                color: dqNight0,
+                borderRadius: BorderRadius.circular(4),
+                border: Border.all(color: dqGoldDeep.withAlpha(120), width: 1),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(3),
+                child: LinearProgressIndicator(
+                  value: pct,
+                  backgroundColor: Colors.transparent,
+                  valueColor: AlwaysStoppedAnimation<Color>(color),
+                  minHeight: 7,
+                ),
               ),
             ),
           ),
           const SizedBox(width: 8),
-          Text(
-            '$count',
-            style: const TextStyle(color: Colors.black54, fontSize: 13),
-          ),
+          Text('$count', style: dqText(size: 13, color: dqInk)),
         ],
       ),
     );
@@ -1464,19 +1390,12 @@ class _StatTile extends StatelessWidget {
         children: [
           Text(icon, style: const TextStyle(fontSize: 18)),
           const SizedBox(width: 10),
-          Text(
-            label,
-            style: const TextStyle(color: Colors.black54, fontSize: 14),
+          Expanded(
+            child: Text(label, style: dqText(size: 13, color: dqInk)),
           ),
-          const Spacer(),
-          Text(
-            value,
-            style: const TextStyle(
-              color: Color(0xFF263238),
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          const SizedBox(width: 8),
+          Text(value,
+              style: dqText(size: 15, w: FontWeight.w800, color: dqGold)),
         ],
       ),
     );
