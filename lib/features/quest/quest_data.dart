@@ -6,9 +6,206 @@
 // choosing the correct English reply. A student starts at the town matching
 // their own 英検 level (e.g. a 準2級 holder starts in the 準2級 town).
 
-/// One conversational encounter: an NPC speaks, the player picks the right reply.
-class QuestEncounter {
+/// One option a learner can tap. For phonics/blend/word/phrase steps each
+/// option may carry its own audio (`audioAsset`) so it renders as a speaker
+/// button (a non-reader picks by sound, not by reading the label).
+class QuestOption {
+  /// Display label (a glyph "s", a word "cat", or a reply sentence).
+  final String label;
+
+  /// Optional asset key (relative to assets/, e.g. 'audio/phonics/phoneme_s.mp3')
+  /// played when the option is tapped, before the answer is evaluated.
+  final String? audioAsset;
+
+  /// Whether this option is the correct choice.
+  final bool isCorrect;
+
+  const QuestOption({required this.label, this.audioAsset, this.isCorrect = false});
+}
+
+/// A single step in a town's learning sequence. The 英検5級 stage layers four
+/// teaching kinds (`TeachSound`, `BlendWord`, `TeachWord`, `Phrase`) BEFORE the
+/// existing grammar quizzes; every other town is built purely from `QuestEncounter`
+/// (the `Quiz` kind), so those literals stay valid unchanged.
+///
+/// Shared contract for the kind-dispatch in quest_screen.dart:
+///  - [npcName]/[npcEmoji]: the villager portrait + nameplate.
+///  - [teachJa]: the Japanese teach text (furigana) shown on the card.
+///  - [autoPlayAudio]: asset key fired on entering the step (best-effort, only
+///    from the user-gesture chain) AND replayable via the always-visible 🔊.
+///  - [practicePromptJa]: the small prompt above the option tiles.
+///  - [options]: the tappable choices; for teach kinds each is a speaker button.
+///  - [onCorrect]: the story beat shown after the right choice.
+///  - [penalizeWrong]: false for teach/blend/word/phrase (a wrong tap replays
+///    audio, never flashes red); true only for the grammar `Quiz`.
+sealed class QuestStep {
+  const QuestStep();
+
+  String get npcName;
+  String get npcEmoji;
+  String? get teachJa;
+  String? get autoPlayAudio;
+  String? get practicePromptJa;
+  List<QuestOption> get options;
+  String get onCorrect;
+  bool get penalizeWrong;
+
+  /// Index of the correct option (first `isCorrect`, else 0).
+  int get correctIndex {
+    final i = options.indexWhere((o) => o.isCorrect);
+    return i < 0 ? 0 : i;
+  }
+}
+
+/// Phase A — phonics. Show a giant glyph, auto-play the pure phoneme, let the
+/// child replay/imitate, then pick "which says /s/?" among speaker options.
+class TeachSound extends QuestStep {
+  @override
   final String npcName;
+  @override
+  final String npcEmoji;
+
+  /// The grapheme to show large (e.g. "s", "a").
+  final String glyph;
+  @override
+  final String? teachJa;
+  @override
+  final String? autoPlayAudio;
+  @override
+  final String? practicePromptJa;
+  @override
+  final List<QuestOption> options;
+  @override
+  final String onCorrect;
+  @override
+  bool get penalizeWrong => false;
+
+  const TeachSound({
+    required this.npcName,
+    required this.npcEmoji,
+    required this.glyph,
+    this.teachJa,
+    this.autoPlayAudio,
+    this.practicePromptJa,
+    required this.options,
+    required this.onCorrect,
+  });
+}
+
+/// Phase A′/B — blend. Separated letter tiles (c·a·t) highlight in sequence with
+/// segmented audio, then the child picks the whole word among speaker tiles.
+class BlendWord extends QuestStep {
+  @override
+  final String npcName;
+  @override
+  final String npcEmoji;
+
+  /// The individual letter tiles shown separated, e.g. ['c','a','t'].
+  final List<String> letters;
+
+  /// The blended whole word (e.g. "cat"); also used as the headline.
+  final String word;
+  @override
+  final String? teachJa;
+  @override
+  final String? autoPlayAudio;
+  @override
+  final String? practicePromptJa;
+  @override
+  final List<QuestOption> options;
+  @override
+  final String onCorrect;
+  @override
+  bool get penalizeWrong => false;
+
+  const BlendWord({
+    required this.npcName,
+    required this.npcEmoji,
+    required this.letters,
+    required this.word,
+    this.teachJa,
+    this.autoPlayAudio,
+    this.practicePromptJa,
+    required this.options,
+    required this.onCorrect,
+  });
+}
+
+/// Phase B/C — a real 英検5級 word taught as a whole (no letter segmentation).
+class TeachWord extends QuestStep {
+  @override
+  final String npcName;
+  @override
+  final String npcEmoji;
+
+  /// The word shown large (e.g. "red").
+  final String word;
+  @override
+  final String? teachJa;
+  @override
+  final String? autoPlayAudio;
+  @override
+  final String? practicePromptJa;
+  @override
+  final List<QuestOption> options;
+  @override
+  final String onCorrect;
+  @override
+  bool get penalizeWrong => false;
+
+  const TeachWord({
+    required this.npcName,
+    required this.npcEmoji,
+    required this.word,
+    this.teachJa,
+    this.autoPlayAudio,
+    this.practicePromptJa,
+    required this.options,
+    required this.onCorrect,
+  });
+}
+
+/// Phase C — a 2–3-word phrase ("a red cat", "Hello!") taught as a whole.
+class Phrase extends QuestStep {
+  @override
+  final String npcName;
+  @override
+  final String npcEmoji;
+
+  /// The phrase shown large (e.g. "a red cat").
+  final String text;
+  @override
+  final String? teachJa;
+  @override
+  final String? autoPlayAudio;
+  @override
+  final String? practicePromptJa;
+  @override
+  final List<QuestOption> options;
+  @override
+  final String onCorrect;
+  @override
+  bool get penalizeWrong => false;
+
+  const Phrase({
+    required this.npcName,
+    required this.npcEmoji,
+    required this.text,
+    this.teachJa,
+    this.autoPlayAudio,
+    this.practicePromptJa,
+    required this.options,
+    required this.onCorrect,
+  });
+}
+
+/// The `Quiz` step: an NPC speaks, the player picks the right reply. This is the
+/// ONLY step kind used by towns 英検4級..準1級 (their literals are unchanged).
+/// Wrong answers DO flash red ([penalizeWrong] == true).
+class QuestEncounter extends QuestStep {
+  @override
+  final String npcName;
+  @override
   final String npcEmoji;
 
   /// What the NPC says (English, at the town's level).
@@ -21,9 +218,11 @@ class QuestEncounter {
   final List<String> choices;
 
   /// Index into [choices] of the correct, natural reply.
+  @override
   final int correctIndex;
 
   /// The NPC's response / story beat shown after a correct reply.
+  @override
   final String onCorrect;
 
   const QuestEncounter({
@@ -35,6 +234,26 @@ class QuestEncounter {
     required this.correctIndex,
     required this.onCorrect,
   });
+
+  @override
+  bool get penalizeWrong => true;
+
+  // QuestStep contract: a Quiz teaches nothing up-front; it carries its line in
+  // [npcLine] (the screen renders that directly), so these are null/derived.
+  @override
+  String? get teachJa => npcLineJa;
+  @override
+  String? get autoPlayAudio => null;
+  @override
+  String? get practicePromptJa => null;
+
+  /// The [choices] surfaced as [QuestOption]s so kind-dispatch code can treat
+  /// every step uniformly.
+  @override
+  List<QuestOption> get options => [
+        for (var i = 0; i < choices.length; i++)
+          QuestOption(label: choices[i], isCorrect: i == correctIndex),
+      ];
 }
 
 /// A town on the quest, gated to one 英検 grade / CEFR level.
@@ -45,7 +264,10 @@ class QuestTown {
   final String name; // 日本語の街名
   final String tagline; // short flavor line
   final String intro; // story text shown on entering the town
-  final List<QuestEncounter> encounters;
+  /// The town's learning sequence. For 英検4級..準1級 these are all
+  /// [QuestEncounter] (Quiz) steps; 英検5級 layers phonics/blend/word/phrase
+  /// teach steps before its quizzes.
+  final List<QuestStep> encounters;
 
   /// Story payoff shown on the cleared screen: the recovered 声の石 and the
   /// arc beat for this town. Optional so existing literals stay valid.
@@ -77,13 +299,212 @@ const List<QuestTown> kQuestTowns = [
     id: 'town_eiken5',
     eikenLevel: '5',
     cefr: 'A1',
-    name: 'はじまりの村',
-    tagline: 'やさしいあいさつの村',
-    intro: 'ここは旅（たび）のはじまりの村（むら）。けれど、みんな「ハロー」を忘（わす）れてしまった。'
-        '正（ただ）しいあいさつで、村（むら）に「ことば」をとりもどそう。',
+    name: 'ことばを失（うしな）った村（むら）',
+    tagline: 'ソネア ― はじまりの声（こえ）の国（くに）',
+    intro: 'ここは〈ソネア〉。ことばが生（う）まれた国（くに）。けれど魔王（まおう）サイレントに'
+        '声（こえ）をうばわれ、村（むら）びとは「ひとつの音（おと）」しか出（だ）せなくなった。'
+        'まず、その音（おと）をよく聞（き）こう。🔊をおして、音（おと）をまねしてみて。'
+        '音（おと）をつなげば、ことばがよみがえる。',
     cleared: '村（むら）に声（こえ）がもどった！ 最初（さいしょ）の〈声（こえ）の石（いし）〉がひかる。'
         'スラが「ハロー！」と、はじめて言（い）えた。',
     encounters: [
+      // ── Phase A: phonics (SATPIN). Each step shows a giant glyph + Ember-Keeper
+      //    villager; 🔊 plays a pure phoneme (founder records later); pick the
+      //    matching sound from two speaker options. No scolding on a wrong tap.
+      // 1 — /s/ 灰守（はいもり）セル. The first sound returns.
+      TeachSound(
+        npcName: '灰守（はいもり）セル',
+        npcEmoji: '🌫️',
+        glyph: 's',
+        teachJa: 'セルは口（くち）をひらいた。「ssss…」 ヘビのように、ながく のばす音（おと）。'
+            '🔊をおして、まねしてみよう。',
+        autoPlayAudio: 'audio/phonics/phoneme_s.mp3',
+        practicePromptJa: '「ssss」の音（おと）は、どっち？ 🔊をおして えらぼう。',
+        options: [
+          QuestOption(label: 's', audioAsset: 'audio/phonics/phoneme_s.mp3', isCorrect: true),
+          QuestOption(label: 'a', audioAsset: 'audio/phonics/phoneme_a.mp3'),
+        ],
+        onCorrect: 'sss…！ セルの目（め）に光（ひかり）がもどった。「これが…わたしの、さいしょの音（おと）…」',
+      ),
+      // 2 — /a/ アン. Short /a/ — guard vs カタカナ「ア」 later.
+      TeachSound(
+        npcName: 'アン',
+        npcEmoji: '🍎',
+        glyph: 'a',
+        teachJa: '小（ちい）さな子（こ）アンが、口（くち）を大（おお）きくあけた。「a（ア）」'
+            '口（くち）をぱっと ひらく、みじかい音（おと）。🔊をおして まねしよう。',
+        autoPlayAudio: 'audio/phonics/phoneme_a.mp3',
+        practicePromptJa: '「a」の音（おと）は、どっち？',
+        options: [
+          QuestOption(label: 's', audioAsset: 'audio/phonics/phoneme_s.mp3'),
+          QuestOption(label: 'a', audioAsset: 'audio/phonics/phoneme_a.mp3', isCorrect: true),
+        ],
+        onCorrect: 'a！ アンがにっこり わらった。「もう ひとつ、音（おと）が ふえたね！」',
+      ),
+      // 3 — /t/ タオ. Stop consonant — clipped, no trailing /u/.
+      TeachSound(
+        npcName: 'タオ',
+        npcEmoji: '🥁',
+        glyph: 't',
+        teachJa: 'タオが舌（した）を はじいた。「t！」 みじかく、ぽんっと きる音（おと）。'
+            '「とぅー」と のばさない。🔊をおして まねしよう。',
+        autoPlayAudio: 'audio/phonics/phoneme_t.mp3',
+        practicePromptJa: '「t」の音（おと）は、どっち？',
+        options: [
+          QuestOption(label: 't', audioAsset: 'audio/phonics/phoneme_t.mp3', isCorrect: true),
+          QuestOption(label: 'a', audioAsset: 'audio/phonics/phoneme_a.mp3'),
+        ],
+        onCorrect: 't！ ぽんっ。「3つの音（おと）が そろった。…つなげたら、どうなる？」',
+      ),
+      // ── Phase A′: nonsense blend (sat). Blending mechanic BEFORE real words
+      //    (katakana-contaminated real words are harder → come later).
+      // 4 — blend s-a-t (スラ teaches blending with a nonsense syllable).
+      BlendWord(
+        npcName: 'スラ',
+        npcEmoji: '🟢',
+        letters: ['s', 'a', 't'],
+        word: 'sat',
+        teachJa: 'スラが言（い）った。「音（おと）を、はやく つなげてみて！ s…a…t… → "sat"！」'
+            'これは いみのない れんしゅうの音（おと）。つなげる かんじを つかもう。🔊で きこう。',
+        autoPlayAudio: 'audio/phonics/blend_sat.mp3',
+        practicePromptJa: 's→a→t を つなげると？ 🔊をおして えらぼう。',
+        options: [
+          QuestOption(label: 'sat', audioAsset: 'audio/phonics/blend_sat.mp3', isCorrect: true),
+          QuestOption(label: 's', audioAsset: 'audio/phonics/phoneme_s.mp3'),
+        ],
+        onCorrect: '"sat"！ つながった！ スラが はねた。「これで、ことばが つくれる！」',
+      ),
+      // ── Phase B: real 英検5級 CVC words. New sounds /c/, /o/, /g/ introduced
+      //    just-in-time; one new sound per step, the rest review.
+      // 5 — /c/ コル. New sound for the first real word.
+      TeachSound(
+        npcName: 'コル',
+        npcEmoji: '🪨',
+        glyph: 'c',
+        teachJa: 'コルが のどの おくで 音（おと）を ならした。「c！」 みじかく きる音（おと）。'
+            '「くぅー」と のばさない。🔊をおして まねしよう。',
+        autoPlayAudio: 'audio/phonics/phoneme_c.mp3',
+        practicePromptJa: '「c」の音（おと）は、どっち？',
+        options: [
+          QuestOption(label: 'c', audioAsset: 'audio/phonics/phoneme_c.mp3', isCorrect: true),
+          QuestOption(label: 't', audioAsset: 'audio/phonics/phoneme_t.mp3'),
+        ],
+        onCorrect: 'c！ 「この音（おと）が あれば…ほら、あの子（こ）の名前（なまえ）が よべる」',
+      ),
+      // 6 — cat (first REAL word). Distractor "cap" = minimal pair (final /t/-/p/).
+      BlendWord(
+        npcName: 'ミィ',
+        npcEmoji: '🐱',
+        letters: ['c', 'a', 't'],
+        word: 'cat',
+        teachJa: 'ちいさな ねこ ミィ。「c…a…t… → cat！」 はじめての ほんとうの ことば。'
+            'カタカナの「キャット」では なく、英語（えいご）の音（おと）で きこう。🔊で。',
+        autoPlayAudio: 'audio/phonics/blend_cat.mp3',
+        practicePromptJa: 'c→a→t は、どの ことば？',
+        options: [
+          QuestOption(label: 'cat', audioAsset: 'audio/phonics/blend_cat.mp3', isCorrect: true),
+          QuestOption(label: 'cap', audioAsset: 'audio/phonics/blend_cap.mp3'),
+        ],
+        onCorrect: 'cat！ ミィが すりよってきた。「にゃあ＝cat。わたし、なまえを とりもどした！」',
+      ),
+      // 7 — /o/ オド. New sound.
+      TeachSound(
+        npcName: 'オド',
+        npcEmoji: '🦉',
+        glyph: 'o',
+        teachJa: 'ふくろうの オドが まるい口（くち）で。「o（オ）」 口（くち）を まるく あける音（おと）。'
+            '🔊をおして まねしよう。',
+        autoPlayAudio: 'audio/phonics/phoneme_o.mp3',
+        practicePromptJa: '「o」の音（おと）は、どっち？',
+        options: [
+          QuestOption(label: 'o', audioAsset: 'audio/phonics/phoneme_o.mp3', isCorrect: true),
+          QuestOption(label: 'a', audioAsset: 'audio/phonics/phoneme_a.mp3'),
+        ],
+        onCorrect: 'o！ 「ホー…これで、また ひとつ ことばが つくれる」',
+      ),
+      // 8 — /g/ グレン. New sound.
+      TeachSound(
+        npcName: 'グレン',
+        npcEmoji: '🐲',
+        glyph: 'g',
+        teachJa: 'グレンが のどを ふるわせた。「g！」 みじかく きる音（おと）。'
+            '「ぐぅー」と のばさない。🔊をおして まねしよう。',
+        autoPlayAudio: 'audio/phonics/phoneme_g.mp3',
+        practicePromptJa: '「g」の音（おと）は、どっち？',
+        options: [
+          QuestOption(label: 'g', audioAsset: 'audio/phonics/phoneme_g.mp3', isCorrect: true),
+          QuestOption(label: 'c', audioAsset: 'audio/phonics/phoneme_c.mp3'),
+        ],
+        onCorrect: 'g！ 「これで、おともだちの 名前（なまえ）が よべるぞ」',
+      ),
+      // 9 — dog. Distractor "dig" = vowel minimal pair (/o/ vs /i/).
+      BlendWord(
+        npcName: 'ロブ',
+        npcEmoji: '🐶',
+        letters: ['d', 'o', 'g'],
+        word: 'dog',
+        teachJa: 'いぬの ロブ。「d…o…g… → dog！」 音（おと）を つなげて よもう。'
+            'カタカナの「ドッグ」では なく、英語（えいご）の音（おと）で。🔊で きこう。',
+        autoPlayAudio: 'audio/phonics/blend_dog.mp3',
+        practicePromptJa: 'd→o→g は、どの ことば？',
+        options: [
+          QuestOption(label: 'dog', audioAsset: 'audio/phonics/blend_dog.mp3', isCorrect: true),
+          QuestOption(label: 'dig', audioAsset: 'audio/phonics/blend_dig.mp3'),
+        ],
+        onCorrect: 'dog！ ロブが しっぽを ふった。「ワン＝dog！ ともだちが ふえた！」',
+      ),
+      // 10 — sun. Color/light returns to the village. Distractor "son"→use "sit".
+      BlendWord(
+        npcName: 'ノナ',
+        npcEmoji: '🌞',
+        letters: ['s', 'u', 'n'],
+        word: 'sun',
+        teachJa: 'ノナが 空（そら）を ゆびさした。「s…u…n… → sun！」 太陽（たいよう）の ことば。'
+            'これを いえば、村（むら）に いろが もどる。🔊で きこう。',
+        autoPlayAudio: 'audio/phonics/blend_sun.mp3',
+        practicePromptJa: 's→u→n は、どの ことば？',
+        options: [
+          QuestOption(label: 'sun', audioAsset: 'audio/phonics/blend_sun.mp3', isCorrect: true),
+          QuestOption(label: 'sit', audioAsset: 'audio/phonics/blend_sit.mp3'),
+        ],
+        onCorrect: 'sun！ 空（そら）が あかるくなった。「ひかりが…もどってきた！」',
+      ),
+      // ── Phase C: a single word → a short phrase. Bridges into the grammar arc.
+      // 11 — red + "a red cat" (color word, then the first 2-3-word phrase).
+      Phrase(
+        npcName: 'ベラ',
+        npcEmoji: '🎨',
+        text: 'a red cat',
+        teachJa: 'ベラが 絵（え）の具（ぐ）を ひらいた。「red（あか）」 まず この いろの ことば。'
+            'そして つなげて…「a red cat（あかい ねこ）」！ 🔊で きこう。',
+        autoPlayAudio: 'audio/phonics/phrase_a_red_cat.mp3',
+        practicePromptJa: '「あかい ねこ」は、どれ？ 🔊で きいて えらぼう。',
+        options: [
+          QuestOption(label: 'a red cat', audioAsset: 'audio/phonics/phrase_a_red_cat.mp3', isCorrect: true),
+          QuestOption(label: 'red', audioAsset: 'audio/phonics/blend_red.mp3'),
+        ],
+        onCorrect: 'a red cat！ ベラが えがおに。「ことばを つなげると、絵（え）が うかぶ！」',
+      ),
+      // 12 — Hello! (Sura's first sentence). Hands into the existing grammar arc.
+      Phrase(
+        npcName: 'スラ',
+        npcEmoji: '🟢',
+        text: 'Hello!',
+        teachJa: 'スラが むねを はった。「ぼくも、いってみる…！」 さいしょの あいさつ「Hello!」。'
+            '🔊で きいて、いっしょに いってみよう。',
+        autoPlayAudio: 'audio/phonics/phrase_hello.mp3',
+        practicePromptJa: 'あいさつの ことばは、どっち？',
+        options: [
+          QuestOption(label: 'Hello!', audioAsset: 'audio/phonics/phrase_hello.mp3', isCorrect: true),
+          QuestOption(label: 'cat', audioAsset: 'audio/phonics/blend_cat.mp3'),
+        ],
+        onCorrect: 'Hello！ スラが はじめて 文（ぶん）を いえた。「これで…みんなと はなせる！'
+            'さあ、村（むら）の おくへ いこう！」',
+      ),
+      // ──────────────────────────────────────────────────────────────────────
+      // Phase C (cont.) — the existing 20-encounter grammar arc. The child can
+      // now decode the option labels, so these quizzes are fair.
+      // ──────────────────────────────────────────────────────────────────────
       // 1 — Greeting. スラ re-learns 'Hello'. (大問2型)
       QuestEncounter(
         npcName: 'スラ',
