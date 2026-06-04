@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 
+import '../../core/sound/sound_service.dart';
 import 'quest_data.dart';
 
 class QuestScreen extends StatefulWidget {
@@ -20,6 +21,22 @@ class _QuestScreenState extends State<QuestScreen> {
   static const _sky = Color(0xFF4FC3F7);
   static const _ink = Color(0xFF263238);
 
+  // 声の石 (Voice Stone) earned on clearing each town — the DQ-style reward.
+  static const _stoneNames = [
+    'あいさつの石', 'くらしの石', 'まなびの石', 'しゃかいの石',
+    'しれんの石', 'がくもんの石', '王（おう）の石',
+  ];
+  static const _stoneColors = [
+    Color(0xFF4FC3F7), Color(0xFF66BB6A), Color(0xFFFFB300), Color(0xFF26C6DA),
+    Color(0xFFAB47BC), Color(0xFFEF5350), Color(0xFFFFD54F),
+  ];
+  int get _townIdx => kQuestTowns.indexWhere((t) => t.id == widget.town.id);
+  String get _stoneName =>
+      _townIdx >= 0 && _townIdx < _stoneNames.length ? _stoneNames[_townIdx] : 'こえの石';
+  Color get _stoneColor =>
+      _townIdx >= 0 && _townIdx < _stoneColors.length ? _stoneColors[_townIdx] : _sky;
+
+  final _sound = SoundService();
   _Phase _phase = _Phase.intro;
   int _index = 0;
   int? _picked;
@@ -35,7 +52,7 @@ class _QuestScreenState extends State<QuestScreen> {
     setState(() {
       _picked = i;
       _revealed = i == _enc.correctIndex;
-      if (!_revealed) _picked = i; // wrong: show feedback, allow retry
+      if (_revealed) _sound.playCorrect();
     });
   }
 
@@ -47,6 +64,7 @@ class _QuestScreenState extends State<QuestScreen> {
         _revealed = false;
       } else {
         _phase = _Phase.cleared;
+        _sound.playLevelUp();
       }
     });
   }
@@ -157,8 +175,18 @@ class _QuestScreenState extends State<QuestScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(children: [
-                  Text(_enc.npcEmoji, style: const TextStyle(fontSize: 32)),
-                  const SizedBox(width: 10),
+                  Container(
+                    width: 52,
+                    height: 52,
+                    decoration: BoxDecoration(
+                      color: _sky.withAlpha(26),
+                      shape: BoxShape.circle,
+                      border: Border.all(color: _sky.withAlpha(120), width: 2),
+                    ),
+                    child: Center(
+                        child: Text(_enc.npcEmoji, style: const TextStyle(fontSize: 30))),
+                  ),
+                  const SizedBox(width: 12),
                   Text(_enc.npcName,
                       style: const TextStyle(color: _ink, fontWeight: FontWeight.bold, fontSize: 16)),
                 ]),
@@ -194,10 +222,43 @@ class _QuestScreenState extends State<QuestScreen> {
             _primaryButton(
                 _index < total - 1 ? 'つぎへ' : '街（まち）をクリア！', _next),
           ],
+          const SizedBox(height: 24),
+          _partyFooter(),
         ],
       ),
     );
   }
+
+  /// The hero + companion shown on every encounter — "this is my party".
+  Widget _partyFooter() => Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _partyMember('assets/art/masters/prince.png', 'あなた'),
+          const SizedBox(width: 24),
+          _partyMember('assets/art/masters/slime.png', 'スラ'),
+        ],
+      );
+
+  Widget _partyMember(String asset, String label) => Column(
+        children: [
+          Container(
+            width: 46,
+            height: 46,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white,
+              border: Border.all(color: _sky.withAlpha(120), width: 2),
+              boxShadow: [BoxShadow(color: _sky.withAlpha(30), blurRadius: 4)],
+            ),
+            clipBehavior: Clip.antiAlias,
+            child: Image.asset(asset,
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => const Icon(Icons.person, color: _sky)),
+          ),
+          const SizedBox(height: 2),
+          Text(label, style: const TextStyle(color: Color(0xFF90A4AE), fontSize: 11)),
+        ],
+      );
 
   Widget _choiceTile(int i) {
     final isPicked = _picked == i;
@@ -248,11 +309,16 @@ class _QuestScreenState extends State<QuestScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text('🎉', style: TextStyle(fontSize: 64)),
-            const SizedBox(height: 12),
+            _voiceStone(),
+            const SizedBox(height: 18),
             Text('${widget.town.name} クリア！',
                 textAlign: TextAlign.center,
                 style: const TextStyle(color: _ink, fontSize: 24, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 4),
+            Text('〈$_stoneName〉を手（て）に入（い）れた！',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: _stoneColor, fontSize: 16, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
             Text(
                 widget.town.cleared ??
@@ -267,6 +333,31 @@ class _QuestScreenState extends State<QuestScreen> {
       ),
     );
   }
+
+  /// The recovered 声の石 — blooms in with an elastic pop + colored glow.
+  Widget _voiceStone() => TweenAnimationBuilder<double>(
+        tween: Tween(begin: 0, end: 1),
+        duration: const Duration(milliseconds: 750),
+        curve: Curves.elasticOut,
+        builder: (context, t, _) => Transform.scale(
+          scale: t.clamp(0.0, 1.0),
+          child: Container(
+            width: 116,
+            height: 116,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: RadialGradient(
+                colors: [Colors.white, _stoneColor, _stoneColor.withAlpha(170)],
+                stops: const [0.0, 0.55, 1.0],
+              ),
+              boxShadow: [
+                BoxShadow(color: _stoneColor.withAlpha(150), blurRadius: 32, spreadRadius: 4),
+              ],
+            ),
+            child: const Center(child: Text('💎', style: TextStyle(fontSize: 46))),
+          ),
+        ),
+      );
 
   Widget _primaryButton(String label, VoidCallback onTap, {bool enabled = true}) {
     return SizedBox(
