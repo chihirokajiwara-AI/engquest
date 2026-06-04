@@ -235,13 +235,20 @@ class QuestTitleScreen extends StatelessWidget {
                   ? const Icon(Icons.play_arrow, color: _gold, size: 18)
                   : const SizedBox.shrink(),
             ),
-            Text(label,
-                style: GoogleFonts.notoSerifJp(
-                  color: selected ? Colors.white : _ink.withAlpha(190),
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 3,
-                )),
+            Expanded(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.centerLeft,
+                child: Text(label,
+                    maxLines: 1,
+                    style: GoogleFonts.notoSerifJp(
+                      color: selected ? Colors.white : _ink.withAlpha(190),
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 2,
+                    )),
+              ),
+            ),
           ],
         ),
       ),
