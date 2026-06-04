@@ -373,3 +373,241 @@ class DqTile extends StatelessWidget {
     );
   }
 }
+
+// ── 英検5級『言葉を失った村』phonics-stage widgets ────────────────────────────
+// Audio-central, autoplay-SAFE (every clip is also reachable via a large
+// always-visible 🔊 button — see [DqReplayButton]). No pictures (hardened C4):
+// meaning is carried by audio + the villager-revival beat.
+
+/// A large, always-visible 🔊 replay button. The autoplay contract: on web,
+/// audio must come from a user gesture, so this button is the guaranteed way to
+/// hear (and imitate) every clip. [onTap] should call AudioCueService.play(...).
+class DqReplayButton extends StatelessWidget {
+  final VoidCallback? onTap;
+  final String label;
+  const DqReplayButton({super.key, this.onTap, this.label = 'もう いちど きく'});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(colors: [dqGold, dqGoldDeep]),
+          borderRadius: BorderRadius.circular(28),
+          border: Border.all(color: dqBorder, width: 2),
+          boxShadow: [BoxShadow(color: dqGoldDeep.withAlpha(120), blurRadius: 14)],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text('🔊', style: TextStyle(fontSize: 26)),
+            const SizedBox(width: 10),
+            Text(label,
+                style: GoogleFonts.notoSerifJp(
+                    color: const Color(0xFF2A1C00),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 1)),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Phase A card: a giant grapheme glyph + the Ember-Keeper villager portrait +
+/// a large always-visible 🔊 replay button + the JA teach text. The pure phoneme
+/// is auto-played on enter (best-effort) and replayed on the 🔊 tap.
+class PhonicsLetterCard extends StatelessWidget {
+  final String glyph;
+  final String npcName;
+  final String npcEmoji;
+  final String? teachJa;
+  final VoidCallback? onReplay;
+  const PhonicsLetterCard({
+    super.key,
+    required this.glyph,
+    required this.npcName,
+    required this.npcEmoji,
+    this.teachJa,
+    this.onReplay,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        DqPortrait(emoji: npcEmoji, size: 64),
+        const SizedBox(height: 14),
+        // Giant glyph in a gold-framed plate.
+        Container(
+          width: 150,
+          height: 150,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: dqBox.withAlpha(235),
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(color: dqGold, width: 3),
+            boxShadow: [BoxShadow(color: dqGold.withAlpha(90), blurRadius: 20)],
+          ),
+          child: Text(glyph,
+              style: GoogleFonts.notoSerifJp(
+                  color: Colors.white, fontSize: 96, fontWeight: FontWeight.w800)),
+        ),
+        const SizedBox(height: 16),
+        DqReplayButton(onTap: onReplay, label: '🔁 おとを きく・まねする'),
+        if (teachJa != null) ...[
+          const SizedBox(height: 16),
+          DqDialogBox(speaker: npcName, child: Text(teachJa!, style: dqText(size: 15))),
+        ],
+      ],
+    );
+  }
+}
+
+/// Phase A′/B card: separated letter tiles (c·a·t) that highlight in sequence
+/// (driven by [activeLetter]) + a large 🔊 + the JA teach text. NO picture
+/// (hardened C4). The whole-word options are rendered by the screen below.
+class BlendWordCard extends StatelessWidget {
+  final List<String> letters;
+  final String word;
+  final String npcName;
+  final String npcEmoji;
+  final String? teachJa;
+
+  /// Index of the letter currently highlighted (-1 = none / whole word). Drives
+  /// the c→a→t sweep the screen animates while the segmented audio plays.
+  final int activeLetter;
+  final VoidCallback? onReplay;
+  const BlendWordCard({
+    super.key,
+    required this.letters,
+    required this.word,
+    required this.npcName,
+    required this.npcEmoji,
+    this.teachJa,
+    this.activeLetter = -1,
+    this.onReplay,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        DqPortrait(emoji: npcEmoji, size: 60),
+        const SizedBox(height: 14),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            for (var i = 0; i < letters.length; i++) ...[
+              if (i > 0)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: Text('·', style: dqText(size: 40, color: dqGoldDeep)),
+                ),
+              _letterTile(letters[i], i == activeLetter),
+            ],
+          ],
+        ),
+        const SizedBox(height: 14),
+        DqReplayButton(onTap: onReplay, label: '🔁 おとを つなげて きく'),
+        if (teachJa != null) ...[
+          const SizedBox(height: 16),
+          DqDialogBox(speaker: npcName, child: Text(teachJa!, style: dqText(size: 15))),
+        ],
+      ],
+    );
+  }
+
+  Widget _letterTile(String letter, bool active) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 180),
+      width: 62,
+      height: 76,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: active ? const Color(0xFF15351B).withAlpha(235) : dqBox.withAlpha(225),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: active ? const Color(0xFF8BE08B) : dqBorder, width: active ? 3 : 2),
+        boxShadow: active
+            ? [BoxShadow(color: const Color(0xFF8BE08B).withAlpha(140), blurRadius: 16)]
+            : null,
+      ),
+      child: Text(letter,
+          style: GoogleFonts.notoSerifJp(
+              color: active ? const Color(0xFFCFF5CF) : Colors.white,
+              fontSize: 44,
+              fontWeight: FontWeight.w800)),
+    );
+  }
+}
+
+/// An option button that PLAYS its own audio on tap (via [onAudio]) BEFORE the
+/// answer is evaluated (via [onChoose]) — a [DqChoice] variant with a leading 🔊.
+/// Lets a non-reader pick by sound. [state] colours correct (green); wrong is
+/// only ever shown for penalized (Quiz) steps, handled by the caller.
+class AudioOptionButton extends StatelessWidget {
+  final String label;
+  final DqChoiceState state;
+
+  /// Plays the option's audio (call AudioCueService.play(option.audioAsset)).
+  final VoidCallback? onAudio;
+
+  /// Evaluates the choice (call the screen's _choose).
+  final VoidCallback? onChoose;
+  const AudioOptionButton({
+    super.key,
+    required this.label,
+    this.state = DqChoiceState.normal,
+    this.onAudio,
+    this.onChoose,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    Color border = dqBorder;
+    Color fill = dqBox.withAlpha(210);
+    if (state == DqChoiceState.correct) {
+      border = const Color(0xFF8BE08B);
+      fill = const Color(0xFF15351B).withAlpha(235);
+    } else if (state == DqChoiceState.wrong) {
+      border = const Color(0xFFE89090);
+      fill = const Color(0xFF3A1414).withAlpha(235);
+    }
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 9),
+      child: GestureDetector(
+        onTap: (onAudio == null && onChoose == null)
+            ? null
+            : () {
+                onAudio?.call();
+                onChoose?.call();
+              },
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+          decoration: BoxDecoration(
+            color: fill,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: border, width: 2),
+          ),
+          child: Row(
+            children: [
+              const Text('🔊', style: TextStyle(fontSize: 22)),
+              const SizedBox(width: 12),
+              Expanded(
+                  child: Text(label,
+                      style: dqText(size: 20, w: FontWeight.w700))),
+              if (state == DqChoiceState.correct)
+                const Icon(Icons.check, color: Color(0xFF8BE08B), size: 22)
+              else if (state == DqChoiceState.wrong)
+                const Icon(Icons.close, color: Color(0xFFE89090), size: 22),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

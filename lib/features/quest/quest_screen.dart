@@ -5,6 +5,7 @@
 
 import 'package:flutter/material.dart';
 
+import '../../core/audio/audio_cue_service.dart';
 import '../../core/sound/sound_service.dart';
 import 'quest_data.dart';
 import 'ui/dq_ui.dart';
@@ -34,6 +35,7 @@ class _QuestScreenState extends State<QuestScreen> {
   ];
 
   final _sound = SoundService();
+  final _cue = AudioCueService();
   _Phase _phase = _Phase.intro;
   int _index = 0;
   int? _picked;
@@ -46,10 +48,22 @@ class _QuestScreenState extends State<QuestScreen> {
     if (p != null && _hasEncounters) {
       _phase = _Phase.encounter;
       _index = p.clamp(0, widget.town.encounters.length - 1);
+      // NOTE: do NOT auto-play here — initState is not a user gesture, so web
+      // would throw NotAllowedError. The always-visible 🔊 button is the path.
     }
   }
 
-  QuestEncounter get _enc => widget.town.encounters[_index];
+  @override
+  void dispose() {
+    _cue.dispose();
+    super.dispose();
+  }
+
+  QuestStep get _enc => widget.town.encounters[_index];
+
+  /// Play the current step's auto-play clip. Only safe from a user-gesture
+  /// chain (_start/_next/_choose). Best-effort; swallows errors.
+  void _autoPlayCurrent() => _cue.play(_enc.autoPlayAudio);
   bool get _hasEncounters => widget.town.encounters.isNotEmpty;
   int get _townIdx => kQuestTowns.indexWhere((t) => t.id == widget.town.id);
   String get _stoneName =>
@@ -60,13 +74,24 @@ class _QuestScreenState extends State<QuestScreen> {
   // Optional per-town scene art (falls back to the night gradient).
   String get _sceneAsset => 'assets/art/scenes/town_${widget.town.eikenLevel}.png';
 
-  void _start() => setState(() => _phase = _hasEncounters ? _Phase.encounter : _Phase.cleared);
+  void _start() {
+    setState(() => _phase = _hasEncounters ? _Phase.encounter : _Phase.cleared);
+    // _start is a tap handler → safe to auto-play the first step's clip.
+    if (_phase == _Phase.encounter) _autoPlayCurrent();
+  }
 
   void _choose(int i) {
     if (_revealed) return;
+    final correct = i == _enc.correctIndex;
+    if (!correct && !_enc.penalizeWrong) {
+      // No-scold (teach/blend/word/phrase): a wrong tap replays the audio and
+      // keeps the card active — never red, never advancing.
+      _cue.play(_enc.autoPlayAudio);
+      return;
+    }
     setState(() {
       _picked = i;
-      _revealed = i == _enc.correctIndex;
+      _revealed = correct;
       if (_revealed) _sound.playCorrect();
     });
   }
@@ -82,6 +107,8 @@ class _QuestScreenState extends State<QuestScreen> {
         _sound.playLevelUp();
       }
     });
+    // _next is a tap handler → safe to auto-play the new step's clip.
+    if (_phase == _Phase.encounter) _autoPlayCurrent();
   }
 
   @override
@@ -132,51 +159,59 @@ class _QuestScreenState extends State<QuestScreen> {
 
   Widget _encounter() {
     final total = widget.town.encounters.length;
+    final step = _enc;
     return SingleChildScrollView(
       child: Column(
         children: [
           _header('${_index + 1} / $total'),
           const SizedBox(height: 4),
-          // NPC portrait, centered above the dialogue.
-          DqPortrait(emoji: _enc.npcEmoji, size: 76),
-          const SizedBox(height: 16),
-          DqDialogBox(
-            speaker: _enc.npcName,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(_enc.npcLine, style: dqText(size: 19, w: FontWeight.w700)),
-                if (_enc.npcLineJa != null) ...[
-                  const SizedBox(height: 8),
-                  Text(_enc.npcLineJa!, style: dqText(size: 12, color: dqInk, w: FontWeight.w400)),
-                ],
-              ],
-            ),
-          ),
+          // Kind-dispatch: phonics/blend/word/phrase get a teach card; Quiz keeps
+          // the original NPC-dialogue layout.
+          switch (step) {
+            TeachSound s => PhonicsLetterCard(
+                glyph: s.glyph,
+                npcName: s.npcName,
+                npcEmoji: s.npcEmoji,
+                teachJa: s.teachJa,
+                onReplay: () => _cue.play(s.autoPlayAudio),
+              ),
+            BlendWord s => BlendWordCard(
+                letters: s.letters,
+                word: s.word,
+                npcName: s.npcName,
+                npcEmoji: s.npcEmoji,
+                teachJa: s.teachJa,
+                onReplay: () => _cue.play(s.autoPlayAudio),
+              ),
+            TeachWord s => PhonicsLetterCard(
+                glyph: s.word,
+                npcName: s.npcName,
+                npcEmoji: s.npcEmoji,
+                teachJa: s.teachJa,
+                onReplay: () => _cue.play(s.autoPlayAudio),
+              ),
+            Phrase s => PhonicsLetterCard(
+                glyph: s.text,
+                npcName: s.npcName,
+                npcEmoji: s.npcEmoji,
+                teachJa: s.teachJa,
+                onReplay: () => _cue.play(s.autoPlayAudio),
+              ),
+            QuestEncounter q => _quizPrompt(q),
+          },
           const SizedBox(height: 18),
           Align(
             alignment: Alignment.centerLeft,
-            child: Text('正（ただ）しい返事（へんじ）をえらぼう', style: dqText(size: 12, color: dqGold)),
+            child: Text(step.practicePromptJa ?? '正（ただ）しい返事（へんじ）をえらぼう',
+                style: dqText(size: 12, color: dqGold)),
           ),
           const SizedBox(height: 8),
-          ...List.generate(_enc.choices.length, (i) {
-            DqChoiceState st = DqChoiceState.normal;
-            if (_revealed && i == _enc.correctIndex) {
-              st = DqChoiceState.correct;
-            } else if (_picked == i && i != _enc.correctIndex) {
-              st = DqChoiceState.wrong;
-            }
-            return DqChoice(
-              label: _enc.choices[i],
-              state: st,
-              onTap: _revealed ? null : () => _choose(i),
-            );
-          }),
+          ..._options(step),
           if (_revealed) ...[
             const SizedBox(height: 8),
             DqDialogBox(
-              speaker: _enc.npcName,
-              child: Text(_enc.onCorrect, style: dqText(size: 15)),
+              speaker: step.npcName,
+              child: Text(step.onCorrect, style: dqText(size: 15)),
             ),
             const SizedBox(height: 16),
             DqButton(label: _index < total - 1 ? '▶ つぎへ' : '▶ 街（まち）をクリア！', onTap: _next),
@@ -186,6 +221,58 @@ class _QuestScreenState extends State<QuestScreen> {
         ],
       ),
     );
+  }
+
+  /// The Quiz step's NPC portrait + dialogue (unchanged from the original).
+  Widget _quizPrompt(QuestEncounter q) => Column(
+        children: [
+          DqPortrait(emoji: q.npcEmoji, size: 76),
+          const SizedBox(height: 16),
+          DqDialogBox(
+            speaker: q.npcName,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(q.npcLine, style: dqText(size: 19, w: FontWeight.w700)),
+                if (q.npcLineJa != null) ...[
+                  const SizedBox(height: 8),
+                  Text(q.npcLineJa!, style: dqText(size: 12, color: dqInk, w: FontWeight.w400)),
+                ],
+              ],
+            ),
+          ),
+        ],
+      );
+
+  /// Render the option tiles. Teach kinds (any option carrying audio) render as
+  /// 🔊 [AudioOptionButton]s that play the option's clip before evaluating, and
+  /// never flash red. Quiz steps keep the plain [DqChoice] with red-on-wrong.
+  List<Widget> _options(QuestStep step) {
+    final opts = step.options;
+    return List.generate(opts.length, (i) {
+      final correct = i == step.correctIndex;
+      DqChoiceState st = DqChoiceState.normal;
+      if (_revealed && correct) {
+        st = DqChoiceState.correct;
+      } else if (step.penalizeWrong && _picked == i && !correct) {
+        st = DqChoiceState.wrong;
+      }
+      if (!step.penalizeWrong) {
+        // Audio-option (phonics/blend/word/phrase): play, then evaluate.
+        final o = opts[i];
+        return AudioOptionButton(
+          label: o.label,
+          state: st,
+          onAudio: _revealed ? null : () => _cue.play(o.audioAsset),
+          onChoose: _revealed ? null : () => _choose(i),
+        );
+      }
+      return DqChoice(
+        label: opts[i].label,
+        state: st,
+        onTap: _revealed ? null : () => _choose(i),
+      );
+    });
   }
 
   Widget _cleared() {
