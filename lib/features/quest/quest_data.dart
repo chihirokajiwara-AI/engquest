@@ -84,77 +84,214 @@ const List<QuestTown> kQuestTowns = [
     cleared: '村（むら）に声（こえ）がもどった！ 最初（さいしょ）の〈声（こえ）の石（いし）〉がひかる。'
         'スラが「ハロー！」と、はじめて言（い）えた。',
     encounters: [
+      // 1 — Greeting. スラ re-learns 'Hello'. (大問2型)
       QuestEncounter(
         npcName: 'スラ',
         npcEmoji: '🟢',
         npcLine: '... ... (A small slime opens its mouth, but no word comes out.)',
-        npcLineJa: '小（ちい）さなスライムが口（くち）を開（あ）けるけれど、言葉（ことば）が出（で）てこない…',
-        choices: [
-          'Goodbye, slime!',
-          'Hello! Are you okay?',
-          'I am a slime.',
-          'Thank you very much.',
-        ],
+        npcLineJa: 'ちいさなスライムが口（くち）をひらくけれど、ことばが出（で）てこない…',
+        choices: ['Goodbye.', 'Hello!', 'Thank you.', 'I am sorry.'],
         correctIndex: 1,
         onCorrect:
-            "H... Hello! ...I remember now — Hello! You gave me my word back. I'm Sura. Can I come with you?",
+            "H...Hello! ...I remember it now — Hello! You gave me back my first word. I'm Sura. Can I come with you?",
       ),
+      // 2 — be動詞 I am + 定型応答. (大問2型)
       QuestEncounter(
         npcName: 'むらびと',
         npcEmoji: '🧑‍🌾',
-        npcLine: 'Good morning! How are you today?',
-        npcLineJa: 'おはよう！ 今日（きょう）は元気（げんき）ですか？',
-        choices: [
-          'I am a village.',
-          'Yes, it is a dog.',
-          "I'm fine, thank you.",
-          'You are welcome.',
-        ],
+        npcLine: 'How are you?',
+        npcLineJa: 'お元気（げんき）ですか？',
+        choices: ["I'm a village.", 'I am Tuesday.', "I'm fine, thank you.", 'You are fine.'],
         correctIndex: 2,
-        onCorrect: 'Wonderful! The village feels warmer already. Welcome, traveller!',
+        onCorrect: 'Good! Welcome to our village, traveller.',
       ),
+      // 3 — be動詞 + 所有格 my. (大問1型)
       QuestEncounter(
         npcName: 'おんなのこ',
         npcEmoji: '👧',
         npcLine: "What's your name?",
-        npcLineJa: 'お名前（なまえ）は？',
-        choices: [
-          'My name is Leo.',
-          "It's three o'clock.",
-          'I am eleven years old.',
-          'My name your name.',
-        ],
+        npcLineJa: 'お名前（なまえ）は、なんですか？',
+        choices: ['My name is Leo.', 'Your name is Leo.', 'I name is Leo.', "It's three o'clock."],
         correctIndex: 0,
-        onCorrect: 'Leo! Nice to meet you. Sura likes you too!',
+        onCorrect: 'Leo! Nice to meet you, Leo. Sura likes you too!',
       ),
+      // 4 — be動詞の人称一致 (You are). (大問1 文法型)
       QuestEncounter(
-        npcName: 'おじいさん',
-        npcEmoji: '👴',
-        npcLine: 'Where are you from?',
-        npcLineJa: 'どこから来（き）たのですか？',
-        choices: [
-          'It is a red apple.',
-          "I'm from a far country.",
-          "I'm fine, thank you.",
-          'I am from happy.',
-        ],
+        npcName: 'もんばん',
+        npcEmoji: '💂',
+        npcLine: 'You ___ a traveller. Welcome.',
+        npcLineJa: 'あなた「は」旅人（たびびと）ですね。 ___ に入（はい）るのは？',
+        choices: ['am', 'are', 'is', 'be'],
         correctIndex: 1,
-        onCorrect: 'A far country... and yet your eyes shine like royalty. Take care, young one.',
+        onCorrect: 'Yes — you ARE a traveller. Pass through, friend.',
       ),
+      // 5 — be動詞 3人称 + 代名詞 he/she. (大問1 文法型)
       QuestEncounter(
-        npcName: 'おみせのひと',
-        npcEmoji: '🧺',
-        npcLine: 'These apples are fresh. Do you want one?',
-        npcLineJa: 'このりんごは新鮮（しんせん）です。ひとつ、いかが？',
-        choices: [
-          'No, I am sorry for you.',
-          'See you tomorrow.',
-          'It is a fresh.',
-          'Yes, please!',
-        ],
-        correctIndex: 3,
+        npcName: 'おとこのこ',
+        npcEmoji: '👦',
+        npcLine: 'Look, that is my sister. ___ is kind.',
+        npcLineJa: 'ほら、あれは妹（いもうと）です。「彼女（かのじょ）は」やさしいよ。 ___ は？',
+        choices: ['He', 'It', 'She', 'You'],
+        correctIndex: 2,
+        onCorrect: 'Yes! She is very kind. You speak well, traveller!',
+      ),
+      // 6 — this / that + be動詞. (大問1型)
+      QuestEncounter(
+        npcName: 'おばあさん',
+        npcEmoji: '👵',
+        npcLine: '(pointing far away) What is that on the hill?',
+        npcLineJa: '（遠（とお）くを指（ゆび）さして）あの丘（おか）の上（うえ）にあるのは、何（なん）ですか？',
+        choices: ['This is a castle.', 'That is a castle.', 'That is castle.', 'These is a castle.'],
+        correctIndex: 1,
         onCorrect:
-            'Here you are! Now the whole village has its voice back. Look — a stone is glowing in my basket. Take it!',
+            'That is the old castle... where a prince was born, they say. Strange — your eyes look just like his.',
+      ),
+      // 7 — 冠詞 a / an. (大問1型)
+      QuestEncounter(
+        npcName: 'パンやさん',
+        npcEmoji: '🥐',
+        npcLine: 'Are you hungry? Here, this is ___ apple.',
+        npcLineJa: 'おなか、すいてる？ ほら、これは ___ りんごだよ。 ___ は？',
+        choices: ['a', 'an', 'the', 'one'],
+        correctIndex: 1,
+        onCorrect: "An apple — well said! Take it. A growing traveller must eat.",
+      ),
+      // 8 — 複数形 -s. (大問1型)
+      QuestEncounter(
+        npcName: 'はなやさん',
+        npcEmoji: '💐',
+        npcLine: 'I have one flower here, and over there I have many ___.',
+        npcLineJa: 'ここに花（はな）が1本（ぽん）、あそこには、たくさんの ___ があるの。 ___ は？',
+        choices: ['flower', 'flowers', 'a flower', 'flower s'],
+        correctIndex: 1,
+        onCorrect: 'Yes, many flowers! Take one for luck on your journey.',
+      ),
+      // 9 — 一般動詞 現在形（1人称）. (大問1型)
+      QuestEncounter(
+        npcName: 'こども',
+        npcEmoji: '🧒',
+        npcLine: 'Do you like games? I ___ soccer every day!',
+        npcLineJa: 'ゲームは好（す）き？ ぼくは毎日（まいにち）サッカーを ___ よ！ ___ は？',
+        choices: ['am play', 'play', 'plays', 'playing'],
+        correctIndex: 1,
+        onCorrect: 'You play soccer too? Let’s play after you save our village!',
+      ),
+      // 10 — 3単現 s/es（頻出トラップ）. (大問1 文法型)
+      QuestEncounter(
+        npcName: 'いぬのかいぬし',
+        npcEmoji: '🐕',
+        npcLine: 'My dog is happy with you! He ___ new friends.',
+        npcLineJa: 'うちの犬（いぬ）、あなたが好（す）きみたい！ 新（あたら）しい友（とも）だちが ___ んだ。 ___ は？',
+        choices: ['like', 'likes', 'am like', 'is like'],
+        correctIndex: 1,
+        onCorrect: 'He likes you a lot! See? Even animals trust a kind heart.',
+      ),
+      // 11 — 否定文 don't. (大問1 文法型)
+      QuestEncounter(
+        npcName: 'りょうし',
+        npcEmoji: '🎣',
+        npcLine: 'Do you eat fish? Some travellers ___ eat fish.',
+        npcLineJa: '魚（さかな）は食（た）べる？ 旅人（たびびと）の中（なか）には、魚を食べ ___ 人（ひと）もいるよ。 ___ は？',
+        choices: ['not', "doesn't", "don't", 'no'],
+        correctIndex: 2,
+        onCorrect: "Right — some don't. But you'll eat anything, eh? Good. A traveller needs strength.",
+      ),
+      // 12 — 助動詞 can. (大問1 文法型)
+      QuestEncounter(
+        npcName: 'おんがくか',
+        npcEmoji: '🎻',
+        npcLine: 'The song is lost. ___ you sing with me?',
+        npcLineJa: '歌（うた）が消（き）えてしまった。いっしょに歌（うた）って ___ ？ ___ は？',
+        choices: ['Are', 'Do', 'Can', 'Is'],
+        correctIndex: 2,
+        onCorrect: "Yes! Together — la la la! See, words come back when we are not afraid to use them.",
+      ),
+      // 13 — 疑問詞 what + be動詞. (大問2型)
+      QuestEncounter(
+        npcName: 'こどものスラ',
+        npcEmoji: '🟢',
+        npcLine: '(Sura points at a strange fruit) ___ is this?',
+        npcLineJa: '（スラがふしぎな果物（くだもの）を指（ゆび）さして）これは ___ ？ ___ は？',
+        choices: ['Who', 'Where', 'What', 'How'],
+        correctIndex: 2,
+        onCorrect: "It's a peach! What is this, what is that — Sura wants to learn every word now!",
+      ),
+      // 14 — 疑問詞 who + 代名詞. (大問2型)
+      QuestEncounter(
+        npcName: 'むらおさ',
+        npcEmoji: '🧓',
+        npcLine: 'A knight stands at the gate. Who is he?',
+        npcLineJa: '門（もん）に騎士（きし）が立（た）っている。彼（かれ）は誰（だれ）ですか？',
+        choices: ['It is a gate.', 'He is my guard.', 'She is my guard.', 'Who is my guard.'],
+        correctIndex: 1,
+        onCorrect:
+            'He is my guard, yes. He has waited years for a true prince to return... I wonder.',
+      ),
+      // 15 — 疑問詞 where + 前置詞 in/on/under. (大問1 前置詞型)
+      QuestEncounter(
+        npcName: 'ねこ',
+        npcEmoji: '🐈',
+        npcLine: 'My ball is gone! Where is it? ...Oh, it is ___ the box.',
+        npcLineJa: 'ボールがない！ どこ？ …あ、箱（はこ）「の中（なか）」に ___ あった。 ___ は？',
+        choices: ['on', 'in', 'to', 'at'],
+        correctIndex: 1,
+        onCorrect: 'In the box — meow, thank you! You found my words AND my ball!',
+      ),
+      // 16 — how many + 複数形 → 数で答える. (大問2型)
+      QuestEncounter(
+        npcName: 'やおやさん',
+        npcEmoji: '🧺',
+        npcLine: 'How many apples do you want?',
+        npcLineJa: 'りんごは、いくつ ほしいですか？',
+        choices: ['I want three apples.', 'I am three.', "It's red.", 'Yes, I want.'],
+        correctIndex: 0,
+        onCorrect: 'Three apples! Here you are. A good traveller knows their numbers.',
+      ),
+      // 17 — 現在進行形 be + ~ing. (大問1 文法型)
+      QuestEncounter(
+        npcName: 'がか',
+        npcEmoji: '🎨',
+        npcLine: 'Look at me! I am ___ a picture of the castle now.',
+        npcLineJa: '見（み）て！ いま、お城（しろ）の絵（え）を ___ いるところ。 ___ は？',
+        choices: ['paint', 'paints', 'painting', 'painted'],
+        correctIndex: 2,
+        onCorrect: "I'm painting the castle, yes. ...They say its true prince is on the road again.",
+      ),
+      // 18 — 命令文 / Let's. (大問2型)
+      QuestEncounter(
+        npcName: 'こどもたち',
+        npcEmoji: '🧒',
+        npcLine: 'We want to play together! What do we say?',
+        npcLineJa: 'みんなで遊（あそ）びたい！ なんて言（い）えばいい？',
+        choices: ['We are play.', "Let's play!", 'You play me.', 'Do play?'],
+        correctIndex: 1,
+        onCorrect: "Let's play! Hooray! The village sounds alive again — listen!",
+      ),
+      // 19 — 疑問文の語順（語句整序の感覚）. (大問3型)
+      QuestEncounter(
+        npcName: 'たびのしょうにん',
+        npcEmoji: '🧳',
+        npcLine: '「あなたは地図を持っていますか？」 Choose the correct order.',
+        npcLineJa: '正（ただ）しい語順（ごじゅん）をえらぼう：「あなたは地図（ちず）を持（も）っていますか？」',
+        choices: ['You do have a map?', 'Do have you a map?', 'Do you have a map?', 'Have you a map do?'],
+        correctIndex: 2,
+        onCorrect: "Do you have a map? — perfect order! Here, take mine. The road ahead is dark.",
+      ),
+      // 20 — Boss gate. 総合運用 + 魔王サイレント. (大問2 総合)
+      QuestEncounter(
+        npcName: '魔王（まおう）サイレントの影（かげ）',
+        npcEmoji: '🌑',
+        npcLine: "Silence... is peace. Why do you bring words back, little prince?",
+        npcLineJa: 'しずけさ…こそ、へいわ。なぜ言葉（ことば）をもどす、小（ちい）さな王子（おうじ）よ？',
+        choices: [
+          'I am peace.',
+          'You are silent.',
+          'I can speak, and I am not afraid.',
+          'Silence is a box.',
+        ],
+        correctIndex: 2,
+        onCorrect:
+            "...You are not afraid. Hmph. The first stone is yours, prince. But the world has six more silences... and I will be at the last.",
       ),
     ],
   ),
