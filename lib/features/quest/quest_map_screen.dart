@@ -9,6 +9,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:engquest/core/storage/preferences_service.dart';
+import 'package:engquest/features/explore/scene_view.dart';
 import 'ui/dq_ui.dart';
 import 'quest_data.dart';
 import 'battle/quest_town_battle_flow.dart';
@@ -73,10 +74,23 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
   }
 
   Future<void> _openTown(int i) async {
+    final town = kQuestTowns[i];
+    // Wave 1: route 英検5級 town to the SceneView (Layton-style explorable
+    // scene). All other towns keep the existing QuestTownBattleFlow.
+    if (town.eikenLevel == '5') {
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => SceneView(scene: kTown5Scene, eikenLevel: '5'),
+        ),
+      );
+      // SceneView does not return a cleared bool; leave _unlocked unchanged
+      // until Wave 3 wires ナゾーバ completion tracking.
+      return;
+    }
     final cleared = await Navigator.of(context).push<bool>(
       MaterialPageRoute(
           builder: (_) =>
-              QuestTownBattleFlow(town: kQuestTowns[i])),
+              QuestTownBattleFlow(town: town)),
     );
     if (cleared == true && i + 1 > _unlocked) {
       setState(() => _unlocked = i + 1);

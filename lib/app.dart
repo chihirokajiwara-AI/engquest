@@ -18,6 +18,7 @@ import 'package:engquest/features/parent_dashboard/parent_dashboard_screen.dart'
 import 'package:engquest/features/home/daily_home_screen.dart';
 import 'package:engquest/core/storage/preferences_service.dart';
 import 'package:engquest/features/quest/ui/dq_ui.dart';
+import 'package:engquest/features/explore/scene_view.dart';
 
 // ---------------------------------------------------------------------------
 // Onboarding state management
@@ -279,6 +280,9 @@ Widget _previewFor(String? name) {
       return PrologueScreen(onDone: () {}, startIndex: 4);
     case 'prologue5':
       return PrologueScreen(onDone: () {}, startIndex: 5);
+    case 'explore':
+      // Wave 1 — Layton-style SceneView for the 英検5級 town.
+      return SceneView(scene: kTown5Scene, eikenLevel: '5');
     case 'quest':
       return QuestScreen(town: kQuestTowns.first);
     case 'quest5t': // 英検5級 Phase A — first TeachSound (/s/) step
