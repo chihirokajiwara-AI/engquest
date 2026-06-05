@@ -1,0 +1,306 @@
+// lib/features/quest/prologue_screen.dart
+// A-KEN Quest — the opening PROLOGUE (『ことばを失った世界』).
+//
+// Six tap-through panels that establish the world WITHOUT the old "you are
+// secretly a prince" trope (see docs/design/OPENING-NARRATIVE-BIBLE.md): a quiet
+// called サイレント drained the world's words and colour; きみ is special only
+// because きみ can still HEAR the sounds and VOICE them — the exact skill the
+// child is learning. Panel 5 is INTERACTIVE: the child taps 🔊 and blends c·a·t
+// into "cat" and wins — a guaranteed win, so the no-scold contract is FELT.
+//
+// Plays once-ever (the caller persists that); skippable from panel 1. Built to
+// stand WITHOUT the not-yet-recorded phoneme audio: the one real audio moment is
+// the blend on panel 5 (blend_cat.mp3 exists); phoneme keys are wired so they
+// light up the instant the founder records them.
+
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+
+import '../../core/audio/audio_cue_service.dart';
+import 'ui/dq_ui.dart';
+
+class _Panel {
+  final String jp;
+  final String en;
+  final String? audio; // best-effort cue key (graceful no-op if unrecorded)
+  final bool interactive; // panel 5: the c·a·t blend demo
+  final bool isLast;
+  const _Panel(this.jp, this.en, {this.audio, this.interactive = false, this.isLast = false});
+}
+
+const _panels = <_Panel>[
+  _Panel(
+    '（くらやみ。ちいさな おとだけが きこえる）\ns … a … t …',
+    'In the dark, only small sounds remain. s... a... t...',
+    audio: 'audio/phonics/phoneme_s.mp3',
+  ),
+  _Panel(
+    'むかし、この くに〈ソネア〉では、\nこえに だした ことばが、そのまま「いろ」に なった。',
+    'Long ago, in Sonea, a spoken word turned into colour.',
+  ),
+  _Panel(
+    'でも、あるひから ──\n「しずけさ」が、ひろがりはじめた。\nことばが きえると、いろも、こえも、しずかに なる。',
+    'But one day, the Silence began to spread. When a word is forgotten, its colour and its voice grow quiet too.',
+  ),
+  _Panel(
+    '……けれど、きみは ちがった。\nきみには、まだ おとが きこえる。\nそして、まだ こえに だせる。',
+    "...but you are different. You can still hear the sounds. And you can still say them.",
+  ),
+  _Panel(
+    '🔊を おして、おとを きいて、まねしてみよう。\nおとを つなげば、ことばが よみがえる。',
+    'Tap 🔊, hear a sound, and try it. Join the sounds, and a word comes back to life.',
+    audio: 'audio/phonics/blend_cat.mp3',
+    interactive: true,
+  ),
+  _Panel(
+    'これは、たたかいの たびじゃない。\nきえた ことばを、ひとつずつ かえしていく たび。\nきみの こえで、せかいに ことばを かえそう。',
+    'This is not a journey of battle. It is a journey to give the lost words back, one by one. With your voice, give the world its words back.',
+    isLast: true,
+  ),
+];
+
+class PrologueScreen extends StatefulWidget {
+  /// Called when the player finishes (or skips) the prologue.
+  final VoidCallback onDone;
+
+  /// Design-audit only: start on this panel (skips the tap-through to it).
+  final int startIndex;
+  const PrologueScreen({super.key, required this.onDone, this.startIndex = 0});
+
+  @override
+  State<PrologueScreen> createState() => _PrologueScreenState();
+}
+
+class _PrologueScreenState extends State<PrologueScreen> {
+  final _cue = AudioCueService();
+  late int _index = widget.startIndex.clamp(0, _panels.length - 1);
+
+  // Panel 5 (interactive blend) — drives the c→a→t tile sweep, mirrored from
+  // QuestScreen so the demo matches the real game exactly.
+  int _activeLetter = -1;
+  Timer? _sweep;
+  bool _blendDone = false; // gates the "▶ つぎへ" until the child has tried once
+
+  _Panel get _p => _panels[_index];
+
+  @override
+  void dispose() {
+    _sweep?.cancel();
+    _cue.dispose();
+    super.dispose();
+  }
+
+  void _next() {
+    _sweep?.cancel();
+    if (_p.isLast) {
+      widget.onDone();
+      return;
+    }
+    setState(() {
+      _index++;
+      _activeLetter = -1;
+      _blendDone = false;
+    });
+    // This runs from a tap (user gesture) → safe to fire audio on web, except on
+    // the interactive panel where the child taps 🔊 themselves.
+    if (!_p.interactive && _p.audio != null) _cue.play(_p.audio);
+  }
+
+  void _playBlend() {
+    _cue.play(_p.audio);
+    _sweepLetters();
+    setState(() => _blendDone = true);
+  }
+
+  void _sweepLetters() {
+    _sweep?.cancel();
+    setState(() => _activeLetter = 0);
+    var i = 0;
+    _sweep = Timer.periodic(const Duration(milliseconds: 460), (t) {
+      i++;
+      if (i >= 3) {
+        t.cancel();
+        _sweep = Timer(const Duration(milliseconds: 520), () {
+          if (mounted) setState(() => _activeLetter = -1);
+        });
+      } else if (mounted) {
+        setState(() => _activeLetter = i);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return DqScene(
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 10, 20, 18),
+          child: Column(
+            children: [
+              // Skip (top-right) — available from the first panel.
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: widget.onDone,
+                  child: Text('スキップ ▶▶', style: dqText(size: 12, color: dqInk)),
+                ),
+              ),
+              Expanded(
+                child: Center(
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 450),
+                    child: KeyedSubtree(key: ValueKey(_index), child: _stage()),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              DqDialogBox(
+                speaker: 'ものがたり',
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(_p.jp, style: dqText(size: 15).copyWith(height: 1.7)),
+                    const SizedBox(height: 8),
+                    Text(_p.en, style: dqText(size: 11, color: dqInk, w: FontWeight.w400).copyWith(height: 1.4)),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+              _advanceControl(),
+              // Progress dots.
+              const SizedBox(height: 12),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  for (var i = 0; i < _panels.length; i++)
+                    Container(
+                      width: 7,
+                      height: 7,
+                      margin: const EdgeInsets.symmetric(horizontal: 3),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: i == _index ? dqGold : dqGoldDeep.withAlpha(110),
+                      ),
+                    ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// The interactive panel gates "next" behind one 🔊 tap; others show "▶ つぎへ"
+  /// (or "▶ はじめる" on the last panel).
+  Widget _advanceControl() {
+    if (_p.interactive && !_blendDone) {
+      return DqReplayButton(onTap: _playBlend, label: '🔊 おして、きいてみよう');
+    }
+    return DqButton(label: _p.isLast ? '▶ はじめる / Begin' : '▶ つぎへ', onTap: _next);
+  }
+
+  // ── Per-panel "stage" art (minimal-but-evocative within the dq dark palette).
+  Widget _stage() {
+    if (_p.interactive) {
+      return BlendWordCard(
+        letters: const ['c', 'a', 't'],
+        word: 'cat',
+        npcName: 'きみ',
+        npcEmoji: '🧭',
+        npcImage: 'assets/art/masters/hero.png',
+        activeLetter: _activeLetter,
+        onReplay: _playBlend,
+      );
+    }
+    switch (_index) {
+      case 0:
+        return _glyphRow(['s', 'a', 't'], const Color(0xFFEDE3C8));
+      case 1:
+        return _orb(const Color(0xFF6FC9FF), bright: true, label: 'いろ');
+      case 2:
+        return _orb(const Color(0xFF5A6072), bright: false, label: 'しずけさ');
+      case 3:
+        return _heroSpark();
+      default: // last
+        return _mapHint();
+    }
+  }
+
+  Widget _glyphRow(List<String> letters, Color color) => Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          for (final l in letters)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Text(l,
+                  style: TextStyle(
+                      color: color, fontSize: 64, fontWeight: FontWeight.w300, letterSpacing: 2)),
+            ),
+        ],
+      );
+
+  /// A glowing orb — colour returning (bright) or draining to grey (dim).
+  Widget _orb(Color c, {required bool bright, required String label}) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 110,
+            height: 110,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: RadialGradient(colors: [c.withAlpha(bright ? 235 : 90), c.withAlpha(0)]),
+              boxShadow: bright ? [BoxShadow(color: c.withAlpha(150), blurRadius: 40, spreadRadius: 6)] : null,
+            ),
+          ),
+          const SizedBox(height: 14),
+          Text(label, style: dqText(size: 13, color: bright ? dqGold : dqInk)),
+        ],
+      );
+
+  /// きみ as the last surviving spark of voice.
+  Widget _heroSpark() => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              boxShadow: [BoxShadow(color: dqGold.withAlpha(120), blurRadius: 34, spreadRadius: 4)],
+            ),
+            child: DqPortrait(imageAsset: 'assets/art/masters/hero.png', emoji: '🧭', size: 96),
+          ),
+          const SizedBox(height: 12),
+          Text('きみ', style: dqText(size: 13, color: dqGold)),
+        ],
+      );
+
+  /// A hint of the road ahead — the first 声の石 lighting.
+  Widget _mapHint() => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Text('✦', style: TextStyle(color: dqGold, fontSize: 60)),
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              for (var i = 0; i < 7; i++)
+                Container(
+                  width: 12,
+                  height: 12,
+                  margin: const EdgeInsets.symmetric(horizontal: 4),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: i == 0 ? dqGold : dqBox,
+                    border: Border.all(color: i == 0 ? dqGold : dqGoldDeep.withAlpha(120), width: 2),
+                    boxShadow: i == 0 ? [BoxShadow(color: dqGold.withAlpha(150), blurRadius: 14)] : null,
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Text('ことばを 失（うしな）った 村（むら）へ', style: dqText(size: 12, color: dqInk)),
+        ],
+      );
+}

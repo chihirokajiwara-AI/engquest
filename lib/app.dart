@@ -266,6 +266,14 @@ Widget _previewFor(String? name) {
       return const DailyHomeScreen(childAge: 8);
     case 'questmap':
       return const QuestMapScreen();
+    case 'prologue':
+      return PrologueScreen(onDone: () {});
+    case 'prologue3':
+      return PrologueScreen(onDone: () {}, startIndex: 3);
+    case 'prologue4':
+      return PrologueScreen(onDone: () {}, startIndex: 4);
+    case 'prologue5':
+      return PrologueScreen(onDone: () {}, startIndex: 5);
     case 'quest':
       return QuestScreen(town: kQuestTowns.first);
     case 'quest5t': // 英検5級 Phase A — first TeachSound (/s/) step
@@ -316,6 +324,7 @@ class _AppEntryPoint extends StatefulWidget {
 
 class _AppEntryPointState extends State<_AppEntryPoint> {
   bool _onboardingComplete = false;
+  bool _prologueSeen = false;
   bool _loading = true;
   bool _started = false; // title screen shows until the player taps はじめる
 
@@ -332,9 +341,16 @@ class _AppEntryPointState extends State<_AppEntryPoint> {
     if (mounted) {
       setState(() {
         _onboardingComplete = complete;
+        _prologueSeen = OnboardingStorage.prologueSeen;
         _loading = false;
       });
     }
+  }
+
+  Future<void> _handlePrologueDone() async {
+    await OnboardingStorage.markPrologueSeen();
+    if (!mounted) return;
+    setState(() => _prologueSeen = true);
   }
 
   Future<void> _handleOnboardingComplete(OnboardingResult result) async {
@@ -379,10 +395,13 @@ class _AppEntryPointState extends State<_AppEntryPoint> {
       return QuestTitleScreen(onStart: () => setState(() => _started = true));
     }
     if (_onboardingComplete) {
-      // Start drops the player straight into the ADVENTURE — the quest journey
-      // map (level-select if no level saved yet, else the town path), NOT the
-      // daily-home status hub. A child taps はじめる to PLAY, not to read stats.
-      // (DailyHomeScreen stays a retention hub for later, reachable separately.)
+      // First time into the adventure: the opening PROLOGUE plays once, then the
+      // quest map. A child taps はじめる to PLAY (and to be pulled into the story),
+      // NOT to read a status hub. (DailyHomeScreen stays a retention hub for
+      // later, reachable separately.)
+      if (!_prologueSeen) {
+        return PrologueScreen(onDone: _handlePrologueDone);
+      }
       return const QuestMapScreen();
     }
     return OnboardingFlow(onComplete: _handleOnboardingComplete);
