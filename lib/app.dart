@@ -29,7 +29,11 @@ import 'package:engquest/features/explore/scene_view.dart';
 class OnboardingStorage {
   static const _kComplete = 'onboarding_complete';
   static const _kAge = 'onboarding_age';
-  static const _kCefr = 'onboarding_cefr'; // legacy — kept for old installs
+  // _kCefr was used by the old 3-level placement — no longer written on new
+  // installs but the key is retained as a named constant so old prefs
+  // (SharedPreferences) remain readable if ever needed for migration.
+  // ignore: unused_field
+  static const _kCefr = 'onboarding_cefr';
   static const _kAvatar = 'onboarding_avatar';
   static const _kGoal = 'onboarding_goal_minutes';
   static const _kPrologueSeen = 'prologue_seen';
@@ -73,6 +77,13 @@ class OnboardingStorage {
     return age > 0 ? age : 8;
   }
 
+  /// Returns the stored 英検 start level.  Defaults to '5' (safe fallback).
+  /// One of: '5' | '4' | '3' | 'pre2' | 'pre2plus' | '2' | 'pre1'
+  static String get startEikenLevel {
+    if (_prefs == null) return '5';
+    return _prefs!.getString(_kStartLevel) ?? '5';
+  }
+
   /// Whether the opening prologue has already played (it plays once-ever).
   static bool get prologueSeen {
     if (_prefs == null) return false;
@@ -90,20 +101,24 @@ class OnboardingStorage {
     final p = await _lazyPrefs();
     await p.setBool(_kComplete, true);
     await p.setInt(_kAge, result.ageYears);
-    await p.setString(_kCefr, result.cefrPlacement.name);
+    await p.setString(_kStartLevel, result.startEikenLevel);
     await p.setString(_kAvatar, result.avatarId);
     await p.setInt(_kGoal, result.dailyGoalMinutes);
+    // Persist θ̂ for T12 adaptive difficulty hook.
+    await p.setString(
+        _kPlacementTheta, result.placementTheta.toString());
   }
 
   static Future<OnboardingResult?> loadAsync() async {
     final p = await _lazyPrefs();
     if (!p.getBool(_kComplete)) return null;
+    final thetaStr = p.getString(_kPlacementTheta);
+    final theta = thetaStr != null ? (double.tryParse(thetaStr) ?? 0.0) : 0.0;
     return OnboardingResult(
       ageYears: p.getInt(_kAge),
-      cefrPlacement: CefrPlacement.values.firstWhere(
-        (e) => e.name == p.getString(_kCefr),
-        orElse: () => CefrPlacement.a1,
-      ),
+      startEikenLevel: p.getString(_kStartLevel) ?? '5',
+      placementGrade: 0, // not stored separately; theta is the T12 signal
+      placementTheta: theta,
       avatarId: p.getString(_kAvatar) ?? 'knight',
       dailyGoalMinutes: p.getInt(_kGoal),
     );
@@ -264,6 +279,10 @@ Widget _previewFor(String? name) {
       return QuestTitleScreen(onStart: () {});
     case 'onboarding':
       return OnboardingFlow(onComplete: (_) {});
+    case 'placement':
+      // Preview route: renders the full OnboardingFlow starting at the
+      // placement step (age pre-set to 13 so the engine seeds at 準2級).
+      return OnboardingFlow(onComplete: (_) {});
     case 'worldmap':
       return const WorldMapScreen(childAge: 8);
     case 'home':
@@ -413,7 +432,9 @@ class _AppEntryPointState extends State<_AppEntryPoint> {
       if (!_prologueSeen) {
         return PrologueScreen(onDone: _handlePrologueDone);
       }
-      return const QuestMapScreen();
+      // THE CRITICAL WIRE: pass the placement result to the quest map so the
+      // child starts at their diagnosed level, not always 5級.
+      return QuestMapScreen(startLevel: OnboardingStorage.startEikenLevel);
     }
     return OnboardingFlow(onComplete: _handleOnboardingComplete);
   }

@@ -10,7 +10,7 @@
 //   - Transition decision logic (isOnboarded → route selection)
 //   - BattleSession initialisation from world map entry
 //
-// Run: dart test test/integration/onboarding_to_battle_test.dart
+// Run: flutter test test/integration/onboarding_to_battle_test.dart
 
 import 'package:test/test.dart';
 import 'package:engquest/features/onboarding/onboarding_flow.dart';
@@ -45,7 +45,7 @@ class OnboardingPreferences {
   final _InMemoryPrefs _prefs;
   static const String _keyComplete = 'onboarding_complete';
   static const String _keyAge = 'onboarding_age';
-  static const String _keyCefr = 'onboarding_cefr';
+  static const String _keyStartLevel = 'onboarding_start_level';
   static const String _keyAvatar = 'onboarding_avatar';
   static const String _keyGoal = 'onboarding_goal_minutes';
 
@@ -57,7 +57,7 @@ class OnboardingPreferences {
   void save(OnboardingResult result) {
     _prefs.setBool(_keyComplete, true);
     _prefs.setInt(_keyAge, result.ageYears);
-    _prefs.setString(_keyCefr, result.cefrPlacement.name);
+    _prefs.setString(_keyStartLevel, result.startEikenLevel);
     _prefs.setString(_keyAvatar, result.avatarId);
     _prefs.setInt(_keyGoal, result.dailyGoalMinutes);
   }
@@ -66,10 +66,9 @@ class OnboardingPreferences {
     if (!isOnboardingComplete) return null;
     return OnboardingResult(
       ageYears: _prefs.getInt(_keyAge),
-      cefrPlacement: CefrPlacement.values.firstWhere(
-        (e) => e.name == _prefs.getString(_keyCefr),
-        orElse: () => CefrPlacement.a1,
-      ),
+      startEikenLevel: _prefs.getString(_keyStartLevel) ?? '5',
+      placementGrade: 0,
+      placementTheta: 0.0,
       avatarId: _prefs.getString(_keyAvatar) ?? 'knight',
       dailyGoalMinutes: _prefs.getInt(_keyGoal),
     );
@@ -113,8 +112,9 @@ const _seedVocab = [
   ),
 ];
 
-List<FSRSCard> buildDeckFromPlacement(CefrPlacement placement) {
-  // In MVP, A1/beginner both use the same A1 word list
+/// Build a battle deck from a start level string.
+List<FSRSCard> buildDeckFromLevel(String eikenLevel) {
+  // In MVP, all levels use the same A1 word list as seed deck.
   return FSRSAlgorithm.buildDeck(
     _seedVocab.map((v) => v.id).toList(),
   );
@@ -142,12 +142,14 @@ void main() {
     test('OnboardingResult can be constructed with all required fields', () {
       const result = OnboardingResult(
         ageYears: 8,
-        cefrPlacement: CefrPlacement.a1,
+        startEikenLevel: '5',
+        placementGrade: 0,
+        placementTheta: 0.0,
         avatarId: 'knight',
         dailyGoalMinutes: 10,
       );
       expect(result.ageYears, equals(8));
-      expect(result.cefrPlacement, equals(CefrPlacement.a1));
+      expect(result.startEikenLevel, equals('5'));
       expect(result.avatarId, equals('knight'));
       expect(result.dailyGoalMinutes, equals(10));
     });
@@ -156,7 +158,9 @@ void main() {
       expect(onboardingPrefs.isOnboardingComplete, isFalse);
       onboardingPrefs.save(const OnboardingResult(
         ageYears: 10,
-        cefrPlacement: CefrPlacement.a1,
+        startEikenLevel: '4',
+        placementGrade: 1,
+        placementTheta: 1.5,
         avatarId: 'mage',
         dailyGoalMinutes: 15,
       ));
@@ -166,7 +170,9 @@ void main() {
     test('route resolves to worldMap after onboarding saved', () {
       onboardingPrefs.save(const OnboardingResult(
         ageYears: 7,
-        cefrPlacement: CefrPlacement.beginner,
+        startEikenLevel: '5',
+        placementGrade: 0,
+        placementTheta: 0.0,
         avatarId: 'archer',
         dailyGoalMinutes: 10,
       ));
@@ -179,7 +185,9 @@ void main() {
     test('saved result can be loaded back with all fields intact', () {
       const original = OnboardingResult(
         ageYears: 12,
-        cefrPlacement: CefrPlacement.a2,
+        startEikenLevel: '3',
+        placementGrade: 2,
+        placementTheta: 2.5,
         avatarId: 'healer',
         dailyGoalMinutes: 20,
       );
@@ -187,7 +195,7 @@ void main() {
       final loaded = onboardingPrefs.load();
       expect(loaded, isNotNull);
       expect(loaded!.ageYears, equals(12));
-      expect(loaded.cefrPlacement, equals(CefrPlacement.a2));
+      expect(loaded.startEikenLevel, equals('3'));
       expect(loaded.avatarId, equals('healer'));
       expect(loaded.dailyGoalMinutes, equals(20));
     });
@@ -196,17 +204,20 @@ void main() {
       expect(onboardingPrefs.load(), isNull);
     });
 
-    test('all CefrPlacement values survive round-trip', () {
-      for (final placement in CefrPlacement.values) {
+    test('all supported eikenLevel values survive round-trip', () {
+      const levels = ['5', '4', '3', 'pre2', 'pre2plus', '2', 'pre1'];
+      for (final level in levels) {
         prefs.clear();
         final fresh = OnboardingPreferences(prefs);
         fresh.save(OnboardingResult(
           ageYears: 8,
-          cefrPlacement: placement,
+          startEikenLevel: level,
+          placementGrade: 0,
+          placementTheta: 0.0,
           avatarId: 'knight',
           dailyGoalMinutes: 10,
         ));
-        expect(fresh.load()!.cefrPlacement, equals(placement));
+        expect(fresh.load()!.startEikenLevel, equals(level));
       }
     });
 
@@ -217,7 +228,9 @@ void main() {
         final fresh = OnboardingPreferences(prefs);
         fresh.save(OnboardingResult(
           ageYears: 8,
-          cefrPlacement: CefrPlacement.a1,
+          startEikenLevel: '5',
+          placementGrade: 0,
+          placementTheta: 0.0,
           avatarId: id,
           dailyGoalMinutes: 10,
         ));
@@ -227,33 +240,29 @@ void main() {
   });
 
   group('World map → Battle entry', () {
-    test('A1 placement builds a non-empty battle deck', () {
+    test('5級 placement builds a non-empty battle deck', () {
       const result = OnboardingResult(
         ageYears: 8,
-        cefrPlacement: CefrPlacement.a1,
+        startEikenLevel: '5',
+        placementGrade: 0,
+        placementTheta: 0.0,
         avatarId: 'knight',
         dailyGoalMinutes: 10,
       );
-      final deck = buildDeckFromPlacement(result.cefrPlacement);
+      final deck = buildDeckFromLevel(result.startEikenLevel);
       expect(deck, isNotEmpty);
       expect(deck.length, equals(_seedVocab.length));
     });
 
-    test('beginner placement also produces A1 deck', () {
-      final deckBeginner = buildDeckFromPlacement(CefrPlacement.beginner);
-      final deckA1 = buildDeckFromPlacement(CefrPlacement.a1);
-      expect(deckBeginner.length, equals(deckA1.length));
-    });
-
     test('all deck cards start as newCard state', () {
-      final deck = buildDeckFromPlacement(CefrPlacement.a1);
+      final deck = buildDeckFromLevel('5');
       for (final card in deck) {
         expect(card.state, equals(CardState.newCard));
       }
     });
 
     test('all deck cards are due immediately on first session', () {
-      final deck = buildDeckFromPlacement(CefrPlacement.a1);
+      final deck = buildDeckFromLevel('5');
       final fsrs = FSRSAlgorithm();
       final due = fsrs.getDueCards(deck, DateTime.now());
       expect(due.length, equals(deck.length));
@@ -267,7 +276,9 @@ void main() {
       // 2. Complete onboarding
       const result = OnboardingResult(
         ageYears: 9,
-        cefrPlacement: CefrPlacement.a1,
+        startEikenLevel: '4',
+        placementGrade: 1,
+        placementTheta: 1.0,
         avatarId: 'mage',
         dailyGoalMinutes: 15,
       );
@@ -279,15 +290,31 @@ void main() {
       // 4. Load persisted profile
       final profile = onboardingPrefs.load()!;
       expect(profile.avatarId, equals('mage'));
+      expect(profile.startEikenLevel, equals('4'));
 
       // 5. Enter battle from world map
-      final deck = buildDeckFromPlacement(profile.cefrPlacement);
+      final deck = buildDeckFromLevel(profile.startEikenLevel);
       expect(deck, isNotEmpty);
 
       // 6. All cards due → session can start
       final fsrs = FSRSAlgorithm();
       final dueCards = fsrs.getDueCards(deck, DateTime.now());
       expect(dueCards.length, equals(deck.length));
+    });
+  });
+
+  // Legacy CefrPlacement enum still exists for backward compat — test it.
+  group('CefrPlacement enum (legacy compat)', () {
+    test('CefrPlacement values exist', () {
+      expect(CefrPlacement.values, containsAll([
+        CefrPlacement.beginner,
+        CefrPlacement.a1,
+        CefrPlacement.a2,
+      ]));
+    });
+    test('CefrPlacementLabel extensions work', () {
+      expect(CefrPlacement.a1.label, isNotEmpty);
+      expect(CefrPlacement.a2.description, isNotEmpty);
     });
   });
 }
