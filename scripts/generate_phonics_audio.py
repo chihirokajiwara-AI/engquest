@@ -91,15 +91,21 @@ def synth(pipeline, text, voice, speed):
 
 
 def build_blend(pipeline, letters, word, voice, silence):
-    """Segmented: each letter-sound slow, then the whole word slow, then natural."""
+    """Whole word, slow then natural — CLEAN connected speech only.
+
+    We deliberately do NOT stitch in synthetic per-letter sounds (the old
+    LETTER_SOUND 'kuh'/'ah'/'tuh' segments): TTS isolated letter-sounds are
+    robotic AND teach the schwa, which is exactly the phoneme problem the founder
+    is recording real clips for. The per-letter blending is carried VISUALLY by
+    the on-screen c→a→t tile sweep; the real recorded phonemes will play the
+    individual sounds when they ship. `letters` is kept in the signature for the
+    planned() call shape but is intentionally unused here."""
     import numpy as np
-    parts = []
-    for ch in letters:
-        seg = synth(pipeline, LETTER_SOUND.get(ch, ch), voice, 0.6)
-        if seg is not None:
-            parts += [seg, silence]
-    parts += [synth(pipeline, word, voice, 0.7), silence]   # blended, slow
-    parts += [synth(pipeline, word, voice, 1.0)]            # natural
+    parts = [
+        synth(pipeline, word, voice, 0.75),  # slow, clear
+        silence,
+        synth(pipeline, word, voice, 1.0),   # natural
+    ]
     parts = [p for p in parts if p is not None]
     return np.concatenate(parts) if parts else None
 
