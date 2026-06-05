@@ -1,0 +1,590 @@
+{
+  "summary": "Deep redesign of the English-level placement diagnostic into an adaptive 5級→準1級 test with a high-quality item bank + adaptive logic",
+  "agentCount": 10,
+  "logs": [],
+  "result": {
+    "plan": {
+      "adaptiveSpec": "ADAPTIVE PLACEMENT TEST — buildable Dart spec (replaces the 3-item fixed quiz in onboarding_flow.dart)\n\n=== θ LADDER (the \"calibrated bank\", 7 rungs idx 0..6) ===\n0=5級(A1−), 1=4級(A1−), 2=3級(A1), 3=準2級(A2), 4=準2級プラス(A2+), 5=2級(B1), 6=準1級(B2). Cap at 6 (1級/C1 out of child scope). Each item is tagged with grade(rung) + skill(vocab|grammar|readingGist) + correctIndex + 4 SAME-TYPE choices.\n\n=== 1. START POINT (age prior — biggest item-saver) ===\nSeed θ̂ (double) from OnboardingResult.ageYears, NOT from zero:\n  age<=6 → 0(5級) ; 7-9 → 1(4級) ; 10-12 → 2(3級) ; 13-15 → 3(準2級) ; 16+ → 4(準2級プラス).\nOptional one-tap self-report (\"英語を習ったことは？\" ない/少し/得意) shifts seed by -1/0/+1, clamped [0,6]. This is the informative prior; a 13-yo never starts at \"Dog=いぬ\".\n\n=== 2. ITEM SELECTION (max-information ≈ target current estimate) ===\nEach step: pick an UNUSED item whose grade == round(θ̂). Discrete analogue of \"select max Fisher information at θ̂\" (info maximized when P(correct)≈0.5, i.e. an item AT the estimate). Track asked item ids to avoid repeats within and across sessions.\n\n=== 3. SCORING / ABILITY UPDATE (damped EWMA ascent, child-robust) ===\nAfter each answer:\n  step = max(0.5, 1.5 - 0.25*n)   // big early jumps to find region, fine settle later; n = items answered so far\n  correct → θ̂ += step ; wrong → θ̂ -= step ; clamp θ̂ to [0.0,6.0]\nNON-DISCOURAGE GUARD (mandatory for under-16s): after a WRONG answer, the next item's grade = floor(θ̂) (a slightly easier, winnable item) — never present two consecutive items a child just failed; the test must never spiral into a failure streak.\n\n=== 4. STOPPING RULE (few items: 4-8) ===\nStop when EITHER:\n  • SETTLED (ceiling found): last 3 items at the same rung r AND pattern is \"passes r, fails r+1\" → place at r. Typically 4-6 items.\n  • MAX LENGTH: hard cap of 8 items (attention budget for 6-10 yo).\n  • MIN LENGTH: never stop before 3 items (no single lucky/unlucky tap decides).\n\n=== 5. FINAL PLACEMENT ===\nplacementGrade = highest rung r where child answered >=2/3 of presented r-items correctly AND did NOT clear r+1.\nRETENTION RULE: if child only BARELY cleared the ceiling (e.g. 2/3, volatile), start the adventure ONE rung BELOW the ceiling — kinder, builds momentum.\nReturn PlacementOutcome{ grade:0..6, eikenLevel:'5'|'4'|'3'|'pre2'|'pre2plus'|'2'|'pre1', cefr, confidence:high|medium|low }. confidence=low (hit max length, still volatile) → start at the conservative (lower) rung; persist final θ̂ so in-game performance / a re-test can nudge placement later (ties into T12 adaptive difficulty).\n\n=== DART SKETCH (the controller) ===\nclass PlacementItem { final int grade; final String skill; final String stemEn; final String? stemJa; final List<String> choices; final int correctIndex; }\n\nclass PlacementEngine {\n  double theta;\n  final List<int> askedGrades = [];\n  final Set<int> usedItemIds = {};\n  final List<bool> answers = [];\n  int get n => answers.length;\n  PlacementEngine.fromAge(int age, {int selfReportShift = 0})\n      : theta = (_seed(age) + selfReportShift).clamp(0.0, 6.0);\n  static double _seed(int a) => a<=6?0 : a<=9?1 : a<=12?2 : a<=15?3 : 4;\n  int nextGrade() {                                   // §2 + §3 guard\n    if (answers.isNotEmpty && !answers.last) return theta.floor().clamp(0,6);\n    return theta.round().clamp(0,6);\n  }\n  void record(bool ok) {                              // §3\n    final step = math.max(0.5, 1.5 - 0.25*n);\n    theta = (theta + (ok ? step : -step)).clamp(0.0, 6.0);\n    answers.add(ok);\n  }\n  bool get done {                                     // §4\n    if (n < 3) return false;\n    if (n >= 8) return true;\n    return _ceilingStable();                          // last 3 same rung, passed r / failed r+1\n  }\n  PlacementOutcome result() { /* §5 highest rung >=2/3 correct & next failed; barely-cleared → -1; volatile → low conf */ }\n}\n\nController drives the loop: build PlacementEngine.fromAge(result.ageYears), then while(!done){ g=nextGrade(); item=bank.unusedItemForGrade(g); show; record(tapped==item.correctIndex); }. On done → PlacementOutcome → map grade→eikenLevel string → start quest (see wiring below).",
+      "build": [
+        "lib/features/onboarding/placement_item_bank.dart — NEW. The authored item bank as `const List<PlacementItem>`, grouped by rung idx 0..6 (5級→準1級). Port the 35 provided items (7 grades x 5) verbatim: each PlacementItem{grade, skill, stemEn, stemJa, choices[4], correctIndex}. Add a helper `List<PlacementItem> itemsForGrade(int g)` and an unused-item picker. CONTENT-QA GATE: every item must pass content-qa before commit — 4 same-type, same-LANGUAGE distractors (4 Japanese options for a JP-meaning item, 4 English for a grammar/vocab cloze — NEVER mix languages: the 7,923-distractor bug class). The provided bank already satisfies this (each item's rationale documents single-key + same-type distractors).",
+        "lib/features/onboarding/placement_engine.dart — NEW. The adaptive controller: `PlacementEngine` (fromAge seed §1, nextGrade §2+guard, record/EWMA §3, done §4, result §5) + `PlacementItem` model + `PlacementOutcome{grade, eikenLevel, cefr, confidence}` + grade→eikenLevel/cefr maps. Pure Dart, no Flutter import → unit-testable.",
+        "lib/features/onboarding/onboarding_flow.dart — EDIT. (a) Replace `enum CefrPlacement {beginner,a1,a2}` with the 7-rung outcome (or keep enum but widen to 7 values 5級..準1級; the existing label/description extensions extend to 7 cases). (b) Delete `_placementQuestions` (the 3 fixed Qs) and `_scoreToCefr`. (c) Rewrite `_StepPlacement` to drive `PlacementEngine`: it now renders ONE adaptive item at a time (reusing DqDialogBox for the stem + DqChoice list for the 4 options — exactly the existing widgets), calling engine.record() and re-querying engine.nextGrade()/done after each tap, instead of a fixed 0..2 index. (d) `_PlacementResult` shows the richer placement (英検 grade label + CEFR + confidence) — reuses DqPanel/DqPortrait as-is. (e) Pass PlacementOutcome.eikenLevel out via OnboardingResult.",
+        "lib/features/onboarding/onboarding_flow.dart — EDIT OnboardingResult: replace `CefrPlacement cefrPlacement` with `String startEikenLevel` ('5'|'4'|'3'|'pre2'|'pre2plus'|'2'|'pre1') + optional `int placementGrade` + `double placementTheta` (persist θ̂ for T12). Keep ageYears/avatarId/dailyGoalMinutes unchanged.",
+        "lib/app.dart — EDIT OnboardingStorage.save/loadAsync: persist/restore `startEikenLevel` (string) and `placementTheta` instead of (or in addition to) the old CefrPlacement enum name. Add a key `_kStartLevel`.",
+        "lib/app.dart — EDIT _handleOnboardingComplete + build(): pass the placement through to the quest. QuestMapScreen ALREADY accepts `startLevel` (defaults '5') keyed to QuestTown.eikenLevel — change `return const QuestMapScreen();` to `return QuestMapScreen(startLevel: OnboardingStorage.startEikenLevel);`. This is the one-line wire from diagnostic → adventure start. (Currently the diagnostic result is computed and then DROPPED — QuestMapScreen is built with no arg, always '5'. This is the core CEO complaint's root cause.)",
+        "test/features/onboarding/placement_engine_test.dart — NEW. Unit tests: age seed table; EWMA step decay; non-discourage guard (no two consecutive failed-rung items); min-3/max-8 stopping; ceiling-found early stop; barely-cleared → one-rung-down; a 6-yo who passes 5級 only places at 0; a 13-yo who clears 準1級 items places at 6 in <=8 items.",
+        "docs/spec/placement-test.md — NEW (optional but recommended). Freeze this design per the spec-freeze governance gate so it is not re-flipped at implementation time."
+      ],
+      "bankCoverageNote": "COVERAGE: the supplied item bank covers the FULL 5級→準1級 range = all 7 θ rungs, 5 items per rung, 35 total, each with 4 same-type distractors + a single defensible key + a documented rationale. Rung→bucket map: idx0=5級, idx1=4級, idx2=3級, idx3=pre2(準2級), idx4=準2級プラス, idx5=2級, idx6=準1級. Skill mix is healthy: 5級 = 2 vocab/2 grammar/1 readingGist; 4級 = 1 vocab/3 grammar/1 readingGist; 3級 = 1 vocab/3 grammar/1 readingGist; 準2級 = 1 vocab/1 grammar/3 readingGist; 準2級プラス = 0 vocab/3 grammar/2 readingGist; 2級 = 2 vocab/2 grammar/1 readingGist; 準1級 = 2 vocab/2 grammar/1 readingGist.\n\nTHIN SPOTS / FLAGS to fill BEFORE shipping (all must pass content-qa):\n1. BANK DEPTH — the CAT design's own §0 calls for ~8-10 items PER rung (≈70 total) so re-tests and item-exposure vary across sessions; the supplied bank has only 5/rung (35). With a hard cap of 8 items per test and a 5-item/rung pool, a child who lingers on one rung can EXHAUST that rung's unused items. ACTION: author ~3-5 more items per rung (target 8-10/rung) before launch, OR allow item reuse with reshuffle when a rung's pool is exhausted (engine.unusedItemForGrade must have a fallback). This is the single biggest gap.\n2. SKILL GAPS — 準2級プラス(idx4) has ZERO vocab items (only grammar+readingGist); 5級/4級/2級/準1級 each have only ONE readingGist. Add ≥1 vocab item to 準2級プラス and balance readingGist so item-selection isn't forced onto a single skill at a rung.\n3. 準2級プラス authenticity — this rung is NEW (2025); its items must follow the official 合格基準スコア/CEFR算出範囲 (一次合格1402 / 総合1829, CEFR算出1550–1949). The supplied items target the A2+ band correctly (present-perfect-continuous density, first conditional, despite/although) — keep these exam-faithful and re-verify against the official PDF before commit.\n4. JP gloss safety — confirm each stemJa furigana gloss does NOT leak the answer (the 5級 vocab item's JP gloss uses ◯◯ for the blank — good; audit all 35 for the same discipline during content-qa).",
+      "sources": [
+        {
+          "title": "2024年度 実用英語技能検定(英検) 問題形式リニューアルサイト｜公益財団法人 日本英語検定協会",
+          "url": "https://www.eiken.or.jp/eiken/2024renewal/",
+          "date": "2024"
+        },
+        {
+          "title": "英検新設級「準2級プラス」最新情報 (公式PDF) — 合格基準スコア・CEFR算出範囲",
+          "url": "https://www.eiken.or.jp/eiken/info/2024/pdf/20240209_info_2025newgrade.pdf",
+          "date": "2024-02-09"
+        },
+        {
+          "title": "英検CSEスコアとは（CEFR対応・各級スコア帯）｜公益財団法人 日本英語検定協会",
+          "url": "https://www.eiken.or.jp/cse/",
+          "date": "2026-06-06"
+        },
+        {
+          "title": "各級の目安｜英検｜公益財団法人 日本英語検定協会",
+          "url": "https://www.eiken.or.jp/eiken/exam/about/",
+          "date": "2026-06-06"
+        },
+        {
+          "title": "Computer Adaptive Tests (CAT), Item Selection, Standard Errors and Stopping Rules — Rasch Measurement Transactions",
+          "url": "https://www.rasch.org/rmt/rmt202f.htm",
+          "date": "1997"
+        },
+        {
+          "title": "Stopping Rules for Computer Adaptive Testing When Item Banks Have Nonuniform Information — PMC",
+          "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7518406/",
+          "date": "2020"
+        },
+        {
+          "title": "How adaptive placement tests enhance junior language testing (under-16s) — OI Digital Institute",
+          "url": "https://oidigitalinstitute.com/news/junior-language-testing-under16s/",
+          "date": "2024"
+        },
+        {
+          "title": "英検の語彙数・必要な単語数は？各級の目安｜令和の知恵袋",
+          "url": "https://www.koregasiritai.com/eiken-goisuu/",
+          "date": "2024"
+        }
+      ]
+    },
+    "banks": [
+      {
+        "grade": "5級",
+        "items": [
+          {
+            "skill": "vocab",
+            "stemEn": "Look! A big ___ is in the sky. It is yellow and bright in the day.",
+            "stemJa": "空に大きな◯◯がある。昼に黄色くてあかるいよ。",
+            "choices": [
+              "sun",
+              "moon",
+              "star",
+              "cloud"
+            ],
+            "correctIndex": 0,
+            "difficulty": 2,
+            "rationale": "Correct = sun: the only sky object that is yellow/bright in the daytime; the cloze constrains it with 'yellow', 'bright', 'in the day'. Distractors are all single common sky/weather nouns (same POS, same semantic field = sky), so none is absurd and none leaks the key. moon = sky object but appears at night, traps a child who knows 'sky' words but not day/night. star = sky object but small and seen at night, not 'big...in the day'. cloud = sky object but white/grey, not yellow. Single unambiguous key; cannot be solved by grammar alone, only by vocab + the contextual constraints. 5級 high-freq concrete noun in a natural ≤12-word sentence with furigana-friendly JP gloss that does NOT reveal the answer."
+          },
+          {
+            "skill": "grammar",
+            "stemEn": "My brother and I ___ very happy today.",
+            "stemJa": "ぼくと兄は今日とても◯◯です。",
+            "choices": [
+              "are",
+              "am",
+              "is",
+              "be"
+            ],
+            "correctIndex": 0,
+            "difficulty": 2,
+            "rationale": "Correct = are: the subject 'My brother and I' is plural (= we), which takes 'are'. All 4 options are forms of the same verb 'be' (am/is/are/be), so distractors are strictly same-type, same-language inflections — exactly the anti-7,923-bug rule. am = first-person singular trap for a child who pattern-matches 'I' and ignores the compound plural subject. is = third-person singular agreement error. be = uninflected base form, the classic beginner error of not conjugating be. Exactly one defensible key; isolates be-verb subject-verb agreement (a core 5級 grammar point) and cannot be guessed from vocabulary."
+          },
+          {
+            "skill": "vocab",
+            "stemEn": "I open my book and ___ a story every night before I sleep.",
+            "stemJa": "ねる前に毎ばん本をひらいてお話を◯◯する。",
+            "choices": [
+              "read",
+              "eat",
+              "run",
+              "sing"
+            ],
+            "correctIndex": 0,
+            "difficulty": 2,
+            "rationale": "Correct = read: collocates with 'book' and 'a story'; the cloze ('open my book...a story') forces a reading verb. All 4 options are common 5級 base-form everyday verbs (same POS, same register), so the item tests verb vocabulary, not grammar (all fit the slot grammatically). eat = high-freq verb but wrong collocation, traps a child guessing any familiar action. run = high-freq action verb, no link to book/story. sing = plausible bedtime action ('sing a song'), a near-miss for 'a story' that forces real word knowledge over topic guessing. Single key; same-type distractors with no Japanese mixed in."
+          },
+          {
+            "skill": "grammar",
+            "stemEn": "\"___ you swim?\" \"Yes, I can. I like the pool.\"",
+            "stemJa": "「あなたは泳げ◯◯か？」「うん、できるよ。プールがすきなんだ。」",
+            "choices": [
+              "Can",
+              "Are",
+              "Do",
+              "Is"
+            ],
+            "correctIndex": 0,
+            "difficulty": 2,
+            "rationale": "Correct = Can: the answer 'Yes, I can' fixes the question word as the modal 'can' (ability), a core 5級 grammar target. All 4 options are auxiliary/be-verb question-starters (same function-word class, same language), so each is a structurally valid sentence-opener and none is absurd. Are = present-continuous/be trap ('Are you swimming?') but that needs -ing and the short answer would be 'Yes, I am'. Do = generic question auxiliary trap, but the echo answer 'I can' rules it out. Is = third-person be-verb, wrong person for 'you'. The short-answer echo provides the single defensible key and the distractors catch real auxiliary-choice misconceptions, not guessing."
+          },
+          {
+            "skill": "readingGist",
+            "stemEn": "Girl: \"Hi! How are you today?\"  Boy: \"___\"",
+            "stemJa": "女の子「やあ！今日はげんき？」 男の子「◯◯」",
+            "choices": [
+              "I'm fine, thank you.",
+              "I'm twelve years old.",
+              "It's a red bag.",
+              "See you tomorrow!"
+            ],
+            "correctIndex": 0,
+            "difficulty": 2,
+            "rationale": "Correct = 'I'm fine, thank you.': mirrors 英検5級 大問2/3 conversation-completion — the reply must answer the greeting 'How are you?'. All 4 options are complete, grammatical English replies of the same form (same type, same language, all natural child sentences), so the item tests gist/appropriacy, not grammar. 'I'm twelve years old.' = answers 'How old are you?', a near-miss that catches a child matching the 'I'm...' frame without reading the question. 'It's a red bag.' = answers 'What is it?', off-topic but plausible classroom English. 'See you tomorrow!' = a real greeting-routine phrase but it is a goodbye, not a response to 'How are you?'. Exactly one appropriate reply; distractors are all valid 5級 utterances that fail only on conversational fit, giving genuine reading-gist discrimination."
+          }
+        ]
+      },
+      {
+        "grade": "4級",
+        "items": [
+          {
+            "skill": "grammar",
+            "stemEn": "Yesterday I ___ to the park with my brother.",
+            "stemJa": "きのう、わたしは おとうとと こうえんへ いきました。",
+            "choices": [
+              "go",
+              "goes",
+              "went",
+              "going"
+            ],
+            "correctIndex": 2,
+            "difficulty": 3,
+            "rationale": "Correct = 'went': 4級 tests past simple, and 'Yesterday' fixes the time as past, requiring the irregular past form of 'go'. All four options are inflections of the SAME verb 'go' (same-type, same-language — R2 pass). Distractor 'go' = present base form, catches a learner who ignores the time marker 'Yesterday' (no tense awareness). 'goes' = 3rd-person-singular present, catches subject-agreement confusion (also wrong subject — 'I'). 'going' = present participle, catches a learner who reaches for a continuous/gerund form without an auxiliary. Single unambiguous key: only the irregular past 'went' fits 'Yesterday + past action'. Discriminates AT 4級 because 5級 stops at be-verb/present-simple and does not require irregular past; a child still at 5級 typically picks 'go' or 'goes'."
+          },
+          {
+            "skill": "grammar",
+            "stemEn": "This book is ___ than that one.",
+            "stemJa": "この ほんは あの ほんより おもしろい。",
+            "choices": [
+              "interesting",
+              "interestinger",
+              "more interesting",
+              "most interesting"
+            ],
+            "correctIndex": 2,
+            "difficulty": 3,
+            "rationale": "Correct = 'more interesting': comparative of a long adjective uses 'more + adjective', and 'than' explicitly signals a comparison (4級 comparatives -er/more). All four options are forms of the SAME adjective 'interesting' (same-type, same-language — R2 pass). 'interesting' = bare positive, catches a learner who misses that 'than' demands a comparative. 'interestinger' = over-generalized '-er' rule applied to a long adjective, catches the classic A1 error of not knowing long adjectives take 'more'. 'most interesting' = superlative, catches comparative-vs-superlative confusion (superlative would need 'the' and no 'than'). Single key: 'than' + long adjective => only 'more interesting' is grammatical. Discriminates AT 4級: 5級 does not cover comparatives at all; 'interestinger' specifically separates a child who has only the '-er' rule from one who has the full 4級 comparative system."
+          },
+          {
+            "skill": "vocab",
+            "stemEn": "It is raining, so please take your ___.",
+            "stemJa": "あめが ふっているので、___ を もっていってね。",
+            "choices": [
+              "umbrella",
+              "spoon",
+              "pencil",
+              "ticket"
+            ],
+            "correctIndex": 0,
+            "difficulty": 2,
+            "rationale": "Correct = 'umbrella': an in-context cloze (NOT a bare L1-recall prompt — R1 pass) where 'It is raining' makes 'umbrella' the one sensible everyday-life object. All four options are common SINGLE concrete nouns of the SAME type and language (same-type — R2 pass), all 4級-level everyday vocabulary (umbrella, spoon, pencil, ticket) from the school/daily-life syllabus (R4 child-appropriate). 'spoon' = food/kitchen object, plausible to a child who keyword-matches 'take' but ignores 'raining'. 'pencil' = school object, a high-frequency near-miss for a child guessing a familiar word. 'ticket' = town/outing object, plausible for 'take your ___' but ignores the rain cue. Single key: only 'umbrella' satisfies the 'raining' context. Discriminates AT 4級: 'umbrella' is a 4級-band word (above the ~600-word 5級 core), and the reasoning requires reading the whole 'so'-clause, not just translating one word."
+          },
+          {
+            "skill": "grammar",
+            "stemEn": "A: Why were you absent yesterday?  B: ___ I was sick.",
+            "stemJa": "A: きのう どうして やすんだの？  B: ___ びょうきだったんだ。",
+            "choices": [
+              "Because",
+              "But",
+              "So",
+              "Or"
+            ],
+            "correctIndex": 0,
+            "difficulty": 3,
+            "rationale": "Correct = 'Because': 4級 introduces 'because/when' as reason connectors, and 'Why...?' is answered with a reason clause, so 'Because I was sick' is the natural reply. All four options are SINGLE conjunctions/connectors of the SAME type and language (same-type — R2 pass). 'But' = contrast connector, catches a learner who knows connectors exist but not their meanings. 'So' = result connector (the reverse logical direction — 'I was sick, so...'), the strongest distractor because it catches reason-vs-result confusion, a real 4級 misconception. 'Or' = alternative connector, catches a child guessing among function words. Single key: a 'Why' question requires a reason, and only 'Because' marks a reason at clause-initial position answering 'why'. Discriminates AT 4級: 5級 does not test causal connectors; the 'So' distractor specifically separates a child who grasps cause/effect direction from one who has only memorized connector words."
+          },
+          {
+            "skill": "readingGist",
+            "stemEn": "Tom: Are you free this Saturday? Mary: Sorry, I can't. I'm going to visit my grandmother. Tom: That's OK. How about Sunday? Mary: Sunday is fine!  Question: When will Tom and Mary meet?",
+            "stemJa": "トム: 土曜日はひま？ メアリー: ごめん、むり。おばあちゃんの家に行くの。 トム: だいじょうぶ。日曜日はどう？ メアリー: 日曜日ならいいよ！  しつもん: トムとメアリーは いつ 会いますか？",
+            "choices": [
+              "On Saturday",
+              "On Sunday",
+              "On her grandmother's birthday",
+              "They will not meet"
+            ],
+            "correctIndex": 1,
+            "difficulty": 4,
+            "rationale": "Correct = 'On Sunday': a 2-4 line everyday dialogue + main-point question (4級 reading-gist — R1 pass). The gist is that Saturday fails (grandmother visit) but Mary accepts Sunday ('Sunday is fine!'). All four options are SAME-form English time/answer phrases of the SAME type and language (R2 pass), and each maps to a defined detail in the text. 'On Saturday' = the rejected day, catches a child who keyword-matches the first day mentioned and misses Mary's 'I can't'. 'On her grandmother's birthday' = a plausible-sounding date built from the 'grandmother' detail, catches a child who fixates on a salient noun rather than tracking the meeting plan (note: birthday is never stated — tests inference vs. surface matching). 'They will not meet' = catches a child who reads only Mary's refusal and stops before the Sunday agreement. Single key: only Sunday is mutually agreed. Discriminates AT 4級: requires integrating across all four lines (refusal + counter-offer + acceptance), which is beyond 5級 single-line greeting comprehension but within 4級 short-dialogue gist."
+          }
+        ]
+      },
+      {
+        "grade": "3級",
+        "items": [
+          {
+            "skill": "grammar",
+            "stemEn": "I have never ___ sushi before.",
+            "stemJa": "わたしは今までに一度もすしを食べたことがない。",
+            "choices": [
+              "eaten",
+              "eat",
+              "ate",
+              "eating"
+            ],
+            "correctIndex": 0,
+            "difficulty": 3,
+            "rationale": "Present perfect (have + past participle), a signature 3級 grammar point (英検3級 大問1). 'never...before' forces the experiential perfect, so the blank needs the past participle 'eaten' (correct). Distractors are all inflections of the same verb 'eat' (R2: same-type, same-language): 'eat'=base form, catches learners who don't conjugate after 'have'; 'ate'=simple past, catches confusing simple past with present perfect (a real, common A2 misconception); 'eating'=present participle, catches treating 'have' as the progressive auxiliary 'be'. Single unambiguous key — only 'eaten' is grammatical."
+          },
+          {
+            "skill": "grammar",
+            "stemEn": "This temple ___ built about 400 years ago.",
+            "stemJa": "このお寺は約400年前に建てられた。",
+            "choices": [
+              "was",
+              "is",
+              "has",
+              "does"
+            ],
+            "correctIndex": 0,
+            "difficulty": 4,
+            "rationale": "Passive voice in the past (be + past participle), a core 3級 grammar target. The past-time marker '400 years ago' + the past participle 'built' require past passive 'was built', so 'was' (correct). Distractors are all auxiliary/verb forms that could precede 'built' (R2: same grammatical slot): 'is'=present passive, catches learners who ignore the past-time adverbial; 'has'=present-perfect active 'has built', catches confusing passive with perfect; 'does'=do-support, ungrammatical here and catches over-generalized question/emphasis auxiliary use. Exactly one defensible key."
+          },
+          {
+            "skill": "grammar",
+            "stemEn": "The man ___ lives next door is a kind doctor.",
+            "stemJa": "となりに住んでいる男の人は親切な医者です。",
+            "choices": [
+              "who",
+              "which",
+              "what",
+              "whose"
+            ],
+            "correctIndex": 0,
+            "difficulty": 4,
+            "rationale": "Subject relative pronoun for a person — relative pronouns are introduced at 英検3級. The antecedent 'The man' (person) + the gap as subject of 'lives' require 'who' (correct). Distractors are all relative/wh-words of the same type (R2): 'which'=relative for things/animals, catches person/thing confusion; 'what'=cannot follow a noun antecedent (free relative), catches the frequent JP-learner 'what'-for-'that' error; 'whose'=possessive relative, ungrammatical before a finite verb 'lives' (would need a noun), catches surface 'who/whose' confusion. Only 'who' yields a grammatical subject relative."
+          },
+          {
+            "skill": "vocab",
+            "stemEn": "It is raining hard outside. Don't forget to take your ___.",
+            "stemJa": "外は雨がはげしい。___を持っていくのを忘れないで。",
+            "choices": [
+              "umbrella",
+              "dictionary",
+              "blanket",
+              "calendar"
+            ],
+            "correctIndex": 0,
+            "difficulty": 3,
+            "rationale": "Vocabulary cloze in a natural English sentence (英検3級 大問1 style), not L1 translation. The context 'raining hard' selects 'umbrella' (correct). All distractors are single, common, concrete 3級-level nouns of the same POS (R2: 4 single nouns, no language mixing, no phrases): 'dictionary' and 'calendar' are everyday school items (plausible 'take your ___' objects, so the item cannot be solved by collocation alone — it needs the rain context, satisfying R5); 'blanket' is a near-miss weather/comfort noun that traps learners who key on 'cold/wet' instead of 'rain'. Only 'umbrella' fits the rain context, giving a single key."
+          },
+          {
+            "skill": "readingGist",
+            "stemEn": "Tom: I want to join the basketball club, but practice is every morning at 6:30. \nLisa: That's really early! Can you wake up that early every day? \nTom: I'm not sure. Maybe I'll try the art club instead.\n\nWhat is Tom's problem?",
+            "stemJa": "トムの問題は何ですか。（会話を読んで主旨をつかむ）",
+            "choices": [
+              "The basketball club's practice is too early in the morning.",
+              "Tom does not like playing basketball at all.",
+              "The art club is already full of members.",
+              "Lisa wants Tom to join the art club with her."
+            ],
+            "correctIndex": 0,
+            "difficulty": 4,
+            "rationale": "Conversation-gist / main-point item (英検3級 大問2 conversation + gist reading). The dialogue's main point is that 6:30 morning practice is the obstacle, so option 0 (correct). Distractors are all full, grammatically-parallel English statements of the same type (R2: 4 complete sentences, same language/register) and each encodes a real reading misconception: option 1 over-infers dislike of basketball (Tom never says he dislikes it — tests 'reason vs. preference' confusion); option 2 invents an unstated fact about the art club (tests adding information not in the text); option 3 misattributes intent to Lisa (tests speaker-confusion / detail error). Only option 0 is supported by the text — single defensible key, and it cannot be answered without reading the passage (R5)."
+          }
+        ]
+      },
+      {
+        "grade": "pre2",
+        "items": [
+          {
+            "skill": "grammar",
+            "stemEn": "A: You look tired. B: Yes, I ___ on this report since this morning.",
+            "stemJa": "A: つかれてるね。 B: うん、けさからずっとこのレポートに___んだ。",
+            "choices": [
+              "have been working",
+              "am working",
+              "worked",
+              "will work"
+            ],
+            "correctIndex": 0,
+            "difficulty": 4,
+            "rationale": "Correct: present perfect continuous (have been working) is required by 'since this morning', which marks an action ongoing from a past point up to now — a signature 準2級 grammar-cloze target. All four options are valid English inflections of the SAME verb 'work' (R2), each catching a real misconception: 'am working' = present continuous, chosen by a 3級-level learner who feels the ongoing sense but ignores 'since'; 'worked' = past simple, chosen by a learner who treats 'this morning' as finished past (the classic perfect-vs-past confusion); 'will work' = future, chosen by a learner mis-mapping the time frame. A child still at 3級 reliably misses the since+continuous combination, so this discriminates at 準2級. Single unambiguous key."
+          },
+          {
+            "skill": "grammar",
+            "stemEn": "___ it was raining hard, we decided to go hiking anyway.",
+            "stemJa": "雨がはげしくふっていた___、わたしたちはそれでもハイキングに行くことにした。",
+            "choices": [
+              "Although",
+              "Because",
+              "So",
+              "If"
+            ],
+            "correctIndex": 0,
+            "difficulty": 5,
+            "rationale": "Correct: 'Although' — concession conjunction, a 準2級 target (although/while). The contrast between bad weather and the decision to go 'anyway' demands a concessive connector. All four options are SAME-type conjunctions (R2), each a level-appropriate trap: 'Because' = cause, chosen by a 4級/3級 learner who defaults to the most familiar connector and ignores the contrast signalled by 'anyway'; 'So' = result, chosen by a learner reading clause order without logic; 'If' = condition, plausible to a learner who hasn't internalised concession. The word 'anyway' disambiguates, so there is exactly one defensible key; a child whose grammar stops at 3級 connectors (because/and/but) will not confidently choose 'although'. Discriminates at 準2級."
+          },
+          {
+            "skill": "vocab",
+            "stemEn": "Our flight was ___ because of the storm, so we waited three more hours.",
+            "stemJa": "あらしのせいで、わたしたちのフライトは___され、あと3時間まった。",
+            "choices": [
+              "delayed",
+              "arrived",
+              "boarded",
+              "canceled"
+            ],
+            "correctIndex": 0,
+            "difficulty": 5,
+            "rationale": "Correct: 'delayed' — a 準2級 travel/social-topic vocabulary item; 'waited three more hours' confirms the flight was postponed, not stopped. All four options are SAME-type single verbs in the same travel register (R2), each a discriminating near-miss: 'canceled' is the strongest trap — same domain and also storm-caused, but contradicted by 'waited three more hours' (a canceled flight does not leave, so you would not wait for it), so a learner who reads 'storm' and stops picks it while a 準2級 reader uses the 'waited' detail; 'arrived' and 'boarded' are real flight verbs that are semantically wrong with the passive frame and the 'three more hours' result. No absurd throwaways, preserving discrimination. The 'waited' clause rules out 'canceled', giving a single key."
+          },
+          {
+            "skill": "readingGist",
+            "stemEn": "Tom: I want to join the school band, but I can't read music. Lisa: Don't worry — the teacher gives free lessons after school on Fridays. You should go this week. Tom: ___",
+            "stemJa": "Tom: バンドに入りたいけど、ぼくは楽ふが読めないんだ。 Lisa: 心配しないで。先生が金曜の放課後に無料レッスンをしてくれるよ。今週行ってみたら。 Tom: ___",
+            "choices": [
+              "Good idea. I'll go this Friday.",
+              "Sorry, I can't play any sports.",
+              "Yes, I already know how to read music.",
+              "No, the band practices on Mondays."
+            ],
+            "correctIndex": 0,
+            "difficulty": 5,
+            "rationale": "Correct: a 準2級 大問2 conversation-completion item; Tom's natural reply accepts Lisa's suggestion of Friday lessons. All four options are full English replies of the SAME type and register (R2), each catching a specific comprehension failure: 'Sorry, I can't play any sports' = topic confusion (band, not sports), caught by a learner pattern-matching 'can't' without tracking the subject; 'Yes, I already know how to read music' directly contradicts Tom's stated 'I can't read music', catching a learner who ignores the established fact; 'No, the band practices on Mondays' fixates on a day word but answers the wrong point (the lessons are Fridays, not band practice). Only the first reply is coherent with BOTH the can't-read-music problem and the Friday-lesson offer, so the key is single and requires genuine gist tracking rather than keyword spotting — exactly what separates a 準2級 reader from a 3級 one."
+          },
+          {
+            "skill": "readingGist",
+            "stemEn": "Notice: The city library will close early at 5 p.m. this Saturday for cleaning. Books due that day can be returned on Monday with no late fee. The reading room reopens at the usual time on Sunday. — When can members return Saturday's books without a fee?",
+            "stemJa": "おしらせ: 市立図書館は清掃のため今週の土曜は午後5時に早くしまります。その日にかえす本は、延滞料金なしで月曜にかえせます。閲覧室は日曜は通常どおりに開きます。— 土曜にかえす本は、料金なしでいつかえせますか。",
+            "choices": [
+              "On Monday",
+              "On Saturday before 5 p.m.",
+              "On Sunday",
+              "Anytime with a small fee"
+            ],
+            "correctIndex": 0,
+            "difficulty": 5,
+            "rationale": "Correct: a 準2級 short-passage gist+detail item (notice register, 2024-reform style). The text states Saturday's due books 'can be returned on Monday with no late fee', so the fee-free return day is Monday. All four options are SAME-type short English timing answers (R2), each a deliberate detail-trap drawn from the passage: 'On Saturday before 5 p.m.' uses the salient early-closing time, caught by a reader who grabs the first time/number and stops; 'On Sunday' uses the genuine 'reopens Sunday' fact but conflates reopening with fee-free return, caught by a reader who can't separate two facts; 'Anytime with a small fee' inverts the 'no late fee' clause, caught by a reader who misreads the negation. Answering correctly requires binding the right detail (Monday) to the right question (fee-free return), the precise skill 準2級 reading tests; a 3級 reader who keyword-matches will be pulled to a distractor. Single defensible key."
+          }
+        ]
+      },
+      {
+        "grade": "準2級プラス",
+        "items": [
+          {
+            "skill": "grammar",
+            "stemEn": "It ___ since early this morning, so the outdoor festival was finally called off.",
+            "stemJa": "今朝早くからずっと雨が降っているので、屋外のフェスティバルはついに中止になった。（called off = 中止）",
+            "choices": [
+              "has been raining",
+              "is raining",
+              "rained",
+              "was raining"
+            ],
+            "correctIndex": 0,
+            "difficulty": 5,
+            "rationale": "Correct: 'since early this morning' marks a duration continuing up to now with an ongoing effect, requiring present perfect continuous (has been raining) — the signature 準2級プラス grammar form (present perfect continuous) at higher density than 準2級. All 4 are inflections of the same verb 'rain' (R2 same-type, same-verb). Distractor 'is raining' = present progressive: a learner who ignores the 'since + duration' cue and reads only 'is happening now' picks it (a real 準2級-level miss). 'rained' = past simple: catches a child who treats 'this morning' as finished past and misses the perfect aspect entirely (a 4級/3級-level error → places BELOW 準2級プラス). 'was raining' = past continuous: catches duration-without-perfect confusion — plausible because it expresses 'in progress' but cannot co-occur with 'since' + present result. Exactly one defensible key; the 'since...still affecting now' frame cannot be satisfied by any other option."
+          },
+          {
+            "skill": "grammar",
+            "stemEn": "If the city ___ more bicycle lanes next year, fewer people will drive to work.",
+            "stemJa": "もし市が来年もっと自転車レーンを作れば、車で通勤する人は減るだろう。（lanes = レーン／車線）",
+            "choices": [
+              "builds",
+              "will build",
+              "built",
+              "is building"
+            ],
+            "correctIndex": 0,
+            "difficulty": 5,
+            "rationale": "Correct: a first conditional (real future) — the if-clause takes present simple while the main clause keeps 'will drive' ('builds'). First-conditional control on a 身近な社会的話題 (city planning) is squarely 準2級プラス. All 4 are forms of the same verb 'build' (R2). Distractor 'will build' = the classic 'will-in-the-if-clause' overcorrection (the single most common conditional error at this band) — places a child who hasn't mastered the form below the rung. 'built' = past/second-conditional intrusion: catches a learner who confuses real and unreal conditionals; wrong because 'will drive' in the main clause fixes this as a real future. 'is building' = present continuous: tempting as 'happening' but ungrammatical in an if-clause stating a future condition. One key; tense agreement across both clauses isolates the target skill (cannot be guessed from vocab)."
+          },
+          {
+            "skill": "grammar",
+            "stemEn": "The volunteers worked hard all weekend ___ the heavy rain and the cold wind.",
+            "stemJa": "ボランティアたちは、激しい雨と冷たい風にもかかわらず、週末ずっと一生けんめい働いた。（volunteers = ボランティア）",
+            "choices": [
+              "despite",
+              "although",
+              "because of",
+              "instead of"
+            ],
+            "correctIndex": 0,
+            "difficulty": 5,
+            "rationale": "Correct: 'despite' is a preposition taking a NOUN PHRASE ('the heavy rain and the cold wind') and expresses concession (worked hard regardless of the obstacle) — the despite/although distinction (preposition vs. conjunction) is a hallmark 準2級プラス↔2級 bridge point. All 4 options are connectives of the same register (R2). Distractor 'although' = the highest-discrimination trap: same concessive MEANING but it is a conjunction requiring a clause ('although it rained'), so it is ungrammatical before a noun phrase — separates students who know the meaning from those who know the syntax. 'because of' = correct grammar (also takes a noun phrase) but WRONG logic: it makes the rain the reason they worked, contradicting 'worked hard ... [obstacle]'. 'instead of' = noun-phrase preposition but wrong meaning (substitution, not concession). One defensible key requiring BOTH part-of-speech and discourse-logic control."
+          },
+          {
+            "skill": "readingGist",
+            "stemEn": "NOTICE — Greenfield Library: Starting next month, the library will close two hours earlier on weekdays to save energy. Weekend hours will not change, and the study rooms can still be reserved online. ___ What is the main point of this notice?",
+            "stemJa": "お知らせ（図書館）：来月から、省エネのため平日は2時間早く閉館します。週末の時間は変わりません。自習室は引き続きオンラインで予約できます。——このお知らせの要点は？",
+            "choices": [
+              "The library will reduce its weekday opening hours.",
+              "The library will close permanently next month.",
+              "The study rooms can no longer be reserved.",
+              "Weekend hours will be made longer."
+            ],
+            "correctIndex": 0,
+            "difficulty": 5,
+            "rationale": "Correct: the notice's MAIN POINT is the weekday hour reduction ('close two hours earlier on weekdays') — gist of a 身近な社会的話題 (community facility) passage, exactly the 3A/3B comprehension that distinguishes 準2級プラス from 準2級. All 4 options are same-form full English statements about the library (R2). Distractor 'close permanently' = over-reading 'close ... earlier' as 'shut down': catches a child who recognizes 'close' but misreads the qualifier (a real gist failure → below the rung). 'study rooms can no longer be reserved' = direct CONTRADICTION of 'can still be reserved online' — catches a reader who skims and inverts a detail. 'weekend hours longer' = contradicts 'weekend hours will not change' — catches confusion between the changed (weekday) and unchanged (weekend) facts. Each distractor requires real comprehension to reject; none is absurd, so the item discriminates true gist control."
+          },
+          {
+            "skill": "readingGist",
+            "stemEn": "A: I'm thinking of joining the school's recycling club, but the meetings are after school on Fridays and I have piano then. B: ___ A: Good idea! I'll email the club leader tonight and ask. What is B most likely saying?",
+            "stemJa": "A：学校のリサイクル部に入ろうと思うんだけど、集まりが金曜の放課後で、その時間はピアノがあるんだ。 B：____ A：いい考えだね！今夜部長にメールして聞いてみる。——Bが言ったと考えられるのは？",
+            "choices": [
+              "Why don't you ask if you can come on a different day?",
+              "Then you should quit playing the piano right away.",
+              "I didn't know the recycling club already closed.",
+              "You should not join any clubs while you are busy."
+            ],
+            "correctIndex": 0,
+            "difficulty": 5,
+            "rationale": "Correct: conversation-completion where the missing line must fit BOTH the problem before it (schedule clash) AND A's response after it ('Good idea! I'll email the club leader and ask') — the only option that A could call a 'good idea' and act on by emailing/asking is suggesting a different day. This bidirectional-coherence reasoning is the 準2級プラス 大問2/3 conversation gist skill. All 4 are same-form full English replies (R2). Distractor 'quit piano right away' = a plausible reaction to the clash but too extreme and not something you 'email the club leader' about — catches local (problem-only) reading that ignores A's follow-up. 'didn't know the club already closed' = introduces an unstated fact (the club isn't closed) — catches a reader who doesn't track the actual situation. 'should not join any clubs' = contradicts A's enthusiasm and intent to join — catches inversion of speaker stance. Only one option is consistent with the FULL exchange; single defensible key."
+          }
+        ]
+      },
+      {
+        "grade": "2級",
+        "items": [
+          {
+            "skill": "vocab",
+            "stemEn": "The government finally decided to ___ the old law because many people thought it was unfair.",
+            "stemJa": "政府は、その古い法律を ___ することについに決めた。多くの人が不公平だと考えていたからだ。",
+            "choices": [
+              "abolish",
+              "announce",
+              "admire",
+              "arrange"
+            ],
+            "correctIndex": 0,
+            "difficulty": 6,
+            "rationale": "Correct: 'abolish' = formally end/get rid of a law — a signature 2級 social-topic verb that collocates with 'law'. Distractors are all transitive verbs of the same POS and similar Latinate register (same-type, same-language): 'announce' (a near-miss — you can announce a law, but it doesn't fit 'because it was unfair'), 'admire' (semantic trap, you don't admire-then-end a law), 'arrange' (collocation trap — arrange a meeting, not a law). A 準2級 child knows announce/arrange but typically not the lower-frequency 'abolish', so the item discriminates at 2級. Single key: only 'abolish' satisfies the 'because it was unfair → ended it' logic."
+          },
+          {
+            "skill": "grammar",
+            "stemEn": "If I ___ more free time, I would travel all around the world.",
+            "stemJa": "もし、もっと自由な時間が ___ なら、世界中を旅行するのに。",
+            "choices": [
+              "had",
+              "have",
+              "had had",
+              "will have"
+            ],
+            "correctIndex": 0,
+            "difficulty": 5,
+            "rationale": "Correct: 'had' — the second conditional (past subjunctive) required by the 'would + base' main clause, a core 2級 grammar point. Distractors are all forms of the same verb 'have' (same-type, same-language inflections), each encoding a real misconception: 'have' (present, the first-conditional/real-condition error), 'had had' (past perfect — overshoots to third conditional, mismatched with 'would travel'), 'will have' (future, the literal-translation error treating 'もし' as a real future condition). 準2級 learners master 1st conditional but often miss the unreal past-subjunctive, so this isolates 2級. Single key: only 'had' agrees with 'I would travel'."
+          },
+          {
+            "skill": "vocab",
+            "stemEn": "It took her several weeks to ___ a decision about which university to attend.",
+            "stemJa": "どの大学に通うかについて ___ のに、彼女は数週間かかった。",
+            "choices": [
+              "make",
+              "take",
+              "do",
+              "get"
+            ],
+            "correctIndex": 0,
+            "difficulty": 5,
+            "rationale": "Correct: 'make a decision' — the fixed verb-noun collocation expected at 2級 (collocations are an explicit 2級 vocab target). Distractors are all common single English verbs of the same type, each a genuine L1/usage-interference error: 'take' (Japanese learners over-extend 'take'; 'take a decision' is BrE-marginal and not the standard taught form), 'do' (a frequent collocation error, 'do a decision'), 'get' (plausible 'get'-everything overgeneralisation). The item is NOT guessable from grammar — all four are grammatically fine, only the collocation is right — so it tests vocabulary depth. 準2級 learners often pick 'take'/'do', discriminating at 2級. Single key: standard English is 'make a decision'."
+          },
+          {
+            "skill": "grammar",
+            "stemEn": "___ finished all his homework, Ken went outside to play with his friends.",
+            "stemJa": "宿題を全部 ___、ケンは友だちと遊びに外へ出た。",
+            "choices": [
+              "Having",
+              "Have",
+              "Had",
+              "Having had"
+            ],
+            "correctIndex": 0,
+            "difficulty": 6,
+            "rationale": "Correct: 'Having' — the perfect participle ('Having finished ...') expressing a completed prior action, a 2級 participial-construction point. Distractors are same-verb/auxiliary forms (same-type, same-language): 'Have' (bare base/imperative — ungrammatical as an opening adverbial, the under-analysis error), 'Had' (past finite — would need its own subject, the it's-just-past-tense error), 'Having had' (over-built double-perfect, redundant before a past participle 'finished' that already carries completion — the over-correction trap). The participle clause is distinctly above 準2級 (which centres on finite tense/conditionals), so it discriminates at 2級. Single key: only 'Having finished' is a well-formed perfect-participle adverbial."
+          },
+          {
+            "skill": "readingGist",
+            "stemEn": "A: I'm really thinking about studying abroad next year, but the tuition is so expensive that I'm not sure I can afford it. B: ___",
+            "stemJa": "A: 来年、留学を本気で考えているんだけど、学費がとても高くて、払えるか自信がないんだ。 B: ___（会話が自然につながる返事は？）",
+            "choices": [
+              "Have you looked into scholarships? Some of them can cover most of the tuition.",
+              "Yes, I went abroad with my family last summer and had a great time.",
+              "You should buy a cheaper textbook for your English class then.",
+              "I don't really like studying, so I usually just play games after school."
+            ],
+            "correctIndex": 0,
+            "difficulty": 5,
+            "rationale": "Correct: the scholarship reply directly addresses B's stated obstacle (the high tuition) — the conversation-completion / gist skill tested in 2級 大問2, where the right reply must respond to the speaker's MAIN concern. Distractors are all full, grammatically parallel English replies of the same type (no Japanese, no fragments), each a discriminating gist-trap: option 2 latches onto the surface word 'abroad' but ignores the cost problem (keyword-match trap), option 3 mentions money/cheaper but at the wrong scale and wrong topic (textbook vs tuition — partial-overlap trap), option 4 is on-register coherent English but self-focused and irrelevant to A's situation (topic-drift trap). Solving it requires tracking the speaker's intent across two lines, not a single word, which is precisely the 2級 gist demand above 準2級's short-exchange level. Single key: only option 1 responds to the affordability problem A raised."
+          }
+        ]
+      },
+      {
+        "grade": "準1級",
+        "items": [
+          {
+            "skill": "vocab",
+            "stemEn": "Without regular maintenance, the old bridge will gradually ___ until it is no longer safe to cross.",
+            "stemJa": "ていきてきな てんけんが ないと、その ふるい はしは だんだん ___ し、わたれなく なってしまう。",
+            "choices": [
+              "deteriorate",
+              "accumulate",
+              "negotiate",
+              "illuminate"
+            ],
+            "correctIndex": 0,
+            "difficulty": 6,
+            "rationale": "Correct = deteriorate (get progressively worse); the cue 'until it is no longer safe' demands a verb of decline. This is a signature low-frequency 準1級/B2 academic verb (大問1 vocab cloze). Distractors are all same-POS, same-register Latinate intransitive-capable verbs of the same morphological shape (-ate), so none can be eliminated on form alone: accumulate (build up) is a real word but the WRONG direction of change — traps a learner who only senses 'something happens over time'; negotiate (settle by discussion) is a high-frequency near-homograph that catches surface decoding without meaning; illuminate (light up) is a phonological/visual lure (similar length, -ate). Only deteriorate fits 'gradually + becomes unsafe'. Single unambiguous key; all four English, no JP mixing."
+          },
+          {
+            "skill": "vocab",
+            "stemEn": "She was ___ to lend him the money at first, but she finally agreed after he promised to pay it all back.",
+            "stemJa": "かのじょは はじめ お金（かね）を かすのを ___ だったが、かれが ぜんぶ かえすと やくそく したので、ついに しょうちした。",
+            "choices": [
+              "reluctant",
+              "eager",
+              "grateful",
+              "curious"
+            ],
+            "correctIndex": 0,
+            "difficulty": 6,
+            "rationale": "Correct = reluctant (unwilling); the contrast marker 'but she finally agreed' presupposes prior unwillingness, and 'reluctant to + infinitive' is the target B2 collocation. Distractors are all same-type predicative adjectives that take 'to + infinitive', same register, all plausible feelings about lending money: eager (keen) is the exact OPPOSITE and is the key discriminator — a learner who ignores 'but...finally agreed' will pick the positive emotion; grateful (thankful) is a common JP-interference choice (感謝) that mis-frames who owes whom; curious (interested) is a syntactically-valid but semantically-empty lure. Only reluctant is consistent with the concessive 'but'. One defensible key, all English single adjectives."
+          },
+          {
+            "skill": "grammar",
+            "stemEn": "Not only ___ the entrance exam, but he also won a full scholarship to the university.",
+            "stemJa": "かれは にゅうがく しけんに ___ だけでなく、だいがくの ぜんがく しょうがくきんも かくとくした。",
+            "choices": [
+              "did he pass",
+              "he passed",
+              "he did pass",
+              "passed he"
+            ],
+            "correctIndex": 0,
+            "difficulty": 7,
+            "rationale": "Correct = 'did he pass'. Fronting the negative adverbial 'Not only' triggers obligatory subject-auxiliary INVERSION (did + subject + base verb) — a hallmark 準1級/B2 grammar point absent at 2級. Distractors are all same-type attempts at the same verb cluster with the same lexical verb 'pass', differing only in word order/auxiliary, so the item tests the inversion rule specifically: 'he passed' is the uninverted declarative order (the most common error — correct meaning, wrong syntax after fronting); 'he did do' i.e. 'he did pass' keeps emphatic 'did' but fails to invert subject/aux; 'passed he' is a malformed half-inversion (verb-subject) that lures learners who know 'something moves' but not what. Only 'did he pass' is grammatical here. Single key; all English."
+          },
+          {
+            "skill": "grammar",
+            "stemEn": "If she had caught the earlier train this morning, she ___ in the office with us right now.",
+            "stemJa": "もし けさ はやい でんしゃに のっていたら、かのじょは いま ___ わたしたちと オフィスに いるはずだ。",
+            "choices": [
+              "would be",
+              "would have been",
+              "will be",
+              "had been"
+            ],
+            "correctIndex": 0,
+            "difficulty": 7,
+            "rationale": "Correct = 'would be'. This is a MIXED conditional: a past unreal condition ('had caught') with a present result, signalled by 'right now' → main clause needs 'would + base' (present result). This nuanced conditional/modality is core 準1級 grammar. Distractors are all same-type modal/verb forms of 'be' from the conditional paradigm, each a real conditional pattern misapplied: 'would have been' is the standard third-conditional result (would have + p.p.) and is the primary trap — correct for a PAST result but clashes with 'right now'; 'will be' is the first-conditional/real result, incompatible with the unreal 'had caught'; 'had been' just echoes the if-clause tense and produces no main clause. Only 'would be' matches the present time-frame of the result. One key; all English, same verb family."
+          },
+          {
+            "skill": "readingGist",
+            "stemEn": "Read the passage, then answer.\n\n\"Many cities have introduced bike-sharing programs, hoping to ease traffic and cut pollution. Yet researchers note that most users were already cyclists or walkers; few have actually given up their cars. The schemes may be popular, but their environmental payoff has so far been modest.\"\n\nWhat is the writer's main point?",
+            "stemJa": "ぶんしょうを よんで、こたえよう。（じてんしゃシェアの こうかについての ぶんしょう）\n\nこの ひっしゃが いちばん いいたい ことは？",
+            "choices": [
+              "Bike-sharing programs have done less for the environment than hoped.",
+              "Bike-sharing programs have successfully removed many cars from the roads.",
+              "Cities should stop funding bike-sharing because nobody uses it.",
+              "Cyclists and walkers dislike using bike-sharing programs."
+            ],
+            "correctIndex": 0,
+            "difficulty": 6,
+            "rationale": "Correct = the environmental benefit has been smaller than hoped — this paraphrases the concluding claim ('environmental payoff has so far been modest') and requires INFERENCE across the 'Yet...few have given up their cars...but...modest' argument structure, the signature 準1級 reading skill (main claim + nuance, not detail lookup). Distractors are all same-type full-sentence statements about the passage's topic and the SAME register: 'successfully removed many cars' is the exact claim the passage REFUTES (catches readers who grasp the topic but invert the stance); 'cities should stop funding' is an over-strong recommendation the text never makes ('popular' contradicts 'nobody uses it') — traps over-readers; 'cyclists and walkers dislike' twists the detail that users 'were already cyclists or walkers' into an unsupported negative. Only option 1 captures the author's qualified, modest-benefit conclusion. One defensible key; all options English, parallel form."
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "summary": "Expert opinion: should A-KEN Quest stay pure-Layton or go hybrid? Deep 2026 online-game research → an opinionated, dated recommendation",
+  "agentCount": 5,
+  "logs": [
+    "4 experts mastering the 2026 online-game / monetization / AI-dev / Layton-limits landscape…",
+    "Senior director forming the blunt recommendation…"
+  ],
+  "result": {
+    "verdict": "Go HYBRID — but a specific, narrow one I'll call \"LAYTON SHELL + DUOLINGO ENGINE\": keep the painted/voiced/AI-generated コトバ探偵 world as the premium single-player SOUL, and bolt on ONLY Duolingo's async, server-light, gacha-free retention spine (streak → daily FSRS ナゾ, async cohort/family leaderboards, parent 英検-progress loop, monthly AI-generated episode cadence) — and explicitly REJECT the 英語物語/マグナ live-PvP-and-gacha hybrid.",
+    "why": "The CEO's framing is a false binary. The real question isn't \"Layton vs hybrid,\" it's \"which retention layer\" — because A-KEN is a ¥1,480/mo SUBSCRIPTION where retention literally is the business, and the two extremes both fail it.\n\nPURE-LAYTON FAILS THE BUSINESS MODEL. Layton is a one-time premium PURCHASE (the new entry, New World of Steam, is a buy-once console/PC title delayed to 2026 — verified) with a finish line and sequels every 2-3 years. A subscription needs a day-2/day-30 return reason a finite narrative structurally lacks. Kids-edu apps churn ~7.4%/mo and the #1 cause is the child disengaging (36%) plus content age-out (24%) — a beatable story hits both walls. The killer proof point I verified live: Recruit's スタディサプリ ENGLISH for KIDS — a deep-pocketed premium kids-English subscription, the closest analog to A-KEN — is being SHUT DOWN 2026-06-30. Premium-only just died in this exact niche.\n\nTHE FULL GACHA/SOCIAL HYBRID ALSO FAILS — on three independent axes. (1) Unbuildable by an AI-solo dev: 英語物語's 10-player raids and マグナ's 50-player live battles need servers, matchmaking, anti-cheat, 24/7 minor-moderation, and a weekly live cadence AI does NOT generate (2026 live-ops consensus: AI's value is backend tooling, not player-facing live content; 52 live-service games already shut down by mid-2026). (2) Regulatory/parent-trust minefield for minors in Japan: コンプガチャ banned since 2012, 2024 amendments tightened randomized-monetization-for-minors, and I verified Apple's Dec-2025 Japan rules now force a parental gate on under-18 purchases and block under-13 web checkout — the direction is harder, not easier. (3) Obsolete even among incumbents: Mintflag (the 英検-gacha leader) is publicly pivoting AWAY from gacha-as-revenue and runs マグナ as permanently FREE (verified 400k users, 400+ schools). You cannot out-gacha or out-social a free voiced anime RPG, and you shouldn't try.\n\nWHAT WINS is the synthesis the whole market is converging on. Duolingo's Q1-2026 numbers (verified from SEC filing: 56.5M DAU +21% YoY, 12.5M paid subs, 10M+ users on 1yr+ streaks, ONE-THIRD of DAUs on a Friend Streak) prove the retention engine is async streaks + leagues + family plan — NOT gacha, NOT real-time PvP, NOT narrative. Every one of those primitives is single-player/async: zero servers-as-realtime, zero kid-chat moderation, COPPA/parent-safe. And the Layton soul is precisely what an AI-full-driven solo team is BEST at mass-producing at ¥0 (endless generatable 英検 puzzles + cohesive storybook world). So: hybrid in OUTCOME (you get the daily-return engine pure-Layton fatally lacks), Layton in SOUL (the calm premium immersion the CEO loves and AI makes cheap), solo-AI-sustainable in BUILD (content, not live-ops). The sole KPI — a kid actually passes 英検 — is served by making the daily habit literally BE the FSRS spaced review, surfaced as 今日のナゾ, with the parent dashboard proving readiness. That's the renewal trigger, not a loot box.",
+    "hybridGraftRanked": [
+      "1. STREAK + daily ナゾ quota — the single highest-ROI, cheapest retention lever (Duolingo: 10M+ users on 1yr+ streaks). Pure client + Firestore, zero servers. This IS your daily-return engine. Make the streak action = solving today's NPC ナゾ.",
+      "2. FSRS 復習の館 reframed as the streak destination / 今日のナゾ — you already built FSRS; spaced review IS the scientifically-grounded daily habit AND the 英検-pass mechanism. Lean into it as the engagement CORE, not a side feature. This is the rare lever where retention and the sole KPI are the same action.",
+      "3. PARENT DASHBOARD with 英検-readiness gauge + 'your child passed a mock 級' milestone — the 2-3x retention multiplier for kids subs, the conversion/renewal trigger, and the proof of sole value. The parent is the payer; make them the audience. Non-negotiable.",
+      "4. MONTHLY AI-generated episode/town cadence (Animagine XL, ¥0) — this is 'live-ops delivered as story DLC' with NO live server. Solves the finite-narrative age-out churn hole and turns your AI pipeline into an unfair content-cadence advantage.",
+      "5. MULTI-GRADE progression 5級→準1級 (you have it) as celebrated narrative milestones — the 3-5x LTV anti-age-out lever. Grade-up = a big in-world event so content never 'ends.'",
+      "6. ASYNC, SAFE social only: ghost/cohort leaderboards by ピカラット, Duolingo-style Friend/Family Streak, class/family progress feed, shareable solved-case cards. Captures the league effect (one-third of Duolingo DAU use Friend Streak) with ZERO live chat, PvP, or moderation burden. Family-shaped, since the family plan is Duolingo's fastest-growing SKU.",
+      "7. ひらめきコイン / ピカラット as EARNED-ONLY currency, never purchasable — cosmetics unlocked by play, never by chance. Keeps you clear of 射幸心/gacha regulation while still giving a reward economy."
+    ],
+    "avoid": [
+      "GACHA / paid loot boxes / collectible-card-by-chance monetization — コンプガチャ banned, 2024 minor-monetization scrutiny, Apple Dec-2025 parental-gate rules, and the incumbent 英語物語 itself is fleeing it. Disproportionate legal+PR risk for a ¥1,480 sub, and it torches the parent-trust that is your actual moat.",
+      "Real-time co-op raids / live PvP / 50-player live battles (英語物語/マグナ style) — require servers, matchmaking, anti-cheat, 24/7 minor moderation, and a relentless live content cadence a solo AI dev cannot staff. AI does not generate the hard parts of live-ops. And you can't out-social a FREE voiced anime RPG anyway.",
+      "Open kid-to-kid chat / social-media-style features — rising G7/Japan minor-safety + age-assurance burden; moderation liability with no upside for a learning app.",
+      "Aggressive energy/heart paywall hooks (Duolingo's 2025 Energy backlash — ~3,000-upvote revolt) — dark patterns that punish even correct answers will destroy the parent goodwill that drives word-of-mouth in the kids category.",
+      "Any IAP currency a child can buy — keep it ONE flat subscription, no consumables, no in-app purchasable currency. Simplicity is the trust signal and the only model a solo AI team can sustain.",
+      "Don't splash visible AI across social/multiplayer surfaces — keep AI generation inside the cohesive storybook frame (where the team already excels); GDC 2026 shows rising backlash to obvious AI assets, but a unified painted world reads as craft, not slop."
+    ],
+    "biggestRisk": "The biggest risk is DILUTION OF THE PREMIUM CALM — that grafting streaks, leaderboards and 'today's quota' onto Layton recreates a Duolingo-style anxiety/guilt treadmill and kills the very immersion that is A-KEN's differentiation (and the thing AI uniquely lets you produce at quality). Layton's brand is calm, curious, unhurried; streak-loss-aversion is its tonal opposite. Mitigation: make the retention layer DIEGETIC and gentle — the streak is a 探偵's case-log, not a red 'you'll lose it!' nag; no energy/hearts wall ever; FSRS review framed as 'a new ナゾ arrived at the 館,' not a chore meter. Tune for parent-trust and intrinsic mastery over loss-aversion. If you must err, err calm: a slightly weaker streak that preserves the premium feel beats an aggressive one that makes A-KEN feel like every other guilt app — because the calm IS the product.",
+    "nextWaves": "Concretely for the build waves (all single-player/async — nothing here needs a live server, matchmaking, or moderation): WAVE 2 = retention spine. Wire the daily STREAK to FSRS-due reviews surfaced as 今日のナゾ from an NPC (this is the one feature with highest leverage and you already have FSRS). Ship the PARENT DASHBOARD with a 英検-readiness gauge + mock-exam milestone (this is your conversion/renewal trigger and proof of the sole KPI — treat it as P0, not parent-facing afterthought). Confirm flat ¥1,480 sub with NO IAP currency. WAVE 3 = content cadence + anti-age-out. Stand up the AI episode pipeline to ship one new town/case per MONTH (your no-server live-ops), and make 5級→準1級 grade-ups celebrated in-world events. WAVE 4 = async social, last. Add Friend/Family Streak + ghost/cohort leaderboards by ピカラット + shareable solved-case cards — async only, no chat. EXPLICITLY OFF THE ROADMAP (write it down so it doesn't creep back in): gacha, paid loot, real-time co-op/PvP, energy/heart paywalls, open chat. Resolve the existing audio-asset contract (T35) and child-safety crisis gap (per project memory: a suicidal-child scold path and in-memory billing are launch blockers) BEFORE adding any social surface — trust infrastructure precedes engagement features for a paid kids app. Spec-freeze this hybrid shape now per your own anti-churn governance: the design has flipped 4x; this is the one that matches both the market data and what your team can actually sustain — stop re-litigating it and build.",
+    "sources": [
+      {
+        "title": "Duolingo Q1 FY2026 Form 8-K (SEC) — 56.5M DAU, 12.5M paid subs, 1/3 of DAU on Friend Streak",
+        "url": "https://www.sec.gov/Archives/edgar/data/0001562088/000162828026029790/q1fy26duolingo3-31x26share.htm",
+        "date": "2026-05"
+      },
+      {
+        "title": "Duolingo Q4 FY2025 Form 8-K (SEC) — 52.7M DAU +30% YoY, 12.2M paid subs, 10M+ users on 1yr+ streaks",
+        "url": "https://www.sec.gov/Archives/edgar/data/0001562088/000162828026012246/q4fy25duolingo12-31x25shar.htm",
+        "date": "2026-02"
+      },
+      {
+        "title": "『スタディサプリENGLISH for KIDS』サービス終了のお知らせ — 株式会社リクルート",
+        "url": "https://www.recruit.co.jp/newsroom/pressrelease/2025/0407_15613.html",
+        "date": "2025-04-07"
+      },
+      {
+        "title": "AIえいご-マグナとふしぎの少女 ずっと無料の英語ゲーム — Google Play (400k users, 400+ schools, permanently free)",
+        "url": "https://play.google.com/store/apps/details?hl=en_US&id=com.mintflag.magna",
+        "date": "2026"
+      },
+      {
+        "title": "学校版『マグナとふしぎの少女』無償AI英語アプリ — MINTFLAG (free + school-adoption growth model, no gacha)",
+        "url": "https://mintflag.com/education",
+        "date": "2026"
+      },
+      {
+        "title": "Apple announces changes to iOS in Japan — Apple Newsroom (under-18 parental gate, under-13 no web checkout, eff. Dec 18 2025)",
+        "url": "https://www.apple.com/newsroom/2025/12/apple-announces-changes-to-ios-in-japan/",
+        "date": "2025-12-17"
+      },
+      {
+        "title": "Kids Education App Churn Rate 2026: 7.4% Monthly Benchmark — RetentionCheck",
+        "url": "https://retentioncheck.com/churn-benchmarks/kids-education-apps",
+        "date": "2026"
+      },
+      {
+        "title": "Duolingo Gamification Strategy: A Full Case Study (2026) — Trophy.so",
+        "url": "https://trophy.so/blog/duolingo-gamification-case-study",
+        "date": "2026"
+      },
+      {
+        "title": "Duolingo Breaks Hearts for Energy, Drains Free Learning — Class Central (2025 Energy backlash)",
+        "url": "https://www.classcentral.com/report/duolingo-breaks-hearts-for-energy/",
+        "date": "2025"
+      },
+      {
+        "title": "52 Games Have Already Been Shut Down in 2026 — Game Rant (live-service graveyard)",
+        "url": "https://gamerant.com/games-shut-down-2026-list-highguard-anthem/",
+        "date": "2026"
+      },
+      {
+        "title": "2026 live ops trends: Templatisation, personalisation and AI — PocketGamer.biz (AI = backend tooling, not player-facing live content)",
+        "url": "https://www.pocketgamer.biz/2026-live-ops-trends-templatisation-personalisation-and-ai/",
+        "date": "2026"
+      },
+      {
+        "title": "Legal Regulation of Game Gacha in Japan — Lexology (kompu-gacha banned 2012; 2024 minor-monetization scrutiny)",
+        "url": "https://www.lexology.com/library/detail.aspx?g=9207df10-a8a2-4f67-81c3-6a148a6100e2",
+        "date": "2025"
+      },
+      {
+        "title": "オンラインゲームの課金トラブルにご注意ください — 消費者庁 (minors' purchases voidable; 子供の射幸心 scrutiny)",
+        "url": "https://www.caa.go.jp/policies/policy/consumer_policy/caution/caution_022/",
+        "date": "2024"
+      },
+      {
+        "title": "Professor Layton and the New World of Steam delayed until 2026 — Nintendo Life (premium one-time purchase, no live-ops by design)",
+        "url": "https://www.nintendolife.com/news/2025/09/professor-layton-and-the-new-world-of-steam-has-been-delayed-until-2026",
+        "date": "2025-09-25"
+      },
+      {
+        "title": "教科化で広がる英検チャレンジ、小学生の準2級受験者が10年で2倍 — ReseEd (375,991 小学生 takers FY2024; growing demand)",
+        "url": "https://reseed.resemom.jp/article/2025/08/20/11524.html",
+        "date": "2025-08-20"
+      }
+    ]
+  }
+}

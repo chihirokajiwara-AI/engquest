@@ -1,0 +1,140 @@
+{
+  "summary": "Master 英検 completely (all 7 grades, all skills, scoring, 2024 reform, market) + audit our content gaps → a 英検-pass-specialist build plan",
+  "agentCount": 5,
+  "logs": [
+    "4 experts mastering 英検 (spec, market, pass-efficacy, our gaps) from primary sources…",
+    "Synthesizing the 英検-specialist spec + gap plan from 4 masters…"
+  ],
+  "result": {
+    "eikenReference": "CURRENT 英検 SPEC (post-2024 reform + 2025 新設 準2級プラス) — verified eiken.or.jp + 旺文社英語の友/ESLclub, accessed 2026-06-06.\n\nGRADES NOW: 5級・4級・3級・準2級・準2級プラス・2級・準1級・1級 (8 grades; 準2級プラス first held 2025-05, first new grade in 31 yrs).\n\nPER-GRADE STRUCTURE / 一次 大問:\n• 5級 (CEFR A1, vocab ~600): 筆記25分 — 大問1 語句空所15 / 大問2 会話文5 / 大問3 語句整序5 = 25問. NO writing. Listening ~20分 第1部10/第2部5/第3部10=25. Speaking=録音式 約3分, 別判定(一次に非算入).\n• 4級 (A1, ~1,300): 筆記35分 — 大問1 15/大問2 5/大問3 整序5/大問4 長文10 = 35問. NO writing. Listening ~30分 3部構成. Speaking=録音式 約4分, 別判定.\n• 3級 (A1-A2, ~2,100): 2024で50→65分. 大問1 15/大問2 5/大問3 長文10 + WRITING 2題: Eメール(15-25語) + 意見論述. Listening 3部=30問. 二次 約5分: 音読(~30語)+No.1パッセージ質問+No.2/3イラスト+No.4/5受験者自身=5問+attitude (33点満点, 合格≈19).\n• 準2級 (A2, ~3,600): 2024で75→80分. Reading 37→29問(大問1 5問削減, 大問3B 3問削減) + WRITING 2題: Eメール(40-50語) + 意見論述. Listening 2部構成. 二次 約6分: イラスト2枚, 黙読20秒→音読, 5問. (二次合格率 ~80%, ここで二次が落とし始める).\n• 準2級プラス (A2上-B1, 2025新設): 筆記85分 — Reading ~28-31問 + WRITING 2題: 要約 + 意見論述. Listening ~25分 第1部15/第2部15=30. 二次 約7分.\n• 2級 (A2-B1, ~5,000): 筆記85分. Reading 38→31問: 大問1 17/大問2 長文空所A3+B3=6/大問3 内容一致8 + WRITING 2題: 要約(45-55語) + 意見論述. Listening 第1部15/第2部15=30. 二次 約7分: No.1パッセージ/No.2イラスト展開(考慮20秒)/No.3カード意見/No.4一般意見.\n• 準1級 (B2, ~7,500): 筆記100分. Reading 41→31問: 大問1 18/大問2 長文空所/大問3 内容一致 + WRITING 2題: 要約(60-70語) + 意見論述. Listening ~30分. 二次 約8分: 自由会話→4コマナレーション(~2分)→No.1-4質問.\n\nWRITING TASK MAP: Eメール=3級/準2級. 要約=準2級プラス/2級/準1級/1級. 意見論述=3級〜1級 全級(2題目). 評価観点: Eメール=内容/語彙/文法(3観点); 要約・論述=内容/構成/語彙/文法(4観点); 各観点×4点.\n\nCSE スコア (満点 / 一次合格 / 二次合格): 5級 850/419(一次のみ) / 4級 1000/622(一次のみ) / 3級 2200/合格1456(一次1103+二次353) / 準2級 2400/1728(1322+406) / 準2級プラス 2500/1829(1402+427) / 2級 2600/1980(1520+460) / 準1級 3000/2304(1792+512). 技能別満点(各技能均等配分): 準1級750/2級650/準2級プラス625/準2級600/3級550/4級500/5級425. KEY RULE: post-2024 CSE配点は技能均等 — Reading満点でWriting/Speaking 0点では合格不可 (旧raw配点では可能だった). 一技能が極端に低いと一次落ち.\n\nGRAMMAR LADDER (易→難): 5級=be/一般動詞現在,三単現,現在進行,can,命令文,複数,WH疑問. 4級=過去/過去進行,will/be going to,不定詞,動名詞,比較,接続詞,There is. 3級=現在完了,受動態,不定詞形容詞用法,間接疑問,関係代名詞,分詞形容詞用法. 準2級=過去完了,関係副詞,使役/知覚動詞,仮定法過去基礎,分詞構文基礎. 準2級プラス/2級=仮定法,分詞構文,強調構文,倒置,無生物主語,抽象語彙. 準1級=仮定法全般,高度な倒置/省略,コロケーション/句動詞,アカデミック語彙~7,500,パラフレーズ.",
+    "marketVerdict": "CONFIRMED — CEO's「英検 stays hot」thesis is quantitatively validated. (1) Huge & durable: ~4,489,999 英検 applicants FY2024 (≈4.5M, plateaued after +22% 2020→2023), and A-KEN's exact demo grows fastest — 小学生 375,991 (1.5×/10yr), 高校生 1,331,710 (1.8×), 高校生準1級 198,863 (≈8×/10yr): acquisition moving DOWN in age, UP in grade across the whole 5級→準1級 ladder. (2) Non-discretionary demand = the moat: 517 universities use 英検 in 2025入試; in 2024一般選抜 462 universities (60.6%) used an external English test and 90.0% of those students chose 英検 — it's admissions currency, not \"nice to have.\" (3) Two vacuums to seize NOW: スタディサプリ ENGLISH for KIDS exits 2026-06-30 (premium kids-English WITHOUT exam-pass thesis abandoned) and the OFFICIAL companion スタディギア for EIKEN already died 2024-03 — no kids-focused, game-wrapped, exam-pass product occupies the open quadrant (kids 6-15 × reliably-passes × narrative game × adaptive-SRS × parent-visibility); mikan=adults/vocab, 英語の友=books. The 3×/yr cadence (2025: 6/1, 10/5, 1/25) + near-monthly S-CBT + 準会場 windows = recurring deadlines that justify the ¥1,480/mo subscription + power the FSRS/streak spine.",
+    "gapRanked": [
+      {
+        "severity": "P0-CRITICAL",
+        "gap": "Vocab DB distractors 100% corrupted — all 10,531 items (5級600..準1級4,500) carry JAPANESE distractors (verified: cat → [いぬ,さかな,とり]). vocab_grammar_practice_screen builds the 大問1 cloze as [word.word, ...distractors], rendering an ENGLISH target against 3 JAPANESE options → trivially answerable at EVERY grade. This is the exact failure the content-qa gate exists to stop. The one item type that IS wired is broken.",
+        "fix": "Regenerate all 10,531 distractors as same-POS, grade-appropriate ENGLISH words via the content-qa subagent gate; AND redesign the item from a recall-cloze (blank the noun in its own example) to a real 英検 大問1 grammar/collocation/idiom cloze where all 4 English options are plausible same-POS. Add a CI assertion: 0 distractors may contain [ぁ-んァ-ヴ一-龠]."
+      },
+      {
+        "severity": "P0-CRITICAL",
+        "gap": "LISTENING = 0. Listening is ~33-50% of every 3級+ score (3級 30Q, 準2級プラス/2級 15+15=30Q). ExamSectionType.listening exists but NO grade config has a listening section; exam_practice_screen routes it to '準備中です'. Zero audio items, zero infra. Pass-prediction is meaningless without it.",
+        "fix": "Build audio item schema (第1部 応答選択/第2部 会話内容一致/第3部 文・イラスト内容一致), generate clips via existing Kokoro TTS pipeline, wire ExamSectionType.listening to a real player+4-choice screen. Seed each grade with the verified counts."
+      },
+      {
+        "severity": "P0-CRITICAL",
+        "gap": "WRITING = 0 implemented — the 2024 reform's defining addition is entirely absent. Config DEFINES writing sections but exam_practice_screen routes writing to '準備中です'. No essay editor, no 要約/Eメール tasks, no rubric, no AI grading. Writing is ~1/3 of CSE at 3級+ and the cheapest CSE points to gain (mechanical rubric).",
+        "fix": "Build a writing editor + Claude-graded rubric against official 観点: Eメール(3級15-25/準2級40-50語; check BOTH underlined questions answered, word count, opening line; 内容/語彙/文法) and 要約(準2級プラス/2級45-55/準1級60-70語; main-points coverage, no verbatim copying; 内容/構成/語彙/文法). This is the clearest premium-justifying, mikan-beating, スタサプ-killing differentiator."
+      },
+      {
+        "severity": "P1-HIGH",
+        "gap": "二次試験 SPEAKING = 0 (voice/ is a demo pronunciation stub). 3級+ pass REQUIRES a separately-failed 二次 stage; 準2級 二次 pass-rate ~80% is where kids first fail, mostly from silence. Without 二次 the product literally cannot claim to make a kid PASS.",
+        "fix": "Build grade-specific record-and-respond 二次 simulators leveraging speech_to_text (T02, already added) + Claude: 音読 scoring → No.1-5/イラスト展開/4コマナレーション per grade → アティチュード 'never go silent, just try' coach (attitude is 3pts and rescues weak-grammar kids)."
+      },
+      {
+        "severity": "P1-HIGH",
+        "gap": "No CSE per-skill model, no mock-exam assembly, no 合格率 prediction, no per-大問 weakness analytics — yet the sole KPI is 'passes 英検'. App tracks '% correct overall', not per-skill CSE, so it cannot name the LIMITING skill (the #1 reason kids fail under均等-CSE rules).",
+        "fix": "Build a per-skill CSE estimator + a full timed 一次 mock in real 大問 proportions (e.g. 2級 R31+W2+L30) that outputs a 合格率 vs the FIXED 合格基準 (2級一次1520/満点2600≈77%) and routes the kid to the weakest skill. Pace FSRS to the limiting skill + the 3×/yr 試験日 countdown. Parent dashboard frames progress as 'predicted 合格 for 第N回'."
+      },
+      {
+        "severity": "P1-HIGH",
+        "gap": "Item banks are DEMO-sized, not prep banks: ~18 reading passages and 16 word-ordering problems TOTAL across all grades, hard-coded; ~20 quest nodes/grade ≈ one 大問1's worth. Exhausted in one sitting, never regenerate — cannot support repeated mock attempts.",
+        "fix": "Scale to dozens of fresh-form items per 大問 per grade (generated via content-qa-gated pipeline), pooled for re-attempts. Deepen the high-volume, high-anxiety 'cliff' grades 協会 itself flagged: 3級/準2級/準2級プラス/2級 (準2級→2級 takes ~2yr vs ~1yr others)."
+      },
+      {
+        "severity": "P2-MEDIUM",
+        "gap": "Spec source-of-truth is stale/incomplete: 準2級プラス (2025-new, 要約-bearing) has a quest town but is ABSENT from kEikenExams; no config carries Listening or 二次 counts; question counts predate verification.",
+        "fix": "Add 準2級プラス to kEikenExams; add Listening + Writing + Speaking section defs with the verified 2025-26 counts per grade so every screen can be built against an accurate, current spec. First-mover edge: no incumbent has mature 準2級プラス content."
+      },
+      {
+        "severity": "P2-MEDIUM",
+        "gap": "Existing quest nodes labeled 'Writing Eメール' (quest_data.dart ~1168,1475) and '二次面接 イラスト描写' (~1198) are 4-choice MCQ awareness items — they teach ABOUT writing/speaking but produce no learner output and no grading. Mislabeled as practice.",
+        "fix": "Re-label honestly as awareness/intro nodes; route the actual productive practice to the new Writing/Speaking engines so the retention spine and the pass-machinery are not conflated."
+      }
+    ],
+    "topPriorities": [
+      "1. UNBLOCK 大問1 (1-2 days): regenerate all 10,531 vocab distractors as same-POS English via the content-qa gate + add anti-Japanese CI assertion, and convert the recall-cloze into a real 英検 grammar/collocation cloze. This is the only wired item type and it is currently broken — fix before anything else.",
+      "2. BUILD WRITING ENGINE (highest ROI for the pass KPI): Claude-graded Eメール (3級/準2級) + 要約 (準2級プラス/2級/準1級) on the official 観点. Absent today, ~1/3 of CSE, cheapest points to gain, and the single most defensible AI-graded differentiator vs mikan/英語の友 — this is precisely the thesis スタサプKIDS lacked.",
+      "3. BUILD LISTENING (~half the score, 0 today): audio item schema + 第1部/2部/3部 items generated via existing Kokoro TTS, wired to a real player screen. Pass-prediction is meaningless until listening exists.",
+      "4. BUILD CSE PER-SKILL MODEL + FULL TIMED MOCK → 合格率 PREDICTION naming the limiting skill, scored vs the fixed 合格基準. This operationalizes the sole KPI and reframes the parent dashboard as 'predicted 合格 for 第N回'.",
+      "5. BUILD 二次 SPEAKING SIMULATOR (record-and-respond + アティチュード 'never go silent' coach via speech_to_text+Claude), per-grade. Required for any 3級+ pass claim; 準2級 二次 is where kids first fail.",
+      "6. SCALE DEMO BANKS → PREP BANKS (dozens of fresh-form items/大問/grade, content-qa-gated), deepest on the cliff grades 3級/準2級/準2級プラス/2級; add 準2級プラス to kEikenExams and fix the spec source-of-truth with verified 2025-26 counts."
+    ],
+    "shellServesPass": "The Layton + Duolingo shell is the RETENTION/ADHERENCE spine that gets a 6-15yo to do enough reps to actually pass — but it must wrap the exam-pass machinery, not replace it. (a) Layton-style コトバ探偵 painted adventure: every 英検 item is delivered as a ナゾ thrown by an NPC, which makes the hardest, most-skipped item types (grammar cloze, 要約, 二次 Q&A) feel like solving a mystery rather than drilling — critical because kids fail on the skills they avoid practicing (writing/speaking). Story progression should map 1:1 to the grade ladder and to 大問 coverage so 'finishing the town' = 'covered every section of that grade'. (b) Duolingo-style async spine — streak + FSRS spaced review + parent dashboard, explicitly NO gacha/PvP — converts the 3×/yr cadence into daily habit: the streak and FSRS pacing are aimed at the 試験日 countdown (第1回 6/1, 第2回 10/5, 第3回 1/25), and FSRS targets the CSE-LIMITING skill, not just vocab, so daily play actively closes the gap that decides pass/fail. (c) The parent dashboard is the willingness-to-pay engine: it must surface 'predicted 合格 for the next sitting' and 'weakest skill blocking the pass', matching the parent's own 3×/yr mental model and justifying ¥1,480/mo against a concrete admissions outcome. Net: the shell is the delivery+retention layer; the moat is the writing/listening/二次/mock+合格予測 engine it carries. The shell makes kids show up; the CSE machinery makes them pass.",
+    "sources": [
+      {
+        "title": "2024年度 実用英語技能検定(英検) 問題形式リニューアルサイト｜日本英語検定協会(公式)",
+        "url": "https://www.eiken.or.jp/eiken/2024renewal/",
+        "date": "2026-06-06"
+      },
+      {
+        "title": "新設級「準2級プラス」最新情報 / データからわかる新設の意義（PDF・英検公式）",
+        "url": "https://www.eiken.or.jp/eiken/info/2025/pdf/20250418_info_eikenp2plus.pdf",
+        "date": "2026-06-06"
+      },
+      {
+        "title": "準2級プラス 試験内容（英検公式）",
+        "url": "https://www.eiken.or.jp/eiken/exam/grade_p2plus/",
+        "date": "2026-06-06"
+      },
+      {
+        "title": "英検CSEスコアでの合否判定方法について（英検公式）",
+        "url": "https://www.eiken.or.jp/eiken/result/eiken-cse_admission.html",
+        "date": "2026-06-06"
+      },
+      {
+        "title": "受験の状況（英検公式統計）— FY2024 志願者4,489,999",
+        "url": "https://www.eiken.or.jp/eiken/about/situation/",
+        "date": "2026-06-06"
+      },
+      {
+        "title": "2025年度 試験日程（英検公式）— 3×/年 確認",
+        "url": "https://www.eiken.or.jp/eiken/schedule/2025-examinee.html",
+        "date": "2026-06-06"
+      },
+      {
+        "title": "高校生133万人が英検に挑戦、準1級受験者が10年で8倍に｜ReseEd（英検協会 統合報告書2025）",
+        "url": "https://reseed.resemom.jp/article/2025/08/21/11533.html",
+        "date": "2026-06-06"
+      },
+      {
+        "title": "教科化で広がる英検チャレンジ、小学生の準2級受験者が10年で2倍｜ReseEd（統合報告書2025）",
+        "url": "https://reseed.resemom.jp/article/2025/08/20/11524.html",
+        "date": "2026-06-06"
+      },
+      {
+        "title": "『スタディサプリENGLISH for KIDS』サービス終了のお知らせ（リクルート press 2025-04-07）",
+        "url": "https://www.recruit.co.jp/newsroom/pressrelease/2025/0407_15613.html",
+        "date": "2026-06-06"
+      },
+      {
+        "title": "大学受験で英検が利用できる大学一覧【2026年入試】（河合塾Keinetデータ／塾選）— 517大学・60.6%・90.0%",
+        "url": "https://bestjuku.com/shingaku/s-article/22713/",
+        "date": "2026-06-06"
+      },
+      {
+        "title": "英検CSEスコアとは：満点/合格基準一覧｜旺文社 英語の友",
+        "url": "https://eigonotomo.com/eiken/eiken_cse",
+        "date": "2026-06-06"
+      },
+      {
+        "title": "英検一次試験の合格点ライン（一次/二次内訳）｜ESL club",
+        "url": "https://eslclub.jp/blog/286/",
+        "date": "2026-06-06"
+      },
+      {
+        "title": "英検二次試験(面接)の合格点・配点・合格率（33点満点/合格19）｜ESL club",
+        "url": "https://eslclub.jp/blog/155/",
+        "date": "2026-06-06"
+      },
+      {
+        "title": "英検対策アプリおすすめランキング2026（スタディギア2024-03終了・mikan・英語の友）｜Weblio",
+        "url": "https://eikaiwa.weblio.jp/ninja-eikaiwa/eiken-app",
+        "date": "2026-06-06"
+      },
+      {
+        "title": "コード検証（本リポジトリ）: quest_data.dart 2,298行/151ノード, exam_practice_screen.dart L172-176 listening/writing/speaking→'準備中です', eiken5_vocab.json 600/600 Japanese distractors",
+        "url": "file:///Users/openclaw/dev/engquest-flutter/lib/features/exam_practice/exam_practice_screen.dart",
+        "date": "2026-06-06"
+      }
+    ]
+  }
+}
