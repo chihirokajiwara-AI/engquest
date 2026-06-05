@@ -306,12 +306,6 @@ class _AppEntryPointState extends State<_AppEntryPoint> {
   bool _loading = true;
   bool _started = false; // title screen shows until the player taps はじめる
 
-  /// The age to route into [WorldMapScreen] with.  Sourced either from
-  /// persisted prefs (returning user) or directly from the just-completed
-  /// [OnboardingResult] (new user) to avoid any read-after-write race on the
-  /// storage layer.  Defaults to 8 until prefs are loaded.
-  int _childAge = 8;
-
   @override
   void initState() {
     super.initState();
@@ -325,27 +319,18 @@ class _AppEntryPointState extends State<_AppEntryPoint> {
     if (mounted) {
       setState(() {
         _onboardingComplete = complete;
-        // For returning users, read the persisted age now that prefs are warm.
-        if (complete) _childAge = OnboardingStorage.ageYears;
         _loading = false;
       });
     }
   }
 
   Future<void> _handleOnboardingComplete(OnboardingResult result) async {
-    // Persist the result, then transition.  We must await the write so the
-    // synchronous [OnboardingStorage.ageYears] getter (and any later route
-    // rebuild) reflects the chosen age — otherwise the WorldMap/Battle vocab
-    // filter falls back to the default age 8 on the very first session, which
-    // is exactly when age-appropriate filtering matters most. We also pass the
-    // age directly from [result] so the first render is correct regardless of
-    // storage timing.
+    // Persist the result (await the write so the WorldMap/Battle vocab filter,
+    // which reads OnboardingStorage.ageYears later, sees the chosen age rather
+    // than the age-8 default on the very first session), then enter the quest.
     await OnboardingStorage.save(result);
     if (!mounted) return;
-    setState(() {
-      _childAge = result.ageYears;
-      _onboardingComplete = true;
-    });
+    setState(() => _onboardingComplete = true);
   }
 
   @override
@@ -381,7 +366,11 @@ class _AppEntryPointState extends State<_AppEntryPoint> {
       return QuestTitleScreen(onStart: () => setState(() => _started = true));
     }
     if (_onboardingComplete) {
-      return DailyHomeScreen(childAge: _childAge);
+      // Start drops the player straight into the ADVENTURE — the quest journey
+      // map (level-select if no level saved yet, else the town path), NOT the
+      // daily-home status hub. A child taps はじめる to PLAY, not to read stats.
+      // (DailyHomeScreen stays a retention hub for later, reachable separately.)
+      return const QuestMapScreen();
     }
     return OnboardingFlow(onComplete: _handleOnboardingComplete);
   }
