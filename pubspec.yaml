@@ -56,6 +56,7 @@ flutter:
     - assets/audio/a1/
     - assets/audio/phonics/
     - assets/audio/quiz/
+    - assets/audio/listening/
     - assets/audio/eiken5/
     - assets/audio/eiken4/
     - assets/audio/eiken3/

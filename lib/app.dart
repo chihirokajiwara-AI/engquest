@@ -13,6 +13,9 @@ import 'package:engquest/features/quest/prologue_screen.dart';
 import 'package:engquest/features/quest/battle/quest_town_battle_flow.dart';
 import 'package:engquest/features/quest/quest_data.dart';
 import 'package:engquest/features/exam_practice/exam_practice_screen.dart';
+import 'package:engquest/features/exam_practice/listening_practice_screen.dart';
+import 'package:engquest/features/exam_practice/writing_practice_screen.dart';
+import 'package:engquest/features/exam_practice/eiken_exam_config.dart';
 import 'package:engquest/features/achievements/achievements_screen.dart';
 import 'package:engquest/features/parent_dashboard/parent_dashboard_screen.dart';
 import 'package:engquest/features/home/daily_home_screen.dart';
@@ -336,6 +339,118 @@ Widget _previewFor(String? name) {
       return const VoiceScreen();
     case 'exam':
       return const ExamPracticeScreen(eikenGrade: '5');
+    case 'writing':
+      // Preview: 英検3級 Eメール返信 — the simplest task type.
+      return WritingPracticeScreen(
+        eikenGrade: '3',
+        section: const ExamSection(
+          id: '3_w1',
+          nameJa: '筆記4: ライティング（Eメール）',
+          nameEn: 'Writing: Email Reply',
+          type: ExamSectionType.writing,
+          questionCount: 1,
+          timeLimitMinutes: 15,
+          description: 'Preview',
+        ),
+      );
+    case 'writing2':
+      // Preview: 英検2級 要約
+      return WritingPracticeScreen(
+        eikenGrade: '2',
+        section: const ExamSection(
+          id: '2_w1',
+          nameJa: '筆記4: ライティング（要約＋意見）',
+          nameEn: 'Writing: Summary + Opinion',
+          type: ExamSectionType.writing,
+          questionCount: 2,
+          timeLimitMinutes: 30,
+          description: 'Preview',
+        ),
+      );
+    case 'writingp1':
+      // Preview: 英検準1級 要約
+      return WritingPracticeScreen(
+        eikenGrade: 'pre1',
+        section: const ExamSection(
+          id: 'p1_w1',
+          nameJa: '筆記4: ライティング（要約＋意見）',
+          nameEn: 'Writing: Summary + Opinion',
+          type: ExamSectionType.writing,
+          questionCount: 2,
+          timeLimitMinutes: 30,
+          description: 'Preview',
+        ),
+      );
+    case 'listening':
+      // Preview: 英検5級 リスニング (all 3 parts)
+      return ListeningPracticeScreen(
+        eikenGrade: '5',
+        section: const ExamSection(
+          id: '5_l',
+          nameJa: 'リスニング (第1部〜第3部)',
+          nameEn: 'Listening (Parts 1–3)',
+          type: ExamSectionType.listening,
+          questionCount: 25,
+          timeLimitMinutes: 20,
+          description: 'Preview',
+        ),
+      );
+    case 'listening4':
+      // Preview: 英検4級 リスニング
+      return ListeningPracticeScreen(
+        eikenGrade: '4',
+        section: const ExamSection(
+          id: '4_l',
+          nameJa: 'リスニング (第1部〜第3部)',
+          nameEn: 'Listening (Parts 1–3)',
+          type: ExamSectionType.listening,
+          questionCount: 30,
+          timeLimitMinutes: 30,
+          description: 'Preview',
+        ),
+      );
+    case 'listening3':
+      // Preview: 英検3級 リスニング
+      return ListeningPracticeScreen(
+        eikenGrade: '3',
+        section: const ExamSection(
+          id: '3_l',
+          nameJa: 'リスニング (第1部〜第3部)',
+          nameEn: 'Listening (Parts 1–3)',
+          type: ExamSectionType.listening,
+          questionCount: 30,
+          timeLimitMinutes: 25,
+          description: 'Preview',
+        ),
+      );
+    case 'listeningp2':
+      // Preview: 英検準2級 リスニング
+      return ListeningPracticeScreen(
+        eikenGrade: 'pre2',
+        section: const ExamSection(
+          id: 'p2_l',
+          nameJa: 'リスニング (第1部〜第2部)',
+          nameEn: 'Listening (Parts 1–2)',
+          type: ExamSectionType.listening,
+          questionCount: 30,
+          timeLimitMinutes: 25,
+          description: 'Preview',
+        ),
+      );
+    case 'listening2':
+      // Preview: 英検2級 リスニング
+      return ListeningPracticeScreen(
+        eikenGrade: '2',
+        section: const ExamSection(
+          id: '2_l',
+          nameJa: 'リスニング (第1部〜第2部)',
+          nameEn: 'Listening (Parts 1–2)',
+          type: ExamSectionType.listening,
+          questionCount: 30,
+          timeLimitMinutes: 25,
+          description: 'Preview',
+        ),
+      );
     case 'achievements':
       return const AchievementsScreen();
     case 'parent':

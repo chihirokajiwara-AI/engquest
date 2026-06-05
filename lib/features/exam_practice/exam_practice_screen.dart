@@ -11,9 +11,11 @@ import 'package:flutter/material.dart';
 import '../quest/ui/dq_ui.dart';
 import 'conversation_practice_screen.dart';
 import 'eiken_exam_config.dart';
+import 'listening_practice_screen.dart';
 import 'reading_practice_screen.dart';
 import 'vocab_grammar_practice_screen.dart';
 import 'word_ordering_practice_screen.dart';
+import 'writing_practice_screen.dart';
 
 class ExamPracticeScreen extends StatelessWidget {
   const ExamPracticeScreen({
@@ -169,8 +171,26 @@ class ExamPracticeScreen extends StatelessWidget {
             ),
           ),
         );
-      case ExamSectionType.listening:
       case ExamSectionType.writing:
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => WritingPracticeScreen(
+              eikenGrade: eikenGrade,
+              section: section,
+            ),
+          ),
+        );
+      case ExamSectionType.listening:
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => ListeningPracticeScreen(
+              eikenGrade: eikenGrade,
+              section: section,
+            ),
+          ),
+        );
       case ExamSectionType.speaking:
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('${section.nameJa}は準備中です')),
