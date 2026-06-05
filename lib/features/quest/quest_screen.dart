@@ -3,6 +3,8 @@
 // intro (narration box) → villager dialogue + English quiz (NPC portrait,
 // dialogue box, command-window choices) → cleared (声の石 reward).
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../core/audio/audio_cue_service.dart';
@@ -41,6 +43,12 @@ class _QuestScreenState extends State<QuestScreen> {
   int? _picked;
   bool _revealed = false;
 
+  // Blend-letter sweep: the c→a→t tiles light up in turn while the segmented
+  // blend clip plays (-1 = none / whole word). Driven from the audio gesture so
+  // the highlight roughly tracks "c…a…t……cat".
+  int _activeLetter = -1;
+  Timer? _sweepTimer;
+
   @override
   void initState() {
     super.initState();
@@ -55,6 +63,7 @@ class _QuestScreenState extends State<QuestScreen> {
 
   @override
   void dispose() {
+    _sweepTimer?.cancel();
     _cue.dispose();
     super.dispose();
   }
@@ -63,7 +72,37 @@ class _QuestScreenState extends State<QuestScreen> {
 
   /// Play the current step's auto-play clip. Only safe from a user-gesture
   /// chain (_start/_next/_choose). Best-effort; swallows errors.
-  void _autoPlayCurrent() => _cue.play(_enc.autoPlayAudio);
+  void _autoPlayCurrent() {
+    _cue.play(_enc.autoPlayAudio);
+    _sweepBlend();
+  }
+
+  /// Light the blend tiles c→a→t in turn, then hold the whole word and clear.
+  /// Approximate sync to the segmented clip (no per-segment timestamps); the
+  /// goal is the visual "tie the sounds together" cue, not frame-accuracy.
+  /// Safe for non-blend steps (resets the highlight and returns).
+  void _sweepBlend() {
+    _sweepTimer?.cancel();
+    final step = _enc;
+    if (step is! BlendWord) {
+      if (_activeLetter != -1) setState(() => _activeLetter = -1);
+      return;
+    }
+    final n = step.letters.length;
+    setState(() => _activeLetter = 0);
+    var i = 0;
+    _sweepTimer = Timer.periodic(const Duration(milliseconds: 460), (t) {
+      i++;
+      if (i >= n) {
+        t.cancel();
+        _sweepTimer = Timer(const Duration(milliseconds: 520), () {
+          if (mounted) setState(() => _activeLetter = -1);
+        });
+      } else if (mounted) {
+        setState(() => _activeLetter = i);
+      }
+    });
+  }
   bool get _hasEncounters => widget.town.encounters.isNotEmpty;
   int get _townIdx => kQuestTowns.indexWhere((t) => t.id == widget.town.id);
   String get _stoneName =>
@@ -183,7 +222,11 @@ class _QuestScreenState extends State<QuestScreen> {
                 npcEmoji: s.npcEmoji,
                 npcImage: _npcImage(s.npcName),
                 teachJa: s.teachJa,
-                onReplay: () => _cue.play(s.autoPlayAudio),
+                activeLetter: _activeLetter,
+                onReplay: () {
+                  _cue.play(s.autoPlayAudio);
+                  _sweepBlend();
+                },
               ),
             TeachWord s => PhonicsLetterCard(
                 glyph: s.word,

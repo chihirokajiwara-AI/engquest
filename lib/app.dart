@@ -255,8 +255,15 @@ Widget _previewFor(String? name) {
       return const QuestMapScreen();
     case 'quest':
       return QuestScreen(town: kQuestTowns.first);
+    case 'quest5t': // 英検5級 Phase A — first TeachSound (/s/) step
+      return QuestScreen(town: kQuestTowns[0], previewEncounterIndex: 0);
     case 'quest5':
       return QuestScreen(town: kQuestTowns[0], previewEncounterIndex: 3);
+    case 'quest5q': // 英検5級 — first grammar Quiz step (Phase C handoff)
+      return QuestScreen(
+        town: kQuestTowns[0],
+        previewEncounterIndex: kQuestTowns[0].encounters.indexWhere((s) => s is QuestEncounter),
+      );
     case 'quest4':
       return QuestScreen(town: kQuestTowns[1], previewEncounterIndex: 9);
     case 'quest3':
