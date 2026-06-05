@@ -1,0 +1,197 @@
+{
+  "summary": "Harsh expert audit of the AS-BUILT A-KEN Quest demo benchmarked against the 2026 competitive bar (英検/kids-English/game-learning apps): defects + honest verdict",
+  "agentCount": 10,
+  "logs": [
+    "Phase 1 — researching the 2026 competitive bar (4 angles, dated sources)…",
+    "Synthesizing the competitive bar from 4 angles…",
+    "Phase 3 — auditing the AS-BUILT product against the bar (4 harsh critics)…",
+    "Final synthesis — honest verdict + severity-ranked gaps…"
+  ],
+  "result": {
+    "competitiveBar": "In 2026 the kids/英検 learning-game category has settled on five pillars A-KEN does not yet meet. (1) Learning is a VERB inside a game, not the whole screen: Prodigy (150M registered users, free-core + US$8.95/mo Premium, KidEdTools 2026-01-09) makes a correct answer refill Magic Points to cast a spell — answering IS attacking; Duolingo Adventures (2024-09-24) puts you AS a character on a 3D board with diegetic error handling. (2) A serialized, voiced, animated story pulls you forward: the DIRECT 英検 competitor AIえいご マグナとふしぎの少女 (Mintflag) ships a 39-episode fully-voiced 3DCG anime, 70+ hrs, 30+ A-list seiyuu, 英検5級→2級, AI pronunciation, 50-player live battles — completely FREE, #1 App Store kids category, 150–250k users (PR TIMES 2025-04-27, 4Gamer 2025-07-20). (3) A long adaptive spine of VARIED animated micro-games: トド英語/Enuma (XPRIZE winner) ships 26 levels × 700 adaptive courses × 3,500+ games, ~¥938–1,407/mo, 200万 DL Japan (online-english.enjoy 2026-02); Lingokids 4,000+ activities + broadcast-grade IP, 168M DL (Kidscreen 2025-05-06). (4) A daily-retention engine — streak + leagues + friend quests drove Duolingo to 56.5M DAU, +21% YoY (SEC 8-K Q1 FY2026; Deconstructor of Fun 2025-04-14). (5) A meta-progression/reward economy: Prodigy has 31 pets, gacha, battle-pass; 英語物語 has 1,500+ collectible cards, gacha, 10-player raids on the same 4-choice quiz (1.5M DL). And the 英検 incumbent mikan (10M+ DL, App Store Education #1, 4.7★, ¥1,800/mo) owns A-KEN's sole value (pass 英検) with ~20k-word SRS decks. The bar is: a real game/story where, if you deleted the English, something playable still remains.",
+    "topCompetitors": [
+      "AIえいご マグナとふしぎの少女 (Mintflag) — the DIRECT 英検 story-RPG: 39-episode fully-voiced 3DCG anime (70+ hrs, 30+ A-list seiyuu), 英検5級→2級, AI pronunciation, 50-player live battles, FREE no-IAP, #1 kids category, 150–250k users. This is the exact product A-KEN claims to be, shipped at ¥0. (PR TIMES 2025-04-27, 4Gamer 2025-07-20)",
+      "Prodigy Math/English (Prodigy Education) — true educational MMORPG where answering a curriculum question casts the spell; 31 pets, gacha, battle-pass; 150M registered users, free-core + US$8.95/mo. The structural benchmark for 'learning embedded in an RPG verb.' (KidEdTools 2026-01-09)",
+      "トド英語 / Todo English (Enuma) — XPRIZE-winning kids-English: 26 levels × 700 adaptive courses × 3,500+ animated voiced mini-games, ~¥938–1,407/mo, 200万 DL Japan. Same price band, same demographic, the varied-micro-game spine A-KEN's single template can't touch. (online-english.enjoy 2026-02)",
+      "Duolingo (Adventures + Oct-2025 Titmouse anime) — the global production + retention ceiling: 56.5M DAU Q1 FY2026 (+21% YoY, SEC), streak/leagues/friend-quests, voiced animated recurring cast, diegetic error handling. Free tier out-produces A-KEN on animation, character, sound, narrative.",
+      "英語物語 (FreCre) — 'game-first' 英検/受験 collectible RPG: 1,500+ cards, gacha, party-building, co-op + 10-player raids, 50,000+ problems, 1.5M DL, free. Proves the SAME 4-choice node earns 'RPG' only when wrapped in collection + social meta-loops A-KEN entirely lacks. (app-liv 2025-07-01)",
+      "mikan — the 英検 incumbent on A-KEN's SOLE value: 10M+ DL, App Store Education #1, 4.7★, 英検5級→1級 audio decks, ~20,000 words, SRS, ¥1,800/mo. The credibility anchor A-KEN must beat on exam outcomes OR production, and currently beats on neither. (eigomonogatari 2025, mikan Help Center)",
+      "スタディギア for EIKEN (英検公式, FREE) + 旺文社 英語の友 (FREE) — official 英検 prep covering 準1〜5級, full 大問 + 二次対策, four-choice audio tests, at ¥0. A parent optimizing purely for a pass has no efficacy reason to pay ¥1,480 over these."
+    ],
+    "honestVerdict": "No — A-KEN Quest is NOT world-class, and the CEO's read (\"structure & progression is WAY too low-level\") is correct and quantifiable. It is a competent, web-safe, tastefully-skinned visual-novel multiple-choice quiz wearing a Dragon-Quest costume — roughly ONE FULL PRODUCT-GENERATION behind every benchmark. All four independent audits landed on 3/10 and the code confirms why. Apply the acid test: delete the English and only a portrait, a level-select menu, and a node-list remain. Hard evidence verified in the repo this session: 139 of 155 nodes (90%) are the IDENTICAL NPC-line + 4-text-button template; all 16 teach nodes (7 TeachSound + 5 BlendWord + 3 Phrase + 1 TeachWord) live in Town 1 ONLY, so mechanic depth INVERTS — towns 2–7 (英検4級→準1級) are six straight grades of one reused quiz with no teach-before-test. The \"world map\" is a ListView of grade buttons (quest_map_screen.dart:137), not a traversed world. The reward economy is one 声の石 gem per town (7 total) + a fanfare SFX; the loop awards ZERO XP despite a gamification system existing, the streak_service is orphaned (app.dart routing explicitly bypasses the retention hub), and there is no currency/collection/gacha/multiplayer/daily-quest. There is no fail state, HP, timer, or score — you literally cannot lose, so the gem is unearned. WORST: the ONE genuine differentiator — audio-first phonics ear-discrimination — is SILENT: zero phoneme_*.mp3 files exist on disk (only blend_*/phrase_*), so a 6-year-old non-reader faces two silent speaker buttons distinguished only by romaji they can't read, at first contact. On top of this is a narrative-consistency crisis: 16 lines still say 魔王/まおう (including the finale nameplate) directly contradicting the recast that サイレント is \"not a demon to be slain.\" Meanwhile the direct 英検 competitor (Magna) ships a 39-episode voiced anime FREE, the structural benchmark (Prodigy) makes answering cast a spell, and the trusted drill (mikan, ¥1,800) out-credentials A-KEN on exam outcomes. At ¥1,480/mo this is strategically stuck in the middle: not the best drill, not the best game. The SATPIN phonics arc is genuinely good pedagogy and the one real asset — but it is silent, confined to 1 of 7 towns, and invisible to a parent comparing store screenshots against an animated, voiced competitor. Do not raise the price or scale marketing against free, more-produced rivals in this state.",
+    "scoreOutOf10": 3,
+    "gaps": [
+      {
+        "severity": "critical",
+        "area": "Signature mechanic is SILENT — phoneme audio does not exist on disk",
+        "problem": "The product's SOLE differentiator (audio-first ear-discrimination) is non-functional at first contact. All 7 TeachSound steps and prologue panel 1 reference audio/phonics/phoneme_{s,a,t,c,o,g}.mp3, but `ls assets/audio/phonics/` shows ZERO phoneme_*.mp3 (only blend_*/phrase_*). VERIFIED in repo. AudioCueService.play() swallows the error silently, so a 6yo non-reader taps two silent speaker buttons distinguishable only by romaji they cannot read. The narrative literally says 'only small sounds remain: s... a... t...' while playing silence. Additionally ~24/154 (15%) of quiz option/npcLine strings have a 🔊 affordance with no matching clip.",
+        "fix": "Record/synthesize the 6–9 pure phoneme clips (/s/,/a/,/t/,/p/,/i/,/n/,/c/,/o/,/g/) as clipped single-phoneme utterances (stops without trailing schwa). Add a build-time asset-contract test that fails CI if any autoPlayAudio/audioAsset/option-label key has no matching file, and make AudioCueService assert on missing assets in debug. Do not render the 🔊 button when the clip is known-missing. Until recorded, gate the 5級 phonics town behind a flag rather than ship silent.",
+        "effort": "S — 1–2 days (record clips + CI asset-contract check); the mechanic and UI already exist."
+      },
+      {
+        "severity": "critical",
+        "area": "Core loop has no RPG verb — fails the 'delete the English' test",
+        "problem": "Every node is VN-skinned multiple-choice: NPC portrait + one line + 🔊 + 4 stacked text buttons. Answering does NOT power a verb the player owns — it advances a node counter (_index++). No character creation/customization, no battle, no exploration, no inventory, no agency beyond tapping the correct button. Prodigy makes answering refill Magic Points to cast a spell; Duolingo Adventures puts you AS a character deducing vocab from scene context. A-KEN is the exact naked-4-button node those products evolved away from a decade ago. Verified: quest_screen renders one template; no hp/score/combo/attack anywhere.",
+        "fix": "Introduce ONE owned RPG verb that consumes a correct answer as fuel. Minimum viable: a turn-based 'voice battle' where サイレント/the word-thief has HP, the only attack is 'speak/choose the word back,' and a correct answer deals damage scaled to speed/streak (Prodigy's model). Reuse existing QuestEncounter data — only the render layer + a battle state machine are new. Until a verb exists, this is not a game.",
+        "effort": "L — 2–4 weeks for one well-built verb wired across all node types."
+      },
+      {
+        "severity": "critical",
+        "area": "Mechanic depth INVERTS — 1 template × 7 towns, variety only in Town 1",
+        "problem": "Node census VERIFIED: 139 QuestEncounter quizzes vs 16 teach nodes (7 TeachSound + 5 BlendWord + 3 Phrase + 1 TeachWord), and ALL 16 teach nodes are in Town 1. Towns 2–7 (英検4級→準1級) collapse to a single reused 4-button template, 18–20 nodes each, for six straight grades — the game gets shallower exactly as the learner advances. There is no teach-before-test in 4級+: the very first 4級 node tests was/were cold. トド英語 ships 3,500+ different mini-games at the same price band; A-KEN ships 1 template.",
+        "fix": "Each grade introduces a NEW verb/micro-game AND a short voiced teach card before its graded items: e.g. 4級 listening-gap dictation, 3級 sentence-build drag (orphaned crafting module), 準2級 timed reading-skim, 2級 paraphrase battle, 準1級 speak-aloud boss (voice module exists). The voice/ and crafting/ dirs are already stubbed — wire them as per-town mechanics so depth grows with grade. Add a lightweight TeachGrammar step kind reusing the sealed-class dispatch.",
+        "effort": "L — 3–5 weeks (multiple mini-games + teach cards); can ship incrementally one grade at a time."
+      },
+      {
+        "severity": "critical",
+        "area": "No 英検-efficacy spine — FSRS/SRS, mock tests, coverage all orphaned",
+        "problem": "A-KEN's SOLE promise is 'pass 英検,' yet the playable loop surfaces NO spaced repetition (the FSRS engine exists but the quest screen never invokes it — words seen once, never re-scheduled), NO rank-up/mock exam to certify a grade, NO word-count/coverage arc a parent reads as 'on track for 4級.' It is a linear one-pass walkthrough. The FREE official スタディギア + 旺文社 英語の友 do the real exam structure for ¥0; mikan (¥1,800) has SRS + ~20k words. A parent optimizing for a pass has no efficacy reason to pay ¥1,480.",
+        "fix": "Wire the existing FSRS engine into the quest loop so weak/missed items resurface across sessions (the measurable efficacy lever, already built but orphaned). Add an end-of-town 模試 (mini-mock using the 英検 大問 structure T21–T24 reportedly built) that gates the 声の石 and outputs a '4級 合格率 XX%' readout. Surface a per-grade word/grammar coverage bar.",
+        "effort": "M — 1–2 weeks (engines exist; this is wiring + a mock-test screen + a progress bar)."
+      },
+      {
+        "severity": "critical",
+        "area": "No meta-progression, economy, or reason to return tomorrow; zero XP awarded",
+        "problem": "VERIFIED: clearing a town grants exactly one 声の石 + playLevelUp SFX; the loop awards ZERO XP despite a gamification system existing in core/gamification. No currency, collection, gacha, pets, battle-pass, seasonal/live-ops, or multiplayer. streak_service.dart EXISTS but is orphaned — app.dart routing (Title→Onboarding→Prologue→QuestMap→Quest) explicitly bypasses the DailyHomeScreen retention hub, confirmed by the in-code comment. The category's #1 DAU lever (streak, per Duolingo) is coded but unreachable. Nothing engineers a reason to open the app tomorrow except 'next quiz.'",
+        "fix": "P0 (cheap): award XP per correct answer (wire existing gamification into _choose) and surface the orphaned streak in the QuestMap header (daily 声 streak + today's quest). P1: add a spendable soft currency per node + a small collection (words you've 'given back' become collectible 声 cards) + one customization sink. Either wire streak_service in or delete it so it stops masquerading as a feature.",
+        "effort": "M — P0 (XP + streak surface) is 2–3 days; full economy/collection is 2–3 weeks."
+      },
+      {
+        "severity": "critical",
+        "area": "Narrative self-contradiction — the サイレント recast is half-shipped",
+        "problem": "VERIFIED: 16 lines in quest_data.dart still contain 魔王/まおう, directly contradicting the bible's headline promise that サイレント is 'not a 魔王, never slain.' This includes the very first 5級 town intro AND the finale NPC nameplate (npcName: '魔王サイレント') — a 'Demon King' label floating over the exact creature the game insists is a victim, not a demon. The story contradicts itself on the same screen. This is precisely the leakage the bible's own mandatory grep (bible:84) was meant to catch; it shipped anyway.",
+        "fix": "Run the mandated grep now (grep -nE '魔王|まおう|玉座|👑|prince|heir|救った' across lib/). Recast every '魔王サイレント' to a non-demon framing consistent with the finale (e.g. 'しずけさ サイレント' / 'こえを失ったもの'). Add the grep as a pre-commit content-qa check so this class of half-recast can never ship again. Launch blocker for narrative credibility, not polish.",
+        "effort": "S — half a day (string edits + a pre-commit grep gate)."
+      },
+      {
+        "severity": "high",
+        "area": "Map is a level-select menu, not a traversed world",
+        "problem": "VERIFIED: quest_map_screen.dart:137 is a ListView of 7 grade-labelled cards with a decorative trail line and _unlocked gating — a settings list cosplaying as a map. No avatar on it, no traversal, no between-town encounters, no exploration, no branching. The title 'ことばの勇者' and 'ぼうけんの地図' promise a DQ field; the player re-reads a menu. The level-skip picker also lets an advanced learner skip the only town with mechanic variety (phonics is 5級-only) straight into flat quizzes — their first experience is the most monotonous one.",
+        "fix": "Either (a) build a real traversable overworld with a moving avatar token and between-town encounters (the trail widget already exists at quest_map_screen.dart:248-420 — wire it as the default post-pick view), or (b) stop calling it a map and own that it's a curriculum spine. A line drawn between menu buttons reads as a fake and undercuts the premium price more than an honest menu would. Pick ONE and build it deep.",
+        "effort": "M–L — M for an honest visual map with a moving avatar; L for genuine between-town encounters."
+      },
+      {
+        "severity": "high",
+        "area": "Production value — emoji NPCs, missing scene art, no animation, palette clash",
+        "problem": "VERIFIED: only 3 of 7 scene PNGs exist (town_4, town_5, town_pre1); the other 4 towns silently fall back to a flat night gradient. NPCs are nameless roles (むらびと/もんばん) sharing recycled portraits with no recurrence or personality; the green slime emoji 🟢 stands in 7×; the climactic reward is a Unicode 💎. The only motion is a gem pop + fades. The title screen's warm parchment art clashes with the cold navy command-window of every in-game screen — the player crosses a visual seam at はじめる. Magna ships 30+ A-list seiyuu and 3DCG; Duolingo's cast has reactive per-state animation.",
+        "fix": "Generate the 4 missing scene PNGs; replace the 💎 emoji with real 声の石 art per stone color (palette already exists); give スラ + サイレント authored portraits in 2–3 emotional states and swap them reactively on correct/wrong; name and recur 2–3 NPCs across towns; reconcile title art to the in-game palette. You don't need anime — you need named, recurring, reactive faces and one consistent world.",
+        "effort": "M — 1–2 weeks of art generation + reactive-portrait wiring (the audit's other items unblock this)."
+      },
+      {
+        "severity": "medium",
+        "area": "No game tension — you cannot fail, lose, or underperform",
+        "problem": "VERIFIED: no hp/lives/timer/score/combo anywhere in quest_screen. A wrong answer flashes red or replays audio; you re-tap until correct, then advance. Every town outcome is 100% clear for every player, so the 声の石 is unearned because it cannot be missed. With no risk there is no reward — the opposite of an RPG.",
+        "fix": "Add bounded, kind stakes: a per-town accuracy/speed rank (★/★★/★★★) on the clear screen so performance is visible and replayable, and tie 声の石 luminosity or a bonus currency to first-try accuracy. Optional regenerating 'hearts' per session. Stakes can stay child-safe while making the gem mean something.",
+        "effort": "S — 2–3 days (track first-try accuracy, render a rank on clear)."
+      },
+      {
+        "severity": "medium",
+        "area": "'No-scold' assessment still breaks the fiction (non-diegetic red-on-wrong)",
+        "problem": "VERIFIED: for all 139 grammar/cloze QuestEncounter nodes (penalizeWrong=true) a wrong tap paints a red frame + ✕ (dq_ui.dart). The brief sells 'no-scold,' but a red box with an X IS a UI assessment break — the NPC stops being a character and becomes a graded test item the instant you answer. Duolingo Adventures handles errors diegetically ('Oh, did you mean…?', scene continues). 'No-scold' is only true for the 16 teach steps.",
+        "fix": "On in-fiction nodes, replace red-on-wrong with diegetic correction: the NPC reacts in-character ('ん…？ もういちど、ゆっくり言ってみて') and the line is re-voiced, no red box. Keep hard scoring/FSRS under the hood. Reserve overt red only for an explicitly-framed 'exam practice' mode. Cheap — audio + onCorrect text already exist.",
+        "effort": "S — 1–2 days (swap the wrong-state render path on graded nodes)."
+      },
+      {
+        "severity": "medium",
+        "area": "Dead/debug code wired into production routing + silent error-swallow",
+        "problem": "VERIFIED-adjacent: previewEncounterIndex ('Design-audit only') is wired into the production router (7 dev-preview QuestScreen entries in app.dart), increasing wrong-build leak surface. AudioCueService swallows ALL errors with no telemetry/assert — the root cause that let the missing-phoneme and 15%-missing-quiz-audio defects ship invisibly past QA.",
+        "fix": "Move preview routes behind a kDebugMode/flavor guard or strip them. Add an assert in debug + an analytics event in prod on AudioCueService asset-load failure so missing audio is loud in dev and measurable in prod.",
+        "effort": "S — half a day."
+      }
+    ],
+    "top5Priorities": [
+      "1. RECORD THE 6–9 PHONEME CLIPS + add a CI asset-contract test (effort S, ~1–2 days). The single differentiated mechanic is SILENT at first contact — zero phoneme_*.mp3 exist on disk and the error is swallowed. This is the cheapest critical fix and it un-bricks the one thing A-KEN does that mikan/Magna don't. Nothing else matters if the opening plays silence.",
+      "2. WIRE THE EXISTING-BUT-ORPHANED SYSTEMS INTO THE LIVE LOOP (effort M, ~1 week). Award XP per correct answer, surface the orphaned streak_service in the QuestMap header, and wire the existing FSRS engine so weak items resurface. Three retention/efficacy levers are already coded and just bypassed — this is wiring, not building, and it converts a one-pass walkthrough into a returnable, measurable product. Add a per-grade 合格率 readout from the existing mock-test code (T21–T24).",
+      "3. BUILD ONE OWNED RPG VERB AND PASS THE ACID TEST (effort L, ~2–4 weeks). A turn-based 'voice/word battle' where answering deals damage to サイレント (Prodigy's model), reusing existing QuestEncounter data — only the render layer + a battle state machine are new. This is the structural rebuild the CEO is demanding: after it, deleting the English leaves a game, not a settings menu. Do this before adding any more content.",
+      "4. FIX THE NARRATIVE SELF-CONTRADICTION + DIEGETIC ERRORS (effort S, ~1–2 days). Run the bible's mandated grep, recast all 16 魔王/まおう leaks (incl. the finale nameplate) to non-demon framing, add the grep as a pre-commit gate, and swap red-on-wrong for in-character NPC correction on the 139 graded nodes. A 'Demon King' nameplate over the creature the story says is 'not a demon' is a credibility-killer visible in a single screenshot — and it's nearly free to fix.",
+      "5. KILL THE 1-TEMPLATE × 7-TOWNS MONOTONY: add teach-before-test + a second mechanic to 4級+ (effort L, incremental). Today depth INVERTS — all 16 teach nodes are in Town 1 and grades 4級→準1級 are six straight grades of one quiz with no instruction. Wire the stubbed crafting/ (sentence-build drag) and voice/ (speak-and-score) modules in as per-town mechanics and add short voiced teach cards before graded items, shipping one grade at a time so depth grows with the learner."
+    ],
+    "sources": [
+      {
+        "title": "トド英語 公式 / TODO English (Enuma)",
+        "url": "https://www.todoschool.com/jp/english",
+        "date": "2025"
+      },
+      {
+        "title": "トド英語アプリ徹底解説（料金・カリキュラム・200万DL）",
+        "url": "https://online-english.enjoy-kosodate.com/todo-english",
+        "date": "2026-02"
+      },
+      {
+        "title": "小学生が英語に夢中『AIえいご – マグナとふしぎの少女』新機能 (PR TIMES, Mintflag)",
+        "url": "https://prtimes.jp/main/html/rd/p/000000072.000027398.html",
+        "date": "2025-04-27"
+      },
+      {
+        "title": "マグナとふしぎの少女 — story/cast/downloads (4Gamer)",
+        "url": "https://www.4gamer.net/games/392/G039285/",
+        "date": "2025-07-20"
+      },
+      {
+        "title": "Prodigy Math Review 2026 (KidEdTools) — RPG loop, US$8.95/mo Premium",
+        "url": "https://kidedtools.com/blog/prodigy-math-game-review-2025/",
+        "date": "2026-01-09"
+      },
+      {
+        "title": "Battling in Prodigy Math — answering refills Magic Points (Prodigy support)",
+        "url": "https://prodigygame.zendesk.com/hc/en-us/articles/12910978061844-Battling-in-Prodigy-Math",
+        "date": "2025"
+      },
+      {
+        "title": "Pets / Treasure Track / Prodigy English village (Prodigy Education)",
+        "url": "https://prodigygame.zendesk.com/hc/en-us/articles/21595520518548-Pets",
+        "date": "2025"
+      },
+      {
+        "title": "Best Learning Games For Kids 2025 — Prodigy 150M users (Yahoo Finance)",
+        "url": "https://finance.yahoo.com/news/best-learning-games-kids-2025-090000424.html",
+        "date": "2025"
+      },
+      {
+        "title": "Duolingo Q1 FY2026 8-K — 56.5M DAU +21% YoY (SEC)",
+        "url": "https://www.sec.gov/Archives/edgar/data/0001562088/000162828026029790/q1fy26duolingo3-31x26share.htm",
+        "date": "2026-04"
+      },
+      {
+        "title": "Adventures Is Duolingo's New Immersive Gamified Feature (Duolingo Blog)",
+        "url": "https://blog.duolingo.com/adventures/",
+        "date": "2024-09-24"
+      },
+      {
+        "title": "Why Duolingo Is Launching Its Own Anime Series 'The Final Test' (Variety)",
+        "url": "https://variety.com/2025/digital/news/duolingo-anime-series-final-test-titmouse-studio-big-mouth-1236536373/",
+        "date": "2025-10-13"
+      },
+      {
+        "title": "Duolingo Gamification: streaks as #1 DAU lever (Deconstructor of Fun)",
+        "url": "https://www.deconstructoroffun.com/blog/2025/4/14/duolingo-how-the-15b-app-uses-gaming-principles-to-supercharge-dau-growth",
+        "date": "2025-04-14"
+      },
+      {
+        "title": "英語学習ゲーム（英語物語）1.5M DL, cards/co-op/raids (app-liv)",
+        "url": "https://app-liv.jp/1152658/",
+        "date": "2025-07-01"
+      },
+      {
+        "title": "英単語アプリ mikan レビュー — 10M DL, 英検5級→1級, 4.7★ (eigomonogatari)",
+        "url": "https://eigomonogatari.com/mikan-review/",
+        "date": "2025"
+      },
+      {
+        "title": "mikan プラン内容と料金 Premium ¥1,800/月 (mikan Help Center)",
+        "url": "https://mikan.helpshift.com/hc/en/3-%E8%8B%B1%E8%AA%9E%E3%82%A2%E3%83%95%E3%83%AA-mikan/",
+        "date": "2025"
+      },
+      {
+        "title": "Lingokids wants to team up with kids IPs — 168M DL, original IP (Kidscreen)",
+        "url": "https://kidscreen.com/2025/05/06/feature-lingokids-wants-to-team-up-with-kids-ips-to-speak-a-new-brand-language/",
+        "date": "2025-05-06"
+      },
+      {
+        "title": "Lingokids Review 2026: Pricing, Features (research.com)",
+        "url": "https://research.com/software/lingokids-review",
+        "date": "2026"
+      }
+    ]
+  }
+}

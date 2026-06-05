@@ -276,7 +276,6 @@ class _QuestScreenState extends State<QuestScreen> {
     const m = {
       'スラ': 'assets/art/masters/slime.png',
       'サイレント': 'assets/art/npc/silentus.png',
-      '魔王': 'assets/art/npc/silentus.png',
       '賢者': 'assets/art/npc/sage.png',
       '灰守': 'assets/art/npc/sage.png',
       'がくしゃ': 'assets/art/npc/sage.png',

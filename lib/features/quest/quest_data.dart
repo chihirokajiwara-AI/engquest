@@ -335,7 +335,7 @@ const List<QuestTown> kQuestTowns = [
     cefr: 'A1',
     name: 'ことばを失（うしな）った村（むら）',
     tagline: 'ソネア ― はじまりの声（こえ）の国（くに）',
-    intro: 'ここは〈ソネア〉。ことばが生（う）まれた国（くに）。けれど魔王（まおう）サイレントに'
+    intro: 'ここは〈ソネア〉。ことばが生（う）まれた国（くに）。けれどサイレントに'
         '声（こえ）をうばわれ、村（むら）びとは「ひとつの音（おと）」しか出（だ）せなくなった。'
         'まず、その音（おと）をよく聞（き）こう。🔊をおして、音（おと）をまねしてみて。'
         '音（おと）をつなげば、ことばがよみがえる。',
@@ -732,9 +732,9 @@ const List<QuestTown> kQuestTowns = [
         correctIndex: 2,
         onCorrect: "Do you have a map? — perfect order! Here, take mine. The road ahead is dark.",
       ),
-      // 20 — Boss gate. 総合運用 + 魔王サイレント. (大問2 総合)
+      // 20 — Boss gate. 総合運用 + サイレント. (大問2 総合)
       QuestEncounter(
-        npcName: '魔王（まおう）サイレントの影（かげ）',
+        npcName: 'サイレントの影（かげ）',
         npcEmoji: '🌑',
         npcLine: "Silence... is peace. Why do you bring words back, little one who can still hear me?",
         npcLineJa: 'しずけさ…こそ、へいわ。なぜ ことばを もどす、まだ わたしの こえが きこえる子（こ）よ？',
@@ -760,7 +760,7 @@ const List<QuestTown> kQuestTowns = [
     intro: '風（かぜ）の街（まち）。毎日（まいにち）のくらしの言葉（ことば）が、風（かぜ）にさらわれて消（き）えかけている。'
         '人々（ひとびと）の一日（いちにち）を、英語（えいご）でつないであげよう。',
     cleared: '街（まち）に毎日（まいにち）のおしゃべりがもどった。二（ふた）つ目（め）の〈声（こえ）の石（いし）〉を手（て）に。'
-        '「魔王（まおう）は、しずけさを“へいわ”だと思（おも）っているらしい」とスラがつぶやく。',
+        '「サイレントは、しずけさを“へいわ”だと思（おも）っているらしい」とスラがつぶやく。',
     encounters: [
       // 1 — be動詞 過去 was/were. 5級の現在から「昨日」へ。(大問1 文法型)
       QuestEncounter(
@@ -957,9 +957,9 @@ const List<QuestTown> kQuestTowns = [
         correctIndex: 2,
         onCorrect: "Her brother — yes! 'He' means the brother. You read carefully. That is a rare gift here.",
       ),
-      // 20 — Boss gate. 過去・未来・比較・接続詞の総合 + 魔王サイレント。(大問4＋総合)
+      // 20 — Boss gate. 過去・未来・比較・接続詞の総合 + サイレント。(大問4＋総合)
       QuestEncounter(
-        npcName: "魔王（まおう）サイレントの影（かげ）",
+        npcName: "サイレントの影（かげ）",
         npcEmoji: "🌑",
         npcLine: "You woke this town with noise. But silence is stronger than words. Why do you keep bringing the words back?",
         npcLineJa: "おまえは おとで まちを おこした。だが しずけさは ことばより つよい。なぜ ことばを もどしつづける？",
@@ -1145,7 +1145,7 @@ const List<QuestTown> kQuestTowns = [
         npcName: "けんちくか",
         npcEmoji: "🏛️",
         npcLine: "Be careful near that ___ window — Lord Silentus's shadow passed through it.",
-        npcLineJa: "あの ___ 窓（まど）に近（ちか）づくな――魔王（まおう）サイレントの影（かげ）が通（とお）り抜（ぬ）けたのだ。「こわされた窓」。 ___ は？",
+        npcLineJa: "あの ___ 窓（まど）に近（ちか）づくな――サイレントの影（かげ）が通（とお）り抜（ぬ）けたのだ。「こわされた窓」。 ___ は？",
         choices: ["breaking", "broke", "broken", "breaks"],
         correctIndex: 2,
         onCorrect: "'broken window' — exactly! A past participle can describe a noun: the window that was broken. Sharp eye.",
@@ -1210,9 +1210,9 @@ const List<QuestTown> kQuestTowns = [
         correctIndex: 0,
         onCorrect: "'The boy is reading' — perfect! In the interview, describe a picture with the present continuous: what's happening right now.",
       ),
-      // 20 — Boss gate。完了・関係詞・意見の総合運用 + 魔王サイレント。(大問総合)
+      // 20 — Boss gate。完了・関係詞・意見の総合運用 + サイレント。(大問総合)
       QuestEncounter(
-        npcName: "魔王（まおう）サイレントの影（かげ）",
+        npcName: "サイレントの影（かげ）",
         npcEmoji: "🌑",
         npcLine: "You have grown, little voice. Tell me — why do you fight for words that have only ever brought pain?",
         npcLineJa: "大（おお）きくなったな、消（き）えない こえの子（こ）よ。言（い）え――ただ苦（くる）しみだけをもたらしてきた言葉（ことば）のために、なぜ戦（たたか）う？",
@@ -1234,9 +1234,9 @@ const List<QuestTown> kQuestTowns = [
     name: '社会（しゃかい）の港町（みなとまち）',
     tagline: '世の中を語る港町',
     intro: '社会（しゃかい）の港町（みなとまち）。世（よ）の中（なか）を語（かた）り合（あ）う場所（ばしょ）。'
-        'ここで、魔王（まおう）の手（て）の者（もの）クワイエトが、人々（ひとびと）から「意見（いけん）」そのものを奪（うば）おうとしている。',
+        'ここで、サイレントの手（て）の者（もの）クワイエトが、人々（ひとびと）から「意見（いけん）」そのものを奪（うば）おうとしている。',
     cleared: '港町（みなとまち）の人々（ひとびと）が、また「自分（じぶん）はこう思（おも）う」と言（い）えるようになった。四（よっ）つ目（め）の〈声（こえ）の石（いし）〉。'
-        'クワイエトは去（さ）りぎわ、ふり返（かえ）った――「…おまえの言葉（ことば）は、なぜ消（き）えない？」 遠（とお）くで魔王（まおう）サイレントの影（かげ）がうごめく。',
+        'クワイエトは去（さ）りぎわ、ふり返（かえ）った――「…おまえの言葉（ことば）は、なぜ消（き）えない？」 遠（とお）くでサイレントの影（かげ）がうごめく。',
     encounters: [
       // 1 — 大問1 短文空所補充: past tense + because (3級→準2級 bridge review)
       QuestEncounter(
@@ -1551,7 +1551,7 @@ const List<QuestTown> kQuestTowns = [
         npcLine:
             "I serve Lord Silentus. He believes a world without words has no lies and no quarrels — that silence is peace. After all you've heard in this town, what do you say to that?",
         npcLineJa:
-            "私（わたし）は魔王（まおう）サイレントに仕（つか）える者（もの）。彼（かれ）は、言葉（ことば）なき世界（せかい）には嘘（うそ）も争（あらそ）いもない――しずけさこそ平和（へいわ）だと信（しん）じる。この町（まち）で聞（き）いたすべてのあと、それに何（なに）と答（こた）える？",
+            "私（わたし）はサイレントに仕（つか）える者（もの）。彼（かれ）は、言葉（ことば）なき世界（せかい）には嘘（うそ）も争（あらそ）いもない――しずけさこそ平和（へいわ）だと信（しん）じる。この町（まち）で聞（き）いたすべてのあと、それに何（なに）と答（こた）える？",
         choices: [
           "A silent world has no lies and no quarrels at all.",
           "Yes, silence is peace, just as Lord Silentus believes.",
@@ -1765,7 +1765,7 @@ const List<QuestTown> kQuestTowns = [
         correctIndex: 0,
         onCorrect: "\"She FIXED it, so...\" — past tense kept consistent, and the story moves forward. That's how 3コマ narration works!",
       ),
-      // 20 — ボス: 仮定法 + 逆接マーカー + 理由展開の統合 (魔王の手先). (統合・意見論述型)
+      // 20 — ボス: 仮定法 + 逆接マーカー + 理由展開の統合 (サイレントの手先). (統合・意見論述型)
       QuestEncounter(
         npcName: "橋の影 (サイレントの手先)",
         npcEmoji: "🌑",
@@ -1983,7 +1983,7 @@ const List<QuestTown> kQuestTowns = [
         npcName: "論駁の番人",
         npcEmoji: "🗿",
         npcLine: "(A stone guardian blocks the keep.) Silentus ate the world's words because he thought them noise. Prove you can hold meaning, not mere noise: which choice truly summarises an argument — capturing its point without copying its words or adding your own?",
-        npcLineJa: "（石（いし）の番人（ばんにん）が天守（てんしゅ）をふさいでいる。）魔王（まおう）サイレントは、ことばを「ただの雑音（ざつおん）」と思（おも）い、世界（せかい）から食（た）べてしまった。お前（まえ）が雑音（ざつおん）ではなく「意味（いみ）」を扱（あつか）える証（あかし）を見（み）せよ。本当（ほんとう）に論（ろん）を要約（ようやく）しているのは――言葉（ことば）を写（うつ）さず、自分（じぶん）の意見（いけん）も足（た）さず、要点（ようてん）をつかむのは、どれだ？",
+        npcLineJa: "（石（いし）の番人（ばんにん）が天守（てんしゅ）をふさいでいる。）サイレントは、ことばを「ただの雑音（ざつおん）」と思（おも）い、世界（せかい）から食（た）べてしまった。お前（まえ）が雑音（ざつおん）ではなく「意味（いみ）」を扱（あつか）える証（あかし）を見（み）せよ。本当（ほんとう）に論（ろん）を要約（ようやく）しているのは――言葉（ことば）を写（うつ）さず、自分（じぶん）の意見（いけん）も足（た）さず、要点（ようてん）をつかむのは、どれだ？",
         choices: ["Repeating the author's strongest sentence word for word, exactly as written.", "Adding your own opinion about whether the author was right or wrong.", "Restating the author's main idea in fewer, different words, with nothing added.", "Listing every example the author gave, in the same order, leaving none out."],
         correctIndex: 2,
         onCorrect: "(The guardian's stone eyes glow, then still.) ...You hold meaning, not noise. A summary is the idea, reborn in your own words. Pass, traveller — the sixth Stone of Voice is yours, and the keep doors open.",
@@ -2268,9 +2268,9 @@ const List<QuestTown> kQuestTowns = [
         onCorrect:
             'A reason that directly props up the claim — relevant, not random. Your argument has a spine now.',
       ),
-      // 20 — FINALE: 魔王サイレント. Integrate nuance + logic + inference under pressure. (統合型)
+      // 20 — FINALE: サイレント. Integrate nuance + logic + inference under pressure. (統合型)
       QuestEncounter(
-        npcName: '魔王サイレント',
+        npcName: 'サイレント',
         npcEmoji: '🌫️',
         npcLine:
             '(A faceless grey hush fills the square; it swallows every sound.) "...If silence is peace, then speech is mere noise. Why should I ever give the world its words back?" Your single reply must reach it.',
