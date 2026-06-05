@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 
 import '../quest/ui/dq_ui.dart';
+import 'placement_engine.dart';
+import 'placement_item_bank.dart';
 
 /// ENG Quest — Onboarding Flow (C10)
 ///
 /// 4-step onboarding for new users:
 ///   Step 1: Welcome + age input
-///   Step 2: CEFR placement (3-question mini-test)
+///   Step 2: Adaptive placement (3–8 questions, CAT engine)
 ///   Step 3: Avatar selection (5 characters)
 ///   Step 4: Goal setting + first session entry
 ///
 /// On completion, calls [onComplete] with the resulting [OnboardingResult].
 /// The result is persisted by the parent widget (e.g. to SharedPreferences).
-///
-/// Visually this is the Dragon-Quest "賢者 asks you questions" opening: a dark
-/// atmospheric scene, a navy+cream command/dialogue window, ▶-cursor choices,
-/// serif text, and bilingual (日本語 / English) short labels.
 
 // ---------------------------------------------------------------------------
 // Data model
@@ -23,18 +21,32 @@ import '../quest/ui/dq_ui.dart';
 
 class OnboardingResult {
   final int ageYears;
-  final CefrPlacement cefrPlacement;
+
+  /// 英検 level string for QuestMapScreen.startLevel.
+  /// One of: '5' | '4' | '3' | 'pre2' | 'pre2plus' | '2' | 'pre1'
+  final String startEikenLevel;
+
+  /// θ rung index (0..6) — persisted for T12 adaptive difficulty.
+  final int placementGrade;
+
+  /// Final θ̂ value — persisted for T12 adaptive difficulty.
+  final double placementTheta;
+
   final String avatarId;
   final int dailyGoalMinutes;
 
   const OnboardingResult({
     required this.ageYears,
-    required this.cefrPlacement,
+    required this.startEikenLevel,
+    required this.placementGrade,
+    required this.placementTheta,
     required this.avatarId,
     required this.dailyGoalMinutes,
   });
 }
 
+/// Legacy 3-level enum — kept so existing callers (integration test) still
+/// compile.  New code uses [OnboardingResult.startEikenLevel] directly.
 enum CefrPlacement { beginner, a1, a2 }
 
 extension CefrPlacementLabel on CefrPlacement {
@@ -59,56 +71,6 @@ extension CefrPlacementLabel on CefrPlacement {
         return '日常会話レベルで挑戦！';
     }
   }
-}
-
-// ---------------------------------------------------------------------------
-// Mini placement test data
-// ---------------------------------------------------------------------------
-
-class PlacementQuestion {
-  final String question;
-  final List<String> options;
-  final int correctIndex;
-  final CefrPlacement targetLevel; // which level this question tests
-
-  const PlacementQuestion({
-    required this.question,
-    required this.options,
-    required this.correctIndex,
-    required this.targetLevel,
-  });
-}
-
-const List<PlacementQuestion> _placementQuestions = [
-  PlacementQuestion(
-    question: '"Dog" の意味は？',
-    options: ['ねこ', 'いぬ', 'さかな', 'とり'],
-    correctIndex: 1,
-    targetLevel: CefrPlacement.a1,
-  ),
-  PlacementQuestion(
-    question: '"I ___ a student." に入る言葉は？',
-    options: ['am', 'is', 'are', 'be'],
-    correctIndex: 0,
-    targetLevel: CefrPlacement.a1,
-  ),
-  PlacementQuestion(
-    question: '"What time do you usually wake up?" の意味は？',
-    options: [
-      'どこに住んでいますか？',
-      '何が好きですか？',
-      'いつも何時に起きますか？',
-      '今日は何曜日ですか？',
-    ],
-    correctIndex: 2,
-    targetLevel: CefrPlacement.a2,
-  ),
-];
-
-CefrPlacement _scoreToCefr(int correctCount) {
-  if (correctCount == 0) return CefrPlacement.beginner;
-  if (correctCount <= 1) return CefrPlacement.a1;
-  return CefrPlacement.a2;
 }
 
 // ---------------------------------------------------------------------------
@@ -177,10 +139,11 @@ class _OnboardingFlowState extends State<OnboardingFlow>
   // Step 1 — age
   int _age = 8;
 
-  // Step 2 — placement
-  int _qIndex = 0;
-  int _correctCount = 0;
-  CefrPlacement? _placement;
+  // Step 2 — adaptive placement
+  PlacementEngine? _engine;        // created once age is committed
+  PlacementItem? _currentItem;     // item being shown
+  int? _currentItemBankIdx;        // its index in kPlacementBank
+  PlacementOutcome? _outcome;      // set when engine.done == true
 
   // Step 3 — avatar
   String _selectedAvatarId = _avatars.first.id;
@@ -208,15 +171,57 @@ class _OnboardingFlowState extends State<OnboardingFlow>
 
   void _nextStep() {
     _fadeCtrl.reverse().then((_) {
-      setState(() => _step++);
+      setState(() {
+        _step++;
+        // Entering placement step — initialise the engine now so the age seed
+        // is correct.  The engine itself is pure Dart (no Firebase, no async).
+        if (_step == 1 && _engine == null) {
+          _engine = PlacementEngine.fromAge(_age);
+          _pickNextItem();
+        }
+      });
       _fadeCtrl.forward();
     });
   }
 
+  /// Pick the next item from the bank and store it (+ its bank index) so the
+  /// widget can render it.  Called at the start of placement and after each answer.
+  void _pickNextItem() {
+    final engine = _engine;
+    if (engine == null) return;
+    final grade = engine.nextGrade();
+    final item = unusedItemForGrade(grade, engine.usedItemIds);
+    final idx = bankIndexOf(item);
+    _currentItem = item;
+    _currentItemBankIdx = idx;
+  }
+
+  void _answerItem(bool correct) {
+    final engine = _engine;
+    final item = _currentItem;
+    final idx = _currentItemBankIdx;
+    if (engine == null || item == null || idx == null) return;
+
+    engine.usedItemIds.add(idx);
+    engine.record(correct, grade: item.grade);
+
+    setState(() {
+      if (engine.done) {
+        _outcome = engine.result();
+        _currentItem = null;
+      } else {
+        _pickNextItem();
+      }
+    });
+  }
+
   void _finish() {
+    final outcome = _outcome;
     final result = OnboardingResult(
       ageYears: _age,
-      cefrPlacement: _placement ?? CefrPlacement.a1,
+      startEikenLevel: outcome?.eikenLevel ?? '5',
+      placementGrade: outcome?.grade ?? 0,
+      placementTheta: outcome?.theta ?? 0.0,
       avatarId: _selectedAvatarId,
       dailyGoalMinutes: _dailyGoalMinutes,
     );
@@ -249,24 +254,18 @@ class _OnboardingFlowState extends State<OnboardingFlow>
           onNext: _nextStep,
         );
       case 1:
-        return _placement != null
-            ? _PlacementResult(
-                placement: _placement!,
-                onNext: _nextStep,
-              )
-            : _StepPlacement(
-                question: _placementQuestions[_qIndex],
-                questionIndex: _qIndex,
-                total: _placementQuestions.length,
-                onAnswer: (isCorrect) {
-                  if (isCorrect) _correctCount++;
-                  if (_qIndex < _placementQuestions.length - 1) {
-                    setState(() => _qIndex++);
-                  } else {
-                    setState(() => _placement = _scoreToCefr(_correctCount));
-                  }
-                },
-              );
+        final outcome = _outcome;
+        if (outcome != null) {
+          return _PlacementResult(outcome: outcome, onNext: _nextStep);
+        }
+        final item = _currentItem;
+        final engine = _engine;
+        if (item == null || engine == null) return const SizedBox.shrink();
+        return _StepPlacement(
+          item: item,
+          itemNumber: engine.n + 1,
+          onAnswer: _answerItem,
+        );
       case 2:
         return _StepAvatar(
           avatars: _avatars,
@@ -278,7 +277,7 @@ class _OnboardingFlowState extends State<OnboardingFlow>
         return _StepGoal(
           goalMinutes: _dailyGoalMinutes,
           avatarId: _selectedAvatarId,
-          placement: _placement ?? CefrPlacement.a1,
+          outcome: _outcome,
           onGoalChanged: (v) => setState(() => _dailyGoalMinutes = v),
           onFinish: _finish,
         );
@@ -440,19 +439,20 @@ class _StepAge extends StatelessWidget {
 }
 
 // ---------------------------------------------------------------------------
-// Step 2a: Placement question — DQ command-window quiz.
+// Step 2a: Adaptive placement question — DQ command-window quiz.
 // ---------------------------------------------------------------------------
 
 class _StepPlacement extends StatelessWidget {
-  final PlacementQuestion question;
-  final int questionIndex;
-  final int total;
+  final PlacementItem item;
+
+  /// 1-based item number (displayed as "Question N").
+  final int itemNumber;
+
   final void Function(bool isCorrect) onAnswer;
 
   const _StepPlacement({
-    required this.question,
-    required this.questionIndex,
-    required this.total,
+    required this.item,
+    required this.itemNumber,
     required this.onAnswer,
   });
 
@@ -466,8 +466,8 @@ class _StepPlacement extends StatelessWidget {
           const SizedBox(height: 8),
           Center(
             child: dqBilingual(
-              'えいごチェック ${questionIndex + 1}/$total',
-              'Placement ${questionIndex + 1}/$total',
+              'えいごチェック $itemNumber',
+              'Placement Q$itemNumber',
               jpSize: 15,
               jpColor: dqInk,
               align: TextAlign.center,
@@ -476,18 +476,29 @@ class _StepPlacement extends StatelessWidget {
           const SizedBox(height: 22),
           DqDialogBox(
             speaker: '賢者 / Sage',
-            child: Text(
-              question.question,
-              style: dqText(size: 21, w: FontWeight.w700, color: dqInk),
-              textAlign: TextAlign.center,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  item.stemEn,
+                  style: dqText(size: 17, w: FontWeight.w700, color: dqInk),
+                ),
+                if (item.stemJa != null) ...[
+                  const SizedBox(height: 8),
+                  Text(
+                    item.stemJa!,
+                    style: dqText(size: 13, color: dqInk, w: FontWeight.w400),
+                  ),
+                ],
+              ],
             ),
           ),
           const SizedBox(height: 26),
-          ...List.generate(question.options.length, (i) {
+          ...List.generate(item.choices.length, (i) {
             return DqChoice(
-              label: question.options[i],
+              label: item.choices[i],
               showCursor: true,
-              onTap: () => onAnswer(i == question.correctIndex),
+              onTap: () => onAnswer(i == item.correctIndex),
             );
           }),
         ],
@@ -500,11 +511,45 @@ class _StepPlacement extends StatelessWidget {
 // Step 2b: Placement result — the Sage proclaims your starting rank.
 // ---------------------------------------------------------------------------
 
+/// Maps [PlacementOutcome.eikenLevel] to a human-readable 英検 grade label.
+String _eikenLabel(String level) {
+  switch (level) {
+    case '5':
+      return '英検5級 (A1)';
+    case '4':
+      return '英検4級 (A1)';
+    case '3':
+      return '英検3級 (A1+)';
+    case 'pre2':
+      return '英検準2級 (A2)';
+    case 'pre2plus':
+      return '英検準2級プラス (A2+)';
+    case '2':
+      return '英検2級 (B1)';
+    case 'pre1':
+      return '英検準1級 (B2)';
+    default:
+      return '英検5級';
+  }
+}
+
+/// Human-readable confidence label.
+String _confidenceLabel(PlacementConfidence c) {
+  switch (c) {
+    case PlacementConfidence.high:
+      return '自信あり ★★★';
+    case PlacementConfidence.medium:
+      return '自信あり ★★';
+    case PlacementConfidence.low:
+      return '自信あり ★';
+  }
+}
+
 class _PlacementResult extends StatelessWidget {
-  final CefrPlacement placement;
+  final PlacementOutcome outcome;
   final VoidCallback onNext;
 
-  const _PlacementResult({required this.placement, required this.onNext});
+  const _PlacementResult({required this.outcome, required this.onNext});
 
   @override
   Widget build(BuildContext context) {
@@ -523,15 +568,21 @@ class _PlacementResult extends StatelessWidget {
               children: [
                 Center(
                   child: Text(
-                    placement.label,
-                    style: dqText(size: 30, w: FontWeight.w800, color: dqGold),
+                    _eikenLabel(outcome.eikenLevel),
+                    style: dqText(size: 24, w: FontWeight.w800, color: dqGold),
                     textAlign: TextAlign.center,
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 8),
                 Text(
-                  placement.description,
-                  style: dqText(size: 15, color: dqInk),
+                  outcome.cefr,
+                  style: dqText(size: 18, w: FontWeight.w700, color: dqGoldDeep),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  _confidenceLabel(outcome.confidence),
+                  style: dqText(size: 12, color: dqInk, w: FontWeight.w500),
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -693,14 +744,14 @@ class _AvatarCard extends StatelessWidget {
 class _StepGoal extends StatelessWidget {
   final int goalMinutes;
   final String avatarId;
-  final CefrPlacement placement;
+  final PlacementOutcome? outcome;
   final ValueChanged<int> onGoalChanged;
   final VoidCallback onFinish;
 
   const _StepGoal({
     required this.goalMinutes,
     required this.avatarId,
-    required this.placement,
+    required this.outcome,
     required this.onGoalChanged,
     required this.onFinish,
   });
@@ -727,7 +778,7 @@ class _StepGoal extends StatelessWidget {
                 child: DqDialogBox(
                   speaker: '${avatar.name} / ${_avatarClassEn(avatar.jobTitle)}',
                   child: Text(
-                    '準備はいい？\n${placement.label} から旅を はじめよう！',
+                    '準備はいい？\n${_eikenLabel(outcome?.eikenLevel ?? '5')} から旅を はじめよう！',
                     style: dqText(size: 15, color: dqInk),
                   ),
                 ),
@@ -800,7 +851,10 @@ class _StepGoal extends StatelessWidget {
             title: 'けいやく / Quest Contract',
             child: Column(
               children: [
-                _SummaryRow(jp: 'レベル', en: 'Level', value: placement.label),
+                _SummaryRow(
+                    jp: 'レベル',
+                    en: 'Level',
+                    value: _eikenLabel(outcome?.eikenLevel ?? '5')),
                 const SizedBox(height: 6),
                 _SummaryRow(
                     jp: 'なかま',

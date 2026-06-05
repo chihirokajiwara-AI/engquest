@@ -29,10 +29,12 @@ import 'package:engquest/features/explore/scene_view.dart';
 class OnboardingStorage {
   static const _kComplete = 'onboarding_complete';
   static const _kAge = 'onboarding_age';
-  static const _kCefr = 'onboarding_cefr';
+  static const _kCefr = 'onboarding_cefr'; // legacy — kept for old installs
   static const _kAvatar = 'onboarding_avatar';
   static const _kGoal = 'onboarding_goal_minutes';
   static const _kPrologueSeen = 'prologue_seen';
+  static const _kStartLevel = 'onboarding_start_level'; // new: persists英検 level
+  static const _kPlacementTheta = 'onboarding_placement_theta'; // T12 hook
 
   // Cached instance — populated by [init()] or [_lazyPrefs()].
   static PreferencesService? _prefs;
