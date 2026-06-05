@@ -1,0 +1,30 @@
+# ALLOWED_MISSING.txt — explicit registry of referenced-but-not-yet-recorded assets.
+#
+# FORMAT: one entry per line
+#   <asset_key_relative_to_assets/>  |  <ISO-date>  |  <reason>
+#
+# Rules:
+#  - "asset_key" is the key AS USED IN CODE (e.g. 'audio/phonics/phoneme_s.mp3'
+#    means assets/audio/phonics/phoneme_s.mp3 on disk).
+#  - Date is when the exception was registered (YYYY-MM-DD).
+#  - An entry here makes the R2 gate WARN instead of FAIL for that key.
+#  - Remove entries when the real file is recorded and committed.
+#
+# ---------------------------------------------------------------------------
+# 6 founder phoneme clips — pure /s/ /a/ /t/ /c/ /o/ /g/ sounds.
+# These will be professionally recorded; the UI falls back gracefully
+# (AudioCueService swallows errors, replay button always present).
+audio/phonics/phoneme_s.mp3 | 2026-06-06 | founder-record pending: pure /s/ phoneme clip
+audio/phonics/phoneme_a.mp3 | 2026-06-06 | founder-record pending: pure /a/ phoneme clip
+audio/phonics/phoneme_t.mp3 | 2026-06-06 | founder-record pending: pure /t/ phoneme clip
+audio/phonics/phoneme_c.mp3 | 2026-06-06 | founder-record pending: pure /c/ phoneme clip
+audio/phonics/phoneme_o.mp3 | 2026-06-06 | founder-record pending: pure /o/ phoneme clip
+audio/phonics/phoneme_g.mp3 | 2026-06-06 | founder-record pending: pure /g/ phoneme clip
+# ---------------------------------------------------------------------------
+# Town scene art — towns 3, pre2, pre2plus, 2 not yet illustrated.
+# The quest_screen.dart dynamically constructs these paths; towns 5, 4, pre1 exist.
+# Remaining scenes will be generated in T31 (AI character/world assets).
+assets/art/scenes/town_3.png | 2026-06-06 | T31 pending: 英検3級 town scene art
+assets/art/scenes/town_pre2.png | 2026-06-06 | T31 pending: 英検準2級 town scene art
+assets/art/scenes/town_pre2plus.png | 2026-06-06 | T31 pending: 英検準2級+ town scene art
+assets/art/scenes/town_2.png | 2026-06-06 | T31 pending: 英検2級 town scene art

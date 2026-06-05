@@ -67,6 +67,30 @@ child-safety/COPPA; Japan minor-monetization law). Integration waits on that rev
 - AI generation stays inside one cohesive storybook style; never ship obvious AI slop.
 
 ## Enforcement
-`scripts/verify_quality.sh` runs R1 (content-integrity), R2 (asset-contract), R3
-(smoke-test presence), R5 (leakage grep), plus `flutter analyze` (0) and `flutter test`
-(green). Wired as a pre-commit / pre-deploy gate. A failing gate blocks the change.
+
+`scripts/verify_quality.sh` (bash, exits non-zero on any hard failure) runs:
+
+| Check | Rule | Hard-fail? | Implementation |
+|-------|------|-----------|----------------|
+| Vocab distractor integrity | R1 | yes | `scripts/qa/check_content_integrity.py` |
+| Quest data structural correctness | R1 | yes (via flutter test) | `test/features/quest/quest_data_test.dart` |
+| Asset contract | R2 | yes (unregistered missing) | `scripts/qa/check_asset_contract.py` |
+| Smoke-test presence | R3 | warn-only v1 (set HARD_FAIL=1) | `scripts/qa/check_smoke_tests.py` |
+| Narrative leakage grep | R5 | yes | inline grep in verify_quality.sh |
+| flutter analyze | — | yes | `flutter analyze` |
+| flutter test | — | yes | `flutter test` |
+
+**Asset exceptions registry**: `assets/ALLOWED_MISSING.txt` — listed missing assets
+are WARN (not hard-fail). Requires a dated reason. Remove entries when files land.
+
+**Usage**:
+```bash
+./scripts/verify_quality.sh            # full gate (R1/R2/R3/R5 + analyze + test)
+./scripts/verify_quality.sh --fast     # R1/R2/R3/R5 only (skip analyze/test)
+HARD_FAIL=1 ./scripts/verify_quality.sh  # promote R3 smoke-test gaps to hard fail
+```
+
+**Wiring**: Run as pre-commit and pre-deploy gate. A failing gate blocks the change.
+The `.claude/settings.json` `PreToolUse` Bash hook (`guard-heavy-jobs.sh`) is separate
+and must NOT be modified — it guards against heavy job hangs; this gate guards content
+and code quality.
