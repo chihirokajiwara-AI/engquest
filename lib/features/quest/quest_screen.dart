@@ -420,9 +420,9 @@ class _QuestScreenState extends State<QuestScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Column(children: [
-            const DqPortrait(imageAsset: 'assets/art/masters/prince.png', emoji: '🤴', size: 44),
+            const DqPortrait(imageAsset: 'assets/art/masters/hero.png', emoji: '🧭', size: 44),
             const SizedBox(height: 2),
-            Text('あなた', style: dqText(size: 10, color: dqInk, w: FontWeight.w400)),
+            Text('きみ', style: dqText(size: 10, color: dqInk, w: FontWeight.w400)),
           ]),
           const SizedBox(width: 22),
           Column(children: [

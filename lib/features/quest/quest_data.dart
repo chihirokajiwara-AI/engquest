@@ -1,10 +1,10 @@
 // lib/features/quest/quest_data.dart
 // A-KEN Quest — the Adventure (ドラクエ型 英語クエスト)
 //
-// The hero is secretly a prince/princess. They travel town to town; the people
-// they meet speak English at that town's 英検 level. The player advances by
-// choosing the correct English reply. A student starts at the town matching
-// their own 英検 level (e.g. a 準2級 holder starts in the 準2級 town).
+// The hero is きみ — an ordinary traveller who can still HEAR the sounds inside words and still VOICE them,
+// when almost no one else can (the very phonics skill the player is learning — an earned, learnable power,
+// not a birthright). They travel town to town giving each person their words back; recovering a word
+// brings a person, and a colour, back to life.
 
 /// One option a learner can tap. For phonics/blend/word/phrase steps each
 /// option may carry its own audio (`audioAsset`) so it renders as a speaker
@@ -321,10 +321,10 @@ class QuestTown {
 
 /// The hero's opening — revealed once, at the very start of the quest.
 const String kQuestPrologue =
-    'あなたは、じつは王子（おうじ）／王女（おうじょ）。\n'
-    '魔王（まおう）サイレントが、世界（せかい）の「ことば」を食（た）べ、色（いろ）が消（き）えていく。\n'
-    'むねの石（いし）を手（て）に、声（こえ）の石（いし）を集（あつ）める旅（たび）へ。\n'
-    'ことばの力（ちから）で、世界（せかい）を取（と）りもどそう。';
+    'きみには、まだ おとが きこえる。そして、まだ こえに だせる。\n'
+    '〈サイレント〉に つつまれ、いろと こえを うしなった せかい。\n'
+    'きみの みみと こえで、ひとりずつ ことばを かえしていこう。\n'
+    'ことばが もどれば、いろも、こえも、もどる。';
 
 /// Towns in order, easiest → hardest. A player enters at the town matching
 /// their placement level; clearing a town unlocks the next.
@@ -599,7 +599,7 @@ const List<QuestTown> kQuestTowns = [
         choices: ['This is a castle.', 'That is a castle.', 'That is castle.', 'These is a castle.'],
         correctIndex: 1,
         onCorrect:
-            'That is the old castle... where a prince was born, they say. Strange — your eyes look just like his.',
+            'That is the old hall... where the first word was ever spoken, they say. Strange — when you talk, I can almost hear it breathing again. You listen the way careful listeners used to.',
       ),
       // 7 — 冠詞 a / an. (大問1型)
       QuestEncounter(
@@ -680,7 +680,7 @@ const List<QuestTown> kQuestTowns = [
         choices: ['It is a gate.', 'He is my guard.', 'She is my guard.', 'Who is my guard.'],
         correctIndex: 1,
         onCorrect:
-            'He is my guard, yes. He has waited years for a true prince to return... I wonder.',
+            'He is my guard, yes. He has waited years for someone who could still speak to come back... and your voice can still be heard. I wonder if you are the one.',
       ),
       // 15 — 疑問詞 where + 前置詞 in/on/under. (大問1 前置詞型)
       QuestEncounter(
@@ -710,7 +710,7 @@ const List<QuestTown> kQuestTowns = [
         npcLineJa: '見（み）て！ いま、お城（しろ）の絵（え）を ___ いるところ。 ___ は？',
         choices: ['paint', 'paints', 'painting', 'painted'],
         correctIndex: 2,
-        onCorrect: "I'm painting the castle, yes. ...They say its true prince is on the road again.",
+        onCorrect: "I'm painting the town, yes — adding back the colours as you bring the words home. ...They say someone is on the road again, someone whose words still hold their colour.",
       ),
       // 18 — 命令文 / Let's. (大問2型)
       QuestEncounter(
@@ -736,8 +736,8 @@ const List<QuestTown> kQuestTowns = [
       QuestEncounter(
         npcName: '魔王（まおう）サイレントの影（かげ）',
         npcEmoji: '🌑',
-        npcLine: "Silence... is peace. Why do you bring words back, little prince?",
-        npcLineJa: 'しずけさ…こそ、へいわ。なぜ言葉（ことば）をもどす、小（ちい）さな王子（おうじ）よ？',
+        npcLine: "Silence... is peace. Why do you bring words back, little one who can still hear me?",
+        npcLineJa: 'しずけさ…こそ、へいわ。なぜ ことばを もどす、まだ わたしの こえが きこえる子（こ）よ？',
         choices: [
           'I am peace.',
           'You are silent.',
@@ -746,7 +746,7 @@ const List<QuestTown> kQuestTowns = [
         ],
         correctIndex: 2,
         onCorrect:
-            "...You are not afraid. Hmph. The first stone is yours, prince. But the world has six more silences... and I will be at the last.",
+            "...You are not afraid of sound. The first word is returned, traveller. But the world holds six more silences... and I will be at the last.",
       ),
     ],
   ),
@@ -830,7 +830,7 @@ const List<QuestTown> kQuestTowns = [
         npcLineJa: "ぼくの あには せが たかい。でも きみは あにより ___ ！",
         choices: ["tall", "taller", "more tall", "tallest"],
         correctIndex: 1,
-        onCorrect: "You ARE taller! When you grow up, will you be a knight? You stand like a prince...",
+        onCorrect: "You ARE taller! When you grow up, will you give the whole world its voice back? When you talk, the grey gets a little brighter.",
       ),
       // 8 — 比較級 more + 長い形容詞（-er との使い分けトラップ）。(大問1 文法型)
       QuestEncounter(
@@ -910,7 +910,7 @@ const List<QuestTown> kQuestTowns = [
         npcLineJa: "としょかんへ ようこそ。ほんを さがすのを ___ ？（てつだっても いい？）",
         choices: ["Must", "Should", "May", "Do"],
         correctIndex: 2,
-        onCorrect: "Of course I may help! Here — an old book about a lost prince. ...It looks like you.",
+        onCorrect: "Of course I may help! Here — an old book about a child who could still speak when no one else could. ...It sounds like you.",
       ),
       // 16 — There is / There are 単複一致。(大問1 文法型)
       QuestEncounter(
@@ -961,8 +961,8 @@ const List<QuestTown> kQuestTowns = [
       QuestEncounter(
         npcName: "魔王（まおう）サイレントの影（かげ）",
         npcEmoji: "🌑",
-        npcLine: "You woke this town with noise. But silence is stronger than words. Why do you fight me?",
-        npcLineJa: "おまえは おとで まちを おこした。だが しずけさは ことばより つよい。なぜ わたしと たたかう？",
+        npcLine: "You woke this town with noise. But silence is stronger than words. Why do you keep bringing the words back?",
+        npcLineJa: "おまえは おとで まちを おこした。だが しずけさは ことばより つよい。なぜ ことばを もどしつづける？",
         choices: [
           "Yesterday I am quiet.",
           "Silence is more strong.",
@@ -970,7 +970,7 @@ const List<QuestTown> kQuestTowns = [
           "I will fought you tomorrow.",
         ],
         correctIndex: 2,
-        onCorrect: "\"Warmer than silence...\" Tch. Your grammar grows sharp, little prince. Take the second stone — five silences remain, and I wait at the last.",
+        onCorrect: "\"Warmer than silence...\" Tch. Your grammar grows sharp, little voice that won't go quiet. The second word is returned — five silences remain, and I wait at the last.",
       ),
     ],
   ),
@@ -1008,7 +1008,7 @@ const List<QuestTown> kQuestTowns = [
         npcLineJa: "ようこそ、若（わか）き学徒（がくと）よ。この都（みやこ）の古（ふる）い伝説（でんせつ）を、今（いま）までに読（よ）んだことが ___ ？",
         choices: ["Did", "Have", "Were", "Do"],
         correctIndex: 1,
-        onCorrect: "'Have you ever read...' — yes! Experience needs the present perfect. The legend speaks of a lost prince, you know.",
+        onCorrect: "'Have you ever read...' — yes! Experience needs the present perfect. The legend speaks of one whose voice never went silent, you know.",
       ),
       // 3 — 現在完了 vs 過去形。ago は過去形の手がかり（頻出トラップ）。(大問1 文法型)
       QuestEncounter(
@@ -1054,11 +1054,11 @@ const List<QuestTown> kQuestTowns = [
       QuestEncounter(
         npcName: "がか",
         npcEmoji: "🎨",
-        npcLine: "This portrait of the royal family was painted ___ a famous artist long ago.",
-        npcLineJa: "この王家（おうけ）の肖像画（しょうぞうが）は、むかし有名（ゆうめい）な画家（がか）___ 描（か）かれたものだ。 ___ は？",
+        npcLine: "This portrait of the town's oldest family was painted ___ a famous artist long ago.",
+        npcLineJa: "この 町（まち）の いちばん 古（ふる）い 一家（いっか）の 肖像画（しょうぞうが）は、むかし 有名（ゆうめい）な 画家（がか）___ 描（か）かれたものだ。 ___ は？",
         choices: ["from", "with", "by", "of"],
         correctIndex: 2,
-        onCorrect: "'painted by a famous artist' — correct! 'by' marks who did the action. ...The child in this painting has your eyes.",
+        onCorrect: "'painted by a famous artist' — correct! 'by' marks who did the action. ...When you speak, the colours in this old painting look a little brighter.",
       ),
       // 8 — 不定詞〈名詞用法〉decide / want to + 動詞の原形。(大問1 文法型)
       QuestEncounter(
@@ -1124,11 +1124,11 @@ const List<QuestTown> kQuestTowns = [
       QuestEncounter(
         npcName: "としょかんいん",
         npcEmoji: "📚",
-        npcLine: "Here is the very book ___ the lost prince once read as a child.",
-        npcLineJa: "これこそ、失（うしな）われた王子（おうじ）が幼（おさな）い頃（ころ）に読（よ）んだ、あの本（ほん）です。 ___ は？",
+        npcLine: "Here is the very book ___ the last person who could speak once read as a child.",
+        npcLineJa: "さいごに ことばを はなせた人（ひと）が、おさない ころに よんだ、あの本（ほん）です。 ___ は？",
         choices: ["who", "where", "which", "what"],
         correctIndex: 2,
-        onCorrect: "'the book which the prince read' — correct! 'which' for things; here it's the object of 'read'. You chose the case well.",
+        onCorrect: "'the book which the speaker read' — correct! 'which' for things; here it's the object of 'read'. You chose the case well.",
       ),
       // 14 — 比較 as ~ as（同等比較）。(大問1 文法型)
       QuestEncounter(
@@ -1154,12 +1154,12 @@ const List<QuestTown> kQuestTowns = [
       QuestEncounter(
         npcName: "れきしか",
         npcEmoji: "📜",
-        npcLine: "The scroll reads: 'When the prince left the castle, the city's words slowly disappeared.' What does this mean?",
-        npcLineJa: "巻物（まきもの）にはこうある――「王子（おうじ）が城（しろ）を去（さ）ったとき、都（みやこ）の言葉（ことば）は少（すこ）しずつ消（き）えていった」。これはどういう意味（いみ）？",
+        npcLine: "The scroll reads: 'When the last voice fell silent in the castle, the city's words slowly disappeared.' What does this mean?",
+        npcLineJa: "巻物（まきもの）にはこうある――「城（しろ）の さいごの こえが しずかに なったとき、都（みやこ）の言葉（ことば）は少（すこ）しずつ消（き）えていった」。これはどういう意味（いみ）？",
         choices: [
-          "The prince disappeared from the castle.",
-          "After the prince left, the city gradually began to lose its words.",
-          "The words left the castle with the prince.",
+          "The last voice vanished from the castle.",
+          "After the last voice went silent, the city gradually began to lose its words.",
+          "The words left the castle with that voice.",
           "The city's words appeared slowly in the castle.",
         ],
         correctIndex: 1,
@@ -1214,8 +1214,8 @@ const List<QuestTown> kQuestTowns = [
       QuestEncounter(
         npcName: "魔王（まおう）サイレントの影（かげ）",
         npcEmoji: "🌑",
-        npcLine: "You have grown, little prince. Tell me — why do you fight for words that have only ever brought pain?",
-        npcLineJa: "大（おお）きくなったな、小（ちい）さな王子（おうじ）よ。言（い）え――ただ苦（くる）しみだけをもたらしてきた言葉（ことば）のために、なぜ戦（たたか）う？",
+        npcLine: "You have grown, little voice. Tell me — why do you fight for words that have only ever brought pain?",
+        npcLineJa: "大（おお）きくなったな、消（き）えない こえの子（こ）よ。言（い）え――ただ苦（くる）しみだけをもたらしてきた言葉（ことば）のために、なぜ戦（たたか）う？",
         choices: [
           "Words have brought pain since long ago.",
           "Because words, which we have shared since we were born, are how we understand each other.",
@@ -1223,7 +1223,7 @@ const List<QuestTown> kQuestTowns = [
           "Words are which people speak and write.",
         ],
         correctIndex: 1,
-        onCorrect: "...A relative clause, a present perfect, a reason — and a truth I cannot answer. The third stone is yours, prince. But the harder roads still lie ahead... and I will be waiting.",
+        onCorrect: "...A relative clause, a present perfect, a reason — and a truth I cannot answer. The third word is yours, traveller. But the harder roads still lie ahead... and I will be waiting.",
       ),
     ],
   ),
@@ -1573,7 +1573,7 @@ const List<QuestTown> kQuestTowns = [
     intro: '準2級（じゅんにきゅう）の先（さき）、2級（にきゅう）へつづく長（なが）い橋（はし）。'
         '2025年（ねん）に新（あら）たにかけられた橋（はし）だ。ここでは「理由（りゆう）」と「まとめ（要約・ようやく）」を語（かた）る力（ちから）がためされる。',
     cleared: '橋（はし）の向（む）こうに、城（しろ）の灯（あか）りが見（み）えた。五（いつ）つ目（め）の〈声（こえ）の石（いし）〉を手（て）に。'
-        'ハーモニーが言（い）う――「のこる石（いし）はあと一（ひと）つ。王都（おうと）に、魔王（まおう）がいる」。',
+        'ハーモニーが言（い）う――「のこる石（いし）はあと一（ひと）つ。さいごの ひろばに、しずけさ〈サイレント〉が いる」。',
     encounters: [
       // 1 — 準2確実化: 現在完了 vs 過去 (since の手がかり). (大問1 文法型)
       QuestEncounter(
@@ -1785,8 +1785,8 @@ const List<QuestTown> kQuestTowns = [
     tagline: '学問とビジネスの町',
     intro: '学者（がくしゃ）の城下町（じょうかまち）。学問（がくもん）とビジネスの言葉（ことば）が交（か）わされる町（まち）。'
         'ここまで来（こ）られる勇者（ゆうしゃ）は少（すく）ない。最後（さいご）の〈声（こえ）の石（いし）〉が、城（しろ）の奥（おく）に眠（ねむ）る。',
-    cleared: '六（むっ）つ目（め）――最後（さいご）の〈声（こえ）の石（いし）〉がそろった！ むねの石（いし）と合（あ）わせ、〈ことばの紋章（もんしょう）〉が完成（かんせい）する。'
-        'それは、あなたが王家（おうけ）の血（ち）をひく真（しん）の証（あかし）。王都（おうと）の門（もん）が、ひとりでに開（ひら）いた。',
+    cleared: '六（むっ）つ目（め）――最後（さいご）の〈声（こえ）の石（いし）〉がそろった！ むねの石（いし）と合（あ）わせ、〈ことばの紋章（もんしょう）〉が かんせいする。'
+        'それは、きみが すべての こえを かえしてきた、たしかな あかし。さいごの ひろばへの みちが、ひとりでに ひらいた。',
     encounters: [
       // 1 — Academic-register appropriate response. (大問1会話/Listening応答型)
       QuestEncounter(
@@ -1986,7 +1986,7 @@ const List<QuestTown> kQuestTowns = [
         npcLineJa: "（石（いし）の番人（ばんにん）が天守（てんしゅ）をふさいでいる。）魔王（まおう）サイレントは、ことばを「ただの雑音（ざつおん）」と思（おも）い、世界（せかい）から食（た）べてしまった。お前（まえ）が雑音（ざつおん）ではなく「意味（いみ）」を扱（あつか）える証（あかし）を見（み）せよ。本当（ほんとう）に論（ろん）を要約（ようやく）しているのは――言葉（ことば）を写（うつ）さず、自分（じぶん）の意見（いけん）も足（た）さず、要点（ようてん）をつかむのは、どれだ？",
         choices: ["Repeating the author's strongest sentence word for word, exactly as written.", "Adding your own opinion about whether the author was right or wrong.", "Restating the author's main idea in fewer, different words, with nothing added.", "Listing every example the author gave, in the same order, leaving none out."],
         correctIndex: 2,
-        onCorrect: "(The guardian's stone eyes glow, then still.) ...You hold meaning, not noise. A summary is the idea, reborn in your own words. Pass, heir — the sixth Stone of Voice is yours, and the keep doors open.",
+        onCorrect: "(The guardian's stone eyes glow, then still.) ...You hold meaning, not noise. A summary is the idea, reborn in your own words. Pass, traveller — the sixth Stone of Voice is yours, and the keep doors open.",
       ),
     ],
   ),
@@ -1994,10 +1994,10 @@ const List<QuestTown> kQuestTowns = [
     id: 'town_pre1',
     eikenLevel: 'pre1',
     cefr: 'B2-C1',
-    name: '王都（おうと）',
-    tagline: '王の待つ都',
-    intro: 'すべての旅（たび）の果（は）て、灰色（はいいろ）に沈（しず）んだ王都（おうと）。'
-        '玉座（ぎょくざ）に、口（くち）のない魔王（まおう）サイレントが座（すわ）っている。最後（さいご）の戦（たたか）いは――剣（けん）ではなく、言葉（ことば）。',
+    name: '灰色（はいいろ）の ひろば / The Grey Square',
+    tagline: 'ことばが はじまった 場所（ばしょ）',
+    intro: 'すべての たびの はて、灰色（はいいろ）に しずんだ さいごの ひろば。'
+        'ここで、いちばん はじめの ことばが はなされた。いま、しずけさ〈サイレント〉が、こえもなく そこに ある。さいごに かえすのは、剣（けん）ではなく、ことば。',
     cleared: 'あなたの言葉（ことば）が、サイレントの胸（むね）に届（とど）いた。彼（かれ）に「声（こえ）」が返（かえ）り、灰色（はいいろ）の世界（せかい）に色（いろ）がもどっていく。'
         'ことばは、しずけさより強（つよ）い。勇者（ゆうしゃ）よ――あなたの旅（たび）が、世界（せかい）を救（すく）った。',
     encounters: [
@@ -2008,7 +2008,7 @@ const List<QuestTown> kQuestTowns = [
         npcLine:
             'Traveller, the capital is under siege. Before you enter, you must ___ a decision: fight, or flee.',
         npcLineJa:
-            '旅人（たびびと）よ、王都（おうと）は包囲（ほうい）されている。入（はい）る前（まえ）に、戦（たたか）うか逃（に）げるか、決断（けつだん）を ___ ねばならぬ。',
+            '旅人（たびびと）よ、さいごの ひろばに しずけさが みちている。入（はい）る前（まえ）に、進（すす）むか引（ひ）くか、決断（けつだん）を ___ ねばならぬ。',
         choices: ['do', 'take', 'make', 'give'],
         correctIndex: 2,
         onCorrect:
@@ -2016,7 +2016,7 @@ const List<QuestTown> kQuestTowns = [
       ),
       // 2 — Low-frequency synonym nuance (deliberate vs hasty/reluctant/accidental). (大問1型)
       QuestEncounter(
-        npcName: '王都の書記',
+        npcName: 'ひろばの書記',
         npcEmoji: '📜',
         npcLine:
             'The Silent King did not act by chance. His erasure of all words was slow and ___ — every page chosen on purpose.',
@@ -2055,12 +2055,12 @@ const List<QuestTown> kQuestTowns = [
       ),
       // 5 — Subjunctive present (insist (that) S (should) be). (大問1 文法型)
       QuestEncounter(
-        npcName: '王都の将軍',
+        npcName: 'ひろばの将軍',
         npcEmoji: '⚔️',
         npcLine:
-            'The council insists that every gate ___ guarded tonight. No exceptions, even for a prince.',
+            'The council insists that every gate ___ guarded tonight. No exceptions — not even for the one whose voice still carries.',
         npcLineJa:
-            '評議会（ひょうぎかい）は、今夜（こんや）すべての門（もん）が守（まも）られる「べきだ」と強（つよ）く求（もと）めている。王子（おうじ）であっても例外（れいがい）はない。',
+            '評議会（ひょうぎかい）は、今夜（こんや）すべての門（もん）が守（まも）られる「べきだ」と強（つよ）く求（もと）めている。どんな こえの もちぬしであっても、れいがいは ない。',
         choices: ['is', 'be', 'was', 'will be'],
         correctIndex: 1,
         onCorrect:
@@ -2133,20 +2133,20 @@ const List<QuestTown> kQuestTowns = [
       ),
       // 11 — Concession (No matter how + adjective). (大問1 文法型)
       QuestEncounter(
-        npcName: '王妃の侍女',
+        npcName: 'ひろばの ふるい こえ',
         npcEmoji: '👗',
         npcLine:
-            'No matter ___ powerful the King grows, a true heir is bound to no fear. Are you that heir?',
+            'No matter ___ loud the Silence grows, one true voice is bound to no fear. Are you that voice?',
         npcLineJa:
-            '王（おう）がどれほど強大（きょうだい）になろうとも、真（しん）の世継（よつ）ぎは恐（おそ）れに縛（しば）られぬ。「どれほど ___ うとも」の「___」は？',
+            'どれほど しずけさが おおきくなろうとも、まことの こえ ひとつは おそれに しばられぬ。「どれほど ___ うとも」の「___」は？',
         choices: ['how', 'what', 'that', 'than'],
         correctIndex: 0,
         onCorrect:
-            '"No matter HOW powerful" — "how" before an adjective. The court bows; they know your blood now.',
+            'No matter HOW loud — "how" before an adjective. The square listens; they hear you now.',
       ),
       // 12 — Inanimate subject + high-register verb (witnessed). (大問1 / 長文型)
       QuestEncounter(
-        npcName: '王都の歴史家',
+        npcName: 'ひろばの歴史家',
         npcEmoji: '🏛️',
         npcLine:
             'These walls have ___ the rise and fall of three dynasties — and tonight, perhaps, a fourth.',
@@ -2216,7 +2216,7 @@ const List<QuestTown> kQuestTowns = [
       ),
       // 17 — Paraphrase = answer; verbatim = trap. (長文の内容一致選択型)
       QuestEncounter(
-        npcName: '王都の哲学者',
+        npcName: 'ひろばの哲学者',
         npcEmoji: '🦉',
         npcLine:
             '"To rob a people of their words is to rob them of the means to imagine a better world." Which choice best restates this?',
@@ -2239,7 +2239,7 @@ const List<QuestTown> kQuestTowns = [
         npcLine:
             '"Long ago the capital thrived on open debate. When the King began erasing dissenting words, fear spread, scholars fled, and the city fell silent." Pick the best one-line summary.',
         npcLineJa:
-            '「かつて王都（おうと）は自由（じゆう）な議論（ぎろん）で栄（さか）えた。王（おう）が異論（いろん）の言葉（ことば）を消（け）し始（はじ）めると、恐怖（きょうふ）が広（ひろ）がり、学者（がくしゃ）は逃（に）げ、都（みやこ）は沈黙（ちんもく）した。」最（もっと）も良（よ）い一文（いちぶん）の要約（ようやく）は？',
+            '「かつて この ひろばは 自由（じゆう）な 議論（ぎろん）で 栄（さか）えた。しずけさが 異論（いろん）の 言葉（ことば）を 消（け）し 始（はじ）めると、恐怖（きょうふ）が 広（ひろ）がり、学者（がくしゃ）は 逃（に）げ、ひろばは 沈黙（ちんもく）した。」最（もっと）も 良（よ）い 一文（いちぶん）の 要約（ようやく）は？',
         choices: [
           'I think the King was wrong to erase words from the city.',
           'Scholars fled the capital because they were afraid of fear.',
@@ -2271,11 +2271,11 @@ const List<QuestTown> kQuestTowns = [
       // 20 — FINALE: 魔王サイレント. Integrate nuance + logic + inference under pressure. (統合型)
       QuestEncounter(
         npcName: '魔王サイレント',
-        npcEmoji: '👑',
+        npcEmoji: '🌫️',
         npcLine:
-            '(A crowned shadow on the throne; the air swallows every sound.) "...If silence is peace, then speech is mere noise. Why should I ever give the world its words back?" Your single reply must break him.',
+            '(A faceless grey hush fills the square; it swallows every sound.) "...If silence is peace, then speech is mere noise. Why should I ever give the world its words back?" Your single reply must reach it.',
         npcLineJa:
-            '（王座（おうざ）の上（うえ）、冠（かんむり）をかぶった影（かげ）。空気（くうき）があらゆる音（おと）を呑（の）み込（こ）む。）「…静寂（せいじゃく）が平和（へいわ）だというなら、言葉（ことば）はただの雑音（ざつおん）だ。なぜ私（わたし）が世界（せかい）に言葉（ことば）を返（かえ）さねばならぬ？」きみのただ一言（ひとこと）が彼（かれ）を打（う）ち破（やぶ）る。',
+            '（顔（かお）のない灰色（はいいろ）の しずけさが ひろばに みちる。空気（くうき）があらゆる音（おと）を呑（の）み込（こ）む。）「…静寂（せいじゃく）が平和（へいわ）だというなら、言葉（ことば）はただの雑音（ざつおん）だ。なぜ私（わたし）が世界（せかい）に言葉（ことば）を返（かえ）さねばならぬ？」きみのただ一言（ひとこと）が届（とど）く。',
         choices: [
           'Silence is quiet, and quiet is nice, so you are a little right.',
           'You are powerful, and powerful people should do whatever they want.',
@@ -2284,7 +2284,7 @@ const List<QuestTown> kQuestTowns = [
         ],
         correctIndex: 2,
         onCorrect:
-            'The crown cracks. "...A cage. You name it true." Light floods the throne room, and a thousand voices return at once. "Then take them back, my heir — and never let them be eaten again." The world remembers how to speak.',
+            '(The hush stills, then softens — as if it, too, is remembering.) "...A cage. You name it true. I had forgotten I once had a voice of my own." Colour floods the grey square, and a thousand voices return at once — and one more: サイレント\'s own. You did it, きみ. You gave the world — and the Silence itself — its words back. Words are warmer than silence.',
       ),
     ],
   ),
