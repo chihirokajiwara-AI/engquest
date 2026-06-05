@@ -1,0 +1,146 @@
+{
+  "summary": "Design the actually-sellable, world-class 英検 learning RPG that beats マグナ/Prodigy/トド英語/mikan — concrete buildable game + phased implementation plan",
+  "agentCount": 6,
+  "logs": [
+    "Designing the 5 pillars of the sellable world-class game (build on the audit)…",
+    "Synthesizing ONE coherent game + a phased build plan from 5 pillars…"
+  ],
+  "result": {
+    "theGame": "CORE VERB: 「となえる」(Cast / Voice the Word). A-KEN Quest is a turn-based \"word-battle\" RPG where the player frees townspeople wrapped in サイレント (the silence — a sad phenomenon, never a demon to kill). The moment-to-moment loop: a villager appears greyed-out with a しずけさ (silence) meter; the existing 英検 item (NPC line + 4 audio-first choices) is reframed as ammunition — \"ことばを となえて！\". A correct cast LANDS as an attack: the meter drops a notch, a burst of COLOUR peels grey off the portrait, the チャージ combo ticks up. A wrong cast on a Quiz step \"won't come out\" (audio replays, no red/no scold) and costs 1 of 3 こころ (hearts); teach steps never cost hearts. Empty the meter → the villager BLOOMS to full colour and speaks their first restored line (TTS) → drop a 声のかけら shard; collect a town's worth → the 声の石 (the real progression macguffin, replacing the meaningless 💎). Run out of こころ → \"ことばが まだ たりない\" retreat-and-retry (keeps all shards, no death/Game Over imagery — child-safe). THE ACID TEST PASSES: strip the English and you still have a light JRPG battler with HP/combo/hearts, a recruited party with one-shot specials, equippable 声の石 relics, a collectible 声カード dex, streaks and a daily quest. Keep the English and every attack is a 英検 item answered out loud, scheduled by FSRS — so the game literally cannot be played without genuine 英検 practice. The single integrating thesis across all five pillars: the orphaned XP/streak/FSRS engines + the mock-test 大問 code already EXIST and are ~80% of a Duolingo-class meta; the redesign is overwhelmingly WIRING + a battle FSM skin + thin new layers, not a rebuild. Verified during research: battle_screen.dart already contains the exact, working grade→awardXp→FSRS.schedule→saveCard→level-up glue — Wave 1 lifts that proven code into the quest loop rather than inventing it.",
+    "theWedge": "「マグナは英語が\"好きになる\"。A-KENは、英検に\"受かる\"。」The defensible empty quadrant (verified June 2026): マグナ (free forever, 28 voice actors, 400+ schools, now bundles free 24/7 AI 英会話) owns \"fun English exposure\" but is conversation/pronunciation-first and does NOT do systematic, 配点-weighted 過去問 exam simulation — its own users complain words are 簡単すぎる. The official free 英検 app (スタディギア) was discontinued March 2024. mikan owns vocab-SRS only. トド英語 hard-stops at age 8 / ~3級. NOBODY owns: systematic, 過去問-faithful 英検 exam prep, for ages 6–15, delivered as a daily-playable RPG, with a parent-facing 合格-readiness signal. Our moat = 過去問-faithfulness × FSRS spaced-review × child-RPG × parent-outcome reporting as ONE loop (the same act of \"casting\" an exam item both entertains the child and raises the measurable pass-rate). The willingness-to-pay is the parent buying a 中学受験/内申 advantage with a hard 3×/yr deadline (1,700+ middle schools now use 英検 for 加点; 小学生 受験者 375,991/yr, mid-grades growing fastest). The child's FUN is free (top-of-funnel vs マグナ's free gravity); the parent's PROOF (合格-readiness dashboard) is the ¥1,480/mo paid layer. Price stays ¥1,480/mo + ¥9,800/yr but RE-ANCHORED: it sits BETWEEN mikan Lite (¥1,000 vocab-only) and mikan Premium (¥1,800 full-feature) — \"18% under mikan Premium for a child-playable exam RPG,\" a far stronger frame than the old \"+48% over mikan.\" We compete on COHERENCE + reactivity + the restoration narrative, NOT on out-spending a voice-acting studio.",
+    "wave1": {
+      "goal": "Make 'delete the English → still a game' TRUE and ship to the demo: turn the dead map→_index++→💎 loop into a real サイレント・バトル with HP/combo/hearts/fail-state, AND simultaneously kill the XP=0 bug by wiring the three orphaned systems (XP, streak, FSRS) into the quest loop — using the ALREADY-WORKING glue proven in battle_screen.dart. No new content, no new art, no animation dependency. Pure Dart + existing dq_ui widgets, fully unit-testable.",
+      "build": [
+        "lib/features/quest/battle/silent_battle_controller.dart — ChangeNotifier FSM (intro→prompt→resolve(correct)→resolve(wrong)→victory/defeat). Holds こころ(3 hearts), チャージ combo multiplier, 声のかけら shard count, current step index. Methods: castTap(int i), retreat(). Derives an FSRS Grade per cast from (correct?, attempts) — first-try=good, after-retry=hard, gave-up/defeated-then-cleared=again — copying battle_screen.dart's exact grade logic. Pure Dart, no dart:io, no Flutter import.",
+        "BattleRewards glue service (in the battle/ dir) — on victory calls XpService.awardXp(uid, grade), StreakService.recordStudySession(), and FsrsCardRepository.saveCard(FSRSAlgorithm.schedule(card, grade, now)). Card-id derived from town.id + step index (since QuestEncounter has NO wordId — a verified Wave-1 constraint; per-word keying is a later content task). This is a near-verbatim lift of the working block at battle_screen.dart lines ~360-385.",
+        "lib/features/quest/battle/silent_battle_screen.dart — reskin of quest_screen._encounter(): add a しずけさ HP bar (DqPanel), a こころ row (3 hearts), a combo flash, and a grey→colour portrait reveal via AnimatedSwitcher + opacity/saturation tween (NO new dep — pubspec has no animation package yet, so stay Flutter-native in Wave 1). Reuse DqScene, DqDialogBox, DqPortrait, AudioOptionButton, PhonicsLetterCard/BlendWordCard VERBATIM. Reframe the dialogue copy to 'サイレントが ○○さんを つつんでいる。ことばを となえて！'.",
+        "Encounter slicer (small helper) — split QuestTown.encounters into battles of 3–5 steps (one villager each) to hit the 3–5 min session shape; the town's 大問2-style node becomes a multi-phase mini-boss.",
+        "Replace quest_screen._choose/_next/_index++ call sites to drive the controller (or route QuestScreen to the new battle screen). Preserve the audio-first / no-scold contract exactly: teach-step wrong = replay only, never red, never a heart lost.",
+        "Unit tests: silent_battle_controller_test.dart against InMemoryFsrsCardRepository — assert correct cast drops しずけさ + awards XP>0 (proves XP=0 is fixed), wrong Quiz cast costs a heart, wrong teach step does not, 0 hearts → retreat keeps shards, victory fires reward glue once."
+      ],
+      "reuses": [
+        "lib/features/battle/battle_screen.dart (lines ~340-390) — the ALREADY-WORKING grade→awardXp→FSRS.schedule→saveCard→XP-popup→level-up-dialog glue; Wave 1 lifts this, it is not new code",
+        "lib/core/gamification/xp_service.dart awardXp(uid, Grade) + xp_profile.dart kGradeXp (again0/hard5/good10/easy15)",
+        "lib/features/home/streak_service.dart recordStudySession() (no-arg; currently called by NOTHING — verified)",
+        "lib/core/fsrs/{fsrs_algorithm.dart schedule(card,Grade,now), fsrs_card.dart enum Grade{again,hard,good,easy}, fsrs_card_repository.dart saveCard/getDueCards, InMemoryFsrsCardRepository for tests}",
+        "lib/features/quest/quest_data.dart — all ~155 authored nodes + sealed QuestStep (options/correctIndex/penalizeWrong/autoPlayAudio/onCorrect) as the unchanged question bank; penalizeWrong already distinguishes scold-vs-no-scold and becomes load-bearing",
+        "lib/features/quest/ui/dq_ui.dart — DqScene/DqDialogBox/DqPortrait/DqPanel/AudioOptionButton/PhonicsLetterCard/BlendWordCard/DqButton compose the whole battle UI",
+        "lib/core/sound/sound_service.dart + audio_cue_service.dart (audioplayers ^5.2.1) — existing correct/wrong/level-up SFX reused for hit/crit/victory",
+        "existing _stoneNames/_stoneColors (7 声の石) + 💎 reward path in quest_screen — shards now earned across the battle instead of handed out"
+      ],
+      "acceptanceTest": "Play one town end-to-end: each correct answer visibly drops the しずけさ meter and restores colour to the portrait; a wrong answer on a Quiz step costs a heart (wrong on a teach step does NOT); running out of hearts shows a child-safe retreat-and-retry that keeps shards; clearing the town awards >0 XP (the headline number is no longer 0), records a streak day, and persists an FSRS review. Cover-test: with the answer text blanked, the HP/combo/hearts/retreat loop is still a coherent playable battler (delete-the-English passes). flutter analyze clean + new controller unit tests green."
+    },
+    "laterWaves": [
+      {
+        "wave": "Wave 2 — The retention meta (Duolingo/Prodigy layer) + result screen",
+        "adds": "SessionResult model + animated SessionSummaryScreen (リザルト: +XP bar, streak flame, コトダマ coins, 声カード unlock, 'つぎに よみがえる ことば: N' = FSRS due-tomorrow come-back hook). KotodamaService (single soft currency, study-gated sources, deterministic NON-random sinks — COPPA-safe, no loot-box/real-money: れんぞくまもり streak-freeze, avatar/なかま cosmetics). DailyQuestService (3 ひらがな goals incl. 'ふくしゅうを すませよう' which drives FSRS efficacy). Streak milestone table + れんぞくまもり auto-consume (modify recordStudySession gap==2+freeze → keep streak; the single -21% churn lever Duolingo measured). Voice-cast critical-hit path via the shipped speech_to_text ^7.0.0 (OPTIONAL mic = 2× colour-restore crit; tap-only always a full valid path — マグナ's differentiator, made graceful).",
+        "effort": "Medium (~1.5–2 wk). Mostly thin Firestore-backed services + one animated screen; speech_to_text already integrated (T02 done). Risk: web mic permission flakiness — mitigated by mic-always-optional."
+      },
+      {
+        "wave": "Wave 3 — The efficacy lever surfaced + collection (the SOLE business value made visible)",
+        "adds": "ふくしゅう (review) map node fed by getDueCards(uid, now) — weak items resurface daily (turns FSRS from orphan into the pass-rate engine). KoeCard collection (Pokédex of mastered 英検 headwords; card mastered = FSRS stability ≥21d; CollectionScreen with per-grade completion %) — illustrations generated OFFLINE via Animagine batch (scripts/safe-job.sh, never in-loop). 声の石 made equippable relics (3 slots: +combo cap / +こころ / hint / retry) + party-villager one-shot specials (スラ=free retry, sage=eliminate-one-option). Replace the ListView-of-grade-buttons map with mastery-gated nodes (MasteryService: per-skill retrievability≥0.9 gauges).",
+        "effort": "Medium-High (~2–3 wk). KoeCard art is a heavy offline job (safe-job.sh, honor the 16-hr-hang rule). MasteryService + node-state map is the most logic-dense piece."
+      },
+      {
+        "wave": "Wave 4 — The PAID wedge: 過去問 simulation + 合格-readiness parent dashboard",
+        "adds": "Bind the existing exam_practice 大問1–4 screens (vocab_grammar/conversation/word_ordering/reading, ~3,787 LOC already built) as multi-phase town BOSSES and a separate 腕試し mock-test mode feeding the same FSRS deck. PassRateEstimator → 「合格まであと◯%」readiness bar from 配点-mapped 過去問-section mastery (NOT a pass-probability prediction — per the frozen-roadmap audit, to avoid refund/1-star risk) + 弱点分野 by 大問 + 試験日カウントダウン. ProgressionGate: unlock next grade at readiness ≥80% (genuine mastery gate, separate axis from generous XP). Parent dashboard surfaces 合格率% (the ¥1,480 willingness-to-pay trigger) + Day-1/Day-5/試験前 emails. Free/paid split: 大問1 loop capped 10/day free; unlimited 大問1–4 + dashboard paid (parent pays for PROOF, child's fun is free). This is the durable moat マグナ structurally won't build.",
+        "effort": "High (~3–4 wk). exam_practice screens exist but the 配点-mastery data layer, estimator, gate, and parent dashboard analytics are new. Critical-path RISK is CONTENT VOLUME: ~155 nodes is too few for a credible 7-grade 大問1–4 sim — needs hundreds more rigorous items through the content-qa gate (the real bottleneck, not code)."
+      },
+      {
+        "wave": "Wave 5 — Premium production polish (art coherence + animation + audio bed)",
+        "adds": "STYLE-LOCK: the 13 shipped assets are in 5 incompatible styles (storefront reads as asset-flip) — author scripts/art/style_prompt.py single-source prompt contract + re-gen the off-style assets (hero/title_bg/Silentus/villagers) to one cel look via ComfyUI IP-Adapter PLUS-FACE @0.7 + ArcFace≥0.70 gate (all via safe-job.sh). 34 reactive 2–3-state portraits that swap on answer (joy/concerned, no-scold). Add `rive` dep + 4 Rive artboards (correct-burst colour-spread, gentle wrong-recoil, 声の石 acquisition, town-revival colour-wash) — the moment XP/streak FIRE on screen. 4 missing town biomes + 7 声の石 gem assets + parallax. Audio bed: 3–4 looping music tracks + SFX kit (extend SoundService). Reconcile title↔in-game palette.",
+        "effort": "High (~3–4 wk, mostly offline gen + 1 manual Rive-editor step). REQUIRES CEO spec-freeze sign-off on the single chosen art style BEFORE re-gen (avoid the 4×-design-flip churn). All heavy gen via safe-job.sh only."
+      }
+    ],
+    "reuseVsBuild": "REUSE (verified present, wire don't rebuild): the entire orphaned meta is already built — XpService.awardXp + kGradeXp curve, StreakService.recordStudySession (called by NOTHING today — confirmed), FSRSAlgorithm.schedule + FsrsCardRepository.{saveCard,getDueCards} + InMemoryFsrsCardRepository, achievement_service. CRITICALLY: battle_screen.dart ALREADY contains a complete, working grade→awardXp→FSRS.schedule→saveCard→XP-popup→level-up glue block — Wave 1's BattleRewards is a lift of this, not new logic. Question bank: ~155 authored nodes + sealed QuestStep (options/correctIndex/penalizeWrong/autoPlayAudio/onCorrect) unchanged. UI: the full dq_ui kit composes every new screen. Audio: audioplayers + SoundService SFX + 11,522 Kokoro vocab MP3s + audio-first AudioOptionButton. Speaking: speech_to_text ^7.0.0 (T02 done) for the voice-crit. Exam: the 5 exam_practice 大問 screens (~3,787 LOC) + eiken_exam_config.dart per-grade CSE thresholds become bosses/腕試し. Pricing plumbing: paywall (T20) + Stripe (T30) + Claude proxy (T32). Generation: Kokoro TTS + Animagine XL local pipelines (¥0). BUILD NEW (thin): silent_battle_controller FSM + silent_battle_screen reskin + BattleRewards glue + encounter slicer (Wave 1); KotodamaService + KoeCard model/repo/CollectionScreen + DailyQuestService + SessionSummaryScreen + streak-freeze logic (W2–3); PassRateEstimator + ProgressionGate + MasteryService + parent dashboard analytics + free/paid cap logic (W4); style_prompt contract + IP-Adapter pipeline + Rive artboards + reactive-portrait system + music/SFX (W5). The ONLY genuinely new CONTENT authoring is grammar-pattern tables, EN distractors, and hundreds more 大問 items — all must pass the content-qa gate (the 7,923-distractor corruption precedent).",
+    "risks": [
+      "CONTENT VOLUME is the real critical path, not code. ~155 nodes cannot back a credible 7-grade 大問1–4 過去問 simulation (Wave 4, the paid wedge). Needs hundreds more rigorous items + EN recall distractors (current ones are JP-only) + grammar-pattern tables — ALL through the content-qa subagent (7,923-distractor corruption precedent). Underestimating this re-creates the depth-inversion the redesign exists to fix.",
+      "Depth-inversion is only PARTIALLY solved by Wave 1. The battle layer adds ENGAGEMENT depth uniformly, but six upper grades still share one Quiz step-kind — real PEDAGOGY depth (listening/reading/writing/speaking verbs per grade) lives in Waves 3–5. Risk of shipping Wave 1 and declaring 'depth solved' when 4級→準1級 are still one reused quiz mechanically.",
+      "Defeat/heart fail-state vs no-scold pedagogy for ages 4–8. Mitigation baked into Wave 1: defeat = retreat-and-retry keeping all shards, no death imagery, teach-step wrongs never cost hearts (only Quiz steps). Must be UX-validated with young testers — a heart loss must never read as a scold.",
+      "FSRS card-id has no wordId in QuestEncounter (verified) — Wave 1 keys cards by town+index, so spaced review is per-position not per-vocabulary-item until the content layer adds word-ids. This weakens the efficacy claim until Wave 3/4; don't overclaim FSRS pass-rate lift on Wave 1 alone.",
+      "The 'faster-to-pass than mikan' and '合格まであと◯%' claims are HYPOTHESES, not proven (FSRS's 20–30% gain is adult-Anki simulation; child 英検 forgetting curves may differ). Present to CEO as A/B-measurable (the analytics framework exists), never as proven — a harsh audit punishes overclaim. The readiness bar must be framed as section-mastery progress, NOT a pass guarantee (legal/copy review before launch).",
+      "Heavy generation (KoeCard illustrations, art re-gen, music) MUST run via scripts/safe-job.sh detached only — same class as the 16-hour-hang incident. Never in the agent/app loop.",
+      "Art re-gen (Wave 5) re-generates already-shipped, possibly CEO-approved assets — REQUIRES explicit spec-freeze sign-off on the single chosen style BEFORE work, or it repeats the 4×-design-flip churn this project already suffered.",
+      "マグナ could add 過去問 rigor and erase the wedge (it has the studio + 400 schools). Defense: build the parent-outcome dashboard moat fast — the data compounds and マグナ would have to abandon its conversation-first identity to copy it.",
+      "Web mic permission for voice-cast is flaky/absent on some browsers — never gate progress on speech; voice is always an OPTIONAL crit with tap-only as a full valid path.",
+      "Audio asset contract is still red (T35, web/audio empty): Listening/Speaking verbs assume Kokoro clips load via the playback path — resolve bundled-vs-web-audio architecture before depending on auto-play there. SATPIN phoneme audio is still unrecorded (CEO-owned gate) — defer gracefully, don't let art polish imply phonics audio is done."
+    ],
+    "sources": [
+      {
+        "title": "AI英語ゲーム マグナとふしぎの少女 — App Store (JP)",
+        "url": "https://apps.apple.com/jp/app/ai%E3%81%88%E3%81%84%E3%81%94-%E3%83%9E%E3%82%B0%E3%83%8A%E3%81%A8%E3%81%B5%E3%81%97%E3%81%8E%E3%81%AE%E5%B0%91%E5%A5%B3/id1112371684",
+        "date": "2026-06-05"
+      },
+      {
+        "title": "ずっと無料で使えるAI英語学習アプリ『マグナとふしぎの少女』にAI英会話キャラ「AIレイちゃん」が登場 — Mintflag",
+        "url": "https://magna.mintflag.com/info/?p=5284",
+        "date": "2026-06-05"
+      },
+      {
+        "title": "英語アプリ『マグナとふしぎの少女』を徹底解説 — 英語物語",
+        "url": "https://eigomonogatari.com/app_magna/",
+        "date": "2026-06-05"
+      },
+      {
+        "title": "Battling in Prodigy Math — Prodigy Education",
+        "url": "https://prodigygame.zendesk.com/hc/en-us/articles/12910978061844-Battling-in-Prodigy-Math",
+        "date": "2025"
+      },
+      {
+        "title": "Duolingo Gamification Strategy: A Full Case Study (2026) — Trophy",
+        "url": "https://trophy.so/blog/duolingo-gamification-case-study",
+        "date": "2026-01-01"
+      },
+      {
+        "title": "What Duolingo Taught Me About Retention — DEV Community (Streak Freeze -21% churn)",
+        "url": "https://dev.to/bhumica08/what-duolingo-taught-me-about-retention-and-how-id-build-it-into-my-own-apps-438j",
+        "date": "2025-01-01"
+      },
+      {
+        "title": "Lite・Premiumの料金 — 英語アプリ mikan ヘルプセンター (Lite ¥1,000 / Premium ¥1,800)",
+        "url": "https://mikan.helpshift.com/hc/ja/3-%E8%8B%B1%E8%AA%9E%E3%82%A2%E3%83%95%E3%83%AA-mikan/faq/287-lite-premium%E3%81%AE%E6%96%99%E9%87%91%E3%82%92%E7%9F%A5%E3%82%8A%E3%81%9F%E3%81%84/",
+        "date": "2026-06-05"
+      },
+      {
+        "title": "英検対策アプリおすすめランキング【2026年最新版】(スタディギア discontinued Mar 2024) — Weblio忍者英会話",
+        "url": "https://eikaiwa.weblio.jp/ninja-eikaiwa/eiken-app",
+        "date": "2026-06-05"
+      },
+      {
+        "title": "教科化で広がる英検チャレンジ、小学生の準2級受験者が10年で2倍 — ReseEd",
+        "url": "https://reseed.resemom.jp/article/2025/08/20/11524.html",
+        "date": "2025-08-20"
+      },
+      {
+        "title": "2024年度 実用英語技能検定(英検) 問題形式リニューアル — 日本英語検定協会 (公式)",
+        "url": "https://www.eiken.or.jp/eiken/2024renewal/",
+        "date": "2024"
+      },
+      {
+        "title": "The Effects of Spaced Practice on Second Language Learning: A Meta-Analysis — Kim & Webb (2022), Language Learning",
+        "url": "https://onlinelibrary.wiley.com/doi/abs/10.1111/lang.12479",
+        "date": "2022"
+      },
+      {
+        "title": "FSRS vs SM-2: Why the Algorithm Behind Your Flashcard App Matters — Neurako",
+        "url": "https://www.neurako.com/blog/fsrs-vs-sm2-spaced-repetition-algorithms-compared",
+        "date": "2025-01-01"
+      },
+      {
+        "title": "Rive vs Lottie: Which Animation Tool Should You Use in 2025? — DEV Community",
+        "url": "https://dev.to/uianimation/rive-vs-lottie-which-animation-tool-should-you-use-in-2025-p4m",
+        "date": "2026-06-05"
+      },
+      {
+        "title": "cagliostrolab/animagine-xl-4.0 — Hugging Face model card (identity-not-style)",
+        "url": "https://huggingface.co/cagliostrolab/animagine-xl-4.0",
+        "date": "2026-06-05"
+      },
+      {
+        "title": "Average Gaming Session Length by Age Group (2025)",
+        "url": "https://playercounter.com/average-gaming-session-length-by-age-group/",
+        "date": "2025"
+      }
+    ]
+  }
+}
