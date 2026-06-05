@@ -41,23 +41,21 @@ def synth(pipeline, text, voice, speed):
 
 
 def build_line(pipeline, text, voice, gap):
-    """Whole utterance slow then natural. `___` cloze blanks become a silent gap
-    so a read-aloud cloze question never voices the answer."""
+    """ONE clean, natural-speed utterance (英検 listening is natural speed; the
+    child can replay via 🔊). `___` cloze blanks become a silent gap so a
+    read-aloud cloze never voices the answer. We do NOT render slow-then-natural
+    any more — that doubled the clip and the slow stretch sounded robotic
+    (a one-word option ran ~3s)."""
     import numpy as np
-
-    def render(speed):
-        parts = []
-        segments = [s.strip() for s in text.split("___")]
-        for i, seg in enumerate(segments):
-            if seg:
-                s = synth(pipeline, seg, voice, speed)
-                if s is not None:
-                    parts.append(s)
-            if i < len(segments) - 1:
-                parts.append(gap)  # audible blank
-        return [p for p in parts if p is not None]
-
-    parts = render(0.85) + [gap] + render(1.0)
+    parts = []
+    segments = [s.strip() for s in text.split("___")]
+    for i, seg in enumerate(segments):
+        if seg:
+            s = synth(pipeline, seg, voice, 1.0)
+            if s is not None:
+                parts.append(s)
+        if i < len(segments) - 1:
+            parts.append(gap)  # audible blank
     return np.concatenate(parts) if parts else None
 
 
@@ -67,7 +65,7 @@ def write_mp3(audio, out_file):
     wav = out_file.with_suffix(".wav")
     sf.write(str(wav), audio, SAMPLE_RATE)
     rc = os.system(
-        f'ffmpeg -y -i "{wav}" -codec:a libmp3lame -qscale:a 5 '
+        f'ffmpeg -y -i "{wav}" -codec:a libmp3lame -qscale:a 2 '
         f'-ar {SAMPLE_RATE} "{out_file}" -loglevel quiet'
     )
     ok = rc == 0 and out_file.exists()

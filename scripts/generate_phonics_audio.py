@@ -100,22 +100,13 @@ def build_blend(pipeline, letters, word, voice, silence):
     the on-screen c→a→t tile sweep; the real recorded phonemes will play the
     individual sounds when they ship. `letters` is kept in the signature for the
     planned() call shape but is intentionally unused here."""
-    import numpy as np
-    parts = [
-        synth(pipeline, word, voice, 0.75),  # slow, clear
-        silence,
-        synth(pipeline, word, voice, 1.0),   # natural
-    ]
-    parts = [p for p in parts if p is not None]
-    return np.concatenate(parts) if parts else None
+    return synth(pipeline, word, voice, 1.0)  # one clean, natural utterance
 
 
 def build_phrase(pipeline, text, voice, silence):
-    """Whole phrase, slow then natural."""
-    import numpy as np
-    parts = [synth(pipeline, text, voice, 0.8), silence, synth(pipeline, text, voice, 1.0)]
-    parts = [p for p in parts if p is not None]
-    return np.concatenate(parts) if parts else None
+    """One clean, natural-speed utterance (no slow-then-natural doubling — it
+    stretched the clip and sounded robotic)."""
+    return synth(pipeline, text, voice, 1.0)
 
 
 def write_mp3(audio, out_file):
@@ -124,7 +115,7 @@ def write_mp3(audio, out_file):
     wav = out_file.with_suffix(".wav")
     sf.write(str(wav), audio, SAMPLE_RATE)
     rc = os.system(
-        f'ffmpeg -y -i "{wav}" -codec:a libmp3lame -qscale:a 5 '
+        f'ffmpeg -y -i "{wav}" -codec:a libmp3lame -qscale:a 2 '
         f'-ar {SAMPLE_RATE} "{out_file}" -loglevel quiet'
     )
     ok = rc == 0 and out_file.exists()
