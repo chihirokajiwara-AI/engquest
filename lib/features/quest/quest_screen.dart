@@ -224,9 +224,50 @@ class _QuestScreenState extends State<QuestScreen> {
   }
 
   /// The Quiz step's NPC portrait + dialogue (unchanged from the original).
+  /// Maps an NPC name to a generated portrait; null → DqPortrait shows the emoji.
+  static String? _npcImage(String name) {
+    const m = {
+      'スラ': 'assets/art/masters/slime.png',
+      'サイレント': 'assets/art/npc/silentus.png',
+      '魔王': 'assets/art/npc/silentus.png',
+      '賢者': 'assets/art/npc/sage.png',
+      '灰守': 'assets/art/npc/sage.png',
+      'がくしゃ': 'assets/art/npc/sage.png',
+      'せんせい': 'assets/art/npc/sage.png',
+      'むらおさ': 'assets/art/npc/sage.png',
+      'もんばん': 'assets/art/npc/gatekeeper.png',
+      'へいし': 'assets/art/npc/gatekeeper.png',
+      'きし': 'assets/art/npc/gatekeeper.png',
+      'ミィ': 'assets/art/npc/girl_cat.png',
+      'おんなのこ': 'assets/art/npc/girl_cat.png',
+      'ねこ': 'assets/art/npc/girl_cat.png',
+      'いぬ': 'assets/art/npc/boy_dog.png',
+      'おとこのこ': 'assets/art/npc/boy_dog.png',
+      'こども': 'assets/art/npc/boy_dog.png',
+      'おばあさん': 'assets/art/npc/old_woman.png',
+      'おかあさん': 'assets/art/npc/old_woman.png',
+      'パンや': 'assets/art/npc/baker.png',
+      'やおや': 'assets/art/npc/baker.png',
+      'みせ': 'assets/art/npc/baker.png',
+      'しょうにん': 'assets/art/npc/baker.png',
+      'りょうし': 'assets/art/npc/fisherman.png',
+      'かいぞく': 'assets/art/npc/fisherman.png',
+      'おじいさん': 'assets/art/npc/fisherman.png',
+      'おんがくか': 'assets/art/npc/musician.png',
+      'しじん': 'assets/art/npc/musician.png',
+      'たびびと': 'assets/art/npc/villager.png',
+      'むらびと': 'assets/art/npc/villager.png',
+      'はなや': 'assets/art/npc/villager.png',
+    };
+    for (final e in m.entries) {
+      if (name.contains(e.key)) return e.value;
+    }
+    return null;
+  }
+
   Widget _quizPrompt(QuestEncounter q) => Column(
         children: [
-          DqPortrait(emoji: q.npcEmoji, size: 76),
+          DqPortrait(imageAsset: _npcImage(q.npcName), emoji: q.npcEmoji, size: 76),
           const SizedBox(height: 16),
           DqDialogBox(
             speaker: q.npcName,
