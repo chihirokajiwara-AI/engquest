@@ -9,6 +9,7 @@ import 'package:engquest/features/onboarding/onboarding_flow.dart';
 import 'package:engquest/features/quest/quest_title_screen.dart';
 import 'package:engquest/features/quest/quest_screen.dart';
 import 'package:engquest/features/quest/quest_map_screen.dart';
+import 'package:engquest/features/quest/prologue_screen.dart';
 import 'package:engquest/features/quest/quest_data.dart';
 import 'package:engquest/features/exam_practice/exam_practice_screen.dart';
 import 'package:engquest/features/achievements/achievements_screen.dart';
@@ -29,6 +30,7 @@ class OnboardingStorage {
   static const _kCefr = 'onboarding_cefr';
   static const _kAvatar = 'onboarding_avatar';
   static const _kGoal = 'onboarding_goal_minutes';
+  static const _kPrologueSeen = 'prologue_seen';
 
   // Cached instance — populated by [init()] or [_lazyPrefs()].
   static PreferencesService? _prefs;
@@ -65,6 +67,17 @@ class OnboardingStorage {
     if (_prefs == null) return 8;
     final age = _prefs!.getInt(_kAge);
     return age > 0 ? age : 8;
+  }
+
+  /// Whether the opening prologue has already played (it plays once-ever).
+  static bool get prologueSeen {
+    if (_prefs == null) return false;
+    return _prefs!.getBool(_kPrologueSeen);
+  }
+
+  static Future<void> markPrologueSeen() async {
+    final p = await _lazyPrefs();
+    await p.setBool(_kPrologueSeen, true);
   }
 
   // ── Async save / load ────────────────────────────────────────────────────
