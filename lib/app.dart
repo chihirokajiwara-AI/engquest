@@ -259,10 +259,11 @@ Widget _previewFor(String? name) {
       return QuestScreen(town: kQuestTowns[0], previewEncounterIndex: 0);
     case 'quest5':
       return QuestScreen(town: kQuestTowns[0], previewEncounterIndex: 3);
-    case 'quest5q': // 英検5級 — first grammar Quiz step (Phase C handoff)
+    case 'quest5q': // 英検5級 — first voiced 応答型 quiz (Phase C, 🔊 line audio)
       return QuestScreen(
         town: kQuestTowns[0],
-        previewEncounterIndex: kQuestTowns[0].encounters.indexWhere((s) => s is QuestEncounter),
+        previewEncounterIndex:
+            kQuestTowns[0].encounters.indexWhere((s) => s is QuestEncounter && s.autoPlayAudio != null),
       );
     case 'quest4':
       return QuestScreen(town: kQuestTowns[1], previewEncounterIndex: 9);

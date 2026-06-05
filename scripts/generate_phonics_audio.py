@@ -70,6 +70,17 @@ PHRASES = {
     "thank_you": "Thank you.",
 }
 
+# Phase C grammar-arc NPC lines (line_*.mp3) — so the child HEARS the English of
+# the quiz, not just reads it. ONLY 応答型 (complete questions): voicing these is
+# never a spoiler because the answer is the child's reply, not a blank in the
+# line. Cloze (穴埋め) encounters are deliberately NOT here — playing the filled
+# sentence would give away the blank; they get post-reveal model audio instead.
+SENTENCES = {
+    "how_are_you": "How are you?",
+    "whats_your_name": "What's your name?",
+    "what_is_that": "What is that on the hill?",
+}
+
 # Letter -> a syllable Kokoro pronounces as the SOUND, not the letter-name, for
 # the slow segmented sweep. (These are deliberate sound exemplars; the pure
 # isolated phonemes themselves are the founder's espeak-ng/recorded job.)
@@ -130,6 +141,7 @@ def write_mp3(audio, out_file):
 def planned():
     items = [(f"blend_{k}.mp3", "blend", k, v) for k, v in BLENDS.items()]
     items += [(f"phrase_{k}.mp3", "phrase", v, None) for k, v in PHRASES.items()]
+    items += [(f"line_{k}.mp3", "phrase", v, None) for k, v in SENTENCES.items()]
     return items
 
 
@@ -137,10 +149,15 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("--voice", default="af_heart")
     p.add_argument("--limit", type=int, default=None)
+    p.add_argument("--only", default=None,
+                   help="only generate files whose name contains this substring "
+                        "(e.g. --only line_ to regen just the Phase C lines)")
     p.add_argument("--dry-run", action="store_true")
     args = p.parse_args()
 
     items = planned()
+    if args.only:
+        items = [it for it in items if args.only in it[0]]
     if args.limit:
         items = items[: args.limit]
 

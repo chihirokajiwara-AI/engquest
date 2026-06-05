@@ -329,6 +329,17 @@ class _QuestScreenState extends State<QuestScreen> {
               ],
             ),
           ),
+          // Hear the English line. Only for 応答型 (complete-question) encounters
+          // that carry line audio — cloze (穴埋め) lines are NOT auto-voiced here
+          // (the model answer would spoil the blank); they model the full answer
+          // on reveal instead. Shown only when a line clip is wired.
+          if (q.autoPlayAudio != null) ...[
+            const SizedBox(height: 12),
+            DqReplayButton(
+              onTap: () => _cue.play(q.autoPlayAudio),
+              label: '🔊 もういちど きく',
+            ),
+          ],
         ],
       );
 

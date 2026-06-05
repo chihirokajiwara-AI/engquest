@@ -225,6 +225,12 @@ class QuestEncounter extends QuestStep {
   @override
   final String onCorrect;
 
+  /// Optional asset key for the spoken English [npcLine] (so the child HEARS the
+  /// quiz, not just reads it). ONLY set for 応答型 (complete-question) encounters
+  /// — never for cloze (穴埋め) lines, where voicing the filled sentence would
+  /// give away the blank.
+  final String? lineAudio;
+
   const QuestEncounter({
     required this.npcName,
     required this.npcEmoji,
@@ -233,6 +239,7 @@ class QuestEncounter extends QuestStep {
     required this.choices,
     required this.correctIndex,
     required this.onCorrect,
+    this.lineAudio,
   });
 
   @override
@@ -243,7 +250,7 @@ class QuestEncounter extends QuestStep {
   @override
   String? get teachJa => npcLineJa;
   @override
-  String? get autoPlayAudio => null;
+  String? get autoPlayAudio => lineAudio;
   @override
   String? get practicePromptJa => null;
 
@@ -522,6 +529,7 @@ const List<QuestTown> kQuestTowns = [
         npcEmoji: '🧑‍🌾',
         npcLine: 'How are you?',
         npcLineJa: 'お元気（げんき）ですか？',
+        lineAudio: 'audio/phonics/line_how_are_you.mp3',
         choices: ["I'm a village.", 'I am Tuesday.', "I'm fine, thank you.", 'You are fine.'],
         correctIndex: 2,
         onCorrect: 'Good! Welcome to our village, traveller.',
@@ -532,6 +540,7 @@ const List<QuestTown> kQuestTowns = [
         npcEmoji: '👧',
         npcLine: "What's your name?",
         npcLineJa: 'お名前（なまえ）は、なんですか？',
+        lineAudio: 'audio/phonics/line_whats_your_name.mp3',
         choices: ['My name is Leo.', 'Your name is Leo.', 'I name is Leo.', "It's three o'clock."],
         correctIndex: 0,
         onCorrect: 'Leo! Nice to meet you, Leo. Sura likes you too!',
@@ -562,6 +571,7 @@ const List<QuestTown> kQuestTowns = [
         npcEmoji: '👵',
         npcLine: '(pointing far away) What is that on the hill?',
         npcLineJa: '（遠（とお）くを指（ゆび）さして）あの丘（おか）の上（うえ）にあるのは、何（なん）ですか？',
+        lineAudio: 'audio/phonics/line_what_is_that.mp3',
         choices: ['This is a castle.', 'That is a castle.', 'That is castle.', 'These is a castle.'],
         correctIndex: 1,
         onCorrect:
