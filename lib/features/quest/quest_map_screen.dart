@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:engquest/core/storage/preferences_service.dart';
 import 'ui/dq_ui.dart';
 import 'quest_data.dart';
-import 'quest_screen.dart';
+import 'battle/quest_town_battle_flow.dart';
 
 class QuestMapScreen extends StatefulWidget {
   /// 英検 level the student starts at ('5','4','3','pre2','2','pre1').
@@ -74,7 +74,9 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
 
   Future<void> _openTown(int i) async {
     final cleared = await Navigator.of(context).push<bool>(
-      MaterialPageRoute(builder: (_) => QuestScreen(town: kQuestTowns[i])),
+      MaterialPageRoute(
+          builder: (_) =>
+              QuestTownBattleFlow(town: kQuestTowns[i])),
     );
     if (cleared == true && i + 1 > _unlocked) {
       setState(() => _unlocked = i + 1);

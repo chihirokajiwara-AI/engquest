@@ -21,6 +21,11 @@ class QuestScreen extends StatefulWidget {
 
   @override
   State<QuestScreen> createState() => _QuestScreenState();
+
+  /// Maps an NPC name to a generated portrait asset path, or null if none
+  /// is defined. Public so [SilentBattleScreen] and related widgets can reuse
+  /// the same mapping without duplicating it.
+  static String? npcImage(String name) => _QuestScreenState._npcImage(name);
 }
 
 enum _Phase { intro, encounter, cleared }
@@ -271,7 +276,6 @@ class _QuestScreenState extends State<QuestScreen> {
   }
 
   /// The Quiz step's NPC portrait + dialogue (unchanged from the original).
-  /// Maps an NPC name to a generated portrait; null → DqPortrait shows the emoji.
   static String? _npcImage(String name) {
     const m = {
       'スラ': 'assets/art/masters/slime.png',

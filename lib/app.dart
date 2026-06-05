@@ -10,6 +10,7 @@ import 'package:engquest/features/quest/quest_title_screen.dart';
 import 'package:engquest/features/quest/quest_screen.dart';
 import 'package:engquest/features/quest/quest_map_screen.dart';
 import 'package:engquest/features/quest/prologue_screen.dart';
+import 'package:engquest/features/quest/battle/quest_town_battle_flow.dart';
 import 'package:engquest/features/quest/quest_data.dart';
 import 'package:engquest/features/exam_practice/exam_practice_screen.dart';
 import 'package:engquest/features/achievements/achievements_screen.dart';
@@ -266,6 +267,10 @@ Widget _previewFor(String? name) {
       return const DailyHomeScreen(childAge: 8);
     case 'questmap':
       return const QuestMapScreen();
+    case 'silentbattle': // Wave 1 — サイレント word-battle (skip intro, open in battle)
+      return QuestTownBattleFlow(town: kQuestTowns[0], previewStraightToBattle: true);
+    case 'silentbattle4':
+      return QuestTownBattleFlow(town: kQuestTowns[1], previewStraightToBattle: true);
     case 'prologue':
       return PrologueScreen(onDone: () {});
     case 'prologue3':
