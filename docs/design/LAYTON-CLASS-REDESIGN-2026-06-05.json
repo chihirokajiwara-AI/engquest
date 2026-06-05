@@ -1,0 +1,124 @@
+{
+  "summary": "Master Professor Layton deeply, then redesign A-KEN Quest into a Layton-class immersive 英検 adventure built with full AI generation — buildable + generation plan",
+  "agentCount": 5,
+  "logs": [
+    "Mastering Professor Layton + designing the adaptation (4 angles, dated sources)…",
+    "Synthesizing the immersive 英検-adventure design + build/generation plan from 4 angles…"
+  ],
+  "result": {
+    "experience": "A-KEN Quest becomes 「コトバ探偵」— a Layton-class point-and-click 英検 adventure where the child is a kotoba-tantei (word-detective) who restores a silenced world one word at a time. The screen is no longer a portrait + textbox quiz list; it is a PAINTED, TAPPABLE, VOICED PLACE.\n\nTHE LOOP (honoring Layton, verified from TGS2025/2026 sources):\n1. EXPLORE — You don't walk a character; you tap a full-bleed AI-painted district (a clocktower lane, a harbour of brass ships). A 2–3 layer Stack parallaxes on drag so the place feels alive (the \"living storybook\" look reviewers praise, Cubed3 2025-09). Idle ambience (a steam puff, a flickering lamp) kills the 昭和 stillness.\n2. INVESTIGATE — Tap scenery and people. Tapping an NPC plays a Kokoro-voiced line that surfaces a CLUE, then the NPC suddenly \"throws\" a ナゾ — the 「？」speech-bubble. This is Layton's core \"a puzzle lives inside a place and a person\" (4Gamer TGS2025, 2025-09-26). Tapping the bubble opens the puzzle with a page-turn/iris transition + a ナゾ sting.\n3. THE ナゾ IS A 英検 ITEM — UNCHANGED. Each ナゾ is one of the existing ~155 authored QuestEncounter nodes (real 英検 cloze / vocab / conversation / 語句の並びかえ items, correct answer + authored distractors byte-identical). The only change is the ENVELOPE: an in-world framing line re-casts the dry stem as a mystery (\"この時計、2019年で止まったきり…どの言葉なら『ずっと』を表せる?\" over a real since/for/at/in cloze). Exam rigor is strictly preserved — the kid must still pick the exam-correct option to progress. 5級 phonics TeachSound/BlendWord become Kokoro-voiced \"listen-and-restore\" ナゾ. On a correct answer, the grey (silenced) NPC/scene tile cross-fades to COLOR — the restoration payoff and the anti-昭和 reveal in one beat.\n4. ひらめきコイン — Hidden in the scenery as tappable hotspots (barrel, chimney, lamppost). Start with 10, ~30 per district (canon: start 10, ~300/game, found by scenery touch-points — laytonwiki, updated 2010; coin-detector \"Coindar\" mode, Famitsu 53646 2025-09). The silent-slime companion gives a Japanese word-clue toward the nearest unfound coin. Coins are SPENT on a 3-tier PEDAGOGICAL hint ladder per ナゾ: T1 (1 coin) = the grammar/phonics PRINCIPLE in Japanese; T2 (2 coins) = eliminate ONE distractor WITH the reason; T3 (3 coins) = a worked PARALLEL example the kid must still map. Hints TEACH and never reveal the option — desirable-difficulty scaffolding, not answer-leakage. A kid who knows it banks coins; a stuck kid pays to learn.\n5. ピカラット = まなびポイント / 合格メーター — Each item carries a value by grade (5級 vocab=10 … 準1級 reading=50). First-try correct = full; each wrong tap decays the earnable value (full→⅔→⅓→40% floor), no timer, never a fail screen (mirrors the verified mechanic, GAME Watch 2025-09). Decay drives genuine retrieval effort (good for FSRS). Town/grade totals roll into a 合格メーター literally reskinned as 英検 readiness (\"準2級 合格圏まで あと 320\"). Accumulated ピカラット unlocks an AI-painted bonus gallery + HIDDEN 難ナゾ (above-grade real past-exam items) — genuine exam upside, not cosmetics.\n6. ナゾーバの館 = THE FSRS SPACED-REVIEW HOME (load-bearing, not decorative). Every missed/skipped/wrong-then-corrected ナゾ auto-files into 「ナゾーバおばあちゃんの館」, backed by the REAL FsrsCardRepository.getDueCards. On each solve, grade the card (Again/Hard/Good/Easy from #wrong taps + #hints used) via saveCard. The 館 surfaces \"今日 解き直せるナゾ\" = today's due deck. Layton's \"nothing is ever lost\" promise and spaced-repetition correctness become the SAME system — the FSRS read-back the business depends on, made diegetic.\n7. トランク MINIGAMES — Menu minigames (はつおんマシン / ことばパズル from T24 word-order content / リスニング・ラジオ) whose PARTS drop from solved ナゾ; completing one unlocks a super-hard hidden ナゾ. Reuses exam_practice content as fuel.\n\nHOW IT HOOKS: every system is a reason to LOOK at the painted world — content is hidden IN the world and discovered, never served as a list. HOW RIGOR + FSRS READ-BACK ARE PRESERVED: answer keys/distractors/skill-coverage untouched; ピカラット tracks 合格圏; the 館 is the FSRS due-queue; hints teach the tested principle.",
+    "fateOfSilentWorld": "KEEP and REFRAME — do not replace. The サイレント restoration narrative is the single best asset for a Layton adaptation and already fits perfectly. Decisions: (1) NARRATIVE STAYS. きみ returns words; サイレント = the silence phenomenon = the season-arc mystery (the role Layton's overarching mystery plays). Each town/district becomes a CHAPTER; clearing it visibly rebuilds the world grey→color — a direct port of 蒸気の新世界's new 'town-development' meta-progression (Dengeki 2024-09). The restoration mechanic IS the color-reveal payoff, so it does double duty as the anti-昭和 immersion beat. (2) BATTLE / flashcard retrieval is REFRAMED, not kept as a separate mode. The standalone battle screen (a quiz in a costume) is exactly what the founder rejected, so it is RETIRED as a front-facing destination. Its engine — FSRS-4.5 retrieval scheduling — is REPURPOSED as the brain of ナゾーバの館: the spaced-review 'solve-it-again' surface. Retrieval practice still happens (essential for passing 英検), but it now happens diegetically inside the world (re-investigating a ナゾ in the 館) instead of in a decontextualized flashcard mode. Net: zero pedagogy lost, the rejected presentation gone, and the world's two strongest existing assets (restoration story + FSRS) become the spine of the immersive loop.",
+    "artDirectionBible": "One FROZEN storybook style-lock prepended to EVERY Animagine XL prompt so the whole world reads as a single hand-painted book (Layton's cohesion is the immersion, not budget): POSITIVE suffix — \"european storybook illustration, soft watercolour and gouache, warm muted palette (dusty teal #5DA9E9, brass amber #E0A458, cream #F5EFE0, plum shadow), gentle steam-fantasy meets cozy fairytale Europe, Ghibli/Howl's-Moving-Castle warmth, hand-painted texture, soft rim light, painterly depth of field, no harsh black outlines, no cel-shading\"; NEGATIVE suffix — \"photo, 3dcg, flat vector, grey background, textbox, ui, sterile, modern anime gloss, harsh outlines, neon, watermark, lowres, jpeg artifacts\". Lock determinism for a coherent world: DPM++ 2M Karras, CFG 6.5, 28 steps, and ONE master seed per district so a town keeps consistent architecture/lighting across scenes; recurring NPCs use a verbatim-reused identity description + fixed seed so the cast is recognizable across every appearance. Backgrounds are generated EMPTY-OF-PEOPLE and wide (1536×640, sliced into 2–3 parallax bands) so NPC sprites and tap-hotspots composite on top in Flutter — this is what turns a flat PNG into an explorable, living storybook place and escapes the grey-portrait '昭和' look wholesale.",
+    "wave1": {
+      "goal": "Prove the immersive Layton-feel on ONE existing town: a kid explores a painted, parallaxing district, taps an NPC who VOICES a clue then throws a real 英検 ナゾ, can find a hidden ひらめきコイン and spend it on a teaching hint, earns ピカラット that decay on wrong taps, and sees the grey NPC cross-fade to color on solving — all from local AI assets, exam content byte-identical.",
+      "build": [
+        "lib/features/explore/scene_view.dart — the new explorable scene: a Stack of 2–3 parallax background bands (Transform tied to a PanGesture, drifts on drag) with a Positioned hotspot overlay. Replaces the linear QuestEncounter list for town_eiken5. Pure Flutter Stack/Positioned/GestureDetector, no dart:io.",
+        "lib/features/explore/hotspot.dart — Hotspot model: { Offset pos; Size size; HotspotKind kind (npc|coin); QuestStep? step; int coinValue; String? clueLineJa; } + a SceneDef { String backgroundAsset; List<String> parallaxLayers; List<Hotspot> hotspots; } authored for one district from town_eiken5's existing nodes. Pure Dart, additive to the sealed model.",
+        "lib/features/explore/nazo_reveal_transition.dart — tap-bounce (AnimatedScale) on the hotspot then a page-turn/iris ClipPath route into the existing quiz card, with a ナゾ-sting via the wired SoundService. This single transition delivers ~80% of the premium adventure read.",
+        "lib/features/quest/nazo_envelope.dart — additive optional fields on QuestEncounter (framingJa, solvedJa, nazoNo, picaratMax, hints[3]); all existing ~155 literals stay valid (defaults derived from grade+skill). Renders the Kokoro-voiced NPC framing line ABOVE the UNCHANGED 英検 stem + options inside DqDialogBox/DqChoice.",
+        "lib/core/gamification/hint_coin_service.dart — persistent coin balance via existing PreferencesService (seed 10); addCoin()/spend(); surfaces the currently-invisible economy. + HintSheet (DqPanel) spending 1/2/3 coins for the T1/T2/T3 teaching ladder.",
+        "lib/core/gamification/picarat_controller.dart — per-item value + wrong-answer decay (full→⅔→⅓→40% floor, no timer) hooked into quest_screen.dart's existing _choose/penalizeWrong path; count-up award animation reusing the XP wiring; visible decrement on wrong tap.",
+        "lib/features/explore/color_restore.dart — AnimatedCrossFade grey→color on correct answer, swapping a generated grey portrait for its color variant (the restoration + anti-昭和 payoff).",
+        "Wire-up: route town_eiken5 entry to SceneView instead of the linear QuestScreen; keep QuestScreen for the quiz card itself (reuse, don't rewrite)."
+      ],
+      "generate": [
+        "assets/art/STYLE_BIBLE.md — the frozen positive/negative blocks, palette hexes, sampler/CFG/steps/seed-per-district rules (single source of cohesion; checked in, not heavy).",
+        "scripts/generate_scene_backgrounds.py (Animagine XL, MPS, local) — ONE district plate for town_eiken5, empty-of-people, 1536×640 at the district master seed, auto-sliced into 2–3 parallax layers → assets/art/scenes/eiken5_plaza/{far,mid,near}.png. RUN VIA scripts/safe-job.sh (heavy-job hook), never in the agent loop.",
+        "scripts/generate_character_sheet.py (Animagine XL, local) — 2 recurring NPCs for the slice (e.g. the clockmaker + a child), each a grey(silenced)→color(restored) pair + 2 expressions (neutral, 'I have a ナゾ!'), transparent bg, identity-locked description+seed → assets/art/npc/{name}/{state}_{expr}.png. Via safe-job.sh.",
+        "Extend scripts/generate_kokoro_audio.py — voice the 2 NPCs' framing lines + clue lines (one consistent voice/speed per character) and the ナ ゾ-sting, reusing the existing multi-segment manifest path → assets/audio/npc/{name}/*.mp3. Via safe-job.sh. English 英検 listening stems stay neutral TTS for exam fidelity.",
+        "content-qa gate (per CLAUDE.md governance) MUST pass on the new framingJa/solvedJa/hints[] BEFORE commit — this is the exact bug class (corrupted distractors/English-among-Japanese) that previously shipped."
+      ],
+      "acceptanceTest": "On town_eiken5: the scene loads as a painted plate that parallaxes on drag; tapping the clockmaker plays a Kokoro voice line and raises a 「？」bubble; tapping the bubble page-turns into a REAL 英検5級 item (answer/distractors unchanged from quest_data.dart); a wrong tap visibly drops the ピカラット value and is recoverable (no fail, no timer); a hidden coin is findable in the scenery and spending it opens a teaching hint that does NOT reveal the answer; a correct answer cross-fades the clockmaker grey→color and banks full/decayed ピカラット. flutter analyze 0, flutter test green, content-qa pass on all new fiction."
+    },
+    "laterWaves": [
+      {
+        "wave": "Wave 2 — Full district + cast + voiced NPCs",
+        "adds": "Generate the full town_eiken5 district (3–4 scenes), all ~8 recurring NPCs as identity-locked grey→color sheets with 3–4 expressions and a 2-frame talk cycle, and Kokoro-voice every NPC line. Author all of town_eiken5's existing nodes as hotspots across the scenes. Add the 🔍 'コインさがし' Coindar sweep with the slime companion's JP word-clues. One gentle accordion/music-box town BGM + coin/correct/tap SFX through the wired SoundService."
+      },
+      {
+        "wave": "Wave 3 — ナゾーバの館 (FSRS) + 合格メーター",
+        "adds": "lib/features/nazoba/nazoba_hall.dart: a revisitable hall backed by the REAL FsrsCardRepository.getDueCards; auto-file missed/skipped/wrong ナゾ; grade each solve (Again/Hard/Good/Easy from #wrong+#hints) via saveCard; surface today's due deck. Retire the standalone battle screen, repurposing FSRS here. Build the 合格メーター per grade and the ピカラット-gated bonus gallery + first hidden 難ナゾ (above-grade item)."
+      },
+      {
+        "wave": "Wave 4 — トランク minigames + roll-out to all 7 grades",
+        "adds": "はつおんマシン (phonics blending), ことばパズル (T24 語句の並びかえ), リスニング・ラジオ (Kokoro) as menu minigames; PARTS drop from solved ナゾ; completion unlocks super-hard hidden ナゾ. Then generate district plates + casts for towns 4級→準1級 (batched via safe-job.sh) and author their existing nodes into scenes. Fully-voiced key story cutscenes for the サイレント season arc."
+      }
+    ],
+    "risks": [
+      "AI-art coherence is the make-or-break risk. Animagine XL (SDXL anime) can drift between scenes; if seeds/style-lock aren't disciplined the world looks like a stock-asset patchwork — the exact '昭和 patchwork' failure, just prettier. Mitigation: frozen STYLE_BIBLE + one master seed per district + verbatim NPC identity strings; founder eyeballs the Wave-1 plate before scaling. This needs a human art-taste gate, not just code.",
+      "NPC consistency across expressions/poses is genuinely hard without a per-character LoRA. Reused-description + fixed-seed gets ~70% there; faces may still wobble. Honest call: may need to train a tiny LoRA per core NPC (heavy job, safe-job.sh) before Wave 4 cast roll-out — budget time for it.",
+      "Heavy generation MUST go through scripts/safe-job.sh (the PreToolUse hook blocks it otherwise). A 2026-06-03 incident was a 16h hang from running heavy work in the loop. All image/TTS/LoRA runs are detached + timed; poll status, STOP on FAILED/TIMEOUT, never re-loop.",
+      "Rigor-erosion risk in the hint ladder. If a hint accidentally encodes the answer, the 英検 item is compromised. The content-qa gate is mandatory on every framingJa/solvedJa/hints[] — this is the same gate that exists because 7,923 distractors were once silently corrupted. Treat the fiction layer as exam content, not flavor.",
+      "Scope/spec-churn risk. The design has flipped 4× before. Wave 1 must be FROZEN once approved (per the spec-freeze gate) — build the vertical slice end-to-end before touching the spec again; do not let the parallax/animation polish balloon and bury the 英検 pedagogy.",
+      "Web performance: full-bleed 1536px plates + parallax + cross-fades on Flutter Web (CanvasKit) can jank on low-end devices/Chromebooks common in JP homes. Mitigation: cap layer count at 3, pre-size/compress plates, test on a throttled device in Wave 1.",
+      "Source caveat: the latest entry is 2026 (not 2025 as the brief assumed) and was still 'nearly complete / polishing presentation' as of 2026-04-10 (AUTOMATON). Some 蒸気の新世界 specifics (exact coin counts, town-development depth) are from hands-on previews, not a shipped final build — treat numbers as canon-from-prior-entries plus preview signal, and re-verify at launch."
+    ],
+    "sources": [
+      {
+        "title": "『レイトン教授と蒸気の新世界』TGS2025 試遊レポート — QuizKnockが手掛けるナゾ解き (4Gamer)",
+        "url": "https://www.4gamer.net/games/948/G094835/20250926002/",
+        "date": "2025-09-26"
+      },
+      {
+        "title": "Professor Layton & The New World of Steam — TGS2025 Hands-On (RPGFan)",
+        "url": "https://www.rpgfan.com/2025/09/27/tgs-2025-professor-layton-and-the-new-world-of-steam-hands-on/",
+        "date": "2025-09-27"
+      },
+      {
+        "title": "Hands-On: Professor Layton and the New World of Steam (Coindar word-clue hint coins, fully-voiced) — Nintendo Life",
+        "url": "https://www.nintendolife.com/previews/hands-on-professor-layton-and-the-new-world-of-steam-new-world-but-feels-like-the-old-prof",
+        "date": "2025-09-30"
+      },
+      {
+        "title": "『蒸気の新世界』TGS2025 試遊レポート — ひらめきコイン探知モード、シリーズ最多のナゾ数 (ファミ通, art 53646)",
+        "url": "https://www.famitsu.com/article/202509/53646",
+        "date": "2025-09-26"
+      },
+      {
+        "title": "Switch2マウス機能を使ったナゾ解き — 蒸気の新世界 試遊：誤答でピカラット減少、コイン探知 (GAME Watch)",
+        "url": "https://game.watch.impress.co.jp/docs/preview/2050471.html",
+        "date": "2025-09-25"
+      },
+      {
+        "title": "ひらめきコイン（初期10枚、計約300、タッチポイントで取得）— レイトン教授攻略Wiki",
+        "url": "http://laytonwiki.com/layton3/67.html",
+        "date": "2010-05-05"
+      },
+      {
+        "title": "『蒸気の新世界』シリーズ最多のナゾ数・町を発展させるナゾ（town-development）— 電撃オンライン",
+        "url": "https://dengekionline.com/article/202409/18694",
+        "date": "2024-09-18"
+      },
+      {
+        "title": "Professor Layton and the New World of Steam — Wikipedia (2026 worldwide release, QuizKnock, Hisaishi×Lilas Ikuta theme)",
+        "url": "https://en.wikipedia.org/wiki/Professor_Layton_and_the_New_World_of_Steam",
+        "date": "2026-04-10"
+      },
+      {
+        "title": "『蒸気の新世界』システムは“ほぼ完成”、2026年発売予定 — AUTOMATON",
+        "url": "https://automaton-media.com/articles/newsjp/20260410-436283/",
+        "date": "2026-04-10"
+      },
+      {
+        "title": "Professor Layton and the New World of Steam (TGS 2025): 'living storybook illustrations', layered backdrops — Cubed3",
+        "url": "https://www.cubed3.com/features/previews/professor-layton-and-the-new-world-tokyo-game-show-2025",
+        "date": "2025-09-30"
+      },
+      {
+        "title": "Professor Layton — Wikipedia (point-and-click: tap NPCs/scenery, hidden hint coins, picarats reduced on wrong answers)",
+        "url": "https://en.wikipedia.org/wiki/Professor_Layton",
+        "date": "2026-06-05"
+      },
+      {
+        "title": "Professor Layton: The Storytelling Value of Puzzles — With A Terrible Fate (puzzles AS narrative = the immersion mechanism)",
+        "url": "https://withaterriblefate.com/2018/02/16/professor-layton-the-storytelling-value-of-puzzles-in-video-games/",
+        "date": "2018-02-16"
+      },
+      {
+        "title": "Granny Riddleton's Shack (ナゾーバの館 auto-collects missed puzzles, nothing lost) — Professor Layton Wiki",
+        "url": "https://layton.fandom.com/wiki/Granny_Riddleton%27s_Shack",
+        "date": "2024-01-01"
+      }
+    ]
+  }
+}

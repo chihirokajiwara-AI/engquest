@@ -1,0 +1,60 @@
+{
+  "summary": "Autonomous super-harsh evaluation of the just-shipped Wave 1 サイレントバトル: is it a real game or a node-counter in an HP skin? Honest score + defects",
+  "agentCount": 5,
+  "logs": [
+    "4 ruthless critics evaluating Wave 1 (code + screenshots + verified facts)…",
+    "Synthesizing the honest Wave-1 verdict…"
+  ],
+  "result": {
+    "scoreNow": 3,
+    "priorScore": 3,
+    "movedNeedle": "No. The needle did not move on the axis the prior audit attacked. Score stays 3/10. I verified every load-bearing claim in the actual code and all four independent critiques are correct and converge: the \"battle\" is the old map→quiz loop wearing an HP costume. The acid test the prior audit set (\"delete the English and only a menu remains\") STILL passes verbatim — strip the 英検 step body and you have a progress bar, 3 hearts, and a となえる button with nothing to do. Wave 1 was a faithful reskin, not the structural rebuild it claimed. The only real gains are infrastructural (Firebase persists, XP no longer hard-zero) and they are invisible to the player, so they do not lift the gameplay/retention score. A world-class bar (Prodigy 2025: a correct answer REFILLS a resource you then SPEND on a chosen spell vs a chosen enemy with damage variance, elemental matchups, enemy turns) requires a second strategic layer ON TOP of the academic answer. Wave 1 has no second layer. That is the entire gap between \"quiz in a costume\" and \"game,\" and Wave 1 did not cross it.",
+    "genuinelyBetter": [
+      "DATA LAYER IS FIXED AND CLEAN. battle_rewards.dart actually awards XP, schedules FSRS, and records a streak on victory; Firebase IS initialised (main.dart:23) so writes land. The prior XP=0 bug is genuinely closed at the data layer. Credited — but it is plumbing, not gameplay.",
+      "THE FSM IS CLEAN AND TESTABLE. silent_battle_controller.dart is pure Dart, no Flutter/dart:io, web-safe, with a well-specified phase machine (intro→prompt→resolved→victory/defeat) and clear grade derivation (first-try=good, retry=hard, fail=again). This is the one genuinely solid piece of engineering — good wiring underneath the lipstick.",
+      "THE NO-SCOLD CONTRACT IS PRESERVED AND CORRECT. Teach/blend/word/phrase steps replay audio on wrong tap and never cost a heart (penalizeWrong==false). Good child-UX, intact from before."
+    ],
+    "stillFakeOrMissing": [
+      "FAKE: しずけさ 'HP' meter = silenceMeter => steps.length - _clearedSteps (controller:102). It is the node counter with an HP skin — monotonic, drops exactly 1 per cleared step, never driven by an enemy. A progress bar, not a combat resource. Victory at :230 is 'cleared every step → win, unconditionally.'",
+      "FAKE: チャージ combo is purely DECORATIVE. _combo++ at :175, but grep confirms its ONLY consumer is the _ComboFlash display badge (silent_battle_screen:240,782 'チャージ × N'). Zero combo→damage/scaling/multiplier link anywhere. A combo that multiplies nothing is a particle effect impersonating a mechanic.",
+      "FAKE: 声のかけら shards are WRITE-ONLY. Incremented (:173), accumulated (quest_town_battle_flow:111), displayed as icons (_ShardsRow) — never spent, never gate victory/defeat/rewards. A currency you cannot spend is not a resource.",
+      "MISSING: NO enemy agency, NO real lose condition. The サイレント enemy never acts, never attacks, never threatens on a timer. Defeat fires ONLY when hearts==0, and hearts drop ONLY on repeated wrong QUIZ answers — teach-steps are free. Most of a town is literally unloseable. An opponent that cannot hurt you is set dressing, so there is zero tension.",
+      "MISSING/BROKEN EFL: FSRS is WRITE-ONLY AND MIS-KEYED. cardId = 'townId__step_N' (controller:165) is a node coordinate, NOT a word/lemma — the same word in two towns becomes two cards. And grep for loadCard/getDue/dueCards/nextDue across the quest returns NOTHING: the deck is never read back to schedule a review. So 'spaced repetition' is dead weight — a forgotten word can never resurface. This is the single most damning finding: the core learning claim of the rebuild is unwired.",
+      "MISSING: progression is INVISIBLE. Grep confirms zero XP/level/streak/合格率 display in lib/features/quest/. The only surfacing is an ephemeral per-villager '✨ +N XP 獲得！' flash on the victory screen (silent_battle_screen:482) — no cumulative total, no level bar, no level-up moment, no streak flame, no mastery delta. The child earns progress they never see. That is the Duolingo/トド retention loop left fully open.",
+      "FAKE 'structural rebuild': every town routes through the IDENTICAL template. quest_map_screen:79 → QuestTownBattleFlow → sliceBattles(sliceSize:4) for all 7 towns; step bodies are reused VERBATIM from quest_screen; the 155-node bank is unchanged. battle_fixed.png (準1) and battle4_fixed.png (4級) are visually indistinguishable. '1-template × 7-towns' was not killed — it was reskinned with an HP bar.",
+      "MISSING: no combat juice / unchanged production polish. The 'attack' is a LinearProgressIndicator shrinking 1/N with no shake, flash, damage number, or cast VFX; the portrait reveal is a passive ColorFilter desaturation lerp, not a hit; the となえる→step path is two dead taps; reused greyscale-tinted portraits stand in for enemies; the town reward is still a literal 💎 emoji (quest_screen:417). Nothing reads as 'I cast, it hit.'",
+      "RISK: reward persistence is silent best-effort with NO telemetry. battle_rewards.dart wraps every write in bare catch(_){} (lines 53/63/72) and silent_battle_screen wraps the whole apply in another. No analytics event on success or failure. A future XP=0-style regression would be undetectable in production — and you already shipped one."
+    ],
+    "rankedFixes": [
+      {
+        "severity": "critical",
+        "fix": "BUILD A REAL SECOND LAYER (the answer must FEED combat, not BE combat). Give the enemy independent HP and a turn. Invert the meter: しずけさ RISES each turn as a visible ticking threat, and a correct となえる is what pushes it back — you race a returning silence instead of ticking down a checklist. Make the answer's EFFECT variable (damage = f(correctness, response-time, combo, FSRS-difficulty)). Until the academic answer drives a system distinct from itself, every future wave is another reskin. Reference Prodigy 2025: answer→refill resource→spend on a chosen action vs an enemy that counterattacks."
+      },
+      {
+        "severity": "critical",
+        "fix": "WIRE FSRS FOR REAL OR STOP CLAIMING IT. (a) Key cards per word/lemma (the actual vocab id in the step), NOT townId__step_N, so one word = one card across all towns. (b) Build a read-back surface: a daily/おさらい battle that PULLS due cards from the repository. Without a read path FSRS is inert and the product's efficacy promise is false — a launch blocker for a paid (¥1,480/mo) learning app."
+      },
+      {
+        "severity": "critical",
+        "fix": "MAKE COMBO AND SHARDS LOAD-BEARING OR DELETE THEM. Combo must multiply attack/pushback (flawless run kills faster / unlocks a finisher; a miss decays it and costs you). Shards must be a SPENDABLE currency (heal a heart, buy a hint, power a finisher). Keeping them decorative actively misrepresents depth — that is the textbook tell of lipstick."
+      },
+      {
+        "severity": "high",
+        "fix": "SURFACE PROGRESSION. Persistent HUD on the map (cumulative XP + level bar + streak flame) and a real town-clear result screen that animates XP filling the level bar, shows a level-up moment, the streak count, the FSRS mastery delta, and a 合格率 toward the 英検 grade. Persist-but-hide is worse than not persisting — it wastes the one fix Wave 1 actually landed."
+      },
+      {
+        "severity": "high",
+        "fix": "ADD COMBAT JUICE (highest-leverage 'feel' fix, needs no new packages). On a correct cast: shake/flinch the enemy portrait, flash a damage number, play a cast SFX, drain the HP bar with overshoot. On enemy turn: a silence-pulse 'attack'. Flutter AnimatedBuilder/Transform suffice. Replace the shared grey portrait with per-NPC art and the 💎 emoji reward with a real asset (T31 pipeline)."
+      },
+      {
+        "severity": "medium",
+        "fix": "ADD REWARD TELEMETRY. Keep the catch guards but emit an analytics event on both success and the caught-failure path (reward_applied / reward_failed with uid + grades + error). You already shipped one silent XP=0 regression; without this you cannot detect the next one."
+      },
+      {
+        "severity": "medium",
+        "fix": "DIFFERENTIATE TOWNS MECHANICALLY, not just by vocab — town-specific enemy patterns, multi-phase boss villagers, varying win conditions (timed, no-miss, multi-enemy). One template across 7 towns is the original sin; an HP skin on it does not address the audit's core charge."
+      }
+    ],
+    "nextMostImportant": "Build the enemy-turn / damage loop in silent_battle_controller.dart — the SINGLE highest-leverage change. Concretely: give the サイレント its own HP and a per-turn threat (silence rises each turn; a correct となえる deals variable pushback scaled by the now-load-bearing combo; if the player stalls or fails, the silence advances and threatens a heart). This one change simultaneously (a) makes the answer an INPUT to combat instead of the combat itself, (b) creates real tension and a genuine lose condition driven BY the enemy, and (c) finally gives combo and shards something to feed. It is the load-bearing fix that turns the controller from a node-counter-with-a-skin into an actual turn-based battle and makes the acid test fail (delete the English and a real combat shell remains). Everything else — juice, HUD, FSRS read-back — is high-value but secondary to establishing that the answer drives a second system. Do this in the pure-Dart controller (no UI), unit-test it, THEN layer the visuals."
+  }
+}
