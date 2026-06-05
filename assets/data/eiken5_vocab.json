@@ -52,9 +52,9 @@
         "animals"
       ],
       "distractors": [
-        "いぬ",
-        "さかな",
-        "とり"
+        "year",
+        "yesterday",
+        "zero"
       ]
     },
     {
@@ -81,9 +81,9 @@
         "animals"
       ],
       "distractors": [
-        "ねこ",
-        "うさぎ",
-        "くま"
+        "bath",
+        "beach",
+        "bear"
       ]
     },
     {
@@ -110,9 +110,9 @@
         "animals"
       ],
       "distractors": [
-        "とり",
-        "ねこ",
-        "かめ"
+        "lion",
+        "lip",
+        "lunch"
       ]
     },
     {
@@ -139,9 +139,9 @@
         "animals"
       ],
       "distractors": [
-        "さかな",
-        "ねこ",
-        "うさぎ"
+        "library",
+        "light",
+        "light_bulb"
       ]
     },
     {
@@ -168,9 +168,9 @@
         "animals"
       ],
       "distractors": [
-        "ねこ",
-        "いぬ",
-        "くま"
+        "woman",
+        "world",
+        "year"
       ]
     },
     {
@@ -197,9 +197,9 @@
         "animals"
       ],
       "distractors": [
-        "うし",
-        "ぶた",
-        "ひつじ"
+        "neck",
+        "newspaper",
+        "night"
       ]
     },
     {
@@ -226,9 +226,9 @@
         "animals"
       ],
       "distractors": [
-        "うま",
-        "ぶた",
-        "ひつじ"
+        "pencil",
+        "penguin",
+        "phone"
       ]
     },
     {
@@ -255,9 +255,9 @@
         "animals"
       ],
       "distractors": [
-        "うし",
-        "うま",
-        "ひつじ"
+        "traffic",
+        "train",
+        "travel"
       ]
     },
     {
@@ -284,9 +284,9 @@
         "animals"
       ],
       "distractors": [
-        "うし",
-        "ぶた",
-        "うま"
+        "hobby",
+        "holiday",
+        "home"
       ]
     },
     {
@@ -313,9 +313,9 @@
         "animals"
       ],
       "distractors": [
-        "とり",
-        "さかな",
-        "かめ"
+        "banana",
+        "bank",
+        "baseball"
       ]
     },
     {
@@ -342,9 +342,9 @@
         "animals"
       ],
       "distractors": [
-        "トラ",
-        "くま",
-        "ぞう"
+        "grandmother",
+        "grape",
+        "gym"
       ]
     },
     {
@@ -371,9 +371,9 @@
         "animals"
       ],
       "distractors": [
-        "ライオン",
-        "くま",
-        "ぞう"
+        "umbrella",
+        "uncle",
+        "uniform"
       ]
     },
     {
@@ -400,9 +400,9 @@
         "animals"
       ],
       "distractors": [
-        "トラ",
-        "ライオン",
-        "くま"
+        "tomorrow",
+        "tooth",
+        "top"
       ]
     },
     {
@@ -429,9 +429,9 @@
         "animals"
       ],
       "distractors": [
-        "ぞう",
-        "くま",
-        "トラ"
+        "notebook",
+        "number",
+        "one"
       ]
     },
     {
@@ -458,9 +458,9 @@
         "animals"
       ],
       "distractors": [
-        "ライオン",
-        "トラ",
-        "ぞう"
+        "hand",
+        "hat",
+        "head"
       ]
     },
     {
@@ -487,9 +487,9 @@
         "animals"
       ],
       "distractors": [
-        "おおかみ",
-        "くま",
-        "ライオン"
+        "February",
+        "Friday",
+        "January"
       ]
     },
     {
@@ -516,9 +516,9 @@
         "animals"
       ],
       "distractors": [
-        "きつね",
-        "くま",
-        "トラ"
+        "time",
+        "today",
+        "tomato"
       ]
     },
     {
@@ -545,9 +545,9 @@
         "animals"
       ],
       "distractors": [
-        "かめ",
-        "へび",
-        "さかな"
+        "top",
+        "toy",
+        "traffic"
       ]
     },
     {
@@ -574,9 +574,9 @@
         "animals"
       ],
       "distractors": [
-        "かえる",
-        "かめ",
-        "とり"
+        "kitchen",
+        "knee",
+        "left"
       ]
     },
     {
@@ -603,9 +603,9 @@
         "animals"
       ],
       "distractors": [
-        "かえる",
-        "へび",
-        "さかな"
+        "morning",
+        "mother",
+        "motorcycle"
       ]
     },
     {
@@ -632,9 +632,9 @@
         "animals"
       ],
       "distractors": [
-        "ねこ",
-        "うさぎ",
-        "いぬ"
+        "arm",
+        "art",
+        "aunt"
       ]
     },
     {
@@ -661,9 +661,9 @@
         "animals"
       ],
       "distractors": [
-        "とり",
-        "ペンギン",
-        "あひる"
+        "dancing",
+        "daughter",
+        "day"
       ]
     },
     {
@@ -690,9 +690,9 @@
         "animals"
       ],
       "distractors": [
-        "おうむ",
-        "あひる",
-        "とり"
+        "light_bulb",
+        "lion",
+        "lip"
       ]
     },
     {
@@ -719,9 +719,9 @@
         "animals"
       ],
       "distractors": [
-        "くま",
-        "ライオン",
-        "トラ"
+        "soccer",
+        "socks",
+        "sofa"
       ]
     },
     {
@@ -748,9 +748,9 @@
         "animals"
       ],
       "distractors": [
-        "うま",
-        "うし",
-        "ひつじ"
+        "station",
+        "station_tr",
+        "stomach"
       ]
     },
     {
@@ -777,9 +777,9 @@
         "animals"
       ],
       "distractors": [
-        "ハムスター",
-        "うさぎ",
-        "ねこ"
+        "week",
+        "wind",
+        "window"
       ]
     },
     {
@@ -806,9 +806,9 @@
         "animals"
       ],
       "distractors": [
-        "あひる",
-        "とり",
-        "ペンギン"
+        "computer",
+        "convenience_store",
+        "cookie"
       ]
     },
     {
@@ -835,9 +835,9 @@
         "animals"
       ],
       "distractors": [
-        "はち",
-        "あり",
-        "とり"
+        "pen",
+        "pencil",
+        "penguin"
       ]
     },
     {
@@ -864,9 +864,9 @@
         "animals"
       ],
       "distractors": [
-        "ちょうちょ",
-        "あり",
-        "むし"
+        "hundred",
+        "ice_cream",
+        "ice_skating"
       ]
     },
     {
@@ -893,9 +893,9 @@
         "animals"
       ],
       "distractors": [
-        "はち",
-        "ちょうちょ",
-        "むし"
+        "eleven",
+        "email",
+        "eraser"
       ]
     },
     {
@@ -922,9 +922,9 @@
         "food_drink"
       ],
       "distractors": [
-        "バナナ",
-        "みかん",
-        "ぶどう"
+        "shoes",
+        "shop",
+        "shoulder"
       ]
     },
     {
@@ -951,9 +951,9 @@
         "food_drink"
       ],
       "distractors": [
-        "パン",
-        "めん",
-        "スープ"
+        "pencil",
+        "penguin",
+        "phone"
       ]
     },
     {
@@ -980,9 +980,9 @@
         "food_drink"
       ],
       "distractors": [
-        "ジュース",
-        "ぎゅうにゅう",
-        "おちゃ"
+        "nine",
+        "nose",
+        "note"
       ]
     },
     {
@@ -1009,9 +1009,9 @@
         "food_drink"
       ],
       "distractors": [
-        "ごはん",
-        "めん",
-        "ケーキ"
+        "frog",
+        "front",
+        "game"
       ]
     },
     {
@@ -1038,9 +1038,9 @@
         "food_drink"
       ],
       "distractors": [
-        "みず",
-        "ジュース",
-        "おちゃ"
+        "stomach",
+        "straight",
+        "strawberry"
       ]
     },
     {
@@ -1067,9 +1067,9 @@
         "food_drink"
       ],
       "distractors": [
-        "にく",
-        "さかな",
-        "やさい"
+        "house",
+        "hundred",
+        "ice_cream"
       ]
     },
     {
@@ -1096,9 +1096,9 @@
         "food_drink"
       ],
       "distractors": [
-        "りんご",
-        "バナナ",
-        "いちご"
+        "March",
+        "May",
+        "Monday"
       ]
     },
     {
@@ -1125,9 +1125,9 @@
         "food_drink"
       ],
       "distractors": [
-        "りんご",
-        "オレンジ",
-        "いちご"
+        "hobby",
+        "holiday",
+        "home"
       ]
     },
     {
@@ -1154,9 +1154,9 @@
         "food_drink"
       ],
       "distractors": [
-        "クッキー",
-        "アイスクリーム",
-        "チョコレート"
+        "wind",
+        "window",
+        "winter"
       ]
     },
     {
@@ -1183,9 +1183,9 @@
         "food_drink"
       ],
       "distractors": [
-        "みず",
-        "ぎゅうにゅう",
-        "おちゃ"
+        "dress",
+        "drink_noun",
+        "duck"
       ]
     },
     {
@@ -1212,9 +1212,9 @@
         "food_drink"
       ],
       "distractors": [
-        "さかな",
-        "たまご",
-        "やさい"
+        "class",
+        "classroom",
+        "clock"
       ]
     },
     {
@@ -1241,9 +1241,9 @@
         "food_drink"
       ],
       "distractors": [
-        "くだもの",
-        "にく",
-        "ごはん"
+        "bicycle",
+        "bicycle_tr",
+        "bird"
       ]
     },
     {
@@ -1270,9 +1270,9 @@
         "food_drink"
       ],
       "distractors": [
-        "スープ",
-        "サンドウィッチ",
-        "ピザ"
+        "January",
+        "Japan",
+        "July"
       ]
     },
     {
@@ -1299,9 +1299,9 @@
         "food_drink"
       ],
       "distractors": [
-        "サラダ",
-        "ごはん",
-        "パン"
+        "shop",
+        "shoulder",
+        "shower"
       ]
     },
     {
@@ -1328,9 +1328,9 @@
         "food_drink"
       ],
       "distractors": [
-        "ケーキ",
-        "チョコレート",
-        "アイスクリーム"
+        "seven",
+        "sheep",
+        "ship"
       ]
     },
     {
@@ -1357,9 +1357,9 @@
         "food_drink"
       ],
       "distractors": [
-        "ケーキ",
-        "クッキー",
-        "チョコレート"
+        "orange",
+        "panda",
+        "pants"
       ]
     },
     {
@@ -1386,9 +1386,9 @@
         "food_drink"
       ],
       "distractors": [
-        "サンドウィッチ",
-        "ハンバーガー",
-        "スープ"
+        "foot",
+        "forest",
+        "forty"
       ]
     },
     {
@@ -1415,9 +1415,9 @@
         "food_drink"
       ],
       "distractors": [
-        "ピザ",
-        "ハンバーガー",
-        "パン"
+        "strawberry",
+        "street",
+        "student"
       ]
     },
     {
@@ -1444,9 +1444,9 @@
         "food_drink"
       ],
       "distractors": [
-        "クッキー",
-        "ケーキ",
-        "キャンディ"
+        "hamster",
+        "hand",
+        "hat"
       ]
     },
     {
@@ -1473,9 +1473,9 @@
         "food_drink"
       ],
       "distractors": [
-        "りんご",
-        "バナナ",
-        "ぶどう"
+        "shoulder",
+        "shower",
+        "side"
       ]
     },
     {
@@ -1502,9 +1502,9 @@
         "food_drink"
       ],
       "distractors": [
-        "いちご",
-        "りんご",
-        "オレンジ"
+        "bath",
+        "beach",
+        "bear"
       ]
     },
     {
@@ -1531,9 +1531,9 @@
         "food_drink"
       ],
       "distractors": [
-        "メロン",
-        "いちご",
-        "ぶどう"
+        "kitchen",
+        "knee",
+        "left"
       ]
     },
     {
@@ -1560,9 +1560,9 @@
         "food_drink"
       ],
       "distractors": [
-        "オレンジ",
-        "りんご",
-        "バナナ"
+        "friend",
+        "frog",
+        "front"
       ]
     },
     {
@@ -1589,9 +1589,9 @@
         "food_drink"
       ],
       "distractors": [
-        "にんじん",
-        "じゃがいも",
-        "たまねぎ"
+        "boat",
+        "book",
+        "bottom"
       ]
     },
     {
@@ -1618,9 +1618,9 @@
         "food_drink"
       ],
       "distractors": [
-        "にんじん",
-        "とうもろこし",
-        "たまねぎ"
+        "hiking",
+        "hobby",
+        "holiday"
       ]
     },
     {
@@ -1647,9 +1647,9 @@
         "food_drink"
       ],
       "distractors": [
-        "にんじん",
-        "たまねぎ",
-        "きゅうり"
+        "two",
+        "umbrella",
+        "uncle"
       ]
     },
     {
@@ -1676,9 +1676,9 @@
         "food_drink"
       ],
       "distractors": [
-        "トマト",
-        "じゃがいも",
-        "たまねぎ"
+        "bank",
+        "baseball",
+        "basketball"
       ]
     },
     {
@@ -1705,9 +1705,9 @@
         "food_drink"
       ],
       "distractors": [
-        "にんじん",
-        "トマト",
-        "じゃがいも"
+        "bed",
+        "bee",
+        "bicycle"
       ]
     },
     {
@@ -1734,9 +1734,9 @@
         "food_drink"
       ],
       "distractors": [
-        "みず",
-        "ジュース",
-        "コーヒー"
+        "club",
+        "coat",
+        "coffee"
       ]
     },
     {
@@ -1763,9 +1763,9 @@
         "food_drink"
       ],
       "distractors": [
-        "おちゃ",
-        "みず",
-        "ジュース"
+        "singing",
+        "sister",
+        "six"
       ]
     },
     {
@@ -1792,9 +1792,9 @@
         "family_people"
       ],
       "distractors": [
-        "おとうさん",
-        "おねえさん",
-        "おばあさん"
+        "neck",
+        "newspaper",
+        "night"
       ]
     },
     {
@@ -1821,9 +1821,9 @@
         "family_people"
       ],
       "distractors": [
-        "おかあさん",
-        "おにいさん",
-        "おじいさん"
+        "cat",
+        "center",
+        "chair"
       ]
     },
     {
@@ -1850,9 +1850,9 @@
         "family_people"
       ],
       "distractors": [
-        "おかあさん",
-        "おにいさん",
-        "ともだち"
+        "eye",
+        "face",
+        "fall"
       ]
     },
     {
@@ -1879,9 +1879,9 @@
         "family_people"
       ],
       "distractors": [
-        "おねえさん",
-        "おとうさん",
-        "ともだち"
+        "morning",
+        "mother",
+        "motorcycle"
       ]
     },
     {
@@ -1908,9 +1908,9 @@
         "family_people"
       ],
       "distractors": [
-        "おじいさん",
-        "おかあさん",
-        "おばさん"
+        "ticket",
+        "tiger",
+        "time"
       ]
     },
     {
@@ -1937,9 +1937,9 @@
         "family_people"
       ],
       "distractors": [
-        "おばあさん",
-        "おとうさん",
-        "おじさん"
+        "pencil",
+        "penguin",
+        "phone"
       ]
     },
     {
@@ -1966,9 +1966,9 @@
         "family_people"
       ],
       "distractors": [
-        "ともだち",
-        "クラス",
-        "グループ"
+        "card_game",
+        "carrot",
+        "cat"
       ]
     },
     {
@@ -1995,9 +1995,9 @@
         "family_people"
       ],
       "distractors": [
-        "こども",
-        "おとこのこ",
-        "おんなのこ"
+        "desk",
+        "dictionary",
+        "dinner"
       ]
     },
     {
@@ -2024,9 +2024,9 @@
         "family_people"
       ],
       "distractors": [
-        "おとな",
-        "あかちゃん",
-        "せいと"
+        "phone",
+        "photo",
+        "physical_education"
       ]
     },
     {
@@ -2053,9 +2053,9 @@
         "family_people"
       ],
       "distractors": [
-        "おんなのこ",
-        "おとこ",
-        "こども"
+        "door",
+        "drawing",
+        "dress"
       ]
     },
     {
@@ -2082,9 +2082,9 @@
         "family_people"
       ],
       "distractors": [
-        "おとこのこ",
-        "おんな",
-        "こども"
+        "breakfast",
+        "brother",
+        "bus"
       ]
     },
     {
@@ -2111,9 +2111,9 @@
         "family_people"
       ],
       "distractors": [
-        "おんなのひと",
-        "おとこのこ",
-        "おとうさん"
+        "game_sport",
+        "garden",
+        "gift"
       ]
     },
     {
@@ -2140,9 +2140,9 @@
         "family_people"
       ],
       "distractors": [
-        "おとこのひと",
-        "おんなのこ",
-        "おかあさん"
+        "camera",
+        "camping",
+        "car"
       ]
     },
     {
@@ -2169,9 +2169,9 @@
         "family_people"
       ],
       "distractors": [
-        "かぞく",
-        "クラスメート",
-        "せんせい"
+        "November",
+        "October",
+        "Saturday"
       ]
     },
     {
@@ -2198,9 +2198,9 @@
         "family_people"
       ],
       "distractors": [
-        "ねんれい",
-        "がっこう",
-        "くに"
+        "October",
+        "Saturday",
+        "September"
       ]
     },
     {
@@ -2227,9 +2227,9 @@
         "family_people"
       ],
       "distractors": [
-        "なまえ",
-        "がくねん",
-        "たんじょうび"
+        "kitchen",
+        "knee",
+        "left"
       ]
     },
     {
@@ -2256,9 +2256,9 @@
         "family_people"
       ],
       "distractors": [
-        "むすめ",
-        "おにいさん",
-        "おとこのこ"
+        "six",
+        "ski",
+        "skirt"
       ]
     },
     {
@@ -2285,9 +2285,9 @@
         "family_people"
       ],
       "distractors": [
-        "むすこ",
-        "おねえさん",
-        "おんなのこ"
+        "coffee",
+        "coin",
+        "color"
       ]
     },
     {
@@ -2314,9 +2314,9 @@
         "family_people"
       ],
       "distractors": [
-        "おばさん",
-        "おじいさん",
-        "おとうさん"
+        "bicycle_tr",
+        "bird",
+        "birthday"
       ]
     },
     {
@@ -2343,9 +2343,9 @@
         "family_people"
       ],
       "distractors": [
-        "おじさん",
-        "おばあさん",
-        "おかあさん"
+        "four",
+        "fourteen",
+        "fox"
       ]
     },
     {
@@ -2373,9 +2373,9 @@
         "colors_shapes"
       ],
       "distractors": [
-        "あお",
-        "きいろ",
-        "みどり"
+        "hot",
+        "hot_weather",
+        "hungry"
       ]
     },
     {
@@ -2403,9 +2403,9 @@
         "colors_shapes"
       ],
       "distractors": [
-        "あか",
-        "みどり",
-        "きいろ"
+        "strong",
+        "sunny",
+        "tall"
       ]
     },
     {
@@ -2433,9 +2433,9 @@
         "colors_shapes"
       ],
       "distractors": [
-        "あお",
-        "あか",
-        "きいろ"
+        "clean",
+        "clever",
+        "cold"
       ]
     },
     {
@@ -2463,9 +2463,9 @@
         "colors_shapes"
       ],
       "distractors": [
-        "あか",
-        "あお",
-        "みどり"
+        "another",
+        "any",
+        "bad"
       ]
     },
     {
@@ -2493,9 +2493,9 @@
         "colors_shapes"
       ],
       "distractors": [
-        "くろ",
-        "あか",
-        "あお"
+        "small",
+        "soft",
+        "some"
       ]
     },
     {
@@ -2523,9 +2523,9 @@
         "colors_shapes"
       ],
       "distractors": [
-        "しろ",
-        "あか",
-        "あお"
+        "beautiful",
+        "big",
+        "blue"
       ]
     },
     {
@@ -2553,9 +2553,9 @@
         "colors"
       ],
       "distractors": [
-        "あか",
-        "きいろ",
-        "ピンク"
+        "my",
+        "near",
+        "new"
       ]
     },
     {
@@ -2583,9 +2583,9 @@
         "colors_shapes"
       ],
       "distractors": [
-        "むらさき",
-        "あか",
-        "オレンジいろ"
+        "quiet",
+        "ready",
+        "red"
       ]
     },
     {
@@ -2613,9 +2613,9 @@
         "colors_shapes"
       ],
       "distractors": [
-        "ピンク",
-        "あお",
-        "あか"
+        "different",
+        "dirty",
+        "easy"
       ]
     },
     {
@@ -2643,9 +2643,9 @@
         "colors_shapes"
       ],
       "distractors": [
-        "くろ",
-        "きいろ",
-        "しろ"
+        "first",
+        "free",
+        "funny"
       ]
     },
     {
@@ -2673,9 +2673,9 @@
         "colors_shapes"
       ],
       "distractors": [
-        "しろ",
-        "くろ",
-        "ちゃいろ"
+        "happy",
+        "hard",
+        "hard_adj"
       ]
     },
     {
@@ -2703,9 +2703,9 @@
         "colors_shapes"
       ],
       "distractors": [
-        "ぎんいろ",
-        "きいろ",
-        "オレンジいろ"
+        "tall",
+        "their",
+        "third"
       ]
     },
     {
@@ -2733,9 +2733,9 @@
         "colors_shapes"
       ],
       "distractors": [
-        "きんいろ",
-        "はいいろ",
-        "しろ"
+        "easy",
+        "every",
+        "far"
       ]
     },
     {
@@ -2762,9 +2762,9 @@
         "colors_shapes"
       ],
       "distractors": [
-        "かたち",
-        "おおきさ",
-        "かず"
+        "cloud",
+        "club",
+        "coat"
       ]
     },
     {
@@ -2792,9 +2792,9 @@
         "colors_shapes"
       ],
       "distractors": [
-        "くらい",
-        "おもい",
-        "かたい"
+        "boy",
+        "bread",
+        "breakfast"
       ]
     },
     {
@@ -2822,9 +2822,9 @@
         "numbers_counting"
       ],
       "distractors": [
-        "に",
-        "さん",
-        "し"
+        "bread",
+        "breakfast",
+        "brother"
       ]
     },
     {
@@ -2852,9 +2852,9 @@
         "numbers_counting"
       ],
       "distractors": [
-        "いち",
-        "さん",
-        "し"
+        "lemon",
+        "lesson",
+        "lesson_music"
       ]
     },
     {
@@ -2882,9 +2882,9 @@
         "numbers_counting"
       ],
       "distractors": [
-        "に",
-        "し",
-        "ご"
+        "fifty",
+        "finger",
+        "fish"
       ]
     },
     {
@@ -2912,9 +2912,9 @@
         "numbers_counting"
       ],
       "distractors": [
-        "さん",
-        "ご",
-        "ろく"
+        "September",
+        "Sunday",
+        "TV"
       ]
     },
     {
@@ -2942,9 +2942,9 @@
         "numbers_counting"
       ],
       "distractors": [
-        "し",
-        "ろく",
-        "なな"
+        "ski",
+        "skirt",
+        "sky"
       ]
     },
     {
@@ -2972,9 +2972,9 @@
         "numbers_counting"
       ],
       "distractors": [
-        "ご",
-        "なな",
-        "はち"
+        "taxi",
+        "tea",
+        "teacher"
       ]
     },
     {
@@ -3002,9 +3002,9 @@
         "numbers_counting"
       ],
       "distractors": [
-        "ろく",
-        "はち",
-        "きゅう"
+        "scarf",
+        "schedule",
+        "school"
       ]
     },
     {
@@ -3032,9 +3032,9 @@
         "numbers_counting"
       ],
       "distractors": [
-        "なな",
-        "きゅう",
-        "じゅう"
+        "day",
+        "deer",
+        "desk"
       ]
     },
     {
@@ -3062,9 +3062,9 @@
         "numbers_counting"
       ],
       "distractors": [
-        "はち",
-        "じゅう",
-        "なな"
+        "lemon",
+        "lesson",
+        "lesson_music"
       ]
     },
     {
@@ -3092,9 +3092,9 @@
         "numbers_counting"
       ],
       "distractors": [
-        "きゅう",
-        "じゅういち",
-        "じゅうに"
+        "family",
+        "father",
+        "fifteen"
       ]
     },
     {
@@ -3122,9 +3122,9 @@
         "numbers_counting"
       ],
       "distractors": [
-        "じゅう",
-        "じゅうに",
-        "じゅうさん"
+        "child",
+        "chocolate",
+        "church"
       ]
     },
     {
@@ -3152,9 +3152,9 @@
         "numbers_counting"
       ],
       "distractors": [
-        "じゅういち",
-        "じゅうさん",
-        "じゅう"
+        "train",
+        "travel",
+        "tree"
       ]
     },
     {
@@ -3182,9 +3182,9 @@
         "numbers_counting"
       ],
       "distractors": [
-        "じゅう",
-        "さんじゅう",
-        "しじゅう"
+        "thirty",
+        "thousand",
+        "three"
       ]
     },
     {
@@ -3212,9 +3212,9 @@
         "numbers_counting"
       ],
       "distractors": [
-        "じゅう",
-        "せん",
-        "にじゅう"
+        "city",
+        "class",
+        "classroom"
       ]
     },
     {
@@ -3241,9 +3241,9 @@
         "numbers_counting"
       ],
       "distractors": [
-        "にばんめ",
-        "さんばんめ",
-        "よんばんめ"
+        "far",
+        "fast",
+        "free"
       ]
     },
     {
@@ -3270,9 +3270,9 @@
         "numbers_counting"
       ],
       "distractors": [
-        "いちばんめ",
-        "さんばんめ",
-        "よんばんめ"
+        "orange color",
+        "other",
+        "our"
       ]
     },
     {
@@ -3299,9 +3299,9 @@
         "numbers_counting"
       ],
       "distractors": [
-        "いちばんめ",
-        "にばんめ",
-        "よんばんめ"
+        "many",
+        "much",
+        "my"
       ]
     },
     {
@@ -3328,9 +3328,9 @@
         "numbers_counting"
       ],
       "distractors": [
-        "もじ",
-        "いろ",
-        "かたち"
+        "phone",
+        "photo",
+        "physical_education"
       ]
     },
     {
@@ -3358,9 +3358,9 @@
         "numbers_counting"
       ],
       "distractors": [
-        "いち",
-        "に",
-        "さん"
+        "teacher",
+        "team",
+        "ten"
       ]
     },
     {
@@ -3388,9 +3388,9 @@
         "numbers_counting"
       ],
       "distractors": [
-        "ぜんぶ",
-        "すこし",
-        "おおい"
+        "door",
+        "drawing",
+        "dress"
       ]
     },
     {
@@ -3417,9 +3417,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "あるく",
-        "およぐ",
-        "とぶ"
+        "wake",
+        "wake_up",
+        "walk"
       ]
     },
     {
@@ -3446,9 +3446,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "のむ",
-        "つくる",
-        "かう"
+        "dance",
+        "draw",
+        "drink"
       ]
     },
     {
@@ -3475,9 +3475,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "おきる",
-        "やすむ",
-        "すわる"
+        "say",
+        "see",
+        "show"
       ]
     },
     {
@@ -3504,9 +3504,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "べんきょうする",
-        "はたらく",
-        "やすむ"
+        "wake_up",
+        "walk",
+        "walk_tr"
       ]
     },
     {
@@ -3533,9 +3533,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "かく",
-        "みる",
-        "きく"
+        "sing",
+        "sleep",
+        "speak"
       ]
     },
     {
@@ -3562,9 +3562,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "はこぶ",
-        "くる",
-        "かんがえる"
+        "teach",
+        "tell",
+        "think"
       ]
     },
     {
@@ -3591,9 +3591,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "くる",
-        "かえる",
-        "とまる"
+        "wait",
+        "wake",
+        "wake_up"
       ]
     },
     {
@@ -3620,9 +3620,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "いく",
-        "かえる",
-        "でる"
+        "draw",
+        "drink",
+        "eat"
       ]
     },
     {
@@ -3649,9 +3649,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "きく",
-        "はなす",
-        "よむ"
+        "listen",
+        "live",
+        "look"
       ]
     },
     {
@@ -3678,9 +3678,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "きく",
-        "さわる",
-        "かぐ"
+        "get",
+        "give",
+        "go"
       ]
     },
     {
@@ -3707,9 +3707,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "みる",
-        "はなす",
-        "よむ"
+        "wash",
+        "wear",
+        "write"
       ]
     },
     {
@@ -3736,9 +3736,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "きく",
-        "よむ",
-        "かく"
+        "get",
+        "give",
+        "go"
       ]
     },
     {
@@ -3765,9 +3765,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "きく",
-        "かく",
-        "みる"
+        "write",
+        "add",
+        "answer"
       ]
     },
     {
@@ -3794,9 +3794,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "こたえる",
-        "はなす",
-        "みる"
+        "add",
+        "answer",
+        "buy"
       ]
     },
     {
@@ -3823,9 +3823,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "きく",
-        "たずねる",
-        "まつ"
+        "stand",
+        "start",
+        "stop"
       ]
     },
     {
@@ -3852,9 +3852,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "あそぶ",
-        "やすむ",
-        "ねる"
+        "sing",
+        "sleep",
+        "speak"
       ]
     },
     {
@@ -3881,9 +3881,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "おしえる",
-        "わすれる",
-        "おぼえる"
+        "run",
+        "say",
+        "see"
       ]
     },
     {
@@ -3910,9 +3910,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "まなぶ",
-        "わすれる",
-        "きく"
+        "jump",
+        "know",
+        "learn"
       ]
     },
     {
@@ -3939,9 +3939,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "じゃまする",
-        "いく",
-        "くる"
+        "come",
+        "cook",
+        "count"
       ]
     },
     {
@@ -3968,9 +3968,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "もらう",
-        "かう",
-        "とる"
+        "read",
+        "remember",
+        "repeat"
       ]
     },
     {
@@ -3997,9 +3997,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "あげる",
-        "かう",
-        "おく"
+        "forget",
+        "give",
+        "go"
       ]
     },
     {
@@ -4026,9 +4026,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "こわす",
-        "かう",
-        "もつ"
+        "drink",
+        "eat",
+        "feel"
       ]
     },
     {
@@ -4055,9 +4055,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "しめる",
-        "とじる",
-        "おく"
+        "look",
+        "lose",
+        "make"
       ]
     },
     {
@@ -4084,9 +4084,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "あける",
-        "とじる",
-        "おく"
+        "read",
+        "remember",
+        "repeat"
       ]
     },
     {
@@ -4113,9 +4113,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "はしる",
-        "とぶ",
-        "およぐ"
+        "write",
+        "add",
+        "answer"
       ]
     },
     {
@@ -4142,9 +4142,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "はしる",
-        "あるく",
-        "とぶ"
+        "repeat",
+        "ride",
+        "run"
       ]
     },
     {
@@ -4171,9 +4171,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "はしる",
-        "あるく",
-        "およぐ"
+        "wake",
+        "wake_up",
+        "walk"
       ]
     },
     {
@@ -4200,9 +4200,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "おどる",
-        "えをかく",
-        "ひく"
+        "visit",
+        "wait",
+        "wake"
       ]
     },
     {
@@ -4229,9 +4229,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "うたう",
-        "あそぶ",
-        "はしる"
+        "wake",
+        "wake_up",
+        "walk"
       ]
     },
     {
@@ -4258,9 +4258,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "かく",
-        "ぬる",
-        "つくる"
+        "carry",
+        "clean_verb",
+        "close"
       ]
     },
     {
@@ -4287,9 +4287,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "たべる",
-        "つくる",
-        "かう"
+        "sleep",
+        "speak",
+        "stand"
       ]
     },
     {
@@ -4316,9 +4316,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "うる",
-        "もらう",
-        "つくる"
+        "wash",
+        "wear",
+        "write"
       ]
     },
     {
@@ -4345,9 +4345,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "もつ",
-        "おく",
-        "こわす"
+        "can",
+        "cannot",
+        "carry"
       ]
     },
     {
@@ -4374,9 +4374,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "しらない",
-        "わかる",
-        "おぼえる"
+        "remember",
+        "repeat",
+        "ride"
       ]
     },
     {
@@ -4403,9 +4403,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "わかる",
-        "いう",
-        "きく"
+        "dance",
+        "draw",
+        "drink"
       ]
     },
     {
@@ -4432,9 +4432,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "きらい",
-        "いや",
-        "すごい"
+        "ride",
+        "run",
+        "say"
       ]
     },
     {
@@ -4461,9 +4461,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "いらない",
-        "すき",
-        "きらい"
+        "open",
+        "play",
+        "put"
       ]
     },
     {
@@ -4490,9 +4490,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "ない",
-        "あげる",
-        "もらう"
+        "wake",
+        "wake_up",
+        "walk"
       ]
     },
     {
@@ -4519,9 +4519,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "いく",
-        "くる",
-        "はたらく"
+        "take",
+        "teach",
+        "tell"
       ]
     },
     {
@@ -4548,9 +4548,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "すわる",
-        "ねる",
-        "あるく"
+        "tell",
+        "think",
+        "try"
       ]
     },
     {
@@ -4577,9 +4577,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "ちいさい",
-        "ほそい",
-        "みじかい"
+        "bright",
+        "brown",
+        "busy"
       ]
     },
     {
@@ -4606,9 +4606,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "おおきい",
-        "ながい",
-        "たかい"
+        "cold",
+        "cold_weather",
+        "cool"
       ]
     },
     {
@@ -4635,9 +4635,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "かなしい",
-        "おこっている",
-        "こわい"
+        "tall",
+        "their",
+        "third"
       ]
     },
     {
@@ -4664,9 +4664,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "うれしい",
-        "たのしい",
-        "げんき"
+        "little",
+        "long",
+        "many"
       ]
     },
     {
@@ -4693,9 +4693,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "つめたい",
-        "さむい",
-        "すずしい"
+        "cold_weather",
+        "cool",
+        "cute"
       ]
     },
     {
@@ -4722,9 +4722,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "あつい",
-        "あたたかい",
-        "はやい"
+        "yellow",
+        "young",
+        "your"
       ]
     },
     {
@@ -4751,9 +4751,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "わるい",
-        "へた",
-        "だめ"
+        "green",
+        "happy",
+        "hard"
       ]
     },
     {
@@ -4780,9 +4780,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "よい",
-        "いい",
-        "すごい"
+        "short",
+        "sick",
+        "silver"
       ]
     },
     {
@@ -4809,9 +4809,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "おそい",
-        "ゆっくり",
-        "のろい"
+        "wrong",
+        "yellow",
+        "young"
       ]
     },
     {
@@ -4838,9 +4838,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "はやい",
-        "いそぐ",
-        "すばやい"
+        "small",
+        "soft",
+        "some"
       ]
     },
     {
@@ -4867,9 +4867,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "みじかい",
-        "ちいさい",
-        "ひくい"
+        "beautiful",
+        "big",
+        "black"
       ]
     },
     {
@@ -4896,9 +4896,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "ながい",
-        "たかい",
-        "おおきい"
+        "my",
+        "near",
+        "new"
       ]
     },
     {
@@ -4925,9 +4925,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "みじかい",
-        "ちいさい",
-        "せまい"
+        "next",
+        "nice",
+        "no_adj"
       ]
     },
     {
@@ -4954,9 +4954,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "ふるい",
-        "おなじ",
-        "ちがう"
+        "cute",
+        "dark",
+        "different"
       ]
     },
     {
@@ -4983,9 +4983,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "あたらしい",
-        "わかい",
-        "げんき"
+        "black",
+        "blue",
+        "brave"
       ]
     },
     {
@@ -5012,9 +5012,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "みにくい",
-        "へん",
-        "こわい"
+        "right",
+        "round",
+        "sad"
       ]
     },
     {
@@ -5041,9 +5041,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "こわい",
-        "へん",
-        "みにくい"
+        "old",
+        "orange color",
+        "other"
       ]
     },
     {
@@ -5070,9 +5070,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "つまらない",
-        "むずかしい",
-        "かなしい"
+        "great",
+        "green",
+        "happy"
       ]
     },
     {
@@ -5099,9 +5099,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "むずかしい",
-        "たいへん",
-        "こんなん"
+        "any",
+        "bad",
+        "beautiful"
       ]
     },
     {
@@ -5128,9 +5128,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "かんたん",
-        "やさしい",
-        "らく"
+        "every",
+        "far",
+        "fast"
       ]
     },
     {
@@ -5157,9 +5157,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "よわい",
-        "やわらかい",
-        "やさしい"
+        "second",
+        "short",
+        "sick"
       ]
     },
     {
@@ -5186,9 +5186,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "つよい",
-        "げんき",
-        "はやい"
+        "no_adj",
+        "noisy",
+        "old"
       ]
     },
     {
@@ -5215,9 +5215,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "きたない",
-        "よごれた",
-        "ふるい"
+        "different",
+        "dirty",
+        "easy"
       ]
     },
     {
@@ -5244,9 +5244,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "きれい",
-        "あたらしい",
-        "しろい"
+        "long",
+        "many",
+        "much"
       ]
     },
     {
@@ -5273,9 +5273,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "ひま",
-        "やすんでいる",
-        "らく"
+        "gray",
+        "great",
+        "green"
       ]
     },
     {
@@ -5302,9 +5302,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "いそがしい",
-        "たいへん",
-        "こんなん"
+        "busy",
+        "cheers",
+        "clean"
       ]
     },
     {
@@ -5331,9 +5331,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "まちがい",
-        "ちがう",
-        "わるい"
+        "black",
+        "blue",
+        "brave"
       ]
     },
     {
@@ -5360,9 +5360,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "ただしい",
-        "いい",
-        "せいかい"
+        "many",
+        "much",
+        "my"
       ]
     },
     {
@@ -5389,9 +5389,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "ちがう",
-        "べつ",
-        "にている"
+        "her",
+        "his",
+        "hot"
       ]
     },
     {
@@ -5418,9 +5418,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "おなじ",
-        "にている",
-        "よく"
+        "busy",
+        "cheers",
+        "clean"
       ]
     },
     {
@@ -5447,9 +5447,9 @@
         "school_classroom"
       ],
       "distractors": [
-        "ペン",
-        "ものさし",
-        "けしごむ"
+        "hiking",
+        "hobby",
+        "holiday"
       ]
     },
     {
@@ -5476,9 +5476,9 @@
         "school_classroom"
       ],
       "distractors": [
-        "ノート",
-        "かみ",
-        "ざっし"
+        "meat",
+        "milk",
+        "minus"
       ]
     },
     {
@@ -5505,9 +5505,9 @@
         "school_classroom"
       ],
       "distractors": [
-        "せいと",
-        "こうちょう",
-        "としょかんいん"
+        "taxi",
+        "tea",
+        "team"
       ]
     },
     {
@@ -5534,9 +5534,9 @@
         "school_classroom"
       ],
       "distractors": [
-        "いす",
-        "テーブル",
-        "ベッド"
+        "running",
+        "salad",
+        "sandwich"
       ]
     },
     {
@@ -5563,9 +5563,9 @@
         "school_classroom"
       ],
       "distractors": [
-        "がっこう",
-        "じゅぎょう",
-        "こうもく"
+        "minute",
+        "money",
+        "monkey"
       ]
     },
     {
@@ -5592,9 +5592,9 @@
         "school_classroom"
       ],
       "distractors": [
-        "いえ",
-        "こうえん",
-        "としょかん"
+        "scarf",
+        "schedule",
+        "school_lunch"
       ]
     },
     {
@@ -5621,9 +5621,9 @@
         "school_classroom"
       ],
       "distractors": [
-        "せんせい",
-        "こうちょう",
-        "としょかんいん"
+        "paper",
+        "park",
+        "park_play"
       ]
     },
     {
@@ -5650,9 +5650,9 @@
         "school_classroom"
       ],
       "distractors": [
-        "えんぴつ",
-        "けしごむ",
-        "ものさし"
+        "forty",
+        "four",
+        "fourteen"
       ]
     },
     {
@@ -5679,9 +5679,9 @@
         "school_classroom"
       ],
       "distractors": [
-        "えんぴつ",
-        "ペン",
-        "ものさし"
+        "singing",
+        "sister",
+        "six"
       ]
     },
     {
@@ -5708,9 +5708,9 @@
         "school_classroom"
       ],
       "distractors": [
-        "えんぴつ",
-        "けしごむ",
-        "ペン"
+        "strawberry",
+        "street",
+        "student"
       ]
     },
     {
@@ -5737,9 +5737,9 @@
         "school_classroom"
       ],
       "distractors": [
-        "ポケット",
-        "はこ",
-        "ふくろ"
+        "apple",
+        "arm",
+        "art"
       ]
     },
     {
@@ -5766,9 +5766,9 @@
         "school_classroom"
       ],
       "distractors": [
-        "つくえ",
-        "テーブル",
-        "ベッド"
+        "basketball",
+        "bath",
+        "beach"
       ]
     },
     {
@@ -5795,9 +5795,9 @@
         "school_classroom"
       ],
       "distractors": [
-        "かべ",
-        "まど",
-        "ドア"
+        "tiger",
+        "time",
+        "today"
       ]
     },
     {
@@ -5824,9 +5824,9 @@
         "school_classroom"
       ],
       "distractors": [
-        "ほん",
-        "きょうかしょ",
-        "じしょ"
+        "September",
+        "Sunday",
+        "TV"
       ]
     },
     {
@@ -5853,9 +5853,9 @@
         "school_classroom"
       ],
       "distractors": [
-        "しゅくだい",
-        "テスト",
-        "じかん"
+        "watermelon",
+        "week",
+        "wind"
       ]
     },
     {
@@ -5882,9 +5882,9 @@
         "school_classroom"
       ],
       "distractors": [
-        "テスト",
-        "じゅぎょう",
-        "せいせき"
+        "wind",
+        "window",
+        "winter"
       ]
     },
     {
@@ -5911,9 +5911,9 @@
         "school_classroom"
       ],
       "distractors": [
-        "しゅくだい",
-        "じゅぎょう",
-        "せいせき"
+        "park_play",
+        "parrot",
+        "pen"
       ]
     },
     {
@@ -5940,9 +5940,9 @@
         "school_classroom"
       ],
       "distractors": [
-        "テスト",
-        "しゅくだい",
-        "クラス"
+        "daughter",
+        "day",
+        "deer"
       ]
     },
     {
@@ -5969,9 +5969,9 @@
         "school_classroom"
       ],
       "distractors": [
-        "がっこう",
-        "きょうしつ",
-        "しょくどう"
+        "day",
+        "deer",
+        "desk"
       ]
     },
     {
@@ -5998,9 +5998,9 @@
         "school_classroom"
       ],
       "distractors": [
-        "じゅぎょう",
-        "クラス",
-        "テスト"
+        "duck",
+        "ear",
+        "egg"
       ]
     },
     {
@@ -6027,9 +6027,9 @@
         "school_classroom"
       ],
       "distractors": [
-        "すうがく",
-        "かがく",
-        "れきし"
+        "night",
+        "nine",
+        "nose"
       ]
     },
     {
@@ -6056,9 +6056,9 @@
         "school_classroom"
       ],
       "distractors": [
-        "えいご",
-        "かがく",
-        "おんがく"
+        "winter",
+        "wolf",
+        "woman"
       ]
     },
     {
@@ -6085,9 +6085,9 @@
         "school_classroom"
       ],
       "distractors": [
-        "すうがく",
-        "えいご",
-        "れきし"
+        "book",
+        "bottom",
+        "box"
       ]
     },
     {
@@ -6114,9 +6114,9 @@
         "school_classroom"
       ],
       "distractors": [
-        "びじゅつ",
-        "たいいく",
-        "えいご"
+        "hamster",
+        "hand",
+        "hat"
       ]
     },
     {
@@ -6143,9 +6143,9 @@
         "school_classroom"
       ],
       "distractors": [
-        "おんがく",
-        "たいいく",
-        "りか"
+        "email",
+        "eraser",
+        "escalator"
       ]
     },
     {
@@ -6173,9 +6173,9 @@
         "time_calendar"
       ],
       "distractors": [
-        "きのう",
-        "あした",
-        "らいしゅう"
+        "lemon",
+        "lesson",
+        "lesson_music"
       ]
     },
     {
@@ -6202,9 +6202,9 @@
         "time_calendar"
       ],
       "distractors": [
-        "ひる",
-        "よる",
-        "ゆうがた"
+        "bus",
+        "butterfly",
+        "cake"
       ]
     },
     {
@@ -6231,9 +6231,9 @@
         "time_calendar"
       ],
       "distractors": [
-        "あさ",
-        "よる",
-        "ひる"
+        "door",
+        "drawing",
+        "dress"
       ]
     },
     {
@@ -6260,9 +6260,9 @@
         "time_calendar"
       ],
       "distractors": [
-        "あさ",
-        "よる",
-        "ごご"
+        "street",
+        "student",
+        "subject"
       ]
     },
     {
@@ -6289,9 +6289,9 @@
         "time_calendar"
       ],
       "distractors": [
-        "あさ",
-        "ひる",
-        "ゆうがた"
+        "hat",
+        "head",
+        "helicopter"
       ]
     },
     {
@@ -6318,9 +6318,9 @@
         "weather_nature"
       ],
       "distractors": [
-        "くもり",
-        "あめ",
-        "ゆき"
+        "far",
+        "fast",
+        "first"
       ]
     },
     {
@@ -6347,9 +6347,9 @@
         "weather_nature"
       ],
       "distractors": [
-        "ゆき",
-        "かぜ",
-        "くもり"
+        "November",
+        "October",
+        "Saturday"
       ]
     },
     {
@@ -6376,9 +6376,9 @@
         "weather_nature"
       ],
       "distractors": [
-        "あめ",
-        "かぜ",
-        "くもり"
+        "elevator",
+        "eleven",
+        "email"
       ]
     },
     {
@@ -6405,9 +6405,9 @@
         "weather_nature"
       ],
       "distractors": [
-        "あめ",
-        "ゆき",
-        "くも"
+        "school_lunch",
+        "science",
+        "sea"
       ]
     },
     {
@@ -6434,9 +6434,9 @@
         "weather_nature"
       ],
       "distractors": [
-        "あめ",
-        "かぜ",
-        "そら"
+        "son",
+        "soup",
+        "sport"
       ]
     },
     {
@@ -6463,9 +6463,9 @@
         "weather_nature"
       ],
       "distractors": [
-        "てんき",
-        "つき",
-        "ひ"
+        "corner",
+        "country",
+        "cow"
       ]
     },
     {
@@ -6492,9 +6492,9 @@
         "weather_nature"
       ],
       "distractors": [
-        "なつ",
-        "あき",
-        "ふゆ"
+        "bottom",
+        "box",
+        "boy"
       ]
     },
     {
@@ -6521,9 +6521,9 @@
         "weather_nature"
       ],
       "distractors": [
-        "はる",
-        "あき",
-        "ふゆ"
+        "cooking",
+        "corn",
+        "corner"
       ]
     },
     {
@@ -6550,9 +6550,9 @@
         "weather_nature"
       ],
       "distractors": [
-        "はる",
-        "なつ",
-        "ふゆ"
+        "March",
+        "May",
+        "Monday"
       ]
     },
     {
@@ -6579,9 +6579,9 @@
         "weather_nature"
       ],
       "distractors": [
-        "はる",
-        "なつ",
-        "あき"
+        "street",
+        "student",
+        "subject"
       ]
     },
     {
@@ -6608,9 +6608,9 @@
         "time_calendar"
       ],
       "distractors": [
-        "よる",
-        "しゅう",
-        "つき"
+        "six",
+        "ski",
+        "skirt"
       ]
     },
     {
@@ -6637,9 +6637,9 @@
         "time_calendar"
       ],
       "distractors": [
-        "ひ",
-        "つき",
-        "とし"
+        "orange",
+        "panda",
+        "pants"
       ]
     },
     {
@@ -6666,9 +6666,9 @@
         "time_calendar"
       ],
       "distractors": [
-        "しゅう",
-        "とし",
-        "ひ"
+        "tennis",
+        "test",
+        "textbook"
       ]
     },
     {
@@ -6695,9 +6695,9 @@
         "time_calendar"
       ],
       "distractors": [
-        "つき",
-        "しゅう",
-        "ひ"
+        "water",
+        "watermelon",
+        "week"
       ]
     },
     {
@@ -6724,9 +6724,9 @@
         "time_calendar"
       ],
       "distractors": [
-        "ふん",
-        "びょう",
-        "にち"
+        "traffic",
+        "train",
+        "travel"
       ]
     },
     {
@@ -6753,9 +6753,9 @@
         "time_calendar"
       ],
       "distractors": [
-        "じかん",
-        "びょう",
-        "にち"
+        "fourteen",
+        "fox",
+        "friend"
       ]
     },
     {
@@ -6782,9 +6782,9 @@
         "time_calendar"
       ],
       "distractors": [
-        "ひ",
-        "つき",
-        "ねん"
+        "paper",
+        "park",
+        "park_play"
       ]
     },
     {
@@ -6811,9 +6811,9 @@
         "time_calendar"
       ],
       "distractors": [
-        "あとで",
-        "まえ",
-        "ずっと"
+        "no",
+        "not",
+        "outside"
       ]
     },
     {
@@ -6841,9 +6841,9 @@
         "time_calendar"
       ],
       "distractors": [
-        "きょう",
-        "あした",
-        "らいしゅう"
+        "ski",
+        "skirt",
+        "sky"
       ]
     },
     {
@@ -6871,9 +6871,9 @@
         "time_calendar"
       ],
       "distractors": [
-        "きのう",
-        "きょう",
-        "らいしゅう"
+        "notebook",
+        "number",
+        "one"
       ]
     },
     {
@@ -6900,9 +6900,9 @@
         "greetings_social"
       ],
       "distractors": [
-        "さようなら",
-        "おやすみ",
-        "ありがとう"
+        "excuse_me",
+        "good_morning",
+        "good_night"
       ]
     },
     {
@@ -6929,9 +6929,9 @@
         "greetings_social"
       ],
       "distractors": [
-        "こんにちは",
-        "おはよう",
-        "こんばんは"
+        "excuse_me",
+        "good_morning",
+        "good_night"
       ]
     },
     {
@@ -6958,9 +6958,9 @@
         "greetings_social"
       ],
       "distractors": [
-        "ありがとう",
-        "どういたしまして",
-        "すみません"
+        "down",
+        "here",
+        "how"
       ]
     },
     {
@@ -6987,9 +6987,9 @@
         "greetings_social"
       ],
       "distractors": [
-        "すみません",
-        "どういたしまして",
-        "おねがい"
+        "hello",
+        "okay",
+        "sorry"
       ]
     },
     {
@@ -7016,9 +7016,9 @@
         "greetings_social"
       ],
       "distractors": [
-        "ありがとう",
-        "おねがい",
-        "どうぞ"
+        "good_morning",
+        "good_night",
+        "goodbye"
       ]
     },
     {
@@ -7045,9 +7045,9 @@
         "greetings_social"
       ],
       "distractors": [
-        "いいえ",
-        "ちがう",
-        "わからない"
+        "slowly",
+        "there",
+        "together"
       ]
     },
     {
@@ -7074,9 +7074,9 @@
         "greetings_social"
       ],
       "distractors": [
-        "はい",
-        "そう",
-        "わかった"
+        "yes",
+        "again",
+        "also"
       ]
     },
     {
@@ -7104,9 +7104,9 @@
         "greetings_social"
       ],
       "distractors": [
-        "いいえ",
-        "ちがう",
-        "むり"
+        "sorry",
+        "thank_you",
+        "welcome"
       ]
     },
     {
@@ -7133,9 +7133,9 @@
         "greetings_social"
       ],
       "distractors": [
-        "おやすみなさい",
-        "こんにちは",
-        "さようなら"
+        "welcome",
+        "excuse me",
+        "excuse_me"
       ]
     },
     {
@@ -7162,9 +7162,9 @@
         "greetings_social"
       ],
       "distractors": [
-        "おはようございます",
-        "こんにちは",
-        "さようなら"
+        "welcome",
+        "excuse me",
+        "excuse_me"
       ]
     },
     {
@@ -7191,9 +7191,9 @@
         "greetings_social"
       ],
       "distractors": [
-        "さようなら",
-        "またね",
-        "おわかれ"
+        "goodbye",
+        "hello",
+        "okay"
       ]
     },
     {
@@ -7220,9 +7220,9 @@
         "greetings_social"
       ],
       "distractors": [
-        "ありがとう",
-        "ごめんなさい",
-        "どうぞ"
+        "goodbye",
+        "hello",
+        "okay"
       ]
     },
     {
@@ -7249,9 +7249,9 @@
         "greetings_social"
       ],
       "distractors": [
-        "さようなら",
-        "またね",
-        "おやすみ"
+        "nice_day",
+        "no_problem",
+        "of_course"
       ]
     },
     {
@@ -7278,9 +7278,9 @@
         "greetings_social"
       ],
       "distractors": [
-        "さようなら",
-        "ありがとう",
-        "すみません"
+        "excuse",
+        "good_luck",
+        "here_is"
       ]
     },
     {
@@ -7308,9 +7308,9 @@
         "greetings"
       ],
       "distractors": [
-        "ありがとう",
-        "おはよう",
-        "さようなら"
+        "okay",
+        "sorry",
+        "thank_you"
       ]
     },
     {
@@ -7337,9 +7337,9 @@
         "greetings_social"
       ],
       "distractors": [
-        "こたえ",
-        "もんだい",
-        "せつめい"
+        "kitchen",
+        "knee",
+        "left"
       ]
     },
     {
@@ -7366,9 +7366,9 @@
         "communication"
       ],
       "distractors": [
-        "てがみ",
-        "しつもん",
-        "はなし"
+        "month",
+        "moon",
+        "morning"
       ]
     },
     {
@@ -7395,9 +7395,9 @@
         "greetings_social"
       ],
       "distractors": [
-        "わからない",
-        "きく",
-        "みる"
+        "wash",
+        "wear",
+        "write"
       ]
     },
     {
@@ -7424,9 +7424,9 @@
         "greetings_social"
       ],
       "distractors": [
-        "いう",
-        "きく",
-        "よむ"
+        "eat",
+        "feel",
+        "find"
       ]
     },
     {
@@ -7453,9 +7453,9 @@
         "greetings_social"
       ],
       "distractors": [
-        "はやく",
-        "すぐに",
-        "もっと"
+        "not",
+        "now",
+        "outside"
       ]
     },
     {
@@ -7482,9 +7482,9 @@
         "greetings_social"
       ],
       "distractors": [
-        "もう",
-        "ずっと",
-        "まだ"
+        "up",
+        "very",
+        "when"
       ]
     },
     {
@@ -7511,9 +7511,9 @@
         "greetings_social"
       ],
       "distractors": [
-        "ひとりで",
-        "ばらばら",
-        "べつべつ"
+        "also",
+        "down",
+        "here"
       ]
     },
     {
@@ -7540,9 +7540,9 @@
         "greetings_social"
       ],
       "distractors": [
-        "まだ",
-        "おそい",
-        "たいへん"
+        "brave",
+        "bright",
+        "brown"
       ]
     },
     {
@@ -7569,9 +7569,9 @@
         "greetings_social"
       ],
       "distractors": [
-        "おわる",
-        "やめる",
-        "とまる"
+        "count",
+        "dance",
+        "draw"
       ]
     },
     {
@@ -7598,9 +7598,9 @@
         "greetings_social"
       ],
       "distractors": [
-        "はじめる",
-        "つづける",
-        "すすむ"
+        "jump",
+        "know",
+        "learn"
       ]
     },
     {
@@ -7627,9 +7627,9 @@
         "body_parts"
       ],
       "distractors": [
-        "て",
-        "あし",
-        "かお"
+        "arm",
+        "art",
+        "aunt"
       ]
     },
     {
@@ -7656,9 +7656,9 @@
         "body_parts"
       ],
       "distractors": [
-        "あし",
-        "うで",
-        "ゆび"
+        "game_sport",
+        "garden",
+        "gift"
       ]
     },
     {
@@ -7685,9 +7685,9 @@
         "body_parts"
       ],
       "distractors": [
-        "みみ",
-        "はな",
-        "くち"
+        "eleven",
+        "email",
+        "eraser"
       ]
     },
     {
@@ -7714,9 +7714,9 @@
         "body_parts"
       ],
       "distractors": [
-        "め",
-        "はな",
-        "くち"
+        "eye",
+        "face",
+        "fall"
       ]
     },
     {
@@ -7743,9 +7743,9 @@
         "body_parts"
       ],
       "distractors": [
-        "め",
-        "みみ",
-        "くち"
+        "bee",
+        "bicycle",
+        "bicycle_tr"
       ]
     },
     {
@@ -7772,9 +7772,9 @@
         "body_parts"
       ],
       "distractors": [
-        "め",
-        "みみ",
-        "はな"
+        "train",
+        "travel",
+        "tree"
       ]
     },
     {
@@ -7801,9 +7801,9 @@
         "body_parts"
       ],
       "distractors": [
-        "あたま",
-        "て",
-        "あし"
+        "straight",
+        "strawberry",
+        "street"
       ]
     },
     {
@@ -7830,9 +7830,9 @@
         "body_parts"
       ],
       "distractors": [
-        "かお",
-        "て",
-        "うで"
+        "leg",
+        "lemon",
+        "lesson"
       ]
     },
     {
@@ -7859,9 +7859,9 @@
         "body_parts"
       ],
       "distractors": [
-        "て",
-        "あし",
-        "かた"
+        "breakfast",
+        "brother",
+        "bus"
       ]
     },
     {
@@ -7888,9 +7888,9 @@
         "body_parts"
       ],
       "distractors": [
-        "うで",
-        "て",
-        "ひざ"
+        "team",
+        "ten",
+        "tennis"
       ]
     },
     {
@@ -7917,9 +7917,9 @@
         "body_parts"
       ],
       "distractors": [
-        "て",
-        "あし",
-        "ひざ"
+        "front",
+        "game",
+        "game_sport"
       ]
     },
     {
@@ -7946,9 +7946,9 @@
         "body_parts"
       ],
       "distractors": [
-        "て",
-        "あし",
-        "つめ"
+        "water",
+        "watermelon",
+        "week"
       ]
     },
     {
@@ -7975,9 +7975,9 @@
         "body_parts"
       ],
       "distractors": [
-        "おなか",
-        "むね",
-        "かた"
+        "toy",
+        "traffic",
+        "train"
       ]
     },
     {
@@ -8004,9 +8004,9 @@
         "body_parts"
       ],
       "distractors": [
-        "うで",
-        "せなか",
-        "くび"
+        "gloves",
+        "golf",
+        "grade"
       ]
     },
     {
@@ -8033,9 +8033,9 @@
         "body_parts"
       ],
       "distractors": [
-        "むね",
-        "せなか",
-        "こし"
+        "music_hobby",
+        "music_player",
+        "name"
       ]
     },
     {
@@ -8062,9 +8062,9 @@
         "body_parts"
       ],
       "distractors": [
-        "くち",
-        "ゆび",
-        "くちびる"
+        "afternoon",
+        "age",
+        "airplane"
       ]
     },
     {
@@ -8091,9 +8091,9 @@
         "body_parts"
       ],
       "distractors": [
-        "くち",
-        "は",
-        "した"
+        "pen",
+        "pencil",
+        "penguin"
       ]
     },
     {
@@ -8120,9 +8120,9 @@
         "body_parts"
       ],
       "distractors": [
-        "かた",
-        "あたま",
-        "かお"
+        "grade",
+        "grandfather",
+        "grandmother"
       ]
     },
     {
@@ -8149,9 +8149,9 @@
         "body_parts"
       ],
       "distractors": [
-        "あし",
-        "かかと",
-        "うで"
+        "bear",
+        "bed",
+        "bee"
       ]
     },
     {
@@ -8178,9 +8178,9 @@
         "body_parts"
       ],
       "distractors": [
-        "おなか",
-        "せなか",
-        "かた"
+        "May",
+        "Monday",
+        "November"
       ]
     },
     {
@@ -8207,9 +8207,9 @@
         "places_buildings"
       ],
       "distractors": [
-        "がっこう",
-        "みせ",
-        "こうえん"
+        "room",
+        "ruler",
+        "running"
       ]
     },
     {
@@ -8236,9 +8236,9 @@
         "places"
       ],
       "distractors": [
-        "がっこう",
-        "びょういん",
-        "みせ"
+        "hospital",
+        "hotel",
+        "hour"
       ]
     },
     {
@@ -8265,9 +8265,9 @@
         "places"
       ],
       "distractors": [
-        "こうえん",
-        "えき",
-        "びょういん"
+        "lip",
+        "lunch",
+        "lunch_box"
       ]
     },
     {
@@ -8294,9 +8294,9 @@
         "places_buildings"
       ],
       "distractors": [
-        "こうえん",
-        "がっこう",
-        "びょういん"
+        "lunch_box",
+        "magazine",
+        "man"
       ]
     },
     {
@@ -8323,9 +8323,9 @@
         "places_buildings"
       ],
       "distractors": [
-        "みせ",
-        "こうえん",
-        "がっこう"
+        "video_game",
+        "volleyball",
+        "wallet"
       ]
     },
     {
@@ -8352,9 +8352,9 @@
         "places_buildings"
       ],
       "distractors": [
-        "びょういん",
-        "みせ",
-        "こうえん"
+        "game",
+        "game_sport",
+        "garden"
       ]
     },
     {
@@ -8381,9 +8381,9 @@
         "places_buildings"
       ],
       "distractors": [
-        "カフェ",
-        "みせ",
-        "びょういん"
+        "friend",
+        "frog",
+        "front"
       ]
     },
     {
@@ -8410,9 +8410,9 @@
         "places"
       ],
       "distractors": [
-        "えき",
-        "びょういん",
-        "としょかん"
+        "zero",
+        "zoo",
+        "April"
       ]
     },
     {
@@ -8439,9 +8439,9 @@
         "places_buildings"
       ],
       "distractors": [
-        "こうえん",
-        "びょういん",
-        "がっこう"
+        "lesson_music",
+        "letter",
+        "library"
       ]
     },
     {
@@ -8468,9 +8468,9 @@
         "places_buildings"
       ],
       "distractors": [
-        "うみ",
-        "かわ",
-        "こうえん"
+        "woman",
+        "world",
+        "year"
       ]
     },
     {
@@ -8497,9 +8497,9 @@
         "places_buildings"
       ],
       "distractors": [
-        "きょうしつ",
-        "としょかん",
-        "しょくどう"
+        "soccer",
+        "socks",
+        "sofa"
       ]
     },
     {
@@ -8526,9 +8526,9 @@
         "places_buildings"
       ],
       "distractors": [
-        "しんしつ",
-        "リビング",
-        "おふろ"
+        "grandfather",
+        "grandmother",
+        "grape"
       ]
     },
     {
@@ -8555,9 +8555,9 @@
         "places_buildings"
       ],
       "distractors": [
-        "いえ",
-        "ろうか",
-        "にわ"
+        "flower",
+        "food",
+        "foot"
       ]
     },
     {
@@ -8584,9 +8584,9 @@
         "places_buildings"
       ],
       "distractors": [
-        "まど",
-        "かべ",
-        "ゆか"
+        "lesson_music",
+        "letter",
+        "library"
       ]
     },
     {
@@ -8613,9 +8613,9 @@
         "places_buildings"
       ],
       "distractors": [
-        "ドア",
-        "かべ",
-        "ゆか"
+        "salad",
+        "sandwich",
+        "scarf"
       ]
     },
     {
@@ -8642,9 +8642,9 @@
         "places_buildings"
       ],
       "distractors": [
-        "こうえん",
-        "えき",
-        "みせ"
+        "deer",
+        "desk",
+        "dictionary"
       ]
     },
     {
@@ -8671,9 +8671,9 @@
         "places_buildings"
       ],
       "distractors": [
-        "いなか",
-        "くに",
-        "しゅうと"
+        "fifty",
+        "finger",
+        "fish"
       ]
     },
     {
@@ -8700,9 +8700,9 @@
         "places_buildings"
       ],
       "distractors": [
-        "まち",
-        "しゅうと",
-        "むら"
+        "son",
+        "soup",
+        "sport"
       ]
     },
     {
@@ -8729,9 +8729,9 @@
         "places_buildings"
       ],
       "distractors": [
-        "くに",
-        "まち",
-        "うちゅう"
+        "cake",
+        "calendar",
+        "camera"
       ]
     },
     {
@@ -8758,9 +8758,9 @@
         "places_buildings"
       ],
       "distractors": [
-        "ちゅうごく",
-        "かんこく",
-        "アメリカ"
+        "elevator",
+        "eleven",
+        "email"
       ]
     },
     {
@@ -8787,9 +8787,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "アパート",
-        "へや",
-        "マンション"
+        "elevator",
+        "eleven",
+        "email"
       ]
     },
     {
@@ -8816,9 +8816,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "いす",
-        "つくえ",
-        "ソファ"
+        "toy",
+        "traffic",
+        "train"
       ]
     },
     {
@@ -8845,9 +8845,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "ソファ",
-        "いす",
-        "ゆか"
+        "mountain",
+        "mouse",
+        "mouth"
       ]
     },
     {
@@ -8874,9 +8874,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "いす",
-        "ベッド",
-        "テーブル"
+        "minus",
+        "minute",
+        "money"
       ]
     },
     {
@@ -8903,9 +8903,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "ラジオ",
-        "パソコン",
-        "でんわ"
+        "strawberry",
+        "street",
+        "student"
       ]
     },
     {
@@ -8932,9 +8932,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "テレビ",
-        "パソコン",
-        "ラジオ"
+        "coat",
+        "coffee",
+        "coin"
       ]
     },
     {
@@ -8961,9 +8961,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "テレビ",
-        "でんわ",
-        "ラジオ"
+        "tomato",
+        "tomorrow",
+        "tooth"
       ]
     },
     {
@@ -8990,9 +8990,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "カレンダー",
-        "めざましどけい",
-        "でんわ"
+        "left",
+        "leg",
+        "lemon"
       ]
     },
     {
@@ -9019,9 +9019,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "とびら",
-        "まど",
-        "ドア"
+        "uncle",
+        "uniform",
+        "vegetable"
       ]
     },
     {
@@ -9048,9 +9048,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "まど",
-        "かべ",
-        "ゆか"
+        "breakfast",
+        "brother",
+        "bus"
       ]
     },
     {
@@ -9077,9 +9077,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "シャワー",
-        "トイレ",
-        "だいどころ"
+        "motorcycle",
+        "mountain",
+        "mouse"
       ]
     },
     {
@@ -9106,9 +9106,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "おふろ",
-        "トイレ",
-        "プール"
+        "scarf",
+        "schedule",
+        "school"
       ]
     },
     {
@@ -9135,9 +9135,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "こうえん",
-        "もり",
-        "はたけ"
+        "vegetable",
+        "video_game",
+        "volleyball"
       ]
     },
     {
@@ -9164,9 +9164,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "き",
-        "くさ",
-        "やさい"
+        "cookie",
+        "cooking",
+        "corn"
       ]
     },
     {
@@ -9193,9 +9193,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "はな",
-        "くさ",
-        "いけ"
+        "teacher",
+        "team",
+        "ten"
       ]
     },
     {
@@ -9222,9 +9222,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "のみもの",
-        "くだもの",
-        "やさい"
+        "jacket",
+        "juice",
+        "key"
       ]
     },
     {
@@ -9251,9 +9251,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "たべもの",
-        "おかし",
-        "りょうり"
+        "clock",
+        "cloud",
+        "club"
       ]
     },
     {
@@ -9280,9 +9280,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "ひるごはん",
-        "ばんごはん",
-        "おやつ"
+        "friend",
+        "frog",
+        "front"
       ]
     },
     {
@@ -9309,9 +9309,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "あさごはん",
-        "ばんごはん",
-        "おやつ"
+        "son",
+        "soup",
+        "sport"
       ]
     },
     {
@@ -9338,9 +9338,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "あさごはん",
-        "ひるごはん",
-        "おやつ"
+        "park_play",
+        "parrot",
+        "pen"
       ]
     },
     {
@@ -9367,9 +9367,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "さいふ",
-        "かいもの",
-        "しごと"
+        "reading",
+        "restaurant",
+        "rice"
       ]
     },
     {
@@ -9396,9 +9396,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "ゲーム",
-        "ほん",
-        "えんぴつ"
+        "camping",
+        "car",
+        "card_game"
       ]
     },
     {
@@ -9425,9 +9425,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "おもちゃ",
-        "スポーツ",
-        "ほん"
+        "friend",
+        "frog",
+        "front"
       ]
     },
     {
@@ -9454,9 +9454,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "テレビ",
-        "ラジオ",
-        "パソコン"
+        "leg",
+        "lemon",
+        "lesson"
       ]
     },
     {
@@ -9483,9 +9483,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "くるま",
-        "バス",
-        "オートバイ"
+        "horse",
+        "hospital",
+        "hotel"
       ]
     },
     {
@@ -9512,9 +9512,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "ぼうし",
-        "てぶくろ",
-        "コート"
+        "head",
+        "helicopter",
+        "hiking"
       ]
     },
     {
@@ -9541,9 +9541,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "はがき",
-        "メール",
-        "でんわ"
+        "milk",
+        "minus",
+        "minute"
       ]
     },
     {
@@ -9570,9 +9570,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "ケーキ",
-        "かーど",
-        "てがみ"
+        "dancing",
+        "daughter",
+        "day"
       ]
     },
     {
@@ -9599,9 +9599,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "クリスマス",
-        "おまつり",
-        "ねんまつ"
+        "lesson_music",
+        "letter",
+        "library"
       ]
     },
     {
@@ -9628,9 +9628,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "へいじつ",
-        "がっこう",
-        "しごと"
+        "cat",
+        "center",
+        "chair"
       ]
     },
     {
@@ -9657,9 +9657,9 @@
         "clothing"
       ],
       "distractors": [
-        "ズボン",
-        "スカート",
-        "コート"
+        "game_sport",
+        "garden",
+        "gift"
       ]
     },
     {
@@ -9686,9 +9686,9 @@
         "clothing"
       ],
       "distractors": [
-        "シャツ",
-        "スカート",
-        "くつした"
+        "season",
+        "seven",
+        "sheep"
       ]
     },
     {
@@ -9715,9 +9715,9 @@
         "clothing"
       ],
       "distractors": [
-        "ズボン",
-        "シャツ",
-        "ドレス"
+        "teacher",
+        "team",
+        "ten"
       ]
     },
     {
@@ -9744,9 +9744,9 @@
         "clothing"
       ],
       "distractors": [
-        "スカート",
-        "シャツ",
-        "ブラウス"
+        "door",
+        "drawing",
+        "drink_noun"
       ]
     },
     {
@@ -9773,9 +9773,9 @@
         "clothing"
       ],
       "distractors": [
-        "コート",
-        "セーター",
-        "シャツ"
+        "food",
+        "foot",
+        "forest"
       ]
     },
     {
@@ -9802,9 +9802,9 @@
         "clothing"
       ],
       "distractors": [
-        "ジャケット",
-        "セーター",
-        "シャツ"
+        "world",
+        "year",
+        "yesterday"
       ]
     },
     {
@@ -9831,9 +9831,9 @@
         "clothing"
       ],
       "distractors": [
-        "くつした",
-        "ブーツ",
-        "サンダル"
+        "toy",
+        "traffic",
+        "train"
       ]
     },
     {
@@ -9860,9 +9860,9 @@
         "clothing"
       ],
       "distractors": [
-        "くつ",
-        "ブーツ",
-        "サンダル"
+        "elephant",
+        "elevator",
+        "eleven"
       ]
     },
     {
@@ -9889,9 +9889,9 @@
         "clothing"
       ],
       "distractors": [
-        "マフラー",
-        "てぶくろ",
-        "めがね"
+        "hotel",
+        "hour",
+        "house"
       ]
     },
     {
@@ -9918,9 +9918,9 @@
         "clothing"
       ],
       "distractors": [
-        "ぼうし",
-        "マフラー",
-        "くつした"
+        "morning",
+        "mother",
+        "motorcycle"
       ]
     },
     {
@@ -9947,9 +9947,9 @@
         "clothing"
       ],
       "distractors": [
-        "コート",
-        "ジャケット",
-        "シャツ"
+        "sport",
+        "spring",
+        "star"
       ]
     },
     {
@@ -9976,9 +9976,9 @@
         "clothing"
       ],
       "distractors": [
-        "シャツ",
-        "ズボン",
-        "コート"
+        "bath",
+        "beach",
+        "bear"
       ]
     },
     {
@@ -10005,9 +10005,9 @@
         "clothing"
       ],
       "distractors": [
-        "リュック",
-        "さいふ",
-        "はこ"
+        "student",
+        "subject",
+        "subway"
       ]
     },
     {
@@ -10034,9 +10034,9 @@
         "clothing"
       ],
       "distractors": [
-        "ぼうし",
-        "てぶくろ",
-        "マフラー"
+        "school_lunch",
+        "science",
+        "sea"
       ]
     },
     {
@@ -10063,9 +10063,9 @@
         "clothing"
       ],
       "distractors": [
-        "ぼうし",
-        "てぶくろ",
-        "コート"
+        "four",
+        "fourteen",
+        "fox"
       ]
     },
     {
@@ -10092,9 +10092,9 @@
         "sports_hobbies"
       ],
       "distractors": [
-        "やきゅう",
-        "テニス",
-        "バスケットボール"
+        "test",
+        "textbook",
+        "thirteen"
       ]
     },
     {
@@ -10121,9 +10121,9 @@
         "sports_hobbies"
       ],
       "distractors": [
-        "サッカー",
-        "テニス",
-        "バスケットボール"
+        "lunch_box",
+        "magazine",
+        "man"
       ]
     },
     {
@@ -10150,9 +10150,9 @@
         "sports_hobbies"
       ],
       "distractors": [
-        "サッカー",
-        "やきゅう",
-        "ゴルフ"
+        "music_hobby",
+        "music_player",
+        "name"
       ]
     },
     {
@@ -10179,9 +10179,9 @@
         "sports_hobbies"
       ],
       "distractors": [
-        "サッカー",
-        "テニス",
-        "バレーボール"
+        "singing",
+        "sister",
+        "six"
       ]
     },
     {
@@ -10208,9 +10208,9 @@
         "sports_hobbies"
       ],
       "distractors": [
-        "ランニング",
-        "サイクリング",
-        "たいそう"
+        "zoo",
+        "April",
+        "August"
       ]
     },
     {
@@ -10237,9 +10237,9 @@
         "sports_hobbies"
       ],
       "distractors": [
-        "すいえい",
-        "サイクリング",
-        "あるき"
+        "bag_dl",
+        "ball",
+        "banana"
       ]
     },
     {
@@ -10266,9 +10266,9 @@
         "sports_hobbies"
       ],
       "distractors": [
-        "しゅみ",
-        "ゲーム",
-        "おんがく"
+        "computer",
+        "convenience_store",
+        "cookie"
       ]
     },
     {
@@ -10295,9 +10295,9 @@
         "sports_hobbies"
       ],
       "distractors": [
-        "スポーツ",
-        "しごと",
-        "べんきょう"
+        "camping",
+        "car",
+        "card_game"
       ]
     },
     {
@@ -10324,9 +10324,9 @@
         "sports_hobbies"
       ],
       "distractors": [
-        "れんしゅう",
-        "しゅみ",
-        "スポーツ"
+        "hat",
+        "head",
+        "helicopter"
       ]
     },
     {
@@ -10353,9 +10353,9 @@
         "sports_hobbies"
       ],
       "distractors": [
-        "グループ",
-        "クラス",
-        "なかま"
+        "twelve",
+        "twenty",
+        "two"
       ]
     },
     {
@@ -10382,9 +10382,9 @@
         "sports_hobbies"
       ],
       "distractors": [
-        "バット",
-        "ラケット",
-        "グローブ"
+        "season",
+        "seven",
+        "sheep"
       ]
     },
     {
@@ -10411,9 +10411,9 @@
         "sports_hobbies"
       ],
       "distractors": [
-        "プール",
-        "グラウンド",
-        "たいいくかん"
+        "ship",
+        "shirt",
+        "shoes"
       ]
     },
     {
@@ -10440,9 +10440,9 @@
         "sports_hobbies"
       ],
       "distractors": [
-        "スポーツ",
-        "びじゅつ",
-        "りょうり"
+        "mother",
+        "motorcycle",
+        "mountain"
       ]
     },
     {
@@ -10469,9 +10469,9 @@
         "sports_hobbies"
       ],
       "distractors": [
-        "おんがく",
-        "スポーツ",
-        "えいが"
+        "tea",
+        "teacher",
+        "team"
       ]
     },
     {
@@ -10498,9 +10498,9 @@
         "sports_hobbies"
       ],
       "distractors": [
-        "そうじ",
-        "かいもの",
-        "せんたく"
+        "kitchen",
+        "knee",
+        "left"
       ]
     },
     {
@@ -10527,9 +10527,9 @@
         "sports_hobbies"
       ],
       "distractors": [
-        "おんがく",
-        "どくしょ",
-        "スポーツ"
+        "leg",
+        "lemon",
+        "lesson"
       ]
     },
     {
@@ -10556,9 +10556,9 @@
         "sports_hobbies"
       ],
       "distractors": [
-        "おどること",
-        "えをかくこと",
-        "おんがく"
+        "center",
+        "chair",
+        "chalk"
       ]
     },
     {
@@ -10585,9 +10585,9 @@
         "sports_hobbies"
       ],
       "distractors": [
-        "うたうこと",
-        "スポーツ",
-        "おんがく"
+        "star",
+        "station",
+        "station_tr"
       ]
     },
     {
@@ -10614,9 +10614,9 @@
         "sports_hobbies"
       ],
       "distractors": [
-        "りょこう",
-        "ハイキング",
-        "ピクニック"
+        "apple",
+        "arm",
+        "art"
       ]
     },
     {
@@ -10643,9 +10643,9 @@
         "sports_hobbies"
       ],
       "distractors": [
-        "キャンプ",
-        "ピクニック",
-        "ハイキング"
+        "mountain",
+        "mouse",
+        "mouth"
       ]
     },
     {
@@ -10672,9 +10672,9 @@
         "transportation"
       ],
       "distractors": [
-        "バス",
-        "でんしゃ",
-        "ひこうき"
+        "airplane",
+        "airport",
+        "ant"
       ]
     },
     {
@@ -10701,9 +10701,9 @@
         "transportation"
       ],
       "distractors": [
-        "でんしゃ",
-        "くるま",
-        "タクシー"
+        "photo",
+        "physical_education",
+        "picnic"
       ]
     },
     {
@@ -10730,9 +10730,9 @@
         "transportation"
       ],
       "distractors": [
-        "バス",
-        "くるま",
-        "ちかてつ"
+        "baseball",
+        "basketball",
+        "bath"
       ]
     },
     {
@@ -10759,9 +10759,9 @@
         "transportation"
       ],
       "distractors": [
-        "ふね",
-        "ヘリコプター",
-        "ロケット"
+        "March",
+        "May",
+        "Monday"
       ]
     },
     {
@@ -10788,9 +10788,9 @@
         "transportation"
       ],
       "distractors": [
-        "くるま",
-        "バイク",
-        "スクーター"
+        "cloud",
+        "club",
+        "coat"
       ]
     },
     {
@@ -10817,9 +10817,9 @@
         "transportation"
       ],
       "distractors": [
-        "ひこうき",
-        "でんしゃ",
-        "バス"
+        "TV",
+        "Thursday",
+        "Tuesday"
       ]
     },
     {
@@ -10846,9 +10846,9 @@
         "transportation"
       ],
       "distractors": [
-        "バス",
-        "でんしゃ",
-        "くるま"
+        "hundred",
+        "ice_cream",
+        "ice_skating"
       ]
     },
     {
@@ -10875,9 +10875,9 @@
         "transportation"
       ],
       "distractors": [
-        "でんしゃ",
-        "バス",
-        "タクシー"
+        "summer",
+        "sun",
+        "supermarket"
       ]
     },
     {
@@ -10904,9 +10904,9 @@
         "transportation"
       ],
       "distractors": [
-        "はしる",
-        "のる",
-        "とぶ"
+        "show",
+        "sing",
+        "sleep"
       ]
     },
     {
@@ -10933,9 +10933,9 @@
         "transportation"
       ],
       "distractors": [
-        "あるく",
-        "はしる",
-        "およぐ"
+        "buy",
+        "can",
+        "cannot"
       ]
     },
     {
@@ -10962,9 +10962,9 @@
         "transportation"
       ],
       "distractors": [
-        "パスポート",
-        "めいし",
-        "かーど"
+        "wallet",
+        "water",
+        "watermelon"
       ]
     },
     {
@@ -10991,9 +10991,9 @@
         "transportation"
       ],
       "distractors": [
-        "くうこう",
-        "みなと",
-        "てい"
+        "shop",
+        "shoulder",
+        "shower"
       ]
     },
     {
@@ -11020,9 +11020,9 @@
         "transportation"
       ],
       "distractors": [
-        "えき",
-        "みなと",
-        "バスてい"
+        "notebook",
+        "number",
+        "one"
       ]
     },
     {
@@ -11049,9 +11049,9 @@
         "transportation"
       ],
       "distractors": [
-        "こうえん",
-        "かわ",
-        "さんぽみち"
+        "uniform",
+        "vegetable",
+        "video_game"
       ]
     },
     {
@@ -11078,9 +11078,9 @@
         "transportation"
       ],
       "distractors": [
-        "みち",
-        "でんしゃ",
-        "くるま"
+        "classroom",
+        "clock",
+        "cloud"
       ]
     },
     {
@@ -11108,9 +11108,9 @@
         "directions"
       ],
       "distractors": [
-        "みぎ",
-        "まえ",
-        "うしろ"
+        "year",
+        "yesterday",
+        "zero"
       ]
     },
     {
@@ -11138,9 +11138,9 @@
         "directions"
       ],
       "distractors": [
-        "みぎ",
-        "ひだり",
-        "うしろ"
+        "turtle",
+        "twelve",
+        "twenty"
       ]
     },
     {
@@ -11168,9 +11168,9 @@
         "directions_position"
       ],
       "distractors": [
-        "した",
-        "よこ",
-        "まえ"
+        "down",
+        "here",
+        "how"
       ]
     },
     {
@@ -11198,9 +11198,9 @@
         "directions_position"
       ],
       "distractors": [
-        "うえ",
-        "まえ",
-        "よこ"
+        "very",
+        "when",
+        "where"
       ]
     },
     {
@@ -11228,9 +11228,9 @@
         "directions_position"
       ],
       "distractors": [
-        "うしろ",
-        "よこ",
-        "なか"
+        "bag",
+        "bag_clothing",
+        "bag_dl"
       ]
     },
     {
@@ -11258,9 +11258,9 @@
         "directions_position"
       ],
       "distractors": [
-        "まえ",
-        "よこ",
-        "なか"
+        "question",
+        "rabbit",
+        "radio"
       ]
     },
     {
@@ -11288,9 +11288,9 @@
         "directions_position"
       ],
       "distractors": [
-        "とおい",
-        "むこう",
-        "はるか"
+        "little",
+        "long",
+        "many"
       ]
     },
     {
@@ -11318,9 +11318,9 @@
         "directions_position"
       ],
       "distractors": [
-        "ちかい",
-        "すぐそこ",
-        "となり"
+        "same",
+        "second",
+        "short"
       ]
     },
     {
@@ -11347,9 +11347,9 @@
         "directions_position"
       ],
       "distractors": [
-        "そこ",
-        "あそこ",
-        "どこ"
+        "up",
+        "very",
+        "when"
       ]
     },
     {
@@ -11376,9 +11376,9 @@
         "directions_position"
       ],
       "distractors": [
-        "ここ",
-        "あそこ",
-        "どこ"
+        "where",
+        "why",
+        "yes"
       ]
     },
     {
@@ -11406,9 +11406,9 @@
         "directions_position"
       ],
       "distractors": [
-        "そと",
-        "うえ",
-        "した"
+        "where",
+        "why",
+        "yes"
       ]
     },
     {
@@ -11436,9 +11436,9 @@
         "directions_position"
       ],
       "distractors": [
-        "なか",
-        "うえ",
-        "した"
+        "inside",
+        "no",
+        "not"
       ]
     },
     {
@@ -11466,9 +11466,9 @@
         "directions_position"
       ],
       "distractors": [
-        "まえ",
-        "うしろ",
-        "むかい"
+        "her",
+        "his",
+        "hot"
       ]
     },
     {
@@ -11495,9 +11495,9 @@
         "directions_position"
       ],
       "distractors": [
-        "となり",
-        "まえ",
-        "うしろ"
+        "welcome_back",
+        "well",
+        "what"
       ]
     },
     {
@@ -11525,9 +11525,9 @@
         "directions_position"
       ],
       "distractors": [
-        "となり",
-        "あいだ",
-        "まえ"
+        "September",
+        "Sunday",
+        "TV"
       ]
     },
     {
@@ -11554,9 +11554,9 @@
         "question_words"
       ],
       "distractors": [
-        "だれ",
-        "どこ",
-        "いつ"
+        "that",
+        "they",
+        "this"
       ]
     },
     {
@@ -11583,9 +11583,9 @@
         "question_words"
       ],
       "distractors": [
-        "なに",
-        "どこ",
-        "いつ"
+        "which",
+        "you",
+        "I"
       ]
     },
     {
@@ -11612,9 +11612,9 @@
         "question_words"
       ],
       "distractors": [
-        "なに",
-        "だれ",
-        "いつ"
+        "not",
+        "now",
+        "outside"
       ]
     },
     {
@@ -11641,9 +11641,9 @@
         "question_words"
       ],
       "distractors": [
-        "なに",
-        "だれ",
-        "どこ"
+        "again",
+        "also",
+        "down"
       ]
     },
     {
@@ -11670,9 +11670,9 @@
         "question_words"
       ],
       "distractors": [
-        "どんな",
-        "どれ",
-        "なに"
+        "down",
+        "here",
+        "how"
       ]
     },
     {
@@ -11699,9 +11699,9 @@
         "question_words"
       ],
       "distractors": [
-        "なに",
-        "だれ",
-        "どこ"
+        "when",
+        "where",
+        "why"
       ]
     },
     {
@@ -11729,9 +11729,9 @@
         "question_words"
       ],
       "distractors": [
-        "なに",
-        "だれ",
-        "どこ"
+        "who",
+        "you",
+        "I"
       ]
     },
     {
@@ -11758,9 +11758,9 @@
         "question_words"
       ],
       "distractors": [
-        "どのくらい",
-        "なんにん",
-        "なんじ"
+        "I_cannot",
+        "I_don't",
+        "I_like"
       ]
     },
     {
@@ -11787,9 +11787,9 @@
         "question_words"
       ],
       "distractors": [
-        "いくら",
-        "どのくらい",
-        "なんじ"
+        "nice_to_meet_you",
+        "no_problem",
+        "of_course"
       ]
     },
     {
@@ -11816,9 +11816,9 @@
         "question_words"
       ],
       "distractors": [
-        "いくら",
-        "いくつ",
-        "なんじ"
+        "there_is",
+        "this_is",
+        "want_to"
       ]
     },
     {
@@ -11845,9 +11845,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "あなた",
-        "かれ",
-        "かのじょ"
+        "which",
+        "who",
+        "you"
       ]
     },
     {
@@ -11874,9 +11874,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "わたし",
-        "かれ",
-        "かのじょ"
+        "what",
+        "which",
+        "who"
       ]
     },
     {
@@ -11903,9 +11903,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "わたし",
-        "あなた",
-        "かのじょ"
+        "you",
+        "I",
+        "it"
       ]
     },
     {
@@ -11932,9 +11932,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "わたし",
-        "あなた",
-        "かれ"
+        "that",
+        "they",
+        "this"
       ]
     },
     {
@@ -11961,9 +11961,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "あなたたち",
-        "かれら",
-        "みんな"
+        "this",
+        "what",
+        "which"
       ]
     },
     {
@@ -11990,9 +11990,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "わたしたち",
-        "あなたたち",
-        "みんな"
+        "we",
+        "what",
+        "which"
       ]
     },
     {
@@ -12020,9 +12020,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "それ",
-        "あれ",
-        "どれ"
+        "I",
+        "he",
+        "it"
       ]
     },
     {
@@ -12050,9 +12050,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "これ",
-        "あれ",
-        "どれ"
+        "this",
+        "we",
+        "what"
       ]
     },
     {
@@ -12079,9 +12079,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "これ",
-        "それ",
-        "あれ"
+        "they",
+        "this",
+        "we"
       ]
     },
     {
@@ -12108,9 +12108,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "すごく",
-        "ちょっと",
-        "あまり"
+        "up",
+        "when",
+        "where"
       ]
     },
     {
@@ -12137,9 +12137,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "だけ",
-        "しか",
-        "まで"
+        "outside",
+        "please",
+        "slowly"
       ]
     },
     {
@@ -12166,9 +12166,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "ある",
-        "いる",
-        "できる"
+        "yes",
+        "again",
+        "also"
       ]
     },
     {
@@ -12195,9 +12195,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "できない",
-        "むり",
-        "たいへん"
+        "write",
+        "add",
+        "answer"
       ]
     },
     {
@@ -12224,9 +12224,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "できる",
-        "いい",
-        "がんばる"
+        "teach",
+        "tell",
+        "think"
       ]
     },
     {
@@ -12253,9 +12253,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "したくない",
-        "いい",
-        "すき"
+        "good_luck",
+        "here_is",
+        "how_are_you"
       ]
     },
     {
@@ -12282,9 +12282,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "したくない",
-        "いや",
-        "むり"
+        "this_is",
+        "want_to",
+        "welcome_back"
       ]
     },
     {
@@ -12311,9 +12311,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "きらいですか",
-        "ほしいですか",
-        "いいですか"
+        "see_you",
+        "take_care",
+        "there_is"
       ]
     },
     {
@@ -12340,9 +12340,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "きらいです",
-        "いやです",
-        "ちがいます"
+        "how_much",
+        "how_old",
+        "it_is"
       ]
     },
     {
@@ -12369,9 +12369,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "あなたの",
-        "かれの",
-        "かのじょの"
+        "another",
+        "any",
+        "bad"
       ]
     },
     {
@@ -12398,9 +12398,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "わたしの",
-        "かれの",
-        "かのじょの"
+        "hot",
+        "hot_weather",
+        "hungry"
       ]
     },
     {
@@ -12427,9 +12427,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "ねる",
-        "やすむ",
-        "すわる"
+        "wash",
+        "wear",
+        "write"
       ]
     },
     {
@@ -12456,9 +12456,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "ふく",
-        "そうじする",
-        "ぬぐ"
+        "finish",
+        "forget",
+        "get"
       ]
     },
     {
@@ -12485,9 +12485,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "よごす",
-        "あらう",
-        "ぬぐ"
+        "listen",
+        "live",
+        "look"
       ]
     },
     {
@@ -12514,9 +12514,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "たべる",
-        "のむ",
-        "つくる"
+        "see",
+        "show",
+        "sing"
       ]
     },
     {
@@ -12543,9 +12543,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "もつ",
-        "おく",
-        "なげる"
+        "cook",
+        "count",
+        "dance"
       ]
     },
     {
@@ -12572,9 +12572,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "もつ",
-        "はこぶ",
-        "とる"
+        "drink",
+        "eat",
+        "feel"
       ]
     },
     {
@@ -12601,9 +12601,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "おく",
-        "もつ",
-        "はこぶ"
+        "carry",
+        "clean_verb",
+        "close"
       ]
     },
     {
@@ -12630,9 +12630,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "なくす",
-        "わすれる",
-        "おく"
+        "start",
+        "stop",
+        "study"
       ]
     },
     {
@@ -12659,9 +12659,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "みつける",
-        "もつ",
-        "おく"
+        "can",
+        "cannot",
+        "carry"
       ]
     },
     {
@@ -12688,9 +12688,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "わすれる",
-        "まなぶ",
-        "しる"
+        "wake_up",
+        "walk",
+        "walk_tr"
       ]
     },
     {
@@ -12717,9 +12717,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "おぼえる",
-        "まなぶ",
-        "しる"
+        "come",
+        "cook",
+        "count"
       ]
     },
     {
@@ -12746,9 +12746,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "やめる",
-        "あきらめる",
-        "ねる"
+        "ride",
+        "run",
+        "say"
       ]
     },
     {
@@ -12775,9 +12775,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "はじめる",
-        "つづける",
-        "すすむ"
+        "think",
+        "try",
+        "understand"
       ]
     },
     {
@@ -12804,9 +12804,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "いく",
-        "くる",
-        "はしる"
+        "listen",
+        "live",
+        "look"
       ]
     },
     {
@@ -12833,9 +12833,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "かくす",
-        "みる",
-        "もつ"
+        "study",
+        "swim",
+        "take"
       ]
     },
     {
@@ -12862,9 +12862,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "きく",
-        "かく",
-        "みる"
+        "drink",
+        "eat",
+        "feel"
       ]
     },
     {
@@ -12891,9 +12891,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "おもう",
-        "きく",
-        "みる"
+        "start",
+        "stop",
+        "study"
       ]
     },
     {
@@ -12920,9 +12920,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "ぬぐ",
-        "もつ",
-        "おく"
+        "eat",
+        "feel",
+        "find"
       ]
     },
     {
@@ -12949,9 +12949,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "ねる",
-        "やすむ",
-        "すわる"
+        "feel",
+        "find",
+        "finish"
       ]
     },
     {
@@ -12978,9 +12978,9 @@
         "actions/verbs"
       ],
       "distractors": [
-        "いく",
-        "かえる",
-        "すむ"
+        "go",
+        "have",
+        "help"
       ]
     },
     {
@@ -13007,9 +13007,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "ふつう",
-        "わるい",
-        "だめ"
+        "well",
+        "white",
+        "wonderful"
       ]
     },
     {
@@ -13036,9 +13036,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "わるい",
-        "へん",
-        "きらい"
+        "good",
+        "gray",
+        "great"
       ]
     },
     {
@@ -13065,9 +13065,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "きびしい",
-        "こわい",
-        "わるい"
+        "no_adj",
+        "noisy",
+        "old"
       ]
     },
     {
@@ -13094,9 +13094,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "ひきょう",
-        "こわい",
-        "よわい"
+        "square",
+        "strong",
+        "sunny"
       ]
     },
     {
@@ -13123,9 +13123,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "ばか",
-        "まぬけ",
-        "おろか"
+        "tired",
+        "warm",
+        "weak"
       ]
     },
     {
@@ -13152,9 +13152,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "おなかがいっぱい",
-        "のどがかわいた",
-        "つかれた"
+        "cool",
+        "cute",
+        "dark"
       ]
     },
     {
@@ -13181,9 +13181,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "おなかがすいた",
-        "ねむい",
-        "つかれた"
+        "bright",
+        "brown",
+        "busy"
       ]
     },
     {
@@ -13210,9 +13210,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "げんき",
-        "たのしい",
-        "うれしい"
+        "free",
+        "funny",
+        "gold"
       ]
     },
     {
@@ -13239,9 +13239,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "げんき",
-        "たのしい",
-        "うれしい"
+        "gray",
+        "great",
+        "green"
       ]
     },
     {
@@ -13268,9 +13268,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "びょうき",
-        "つかれた",
-        "かなしい"
+        "many",
+        "much",
+        "my"
       ]
     },
     {
@@ -13297,9 +13297,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "としをとった",
-        "ふるい",
-        "おとな"
+        "sick",
+        "silver",
+        "slow"
       ]
     },
     {
@@ -13326,9 +13326,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "しかくい",
-        "ながい",
-        "みじかい"
+        "tall",
+        "their",
+        "third"
       ]
     },
     {
@@ -13355,9 +13355,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "まるい",
-        "さんかくい",
-        "ながい"
+        "thirsty",
+        "tired",
+        "warm"
       ]
     },
     {
@@ -13384,9 +13384,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "かたい",
-        "ざらざら",
-        "つるつる"
+        "well",
+        "white",
+        "wonderful"
       ]
     },
     {
@@ -13413,9 +13413,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "やわらかい",
-        "ふわふわ",
-        "つるつる"
+        "any",
+        "bad",
+        "beautiful"
       ]
     },
     {
@@ -13442,9 +13442,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "しずか",
-        "おだやか",
-        "しとやか"
+        "bad",
+        "beautiful",
+        "big"
       ]
     },
     {
@@ -13471,9 +13471,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "うるさい",
-        "にぎやか",
-        "さわがしい"
+        "same",
+        "second",
+        "short"
       ]
     },
     {
@@ -13500,9 +13500,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "あかるい",
-        "ひかり",
-        "きれい"
+        "clean",
+        "clever",
+        "cold"
       ]
     },
     {
@@ -13529,9 +13529,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "くらい",
-        "くもり",
-        "よる"
+        "silver",
+        "slow",
+        "small"
       ]
     },
     {
@@ -13558,9 +13558,9 @@
         "adjectives_descriptions"
       ],
       "distractors": [
-        "ひどい",
-        "つまらない",
-        "かなしい"
+        "sick",
+        "silver",
+        "slow"
       ]
     },
     {
@@ -13587,9 +13587,9 @@
         "weather_nature"
       ],
       "distractors": [
-        "さむい",
-        "すずしい",
-        "あたたかい"
+        "any",
+        "bad",
+        "beautiful"
       ]
     },
     {
@@ -13616,9 +13616,9 @@
         "weather_nature"
       ],
       "distractors": [
-        "あつい",
-        "あたたかい",
-        "すずしい"
+        "no_adj",
+        "noisy",
+        "old"
       ]
     },
     {
@@ -13645,9 +13645,9 @@
         "weather_nature"
       ],
       "distractors": [
-        "つめたい",
-        "さむい",
-        "あつい"
+        "sad",
+        "same",
+        "second"
       ]
     },
     {
@@ -13674,9 +13674,9 @@
         "weather_nature"
       ],
       "distractors": [
-        "あたたかい",
-        "あつい",
-        "さむい"
+        "dark",
+        "different",
+        "dirty"
       ]
     },
     {
@@ -13703,9 +13703,9 @@
         "weather_nature"
       ],
       "distractors": [
-        "うみ",
-        "やま",
-        "かわ"
+        "shop",
+        "shoulder",
+        "shower"
       ]
     },
     {
@@ -13732,9 +13732,9 @@
         "weather_nature"
       ],
       "distractors": [
-        "つき",
-        "ほし",
-        "くも"
+        "student",
+        "subject",
+        "subway"
       ]
     },
     {
@@ -13761,9 +13761,9 @@
         "weather_nature"
       ],
       "distractors": [
-        "たいよう",
-        "ほし",
-        "くも"
+        "library",
+        "light",
+        "light_bulb"
       ]
     },
     {
@@ -13790,9 +13790,9 @@
         "weather_nature"
       ],
       "distractors": [
-        "つき",
-        "たいよう",
-        "くも"
+        "toy",
+        "traffic",
+        "train"
       ]
     },
     {
@@ -13819,9 +13819,9 @@
         "weather_nature"
       ],
       "distractors": [
-        "うみ",
-        "みずうみ",
-        "いけ"
+        "scarf",
+        "schedule",
+        "school"
       ]
     },
     {
@@ -13848,9 +13848,9 @@
         "weather_nature"
       ],
       "distractors": [
-        "かわ",
-        "うみ",
-        "もり"
+        "seven",
+        "sheep",
+        "ship"
       ]
     },
     {
@@ -13877,9 +13877,9 @@
         "places_buildings"
       ],
       "distractors": [
-        "やま",
-        "こうえん",
-        "うみ"
+        "gloves",
+        "golf",
+        "grade"
       ]
     },
     {
@@ -13906,9 +13906,9 @@
         "places_buildings"
       ],
       "distractors": [
-        "かわ",
-        "みずうみ",
-        "いけ"
+        "cooking",
+        "corn",
+        "corner"
       ]
     },
     {
@@ -13935,9 +13935,9 @@
         "places_buildings"
       ],
       "distractors": [
-        "うみ",
-        "かわ",
-        "プール"
+        "umbrella",
+        "uncle",
+        "uniform"
       ]
     },
     {
@@ -13964,9 +13964,9 @@
         "places_buildings"
       ],
       "distractors": [
-        "りょかん",
-        "アパート",
-        "いえ"
+        "wallet",
+        "water",
+        "watermelon"
       ]
     },
     {
@@ -13993,9 +13993,9 @@
         "places_buildings"
       ],
       "distractors": [
-        "みせ",
-        "びょういん",
-        "がっこう"
+        "bread",
+        "breakfast",
+        "brother"
       ]
     },
     {
@@ -14022,9 +14022,9 @@
         "places_buildings"
       ],
       "distractors": [
-        "ぎんこう",
-        "みせ",
-        "びょういん"
+        "toy",
+        "traffic",
+        "train"
       ]
     },
     {
@@ -14051,9 +14051,9 @@
         "places_buildings"
       ],
       "distractors": [
-        "じんじゃ",
-        "てら",
-        "がっこう"
+        "teacher",
+        "team",
+        "ten"
       ]
     },
     {
@@ -14080,9 +14080,9 @@
         "places_buildings"
       ],
       "distractors": [
-        "みせ",
-        "デパート",
-        "コンビニ"
+        "child",
+        "chocolate",
+        "church"
       ]
     },
     {
@@ -14109,9 +14109,9 @@
         "places_buildings"
       ],
       "distractors": [
-        "スーパーマーケット",
-        "みせ",
-        "デパート"
+        "stomach",
+        "straight",
+        "strawberry"
       ]
     },
     {
@@ -14138,9 +14138,9 @@
         "places_buildings"
       ],
       "distractors": [
-        "としょかん",
-        "びじゅつかん",
-        "がっこう"
+        "twelve",
+        "twenty",
+        "two"
       ]
     },
     {
@@ -14167,9 +14167,9 @@
         "greetings_social"
       ],
       "distractors": [
-        "ありがとう",
-        "どうぞ",
-        "おねがい"
+        "I_see",
+        "I_think_so",
+        "after_you"
       ]
     },
     {
@@ -14196,9 +14196,9 @@
         "greetings_social"
       ],
       "distractors": [
-        "いってきます",
-        "ただいま",
-        "さようなら"
+        "there_is",
+        "this_is",
+        "want_to"
       ]
     },
     {
@@ -14225,9 +14225,9 @@
         "greetings_social"
       ],
       "distractors": [
-        "さようなら",
-        "おやすみ",
-        "ありがとう"
+        "I_think_so",
+        "after_you",
+        "are_you"
       ]
     },
     {
@@ -14254,9 +14254,9 @@
         "greetings_social"
       ],
       "distractors": [
-        "がんばって",
-        "ありがとう",
-        "おねがい"
+        "I_am",
+        "I_can",
+        "I_cannot"
       ]
     },
     {
@@ -14283,9 +14283,9 @@
         "greetings_social"
       ],
       "distractors": [
-        "ありがとう",
-        "おつかれさま",
-        "きをつけて"
+        "I_think_so",
+        "after_you",
+        "are_you"
       ]
     },
     {
@@ -14312,9 +14312,9 @@
         "greetings_social"
       ],
       "distractors": [
-        "ありがとう",
-        "ごめんなさい",
-        "すみません"
+        "I_cannot",
+        "I_don't",
+        "I_like"
       ]
     },
     {
@@ -14341,9 +14341,9 @@
         "greetings"
       ],
       "distractors": [
-        "さようなら",
-        "おはよう",
-        "すみません"
+        "easy",
+        "every",
+        "far"
       ]
     },
     {
@@ -14370,9 +14370,9 @@
         "greetings_social"
       ],
       "distractors": [
-        "でていって",
-        "まって",
-        "こないで"
+        "there_is",
+        "this_is",
+        "want_to"
       ]
     },
     {
@@ -14399,9 +14399,9 @@
         "greetings_social"
       ],
       "distractors": [
-        "いいえ",
-        "ありがとう",
-        "すみません"
+        "good_luck",
+        "here_is",
+        "how_are_you"
       ]
     },
     {
@@ -14428,9 +14428,9 @@
         "greetings_social"
       ],
       "distractors": [
-        "よいよる",
-        "さようなら",
-        "またね"
+        "want_to",
+        "welcome_back",
+        "I_am"
       ]
     },
     {
@@ -14457,9 +14457,9 @@
         "greetings_social"
       ],
       "distractors": [
-        "わからない",
-        "ちがう",
-        "むり"
+        "let's",
+        "let_me",
+        "me_too"
       ]
     },
     {
@@ -14486,9 +14486,9 @@
         "greetings_social"
       ],
       "distractors": [
-        "ちがう",
-        "むり",
-        "いや"
+        "there_is",
+        "this_is",
+        "want_to"
       ]
     },
     {
@@ -14515,9 +14515,9 @@
         "greetings_social"
       ],
       "distractors": [
-        "たいへん",
-        "むり",
-        "こんなん"
+        "there_is",
+        "this_is",
+        "want_to"
       ]
     },
     {
@@ -14544,9 +14544,9 @@
         "greetings_social"
       ],
       "distractors": [
-        "わたしだけ",
-        "ちがう",
-        "わからない"
+        "nice_to_meet_you",
+        "no_problem",
+        "of_course"
       ]
     },
     {
@@ -14573,9 +14573,9 @@
         "greetings_social"
       ],
       "distractors": [
-        "ちがいます",
-        "わかりません",
-        "そうじゃない"
+        "I_see",
+        "after_you",
+        "are_you"
       ]
     },
     {
@@ -14602,9 +14602,9 @@
         "numbers_counting"
       ],
       "distractors": [
-        "じゅうに",
-        "じゅうし",
-        "じゅうご"
+        "eleven",
+        "email",
+        "eraser"
       ]
     },
     {
@@ -14631,9 +14631,9 @@
         "numbers_counting"
       ],
       "distractors": [
-        "じゅうさん",
-        "じゅうご",
-        "じゅうろく"
+        "thirty",
+        "thousand",
+        "three"
       ]
     },
     {
@@ -14660,9 +14660,9 @@
         "numbers_counting"
       ],
       "distractors": [
-        "じゅうし",
-        "じゅうろく",
-        "じゅうなな"
+        "hamster",
+        "hand",
+        "hat"
       ]
     },
     {
@@ -14689,9 +14689,9 @@
         "numbers_counting"
       ],
       "distractors": [
-        "にじゅう",
-        "よんじゅう",
-        "ごじゅう"
+        "taxi",
+        "tea",
+        "teacher"
       ]
     },
     {
@@ -14718,9 +14718,9 @@
         "numbers_counting"
       ],
       "distractors": [
-        "さんじゅう",
-        "ごじゅう",
-        "ろくじゅう"
+        "game",
+        "game_sport",
+        "garden"
       ]
     },
     {
@@ -14747,9 +14747,9 @@
         "numbers_counting"
       ],
       "distractors": [
-        "よんじゅう",
-        "ろくじゅう",
-        "さんじゅう"
+        "bird",
+        "birthday",
+        "board"
       ]
     },
     {
@@ -14776,9 +14776,9 @@
         "numbers_counting"
       ],
       "distractors": [
-        "ひゃく",
-        "まん",
-        "じゅう"
+        "breakfast",
+        "brother",
+        "bus"
       ]
     },
     {
@@ -14805,9 +14805,9 @@
         "numbers_counting"
       ],
       "distractors": [
-        "たす",
-        "ひく",
-        "かける"
+        "get",
+        "give",
+        "go"
       ]
     },
     {
@@ -14834,9 +14834,9 @@
         "numbers_counting"
       ],
       "distractors": [
-        "ひく",
-        "かける",
-        "わる"
+        "know",
+        "learn",
+        "like"
       ]
     },
     {
@@ -14864,9 +14864,9 @@
         "numbers_counting"
       ],
       "distractors": [
-        "たす",
-        "かける",
-        "ゼロ"
+        "cooking",
+        "corn",
+        "corner"
       ]
     },
     {
@@ -14893,9 +14893,9 @@
         "time_calendar"
       ],
       "distractors": [
-        "もくようび",
-        "かようび",
-        "きんようび"
+        "airplane",
+        "airport",
+        "ant"
       ]
     },
     {
@@ -14922,9 +14922,9 @@
         "time_calendar"
       ],
       "distractors": [
-        "にちようび",
-        "かようび",
-        "もくようび"
+        "science",
+        "sea",
+        "season"
       ]
     },
     {
@@ -14951,9 +14951,9 @@
         "time_calendar"
       ],
       "distractors": [
-        "げつようび",
-        "すいようび",
-        "もくようび"
+        "pencil",
+        "penguin",
+        "phone"
       ]
     },
     {
@@ -14980,9 +14980,9 @@
         "time_calendar"
       ],
       "distractors": [
-        "かようび",
-        "もくようび",
-        "きんようび"
+        "ice_skating",
+        "internet",
+        "jacket"
       ]
     },
     {
@@ -15009,9 +15009,9 @@
         "time_calendar"
       ],
       "distractors": [
-        "すいようび",
-        "きんようび",
-        "どようび"
+        "train",
+        "travel",
+        "tree"
       ]
     },
     {
@@ -15038,9 +15038,9 @@
         "time_calendar"
       ],
       "distractors": [
-        "もくようび",
-        "どようび",
-        "にちようび"
+        "key",
+        "kitchen",
+        "knee"
       ]
     },
     {
@@ -15067,9 +15067,9 @@
         "time_calendar"
       ],
       "distractors": [
-        "きんようび",
-        "にちようび",
-        "げつようび"
+        "bicycle",
+        "bicycle_tr",
+        "bird"
       ]
     },
     {
@@ -15096,9 +15096,9 @@
         "time_calendar"
       ],
       "distractors": [
-        "にがつ",
-        "さんがつ",
-        "しがつ"
+        "lunch",
+        "lunch_box",
+        "magazine"
       ]
     },
     {
@@ -15125,9 +15125,9 @@
         "time_calendar"
       ],
       "distractors": [
-        "いちがつ",
-        "さんがつ",
-        "しがつ"
+        "duck",
+        "ear",
+        "egg"
       ]
     },
     {
@@ -15154,9 +15154,9 @@
         "time_calendar"
       ],
       "distractors": [
-        "にがつ",
-        "しがつ",
-        "ごがつ"
+        "eraser",
+        "escalator",
+        "evening"
       ]
     },
     {
@@ -15183,9 +15183,9 @@
         "time_calendar"
       ],
       "distractors": [
-        "さんがつ",
-        "ごがつ",
-        "ろくがつ"
+        "light",
+        "light_bulb",
+        "lion"
       ]
     },
     {
@@ -15212,9 +15212,9 @@
         "time_calendar"
       ],
       "distractors": [
-        "しがつ",
-        "ろくがつ",
-        "しちがつ"
+        "February",
+        "Friday",
+        "January"
       ]
     },
     {
@@ -15241,9 +15241,9 @@
         "time_calendar"
       ],
       "distractors": [
-        "ごがつ",
-        "しちがつ",
-        "はちがつ"
+        "singing",
+        "sister",
+        "six"
       ]
     },
     {
@@ -15270,9 +15270,9 @@
         "time_calendar"
       ],
       "distractors": [
-        "ろくがつ",
-        "はちがつ",
-        "くがつ"
+        "road",
+        "room",
+        "ruler"
       ]
     },
     {
@@ -15299,9 +15299,9 @@
         "time_calendar"
       ],
       "distractors": [
-        "しちがつ",
-        "くがつ",
-        "じゅうがつ"
+        "moon",
+        "morning",
+        "mother"
       ]
     },
     {
@@ -15328,9 +15328,9 @@
         "time_calendar"
       ],
       "distractors": [
-        "はちがつ",
-        "じゅうがつ",
-        "じゅういちがつ"
+        "rain",
+        "reading",
+        "restaurant"
       ]
     },
     {
@@ -15357,9 +15357,9 @@
         "time_calendar"
       ],
       "distractors": [
-        "くがつ",
-        "じゅういちがつ",
-        "じゅうにがつ"
+        "yesterday",
+        "zero",
+        "zoo"
       ]
     },
     {
@@ -15386,9 +15386,9 @@
         "time_calendar"
       ],
       "distractors": [
-        "じゅうがつ",
-        "じゅうにがつ",
-        "いちがつ"
+        "forest",
+        "forty",
+        "four"
       ]
     },
     {
@@ -15415,9 +15415,9 @@
         "time_calendar"
       ],
       "distractors": [
-        "じゅういちがつ",
-        "いちがつ",
-        "にがつ"
+        "May",
+        "Monday",
+        "November"
       ]
     },
     {
@@ -15444,9 +15444,9 @@
         "school_classroom"
       ],
       "distractors": [
-        "としょかん",
-        "しょくどう",
-        "たいいくかん"
+        "sea",
+        "season",
+        "seven"
       ]
     },
     {
@@ -15473,9 +15473,9 @@
         "school_classroom"
       ],
       "distractors": [
-        "きょうしつ",
-        "たいいくかん",
-        "プール"
+        "carrot",
+        "cat",
+        "center"
       ]
     },
     {
@@ -15502,9 +15502,9 @@
         "school_classroom"
       ],
       "distractors": [
-        "きゅうしょく",
-        "おやつ",
-        "ばんごはん"
+        "park_play",
+        "parrot",
+        "pen"
       ]
     },
     {
@@ -15531,9 +15531,9 @@
         "school_classroom"
       ],
       "distractors": [
-        "おべんとう",
-        "おやつ",
-        "ひるごはん"
+        "flower",
+        "food",
+        "foot"
       ]
     },
     {
@@ -15560,9 +15560,9 @@
         "school_classroom"
       ],
       "distractors": [
-        "おんがく",
-        "びじゅつ",
-        "かがく"
+        "hobby",
+        "holiday",
+        "home"
       ]
     },
     {
@@ -15589,9 +15589,9 @@
         "school_classroom"
       ],
       "distractors": [
-        "チーム",
-        "グループ",
-        "クラス"
+        "math",
+        "meat",
+        "milk"
       ]
     },
     {
@@ -15618,9 +15618,9 @@
         "school_classroom"
       ],
       "distractors": [
-        "しゅくだい",
-        "テスト",
-        "レポート"
+        "thousand",
+        "three",
+        "ticket"
       ]
     },
     {
@@ -15647,9 +15647,9 @@
         "school_classroom"
       ],
       "distractors": [
-        "ほん",
-        "ノート",
-        "きょうかしょ"
+        "orange",
+        "panda",
+        "pants"
       ]
     },
     {
@@ -15676,9 +15676,9 @@
         "school_classroom"
       ],
       "distractors": [
-        "じしょ",
-        "ノート",
-        "ほん"
+        "horse",
+        "hospital",
+        "hotel"
       ]
     },
     {
@@ -15705,9 +15705,9 @@
         "school_classroom"
       ],
       "distractors": [
-        "えんぴつ",
-        "ペン",
-        "マーカー"
+        "wallet",
+        "water",
+        "watermelon"
       ]
     },
     {
@@ -15734,9 +15734,9 @@
         "school_classroom"
       ],
       "distractors": [
-        "かんばん",
-        "ポスター",
-        "えず"
+        "art",
+        "aunt",
+        "baby"
       ]
     },
     {
@@ -15763,9 +15763,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "ざっし",
-        "ほん",
-        "てがみ"
+        "hobby",
+        "holiday",
+        "home"
       ]
     },
     {
@@ -15792,9 +15792,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "しんぶん",
-        "ほん",
-        "てがみ"
+        "coat",
+        "coffee",
+        "coin"
       ]
     },
     {
@@ -15821,9 +15821,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "え",
-        "えいが",
-        "ポスター"
+        "bag",
+        "bag_clothing",
+        "bag_dl"
       ]
     },
     {
@@ -15850,9 +15850,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "でんわ",
-        "パソコン",
-        "テレビ"
+        "church",
+        "city",
+        "class"
       ]
     },
     {
@@ -15879,9 +15879,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "テレビ",
-        "パソコン",
-        "でんわ"
+        "ant",
+        "apple",
+        "arm"
       ]
     },
     {
@@ -15908,9 +15908,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "テレビ",
-        "パソコン",
-        "でんわ"
+        "running",
+        "salad",
+        "sandwich"
       ]
     },
     {
@@ -15937,9 +15937,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "てがみ",
-        "はがき",
-        "でんわ"
+        "pants",
+        "paper",
+        "park"
       ]
     },
     {
@@ -15966,9 +15966,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "しゅくだい",
-        "テスト",
-        "クラス"
+        "forest",
+        "forty",
+        "four"
       ]
     },
     {
@@ -15995,9 +15995,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "とけい",
-        "スケジュール",
-        "じかんひょう"
+        "traffic",
+        "train",
+        "travel"
       ]
     },
     {
@@ -16024,9 +16024,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "カレンダー",
-        "とけい",
-        "りすと"
+        "card_game",
+        "carrot",
+        "cat"
       ]
     },
     {
@@ -16053,9 +16053,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "かばん",
-        "ポケット",
-        "はこ"
+        "winter",
+        "wolf",
+        "woman"
       ]
     },
     {
@@ -16082,9 +16082,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "さつ",
-        "おかね",
-        "さいふ"
+        "top",
+        "toy",
+        "traffic"
       ]
     },
     {
@@ -16111,9 +16111,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "ノート",
-        "ほん",
-        "ざっし"
+        "birthday",
+        "board",
+        "boat"
       ]
     },
     {
@@ -16140,9 +16140,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "ふくろ",
-        "かばん",
-        "ケース"
+        "grandfather",
+        "grandmother",
+        "grape"
       ]
     },
     {
@@ -16169,9 +16169,9 @@
         "daily_life_home"
       ],
       "distractors": [
-        "はこ",
-        "かばん",
-        "ポーチ"
+        "October",
+        "Saturday",
+        "September"
       ]
     },
     {
@@ -16198,9 +16198,9 @@
         "sports_hobbies"
       ],
       "distractors": [
-        "バスケットボール",
-        "テニス",
-        "サッカー"
+        "corner",
+        "country",
+        "cow"
       ]
     },
     {
@@ -16227,9 +16227,9 @@
         "sports_hobbies"
       ],
       "distractors": [
-        "テニス",
-        "やきゅう",
-        "サッカー"
+        "month",
+        "moon",
+        "morning"
       ]
     },
     {
@@ -16256,9 +16256,9 @@
         "sports_hobbies"
       ],
       "distractors": [
-        "スノーボード",
-        "アイスケート",
-        "スケート"
+        "hobby",
+        "holiday",
+        "home"
       ]
     },
     {
@@ -16285,9 +16285,9 @@
         "sports_hobbies"
       ],
       "distractors": [
-        "スキー",
-        "ローラースケート",
-        "スノーボード"
+        "half",
+        "hamster",
+        "hand"
       ]
     },
     {
@@ -16314,9 +16314,9 @@
         "sports_hobbies"
       ],
       "distractors": [
-        "キャンプ",
-        "ピクニック",
-        "りょこう"
+        "duck",
+        "ear",
+        "egg"
       ]
     },
     {
@@ -16343,9 +16343,9 @@
         "sports_hobbies"
       ],
       "distractors": [
-        "ハイキング",
-        "キャンプ",
-        "りょこう"
+        "hobby",
+        "holiday",
+        "home"
       ]
     },
     {
@@ -16372,9 +16372,9 @@
         "sports_hobbies"
       ],
       "distractors": [
-        "ボードゲーム",
-        "ビデオゲーム",
-        "パズル"
+        "world",
+        "year",
+        "yesterday"
       ]
     },
     {
@@ -16401,9 +16401,9 @@
         "sports_hobbies"
       ],
       "distractors": [
-        "ゲーム",
-        "おもちゃ",
-        "カードゲーム"
+        "gym",
+        "hair",
+        "half"
       ]
     },
     {
@@ -16430,9 +16430,9 @@
         "sports_hobbies"
       ],
       "distractors": [
-        "キャンプ",
-        "りょこう",
-        "ハイキング"
+        "grandfather",
+        "grandmother",
+        "grape"
       ]
     },
     {
@@ -16459,9 +16459,9 @@
         "sports_hobbies"
       ],
       "distractors": [
-        "カードゲーム",
-        "パズル",
-        "おもちゃ"
+        "August",
+        "December",
+        "English"
       ]
     },
     {
@@ -16488,9 +16488,9 @@
         "transportation"
       ],
       "distractors": [
-        "じてんしゃ",
-        "くるま",
-        "バス"
+        "zoo",
+        "April",
+        "August"
       ]
     },
     {
@@ -16517,9 +16517,9 @@
         "transportation"
       ],
       "distractors": [
-        "ひこうき",
-        "ふね",
-        "バス"
+        "penguin",
+        "phone",
+        "photo"
       ]
     },
     {
@@ -16546,9 +16546,9 @@
         "transportation"
       ],
       "distractors": [
-        "ふね",
-        "いかだ",
-        "カヤック"
+        "foot",
+        "forest",
+        "forty"
       ]
     },
     {
@@ -16575,9 +16575,9 @@
         "transportation"
       ],
       "distractors": [
-        "エレベーター",
-        "かいだん",
-        "スロープ"
+        "corn",
+        "corner",
+        "country"
       ]
     },
     {
@@ -16604,9 +16604,9 @@
         "transportation"
       ],
       "distractors": [
-        "エスカレーター",
-        "かいだん",
-        "スロープ"
+        "dog",
+        "door",
+        "drawing"
       ]
     },
     {
@@ -16633,9 +16633,9 @@
         "directions_position"
       ],
       "distractors": [
-        "まんなか",
-        "よこ",
-        "まえ"
+        "door",
+        "drawing",
+        "dress"
       ]
     },
     {
@@ -16662,9 +16662,9 @@
         "directions_position"
       ],
       "distractors": [
-        "かど",
-        "よこ",
-        "そと"
+        "horse",
+        "hospital",
+        "hotel"
       ]
     },
     {
@@ -16691,9 +16691,9 @@
         "directions_position"
       ],
       "distractors": [
-        "した",
-        "なか",
-        "よこ"
+        "bee",
+        "bicycle",
+        "bicycle_tr"
       ]
     },
     {
@@ -16720,9 +16720,9 @@
         "directions_position"
       ],
       "distractors": [
-        "てっぺん",
-        "うえ",
-        "よこ"
+        "bag_dl",
+        "ball",
+        "banana"
       ]
     },
     {
@@ -16749,9 +16749,9 @@
         "directions_position"
       ],
       "distractors": [
-        "まんなか",
-        "まえ",
-        "うしろ"
+        "knee",
+        "left",
+        "leg"
       ]
     },
     {
@@ -16778,9 +16778,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "わたしの",
-        "あなたの",
-        "かのじょの"
+        "sunny",
+        "tall",
+        "their"
       ]
     },
     {
@@ -16807,9 +16807,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "わたしの",
-        "かれの",
-        "あなたの"
+        "hot",
+        "hot_weather",
+        "hungry"
       ]
     },
     {
@@ -16836,9 +16836,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "かれらの",
-        "あなたたちの",
-        "みんなの"
+        "busy",
+        "cheers",
+        "clean"
       ]
     },
     {
@@ -16865,9 +16865,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "わたしたちの",
-        "あなたたちの",
-        "みんなの"
+        "brown",
+        "busy",
+        "cheers"
       ]
     },
     {
@@ -16895,9 +16895,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "すべての",
-        "ない",
-        "ひとつも"
+        "black",
+        "blue",
+        "brave"
       ]
     },
     {
@@ -16924,9 +16924,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "すくない",
-        "ひとつの",
-        "ない"
+        "bad",
+        "beautiful",
+        "big"
       ]
     },
     {
@@ -16954,9 +16954,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "すこし",
-        "ぜんぜん",
-        "ちょっと"
+        "cold_weather",
+        "cool",
+        "cute"
       ]
     },
     {
@@ -16984,9 +16984,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "たくさん",
-        "おおきい",
-        "おおい"
+        "hard_adj",
+        "her",
+        "his"
       ]
     },
     {
@@ -17014,9 +17014,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "すこし",
-        "いくつか",
-        "ない"
+        "green",
+        "happy",
+        "hard"
       ]
     },
     {
@@ -17043,9 +17043,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "すこし",
-        "たまに",
-        "たまたま"
+        "gold",
+        "good",
+        "gray"
       ]
     },
     {
@@ -17073,9 +17073,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "ない",
-        "すこし",
-        "ひとつも"
+        "hot",
+        "hot_weather",
+        "hungry"
       ]
     },
     {
@@ -17102,9 +17102,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "ある",
-        "いくつか",
-        "たくさん"
+        "brave",
+        "bright",
+        "brown"
       ]
     },
     {
@@ -17132,9 +17132,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "おなじ",
-        "この",
-        "その"
+        "weak",
+        "well",
+        "white"
       ]
     },
     {
@@ -17162,9 +17162,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "おなじ",
-        "ひとつの",
-        "これ"
+        "hungry",
+        "kind",
+        "little"
       ]
     },
     {
@@ -17191,9 +17191,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "それどうぞ",
-        "どうぞ",
-        "もって"
+        "how_many",
+        "how_much",
+        "how_old"
       ]
     },
     {
@@ -17220,9 +17220,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "〜がない",
-        "〜がいる",
-        "〜がいない"
+        "are_you",
+        "come_in",
+        "congratulations"
       ]
     },
     {
@@ -17249,9 +17249,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "あなたは",
-        "かれは",
-        "かのじょは"
+        "do_you_like",
+        "excuse",
+        "good_luck"
       ]
     },
     {
@@ -17278,9 +17278,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "わたしは",
-        "かれは",
-        "かのじょは"
+        "nice_to_meet_you",
+        "no_problem",
+        "of_course"
       ]
     },
     {
@@ -17307,9 +17307,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "これは",
-        "あれは",
-        "どれが"
+        "this_is",
+        "want_to",
+        "welcome_back"
       ]
     },
     {
@@ -17336,9 +17336,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "それは",
-        "あれは",
-        "どれは"
+        "take_care",
+        "there_is",
+        "want_to"
       ]
     },
     {
@@ -17365,9 +17365,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "わたしは",
-        "かれは",
-        "かのじょは"
+        "I_don't",
+        "I_like",
+        "I_see"
       ]
     },
     {
@@ -17394,9 +17394,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "わたしは〜する",
-        "あなたは〜する",
-        "できる"
+        "are_you",
+        "come_in",
+        "congratulations"
       ]
     },
     {
@@ -17423,9 +17423,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "やめて",
-        "まって",
-        "みせて"
+        "nice_day",
+        "nice_to_meet_you",
+        "no_problem"
       ]
     },
     {
@@ -17452,9 +17452,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "わたしはできない",
-        "むり",
-        "だめ"
+        "welcome_back",
+        "I_am",
+        "I_cannot"
       ]
     },
     {
@@ -17481,9 +17481,9 @@
         "common_phrases"
       ],
       "distractors": [
-        "わたしはできる",
-        "がんばる",
-        "やってみる"
+        "this_is",
+        "want_to",
+        "welcome_back"
       ]
     }
   ]

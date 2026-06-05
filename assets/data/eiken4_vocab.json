@@ -52,9 +52,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "ねる",
-        "あそぶ",
-        "たべる"
+        "complain",
+        "complete",
+        "confirm"
       ]
     },
     {
@@ -81,9 +81,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "あらう",
-        "きる",
-        "ぬる"
+        "found",
+        "fry",
+        "gave"
       ]
     },
     {
@@ -110,9 +110,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "あらう",
-        "みがく",
-        "ふく"
+        "heard",
+        "hold",
+        "hope"
       ]
     },
     {
@@ -139,9 +139,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "いためる",
-        "やく",
-        "むす"
+        "order",
+        "organize",
+        "overlook"
       ]
     },
     {
@@ -168,9 +168,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "よごす",
-        "あらかす",
-        "ほうっておく"
+        "gave",
+        "get dressed",
+        "get organized"
       ]
     },
     {
@@ -197,9 +197,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "かたづける",
-        "じゅんびする",
-        "ならべる"
+        "wore",
+        "wrap",
+        "wrote"
       ]
     },
     {
@@ -226,9 +226,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "さぼる",
-        "やすむ",
-        "ねる"
+        "feed",
+        "fell",
+        "felt"
       ]
     },
     {
@@ -255,9 +255,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "あびる",
-        "あらう",
-        "ながす"
+        "explain",
+        "explore",
+        "feed"
       ]
     },
     {
@@ -284,9 +284,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "ひるごはん",
-        "ゆうごはん",
-        "おやつ"
+        "failure",
+        "fare",
+        "farmer"
       ]
     },
     {
@@ -313,9 +313,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "ぬぐ",
-        "あらう",
-        "ならべる"
+        "announce",
+        "apologize",
+        "argue"
       ]
     },
     {
@@ -342,9 +342,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "あける",
-        "だす",
-        "もつ"
+        "turn",
+        "turn off",
+        "turn on"
       ]
     },
     {
@@ -371,9 +371,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "でる",
-        "もどる",
-        "すぎる"
+        "graduate",
+        "greet",
+        "grow"
       ]
     },
     {
@@ -400,9 +400,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "くる",
-        "もどる",
-        "とどく"
+        "discover",
+        "discuss",
+        "drank"
       ]
     },
     {
@@ -429,9 +429,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "でる",
-        "いく",
-        "とまる"
+        "disagree",
+        "discover",
+        "discuss"
       ]
     },
     {
@@ -458,9 +458,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "はたらく",
-        "あそぶ",
-        "べんきょうする"
+        "peel",
+        "perform",
+        "persuade"
       ]
     },
     {
@@ -487,9 +487,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "はしる",
-        "あるく",
-        "サイクリングする"
+        "overlook",
+        "pack",
+        "paint"
       ]
     },
     {
@@ -516,9 +516,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "あそぶ",
-        "なでる",
-        "だく"
+        "compete",
+        "complain",
+        "complete"
       ]
     },
     {
@@ -546,9 +546,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "あらう",
-        "たたむ",
-        "ほす"
+        "turn off",
+        "turn on",
+        "wake up"
       ]
     },
     {
@@ -575,9 +575,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "かたづける",
-        "こわす",
-        "おく"
+        "earn",
+        "echo",
+        "encourage"
       ]
     },
     {
@@ -604,9 +604,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "はしる",
-        "あるく",
-        "スキップする"
+        "charge",
+        "check",
+        "choose"
       ]
     },
     {
@@ -633,9 +633,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "そそぐ",
-        "まく",
-        "ぬらす"
+        "create",
+        "cut",
+        "decide"
       ]
     },
     {
@@ -662,9 +662,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "よごす",
-        "おく",
-        "かざる"
+        "wrap",
+        "wrote",
+        "yell"
       ]
     },
     {
@@ -691,9 +691,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "わすれる",
-        "なくす",
-        "さがす"
+        "rode",
+        "said",
+        "sat"
       ]
     },
     {
@@ -720,9 +720,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "やく",
-        "いためる",
-        "むす"
+        "connect",
+        "create",
+        "cut"
       ]
     },
     {
@@ -749,9 +749,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "あらう",
-        "ふく",
-        "かわかす"
+        "knew",
+        "knit",
+        "knock"
       ]
     },
     {
@@ -778,9 +778,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "あらう",
-        "ぬらす",
-        "ふく"
+        "gave",
+        "get dressed",
+        "get organized"
       ]
     },
     {
@@ -807,9 +807,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "おく",
-        "たたむ",
-        "いれる"
+        "drew",
+        "dribble",
+        "drill"
       ]
     },
     {
@@ -836,9 +836,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "ひろげる",
-        "きる",
-        "なげる"
+        "jog",
+        "join",
+        "kept"
       ]
     },
     {
@@ -865,9 +865,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "みがく",
-        "あらう",
-        "ふく"
+        "wish",
+        "won",
+        "wore"
       ]
     },
     {
@@ -894,9 +894,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "あらう",
-        "みがく",
-        "はらう"
+        "boil",
+        "bought",
+        "brought"
       ]
     },
     {
@@ -923,9 +923,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "かえる",
-        "こうかんする",
-        "わたす"
+        "arise",
+        "arrive",
+        "ate"
       ]
     },
     {
@@ -952,9 +952,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "つかう",
-        "けす",
-        "つける"
+        "warn",
+        "wave",
+        "went"
       ]
     },
     {
@@ -981,9 +981,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "つける",
-        "あける",
-        "しめる"
+        "skim",
+        "skip",
+        "slam"
       ]
     },
     {
@@ -1010,9 +1010,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "けす",
-        "しめる",
-        "わる"
+        "gave",
+        "get dressed",
+        "get organized"
       ]
     },
     {
@@ -1039,9 +1039,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "あける",
-        "しめる",
-        "おさえる"
+        "surrender",
+        "swam",
+        "swap"
       ]
     },
     {
@@ -1069,9 +1069,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "ねる",
-        "やすむ",
-        "ゆめをみる"
+        "type",
+        "typhoon",
+        "vacuum cleaner"
       ]
     },
     {
@@ -1099,9 +1099,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "いく",
-        "でかける",
-        "もどる"
+        "charge",
+        "check",
+        "choose"
       ]
     },
     {
@@ -1128,9 +1128,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "とけい",
-        "カレンダー",
-        "スケジュール"
+        "broth",
+        "brunch",
+        "budget"
       ]
     },
     {
@@ -1157,9 +1157,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "じかんひょう",
-        "カレンダー",
-        "メモ"
+        "ferry",
+        "fever",
+        "field"
       ]
     },
     {
@@ -1186,9 +1186,9 @@
         "daily_routine"
       ],
       "distractors": [
-        "しゅみ",
-        "ルール",
-        "やくそく"
+        "police officer",
+        "pollution",
+        "porridge"
       ]
     },
     {
@@ -1215,9 +1215,9 @@
         "hobbies_and_interests"
       ],
       "distractors": [
-        "ギター",
-        "バイオリン",
-        "ドラム"
+        "field trip",
+        "figure",
+        "firefighter"
       ]
     },
     {
@@ -1244,9 +1244,9 @@
         "hobbies_and_interests"
       ],
       "distractors": [
-        "ピアノ",
-        "フルート",
-        "バイオリン"
+        "diet",
+        "dining room",
+        "direction"
       ]
     },
     {
@@ -1273,9 +1273,9 @@
         "hobbies_and_interests"
       ],
       "distractors": [
-        "ピアノ",
-        "チェロ",
-        "ギター"
+        "timetable",
+        "tip",
+        "topic"
       ]
     },
     {
@@ -1302,9 +1302,9 @@
         "hobbies_and_interests"
       ],
       "distractors": [
-        "ギター",
-        "ピアノ",
-        "フルート"
+        "fare",
+        "farmer",
+        "feeling"
       ]
     },
     {
@@ -1331,9 +1331,9 @@
         "hobbies_and_interests"
       ],
       "distractors": [
-        "バイオリン",
-        "ピアノ",
-        "ドラム"
+        "tourist",
+        "tournament",
+        "tradition"
       ]
     },
     {
@@ -1361,9 +1361,9 @@
         "hobbies_and_interests"
       ],
       "distractors": [
-        "ハイキング",
-        "ピクニック",
-        "りょこう"
+        "idea",
+        "information",
+        "ingredient"
       ]
     },
     {
@@ -1390,9 +1390,9 @@
         "hobbies_and_interests"
       ],
       "distractors": [
-        "えをかく",
-        "ぬる",
-        "コピーする"
+        "destroy",
+        "disagree",
+        "discover"
       ]
     },
     {
@@ -1420,9 +1420,9 @@
         "hobbies_and_interests"
       ],
       "distractors": [
-        "えをかく",
-        "ぬる",
-        "かざる"
+        "fell",
+        "felt",
+        "fix"
       ]
     },
     {
@@ -1449,9 +1449,9 @@
         "hobbies_and_interests"
       ],
       "distractors": [
-        "えんじる・えんそうする",
-        "くつろぐ",
-        "せつめいする"
+        "tidy",
+        "tidy up",
+        "told"
       ]
     },
     {
@@ -1479,9 +1479,9 @@
         "hobbies_and_interests"
       ],
       "distractors": [
-        "あそび",
-        "えをかく",
-        "えんげき"
+        "driver",
+        "drone",
+        "drum"
       ]
     },
     {
@@ -1508,9 +1508,9 @@
         "hobbies_and_interests"
       ],
       "distractors": [
-        "ぬう",
-        "つくる",
-        "おる"
+        "explain",
+        "explore",
+        "feed"
       ]
     },
     {
@@ -1537,9 +1537,9 @@
         "hobbies_and_interests"
       ],
       "distractors": [
-        "あむ",
-        "つくる",
-        "きる"
+        "order",
+        "organize",
+        "overlook"
       ]
     },
     {
@@ -1566,9 +1566,9 @@
         "hobbies_and_interests"
       ],
       "distractors": [
-        "むす",
-        "あげる",
-        "いためる"
+        "yell",
+        "achieve",
+        "afford"
       ]
     },
     {
@@ -1595,9 +1595,9 @@
         "hobbies_and_interests"
       ],
       "distractors": [
-        "みずをやる",
-        "かる",
-        "うえる"
+        "return",
+        "review",
+        "rinse"
       ]
     },
     {
@@ -1624,9 +1624,9 @@
         "hobbies_and_interests"
       ],
       "distractors": [
-        "えをかく",
-        "どうが",
-        "えいが"
+        "vacuum cleaner",
+        "valley",
+        "vegetarian"
       ]
     },
     {
@@ -1653,9 +1653,9 @@
         "hobbies_and_interests"
       ],
       "distractors": [
-        "てづくり",
-        "えをかく",
-        "ぬりえ"
+        "handball",
+        "headache",
+        "heart"
       ]
     },
     {
@@ -1682,9 +1682,9 @@
         "hobbies_and_interests"
       ],
       "distractors": [
-        "どうぐ",
-        "おもちゃ",
-        "きかい"
+        "appetizer",
+        "appointment",
+        "architect"
       ]
     },
     {
@@ -1711,9 +1711,9 @@
         "hobbies_and_interests"
       ],
       "distractors": [
-        "れんしゅうする",
-        "みる",
-        "きく"
+        "scrub",
+        "search",
+        "set"
       ]
     },
     {
@@ -1741,9 +1741,9 @@
         "hobbies_and_interests"
       ],
       "distractors": [
-        "べんきょうする",
-        "みる",
-        "やすむ"
+        "warn",
+        "wave",
+        "went"
       ]
     },
     {
@@ -1770,9 +1770,9 @@
         "hobbies_and_interests"
       ],
       "distractors": [
-        "えんそうかい",
-        "えいが",
-        "はっぴょうかい"
+        "vegetarian",
+        "vet",
+        "violin"
       ]
     },
     {
@@ -1799,9 +1799,9 @@
         "hobbies_and_interests"
       ],
       "distractors": [
-        "とくい",
-        "しゅみ",
-        "のうりょく"
+        "feeling",
+        "fence",
+        "ferry"
       ]
     },
     {
@@ -1828,9 +1828,9 @@
         "adjectives"
       ],
       "distractors": [
-        "そうぞうてきな",
-        "どくそうてきな",
-        "きそうてんがい"
+        "relieved",
+        "rude",
+        "safe"
       ]
     },
     {
@@ -1858,9 +1858,9 @@
         "hobbies_and_interests"
       ],
       "distractors": [
-        "えをかく",
-        "つくる",
-        "かざる"
+        "fare",
+        "farmer",
+        "feeling"
       ]
     },
     {
@@ -1887,9 +1887,9 @@
         "hobbies_and_interests"
       ],
       "distractors": [
-        "おもちゃ",
-        "ぬいぐるみ",
-        "フィギュア"
+        "drum",
+        "earthquake",
+        "economy"
       ]
     },
     {
@@ -1917,9 +1917,9 @@
         "hobbies_and_interests"
       ],
       "distractors": [
-        "てつだう",
-        "はたらく",
-        "きょうりょくする"
+        "noodles",
+        "novel",
+        "nurse"
       ]
     },
     {
@@ -1946,9 +1946,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "まち・ちいき",
-        "きんじょ",
-        "ふきん"
+        "sneeze",
+        "social studies",
+        "soil"
       ]
     },
     {
@@ -1975,9 +1975,9 @@
         "hobbies_and_interests"
       ],
       "distractors": [
-        "しあい",
-        "きょうそう",
-        "テスト"
+        "manga",
+        "mark",
+        "market"
       ]
     },
     {
@@ -2004,9 +2004,9 @@
         "hobbies_and_interests"
       ],
       "distractors": [
-        "てんじかい",
-        "はっぴょうかい",
-        "コンサート"
+        "driver",
+        "drone",
+        "drum"
       ]
     },
     {
@@ -2033,9 +2033,9 @@
         "hobbies_and_interests"
       ],
       "distractors": [
-        "しゅみ",
-        "かつどう",
-        "あそび"
+        "destination",
+        "detail",
+        "diet"
       ]
     },
     {
@@ -2062,9 +2062,9 @@
         "hobbies_and_interests"
       ],
       "distractors": [
-        "しゅみ",
-        "もくひょう",
-        "せいかく"
+        "method",
+        "metro",
+        "microwave"
       ]
     },
     {
@@ -2091,9 +2091,9 @@
         "hobbies_and_interests"
       ],
       "distractors": [
-        "さっと読む",
-        "みる",
-        "よむ"
+        "wish",
+        "won",
+        "wore"
       ]
     },
     {
@@ -2120,9 +2120,9 @@
         "hobbies_and_interests"
       ],
       "distractors": [
-        "まんが",
-        "ざっし",
-        "しんぶん"
+        "lung",
+        "main course",
+        "mall"
       ]
     },
     {
@@ -2149,9 +2149,9 @@
         "hobbies_and_interests"
       ],
       "distractors": [
-        "しょうせつ",
-        "ざっし",
-        "えほん"
+        "brunch",
+        "budget",
+        "cabinet"
       ]
     },
     {
@@ -2178,9 +2178,9 @@
         "hobbies_and_interests"
       ],
       "distractors": [
-        "えいが",
-        "ドラマ",
-        "マンガ"
+        "trimester",
+        "tsunami",
+        "type"
       ]
     },
     {
@@ -2207,9 +2207,9 @@
         "hobbies_and_interests"
       ],
       "distractors": [
-        "カードゲーム",
-        "テレビゲーム",
-        "パズル"
+        "living room",
+        "luggage",
+        "lung"
       ]
     },
     {
@@ -2236,9 +2236,9 @@
         "sports"
       ],
       "distractors": [
-        "バレーボール",
-        "フットサル",
-        "ドッジボール"
+        "piano",
+        "pilot",
+        "plan"
       ]
     },
     {
@@ -2265,9 +2265,9 @@
         "sports"
       ],
       "distractors": [
-        "バスケットボール",
-        "ハンドボール",
-        "バレーボール"
+        "player",
+        "plumber",
+        "police officer"
       ]
     },
     {
@@ -2294,9 +2294,9 @@
         "sports"
       ],
       "distractors": [
-        "バドミントン",
-        "テニス",
-        "ラケットボール"
+        "boarding pass",
+        "bone",
+        "booking"
       ]
     },
     {
@@ -2323,9 +2323,9 @@
         "sports"
       ],
       "distractors": [
-        "テニス",
-        "スカッシュ",
-        "ピンポン"
+        "peak",
+        "period",
+        "pharmacy"
       ]
     },
     {
@@ -2352,9 +2352,9 @@
         "sports"
       ],
       "distractors": [
-        "テニス",
-        "バドミントン",
-        "バレーボール"
+        "plumber",
+        "police officer",
+        "pollution"
       ]
     },
     {
@@ -2381,9 +2381,9 @@
         "sports"
       ],
       "distractors": [
-        "アメフト",
-        "サッカー",
-        "バスケットボール"
+        "ingredient",
+        "injection",
+        "inn"
       ]
     },
     {
@@ -2410,9 +2410,9 @@
         "sports"
       ],
       "distractors": [
-        "かくとうぎ",
-        "たいそう",
-        "ボクシング"
+        "brunch",
+        "budget",
+        "cabinet"
       ]
     },
     {
@@ -2439,9 +2439,9 @@
         "sports"
       ],
       "distractors": [
-        "からて",
-        "けんどう",
-        "すもう"
+        "transfer",
+        "trimester",
+        "tsunami"
       ]
     },
     {
@@ -2468,9 +2468,9 @@
         "sports"
       ],
       "distractors": [
-        "じゅうどう",
-        "けんどう",
-        "たいそう"
+        "waterfall",
+        "weight",
+        "wildlife"
       ]
     },
     {
@@ -2497,9 +2497,9 @@
         "sports"
       ],
       "distractors": [
-        "ダンス",
-        "エアロビクス",
-        "バレエ"
+        "mirror",
+        "mistake",
+        "model"
       ]
     },
     {
@@ -2526,9 +2526,9 @@
         "sports"
       ],
       "distractors": [
-        "スポーツ",
-        "うんどうかい",
-        "きょうそう"
+        "farmer",
+        "feeling",
+        "fence"
       ]
     },
     {
@@ -2556,9 +2556,9 @@
         "sports"
       ],
       "distractors": [
-        "マラソン",
-        "しあい",
-        "きょうぎ"
+        "soil",
+        "solution",
+        "speech"
       ]
     },
     {
@@ -2586,9 +2586,9 @@
         "sports"
       ],
       "distractors": [
-        "けっか",
-        "てん",
-        "しあい"
+        "injection",
+        "inn",
+        "instrument"
       ]
     },
     {
@@ -2615,9 +2615,9 @@
         "sports"
       ],
       "distractors": [
-        "ゲーム",
-        "きょうぎ",
-        "たいかい"
+        "electrician",
+        "emotion",
+        "energy"
       ]
     },
     {
@@ -2644,9 +2644,9 @@
         "sports"
       ],
       "distractors": [
-        "たいかい",
-        "しあい",
-        "きょうそう"
+        "nap",
+        "nature",
+        "neighborhood"
       ]
     },
     {
@@ -2673,9 +2673,9 @@
         "sports"
       ],
       "distractors": [
-        "ゆうしゃ",
-        "せんしゅ",
-        "リーダー"
+        "artist",
+        "assembly",
+        "assignment"
       ]
     },
     {
@@ -2702,9 +2702,9 @@
         "sports"
       ],
       "distractors": [
-        "しんぱん・アンパイア",
-        "コーチ",
-        "かんとく"
+        "takeout",
+        "talent",
+        "teammate"
       ]
     },
     {
@@ -2731,9 +2731,9 @@
         "sports"
       ],
       "distractors": [
-        "せんしゅ",
-        "メンバー",
-        "コーチ"
+        "message",
+        "method",
+        "metro"
       ]
     },
     {
@@ -2760,9 +2760,9 @@
         "sports"
       ],
       "distractors": [
-        "コート",
-        "プール",
-        "グラウンド"
+        "novel",
+        "nurse",
+        "object"
       ]
     },
     {
@@ -2789,9 +2789,9 @@
         "sports"
       ],
       "distractors": [
-        "フィールド",
-        "コース",
-        "プール"
+        "bathroom",
+        "bathtub",
+        "bedroom"
       ]
     },
     {
@@ -2818,9 +2818,9 @@
         "sports"
       ],
       "distractors": [
-        "プール",
-        "コート",
-        "グラウンド"
+        "nature",
+        "neighborhood",
+        "noodles"
       ]
     },
     {
@@ -2847,9 +2847,9 @@
         "sports"
       ],
       "distractors": [
-        "たいいくかん",
-        "スタジアム",
-        "アリーナ"
+        "breeze",
+        "broth",
+        "brunch"
       ]
     },
     {
@@ -2876,9 +2876,9 @@
         "sports"
       ],
       "distractors": [
-        "れんしゅうする",
-        "うごく",
-        "のびをする"
+        "greet",
+        "grow",
+        "had"
       ]
     },
     {
@@ -2905,9 +2905,9 @@
         "sports"
       ],
       "distractors": [
-        "れんしゅうする",
-        "きたえる",
-        "みがく"
+        "celebrate",
+        "charge",
+        "check"
       ]
     },
     {
@@ -2934,9 +2934,9 @@
         "sports"
       ],
       "distractors": [
-        "じゅんびする",
-        "さんかする",
-        "みる"
+        "choose",
+        "chopped",
+        "collect"
       ]
     },
     {
@@ -2963,9 +2963,9 @@
         "sports"
       ],
       "distractors": [
-        "まける",
-        "ひきわける",
-        "さんかする"
+        "return",
+        "review",
+        "rinse"
       ]
     },
     {
@@ -2992,9 +2992,9 @@
         "sports"
       ],
       "distractors": [
-        "まける",
-        "やめる",
-        "のこる"
+        "drank",
+        "drew",
+        "dribble"
       ]
     },
     {
@@ -3021,9 +3021,9 @@
         "sports"
       ],
       "distractors": [
-        "ともだち",
-        "コーチ",
-        "あいて"
+        "boarding pass",
+        "bone",
+        "booking"
       ]
     },
     {
@@ -3050,9 +3050,9 @@
         "sports"
       ],
       "distractors": [
-        "パスする",
-        "なげる",
-        "ける"
+        "afford",
+        "agree",
+        "allow"
       ]
     },
     {
@@ -3079,9 +3079,9 @@
         "sports"
       ],
       "distractors": [
-        "ける",
-        "うつ",
-        "とる"
+        "slam",
+        "slice",
+        "smile"
       ]
     },
     {
@@ -3108,9 +3108,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "りか",
-        "えいご",
-        "れきし"
+        "height",
+        "highway",
+        "history"
       ]
     },
     {
@@ -3137,9 +3137,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "りか",
-        "れきし",
-        "どうとく"
+        "shadow",
+        "shape",
+        "shelf"
       ]
     },
     {
@@ -3166,9 +3166,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "れきし",
-        "かがく",
-        "しゃかい"
+        "change",
+        "checkout",
+        "chef"
       ]
     },
     {
@@ -3195,9 +3195,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "ちり",
-        "しゃかい",
-        "どうとく"
+        "mirror",
+        "mistake",
+        "model"
       ]
     },
     {
@@ -3224,9 +3224,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "スープじる・だし",
-        "おいしゃさん・いし",
-        "デザインする・せっけい"
+        "energy",
+        "engineer",
+        "environment"
       ]
     },
     {
@@ -3253,9 +3253,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "ぶつり",
-        "せいぶつ",
-        "りか"
+        "project",
+        "purpose",
+        "quiz"
       ]
     },
     {
@@ -3282,9 +3282,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "れきし",
-        "えいご",
-        "こくご"
+        "advice",
+        "air conditioner",
+        "alarm"
       ]
     },
     {
@@ -3311,9 +3311,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "たいそう",
-        "うんどう",
-        "スポーツ"
+        "police officer",
+        "pollution",
+        "porridge"
       ]
     },
     {
@@ -3340,9 +3340,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "おんがく",
-        "たいいく",
-        "どうとく"
+        "skin",
+        "sneeze",
+        "social studies"
       ]
     },
     {
@@ -3369,9 +3369,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "ずこう",
-        "たいいく",
-        "えいご"
+        "hue",
+        "idea",
+        "information"
       ]
     },
     {
@@ -3398,9 +3398,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "テスト",
-        "プリント",
-        "レポート"
+        "stew",
+        "stomachache",
+        "stream"
       ]
     },
     {
@@ -3427,9 +3427,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "さくぶん",
-        "レポート",
-        "しゅくだい"
+        "mark",
+        "market",
+        "martial arts"
       ]
     },
     {
@@ -3456,9 +3456,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "じっしゅう",
-        "えんしゅう",
-        "かんさつ"
+        "firefighter",
+        "flavor",
+        "floor"
       ]
     },
     {
@@ -3485,9 +3485,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "しゅくだい",
-        "レポート",
-        "はっぴょう"
+        "condition",
+        "confidence",
+        "connection"
       ]
     },
     {
@@ -3514,9 +3514,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "てん",
-        "ひょうか",
-        "せいせき"
+        "driver",
+        "drone",
+        "drum"
       ]
     },
     {
@@ -3543,9 +3543,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "テーマ",
-        "ないよう",
-        "かだい"
+        "guitar",
+        "gymnastics",
+        "habit"
       ]
     },
     {
@@ -3572,9 +3572,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "がっき",
-        "きかん",
-        "きかんちゅう"
+        "peak",
+        "period",
+        "pharmacy"
       ]
     },
     {
@@ -3601,9 +3601,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "がっきゅう",
-        "がくねん",
-        "たんき"
+        "customs",
+        "decade",
+        "delay"
       ]
     },
     {
@@ -3630,9 +3630,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "ぎょうじ",
-        "かいぎ",
-        "もよおし"
+        "platform",
+        "player",
+        "plumber"
       ]
     },
     {
@@ -3659,9 +3659,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "えんそく",
-        "しゅうがくりょこう",
-        "けんがく"
+        "bill",
+        "biology",
+        "blood"
       ]
     },
     {
@@ -3688,9 +3688,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "テスト",
-        "しけん",
-        "もんだい"
+        "injection",
+        "inn",
+        "instrument"
       ]
     },
     {
@@ -3718,9 +3718,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "よしゅうする",
-        "べんきょうする",
-        "かくにんする"
+        "join",
+        "kept",
+        "kick"
       ]
     },
     {
@@ -3747,9 +3747,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "こない",
-        "おくれる",
-        "はやびけする"
+        "unusual",
+        "upset",
+        "useful"
       ]
     },
     {
@@ -3776,9 +3776,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "でる",
-        "いる",
-        "きている"
+        "careful",
+        "careless",
+        "cheap"
       ]
     },
     {
@@ -3806,9 +3806,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "おうえんする・ささえる",
-        "ふく",
-        "セットする・ならべる"
+        "built",
+        "came",
+        "catch"
       ]
     },
     {
@@ -3835,9 +3835,9 @@
         "jobs_and_occupations"
       ],
       "distractors": [
-        "かんごし",
-        "やくざいし",
-        "じゅうい"
+        "member",
+        "memory",
+        "menu"
       ]
     },
     {
@@ -3864,9 +3864,9 @@
         "jobs_and_occupations"
       ],
       "distractors": [
-        "いし",
-        "やくざいし",
-        "じゅうい"
+        "direction",
+        "discount",
+        "distance"
       ]
     },
     {
@@ -3893,9 +3893,9 @@
         "jobs_and_occupations"
       ],
       "distractors": [
-        "しょうぼうし",
-        "けいびいん",
-        "えいかんぐん"
+        "doctor",
+        "dodgeball",
+        "dojo"
       ]
     },
     {
@@ -3922,9 +3922,9 @@
         "jobs_and_occupations"
       ],
       "distractors": [
-        "けいさつかん",
-        "ぐんじん",
-        "きゅうきゅうたいいん"
+        "market",
+        "martial arts",
+        "match"
       ]
     },
     {
@@ -3951,9 +3951,9 @@
         "jobs_and_occupations"
       ],
       "distractors": [
-        "スチュワーデス",
-        "えんしゅう",
-        "かせん"
+        "muscle",
+        "music class",
+        "musician"
       ]
     },
     {
@@ -3980,9 +3980,9 @@
         "jobs_and_occupations"
       ],
       "distractors": [
-        "けんちくか",
-        "かがくしゃ",
-        "プログラマー"
+        "inn",
+        "instrument",
+        "insurance"
       ]
     },
     {
@@ -4009,9 +4009,9 @@
         "jobs_and_occupations"
       ],
       "distractors": [
-        "エンジニア",
-        "けんきゅうしゃ",
-        "はつめいか"
+        "anime",
+        "appetizer",
+        "appointment"
       ]
     },
     {
@@ -4038,9 +4038,9 @@
         "jobs_and_occupations"
       ],
       "distractors": [
-        "えかき",
-        "デザイナー",
-        "もけいし"
+        "shape",
+        "shelf",
+        "singer"
       ]
     },
     {
@@ -4067,9 +4067,9 @@
         "jobs_and_occupations"
       ],
       "distractors": [
-        "かしゅ",
-        "えんそうか",
-        "さっきょくか"
+        "breeze",
+        "broth",
+        "brunch"
       ]
     },
     {
@@ -4096,9 +4096,9 @@
         "jobs_and_occupations"
       ],
       "distractors": [
-        "りょうりにん",
-        "パティシエ",
-        "ウェイター"
+        "relationship",
+        "report",
+        "research"
       ]
     },
     {
@@ -4125,9 +4125,9 @@
         "jobs_and_occupations"
       ],
       "distractors": [
-        "ぎょし",
-        "かりうど",
-        "そのか"
+        "squash",
+        "stage",
+        "stairs"
       ]
     },
     {
@@ -4154,9 +4154,9 @@
         "jobs_and_occupations"
       ],
       "distractors": [
-        "いし",
-        "かんごし",
-        "やくざいし"
+        "pollution",
+        "porridge",
+        "portion"
       ]
     },
     {
@@ -4183,9 +4183,9 @@
         "jobs_and_occupations"
       ],
       "distractors": [
-        "いし",
-        "かんごし",
-        "がんか"
+        "balcony",
+        "basement",
+        "bathroom"
       ]
     },
     {
@@ -4212,9 +4212,9 @@
         "jobs_and_occupations"
       ],
       "distractors": [
-        "さいばんかん",
-        "けんじ",
-        "せいじか"
+        "art class",
+        "artist",
+        "assembly"
       ]
     },
     {
@@ -4241,9 +4241,9 @@
         "jobs_and_occupations"
       ],
       "distractors": [
-        "べんごし",
-        "ぎんこういん",
-        "ファイナンシャルアドバイザー"
+        "feeling",
+        "fence",
+        "ferry"
       ]
     },
     {
@@ -4270,9 +4270,9 @@
         "jobs_and_occupations"
       ],
       "distractors": [
-        "きしゃ",
-        "さっか",
-        "アナウンサー"
+        "ward",
+        "washing machine",
+        "waterfall"
       ]
     },
     {
@@ -4299,9 +4299,9 @@
         "jobs_and_occupations"
       ],
       "distractors": [
-        "エンジニア",
-        "デザイナー",
-        "インテリアデザイナー"
+        "activity",
+        "actor",
+        "advice"
       ]
     },
     {
@@ -4328,9 +4328,9 @@
         "jobs_and_occupations"
       ],
       "distractors": [
-        "エンジニア",
-        "デザイナー",
-        "ウェブデザイナー"
+        "handball",
+        "headache",
+        "heart"
       ]
     },
     {
@@ -4357,9 +4357,9 @@
         "jobs_and_occupations"
       ],
       "distractors": [
-        "かんとく",
-        "せんせい",
-        "じょさん"
+        "rest",
+        "result",
+        "reward"
       ]
     },
     {
@@ -4386,9 +4386,9 @@
         "jobs_and_occupations"
       ],
       "distractors": [
-        "かしゅ",
-        "ダンサー",
-        "モデル"
+        "chopsticks",
+        "cliff",
+        "clinic"
       ]
     },
     {
@@ -4415,9 +4415,9 @@
         "jobs_and_occupations"
       ],
       "distractors": [
-        "ミュージシャン",
-        "ダンサー",
-        "はいゆう"
+        "arrival",
+        "art class",
+        "artist"
       ]
     },
     {
@@ -4444,9 +4444,9 @@
         "jobs_and_occupations"
       ],
       "distractors": [
-        "アーティスト",
-        "イラストレーター",
-        "けんちくか"
+        "hue",
+        "idea",
+        "information"
       ]
     },
     {
@@ -4473,9 +4473,9 @@
         "jobs_and_occupations"
       ],
       "distractors": [
-        "うんてんし",
-        "パイロット",
-        "こうこくし"
+        "stairs",
+        "stew",
+        "stomachache"
       ]
     },
     {
@@ -4502,9 +4502,9 @@
         "jobs_and_occupations"
       ],
       "distractors": [
-        "てんいん",
-        "ウェイター",
-        "うけつけ"
+        "message",
+        "method",
+        "metro"
       ]
     },
     {
@@ -4531,9 +4531,9 @@
         "jobs_and_occupations"
       ],
       "distractors": [
-        "てんいん",
-        "かんごし",
-        "アシスタント"
+        "courage",
+        "court",
+        "craft"
       ]
     },
     {
@@ -4560,9 +4560,9 @@
         "jobs_and_occupations"
       ],
       "distractors": [
-        "きょうし",
-        "しょくいん",
-        "うけつけ"
+        "bone",
+        "booking",
+        "booking (restaurant)"
       ]
     },
     {
@@ -4589,9 +4589,9 @@
         "jobs_and_occupations"
       ],
       "distractors": [
-        "でんきこうじし",
-        "だいく",
-        "しゅうりし"
+        "dining room",
+        "direction",
+        "discount"
       ]
     },
     {
@@ -4618,9 +4618,9 @@
         "jobs_and_occupations"
       ],
       "distractors": [
-        "とびしょくにん",
-        "プランバー",
-        "でんきこうじし"
+        "craft",
+        "credit card",
+        "culture"
       ]
     },
     {
@@ -4647,9 +4647,9 @@
         "jobs_and_occupations"
       ],
       "distractors": [
-        "プランバー",
-        "だいく",
-        "こうじにん"
+        "timetable",
+        "tip",
+        "topic"
       ]
     },
     {
@@ -4676,9 +4676,9 @@
         "jobs_and_occupations"
       ],
       "distractors": [
-        "しごと",
-        "しゅみ",
-        "やくわり"
+        "anime",
+        "appetizer",
+        "appointment"
       ]
     },
     {
@@ -4705,9 +4705,9 @@
         "emotions"
       ],
       "distractors": [
-        "かなしい",
-        "こわい",
-        "うれしい"
+        "fried",
+        "gentle",
+        "gorgeous"
       ]
     },
     {
@@ -4734,9 +4734,9 @@
         "emotions"
       ],
       "distractors": [
-        "おこっている",
-        "かなしい",
-        "がっかりした"
+        "useful",
+        "weekly",
+        "wise"
       ]
     },
     {
@@ -4763,9 +4763,9 @@
         "emotions"
       ],
       "distractors": [
-        "たのしい",
-        "うれしい",
-        "きんちょうしている"
+        "worried",
+        "absent",
+        "active"
       ]
     },
     {
@@ -4792,9 +4792,9 @@
         "emotions"
       ],
       "distractors": [
-        "こわい",
-        "はずかしい",
-        "しんぱい"
+        "healthy",
+        "honest",
+        "hopeful"
       ]
     },
     {
@@ -4821,9 +4821,9 @@
         "emotions"
       ],
       "distractors": [
-        "びっくりした",
-        "まよった",
-        "とまどった"
+        "polite",
+        "popular",
+        "possible"
       ]
     },
     {
@@ -4850,9 +4850,9 @@
         "emotions"
       ],
       "distractors": [
-        "かなしい",
-        "つまらない",
-        "しずかな"
+        "grilled",
+        "healthy",
+        "honest"
       ]
     },
     {
@@ -4879,9 +4879,9 @@
         "emotions"
       ],
       "distractors": [
-        "うれしい",
-        "まんぞく",
-        "ほっとした"
+        "sour",
+        "spicy",
+        "steamed"
       ]
     },
     {
@@ -4908,9 +4908,9 @@
         "emotions"
       ],
       "distractors": [
-        "あんぜんな",
-        "まいとしの・ねんじの",
-        "しょうじきな"
+        "grilled",
+        "healthy",
+        "honest"
       ]
     },
     {
@@ -4937,9 +4937,9 @@
         "emotions"
       ],
       "distractors": [
-        "まよっている",
-        "わからない",
-        "とまどっている"
+        "perfect",
+        "polite",
+        "popular"
       ]
     },
     {
@@ -4966,9 +4966,9 @@
         "emotions"
       ],
       "distractors": [
-        "あんしんした",
-        "うれしい",
-        "たすかった"
+        "absent",
+        "active",
+        "allergic"
       ]
     },
     {
@@ -4995,9 +4995,9 @@
         "emotions"
       ],
       "distractors": [
-        "つまらない",
-        "ひまな",
-        "ねむい"
+        "unusual",
+        "upset",
+        "useful"
       ]
     },
     {
@@ -5024,9 +5024,9 @@
         "emotions"
       ],
       "distractors": [
-        "うらやましい",
-        "くやしい",
-        "かなしい"
+        "bored",
+        "calm",
+        "careful"
       ]
     },
     {
@@ -5053,9 +5053,9 @@
         "emotions"
       ],
       "distractors": [
-        "ありがたい",
-        "うれしい",
-        "まんぞくした"
+        "daily",
+        "dangerous",
+        "disappointed"
       ]
     },
     {
@@ -5082,9 +5082,9 @@
         "emotions"
       ],
       "distractors": [
-        "こわい",
-        "きんちょうした",
-        "あんしんした"
+        "complicated",
+        "confident",
+        "confused"
       ]
     },
     {
@@ -5111,9 +5111,9 @@
         "emotions"
       ],
       "distractors": [
-        "しずかな",
-        "おだやかな",
-        "おちついた"
+        "bored",
+        "careful",
+        "careless"
       ]
     },
     {
@@ -5140,9 +5140,9 @@
         "emotions"
       ],
       "distractors": [
-        "たのしい",
-        "あかるい",
-        "やさしい"
+        "careless",
+        "cheap",
+        "comfortable"
       ]
     },
     {
@@ -5169,9 +5169,9 @@
         "emotions"
       ],
       "distractors": [
-        "おちこんだ",
-        "かなしい",
-        "さびしい"
+        "spicy",
+        "steamed",
+        "surprised"
       ]
     },
     {
@@ -5198,9 +5198,9 @@
         "emotions"
       ],
       "distractors": [
-        "きょうみしんしん",
-        "あたまのいい",
-        "せっきょくてきな"
+        "safe",
+        "salty",
+        "satisfied"
       ]
     },
     {
@@ -5227,9 +5227,9 @@
         "emotions"
       ],
       "distractors": [
-        "きたいしている",
-        "うれしい",
-        "わくわくしている"
+        "bitter",
+        "bored",
+        "calm"
       ]
     },
     {
@@ -5256,9 +5256,9 @@
         "emotions"
       ],
       "distractors": [
-        "きもち",
-        "かんじょう",
-        "せいかく"
+        "ingredient",
+        "injection",
+        "inn"
       ]
     },
     {
@@ -5285,9 +5285,9 @@
         "emotions"
       ],
       "distractors": [
-        "きもち",
-        "おもい",
-        "かんがえ"
+        "badminton",
+        "balcony",
+        "basement"
       ]
     },
     {
@@ -5314,9 +5314,9 @@
         "emotions"
       ],
       "distractors": [
-        "きもち",
-        "きぶん",
-        "おもい"
+        "process",
+        "product",
+        "profession"
       ]
     },
     {
@@ -5343,9 +5343,9 @@
         "emotions"
       ],
       "distractors": [
-        "プレッシャー",
-        "ふあん",
-        "しんぱい"
+        "market",
+        "martial arts",
+        "match"
       ]
     },
     {
@@ -5372,9 +5372,9 @@
         "emotions"
       ],
       "distractors": [
-        "ゆうき",
-        "きりょく",
-        "つよさ"
+        "report",
+        "research",
+        "responsibility"
       ]
     },
     {
@@ -5401,9 +5401,9 @@
         "emotions"
       ],
       "distractors": [
-        "じしん",
-        "きりょく",
-        "ちから"
+        "ocean",
+        "opinion",
+        "opportunity"
       ]
     },
     {
@@ -5430,9 +5430,9 @@
         "shopping_and_money"
       ],
       "distractors": [
-        "ねだん",
-        "ひよう",
-        "りょうきん"
+        "courage",
+        "court",
+        "craft"
       ]
     },
     {
@@ -5459,9 +5459,9 @@
         "shopping_and_money"
       ],
       "distractors": [
-        "たかい",
-        "てごろな",
-        "おとくな"
+        "careful",
+        "careless",
+        "cheerful"
       ]
     },
     {
@@ -5488,9 +5488,9 @@
         "shopping_and_money"
       ],
       "distractors": [
-        "やすい",
-        "てごろな",
-        "リーズナブルな"
+        "modern",
+        "natural",
+        "nervous"
       ]
     },
     {
@@ -5518,9 +5518,9 @@
         "shopping_and_money"
       ],
       "distractors": [
-        "ポイント",
-        "セール",
-        "クーポン"
+        "volunteer",
+        "waiter",
+        "wall"
       ]
     },
     {
@@ -5547,9 +5547,9 @@
         "shopping_and_money"
       ],
       "distractors": [
-        "ディスカウント",
-        "セール",
-        "バーゲン"
+        "discount",
+        "distance",
+        "doctor"
       ]
     },
     {
@@ -5576,9 +5576,9 @@
         "shopping_and_money"
       ],
       "distractors": [
-        "レシート",
-        "めいさい",
-        "せいきゅうしょ"
+        "vet",
+        "violin",
+        "visa"
       ]
     },
     {
@@ -5605,9 +5605,9 @@
         "shopping_and_money"
       ],
       "distractors": [
-        "テクノロジー・ぎじゅつ",
-        "かつどう",
-        "きょうそう・レース"
+        "detail",
+        "diet",
+        "dining room"
       ]
     },
     {
@@ -5634,9 +5634,9 @@
         "shopping_and_money"
       ],
       "distractors": [
-        "けいさつかん",
-        "プレゼンテーション",
-        "きょうそう・レース"
+        "century",
+        "challenge",
+        "champion"
       ]
     },
     {
@@ -5663,9 +5663,9 @@
         "shopping_and_money"
       ],
       "distractors": [
-        "のりかえ",
-        "バルコニー・ベランダ",
-        "じゅうねん"
+        "stage",
+        "stairs",
+        "stew"
       ]
     },
     {
@@ -5692,9 +5692,9 @@
         "shopping_and_money"
       ],
       "distractors": [
-        "ちょきん",
-        "けいかく",
-        "もくひょう"
+        "boarding pass",
+        "bone",
+        "booking"
       ]
     },
     {
@@ -5721,9 +5721,9 @@
         "shopping_and_money"
       ],
       "distractors": [
-        "つかう",
-        "かりる",
-        "はらう"
+        "join",
+        "kept",
+        "kick"
       ]
     },
     {
@@ -5750,9 +5750,9 @@
         "shopping_and_money"
       ],
       "distractors": [
-        "ためる",
-        "かりる",
-        "もつ"
+        "commute",
+        "compare",
+        "compete"
       ]
     },
     {
@@ -5779,9 +5779,9 @@
         "shopping_and_money"
       ],
       "distractors": [
-        "かえる",
-        "もつ",
-        "えらぶ"
+        "communicate",
+        "commute",
+        "compare"
       ]
     },
     {
@@ -5809,9 +5809,9 @@
         "shopping_and_money"
       ],
       "distractors": [
-        "こうかん",
-        "へんぴん",
-        "わりびき"
+        "receptionist",
+        "recipe",
+        "referee"
       ]
     },
     {
@@ -5839,9 +5839,9 @@
         "shopping_and_money"
       ],
       "distractors": [
-        "かえす",
-        "うる",
-        "かう"
+        "caught",
+        "celebrate",
+        "charge"
       ]
     },
     {
@@ -5868,9 +5868,9 @@
         "shopping_and_money"
       ],
       "distractors": [
-        "レジ",
-        "かいけい",
-        "インフォメーション"
+        "information",
+        "ingredient",
+        "injection"
       ]
     },
     {
@@ -5897,9 +5897,9 @@
         "shopping_and_money"
       ],
       "distractors": [
-        "みせ",
-        "スーパー",
-        "デパート"
+        "wildlife",
+        "woodland",
+        "workout"
       ]
     },
     {
@@ -5926,9 +5926,9 @@
         "shopping_and_money"
       ],
       "distractors": [
-        "スーパー",
-        "ショッピングモール",
-        "コンビニ"
+        "inn",
+        "instrument",
+        "insurance"
       ]
     },
     {
@@ -5955,9 +5955,9 @@
         "shopping_and_money"
       ],
       "distractors": [
-        "デパート",
-        "スーパー",
-        "マーケット"
+        "injection",
+        "inn",
+        "instrument"
       ]
     },
     {
@@ -5984,9 +5984,9 @@
         "shopping_and_money"
       ],
       "distractors": [
-        "スーパー",
-        "みせ",
-        "やたい"
+        "journey",
+        "judo",
+        "karate"
       ]
     },
     {
@@ -6013,9 +6013,9 @@
         "shopping_and_money"
       ],
       "distractors": [
-        "しょうひん",
-        "もの",
-        "グッズ"
+        "chopsticks",
+        "cliff",
+        "clinic"
       ]
     },
     {
@@ -6042,9 +6042,9 @@
         "shopping_and_money"
       ],
       "distractors": [
-        "こうそくどうろ",
-        "のど",
-        "かげ"
+        "topic",
+        "tourist",
+        "tournament"
       ]
     },
     {
@@ -6072,9 +6072,9 @@
         "shopping_and_money"
       ],
       "distractors": [
-        "かう",
-        "もとめる",
-        "えらぶ"
+        "follow",
+        "found",
+        "fry"
       ]
     },
     {
@@ -6101,9 +6101,9 @@
         "shopping_and_money"
       ],
       "distractors": [
-        "おくる",
-        "もってくる",
-        "とどける"
+        "knock",
+        "leap",
+        "leave"
       ]
     },
     {
@@ -6130,9 +6130,9 @@
         "shopping_and_money"
       ],
       "distractors": [
-        "かざる",
-        "むすぶ",
-        "おく"
+        "thought",
+        "throw",
+        "tidy"
       ]
     },
     {
@@ -6159,9 +6159,9 @@
         "health_and_body"
       ],
       "distractors": [
-        "はがいたい",
-        "おなかがいたい",
-        "のどがいたい"
+        "energy",
+        "engineer",
+        "environment"
       ]
     },
     {
@@ -6188,9 +6188,9 @@
         "health_and_body"
       ],
       "distractors": [
-        "あたまがいたい",
-        "はがいたい",
-        "せがいたい"
+        "size",
+        "skill",
+        "skin"
       ]
     },
     {
@@ -6217,9 +6217,9 @@
         "health_and_body"
       ],
       "distractors": [
-        "かぜ",
-        "しょうじょう",
-        "おかん"
+        "designer",
+        "dessert",
+        "destination"
       ]
     },
     {
@@ -6246,9 +6246,9 @@
         "health_and_body"
       ],
       "distractors": [
-        "かぜ",
-        "びょうき",
-        "ねつ"
+        "tradition",
+        "traffic jam",
+        "transfer"
       ]
     },
     {
@@ -6276,9 +6276,9 @@
         "health_and_body"
       ],
       "distractors": [
-        "くしゃみ",
-        "はなみず",
-        "ねつ"
+        "semester",
+        "shadow",
+        "shape"
       ]
     },
     {
@@ -6306,9 +6306,9 @@
         "health_and_body"
       ],
       "distractors": [
-        "せき",
-        "はなみず",
-        "ねつ"
+        "skin",
+        "social studies",
+        "soil"
       ]
     },
     {
@@ -6335,9 +6335,9 @@
         "health_and_body"
       ],
       "distractors": [
-        "サプリメント",
-        "ちりょう",
-        "びょういん"
+        "customs",
+        "decade",
+        "delay"
       ]
     },
     {
@@ -6364,9 +6364,9 @@
         "health_and_body"
       ],
       "distractors": [
-        "びょうとう",
-        "びょうしつ",
-        "めんかいしつ"
+        "ocean",
+        "opinion",
+        "opportunity"
       ]
     },
     {
@@ -6393,9 +6393,9 @@
         "health_and_body"
       ],
       "distractors": [
-        "びょういん",
-        "やっきょく",
-        "ほけんしつ"
+        "manga",
+        "mark",
+        "market"
       ]
     },
     {
@@ -6422,9 +6422,9 @@
         "health_and_body"
       ],
       "distractors": [
-        "クリニック",
-        "びょういん",
-        "ドラッグストア"
+        "ceiling",
+        "century",
+        "challenge"
       ]
     },
     {
@@ -6451,9 +6451,9 @@
         "health_and_body"
       ],
       "distractors": [
-        "くすり",
-        "ちりょう",
-        "けんさ"
+        "item",
+        "journalist",
+        "journey"
       ]
     },
     {
@@ -6480,9 +6480,9 @@
         "health_and_body"
       ],
       "distractors": [
-        "かぜ",
-        "はっしん",
-        "びょうき"
+        "portion",
+        "presentation",
+        "price"
       ]
     },
     {
@@ -6509,9 +6509,9 @@
         "health_and_body"
       ],
       "distractors": [
-        "うんどう",
-        "せいかつしゅうかん",
-        "しょくじ"
+        "tournament",
+        "tradition",
+        "traffic jam"
       ]
     },
     {
@@ -6538,9 +6538,9 @@
         "health_and_body"
       ],
       "distractors": [
-        "ミネラル",
-        "えいよう",
-        "サプリ"
+        "balcony",
+        "basement",
+        "bathroom"
       ]
     },
     {
@@ -6567,9 +6567,9 @@
         "health_and_body"
       ],
       "distractors": [
-        "たいふう",
-        "ざいりょう・きざみ",
-        "たび・りょこう"
+        "plant",
+        "platform",
+        "player"
       ]
     },
     {
@@ -6597,9 +6597,9 @@
         "health_and_body"
       ],
       "distractors": [
-        "ねる",
-        "やすむ",
-        "くつろぐ"
+        "artist",
+        "assembly",
+        "assignment"
       ]
     },
     {
@@ -6626,9 +6626,9 @@
         "health_and_body"
       ],
       "distractors": [
-        "よくなる",
-        "なおる",
-        "げんきになる"
+        "lost",
+        "made",
+        "measure"
       ]
     },
     {
@@ -6655,9 +6655,9 @@
         "health_and_body"
       ],
       "distractors": [
-        "げんきな",
-        "じょうぶな",
-        "つよい"
+        "simple",
+        "sour",
+        "spicy"
       ]
     },
     {
@@ -6684,9 +6684,9 @@
         "health_and_body"
       ],
       "distractors": [
-        "びょうき",
-        "ぐあいわるさ",
-        "けっか"
+        "bone",
+        "booking",
+        "booking (restaurant)"
       ]
     },
     {
@@ -6713,9 +6713,9 @@
         "health_and_body"
       ],
       "distractors": [
-        "よやく",
-        "よてい",
-        "めんかい"
+        "profession",
+        "programmer",
+        "project"
       ]
     },
     {
@@ -6742,9 +6742,9 @@
         "health_and_body"
       ],
       "distractors": [
-        "けつえき",
-        "からだ",
-        "きず"
+        "camp",
+        "carpenter",
+        "cash"
       ]
     },
     {
@@ -6771,9 +6771,9 @@
         "health_and_body"
       ],
       "distractors": [
-        "きんにく",
-        "かんせつ",
-        "すじ"
+        "actor",
+        "advice",
+        "air conditioner"
       ]
     },
     {
@@ -6800,9 +6800,9 @@
         "health_and_body"
       ],
       "distractors": [
-        "ほね",
-        "かんせつ",
-        "ひふ"
+        "literature",
+        "living room",
+        "luggage"
       ]
     },
     {
@@ -6829,9 +6829,9 @@
         "health_and_body"
       ],
       "distractors": [
-        "はい",
-        "のう",
-        "じんぞう"
+        "decade",
+        "delay",
+        "dentist"
       ]
     },
     {
@@ -6858,9 +6858,9 @@
         "health_and_body"
       ],
       "distractors": [
-        "しんぞう",
-        "いぞう",
-        "じんぞう"
+        "pasta",
+        "pastime",
+        "peace"
       ]
     },
     {
@@ -6887,9 +6887,9 @@
         "health_and_body"
       ],
       "distractors": [
-        "くち",
-        "は",
-        "した"
+        "appetizer",
+        "appointment",
+        "architect"
       ]
     },
     {
@@ -6916,9 +6916,9 @@
         "health_and_body"
       ],
       "distractors": [
-        "かみ",
-        "からだ",
-        "かお"
+        "method",
+        "metro",
+        "microwave"
       ]
     },
     {
@@ -6945,9 +6945,9 @@
         "health_and_body"
       ],
       "distractors": [
-        "しんちょう",
-        "たいりょく",
-        "かんじ"
+        "accountant",
+        "activity",
+        "actor"
       ]
     },
     {
@@ -6974,9 +6974,9 @@
         "health_and_body"
       ],
       "distractors": [
-        "たいじゅう",
-        "ねんれい",
-        "サイズ"
+        "fridge",
+        "garage",
+        "geography"
       ]
     },
     {
@@ -7003,9 +7003,9 @@
         "health_and_body"
       ],
       "distractors": [
-        "ほけんしょ",
-        "ほしょう",
-        "けんこうほけん"
+        "failure",
+        "fare",
+        "farmer"
       ]
     },
     {
@@ -7032,9 +7032,9 @@
         "travel_and_transportation"
       ],
       "distractors": [
-        "えき",
-        "バスターミナル",
-        "ふとう"
+        "century",
+        "challenge",
+        "champion"
       ]
     },
     {
@@ -7061,9 +7061,9 @@
         "travel_and_transportation"
       ],
       "distractors": [
-        "ビザ",
-        "めいし",
-        "しなもの"
+        "cabinet",
+        "camp",
+        "carpenter"
       ]
     },
     {
@@ -7090,9 +7090,9 @@
         "travel_and_transportation"
       ],
       "distractors": [
-        "バッグ",
-        "かばん",
-        "にもつ"
+        "ward",
+        "washing machine",
+        "waterfall"
       ]
     },
     {
@@ -7119,9 +7119,9 @@
         "travel_and_transportation"
       ],
       "distractors": [
-        "リュック",
-        "トランク",
-        "バッグ"
+        "memory",
+        "menu",
+        "message"
       ]
     },
     {
@@ -7148,9 +7148,9 @@
         "travel_and_transportation"
       ],
       "distractors": [
-        "チケット",
-        "パスポート",
-        "めいし"
+        "activity",
+        "actor",
+        "advice"
       ]
     },
     {
@@ -7177,9 +7177,9 @@
         "travel_and_transportation"
       ],
       "distractors": [
-        "けいかく",
-        "せいふ",
-        "ほね"
+        "item",
+        "journalist",
+        "journey"
       ]
     },
     {
@@ -7206,9 +7206,9 @@
         "travel_and_transportation"
       ],
       "distractors": [
-        "しゅっぱつ",
-        "かえり",
-        "ちゃくりく"
+        "bill",
+        "biology",
+        "blood"
       ]
     },
     {
@@ -7235,9 +7235,9 @@
         "travel_and_transportation"
       ],
       "distractors": [
-        "ホーム",
-        "のりば",
-        "えき"
+        "shape",
+        "shelf",
+        "singer"
       ]
     },
     {
@@ -7264,9 +7264,9 @@
         "travel_and_transportation"
       ],
       "distractors": [
-        "ねだん",
-        "りょうきん",
-        "だいきん"
+        "period",
+        "pharmacy",
+        "photography"
       ]
     },
     {
@@ -7294,9 +7294,9 @@
         "travel_and_transportation"
       ],
       "distractors": [
-        "ビザ",
-        "もくてきち",
-        "せいふ"
+        "relationship",
+        "report",
+        "research"
       ]
     },
     {
@@ -7323,9 +7323,9 @@
         "travel_and_transportation"
       ],
       "distractors": [
-        "もくてち",
-        "ゴール",
-        "めざすばしょ"
+        "talent",
+        "teammate",
+        "technology"
       ]
     },
     {
@@ -7352,9 +7352,9 @@
         "travel_and_transportation"
       ],
       "distractors": [
-        "りょこう",
-        "たび",
-        "しゅっちょう"
+        "dentist",
+        "department store",
+        "departure"
       ]
     },
     {
@@ -7382,9 +7382,9 @@
         "travel_and_transportation"
       ],
       "distractors": [
-        "あんないにん",
-        "かんこうし",
-        "せんせい"
+        "ingredient",
+        "injection",
+        "inn"
       ]
     },
     {
@@ -7411,9 +7411,9 @@
         "travel_and_transportation"
       ],
       "distractors": [
-        "よごれ・おせん",
-        "しま",
-        "しょうひん・せいひん"
+        "vegetarian",
+        "vet",
+        "violin"
       ]
     },
     {
@@ -7440,9 +7440,9 @@
         "travel_and_transportation"
       ],
       "distractors": [
-        "ホテル",
-        "ゲストハウス",
-        "ユースホステル"
+        "opinion",
+        "opportunity",
+        "origami"
       ]
     },
     {
@@ -7469,9 +7469,9 @@
         "travel_and_transportation"
       ],
       "distractors": [
-        "プロジェクト・けんきゅう",
-        "スケートリンク",
-        "いけん"
+        "architect",
+        "arrival",
+        "art class"
       ]
     },
     {
@@ -7498,9 +7498,9 @@
         "travel_and_transportation"
       ],
       "distractors": [
-        "せんたくき",
-        "エネルギー",
-        "3がっきせい・きかん"
+        "dodgeball",
+        "dojo",
+        "dream"
       ]
     },
     {
@@ -7527,9 +7527,9 @@
         "travel_and_transportation"
       ],
       "distractors": [
-        "ちかてつ",
-        "でんしゃ",
-        "モノレール"
+        "receptionist",
+        "recipe",
+        "referee"
       ]
     },
     {
@@ -7556,9 +7556,9 @@
         "travel_and_transportation"
       ],
       "distractors": [
-        "ルート・けいろ",
-        "じゅうどう",
-        "スピーチ・はっぴょう"
+        "technology",
+        "terminal",
+        "throat"
       ]
     },
     {
@@ -7585,9 +7585,9 @@
         "travel_and_transportation"
       ],
       "distractors": [
-        "じゅうたい",
-        "こうつうきせい",
-        "いそがしい"
+        "soil",
+        "solution",
+        "speech"
       ]
     },
     {
@@ -7614,9 +7614,9 @@
         "travel_and_transportation"
       ],
       "distractors": [
-        "ふね",
-        "ボート",
-        "クルーズせん"
+        "amount",
+        "anime",
+        "appetizer"
       ]
     },
     {
@@ -7643,9 +7643,9 @@
         "travel_and_transportation"
       ],
       "distractors": [
-        "ヘリコプター",
-        "むじんき",
-        "せんぷうき"
+        "wall",
+        "ward",
+        "washing machine"
       ]
     },
     {
@@ -7672,9 +7672,9 @@
         "travel_and_transportation"
       ],
       "distractors": [
-        "はやさ",
-        "パワー",
-        "きょり"
+        "sink",
+        "situation",
+        "size"
       ]
     },
     {
@@ -7701,9 +7701,9 @@
         "travel_and_transportation"
       ],
       "distractors": [
-        "チーム・えいすいだい",
-        "かいだん",
-        "ちかしつ"
+        "insurance",
+        "interest",
+        "island"
       ]
     },
     {
@@ -7730,9 +7730,9 @@
         "travel_and_transportation"
       ],
       "distractors": [
-        "ほうこう",
-        "みち",
-        "あんない"
+        "peace",
+        "peak",
+        "period"
       ]
     },
     {
@@ -7759,9 +7759,9 @@
         "travel_and_transportation"
       ],
       "distractors": [
-        "みち",
-        "ルート",
-        "けいろ"
+        "art class",
+        "artist",
+        "assembly"
       ]
     },
     {
@@ -7789,9 +7789,9 @@
         "travel_and_transportation"
       ],
       "distractors": [
-        "サラダドレッシング",
-        "スピード・はやさ",
-        "リーダー"
+        "firefighter",
+        "flavor",
+        "floor"
       ]
     },
     {
@@ -7818,9 +7818,9 @@
         "travel_and_transportation"
       ],
       "distractors": [
-        "のりかえ",
-        "ついか",
-        "つながり"
+        "alarm",
+        "allergy",
+        "amount"
       ]
     },
     {
@@ -7847,9 +7847,9 @@
         "travel_and_transportation"
       ],
       "distractors": [
-        "にゅうこく・ぜいかん",
-        "けんえき",
-        "ほうもん"
+        "vegetarian",
+        "vet",
+        "violin"
       ]
     },
     {
@@ -7876,9 +7876,9 @@
         "travel_and_transportation"
       ],
       "distractors": [
-        "パスポート",
-        "とうじょうけん",
-        "たいざいきょか"
+        "noodles",
+        "novel",
+        "nurse"
       ]
     },
     {
@@ -7905,9 +7905,9 @@
         "food_and_cooking"
       ],
       "distractors": [
-        "ごはん",
-        "パン",
-        "パスタ"
+        "volunteer",
+        "waiter",
+        "wall"
       ]
     },
     {
@@ -7934,9 +7934,9 @@
         "food_and_cooking"
       ],
       "distractors": [
-        "ごはん",
-        "シリアル",
-        "スープ"
+        "refund",
+        "relationship",
+        "report"
       ]
     },
     {
@@ -7963,9 +7963,9 @@
         "food_and_cooking"
       ],
       "distractors": [
-        "スープ",
-        "みそしる",
-        "シチュー"
+        "ocean",
+        "opinion",
+        "opportunity"
       ]
     },
     {
@@ -7992,9 +7992,9 @@
         "food_and_cooking"
       ],
       "distractors": [
-        "デザート",
-        "かんじょう",
-        "こがわ・せせらぎ"
+        "trimester",
+        "tsunami",
+        "type"
       ]
     },
     {
@@ -8021,9 +8021,9 @@
         "food_and_cooking"
       ],
       "distractors": [
-        "めん",
-        "スパゲッティ",
-        "ライス"
+        "rock",
+        "route",
+        "rugby"
       ]
     },
     {
@@ -8050,9 +8050,9 @@
         "food_and_cooking"
       ],
       "distractors": [
-        "ソース",
-        "マヨネーズ",
-        "ケチャップ"
+        "traffic jam",
+        "transfer",
+        "trimester"
       ]
     },
     {
@@ -8079,9 +8079,9 @@
         "food_and_cooking"
       ],
       "distractors": [
-        "やいた",
-        "むした",
-        "ゆでた"
+        "lazy",
+        "lonely",
+        "lucky"
       ]
     },
     {
@@ -8108,9 +8108,9 @@
         "food_and_cooking"
       ],
       "distractors": [
-        "あげた",
-        "むした",
-        "いためた"
+        "relieved",
+        "rude",
+        "safe"
       ]
     },
     {
@@ -8137,9 +8137,9 @@
         "food_and_cooking"
       ],
       "distractors": [
-        "やいた",
-        "あげた",
-        "ゆでた"
+        "imaginative",
+        "important",
+        "impossible"
       ]
     },
     {
@@ -8166,9 +8166,9 @@
         "food_and_cooking"
       ],
       "distractors": [
-        "りょうり",
-        "しょくざい",
-        "はいごう"
+        "receipt",
+        "receptionist",
+        "recipe"
       ]
     },
     {
@@ -8195,9 +8195,9 @@
         "food_and_cooking"
       ],
       "distractors": [
-        "てじゅん",
-        "つくりかた",
-        "メニュー"
+        "engineer",
+        "environment",
+        "event"
       ]
     },
     {
@@ -8224,9 +8224,9 @@
         "food_and_cooking"
       ],
       "distractors": [
-        "あじ",
-        "においか",
-        "まろやか"
+        "fridge",
+        "garage",
+        "geography"
       ]
     },
     {
@@ -8253,9 +8253,9 @@
         "food_and_cooking"
       ],
       "distractors": [
-        "やすい",
-        "あまい",
-        "でんとうてきな"
+        "steamed",
+        "surprised",
+        "sweet"
       ]
     },
     {
@@ -8282,9 +8282,9 @@
         "food_and_cooking"
       ],
       "distractors": [
-        "あまい",
-        "からい",
-        "すっぱい"
+        "satisfied",
+        "serious",
+        "shy"
       ]
     },
     {
@@ -8311,9 +8311,9 @@
         "food_and_cooking"
       ],
       "distractors": [
-        "あまい",
-        "にがい",
-        "からい"
+        "lazy",
+        "lonely",
+        "lucky"
       ]
     },
     {
@@ -8340,9 +8340,9 @@
         "food_and_cooking"
       ],
       "distractors": [
-        "すっぱい",
-        "からい",
-        "しぶい"
+        "cheap",
+        "cheerful",
+        "comfortable"
       ]
     },
     {
@@ -8369,9 +8369,9 @@
         "food_and_cooking"
       ],
       "distractors": [
-        "からい",
-        "にがい",
-        "すっぱい"
+        "imaginative",
+        "important",
+        "impossible"
       ]
     },
     {
@@ -8398,9 +8398,9 @@
         "food_and_cooking"
       ],
       "distractors": [
-        "りょう・いっしょ",
-        "ひとり",
-        "もりつけ"
+        "delay",
+        "dentist",
+        "department store"
       ]
     },
     {
@@ -8427,9 +8427,9 @@
         "food_and_cooking"
       ],
       "distractors": [
-        "たな",
-        "でんとう",
-        "ビザ"
+        "camp",
+        "carpenter",
+        "cash"
       ]
     },
     {
@@ -8456,9 +8456,9 @@
         "food_and_cooking"
       ],
       "distractors": [
-        "てんいん",
-        "コック",
-        "シェフ"
+        "condition",
+        "confidence",
+        "connection"
       ]
     },
     {
@@ -8485,9 +8485,9 @@
         "food_and_cooking"
       ],
       "distractors": [
-        "りょうきん",
-        "かんじょう",
-        "かいけい"
+        "heater",
+        "height",
+        "highway"
       ]
     },
     {
@@ -8514,9 +8514,9 @@
         "food_and_cooking"
       ],
       "distractors": [
-        "にわ・まわりのそとち",
-        "シェフ・りょうりにん",
-        "ルート・けいろ"
+        "police officer",
+        "pollution",
+        "porridge"
       ]
     },
     {
@@ -8544,9 +8544,9 @@
         "food_and_cooking"
       ],
       "distractors": [
-        "オーブン",
-        "じかんわり",
-        "かしゅ"
+        "earthquake",
+        "economy",
+        "education"
       ]
     },
     {
@@ -8573,9 +8573,9 @@
         "food_and_cooking"
       ],
       "distractors": [
-        "よやく",
-        "もうしこみ",
-        "きゃく"
+        "change",
+        "checkout",
+        "chef"
       ]
     },
     {
@@ -8603,9 +8603,9 @@
         "food_and_cooking"
       ],
       "distractors": [
-        "ビーガン",
-        "グルテンフリー",
-        "アレルギー"
+        "connection",
+        "contest",
+        "conversation"
       ]
     },
     {
@@ -8632,9 +8632,9 @@
         "food_and_cooking"
       ],
       "distractors": [
-        "きらいな",
-        "たべられない",
-        "アレルギーの"
+        "relieved",
+        "rude",
+        "safe"
       ]
     },
     {
@@ -8661,9 +8661,9 @@
         "food_and_cooking"
       ],
       "distractors": [
-        "おかし",
-        "スイーツ",
-        "おやつ"
+        "energy",
+        "engineer",
+        "environment"
       ]
     },
     {
@@ -8690,9 +8690,9 @@
         "food_and_cooking"
       ],
       "distractors": [
-        "りょう・いちにんまえ",
-        "ちずちょう",
-        "けっか"
+        "vet",
+        "violin",
+        "visa"
       ]
     },
     {
@@ -8719,9 +8719,9 @@
         "food_and_cooking"
       ],
       "distractors": [
-        "とだな・キャビネット",
-        "えんそく・けんがくりょこう",
-        "そうじき"
+        "choice",
+        "chopsticks",
+        "cliff"
       ]
     },
     {
@@ -8748,9 +8748,9 @@
         "food_and_cooking"
       ],
       "distractors": [
-        "フォーク",
-        "スプーン",
-        "ナイフ"
+        "pastime",
+        "peace",
+        "peak"
       ]
     },
     {
@@ -8777,9 +8777,9 @@
         "food_and_cooking"
       ],
       "distractors": [
-        "やく",
-        "むす",
-        "ゆでる"
+        "tend garden",
+        "thought",
+        "throw"
       ]
     },
     {
@@ -8807,9 +8807,9 @@
         "food_and_cooking"
       ],
       "distractors": [
-        "きる",
-        "きざむ",
-        "わる"
+        "cut",
+        "decide",
+        "deliver"
       ]
     },
     {
@@ -8836,9 +8836,9 @@
         "food_and_cooking"
       ],
       "distractors": [
-        "えんじる・えんそうする",
-        "のぞむ・きぼうする",
-        "はいたつする"
+        "swam",
+        "swap",
+        "sweep"
       ]
     },
     {
@@ -8865,9 +8865,9 @@
         "food_and_cooking"
       ],
       "distractors": [
-        "いれる",
-        "くむ",
-        "たす"
+        "suggest",
+        "support",
+        "surrender"
       ]
     },
     {
@@ -8894,9 +8894,9 @@
         "food_and_cooking"
       ],
       "distractors": [
-        "きる",
-        "むく",
-        "けずる"
+        "include",
+        "inquire",
+        "introduce"
       ]
     },
     {
@@ -8923,9 +8923,9 @@
         "house_and_rooms"
       ],
       "distractors": [
-        "だいどころ",
-        "ストレージ",
-        "しょくひんこ"
+        "fridge",
+        "garage",
+        "geography"
       ]
     },
     {
@@ -8952,9 +8952,9 @@
         "house_and_rooms"
       ],
       "distractors": [
-        "だいどころ",
-        "しんしつ",
-        "トイレ"
+        "mood",
+        "muscle",
+        "music class"
       ]
     },
     {
@@ -8981,9 +8981,9 @@
         "house_and_rooms"
       ],
       "distractors": [
-        "リビング",
-        "ふろば",
-        "こども部屋"
+        "workout",
+        "yard",
+        "accountant"
       ]
     },
     {
@@ -9010,9 +9010,9 @@
         "house_and_rooms"
       ],
       "distractors": [
-        "だいどころ",
-        "しんしつ",
-        "ダイニング"
+        "badminton",
+        "balcony",
+        "basement"
       ]
     },
     {
@@ -9039,9 +9039,9 @@
         "house_and_rooms"
       ],
       "distractors": [
-        "リビング",
-        "だいどころ",
-        "てらす"
+        "cashier",
+        "cause",
+        "cave"
       ]
     },
     {
@@ -9068,9 +9068,9 @@
         "house_and_rooms"
       ],
       "distractors": [
-        "ちゅうしゃじょう",
-        "しゃこ",
-        "そうこ"
+        "level",
+        "librarian",
+        "literature"
       ]
     },
     {
@@ -9097,9 +9097,9 @@
         "house_and_rooms"
       ],
       "distractors": [
-        "そうこ",
-        "ちかかい",
-        "かんしつ"
+        "field",
+        "field trip",
+        "figure"
       ]
     },
     {
@@ -9126,9 +9126,9 @@
         "house_and_rooms"
       ],
       "distractors": [
-        "そうこ",
-        "ちかしつ",
-        "ベランダ"
+        "purpose",
+        "quiz",
+        "race"
       ]
     },
     {
@@ -9155,9 +9155,9 @@
         "house_and_rooms"
       ],
       "distractors": [
-        "にわ",
-        "テラス",
-        "ベランダ"
+        "appetizer",
+        "appointment",
+        "architect"
       ]
     },
     {
@@ -9184,9 +9184,9 @@
         "house_and_rooms"
       ],
       "distractors": [
-        "にわ",
-        "こうてい",
-        "そとち"
+        "customs",
+        "decade",
+        "delay"
       ]
     },
     {
@@ -9213,9 +9213,9 @@
         "house_and_rooms"
       ],
       "distractors": [
-        "かべ",
-        "ゲート",
-        "へい"
+        "research",
+        "responsibility",
+        "rest"
       ]
     },
     {
@@ -9242,9 +9242,9 @@
         "house_and_rooms"
       ],
       "distractors": [
-        "かべ",
-        "ゆか",
-        "やね"
+        "violin",
+        "visa",
+        "vitamin"
       ]
     },
     {
@@ -9271,9 +9271,9 @@
         "house_and_rooms"
       ],
       "distractors": [
-        "かいだん",
-        "てんじょう",
-        "かべ"
+        "profession",
+        "programmer",
+        "project"
       ]
     },
     {
@@ -9300,9 +9300,9 @@
         "house_and_rooms"
       ],
       "distractors": [
-        "てんじょう",
-        "ゆか",
-        "ドア"
+        "vitamin",
+        "volcano",
+        "volunteer"
       ]
     },
     {
@@ -9329,9 +9329,9 @@
         "house_and_rooms"
       ],
       "distractors": [
-        "エレベーター",
-        "エスカレーター",
-        "スロープ"
+        "player",
+        "plumber",
+        "police officer"
       ]
     },
     {
@@ -9358,9 +9358,9 @@
         "house_and_rooms"
       ],
       "distractors": [
-        "スピーチ・はっぴょう",
-        "ドローン",
-        "もの・ぶつ"
+        "insurance",
+        "interest",
+        "island"
       ]
     },
     {
@@ -9387,9 +9387,9 @@
         "house_and_rooms"
       ],
       "distractors": [
-        "たな",
-        "ひきだし",
-        "クローゼット"
+        "court",
+        "craft",
+        "credit card"
       ]
     },
     {
@@ -9416,9 +9416,9 @@
         "house_and_rooms"
       ],
       "distractors": [
-        "たんす",
-        "おしいれ",
-        "クロゼット"
+        "solution",
+        "speech",
+        "speed"
       ]
     },
     {
@@ -9445,9 +9445,9 @@
         "house_and_rooms"
       ],
       "distractors": [
-        "ブラインド",
-        "まど",
-        "すだれ"
+        "closet",
+        "coach",
+        "community"
       ]
     },
     {
@@ -9474,9 +9474,9 @@
         "house_and_rooms"
       ],
       "distractors": [
-        "でんきゅう",
-        "シーリングライト",
-        "スタンド"
+        "carpenter",
+        "cash",
+        "cashier"
       ]
     },
     {
@@ -9503,9 +9503,9 @@
         "house_and_rooms"
       ],
       "distractors": [
-        "まど",
-        "がらす",
-        "えだて"
+        "skill",
+        "skin",
+        "sneeze"
       ]
     },
     {
@@ -9532,9 +9532,9 @@
         "house_and_rooms"
       ],
       "distractors": [
-        "ながし",
-        "バスタブ",
-        "せんめんだい"
+        "champion",
+        "chance",
+        "change"
       ]
     },
     {
@@ -9561,9 +9561,9 @@
         "house_and_rooms"
       ],
       "distractors": [
-        "シャワー",
-        "シンク",
-        "ぼうさいだい"
+        "pharmacy",
+        "photography",
+        "physical education"
       ]
     },
     {
@@ -9590,9 +9590,9 @@
         "house_and_rooms"
       ],
       "distractors": [
-        "クーラー",
-        "エアコン",
-        "ストーブ"
+        "tourist",
+        "tournament",
+        "tradition"
       ]
     },
     {
@@ -9619,9 +9619,9 @@
         "house_and_rooms"
       ],
       "distractors": [
-        "クーラー",
-        "せんぷうき",
-        "かかん"
+        "conversation",
+        "cough",
+        "courage"
       ]
     },
     {
@@ -9648,9 +9648,9 @@
         "house_and_rooms"
       ],
       "distractors": [
-        "アドバイス・じゅうごん",
-        "クイズ・しょうテスト",
-        "しんぞう・こころ"
+        "journalist",
+        "journey",
+        "judo"
       ]
     },
     {
@@ -9677,9 +9677,9 @@
         "house_and_rooms"
       ],
       "distractors": [
-        "オーブン",
-        "トースター",
-        "でんきこんろ"
+        "concert",
+        "condition",
+        "confidence"
       ]
     },
     {
@@ -9706,9 +9706,9 @@
         "house_and_rooms"
       ],
       "distractors": [
-        "でんしレンジ",
-        "トースター",
-        "グリル"
+        "stomachache",
+        "stream",
+        "stress"
       ]
     },
     {
@@ -9735,9 +9735,9 @@
         "house_and_rooms"
       ],
       "distractors": [
-        "かんそうき",
-        "そうじき",
-        "しょくきあらいき"
+        "martial arts",
+        "match",
+        "material"
       ]
     },
     {
@@ -9764,9 +9764,9 @@
         "house_and_rooms"
       ],
       "distractors": [
-        "モップ",
-        "ほうき",
-        "ちりとり"
+        "leader",
+        "lecture",
+        "level"
       ]
     },
     {
@@ -9793,9 +9793,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "おわる",
-        "つづける",
-        "やめる"
+        "stood",
+        "stride",
+        "suggest"
       ]
     },
     {
@@ -9822,9 +9822,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "おわる",
-        "まとめる",
-        "おえる"
+        "feed",
+        "fell",
+        "felt"
       ]
     },
     {
@@ -9851,9 +9851,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "ふる・てをふる",
-        "はいる・さんかする",
-        "たのしむ"
+        "practice",
+        "prevent",
+        "promise"
       ]
     },
     {
@@ -9880,9 +9880,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "みおとす",
-        "きづかない",
-        "わすれる"
+        "rinse",
+        "rode",
+        "said"
       ]
     },
     {
@@ -9909,9 +9909,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "おもう",
-        "かんがえる",
-        "わかる"
+        "leap",
+        "leave",
+        "lift"
       ]
     },
     {
@@ -9938,9 +9938,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "えらぶ",
-        "おもう",
-        "かんがえる"
+        "recite",
+        "recommend",
+        "recover"
       ]
     },
     {
@@ -9967,9 +9967,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "リサイクルする",
-        "おきあがる",
-        "はく"
+        "hold",
+        "hope",
+        "improve"
       ]
     },
     {
@@ -9996,9 +9996,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "ねがう",
-        "おもう",
-        "かんがえる"
+        "haul",
+        "heard",
+        "hold"
       ]
     },
     {
@@ -10026,9 +10026,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "のぞむ",
-        "ほしがる",
-        "いのる"
+        "explain",
+        "explore",
+        "feed"
       ]
     },
     {
@@ -10056,9 +10056,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "やくそく",
-        "ちかう",
-        "もうす"
+        "stride",
+        "suggest",
+        "support"
       ]
     },
     {
@@ -10085,9 +10085,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "のぞむ・きぼうする",
-        "わける・シェアする",
-        "やくそくする"
+        "jog",
+        "join",
+        "kept"
       ]
     },
     {
@@ -10114,9 +10114,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "ゆるす",
-        "みとめる",
-        "とめる"
+        "scrub",
+        "search",
+        "set"
       ]
     },
     {
@@ -10143,9 +10143,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "とめる",
-        "ふせぐ",
-        "まもる"
+        "drew",
+        "dribble",
+        "drill"
       ]
     },
     {
@@ -10172,9 +10172,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "ふる・てをふる",
-        "たのしむ",
-        "とばす・スキップする"
+        "heard",
+        "hold",
+        "hope"
       ]
     },
     {
@@ -10201,9 +10201,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "わける・あげる",
-        "わりかんにする",
-        "くばる"
+        "sprinkle",
+        "stood",
+        "stride"
       ]
     },
     {
@@ -10230,9 +10230,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "まける・あきらめる",
-        "かつ・かちとる",
-        "にわのせわをする"
+        "echo",
+        "encourage",
+        "enjoy"
       ]
     },
     {
@@ -10259,9 +10259,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "あいさつする",
-        "セットする・ならべる",
-        "あむ"
+        "support",
+        "surrender",
+        "swam"
       ]
     },
     {
@@ -10288,9 +10288,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "つくる",
-        "デザインする",
-        "はつめいする"
+        "tidy up",
+        "told",
+        "took"
       ]
     },
     {
@@ -10317,9 +10317,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "こわす",
-        "とりのぞく",
-        "なくす"
+        "went",
+        "whisper",
+        "win"
       ]
     },
     {
@@ -10346,9 +10346,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "みつける",
-        "しる",
-        "きづく"
+        "kept",
+        "kick",
+        "knew"
       ]
     },
     {
@@ -10375,9 +10375,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "もらう",
-        "つくる",
-        "はたらく"
+        "win",
+        "wipe",
+        "wish"
       ]
     },
     {
@@ -10404,9 +10404,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "たっせいする",
-        "へんじする・こたえる",
-        "かわかす"
+        "boil",
+        "bought",
+        "brought"
       ]
     },
     {
@@ -10433,9 +10433,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "さんぽする",
-        "たびする",
-        "しらべる"
+        "drew",
+        "dribble",
+        "drill"
       ]
     },
     {
@@ -10462,9 +10462,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "なおす",
-        "しゅうりする",
-        "あらためる"
+        "enjoy",
+        "exchange",
+        "explain"
       ]
     },
     {
@@ -10491,9 +10491,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "ついていく",
-        "まねる",
-        "あとをおう"
+        "sew",
+        "shake",
+        "share"
       ]
     },
     {
@@ -10520,9 +10520,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "そだてる",
-        "うえる",
-        "おおきくなる"
+        "persuade",
+        "pick up",
+        "placed"
       ]
     },
     {
@@ -10549,9 +10549,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "つかむ",
-        "にぎる",
-        "かかえる"
+        "charge",
+        "check",
+        "choose"
       ]
     },
     {
@@ -10578,9 +10578,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "よくなる",
-        "のびる",
-        "まさる"
+        "gave",
+        "get dressed",
+        "get organized"
       ]
     },
     {
@@ -10607,9 +10607,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "つくる",
-        "かんがえる",
-        "はっけんする"
+        "throw",
+        "tidy",
+        "tidy up"
       ]
     },
     {
@@ -10636,9 +10636,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "さんかする",
-        "はいる",
-        "むかえる"
+        "drill",
+        "drop",
+        "dry"
       ]
     },
     {
@@ -10665,9 +10665,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "おす",
-        "ねがう・のぞむ",
-        "みのがす・わすれる"
+        "explore",
+        "feed",
+        "fell"
       ]
     },
     {
@@ -10694,9 +10694,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "たっせいする",
-        "さけぶ",
-        "ちゅうこくする・けいこくする"
+        "support",
+        "surrender",
+        "swam"
       ]
     },
     {
@@ -10723,9 +10723,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "いく・すすむ",
-        "かえる",
-        "はこぶ"
+        "kick",
+        "knew",
+        "knit"
       ]
     },
     {
@@ -10752,9 +10752,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "ける",
-        "おきあがる",
-        "ふる・てをふる"
+        "promise",
+        "pull",
+        "push"
       ]
     },
     {
@@ -10782,9 +10782,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "すすめる",
-        "わたす",
-        "くれる"
+        "turn on",
+        "wake up",
+        "warm up"
       ]
     },
     {
@@ -10811,9 +10811,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "わたす",
-        "おくる",
-        "のりこえる"
+        "inquire",
+        "introduce",
+        "invent"
       ]
     },
     {
@@ -10840,9 +10840,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "ひろう",
-        "むかえる",
-        "みつける"
+        "rinse",
+        "rode",
+        "said"
       ]
     },
     {
@@ -10869,9 +10869,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "きづく",
-        "こわす・はかいする",
-        "つける"
+        "leave",
+        "lift",
+        "lock"
       ]
     },
     {
@@ -10898,9 +10898,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "ひく",
-        "たたく",
-        "ける"
+        "suggest",
+        "support",
+        "surrender"
       ]
     },
     {
@@ -10927,9 +10927,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "とどく",
-        "つく",
-        "まにあう"
+        "offer",
+        "order",
+        "organize"
       ]
     },
     {
@@ -10956,9 +10956,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "さがす",
-        "みつける",
-        "しらべる"
+        "afford",
+        "agree",
+        "allow"
       ]
     },
     {
@@ -10985,9 +10985,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "ふる・うごかす",
-        "まわす",
-        "たたく"
+        "confirm",
+        "connect",
+        "create"
       ]
     },
     {
@@ -11014,9 +11014,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "とぶ・ぬかす",
-        "とびはねる",
-        "さける"
+        "bathe",
+        "begin",
+        "believe"
       ]
     },
     {
@@ -11043,9 +11043,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "こたえる",
-        "かいけつする",
-        "きめる"
+        "perform",
+        "persuade",
+        "pick up"
       ]
     },
     {
@@ -11073,9 +11073,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "てつだう・ささえる",
-        "たすける",
-        "みまもる"
+        "stood",
+        "stride",
+        "suggest"
       ]
     },
     {
@@ -11102,9 +11102,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "さわる",
-        "ふれる",
-        "なでる"
+        "perform",
+        "persuade",
+        "pick up"
       ]
     },
     {
@@ -11131,9 +11131,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "まがる・まわす",
-        "むく",
-        "かえる"
+        "perform",
+        "persuade",
+        "pick up"
       ]
     },
     {
@@ -11160,9 +11160,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "さんかする",
-        "でる",
-        "いく"
+        "earn",
+        "echo",
+        "encourage"
       ]
     },
     {
@@ -11189,9 +11189,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "おきる",
-        "めざめる",
-        "たちあがる"
+        "connect",
+        "create",
+        "cut"
       ]
     },
     {
@@ -11218,9 +11218,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "もつ",
-        "はこぶ",
-        "ひっぱる"
+        "swap",
+        "sweep",
+        "taught"
       ]
     },
     {
@@ -11247,9 +11247,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "つかまえる",
-        "とる",
-        "もつ"
+        "built",
+        "came",
+        "caught"
       ]
     },
     {
@@ -11276,9 +11276,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "ドリブルする",
-        "おきる",
-        "もちあげる"
+        "get dressed",
+        "get organized",
+        "get ready"
       ]
     },
     {
@@ -11305,9 +11305,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "たたく",
-        "うつ",
-        "なげる"
+        "explain",
+        "explore",
+        "feed"
       ]
     },
     {
@@ -11334,9 +11334,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "はねる",
-        "とびこむ",
-        "とびあがる"
+        "overlook",
+        "pack",
+        "paint"
       ]
     },
     {
@@ -11363,9 +11363,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "さけぶ",
-        "くつろぐ",
-        "せいりする"
+        "placed",
+        "pour",
+        "practice"
       ]
     },
     {
@@ -11392,9 +11392,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "たたく・おす",
-        "おす",
-        "よぶ"
+        "explain",
+        "explore",
+        "feed"
       ]
     },
     {
@@ -11421,9 +11421,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "ふる",
-        "おじぎする",
-        "うなずく"
+        "move",
+        "notice",
+        "offer"
       ]
     },
     {
@@ -11450,9 +11450,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "なおす・しゅうりする",
-        "あつめる",
-        "かたづける"
+        "throw",
+        "tidy",
+        "tidy up"
       ]
     },
     {
@@ -11479,9 +11479,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "はなす",
-        "いう",
-        "つぶやく"
+        "recycle",
+        "relax",
+        "reply"
       ]
     },
     {
@@ -11509,9 +11509,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "わらう",
-        "えがおになる",
-        "よろこぶ"
+        "support",
+        "surrender",
+        "swam"
       ]
     },
     {
@@ -11538,9 +11538,9 @@
         "adjectives"
       ],
       "distractors": [
-        "すてきな",
-        "うつくしい",
-        "みごとな"
+        "calm",
+        "careful",
+        "careless"
       ]
     },
     {
@@ -11567,9 +11567,9 @@
         "adjectives"
       ],
       "distractors": [
-        "ひつような",
-        "だいじな",
-        "かかせない"
+        "careful",
+        "careless",
+        "cheap"
       ]
     },
     {
@@ -11596,9 +11596,9 @@
         "adjectives"
       ],
       "distractors": [
-        "ちがった",
-        "べつの",
-        "ことなる"
+        "fair",
+        "famous",
+        "fried"
       ]
     },
     {
@@ -11625,9 +11625,9 @@
         "adjectives"
       ],
       "distractors": [
-        "にんきな",
-        "すぐれた",
-        "すばらしい"
+        "excited",
+        "expensive",
+        "fair"
       ]
     },
     {
@@ -11654,9 +11654,9 @@
         "adjectives"
       ],
       "distractors": [
-        "ゆうめいな",
-        "おおぜいの",
-        "もてる"
+        "surprised",
+        "sweet",
+        "traditional"
       ]
     },
     {
@@ -11683,9 +11683,9 @@
         "adjectives"
       ],
       "distractors": [
-        "こわい",
-        "ムずかしい",
-        "ちかんな"
+        "polite",
+        "popular",
+        "possible"
       ]
     },
     {
@@ -11712,9 +11712,9 @@
         "adjectives"
       ],
       "distractors": [
-        "あんぜん",
-        "ぶじな",
-        "だいじょうぶな"
+        "instant",
+        "intelligent",
+        "jealous"
       ]
     },
     {
@@ -11741,9 +11741,9 @@
         "adjectives"
       ],
       "distractors": [
-        "あたらしい",
-        "さいしんの",
-        "ふるい"
+        "absent",
+        "active",
+        "allergic"
       ]
     },
     {
@@ -11770,9 +11770,9 @@
         "adjectives"
       ],
       "distractors": [
-        "でんとうの",
-        "ふるい",
-        "ちょうふうの"
+        "healthy",
+        "honest",
+        "hopeful"
       ]
     },
     {
@@ -11799,9 +11799,9 @@
         "adjectives"
       ],
       "distractors": [
-        "しおからい",
-        "にている",
-        "べんりな・やくにたつ"
+        "perfect",
+        "polite",
+        "popular"
       ]
     },
     {
@@ -11828,9 +11828,9 @@
         "adjectives"
       ],
       "distractors": [
-        "かしこい・けいけんゆたかな",
-        "らくな・きちんとした",
-        "まんぞくした"
+        "annual",
+        "awful",
+        "bitter"
       ]
     },
     {
@@ -11857,9 +11857,9 @@
         "adjectives"
       ],
       "distractors": [
-        "できる",
-        "むずかしい",
-        "りかい"
+        "polite",
+        "popular",
+        "present"
       ]
     },
     {
@@ -11886,9 +11886,9 @@
         "adjectives"
       ],
       "distractors": [
-        "むずかしい",
-        "できない",
-        "やりにくい"
+        "hopeful",
+        "imaginative",
+        "important"
       ]
     },
     {
@@ -11915,9 +11915,9 @@
         "adjectives"
       ],
       "distractors": [
-        "べんりな",
-        "やくにたつ",
-        "てごろな"
+        "angry",
+        "annual",
+        "awful"
       ]
     },
     {
@@ -11944,9 +11944,9 @@
         "adjectives"
       ],
       "distractors": [
-        "めずらしい",
-        "ふつうでない",
-        "かわった"
+        "distinct",
+        "embarrassed",
+        "excellent"
       ]
     },
     {
@@ -11973,9 +11973,9 @@
         "adjectives"
       ],
       "distractors": [
-        "おなじ・にた",
-        "にた",
-        "ちかい"
+        "rude",
+        "safe",
+        "salty"
       ]
     },
     {
@@ -12002,9 +12002,9 @@
         "adjectives"
       ],
       "distractors": [
-        "ひどい",
-        "さいあく",
-        "わるい"
+        "creative",
+        "curious",
+        "daily"
       ]
     },
     {
@@ -12031,9 +12031,9 @@
         "adjectives"
       ],
       "distractors": [
-        "すばらしい",
-        "さいこうの",
-        "じょうずな"
+        "unusual",
+        "upset",
+        "useful"
       ]
     },
     {
@@ -12060,9 +12060,9 @@
         "adjectives"
       ],
       "distractors": [
-        "うれしい",
-        "こうふく",
-        "しあわせ"
+        "wise",
+        "worried",
+        "absent"
       ]
     },
     {
@@ -12089,9 +12089,9 @@
         "adjectives"
       ],
       "distractors": [
-        "きもちよい",
-        "あつかいやすい",
-        "かいてきな"
+        "important",
+        "impossible",
+        "instant"
       ]
     },
     {
@@ -12118,9 +12118,9 @@
         "adjectives"
       ],
       "distractors": [
-        "いやな・きゅうくつ",
-        "むずかしい",
-        "つらい"
+        "embarrassed",
+        "excellent",
+        "excited"
       ]
     },
     {
@@ -12147,9 +12147,9 @@
         "adjectives"
       ],
       "distractors": [
-        "れいぎただしい・きちんとした",
-        "やさしい",
-        "おとなしい"
+        "modern",
+        "natural",
+        "nervous"
       ]
     },
     {
@@ -12176,9 +12176,9 @@
         "adjectives"
       ],
       "distractors": [
-        "しつれいな",
-        "いじわるな",
-        "らんぼうな"
+        "upset",
+        "useful",
+        "weekly"
       ]
     },
     {
@@ -12205,9 +12205,9 @@
         "adjectives"
       ],
       "distractors": [
-        "ちゅういぶかい",
-        "しんちょうな",
-        "まじめな"
+        "patient",
+        "perfect",
+        "polite"
       ]
     },
     {
@@ -12234,9 +12234,9 @@
         "adjectives"
       ],
       "distractors": [
-        "ずぼら・うっかりした",
-        "そそっかしい",
-        "おっちょこちょい"
+        "lazy",
+        "lonely",
+        "lucky"
       ]
     },
     {
@@ -12263,9 +12263,9 @@
         "adjectives"
       ],
       "distractors": [
-        "かしこい",
-        "りこうな",
-        "あたまのいい"
+        "complicated",
+        "confident",
+        "confused"
       ]
     },
     {
@@ -12292,9 +12292,9 @@
         "adjectives"
       ],
       "distractors": [
-        "かんたんな・やさしい",
-        "きれいな",
-        "すっきりした"
+        "serious",
+        "shy",
+        "similar"
       ]
     },
     {
@@ -12321,9 +12321,9 @@
         "adjectives"
       ],
       "distractors": [
-        "むずかしい",
-        "ふくざつな",
-        "めんどうな"
+        "steamed",
+        "surprised",
+        "sweet"
       ]
     },
     {
@@ -12350,9 +12350,9 @@
         "adjectives"
       ],
       "distractors": [
-        "まじめ・しんけん",
-        "だいじな",
-        "きびしい"
+        "bitter",
+        "bored",
+        "calm"
       ]
     },
     {
@@ -12379,9 +12379,9 @@
         "adjectives"
       ],
       "distractors": [
-        "やさしい",
-        "おだやか",
-        "しずかな"
+        "absent",
+        "active",
+        "allergic"
       ]
     },
     {
@@ -12408,9 +12408,9 @@
         "adjectives"
       ],
       "distractors": [
-        "げんきな",
-        "うごきまわる",
-        "せっきょくてきな"
+        "present",
+        "relieved",
+        "rude"
       ]
     },
     {
@@ -12437,9 +12437,9 @@
         "adjectives"
       ],
       "distractors": [
-        "なまける",
-        "ぐうたら",
-        "のんきな"
+        "allergic",
+        "angry",
+        "annual"
       ]
     },
     {
@@ -12466,9 +12466,9 @@
         "adjectives"
       ],
       "distractors": [
-        "はずかしがりや",
-        "おとなしい",
-        "きんちょうした"
+        "annual",
+        "awful",
+        "bitter"
       ]
     },
     {
@@ -12495,9 +12495,9 @@
         "adjectives"
       ],
       "distractors": [
-        "おちついた・しずかな",
-        "ほっとした",
-        "すばらしい・ゆうしゅうな"
+        "cheerful",
+        "comfortable",
+        "complicated"
       ]
     },
     {
@@ -12524,9 +12524,9 @@
         "adjectives"
       ],
       "distractors": [
-        "がまんする",
-        "おおらかな",
-        "しんぼうづよい"
+        "simple",
+        "sour",
+        "spicy"
       ]
     },
     {
@@ -12553,9 +12553,9 @@
         "adjectives"
       ],
       "distractors": [
-        "しょうじき",
-        "まじめな",
-        "まっすぐな"
+        "fried",
+        "gentle",
+        "gorgeous"
       ]
     },
     {
@@ -12582,9 +12582,9 @@
         "adjectives"
       ],
       "distractors": [
-        "こんらんしている・まよっている",
-        "かしこい・けいけんゆたかな",
-        "アレルギーのある"
+        "satisfied",
+        "serious",
+        "shy"
       ]
     },
     {
@@ -12611,9 +12611,9 @@
         "adjectives"
       ],
       "distractors": [
-        "こうそうてきな",
-        "すばらしい",
-        "どくそうてきな"
+        "unusual",
+        "upset",
+        "useful"
       ]
     },
     {
@@ -12640,9 +12640,9 @@
         "adjectives"
       ],
       "distractors": [
-        "うんがいい",
-        "しあわせな",
-        "すてき"
+        "upset",
+        "useful",
+        "weekly"
       ]
     },
     {
@@ -12669,9 +12669,9 @@
         "adjectives"
       ],
       "distractors": [
-        "かしこい",
-        "はんだんりょくのある",
-        "けいけんの"
+        "natural",
+        "nervous",
+        "patient"
       ]
     },
     {
@@ -12698,9 +12698,9 @@
         "nature_and_environment"
       ],
       "distractors": [
-        "おか",
-        "やまちょう",
-        "ちょうじょう"
+        "player",
+        "plumber",
+        "police officer"
       ]
     },
     {
@@ -12727,9 +12727,9 @@
         "nature_and_environment"
       ],
       "distractors": [
-        "かわ",
-        "みずながれ",
-        "たき"
+        "tradition",
+        "traffic jam",
+        "transfer"
       ]
     },
     {
@@ -12756,9 +12756,9 @@
         "nature_and_environment"
       ],
       "distractors": [
-        "うみ",
-        "こうわん",
-        "かいきょう"
+        "weight",
+        "wildlife",
+        "woodland"
       ]
     },
     {
@@ -12785,9 +12785,9 @@
         "nature_and_environment"
       ],
       "distractors": [
-        "はやし",
-        "じゅうりん",
-        "そうげん"
+        "flavor",
+        "floor",
+        "flu"
       ]
     },
     {
@@ -12814,9 +12814,9 @@
         "nature_and_environment"
       ],
       "distractors": [
-        "いけ",
-        "ぬま",
-        "かわ"
+        "opinion",
+        "opportunity",
+        "origami"
       ]
     },
     {
@@ -12843,9 +12843,9 @@
         "nature_and_environment"
       ],
       "distractors": [
-        "さんがく",
-        "さか",
-        "けいこく"
+        "contest",
+        "conversation",
+        "cough"
       ]
     },
     {
@@ -12872,9 +12872,9 @@
         "nature_and_environment"
       ],
       "distractors": [
-        "デパート",
-        "フルート",
-        "どうくつ"
+        "board game",
+        "boarding pass",
+        "bone"
       ]
     },
     {
@@ -12901,9 +12901,9 @@
         "nature_and_environment"
       ],
       "distractors": [
-        "はんとう",
-        "りく",
-        "しょとう"
+        "failure",
+        "fare",
+        "farmer"
       ]
     },
     {
@@ -12930,9 +12930,9 @@
         "nature_and_environment"
       ],
       "distractors": [
-        "ブティック・おしゃれなみせ",
-        "けんちくか",
-        "すうがく"
+        "type",
+        "typhoon",
+        "vacuum cleaner"
       ]
     },
     {
@@ -12959,9 +12959,9 @@
         "nature_and_environment"
       ],
       "distractors": [
-        "たき・みずながれ",
-        "せせらぎ",
-        "はば"
+        "microwave",
+        "mirror",
+        "mistake"
       ]
     },
     {
@@ -12988,9 +12988,9 @@
         "nature_and_environment"
       ],
       "distractors": [
-        "ガイド・あんないにん",
-        "しぜん",
-        "ちいき・コミュニティ"
+        "basement",
+        "bathroom",
+        "bathtub"
       ]
     },
     {
@@ -13017,9 +13017,9 @@
         "nature_and_environment"
       ],
       "distractors": [
-        "りえき・よさ",
-        "てんらんかい",
-        "たっきゅう"
+        "plan",
+        "plant",
+        "platform"
       ]
     },
     {
@@ -13046,9 +13046,9 @@
         "nature_and_environment"
       ],
       "distractors": [
-        "じしん",
-        "こうずい",
-        "たいふう"
+        "opinion",
+        "opportunity",
+        "origami"
       ]
     },
     {
@@ -13075,9 +13075,9 @@
         "nature_and_environment"
       ],
       "distractors": [
-        "あらし",
-        "ハリケーン",
-        "かぜ"
+        "craft",
+        "credit card",
+        "culture"
       ]
     },
     {
@@ -13104,9 +13104,9 @@
         "nature_and_environment"
       ],
       "distractors": [
-        "かんきょう・しぜん",
-        "せかい",
-        "しゅうい"
+        "assembly",
+        "assignment",
+        "athletics"
       ]
     },
     {
@@ -13133,9 +13133,9 @@
         "nature_and_environment"
       ],
       "distractors": [
-        "おせん・よごれ",
-        "こうがい",
-        "ゴミ"
+        "shadow",
+        "shape",
+        "shelf"
       ]
     },
     {
@@ -13162,9 +13162,9 @@
         "nature_and_environment"
       ],
       "distractors": [
-        "ごみをすてる",
-        "せいそうする",
-        "へらす"
+        "sketch",
+        "skim",
+        "skip"
       ]
     },
     {
@@ -13191,9 +13191,9 @@
         "nature_and_environment"
       ],
       "distractors": [
-        "アレルギー",
-        "やっきょく",
-        "うけつけ"
+        "inn",
+        "instrument",
+        "insurance"
       ]
     },
     {
@@ -13220,9 +13220,9 @@
         "nature_and_environment"
       ],
       "distractors": [
-        "はな",
-        "き",
-        "くさ"
+        "tournament",
+        "tradition",
+        "traffic jam"
       ]
     },
     {
@@ -13249,9 +13249,9 @@
         "nature_and_environment"
       ],
       "distractors": [
-        "つち・ど",
-        "すな・じゃり",
-        "こいし"
+        "pastime",
+        "peace",
+        "peak"
       ]
     },
     {
@@ -13278,9 +13278,9 @@
         "nature_and_environment"
       ],
       "distractors": [
-        "かげ",
-        "どうじょう",
-        "ブランチ"
+        "bedroom",
+        "benefit",
+        "bill"
       ]
     },
     {
@@ -13307,9 +13307,9 @@
         "nature_and_environment"
       ],
       "distractors": [
-        "あなど・ちか",
-        "あなぐら",
-        "どくつ"
+        "salad dressing",
+        "sale",
+        "scientist"
       ]
     },
     {
@@ -13336,9 +13336,9 @@
         "nature_and_environment"
       ],
       "distractors": [
-        "フェリー・れんらくせん",
-        "さいのう・とくい",
-        "こくご・ぶんがく"
+        "challenge",
+        "champion",
+        "chance"
       ]
     },
     {
@@ -13365,9 +13365,9 @@
         "nature_and_environment"
       ],
       "distractors": [
-        "かぜ・そよかぜ",
-        "あらし",
-        "たいふう"
+        "bedroom",
+        "benefit",
+        "bill"
       ]
     },
     {
@@ -13394,9 +13394,9 @@
         "nature_and_environment"
       ],
       "distractors": [
-        "しぜん・かんきょう",
-        "せかい",
-        "まわり"
+        "success",
+        "suitcase",
+        "symptom"
       ]
     },
     {
@@ -13423,9 +13423,9 @@
         "time_expressions"
       ],
       "distractors": [
-        "まだ・もう",
-        "すでに",
-        "まもなく"
+        "however",
+        "immediately",
+        "in the meantime"
       ]
     },
     {
@@ -13452,9 +13452,9 @@
         "time_expressions"
       ],
       "distractors": [
-        "まもなく",
-        "すぐに",
-        "あとで"
+        "by now",
+        "carefully",
+        "clearly"
       ]
     },
     {
@@ -13481,9 +13481,9 @@
         "time_expressions"
       ],
       "distractors": [
-        "たったいま・ちょうど",
-        "まさに",
-        "さきほど"
+        "carefully",
+        "clearly",
+        "definitely"
       ]
     },
     {
@@ -13510,9 +13510,9 @@
         "time_expressions"
       ],
       "distractors": [
-        "かんたんに・らくに",
-        "まだ",
-        "ときどき"
+        "gradually",
+        "however",
+        "immediately"
       ]
     },
     {
@@ -13539,9 +13539,9 @@
         "time_expressions"
       ],
       "distractors": [
-        "さいきん・このごろ",
-        "ちかごろ",
-        "きんごろ"
+        "quietly",
+        "quite",
+        "rarely"
       ]
     },
     {
@@ -13568,9 +13568,9 @@
         "time_expressions"
       ],
       "distractors": [
-        "ついに・とうとう",
-        "さいごには",
-        "やがて"
+        "always",
+        "at last",
+        "badly"
       ]
     },
     {
@@ -13597,9 +13597,9 @@
         "time_expressions"
       ],
       "distractors": [
-        "だから・したがって",
-        "まえ（〜まえ）",
-        "だんだん・しだいに"
+        "furthermore",
+        "gently",
+        "gradually"
       ]
     },
     {
@@ -13626,9 +13626,9 @@
         "time_expressions"
       ],
       "distractors": [
-        "すぐに・ただちに",
-        "はやく",
-        "とたんに"
+        "lately",
+        "loudly",
+        "moreover"
       ]
     },
     {
@@ -13655,9 +13655,9 @@
         "time_expressions"
       ],
       "distractors": [
-        "とつぜん・きゅうに",
-        "おもわず",
-        "びっくりして"
+        "clearly",
+        "definitely",
+        "easily"
       ]
     },
     {
@@ -13684,9 +13684,9 @@
         "time_expressions"
       ],
       "distractors": [
-        "いまごろは",
-        "かなり・なかなか",
-        "ときどき"
+        "by now",
+        "carefully",
+        "clearly"
       ]
     },
     {
@@ -13713,9 +13713,9 @@
         "time_expressions"
       ],
       "distractors": [
-        "そのあいだ",
-        "いっぽう",
-        "どうじに"
+        "loudly",
+        "moreover",
+        "nearly"
       ]
     },
     {
@@ -13742,9 +13742,9 @@
         "time_expressions"
       ],
       "distractors": [
-        "あとで・のちに",
-        "そのあと",
-        "しばらくして"
+        "lately",
+        "loudly",
+        "moreover"
       ]
     },
     {
@@ -13771,9 +13771,9 @@
         "time_expressions"
       ],
       "distractors": [
-        "まえ・むかし",
-        "いぜん",
-        "むかし"
+        "afterward",
+        "almost",
+        "already"
       ]
     },
     {
@@ -13801,9 +13801,9 @@
         "time_expressions"
       ],
       "distractors": [
-        "〜から・いらい",
-        "〜のとき",
-        "〜いこう"
+        "while",
+        "although",
+        "because"
       ]
     },
     {
@@ -13830,9 +13830,9 @@
         "time_expressions"
       ],
       "distractors": [
-        "まだ・まだまだ",
-        "いまも",
-        "ずっと"
+        "however",
+        "immediately",
+        "in the meantime"
       ]
     },
     {
@@ -13859,9 +13859,9 @@
         "time_expressions"
       ],
       "distractors": [
-        "まだ・すでに",
-        "もう",
-        "いまのところ"
+        "lately",
+        "loudly",
+        "moreover"
       ]
     },
     {
@@ -13889,9 +13889,9 @@
         "time_expressions"
       ],
       "distractors": [
-        "いちど・ある日",
-        "かつて",
-        "むかし"
+        "still",
+        "suddenly",
+        "therefore"
       ]
     },
     {
@@ -13918,9 +13918,9 @@
         "time_expressions"
       ],
       "distractors": [
-        "いちど・さんど",
-        "にかい",
-        "もういちど"
+        "once",
+        "otherwise",
+        "probably"
       ]
     },
     {
@@ -13948,9 +13948,9 @@
         "time_expressions"
       ],
       "distractors": [
-        "まいにち",
-        "にちじょう",
-        "にっか"
+        "intelligent",
+        "jealous",
+        "joyful"
       ]
     },
     {
@@ -13978,9 +13978,9 @@
         "time_expressions"
       ],
       "distractors": [
-        "まいしゅう",
-        "しゅういちの",
-        "しゅうかん"
+        "confident",
+        "confused",
+        "creative"
       ]
     },
     {
@@ -14007,9 +14007,9 @@
         "time_expressions"
       ],
       "distractors": [
-        "まいとし・ねんかん",
-        "いちねんに",
-        "ねんど"
+        "honest",
+        "hopeful",
+        "imaginative"
       ]
     },
     {
@@ -14036,9 +14036,9 @@
         "time_expressions"
       ],
       "distractors": [
-        "けんきゅう・しらべる",
-        "ずこう",
-        "しゅくだい・かだい"
+        "boarding pass",
+        "bone",
+        "booking"
       ]
     },
     {
@@ -14066,9 +14066,9 @@
         "time_expressions"
       ],
       "distractors": [
-        "すぐ・かんそく",
-        "はやい",
-        "インスタント"
+        "famous",
+        "fried",
+        "gentle"
       ]
     },
     {
@@ -14095,9 +14095,9 @@
         "time_expressions"
       ],
       "distractors": [
-        "じゅうねんかん",
-        "ひとむかし",
-        "ねんだい"
+        "talent",
+        "teammate",
+        "technology"
       ]
     },
     {
@@ -14124,9 +14124,9 @@
         "time_expressions"
       ],
       "distractors": [
-        "てんらんかい",
-        "ゲスト・きゃく",
-        "じょうきょう"
+        "vegetarian",
+        "vet",
+        "violin"
       ]
     },
     {
@@ -14153,9 +14153,9 @@
         "conjunctions_and_connectors"
       ],
       "distractors": [
-        "だから・なので",
-        "ので・から",
-        "したがって"
+        "unless",
+        "until",
+        "while"
       ]
     },
     {
@@ -14182,9 +14182,9 @@
         "conjunctions_and_connectors"
       ],
       "distractors": [
-        "でも・けれど",
-        "しかし",
-        "〜にもかかわらず"
+        "since",
+        "unless",
+        "until"
       ]
     },
     {
@@ -14212,9 +14212,9 @@
         "conjunctions_and_connectors"
       ],
       "distractors": [
-        "もうすこしで・ほとんど",
-        "しずかに",
-        "たぶん"
+        "probably",
+        "quickly",
+        "quietly"
       ]
     },
     {
@@ -14242,9 +14242,9 @@
         "conjunctions_and_connectors"
       ],
       "distractors": [
-        "だから・そのために",
-        "ゆえに",
-        "よって"
+        "abroad",
+        "afterward",
+        "ago"
       ]
     },
     {
@@ -14271,9 +14271,9 @@
         "conjunctions_and_connectors"
       ],
       "distractors": [
-        "どちらも・いずれも",
-        "どちらも〜ない",
-        "〜だけれど"
+        "since",
+        "until",
+        "while"
       ]
     },
     {
@@ -14301,9 +14301,9 @@
         "conjunctions_and_connectors"
       ],
       "distractors": [
-        "〜まで",
-        "〜のあいだ",
-        "〜になるまで"
+        "either",
+        "neither",
+        "since"
       ]
     },
     {
@@ -14330,9 +14330,9 @@
         "conjunctions_and_connectors"
       ],
       "distractors": [
-        "〜のあいだ・〜とき",
-        "〜しながら",
-        "〜と同時に"
+        "neither",
+        "since",
+        "unless"
       ]
     },
     {
@@ -14360,9 +14360,9 @@
         "conjunctions_and_connectors"
       ],
       "distractors": [
-        "どちらか・どちらも",
-        "一方",
-        "も〜ない"
+        "because",
+        "neither",
+        "since"
       ]
     },
     {
@@ -14390,9 +14390,9 @@
         "conjunctions_and_connectors"
       ],
       "distractors": [
-        "〜までずっと",
-        "なぜなら・だから",
-        "〜のあいだ"
+        "while",
+        "although",
+        "because"
       ]
     },
     {
@@ -14420,9 +14420,9 @@
         "conjunctions_and_connectors"
       ],
       "distractors": [
-        "さらに・くわえて",
-        "そのうえ",
-        "また"
+        "soon",
+        "still",
+        "suddenly"
       ]
     },
     {
@@ -14449,9 +14449,9 @@
         "prepositions_and_phrases"
       ],
       "distractors": [
-        "〜によると",
-        "〜をのぞいて",
-        "〜のした"
+        "toward",
+        "within",
+        "without"
       ]
     },
     {
@@ -14479,9 +14479,9 @@
         "conjunctions_and_connectors"
       ],
       "distractors": [
-        "さもないと・そうしないと",
-        "または",
-        "でなければ"
+        "therefore",
+        "twice",
+        "usually"
       ]
     },
     {
@@ -14509,9 +14509,9 @@
         "conjunctions_and_connectors"
       ],
       "distractors": [
-        "もうすこしで・ほとんど",
-        "もうすぐ・まもなく",
-        "かいがいに"
+        "by now",
+        "carefully",
+        "clearly"
       ]
     },
     {
@@ -14538,9 +14538,9 @@
         "conjunctions_and_connectors"
       ],
       "distractors": [
-        "すぐに",
-        "もう・すでに",
-        "おおきなこえで"
+        "easily",
+        "eventually",
+        "furthermore"
       ]
     },
     {
@@ -14567,9 +14567,9 @@
         "conjunctions_and_connectors"
       ],
       "distractors": [
-        "しかしいっぽう",
-        "そのいっぽう",
-        "べつのめんでは"
+        "set up",
+        "show up",
+        "such as"
       ]
     },
     {
@@ -14596,9 +14596,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "きた・もどった",
-        "いった",
-        "でかけた"
+        "departed",
+        "describe",
+        "destroy"
       ]
     },
     {
@@ -14625,9 +14625,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "いった・もどった",
-        "きた",
-        "ついた"
+        "set",
+        "sew",
+        "shake"
       ]
     },
     {
@@ -14654,9 +14654,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "みた・きいた",
-        "きいた",
-        "みつけた"
+        "greet",
+        "grow",
+        "had"
       ]
     },
     {
@@ -14683,9 +14683,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "もった・つれた",
-        "とった",
-        "うけた"
+        "wave",
+        "went",
+        "whisper"
       ]
     },
     {
@@ -14712,9 +14712,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "つくった・した",
-        "かいた",
-        "つくった"
+        "explore",
+        "feed",
+        "fell"
       ]
     },
     {
@@ -14741,9 +14741,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "もった・たべた",
-        "した",
-        "いた"
+        "overlook",
+        "pack",
+        "paint"
       ]
     },
     {
@@ -14770,9 +14770,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "もらった・とった",
-        "かった",
-        "えた"
+        "echo",
+        "encourage",
+        "enjoy"
       ]
     },
     {
@@ -14799,9 +14799,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "いった・はなした",
-        "つたえた",
-        "せつめいした"
+        "sketch",
+        "skim",
+        "skip"
       ]
     },
     {
@@ -14828,9 +14828,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "いった・つたえた",
-        "きいた・おしえた",
-        "はなした"
+        "perform",
+        "persuade",
+        "pick up"
       ]
     },
     {
@@ -14857,9 +14857,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "みつけた・はっけんした",
-        "さがした",
-        "みた"
+        "lock",
+        "lost",
+        "made"
       ]
     },
     {
@@ -14886,9 +14886,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "しっていた・わかった",
-        "おぼえていた",
-        "きいていた"
+        "grow",
+        "had",
+        "hang"
       ]
     },
     {
@@ -14915,9 +14915,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "おもった・かんがえた",
-        "しんじた",
-        "きめた"
+        "went",
+        "whisper",
+        "win"
       ]
     },
     {
@@ -14944,9 +14944,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "かんじた・おもった",
-        "きいた",
-        "なった"
+        "return",
+        "review",
+        "rinse"
       ]
     },
     {
@@ -14973,9 +14973,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "でた・はなれた",
-        "もどった",
-        "ついた"
+        "haul",
+        "heard",
+        "hold"
       ]
     },
     {
@@ -15002,9 +15002,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "はしった・あるいた",
-        "とんだ",
-        "あるいた"
+        "search",
+        "set",
+        "sew"
       ]
     },
     {
@@ -15031,9 +15031,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "およいだ・ひいた",
-        "あるいた",
-        "とびこんだ"
+        "enjoy",
+        "exchange",
+        "explain"
       ]
     },
     {
@@ -15060,9 +15060,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "のった・うんてんした",
-        "あるいた",
-        "のりかえた"
+        "hold",
+        "hope",
+        "improve"
       ]
     },
     {
@@ -15089,9 +15089,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "かいた・えがいた",
-        "よんだ",
-        "かいた"
+        "ran",
+        "reach",
+        "recall"
       ]
     },
     {
@@ -15118,9 +15118,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "くりかえす",
-        "いう",
-        "よむ"
+        "skip",
+        "slam",
+        "slice"
       ]
     },
     {
@@ -15147,9 +15147,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "たべた・のんだ",
-        "のんだ",
-        "りょうりした"
+        "charge",
+        "check",
+        "choose"
       ]
     },
     {
@@ -15176,9 +15176,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "のんだ・たべた",
-        "たべた",
-        "つくった"
+        "pass",
+        "peel",
+        "perform"
       ]
     },
     {
@@ -15205,9 +15205,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "きた・もっていた",
-        "ぬいだ",
-        "えらんだ"
+        "rode",
+        "said",
+        "sat"
       ]
     },
     {
@@ -15234,9 +15234,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "かった・もらった",
-        "うった",
-        "もらった"
+        "skim",
+        "skip",
+        "slam"
       ]
     },
     {
@@ -15263,9 +15263,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "おしえた・しどうした",
-        "まなんだ",
-        "べんきょうした"
+        "turn",
+        "turn off",
+        "turn on"
       ]
     },
     {
@@ -15292,9 +15292,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "もってきた・もってきた",
-        "わたした",
-        "もって"
+        "swap",
+        "sweep",
+        "taught"
       ]
     },
     {
@@ -15321,9 +15321,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "たてた・つくった",
-        "こわした",
-        "せっけいした"
+        "slice",
+        "smile",
+        "solve"
       ]
     },
     {
@@ -15350,9 +15350,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "かいた・えがいた",
-        "ぬった",
-        "かいた"
+        "drank",
+        "dribble",
+        "drill"
       ]
     },
     {
@@ -15379,9 +15379,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "あげた・わたした",
-        "もらった",
-        "かえした"
+        "disagree",
+        "discover",
+        "discuss"
       ]
     },
     {
@@ -15408,9 +15408,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "つづけた・まもった",
-        "やめた",
-        "わすれた"
+        "feed",
+        "fell",
+        "felt"
       ]
     },
     {
@@ -15437,9 +15437,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "あった・であった",
-        "わかれた",
-        "はなした"
+        "leap",
+        "leave",
+        "lift"
       ]
     },
     {
@@ -15466,9 +15466,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "すわった・かけた",
-        "たった",
-        "ねた"
+        "took",
+        "touch",
+        "turn"
       ]
     },
     {
@@ -15495,9 +15495,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "たった・きりつした",
-        "すわった",
-        "やすんだ"
+        "graduate",
+        "greet",
+        "grow"
       ]
     },
     {
@@ -15524,9 +15524,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "おちた・ころんだ",
-        "とんだ",
-        "たおれた"
+        "describe",
+        "destroy",
+        "disagree"
       ]
     },
     {
@@ -15553,9 +15553,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "きいた・きこえた",
-        "みた",
-        "しった"
+        "win",
+        "wipe",
+        "wish"
       ]
     },
     {
@@ -15582,9 +15582,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "かった・ゆうしょうした",
-        "まけた",
-        "さんかした"
+        "bought",
+        "brought",
+        "brush"
       ]
     },
     {
@@ -15611,9 +15611,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "まけた・なくした",
-        "かった",
-        "みつけた"
+        "pour",
+        "practice",
+        "prevent"
       ]
     },
     {
@@ -15640,9 +15640,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "おいた",
-        "ならべた",
-        "いれた"
+        "said",
+        "sat",
+        "sauté"
       ]
     },
     {
@@ -15669,9 +15669,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "きった・わった",
-        "ぬった",
-        "もった"
+        "warn",
+        "wave",
+        "went"
       ]
     },
     {
@@ -15698,9 +15698,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "きった",
-        "きざんだ",
-        "わった"
+        "thought",
+        "throw",
+        "tidy"
       ]
     },
     {
@@ -15727,9 +15727,9 @@
         "irregular_past_tense"
       ],
       "distractors": [
-        "つかまえた・とらえた",
-        "なげた",
-        "はなした"
+        "measure",
+        "met",
+        "mix"
       ]
     },
     {
@@ -15756,9 +15756,9 @@
         "adverbs"
       ],
       "distractors": [
-        "いつも・ずっと",
-        "たいてい",
-        "けっして"
+        "probably",
+        "quickly",
+        "quietly"
       ]
     },
     {
@@ -15785,9 +15785,9 @@
         "adverbs"
       ],
       "distractors": [
-        "ときどき",
-        "さもないと",
-        "すぐに"
+        "quietly",
+        "quite",
+        "rarely"
       ]
     },
     {
@@ -15814,9 +15814,9 @@
         "adverbs"
       ],
       "distractors": [
-        "すぐに",
-        "もうすこしで・ほとんど",
-        "そのうえ・さらに"
+        "still",
+        "suddenly",
+        "therefore"
       ]
     },
     {
@@ -15843,9 +15843,9 @@
         "adverbs"
       ],
       "distractors": [
-        "ときどき・たまに",
-        "よく",
-        "めったに"
+        "otherwise",
+        "probably",
+        "quickly"
       ]
     },
     {
@@ -15872,9 +15872,9 @@
         "adverbs"
       ],
       "distractors": [
-        "だんだん・しだいに",
-        "かいがいに",
-        "かならず・ぜったいに"
+        "often",
+        "once",
+        "otherwise"
       ]
     },
     {
@@ -15901,9 +15901,9 @@
         "adverbs"
       ],
       "distractors": [
-        "けっして〜ない・いちども〜ない",
-        "めったに",
-        "ほとんど"
+        "just",
+        "lately",
+        "loudly"
       ]
     },
     {
@@ -15930,9 +15930,9 @@
         "adverbs"
       ],
       "distractors": [
-        "すばやく・はやく",
-        "ゆっくり",
-        "じっくり"
+        "rarely",
+        "recently",
+        "sometimes"
       ]
     },
     {
@@ -15959,9 +15959,9 @@
         "adverbs"
       ],
       "distractors": [
-        "やさしく",
-        "おだやかに",
-        "しずかに"
+        "loudly",
+        "moreover",
+        "nearly"
       ]
     },
     {
@@ -15988,9 +15988,9 @@
         "adverbs"
       ],
       "distractors": [
-        "そっと・やさしく",
-        "まえ（〜まえ）",
-        "かならず・ぜったいに"
+        "quite",
+        "rarely",
+        "recently"
       ]
     },
     {
@@ -16017,9 +16017,9 @@
         "adverbs"
       ],
       "distractors": [
-        "おおきなこえで・はっきり",
-        "しずかに",
-        "ささやくように"
+        "gently",
+        "gradually",
+        "however"
       ]
     },
     {
@@ -16046,9 +16046,9 @@
         "adverbs"
       ],
       "distractors": [
-        "しずかに・おとなしく",
-        "おおきなこえで",
-        "そっと"
+        "eventually",
+        "furthermore",
+        "gently"
       ]
     },
     {
@@ -16075,9 +16075,9 @@
         "adverbs"
       ],
       "distractors": [
-        "けっして〜ない",
-        "さらに・そのうえ",
-        "ていねいに・きをつけて"
+        "never",
+        "often",
+        "once"
       ]
     },
     {
@@ -16104,9 +16104,9 @@
         "adverbs"
       ],
       "distractors": [
-        "いまごろは",
-        "けっきょく・ついに",
-        "まだ"
+        "instead",
+        "just",
+        "lately"
       ]
     },
     {
@@ -16133,9 +16133,9 @@
         "adverbs"
       ],
       "distractors": [
-        "まだ",
-        "さもないと",
-        "たぶん"
+        "moreover",
+        "nearly",
+        "never"
       ]
     },
     {
@@ -16162,9 +16162,9 @@
         "adverbs"
       ],
       "distractors": [
-        "けっして〜ない",
-        "ちょうど・たったいま",
-        "しずかに"
+        "clearly",
+        "definitely",
+        "easily"
       ]
     },
     {
@@ -16191,9 +16191,9 @@
         "adverbs"
       ],
       "distractors": [
-        "いまごろは・きっと",
-        "すでに",
-        "もうとっくに"
+        "loudly",
+        "moreover",
+        "nearly"
       ]
     },
     {
@@ -16220,9 +16220,9 @@
         "adverbs"
       ],
       "distractors": [
-        "たぶん・おそらく",
-        "きっと",
-        "かならず"
+        "by now",
+        "carefully",
+        "clearly"
       ]
     },
     {
@@ -16249,9 +16249,9 @@
         "adverbs"
       ],
       "distractors": [
-        "めったに〜ない",
-        "しずかに",
-        "まだ"
+        "nearly",
+        "never",
+        "often"
       ]
     },
     {
@@ -16278,9 +16278,9 @@
         "adverbs"
       ],
       "distractors": [
-        "さらに・そのうえ",
-        "まえ（〜まえ）",
-        "かならず・ぜったいに"
+        "badly",
+        "by now",
+        "carefully"
       ]
     },
     {
@@ -16307,9 +16307,9 @@
         "adverbs"
       ],
       "distractors": [
-        "かなり・とても",
-        "すこし",
-        "あまり"
+        "recently",
+        "sometimes",
+        "soon"
       ]
     },
     {
@@ -16336,9 +16336,9 @@
         "prepositions_and_phrases"
       ],
       "distractors": [
-        "〜のなかに",
-        "〜のまわりに",
-        "〜のそばに"
+        "regardless of",
+        "through",
+        "throughout"
       ]
     },
     {
@@ -16365,9 +16365,9 @@
         "prepositions_and_phrases"
       ],
       "distractors": [
-        "〜なしに",
-        "〜をこえて・むこうに",
-        "〜じゅうずっと"
+        "along",
+        "amid",
+        "beneath"
       ]
     },
     {
@@ -16394,9 +16394,9 @@
         "prepositions_and_phrases"
       ],
       "distractors": [
-        "〜のはんたいに",
-        "〜のむかい",
-        "〜のよこに"
+        "against",
+        "along",
+        "amid"
       ]
     },
     {
@@ -16423,9 +16423,9 @@
         "prepositions_and_phrases"
       ],
       "distractors": [
-        "〜のあいだ",
-        "〜ちゅうに",
-        "〜のとき"
+        "in spite of",
+        "instead of",
+        "opposite"
       ]
     },
     {
@@ -16452,9 +16452,9 @@
         "prepositions_and_phrases"
       ],
       "distractors": [
-        "〜のせいで・〜のために",
-        "〜のまんなかで",
-        "〜のとなりに"
+        "through",
+        "throughout",
+        "within"
       ]
     },
     {
@@ -16481,9 +16481,9 @@
         "prepositions_and_phrases"
       ],
       "distractors": [
-        "〜にたいして・〜にもたれて",
-        "〜といっしょに",
-        "〜にさんせいして"
+        "opposite",
+        "regardless of",
+        "through"
       ]
     },
     {
@@ -16510,9 +16510,9 @@
         "prepositions_and_phrases"
       ],
       "distractors": [
-        "〜をこえて・〜のむこう",
-        "〜のそば",
-        "〜にちかい"
+        "within",
+        "without",
+        "according to"
       ]
     },
     {
@@ -16539,9 +16539,9 @@
         "prepositions_and_phrases"
       ],
       "distractors": [
-        "〜にたいして・〜に反して",
-        "〜にもかかわらず",
-        "〜をのぞいて"
+        "instead of",
+        "opposite",
+        "regardless of"
       ]
     },
     {
@@ -16568,9 +16568,9 @@
         "prepositions_and_phrases"
       ],
       "distractors": [
-        "〜のとなりに・〜のよこ",
-        "〜のうしろ",
-        "〜のまえ"
+        "beyond",
+        "due to",
+        "during"
       ]
     },
     {
@@ -16597,9 +16597,9 @@
         "prepositions_and_phrases"
       ],
       "distractors": [
-        "〜のした・〜のしたに",
-        "〜のうえ",
-        "〜のよこ"
+        "beyond",
+        "due to",
+        "during"
       ]
     },
     {
@@ -16626,9 +16626,9 @@
         "prepositions_and_phrases"
       ],
       "distractors": [
-        "〜じゅう",
-        "〜のあいだずっと",
-        "〜のなかで"
+        "instead of",
+        "opposite",
+        "regardless of"
       ]
     },
     {
@@ -16655,9 +16655,9 @@
         "prepositions_and_phrases"
       ],
       "distractors": [
-        "〜のなかで・〜以内に",
-        "〜をこえて",
-        "〜からはなれて"
+        "along",
+        "amid",
+        "beneath"
       ]
     },
     {
@@ -16684,9 +16684,9 @@
         "prepositions_and_phrases"
       ],
       "distractors": [
-        "〜なしに・〜をもたずに",
-        "〜とともに",
-        "〜をつかって"
+        "during",
+        "except",
+        "in spite of"
       ]
     },
     {
@@ -16713,9 +16713,9 @@
         "prepositions_and_phrases"
       ],
       "distractors": [
-        "〜のかわりに",
-        "〜をこえて・むこうに",
-        "〜のなかに・〜のうちに"
+        "regardless of",
+        "through",
+        "throughout"
       ]
     },
     {
@@ -16742,9 +16742,9 @@
         "prepositions_and_phrases"
       ],
       "distractors": [
-        "〜のとなりに",
-        "〜をとおって",
-        "〜のせいで・〜のために"
+        "within",
+        "without",
+        "according to"
       ]
     },
     {
@@ -16771,9 +16771,9 @@
         "prepositions_and_phrases"
       ],
       "distractors": [
-        "〜のした",
-        "〜のとなりに",
-        "〜のなかに・〜のうちに"
+        "during",
+        "except",
+        "in spite of"
       ]
     },
     {
@@ -16800,9 +16800,9 @@
         "prepositions_and_phrases"
       ],
       "distractors": [
-        "〜をこえて・むこうに",
-        "〜のほうへ",
-        "〜にそって"
+        "amid",
+        "beneath",
+        "beside"
       ]
     },
     {
@@ -16829,9 +16829,9 @@
         "prepositions_and_phrases"
       ],
       "distractors": [
-        "むかいに・はんたいの",
-        "〜じゅうずっと",
-        "〜にそって"
+        "beside",
+        "beyond",
+        "due to"
       ]
     },
     {
@@ -16858,9 +16858,9 @@
         "prepositions_and_phrases"
       ],
       "distractors": [
-        "たとえば・〜など",
-        "〜のように",
-        "〜とくらべて"
+        "point out",
+        "proud of",
+        "put off"
       ]
     },
     {
@@ -16887,9 +16887,9 @@
         "prepositions_and_phrases"
       ],
       "distractors": [
-        "かんがえだす・おもいつく",
-        "とりやめる・キャンセルする",
-        "たのしみにする"
+        "take part in",
+        "think about",
+        "turn up"
       ]
     },
     {
@@ -16916,9 +16916,9 @@
         "communication_verbs"
       ],
       "distractors": [
-        "たずねる",
-        "きく",
-        "しつもんする"
+        "review",
+        "rinse",
+        "rode"
       ]
     },
     {
@@ -16945,9 +16945,9 @@
         "communication_verbs"
       ],
       "distractors": [
-        "たっせいする",
-        "かえる・よゆうがある",
-        "えさをやる"
+        "rode",
+        "said",
+        "sat"
       ]
     },
     {
@@ -16974,9 +16974,9 @@
         "communication_verbs"
       ],
       "distractors": [
-        "せつめいする・おしえる",
-        "はなす",
-        "いう"
+        "told",
+        "took",
+        "touch"
       ]
     },
     {
@@ -17003,9 +17003,9 @@
         "communication_verbs"
       ],
       "distractors": [
-        "おうえんする・ささえる",
-        "したくする",
-        "はじめる・はじまる"
+        "earn",
+        "echo",
+        "encourage"
       ]
     },
     {
@@ -17032,9 +17032,9 @@
         "communication_verbs"
       ],
       "distractors": [
-        "ふく",
-        "ソテーする",
-        "へんじする・こたえる"
+        "turn off",
+        "turn on",
+        "wake up"
       ]
     },
     {
@@ -17061,9 +17061,9 @@
         "communication_verbs"
       ],
       "distractors": [
-        "もんくをいう",
-        "おこる",
-        "いやがる"
+        "support",
+        "surrender",
+        "swam"
       ]
     },
     {
@@ -17090,9 +17090,9 @@
         "communication_verbs"
       ],
       "distractors": [
-        "あやまる・すまなそうにする",
-        "ゆるす",
-        "おわびする"
+        "sprinkle",
+        "stood",
+        "stride"
       ]
     },
     {
@@ -17119,9 +17119,9 @@
         "communication_verbs"
       ],
       "distractors": [
-        "スケッチする",
-        "おとす",
-        "やくそくする"
+        "mix",
+        "move",
+        "notice"
       ]
     },
     {
@@ -17148,9 +17148,9 @@
         "communication_verbs"
       ],
       "distractors": [
-        "きょうそうする",
-        "はかる",
-        "ためる・ちょきんする"
+        "spend",
+        "sprinkle",
+        "stood"
       ]
     },
     {
@@ -17177,9 +17177,9 @@
         "communication_verbs"
       ],
       "distractors": [
-        "せつめいする・せつめいする",
-        "とうちゃくする",
-        "とばす・スキップする"
+        "reach",
+        "recall",
+        "recite"
       ]
     },
     {
@@ -17206,9 +17206,9 @@
         "communication_verbs"
       ],
       "distractors": [
-        "せつめいする・いいあらわす",
-        "あらわす",
-        "つたえる"
+        "arise",
+        "arrive",
+        "ate"
       ]
     },
     {
@@ -17235,9 +17235,9 @@
         "communication_verbs"
       ],
       "distractors": [
-        "とばす・スキップする",
-        "なげる",
-        "そらでいう・よむ"
+        "afford",
+        "agree",
+        "allow"
       ]
     },
     {
@@ -17264,9 +17264,9 @@
         "communication_verbs"
       ],
       "distractors": [
-        "いいあう・もめる",
-        "けんかする",
-        "もんくをいう"
+        "apologize",
+        "arise",
+        "arrive"
       ]
     },
     {
@@ -17293,9 +17293,9 @@
         "communication_verbs"
       ],
       "distractors": [
-        "あいさつする",
-        "やく・ベイクする",
-        "かせぐ"
+        "had",
+        "hang",
+        "haul"
       ]
     },
     {
@@ -17322,9 +17322,9 @@
         "communication_verbs"
       ],
       "distractors": [
-        "すすめる・ていあんする",
-        "おしえる",
-        "わたす"
+        "caught",
+        "celebrate",
+        "charge"
       ]
     },
     {
@@ -17351,9 +17351,9 @@
         "communication_verbs"
       ],
       "distractors": [
-        "ちゅうこくする・きをつけさせる",
-        "おしえる",
-        "あぶないという"
+        "support",
+        "surrender",
+        "swam"
       ]
     },
     {
@@ -17380,9 +17380,9 @@
         "communication_verbs"
       ],
       "distractors": [
-        "くりかえす",
-        "またいう",
-        "まねる"
+        "hold",
+        "hope",
+        "improve"
       ]
     },
     {
@@ -17409,9 +17409,9 @@
         "communication_verbs"
       ],
       "distractors": [
-        "あやまる",
-        "ごしごしあらう",
-        "ちゅうこくする・けいこくする"
+        "ran",
+        "reach",
+        "recall"
       ]
     },
     {
@@ -17438,9 +17438,9 @@
         "communication_verbs"
       ],
       "distractors": [
-        "はっぴょうする・つたえる",
-        "おしらせする",
-        "はなす"
+        "allow",
+        "apologize",
+        "argue"
       ]
     },
     {
@@ -17467,9 +17467,9 @@
         "communication_verbs"
       ],
       "distractors": [
-        "ノックする・たたく",
-        "えさをやる",
-        "たたむ"
+        "overlook",
+        "pack",
+        "paint"
       ]
     },
     {
@@ -17496,9 +17496,9 @@
         "communication_verbs"
       ],
       "distractors": [
-        "ほこりに思う",
-        "うれしい",
-        "まんぞくした"
+        "such as",
+        "take care of",
+        "take part in"
       ]
     },
     {
@@ -17525,9 +17525,9 @@
         "communication_verbs"
       ],
       "distractors": [
-        "きにかける",
-        "しんぱいする",
-        "かんがえる"
+        "such as",
+        "take care of",
+        "take part in"
       ]
     },
     {
@@ -17554,9 +17554,9 @@
         "communication_verbs"
       ],
       "distractors": [
-        "たのしみにする・まちどおしい",
-        "きたいする",
-        "わくわくする"
+        "turn up",
+        "break down",
+        "bring up"
       ]
     },
     {
@@ -17583,9 +17583,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "たのしみにする",
-        "かんがえだす・おもいつく",
-        "とりやめる・キャンセルする"
+        "take care of",
+        "take part in",
+        "think about"
       ]
     },
     {
@@ -17612,9 +17612,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "いっぽう・それにたいして",
-        "つかいきる・なくなる",
-        "かんがえだす・おもいつく"
+        "in order to",
+        "look forward to",
+        "on the other hand"
       ]
     },
     {
@@ -17641,9 +17641,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "ちゅういする・みる",
-        "きく",
-        "きをはる"
+        "give up",
+        "in order to",
+        "look forward to"
       ]
     },
     {
@@ -17670,9 +17670,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "そだてる・だす",
-        "いっぽう・それにたいして",
-        "あきらめる"
+        "run out of",
+        "set up",
+        "show up"
       ]
     },
     {
@@ -17699,9 +17699,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "してきする",
-        "〜を気にかける",
-        "あきらめる"
+        "call off",
+        "care about",
+        "come up with"
       ]
     },
     {
@@ -17728,9 +17728,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "してきする・みせる",
-        "さがす",
-        "いう"
+        "give up",
+        "in order to",
+        "look forward to"
       ]
     },
     {
@@ -17757,9 +17757,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "しらべる・わかる",
-        "みつける",
-        "きく"
+        "on the other hand",
+        "pay attention",
+        "point out"
       ]
     },
     {
@@ -17786,9 +17786,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "あらわれる・みつかる",
-        "いく",
-        "くる"
+        "such as",
+        "take care of",
+        "take part in"
       ]
     },
     {
@@ -17815,9 +17815,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "いっぽう・それにたいして",
-        "してきする",
-        "とりやめる・キャンセルする"
+        "pay attention",
+        "point out",
+        "proud of"
       ]
     },
     {
@@ -17844,9 +17844,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "たとえば",
-        "じゅんびする・セットする",
-        "あらわれる"
+        "look forward to",
+        "on the other hand",
+        "pay attention"
       ]
     },
     {
@@ -17873,9 +17873,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "なくなる・つかいきる",
-        "おわる",
-        "さがす"
+        "look forward to",
+        "on the other hand",
+        "pay attention"
       ]
     },
     {
@@ -17902,9 +17902,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "じゅんびする・つくる",
-        "はじめる",
-        "おく"
+        "give up",
+        "in order to",
+        "look forward to"
       ]
     },
     {
@@ -17931,9 +17931,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "あらわれる・くる",
-        "いく",
-        "みつかる"
+        "on the other hand",
+        "pay attention",
+        "point out"
       ]
     },
     {
@@ -17960,9 +17960,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "さきのばす・えんきする",
-        "やめる",
-        "わすれる"
+        "take part in",
+        "think about",
+        "turn up"
       ]
     },
     {
@@ -17989,9 +17989,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "とりやめる・キャンセル",
-        "えんきする",
-        "やすみになる"
+        "break down",
+        "bring up",
+        "care about"
       ]
     },
     {
@@ -18018,9 +18018,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "そだてる・はなす",
-        "うむ",
-        "おおきくする"
+        "give up",
+        "in order to",
+        "look forward to"
       ]
     },
     {
@@ -18047,9 +18047,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "かんがえる・おもいつく",
-        "みつける",
-        "きめる"
+        "get along",
+        "give up",
+        "in order to"
       ]
     },
     {
@@ -18076,9 +18076,9 @@
         "travel_and_transportation"
       ],
       "distractors": [
-        "かいがいに・そとこく",
-        "えんぽうに",
-        "がいこくに"
+        "always",
+        "at last",
+        "badly"
       ]
     },
     {
@@ -18105,9 +18105,9 @@
         "nature_and_environment"
       ],
       "distractors": [
-        "ぶんか・でんとう",
-        "しゅうかん",
-        "れきし"
+        "transfer",
+        "trimester",
+        "tsunami"
       ]
     },
     {
@@ -18134,9 +18134,9 @@
         "nature_and_environment"
       ],
       "distractors": [
-        "ぶんか・でんとう",
-        "しゅうかん",
-        "しきたり"
+        "environment",
+        "event",
+        "example"
       ]
     },
     {
@@ -18163,9 +18163,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "せいふ・やくしょ",
-        "ちょうてい",
-        "かんちょう"
+        "cliff",
+        "clinic",
+        "closet"
       ]
     },
     {
@@ -18192,9 +18192,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "どりょく",
-        "くわしいこと・しょうさい",
-        "ビタミン"
+        "dentist",
+        "department store",
+        "departure"
       ]
     },
     {
@@ -18221,9 +18221,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "もけい・モデル",
-        "ステージ・だんかい",
-        "ダイニング・しょくどう"
+        "shape",
+        "shelf",
+        "singer"
       ]
     },
     {
@@ -18250,9 +18250,9 @@
         "nature_and_environment"
       ],
       "distractors": [
-        "でんき・りょく",
-        "きりょく",
-        "ちから"
+        "mark",
+        "market",
+        "martial arts"
       ]
     },
     {
@@ -18279,9 +18279,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "へいわ・あんせい",
-        "じゆう",
-        "やすらぎ"
+        "visa",
+        "vitamin",
+        "volcano"
       ]
     },
     {
@@ -18308,9 +18308,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "じゆう・ひとりだち",
-        "けんり",
-        "どくりつ"
+        "referee",
+        "refund",
+        "relationship"
       ]
     },
     {
@@ -18337,9 +18337,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "ちいき・しゃかい",
-        "ゆうき",
-        "グループ"
+        "accountant",
+        "activity",
+        "actor"
       ]
     },
     {
@@ -18366,9 +18366,9 @@
         "communication_verbs"
       ],
       "distractors": [
-        "いけん・かんがえ",
-        "きもち",
-        "しつもん"
+        "dream",
+        "driver",
+        "drone"
       ]
     },
     {
@@ -18395,9 +18395,9 @@
         "communication_verbs"
       ],
       "distractors": [
-        "アイデア・こうそう",
-        "かんがえ",
-        "けいかく"
+        "report",
+        "research",
+        "responsibility"
       ]
     },
     {
@@ -18425,9 +18425,9 @@
         "communication_verbs"
       ],
       "distractors": [
-        "けいかく・よてい",
-        "もくひょう",
-        "アイデア"
+        "checkout",
+        "chef",
+        "chemistry"
       ]
     },
     {
@@ -18454,9 +18454,9 @@
         "communication_verbs"
       ],
       "distractors": [
-        "もくひょう・ゴール",
-        "ゆめ",
-        "けいかく"
+        "booking (restaurant)",
+        "boutique",
+        "brand"
       ]
     },
     {
@@ -18484,9 +18484,9 @@
         "communication_verbs"
       ],
       "distractors": [
-        "ゆめ・もくひょう",
-        "きぼう",
-        "いがく"
+        "yard",
+        "accountant",
+        "activity"
       ]
     },
     {
@@ -18513,9 +18513,9 @@
         "communication_verbs"
       ],
       "distractors": [
-        "アドバイス・ていあん",
-        "いけん",
-        "めいれい"
+        "confidence",
+        "connection",
+        "contest"
       ]
     },
     {
@@ -18542,9 +18542,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "じゅぎょう",
-        "コース",
-        "セミナー"
+        "boarding pass",
+        "bone",
+        "booking"
       ]
     },
     {
@@ -18571,9 +18571,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "まちがい・エラー",
-        "しっぱい",
-        "ヒント"
+        "mark",
+        "market",
+        "martial arts"
       ]
     },
     {
@@ -18600,9 +18600,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "せいこう・たっせい",
-        "しっぱい",
-        "けっか"
+        "player",
+        "plumber",
+        "police officer"
       ]
     },
     {
@@ -18629,9 +18629,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "しっぱい・まちがい",
-        "けっか",
-        "にがて"
+        "budget",
+        "cabinet",
+        "camp"
       ]
     },
     {
@@ -18659,9 +18659,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "チャレンジ・むずかしさ",
-        "しあい",
-        "コンテスト"
+        "peak",
+        "period",
+        "pharmacy"
       ]
     },
     {
@@ -18688,9 +18688,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "ごほうび・しょうひん",
-        "プレゼント",
-        "しょうさん"
+        "effort",
+        "electrician",
+        "emotion"
       ]
     },
     {
@@ -18717,9 +18717,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "どりょく・がんばり",
-        "きりょく",
-        "けっか"
+        "guide",
+        "guitar",
+        "gymnastics"
       ]
     },
     {
@@ -18746,9 +18746,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "けいけん・たいけん",
-        "きおく",
-        "きろく"
+        "living room",
+        "luggage",
+        "lung"
       ]
     },
     {
@@ -18775,9 +18775,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "ぎじゅつ・のうりょく",
-        "とくい",
-        "かんのう"
+        "breeze",
+        "broth",
+        "brunch"
       ]
     },
     {
@@ -18804,9 +18804,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "ちしき・じょうほう",
-        "べんきょう",
-        "のうりょく"
+        "doctor",
+        "dodgeball",
+        "dojo"
       ]
     },
     {
@@ -18833,9 +18833,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "きょういく・がくしゅう",
-        "べんきょう",
-        "がっこう"
+        "quiz",
+        "race",
+        "reason"
       ]
     },
     {
@@ -18862,9 +18862,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "じょうほう・データ",
-        "ちしき",
-        "ニュース"
+        "doctor",
+        "dodgeball",
+        "dojo"
       ]
     },
     {
@@ -18892,9 +18892,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "こやぶ・もり",
-        "もくてきち",
-        "しょくぶつ"
+        "lamp",
+        "lawyer",
+        "leader"
       ]
     },
     {
@@ -18921,9 +18921,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "れい・もんだい",
-        "こたえ",
-        "ヒント"
+        "woodland",
+        "workout",
+        "yard"
       ]
     },
     {
@@ -18950,9 +18950,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "くわしいこと・ないよう",
-        "じょうほう",
-        "ちしき"
+        "mistake",
+        "model",
+        "mood"
       ]
     },
     {
@@ -18979,9 +18979,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "けっか・こうか",
-        "てん",
-        "せいせき"
+        "partner",
+        "passport",
+        "pasta"
       ]
     },
     {
@@ -19008,9 +19008,9 @@
         "communication_verbs"
       ],
       "distractors": [
-        "りゆう・わけ",
-        "もくてき",
-        "おもい"
+        "doctor",
+        "dodgeball",
+        "dojo"
       ]
     },
     {
@@ -19037,9 +19037,9 @@
         "communication_verbs"
       ],
       "distractors": [
-        "もくてき・ねらい",
-        "りゆう",
-        "てつづき"
+        "atlas",
+        "attic",
+        "audience"
       ]
     },
     {
@@ -19066,9 +19066,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "きおく・おもいで",
-        "かんかく",
-        "けいけん"
+        "courage",
+        "court",
+        "craft"
       ]
     },
     {
@@ -19095,9 +19095,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "せんたく・えらびかた",
-        "けいかく",
-        "きめかた"
+        "volunteer",
+        "waiter",
+        "wall"
       ]
     },
     {
@@ -19124,9 +19124,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "きかい・チャンス",
-        "さいかい",
-        "どうき"
+        "inn",
+        "instrument",
+        "insurance"
       ]
     },
     {
@@ -19153,9 +19153,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "きかい・チャンス",
-        "じかん",
-        "うん"
+        "direction",
+        "discount",
+        "distance"
       ]
     },
     {
@@ -19182,9 +19182,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "もんだい・こんなん",
-        "しつもん",
-        "なやみ"
+        "geography",
+        "goal",
+        "government"
       ]
     },
     {
@@ -19211,9 +19211,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "かいけつさく・こたえ",
-        "けっか",
-        "ほうほう"
+        "dream",
+        "driver",
+        "drone"
       ]
     },
     {
@@ -19240,9 +19240,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "じょうたい・ようす",
-        "ルール",
-        "けいか"
+        "history",
+        "hue",
+        "idea"
       ]
     },
     {
@@ -19269,9 +19269,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "じょうきょう・ばあい",
-        "かんきょう",
-        "もんだい"
+        "ceiling",
+        "century",
+        "challenge"
       ]
     },
     {
@@ -19298,9 +19298,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "イベント・ぎょうじ",
-        "もよおし",
-        "しあい"
+        "blood",
+        "board game",
+        "boarding pass"
       ]
     },
     {
@@ -19327,9 +19327,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "かつどう・とりくみ",
-        "イベント",
-        "しごと"
+        "opinion",
+        "opportunity",
+        "origami"
       ]
     },
     {
@@ -19356,9 +19356,9 @@
         "shopping_and_money"
       ],
       "distractors": [
-        "じょうきょう",
-        "たき",
-        "スピード・はやさ"
+        "dentist",
+        "department store",
+        "departure"
       ]
     },
     {
@@ -19385,9 +19385,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "たき",
-        "かくとうぎ・ぶどう",
-        "バスタブ・おふろ"
+        "passport",
+        "pasta",
+        "pastime"
       ]
     },
     {
@@ -19414,9 +19414,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "ほうほう・やりかた",
-        "てじゅん",
-        "コツ"
+        "flu",
+        "flute",
+        "freedom"
       ]
     },
     {
@@ -19443,9 +19443,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "きもち・かんじ",
-        "ちり",
-        "ぶんか"
+        "literature",
+        "living room",
+        "luggage"
       ]
     },
     {
@@ -19472,9 +19472,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "セール・バーゲン",
-        "げいじゅつか・アーティスト",
-        "りょう・いちにんまえ"
+        "social studies",
+        "soil",
+        "solution"
       ]
     },
     {
@@ -19501,9 +19501,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "のりかえ",
-        "ダイニング・しょくどう",
-        "ぜんさい"
+        "freedom",
+        "fridge",
+        "garage"
       ]
     },
     {
@@ -19530,9 +19530,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "せきにん・やくわり",
-        "しごと",
-        "まかせ"
+        "pilot",
+        "plan",
+        "plant"
       ]
     },
     {
@@ -19559,9 +19559,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "かんけい・きずな",
-        "つながり",
-        "ゆうじょう"
+        "chance",
+        "change",
+        "checkout"
       ]
     },
     {
@@ -19589,9 +19589,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "よさ・りえき",
-        "もくてき",
-        "こうか"
+        "metro",
+        "microwave",
+        "mirror"
       ]
     },
     {
@@ -19618,9 +19618,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "ドッジボール",
-        "たな",
-        "せんたくき"
+        "destination",
+        "detail",
+        "diet"
       ]
     },
     {
@@ -19648,9 +19648,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "げんいん・りゆう",
-        "けっか",
-        "こうか"
+        "leader",
+        "lecture",
+        "level"
       ]
     },
     {
@@ -19677,9 +19677,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "りょう・かず",
-        "すうりょう",
-        "きん"
+        "rugby",
+        "rule",
+        "salad dressing"
       ]
     },
     {
@@ -19706,9 +19706,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "すうじ",
-        "かず",
-        "どうぐ"
+        "stage",
+        "stairs",
+        "stew"
       ]
     },
     {
@@ -19735,9 +19735,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "しぜん",
-        "ひふ",
-        "チャンピオン・ゆうしょうしゃ"
+        "reward",
+        "rink",
+        "rock"
       ]
     },
     {
@@ -19764,9 +19764,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "かたち・かたち",
-        "もよう",
-        "ぶんかく"
+        "event",
+        "example",
+        "exhibition"
       ]
     },
     {
@@ -19793,9 +19793,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "いろあい・こさ",
-        "トーン",
-        "いろみ"
+        "driver",
+        "drone",
+        "drum"
       ]
     },
     {
@@ -19822,9 +19822,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "せいき・ひゃくねん",
-        "めざましどけい",
-        "げいじゅつか・アーティスト"
+        "tsunami",
+        "type",
+        "typhoon"
       ]
     },
     {
@@ -19851,9 +19851,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "いけん",
-        "ビタミン",
-        "にわ・まわりのそとち"
+        "height",
+        "highway",
+        "history"
       ]
     },
     {
@@ -19880,9 +19880,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "バドミントン",
-        "ゆうき",
-        "りょうきん・うんちん"
+        "highway",
+        "history",
+        "hue"
       ]
     },
     {
@@ -19909,9 +19909,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "ざいりょう・そざい",
-        "おんがくか",
-        "りくじょうきょうぎ"
+        "fence",
+        "ferry",
+        "fever"
       ]
     },
     {
@@ -19938,9 +19938,9 @@
         "sports"
       ],
       "distractors": [
-        "チーム",
-        "グループ",
-        "クラブ"
+        "result",
+        "reward",
+        "rink"
       ]
     },
     {
@@ -19967,9 +19967,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "リーダー・せんとう",
-        "キャプテン",
-        "メンバー"
+        "police officer",
+        "pollution",
+        "porridge"
       ]
     },
     {
@@ -19996,9 +19996,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "メンバー・なかま",
-        "ゆうじん",
-        "クラスメート"
+        "government",
+        "guest",
+        "guide"
       ]
     },
     {
@@ -20025,9 +20025,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "パートナー・あいてやく",
-        "ともだち",
-        "チームメート"
+        "change",
+        "checkout",
+        "chef"
       ]
     },
     {
@@ -20054,9 +20054,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "きゃく・ゲスト",
-        "ほうもんしゃ",
-        "たいざいしゃ"
+        "match",
+        "material",
+        "mathematics"
       ]
     },
     {
@@ -20083,9 +20083,9 @@
         "school_subjects"
       ],
       "distractors": [
-        "かんきゃく・ちょうしゅ",
-        "けんぶつにん",
-        "ぼしゅう"
+        "table tennis",
+        "takeout",
+        "talent"
       ]
     },
     {
@@ -20112,9 +20112,9 @@
         "communication_verbs"
       ],
       "distractors": [
-        "スピーチ・はなし",
-        "はっぴょう",
-        "えんぜつ"
+        "failure",
+        "fare",
+        "farmer"
       ]
     },
     {
@@ -20141,9 +20141,9 @@
         "communication_verbs"
       ],
       "distractors": [
-        "プレゼン・はっぴょう",
-        "スピーチ",
-        "レポート"
+        "pilot",
+        "plan",
+        "plant"
       ]
     },
     {
@@ -20170,9 +20170,9 @@
         "communication_verbs"
       ],
       "distractors": [
-        "かいわ・はなしあい",
-        "もんどう",
-        "ぎろん"
+        "effect",
+        "effort",
+        "electrician"
       ]
     },
     {
@@ -20199,9 +20199,9 @@
         "communication_verbs"
       ],
       "distractors": [
-        "メッセージ・てがみ",
-        "れんらく",
-        "ひとこと"
+        "level",
+        "librarian",
+        "literature"
       ]
     },
     {
@@ -20228,9 +20228,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "ける",
-        "でる・でかける",
-        "しんじる"
+        "recall",
+        "recite",
+        "recommend"
       ]
     },
     {
@@ -20257,9 +20257,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "まとめる",
-        "じゅんびする",
-        "はいちする"
+        "collect",
+        "communicate",
+        "commute"
       ]
     },
     {
@@ -20286,9 +20286,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "たっせいする・できる",
-        "かんせいさせる",
-        "せいこうする"
+        "perform",
+        "persuade",
+        "pick up"
       ]
     },
     {
@@ -20315,9 +20315,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "さんかする・くわわる",
-        "みる",
-        "たすける"
+        "bake",
+        "bathe",
+        "begin"
       ]
     },
     {
@@ -20344,9 +20344,9 @@
         "communication_verbs"
       ],
       "distractors": [
-        "はなす・つたえる",
-        "はなしあう",
-        "れんらくする"
+        "include",
+        "inquire",
+        "introduce"
       ]
     },
     {
@@ -20373,9 +20373,9 @@
         "actions_and_verbs"
       ],
       "distractors": [
-        "はげます・ほめる",
-        "しじする",
-        "たのむ"
+        "saw",
+        "scrub",
+        "search"
       ]
     }
   ]

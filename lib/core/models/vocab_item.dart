@@ -139,7 +139,7 @@ class VocabItem extends Equatable {
   final String imageUrl; // Firebase Storage path
   final FsrsState fsrsState; // current learning state
   final List<String> tags; // ["eiken5", "A1", "food"]
-  /// 3 wrong Japanese translations used as distractors in 4-choice quiz mode.
+  /// 3 wrong English words (same POS, same grade) used as distractors in 4-choice cloze quiz mode.
   /// If empty, the battle screen falls back to generating distractors from the deck.
   final List<String> distractors;
 
