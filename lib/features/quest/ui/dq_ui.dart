@@ -424,6 +424,7 @@ class PhonicsLetterCard extends StatelessWidget {
   final String glyph;
   final String npcName;
   final String npcEmoji;
+  final String? npcImage;
   final String? teachJa;
   final VoidCallback? onReplay;
   const PhonicsLetterCard({
@@ -431,6 +432,7 @@ class PhonicsLetterCard extends StatelessWidget {
     required this.glyph,
     required this.npcName,
     required this.npcEmoji,
+    this.npcImage,
     this.teachJa,
     this.onReplay,
   });
@@ -439,7 +441,7 @@ class PhonicsLetterCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        DqPortrait(emoji: npcEmoji, size: 64),
+        DqPortrait(imageAsset: npcImage, emoji: npcEmoji, size: 64),
         const SizedBox(height: 14),
         // Giant glyph in a gold-framed plate.
         Container(
@@ -475,6 +477,7 @@ class BlendWordCard extends StatelessWidget {
   final String word;
   final String npcName;
   final String npcEmoji;
+  final String? npcImage;
   final String? teachJa;
 
   /// Index of the letter currently highlighted (-1 = none / whole word). Drives
@@ -487,6 +490,7 @@ class BlendWordCard extends StatelessWidget {
     required this.word,
     required this.npcName,
     required this.npcEmoji,
+    this.npcImage,
     this.teachJa,
     this.activeLetter = -1,
     this.onReplay,
@@ -496,7 +500,7 @@ class BlendWordCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        DqPortrait(emoji: npcEmoji, size: 60),
+        DqPortrait(imageAsset: npcImage, emoji: npcEmoji, size: 60),
         const SizedBox(height: 14),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
