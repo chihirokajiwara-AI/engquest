@@ -23,6 +23,37 @@ class QuestOption {
   const QuestOption({required this.label, this.audioAsset, this.isCorrect = false});
 }
 
+/// The text a quiz line/option is SPOKEN as: stage directions in (parens) are
+/// dropped, the cloze blank `___` is kept as a marker (the audio renders it as a
+/// short gap so the question can be read without giving the answer away).
+String quizSpeakableText(String text) =>
+    text.replaceAll(RegExp(r'\([^)]*\)'), ' ').replaceAll(RegExp(r'\s+'), ' ').trim();
+
+/// Deterministic asset slug under `assets/audio/quiz/` for a quiz line or option,
+/// shared by the runtime (to locate the clip) and the `tool/dump_quiz_audio.dart`
+/// manifest (to name it). Returns null for non-speakable lines — empty, or a
+/// stage-direction-only beat like the silent slime's `... ...` — so they stay
+/// silent instead of voicing a description.
+String? quizAudioKey(String text) {
+  final spoken = quizSpeakableText(text);
+  if (spoken.isEmpty || spoken.startsWith('...') || spoken.startsWith('…')) {
+    return null;
+  }
+  final slug = spoken
+      .replaceAll('___', ' ')
+      .toLowerCase()
+      .replaceAll(RegExp(r'[^a-z0-9]+'), '_')
+      .replaceAll(RegExp(r'^_+|_+$'), '');
+  return slug.isEmpty ? null : slug;
+}
+
+/// Full asset key (under `assets/`) for a quiz line/option's clip, or null when
+/// the text is non-speakable.
+String? quizAudioAsset(String text) {
+  final k = quizAudioKey(text);
+  return k == null ? null : 'audio/quiz/$k.mp3';
+}
+
 /// A single step in a town's learning sequence. The 英検5級 stage layers four
 /// teaching kinds (`TeachSound`, `BlendWord`, `TeachWord`, `Phrase`) BEFORE the
 /// existing grammar quizzes; every other town is built purely from `QuestEncounter`
@@ -225,12 +256,6 @@ class QuestEncounter extends QuestStep {
   @override
   final String onCorrect;
 
-  /// Optional asset key for the spoken English [npcLine] (so the child HEARS the
-  /// quiz, not just reads it). ONLY set for 応答型 (complete-question) encounters
-  /// — never for cloze (穴埋め) lines, where voicing the filled sentence would
-  /// give away the blank.
-  final String? lineAudio;
-
   const QuestEncounter({
     required this.npcName,
     required this.npcEmoji,
@@ -239,18 +264,20 @@ class QuestEncounter extends QuestStep {
     required this.choices,
     required this.correctIndex,
     required this.onCorrect,
-    this.lineAudio,
   });
 
   @override
   bool get penalizeWrong => true;
 
   // QuestStep contract: a Quiz teaches nothing up-front; it carries its line in
-  // [npcLine] (the screen renders that directly), so these are null/derived.
+  // [npcLine] (the screen renders that directly). The English line is read aloud
+  // (auto + replay) via a clip derived from the line text — cloze blanks render
+  // as a gap, so the question never gives away the answer; the silent slime line
+  // (`... ...`) resolves to null and stays quiet.
   @override
   String? get teachJa => npcLineJa;
   @override
-  String? get autoPlayAudio => lineAudio;
+  String? get autoPlayAudio => quizAudioAsset(npcLine);
   @override
   String? get practicePromptJa => null;
 
@@ -529,7 +556,6 @@ const List<QuestTown> kQuestTowns = [
         npcEmoji: '🧑‍🌾',
         npcLine: 'How are you?',
         npcLineJa: 'お元気（げんき）ですか？',
-        lineAudio: 'audio/phonics/line_how_are_you.mp3',
         choices: ["I'm a village.", 'I am Tuesday.', "I'm fine, thank you.", 'You are fine.'],
         correctIndex: 2,
         onCorrect: 'Good! Welcome to our village, traveller.',
@@ -540,7 +566,6 @@ const List<QuestTown> kQuestTowns = [
         npcEmoji: '👧',
         npcLine: "What's your name?",
         npcLineJa: 'お名前（なまえ）は、なんですか？',
-        lineAudio: 'audio/phonics/line_whats_your_name.mp3',
         choices: ['My name is Leo.', 'Your name is Leo.', 'I name is Leo.', "It's three o'clock."],
         correctIndex: 0,
         onCorrect: 'Leo! Nice to meet you, Leo. Sura likes you too!',
@@ -571,7 +596,6 @@ const List<QuestTown> kQuestTowns = [
         npcEmoji: '👵',
         npcLine: '(pointing far away) What is that on the hill?',
         npcLineJa: '（遠（とお）くを指（ゆび）さして）あの丘（おか）の上（うえ）にあるのは、何（なん）ですか？',
-        lineAudio: 'audio/phonics/line_what_is_that.mp3',
         choices: ['This is a castle.', 'That is a castle.', 'That is castle.', 'These is a castle.'],
         correctIndex: 1,
         onCorrect:

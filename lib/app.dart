@@ -265,6 +265,12 @@ Widget _previewFor(String? name) {
         previewEncounterIndex:
             kQuestTowns[0].encounters.indexWhere((s) => s is QuestEncounter && s.autoPlayAudio != null),
       );
+    case 'quest5c': // 英検5級 — a cloze (穴埋め) quiz: question 🔊 + self-voicing options
+      return QuestScreen(
+        town: kQuestTowns[0],
+        previewEncounterIndex:
+            kQuestTowns[0].encounters.indexWhere((s) => s is QuestEncounter && s.npcLine.contains('___')),
+      );
     case 'quest4':
       return QuestScreen(town: kQuestTowns[1], previewEncounterIndex: 9);
     case 'quest3':

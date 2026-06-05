@@ -343,12 +343,16 @@ class _QuestScreenState extends State<QuestScreen> {
         ],
       );
 
-  /// Render the option tiles. Teach kinds (any option carrying audio) render as
-  /// 🔊 [AudioOptionButton]s that play the option's clip before evaluating, and
-  /// never flash red. Quiz steps keep the plain [DqChoice] with red-on-wrong.
+  /// Render the option tiles. EVERY step (phonics teach AND grammar quiz) uses
+  /// the 🔊 [AudioOptionButton]: its leading 🔊 auditions the option's clip
+  /// without committing, the body taps to choose. Phonics options carry an
+  /// explicit `audioAsset`; quiz options derive their clip from the label
+  /// (`audio/quiz/<slug>.mp3`). Quiz steps still flash red on a wrong commit
+  /// (penalizeWrong); teach steps never do.
   List<Widget> _options(QuestStep step) {
     final opts = step.options;
     return List.generate(opts.length, (i) {
+      final o = opts[i];
       final correct = i == step.correctIndex;
       DqChoiceState st = DqChoiceState.normal;
       if (_revealed && correct) {
@@ -356,20 +360,12 @@ class _QuestScreenState extends State<QuestScreen> {
       } else if (step.penalizeWrong && _picked == i && !correct) {
         st = DqChoiceState.wrong;
       }
-      if (!step.penalizeWrong) {
-        // Audio-option (phonics/blend/word/phrase): play, then evaluate.
-        final o = opts[i];
-        return AudioOptionButton(
-          label: o.label,
-          state: st,
-          onAudio: _revealed ? null : () => _cue.play(o.audioAsset),
-          onChoose: _revealed ? null : () => _choose(i),
-        );
-      }
-      return DqChoice(
-        label: opts[i].label,
+      final audioKey = o.audioAsset ?? quizAudioAsset(o.label);
+      return AudioOptionButton(
+        label: o.label,
         state: st,
-        onTap: _revealed ? null : () => _choose(i),
+        onAudio: audioKey == null ? null : () => _cue.play(audioKey),
+        onChoose: _revealed ? null : () => _choose(i),
       );
     });
   }

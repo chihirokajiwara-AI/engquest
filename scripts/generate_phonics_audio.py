@@ -70,17 +70,6 @@ PHRASES = {
     "thank_you": "Thank you.",
 }
 
-# Phase C grammar-arc NPC lines (line_*.mp3) — so the child HEARS the English of
-# the quiz, not just reads it. ONLY 応答型 (complete questions): voicing these is
-# never a spoiler because the answer is the child's reply, not a blank in the
-# line. Cloze (穴埋め) encounters are deliberately NOT here — playing the filled
-# sentence would give away the blank; they get post-reveal model audio instead.
-SENTENCES = {
-    "how_are_you": "How are you?",
-    "whats_your_name": "What's your name?",
-    "what_is_that": "What is that on the hill?",
-}
-
 # Letter -> a syllable Kokoro pronounces as the SOUND, not the letter-name, for
 # the slow segmented sweep. (These are deliberate sound exemplars; the pure
 # isolated phonemes themselves are the founder's espeak-ng/recorded job.)
@@ -141,7 +130,6 @@ def write_mp3(audio, out_file):
 def planned():
     items = [(f"blend_{k}.mp3", "blend", k, v) for k, v in BLENDS.items()]
     items += [(f"phrase_{k}.mp3", "phrase", v, None) for k, v in PHRASES.items()]
-    items += [(f"line_{k}.mp3", "phrase", v, None) for k, v in SENTENCES.items()]
     return items
 
 

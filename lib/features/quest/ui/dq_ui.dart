@@ -580,6 +580,9 @@ class AudioOptionButton extends StatelessWidget {
       border = const Color(0xFFE89090);
       fill = const Color(0xFF3A1414).withAlpha(235);
     }
+    // Body tap = choose (and play, so the child hears their pick). The leading
+    // 🔊 is its OWN tap target that only auditions the clip — so a learner can
+    // hear each option before committing (no accidental wrong-answer on a listen).
     return Padding(
       padding: const EdgeInsets.only(bottom: 9),
       child: GestureDetector(
@@ -599,8 +602,14 @@ class AudioOptionButton extends StatelessWidget {
           ),
           child: Row(
             children: [
-              const Text('🔊', style: TextStyle(fontSize: 22)),
-              const SizedBox(width: 12),
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: onAudio,
+                child: const Padding(
+                  padding: EdgeInsets.only(right: 12),
+                  child: Text('🔊', style: TextStyle(fontSize: 22)),
+                ),
+              ),
               Expanded(
                   child: Text(label,
                       style: dqText(size: 20, w: FontWeight.w700))),

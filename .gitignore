@@ -97,3 +97,4 @@ logs/
 flutter_01.log
 archive/
 assets/audio/phonics/*.mp3
+assets/audio/quiz/*.mp3
