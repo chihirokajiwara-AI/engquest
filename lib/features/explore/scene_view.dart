@@ -20,7 +20,8 @@ import '../quest/ui/dq_ui.dart';
 import 'hotspot.dart';
 import 'nazo_screen.dart';
 
-export 'hotspot.dart' show kTown5Scene, SceneDef;
+export 'hotspot.dart'
+    show kTown5Scene, kTown4Scene, kScenesByGrade, sceneForGrade, SceneDef;
 
 class SceneView extends StatefulWidget {
   final SceneDef scene;

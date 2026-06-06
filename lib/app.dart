@@ -311,6 +311,9 @@ Widget _previewFor(String? name) {
     case 'explore':
       // Wave 1 — Layton-style SceneView for the 英検5級 town.
       return SceneView(scene: kTown5Scene, eikenLevel: '5');
+    case 'explore4':
+      // Wave 2 — Layton-style SceneView for the 英検4級 harbour town.
+      return SceneView(scene: kTown4Scene, eikenLevel: '4');
     case 'quest':
       return QuestScreen(town: kQuestTowns.first);
     case 'quest5t': // 英検5級 Phase A — first TeachSound (/s/) step

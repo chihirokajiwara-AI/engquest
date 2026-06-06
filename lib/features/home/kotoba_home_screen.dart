@@ -139,19 +139,21 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
 
   /// Navigate to the painted scene (primary CTA).
   ///
-  /// Currently only 英検5級 has a SceneView (kTown5Scene).  For higher levels
-  /// we fall back to QuestMapScreen (level-select) — honest, and consistent
-  /// with the current architecture where only the 5級 town has Layton art.
+  /// 英検5級 and 4級 have painted SceneViews (see [kScenesByGrade]).  Grades
+  /// without a scene yet fall back to QuestMapScreen (level-select) — honest,
+  /// and consistent with the current build-out where painted districts are
+  /// shipping grade-by-grade.
   void _goToScene() {
-    if (_eikenLevel == '5') {
+    final scene = sceneForGrade(_eikenLevel);
+    if (scene != null) {
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (_) => SceneView(scene: kTown5Scene, eikenLevel: '5'),
+          builder: (_) => SceneView(scene: scene, eikenLevel: _eikenLevel),
         ),
       );
     } else {
-      // Higher-level towns don't have a SceneView yet — send to the map where
-      // the child can pick their town.  Wave 3 will add SceneViews per grade.
+      // Grades without a painted district yet — send to the map where the child
+      // can pick their town. Further districts are shipping grade-by-grade.
       _goToQuestMap();
     }
   }
