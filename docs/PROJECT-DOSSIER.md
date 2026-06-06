@@ -20,8 +20,10 @@ docs/governance/QUALITY-CONSTITUTION.md). Repo: `~/dev/engquest-flutter` (git, b
   is diegetic & gentle (streak = a detective's case-log; FSRS review = "a new ナゾ at the 館").
 - **Market (verified):** ~4.5M 英検 applicants/yr; 小学生 ~376k (growing); 517 universities
   use 英検 in 入試; 90% of external-test 入試 students choose 英検; 3×/yr cadence + S-CBT.
-- **Pricing:** target ¥1,480/mo (strategy doc). ⚠️ DISCREPANCY: the aken flavor code comment
-  still says ¥999/month — needs reconciling to ¥1,480 (a tracked cleanup).
+- **Pricing:** **¥999/mo at launch** (CEO decision 2026-06-06: ¥1,480 considered but too
+  high for launch). RESOLVED & consistent — code (flavor_config), billing_service, and the
+  live Terms of Service all say ¥999; the Stripe product price (env STRIPE_PRICE_ID) must be
+  set to ¥999 at deploy. (Earlier strategy docs say ¥1,480 — superseded by this line.)
 - **Story canon:** docs/design/STORY-BIBLE-KOTOBA-TANTEI.json — サイレント = アイラ (the first
   storyteller, きみ's mirror, lost her voice among everyone's); restoration not conquest;
   the 7 声の石 = fragments of the first word; the 準1級 reading-inference items ARE the
@@ -159,7 +161,7 @@ pre-launch); 17-screen smoke-test backlog; distractor *contextual* quality polis
   APPI-2026) — simple to build, but a hard LAUNCH BLOCKER. Deferred to pre-launch by CEO.
 - 🟠 backend subscriptions are an in-memory Map (not a real DB) — must persist before billing
   real customers. RevenueCat (mobile) + Stripe (web) split.
-- 🟠 17 screens lack widget smoke tests (R3 backlog); distractor contextual quality; ¥999↔¥1,480
+- 🟠 17 screens lack widget smoke tests (R3 backlog); distractor contextual quality
   flavor/strategy mismatch; 準2級プラス missing from exam config.
 - 🟠 concurrent CODE agents collide on shared files → use new-files-only scoping or git worktrees.
 
@@ -176,7 +178,7 @@ constitution; (b) the sole KPI (a kid passes 英検); (c) the premium-calm Layto
 let retention become a guilt treadmill); (d) child-safety/COPPA + Japan minor law; (e)
 solo-AI-dev sustainability (content-rich single-player, NOT live-ops). Verify by MEASUREMENT
 (run the demo, the gate, read the screenshots), never by claim. Open questions worth a
-senior call: the ¥999↔¥1,480 reconciliation; the per-word-FSRS + mock + 合格率 efficacy spine;
+senior call: the per-word-FSRS + mock + 合格率 efficacy spine;
 the item-volume scale-up plan; the Azure-vs-self-hosted 二次 timing.
 
 ## 11. HOW TO VERIFY (don't trust this doc — measure)
