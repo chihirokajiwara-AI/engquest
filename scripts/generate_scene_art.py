@@ -56,6 +56,31 @@ JOBS = [
      "a kind elderly town gatekeeper, simple cap and coat, lantern, smiling warmly, full "
      "warm colour restored, hopeful, single character, simple soft background", 832, 1216,
      DISTRICT_SEED + 33),
+
+    # ── 英検4級 district — 風（かぜ）の港町（みなとまち） ──────────────────────
+    # The second コトバ探偵 district: a windy harbour town where the words for
+    # places, directions and everyday actions were carried off by the サイレント.
+    ("town4_harbor.png",
+     "a quiet european harbour town at soft overcast morning, stone quay, moored sailing "
+     "boats with furled sails, gulls, weathered warehouses, a tall lighthouse, hanging nets, "
+     "gentle sea haze, NO PEOPLE, empty waterfront, wide establishing scene",
+     1216, 832, DISTRICT_SEED + 1000),
+    ("npc_fisher_grey.png",
+     "a gentle young harbour fisherwoman in a knitted cap and oilskin coat, mending a net, "
+     "desaturated muted greyscale, colour drained away, sorrowful quiet, single character, "
+     "simple soft harbour background", 832, 1216, DISTRICT_SEED + 1011),
+    ("npc_fisher_color.png",
+     "a gentle young harbour fisherwoman in a knitted cap and oilskin coat, mending a net, "
+     "smiling warmly, full warm colour restored, hopeful, single character, simple soft "
+     "harbour background", 832, 1216, DISTRICT_SEED + 1011),
+    ("npc_lampkeeper_grey.png",
+     "a kind old lighthouse keeper in a heavy coat holding a brass lantern, desaturated "
+     "muted greyscale, colour drained away, sorrowful quiet, single character, simple soft "
+     "lighthouse background", 832, 1216, DISTRICT_SEED + 1022),
+    ("npc_lampkeeper_color.png",
+     "a kind old lighthouse keeper in a heavy coat holding a glowing brass lantern, smiling "
+     "warmly, full warm colour restored, hopeful, single character, simple soft lighthouse "
+     "background", 832, 1216, DISTRICT_SEED + 1022),
 ]
 
 
