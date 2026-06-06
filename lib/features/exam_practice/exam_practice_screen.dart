@@ -21,6 +21,7 @@ import 'package:flutter/material.dart';
 import '../quest/ui/dq_ui.dart';
 import 'conversation_practice_screen.dart';
 import 'eiken_exam_config.dart';
+import 'mock_exam_screen.dart';
 import 'listening_practice_screen.dart';
 import 'pass/cse_model.dart';
 import 'pass/pass_meter_screen.dart';
@@ -145,14 +146,13 @@ class _ExamPracticeScreenState extends State<ExamPracticeScreen> {
             padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
             child: DqButton(
               label: 'フル模試を開始  /  Start Full Mock',
-              onTap: () {
-                // TODO: Full mock test mode (all sections sequential with timer)
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('フル模試モードは準備中です'),
-                  ),
-                );
-              },
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) =>
+                      MockExamScreen(eikenGrade: widget.eikenGrade),
+                ),
+              ),
             ),
           ),
         ],

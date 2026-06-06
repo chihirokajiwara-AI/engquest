@@ -13,6 +13,7 @@ import 'package:engquest/features/quest/prologue_screen.dart';
 import 'package:engquest/features/quest/battle/quest_town_battle_flow.dart';
 import 'package:engquest/features/quest/quest_data.dart';
 import 'package:engquest/features/exam_practice/exam_practice_screen.dart';
+import 'package:engquest/features/exam_practice/mock_exam_screen.dart';
 import 'package:engquest/features/exam_practice/listening_practice_screen.dart';
 import 'package:engquest/features/exam_practice/writing_practice_screen.dart';
 import 'package:engquest/features/exam_practice/eiken_exam_config.dart';
@@ -314,6 +315,9 @@ Widget _previewFor(String? name) {
     case 'explore4':
       // Wave 2 — Layton-style SceneView for the 英検4級 harbour town.
       return SceneView(scene: kTown4Scene, eikenLevel: '4');
+    case 'mock':
+      // Playable timed フル模試 (seed fixed for a reproducible preview).
+      return const MockExamScreen(eikenGrade: '5', seed: 1);
     case 'quest':
       return QuestScreen(town: kQuestTowns.first);
     case 'quest5t': // 英検5級 Phase A — first TeachSound (/s/) step
