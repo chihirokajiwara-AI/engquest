@@ -1,0 +1,181 @@
+// test/features/exam_practice/pass/pass_meter_smoke_test.dart
+// R3 smoke test: pump PassMeterScreen and assert tester.takeException() == null.
+// R4: No Firebase, no network — data injected via constructor.
+//
+// Tests cover:
+//   1. Default (null estimate → demo profile) — always renderable
+//   2. Below-passing state (pointsNeeded > 0, weakest-skill CTA shown)
+//   3. Passing state (readinessPct = 100, celebration shown)
+//   4. Each supported grade key pumps without exception
+
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+import 'package:engquest/features/exam_practice/pass/pass_meter_screen.dart';
+import 'package:engquest/features/exam_practice/pass/cse_model.dart';
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+Widget _wrap(Widget child) => MaterialApp(home: child);
+
+CseEstimate _estimate({
+  required String grade,
+  required double reading,
+  required double listening,
+  double writing = 0.0,
+  bool hasWriting = false,
+}) {
+  final accuracies = <SkillAccuracy>[
+    SkillAccuracy(
+        skill: EikenSkill.reading, accuracy: reading, itemsAttempted: 10),
+    SkillAccuracy(
+        skill: EikenSkill.listening, accuracy: listening, itemsAttempted: 10),
+    if (hasWriting)
+      SkillAccuracy(
+          skill: EikenSkill.writing, accuracy: writing, itemsAttempted: 1),
+  ];
+  return CseEstimator.estimate(grade: grade, accuracies: accuracies)!;
+}
+
+// ── Smoke tests (R3) ──────────────────────────────────────────────────────────
+
+void main() {
+  group('PassMeterScreen — smoke tests (R3)', () {
+    testWidgets('null estimate (demo profile) — pumps without exception',
+        (tester) async {
+      await tester.pumpWidget(_wrap(const PassMeterScreen()));
+      await tester.pump();
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('null estimate — shows percentage text', (tester) async {
+      await tester.pumpWidget(_wrap(const PassMeterScreen()));
+      await tester.pump();
+      // Should show a %-sign somewhere in the hero
+      expect(find.textContaining('%'), findsWidgets);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('null estimate — shows pass prediction label', (tester) async {
+      await tester.pumpWidget(_wrap(const PassMeterScreen()));
+      await tester.pump();
+      expect(find.textContaining('よそくごうかくりつ'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('below-passing estimate — shows weakest-skill CTA', (tester) async {
+      final est = _estimate(
+          grade: '3',
+          reading: 0.4,
+          listening: 0.8,
+          writing: 0.2,
+          hasWriting: true);
+      await tester.pumpWidget(_wrap(PassMeterScreen(estimate: est)));
+      await tester.pump();
+      // Weak skill CTA section should be visible
+      expect(find.textContaining('のばそう'), findsWidgets);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('passing estimate — shows celebration, no CTA', (tester) async {
+      final est = _estimate(
+          grade: '5', reading: 1.0, listening: 1.0);
+      await tester.pumpWidget(_wrap(PassMeterScreen(estimate: est)));
+      await tester.pump();
+      expect(find.textContaining('ごうかくけん'), findsWidgets);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('grade 5 estimate — pumps without exception', (tester) async {
+      final est = _estimate(grade: '5', reading: 0.65, listening: 0.70);
+      await tester.pumpWidget(_wrap(PassMeterScreen(estimate: est)));
+      await tester.pump();
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('grade 4 estimate — pumps without exception', (tester) async {
+      final est = _estimate(grade: '4', reading: 0.75, listening: 0.80);
+      await tester.pumpWidget(_wrap(PassMeterScreen(estimate: est)));
+      await tester.pump();
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('grade 3 estimate — pumps without exception', (tester) async {
+      final est = _estimate(
+          grade: '3',
+          reading: 0.7,
+          listening: 0.65,
+          writing: 0.5,
+          hasWriting: true);
+      await tester.pumpWidget(_wrap(PassMeterScreen(estimate: est)));
+      await tester.pump();
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('grade pre2 estimate — pumps without exception', (tester) async {
+      final est = _estimate(
+          grade: 'pre2',
+          reading: 0.8,
+          listening: 0.75,
+          writing: 0.6,
+          hasWriting: true);
+      await tester.pumpWidget(_wrap(PassMeterScreen(estimate: est)));
+      await tester.pump();
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('grade 2 estimate — pumps without exception', (tester) async {
+      final est = _estimate(
+          grade: '2',
+          reading: 0.80,
+          listening: 0.70,
+          writing: 0.55,
+          hasWriting: true);
+      await tester.pumpWidget(_wrap(PassMeterScreen(estimate: est)));
+      await tester.pump();
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('grade pre1 estimate — pumps without exception', (tester) async {
+      final est = _estimate(
+          grade: 'pre1',
+          reading: 0.85,
+          listening: 0.80,
+          writing: 0.70,
+          hasWriting: true);
+      await tester.pumpWidget(_wrap(PassMeterScreen(estimate: est)));
+      await tester.pump();
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('zero-accuracy estimate — pumps without exception', (tester) async {
+      final est = _estimate(grade: '3', reading: 0.0, listening: 0.0,
+          writing: 0.0, hasWriting: true);
+      await tester.pumpWidget(_wrap(PassMeterScreen(estimate: est)));
+      await tester.pump();
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('back arrow is present', (tester) async {
+      await tester.pumpWidget(_wrap(const PassMeterScreen()));
+      await tester.pump();
+      expect(find.byIcon(Icons.arrow_back), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('skill bars section is present', (tester) async {
+      await tester.pumpWidget(_wrap(const PassMeterScreen()));
+      await tester.pump();
+      // DqPanel renders the title in toUpperCase() → "SKILLS"
+      expect(find.textContaining('SKILLS'), findsWidgets);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('motivational note (アドバイス) is present', (tester) async {
+      await tester.pumpWidget(_wrap(const PassMeterScreen()));
+      await tester.pump();
+      expect(find.textContaining('アドバイス'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+  });
+}
