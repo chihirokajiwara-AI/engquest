@@ -22,6 +22,7 @@ import 'package:engquest/features/home/daily_home_screen.dart';
 import 'package:engquest/core/storage/preferences_service.dart';
 import 'package:engquest/features/quest/ui/dq_ui.dart';
 import 'package:engquest/features/explore/scene_view.dart';
+import 'package:engquest/features/home/kotoba_home_screen.dart';
 import 'package:engquest/features/exam_practice/pass/pass_meter_screen.dart';
 import 'package:engquest/features/speaking/speaking_consent_notice.dart';
 import 'package:engquest/features/speaking/speaking_screen.dart';
@@ -440,6 +441,8 @@ Widget _previewFor(String? name) {
           description: 'Preview',
         ),
       );
+    case 'kotobahome':
+      return const KotobaHomeScreen();
     case 'passmeter':
       return const PassMeterScreen();
     case 'speaking':
@@ -550,15 +553,14 @@ class _AppEntryPointState extends State<_AppEntryPoint> {
     }
     if (_onboardingComplete) {
       // First time into the adventure: the opening PROLOGUE plays once, then the
-      // quest map. A child taps はじめる to PLAY (and to be pulled into the story),
-      // NOT to read a status hub. (DailyHomeScreen stays a retention hub for
-      // later, reachable separately.)
+      // child LANDS on the コトバ探偵 daily-return home (streak case-log + 今日のナゾ
+      // from FSRS-due → into the painted scene). This is the retention spine + the
+      // fix for the buried-soul seam (Opus review 2026-06-06): the painted world is
+      // the landing, not a level-select menu. The map stays reachable from the home.
       if (!_prologueSeen) {
         return PrologueScreen(onDone: _handlePrologueDone);
       }
-      // THE CRITICAL WIRE: pass the placement result to the quest map so the
-      // child starts at their diagnosed level, not always 5級.
-      return QuestMapScreen(startLevel: OnboardingStorage.startEikenLevel);
+      return const KotobaHomeScreen();
     }
     return OnboardingFlow(onComplete: _handleOnboardingComplete);
   }
