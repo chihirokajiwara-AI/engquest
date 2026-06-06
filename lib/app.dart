@@ -315,6 +315,9 @@ Widget _previewFor(String? name) {
     case 'explore4':
       // Wave 2 — Layton-style SceneView for the 英検4級 harbour town.
       return SceneView(scene: kTown4Scene, eikenLevel: '4');
+    case 'explore3':
+      // Wave 2 — Layton-style SceneView for the 英検3級 academy town.
+      return SceneView(scene: kTown3Scene, eikenLevel: '3');
     case 'mock':
       // Playable timed フル模試 (seed fixed for a reproducible preview).
       return const MockExamScreen(eikenGrade: '5', seed: 1);

@@ -265,6 +265,81 @@ final SceneDef kTown4Scene = SceneDef(
 /// Helper: look up encounter [i] from kQuestTowns[1] (英検4級) at const-eval time.
 QuestStep _kStep4(int i) => kQuestTowns[1].encounters[i];
 
+// ── 英検3級 scene — 学（まな）びの都（みやこ） ────────────────────────────────
+
+/// Wave 2 vertical-slice scene: the third コトバ探偵 district.
+///
+/// 学びの都 is a scholarly old university quarter whose great library lost its
+/// words — the present perfect that holds the past into now (for/since, yet).
+/// NPC ナゾ steps are REFERENCED from kQuestTowns[2].encounters, so the exam
+/// content is byte-identical; framingJa only adds in-world flavour.
+///
+/// Art: town3_academy.png + the librarian/scholar grey→colour pairs. スラ the
+/// companion reuses the slime art (she has travelled here from 5級→4級→3級).
+final SceneDef kTown3Scene = SceneDef(
+  backgroundAsset: 'assets/art/scenes_layton/town3_academy.png',
+  parallaxLayers: const [],
+  titleJa: '学（まな）びの都（みやこ）',
+  hotspots: [
+    // ── NPC 1: としょかんいん — 言葉（ことば）を まもる 司書 / 現在完了 for ──────
+    // Encounter index 3: 「I have worked in this library ___ ten years…」(for).
+    Hotspot.npc(
+      pos: const Alignment(-0.48, -0.05),
+      size: 0.19,
+      step: _kStep3(3),
+      clueLineJa: '「この としょかんで、わたしは ずっと はたらいてきた。'
+          'ことばが しんでも、わたしだけは のこす。」',
+      framingJa: '学（まな）びの都（みやこ）の 大（だい）としょかん。'
+          'たなは からっぽ、ほんの ことばが きえている。\n'
+          '司書（ししょ）は「いままで ずっと」を かたる ことば — '
+          '現在完了（げんざいかんりょう）の for — を まもっている。\n'
+          '「I have worked in this library ___ ten years.」— どの ことばが はいる？',
+      npcGreyAsset: 'assets/art/scenes_layton/npc_librarian_grey.png',
+      npcColorAsset: 'assets/art/scenes_layton/npc_librarian_color.png',
+    ),
+    // ── NPC 2: がくせい — まだ よみおえていない 学生 / 現在完了 yet ────────────
+    // Encounter index 4: 「I have to return this book, but I haven't finished it ___.」(yet)
+    Hotspot.npc(
+      pos: const Alignment(0.52, 0.10),
+      size: 0.17,
+      step: _kStep3(4),
+      clueLineJa: '「この ほんを かえさなきゃ。でも… まだ よみおわっていないんだ。」',
+      framingJa: '中庭（なかにわ）の ベンチ。学生（がくせい）が ほんを かかえて'
+          'こまっている。\n'
+          '「まだ〜していない」を いう ことば — 現在完了の yet — が でてこない。\n'
+          '「I haven\'t finished it ___.」— 否定（ひてい）の文（ぶん）に あう ことばは？',
+      npcGreyAsset: 'assets/art/scenes_layton/npc_scholar_grey.png',
+      npcColorAsset: 'assets/art/scenes_layton/npc_scholar_color.png',
+    ),
+    // ── NPC 3: スラ — 都（みやこ）で 再会（さいかい）した なかま / 過去形 ────────
+    // Encounter index 0: スラ reunion — 「Where did you sleep last night?」
+    Hotspot.npc(
+      pos: const Alignment(0.02, 0.40),
+      size: 0.15,
+      step: _kStep3(0),
+      clueLineJa: 'スラ：「やっと 都（みやこ）に ついた！ ぼく、ひとばんじゅう '
+          'ことばの れんしゅうを したんだ。きみは どこで ねた？」',
+      framingJa: 'スラは 風（かぜ）の街（まち）から きみを おいかけて、'
+          'この 都（みやこ）まで きた。\n'
+          'いまでは「きのうの こと」を じぶんから 話（はな）せる。'
+          'いちほ うしろの なかまが、すこし 大（おお）きくなった。',
+      npcGreyAsset: 'assets/art/scenes_layton/npc_slime_grey.png',
+      npcColorAsset: 'assets/art/scenes_layton/npc_slime_color.png',
+    ),
+    // ── Coin: hidden among the library's high shelves ───────────────────────
+    Hotspot.coin(
+      pos: const Alignment(-0.78, -0.48),
+      size: 0.11,
+      coinValue: 1,
+      clueLineJa: 'スラ：「…ぷる！ たかい たなの うえで、なにかが ひかってる。'
+          'あんなところ、どうやって とるの…？」',
+    ),
+  ],
+);
+
+/// Helper: look up encounter [i] from kQuestTowns[2] (英検3級) at const-eval time.
+QuestStep _kStep3(int i) => kQuestTowns[2].encounters[i];
+
 // ── Scene registry ──────────────────────────────────────────────────────────
 
 /// Painted コトバ探偵 scenes keyed by 英検 grade. Grades without a scene yet are
@@ -272,6 +347,7 @@ QuestStep _kStep4(int i) => kQuestTowns[1].encounters[i];
 final Map<String, SceneDef> kScenesByGrade = {
   '5': kTown5Scene,
   '4': kTown4Scene,
+  '3': kTown3Scene,
 };
 
 /// Returns the painted scene for [grade], or null when that grade has no scene

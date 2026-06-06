@@ -21,7 +21,13 @@ import 'hotspot.dart';
 import 'nazo_screen.dart';
 
 export 'hotspot.dart'
-    show kTown5Scene, kTown4Scene, kScenesByGrade, sceneForGrade, SceneDef;
+    show
+        kTown5Scene,
+        kTown4Scene,
+        kTown3Scene,
+        kScenesByGrade,
+        sceneForGrade,
+        SceneDef;
 
 class SceneView extends StatefulWidget {
   final SceneDef scene;

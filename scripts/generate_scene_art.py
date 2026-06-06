@@ -81,6 +81,32 @@ JOBS = [
      "a kind old lighthouse keeper in a heavy coat holding a glowing brass lantern, smiling "
      "warmly, full warm colour restored, hopeful, single character, simple soft lighthouse "
      "background", 832, 1216, DISTRICT_SEED + 1022),
+
+    # ── 英検3級 district — 学（まな）びの都（みやこ） ──────────────────────────
+    # The third コトバ探偵 district: a scholarly old university quarter where the
+    # words of study and travel — past/future, comparison, the infinitive — were
+    # carried off, leaving the great library silent.
+    ("town3_academy.png",
+     "a quiet european old university quarter at soft golden afternoon, a grand stone library "
+     "with tall arched windows, a clocktower spire, ivy on weathered walls, stone staircases, "
+     "lecture halls, scattered open books, gentle haze, NO PEOPLE, empty courtyard, wide "
+     "establishing scene", 1216, 832, DISTRICT_SEED + 2000),
+    ("npc_librarian_grey.png",
+     "a gentle middle-aged librarian in a long cardigan holding a stack of books, round "
+     "spectacles, desaturated muted greyscale, colour drained away, sorrowful quiet, single "
+     "character, simple soft library background", 832, 1216, DISTRICT_SEED + 2011),
+    ("npc_librarian_color.png",
+     "a gentle middle-aged librarian in a long cardigan holding a stack of books, round "
+     "spectacles, smiling warmly, full warm colour restored, hopeful, single character, "
+     "simple soft library background", 832, 1216, DISTRICT_SEED + 2011),
+    ("npc_scholar_grey.png",
+     "a young earnest student scholar with a satchel and an open notebook, tousled hair, "
+     "desaturated muted greyscale, colour drained away, sorrowful quiet, single character, "
+     "simple soft courtyard background", 832, 1216, DISTRICT_SEED + 2022),
+    ("npc_scholar_color.png",
+     "a young earnest student scholar with a satchel and an open notebook, tousled hair, "
+     "smiling brightly, full warm colour restored, hopeful, single character, simple soft "
+     "courtyard background", 832, 1216, DISTRICT_SEED + 2022),
 ]
 
 
