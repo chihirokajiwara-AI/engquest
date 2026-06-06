@@ -22,6 +22,22 @@ void main() {
       expect(skills.contains(EikenSkill.writing), isFalse);
     });
 
+    test('reading items carry the passage/sentence, not just the instruction',
+        () {
+      // Regression: cloze items once rendered only "Choose the best word for
+      // the blank." with no sentence to answer. Every reading item must now
+      // include its passage text (composed above the instruction).
+      final exam = MockExamAssembler.assemble('5', seed: 1);
+      final reading =
+          exam.mcqItems.where((i) => i.skill == EikenSkill.reading);
+      expect(reading, isNotEmpty);
+      for (final item in reading) {
+        expect(item.questionText.contains('\n'), isTrue,
+            reason: 'reading item ${item.id} is missing its passage text');
+        expect(item.questionText.trim(), isNot('Choose the best word for the blank.'));
+      }
+    });
+
     test('all-correct answers score higher readiness than all-wrong', () {
       final exam = MockExamAssembler.assemble('5', seed: 1);
 

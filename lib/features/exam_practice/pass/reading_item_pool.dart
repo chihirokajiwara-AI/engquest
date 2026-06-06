@@ -39,7 +39,19 @@ class ReadingMockItem extends MockMcqItem {
 /// The pool is intentionally small (a representative seed); items are drawn
 /// and shuffled by [MockExamAssembler] so repeated mock attempts vary.
 List<MockMcqItem> readingItemsFor(String grade) =>
-    (_kReadingPool[grade] ?? []).cast<MockMcqItem>();
+    (_kReadingPool[grade] ?? const <ReadingMockItem>[])
+        // Compose the passage/cloze sentence ABOVE the instruction so the rendered
+        // MockMcqItem is self-contained. Without this the mock UI shows only
+        // "Choose the best word for the blank." with no sentence to answer.
+        .map((r) => MockMcqItem(
+              id: r.id,
+              questionText: '${r.passageText}\n\n${r.questionText}',
+              choices: r.choices,
+              correctIdx: r.correctIdx,
+              skill: EikenSkill.reading,
+              sectionId: r.sectionId,
+            ))
+        .toList();
 
 const Map<String, List<ReadingMockItem>> _kReadingPool = {
   '5': _grade5Reading,
