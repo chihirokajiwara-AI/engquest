@@ -5,6 +5,16 @@
 // Restyled to the 本格 Dragon-Quest scene framework (dq_ui): dark atmospheric
 // field, navy+cream command windows, ▶cursor tiles, gold serif headings.
 // Behaviour, navigation, and eikenGrade handling are preserved exactly.
+//
+// LIVE 合格メーター:
+//   The 「合格率をみる」 button reads SkillAccuracyStore.readAccuracies(grade),
+//   runs CseEstimator.estimate(), and navigates to PassMeterScreen with the REAL
+//   estimate — not the hardcoded _kDemoEstimate. When the learner has no data
+//   yet (hasAnyData == false) an explanatory message is shown instead.
+//
+//   The ?preview=passmeter route (app.dart, design audit) still uses the const
+//   PassMeterScreen() constructor which falls back to _kDemoEstimate — that path
+//   is explicitly for design preview only and is clearly commented there.
 
 import 'package:flutter/material.dart';
 
@@ -12,6 +22,9 @@ import '../quest/ui/dq_ui.dart';
 import 'conversation_practice_screen.dart';
 import 'eiken_exam_config.dart';
 import 'listening_practice_screen.dart';
+import 'pass/cse_model.dart';
+import 'pass/pass_meter_screen.dart';
+import 'pass/skill_accuracy_store.dart';
 import 'reading_practice_screen.dart';
 import 'vocab_grammar_practice_screen.dart';
 import 'word_ordering_practice_screen.dart';
@@ -19,7 +32,7 @@ import 'writing_practice_screen.dart';
 import '../speaking/speaking_consent_notice.dart';
 import '../speaking/speaking_screen.dart';
 
-class ExamPracticeScreen extends StatelessWidget {
+class ExamPracticeScreen extends StatefulWidget {
   const ExamPracticeScreen({
     super.key,
     required this.eikenGrade,
@@ -28,8 +41,13 @@ class ExamPracticeScreen extends StatelessWidget {
   final String eikenGrade;
 
   @override
+  State<ExamPracticeScreen> createState() => _ExamPracticeScreenState();
+}
+
+class _ExamPracticeScreenState extends State<ExamPracticeScreen> {
+  @override
   Widget build(BuildContext context) {
-    final exam = kEikenExams[eikenGrade];
+    final exam = kEikenExams[widget.eikenGrade];
     if (exam == null) {
       return DqScene(
         child: Padding(
@@ -44,7 +62,7 @@ class ExamPracticeScreen extends StatelessWidget {
               DqPanel(
                 child: Center(
                   child: Text(
-                    '未対応のレベル: $eikenGrade',
+                    '未対応のレベル: ${widget.eikenGrade}',
                     style: dqText(size: 16, color: dqInk),
                   ),
                 ),
@@ -111,6 +129,17 @@ class ExamPracticeScreen extends StatelessWidget {
               },
             ),
           ),
+          // ── 合格メーター (LIVE — reads real SkillAccuracyStore data) ──────────
+          // NOTE: This button sources REAL practice results via SkillAccuracyStore.
+          //       The const PassMeterScreen() demo path (no estimate argument) is
+          //       used ONLY by the ?preview=passmeter design-audit route in app.dart.
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
+            child: DqButton(
+              label: '合格率をみる  /  Check Pass Meter',
+              onTap: () => _openLivePassMeter(context),
+            ),
+          ),
           // Full practice test button.
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
@@ -131,6 +160,62 @@ class ExamPracticeScreen extends StatelessWidget {
     );
   }
 
+  /// Opens PassMeterScreen with the learner's REAL accumulated accuracy data.
+  ///
+  /// Flow:
+  ///   1. Load SkillAccuracyStore (SharedPreferences-backed, instant if already
+  ///      initialised by a practice session).
+  ///   2. readAccuracies(grade) → `List<SkillAccuracy>`.
+  ///   3. CseEstimator.estimate() → CseEstimate.
+  ///   4. Navigate to PassMeterScreen(estimate: real) — NOT the demo profile.
+  ///
+  /// If the learner has no practice data yet, show an encouraging snackbar
+  /// prompting them to complete at least one section first.
+  Future<void> _openLivePassMeter(BuildContext context) async {
+    final grade = widget.eikenGrade;
+    try {
+      final store = await SkillAccuracyStore.getInstance();
+      if (!store.hasAnyData(grade)) {
+        if (!context.mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'まずれんしゅうをしてみましょう！\n'
+              '合格メーターはれんしゅう後にひょうじされます。',
+            ),
+            duration: Duration(seconds: 3),
+          ),
+        );
+        return;
+      }
+      final accuracies = store.readAccuracies(grade);
+      final estimate = CseEstimator.estimate(
+        grade: grade,
+        accuracies: accuracies,
+      );
+      if (!context.mounted) return;
+      if (estimate == null) {
+        // Grade not in spec table (should not happen for supported grades).
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('このグレードは未対応です: $grade')),
+        );
+        return;
+      }
+      // LIVE path: real estimate injected. NOT the demo fallback.
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => PassMeterScreen(estimate: estimate),
+        ),
+      );
+    } catch (e) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('合格メーターの読み込みに失敗しました')),
+      );
+    }
+  }
+
   void _navigateToSection(BuildContext context, ExamSection section) {
     switch (section.type) {
       case ExamSectionType.vocabGrammar:
@@ -138,7 +223,7 @@ class ExamPracticeScreen extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (_) => VocabGrammarPracticeScreen(
-              eikenGrade: eikenGrade,
+              eikenGrade: widget.eikenGrade,
               section: section,
             ),
           ),
@@ -148,7 +233,7 @@ class ExamPracticeScreen extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (_) => WordOrderingPracticeScreen(
-              eikenGrade: eikenGrade,
+              eikenGrade: widget.eikenGrade,
               section: section,
             ),
           ),
@@ -158,7 +243,7 @@ class ExamPracticeScreen extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (_) => ConversationPracticeScreen(
-              eikenGrade: eikenGrade,
+              eikenGrade: widget.eikenGrade,
               section: section,
             ),
           ),
@@ -168,7 +253,7 @@ class ExamPracticeScreen extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (_) => ReadingPracticeScreen(
-              eikenGrade: eikenGrade,
+              eikenGrade: widget.eikenGrade,
               section: section,
             ),
           ),
@@ -178,7 +263,7 @@ class ExamPracticeScreen extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (_) => WritingPracticeScreen(
-              eikenGrade: eikenGrade,
+              eikenGrade: widget.eikenGrade,
               section: section,
             ),
           ),
@@ -188,7 +273,7 @@ class ExamPracticeScreen extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (_) => ListeningPracticeScreen(
-              eikenGrade: eikenGrade,
+              eikenGrade: widget.eikenGrade,
               section: section,
             ),
           ),
@@ -198,11 +283,11 @@ class ExamPracticeScreen extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (_) => SpeakingConsentNotice(
-              eikenGrade: eikenGrade,
+              eikenGrade: widget.eikenGrade,
               onConsent: () => Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => SpeakingScreen(eikenGrade: eikenGrade),
+                  builder: (_) => SpeakingScreen(eikenGrade: widget.eikenGrade),
                 ),
               ),
             ),
