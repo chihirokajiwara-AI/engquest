@@ -9,6 +9,8 @@
 
 import 'package:flutter/material.dart';
 import 'eiken_exam_config.dart';
+import 'pass/cse_model.dart';
+import 'pass/skill_accuracy_store.dart';
 
 class _ReadingPassage {
   final String title;
@@ -79,6 +81,23 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
     });
   }
 
+  /// Records the completed session result into [SkillAccuracyStore].
+  /// readingComprehension + passage fill-in → EikenSkill.reading.
+  Future<void> _recordSessionResult() async {
+    if (_totalQuestions <= 0) return;
+    try {
+      final store = await SkillAccuracyStore.getInstance();
+      await store.record(
+        grade: widget.eikenGrade,
+        skill: EikenSkill.reading,
+        correct: _correctCount,
+        total: _totalQuestions,
+      );
+    } catch (_) {
+      // Store errors are non-fatal — never interrupt the learner.
+    }
+  }
+
   void _next() {
     final passage = _passages[_passageIdx];
     if (_questionIdx < passage.questions.length - 1) {
@@ -95,6 +114,7 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
         _answered = false;
       });
     } else {
+      _recordSessionResult(); // fire-and-forget; UI does not wait
       setState(() => _sessionDone = true);
     }
   }

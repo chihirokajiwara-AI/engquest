@@ -25,6 +25,8 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../core/dialog/claude_client.dart';
 import '../quest/ui/dq_ui.dart';
 import 'eiken_exam_config.dart';
+import 'pass/cse_model.dart';
+import 'pass/skill_accuracy_store.dart';
 
 // ── Data models ─────────────────────────────────────────────────────────────
 
@@ -637,7 +639,37 @@ class _WritingPracticeScreenState extends State<WritingPracticeScreen> {
     });
   }
 
+  /// Records the last AI-graded result into [SkillAccuracyStore].
+  /// writing → EikenSkill.writing.
+  ///
+  /// Scoring: rubric total / maxScore mapped to a binary correct/total pair
+  /// (1 correct = total ≥ 50% of maxScore; 0 correct = below 50%).
+  /// This gives the CseEstimator a meaningful per-session signal even when
+  /// there is only one writing prompt per session.
+  ///
+  /// Only called when the API was available (apiAvailable == true) so that
+  /// ungraded submissions do not pollute the accuracy baseline.
+  Future<void> _recordWritingResult() async {
+    final result = _result;
+    if (result == null || !result.apiAvailable) return;
+    if (result.maxScore <= 0) return;
+    try {
+      final store = await SkillAccuracyStore.getInstance();
+      // Binary signal: pass if ≥50% of rubric total earned.
+      final correct = result.total >= result.maxScore / 2 ? 1 : 0;
+      await store.record(
+        grade: widget.eikenGrade,
+        skill: EikenSkill.writing,
+        correct: correct,
+        total: 1,
+      );
+    } catch (_) {
+      // Store errors are non-fatal — never interrupt the learner.
+    }
+  }
+
   void _nextPrompt() {
+    _recordWritingResult(); // fire-and-forget before state change
     if (_promptIdx < _prompts.length - 1) {
       setState(() {
         _promptIdx++;

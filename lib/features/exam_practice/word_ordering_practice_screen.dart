@@ -13,6 +13,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'eiken_exam_config.dart';
+import 'pass/cse_model.dart';
+import 'pass/skill_accuracy_store.dart';
 
 /// A word ordering problem.
 class _OrderingProblem {
@@ -94,8 +96,26 @@ class _WordOrderingPracticeScreenState
     });
   }
 
+  /// Records the completed session result into [SkillAccuracyStore].
+  /// wordOrdering → EikenSkill.reading (Part 3 = Reading大問, 5/4級).
+  Future<void> _recordSessionResult() async {
+    if (_problems.isEmpty) return;
+    try {
+      final store = await SkillAccuracyStore.getInstance();
+      await store.record(
+        grade: widget.eikenGrade,
+        skill: EikenSkill.reading,
+        correct: _correctCount,
+        total: _problems.length,
+      );
+    } catch (_) {
+      // Store errors are non-fatal — never interrupt the learner.
+    }
+  }
+
   void _nextProblem() {
     if (_currentIdx >= _problems.length - 1) {
+      _recordSessionResult(); // fire-and-forget; UI does not wait
       setState(() => _sessionDone = true);
     } else {
       setState(() {

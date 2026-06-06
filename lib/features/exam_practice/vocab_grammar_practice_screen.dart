@@ -13,6 +13,8 @@ import 'package:flutter/material.dart';
 import '../../core/data/vocab_repository.dart';
 import '../../core/models/vocab_item.dart';
 import 'eiken_exam_config.dart';
+import 'pass/cse_model.dart';
+import 'pass/skill_accuracy_store.dart';
 
 class VocabGrammarPracticeScreen extends StatefulWidget {
   const VocabGrammarPracticeScreen({
@@ -113,8 +115,26 @@ class _VocabGrammarPracticeScreenState
     });
   }
 
+  /// Records the completed session result into [SkillAccuracyStore].
+  /// vocabGrammar → EikenSkill.reading (Part 1 = Reading大問).
+  Future<void> _recordSessionResult() async {
+    if (_questions.isEmpty) return;
+    try {
+      final store = await SkillAccuracyStore.getInstance();
+      await store.record(
+        grade: widget.eikenGrade,
+        skill: EikenSkill.reading,
+        correct: _correctCount,
+        total: _questions.length,
+      );
+    } catch (_) {
+      // Store errors are non-fatal — never interrupt the learner.
+    }
+  }
+
   void _nextQuestion() {
     if (_currentIdx >= _questions.length - 1) {
+      _recordSessionResult(); // fire-and-forget; UI does not wait
       setState(() => _sessionDone = true);
     } else {
       setState(() {

@@ -335,12 +335,20 @@ const List<QuestTown> kQuestTowns = [
     cefr: 'A1',
     name: 'ことばを失（うしな）った村（むら）',
     tagline: 'ソネア ― はじまりの声（こえ）の国（くに）',
-    intro: 'ここは〈ソネア〉。ことばが生（う）まれた国（くに）。けれどサイレントに'
-        '声（こえ）をうばわれ、村（むら）びとは「ひとつの音（おと）」しか出（だ）せなくなった。'
+    intro: 'ここは〈ソネア〉。ことばが生（う）まれた国（くに）。けれど〈サイレント〉に'
+        '声（こえ）をうばわれ、村（むら）びとは「ひとつの音（おと）」しか出（だ）せなくなった。\n'
+        '村（むら）の入（い）り口（ぐち）に、一枚（いちまい）の紙（かみ）が置（お）かれていた。'
+        '文字（もじ）はふるえているけれど、はっきりと読（よ）める：\n'
+        '「きみが ことばを いうたびに、はいいろの せかいが いろに なる。はじめよう。」\n'
         'まず、その音（おと）をよく聞（き）こう。🔊をおして、音（おと）をまねしてみて。'
         '音（おと）をつなげば、ことばがよみがえる。',
-    cleared: '村（むら）に声（こえ）がもどった！ 最初（さいしょ）の〈声（こえ）の石（いし）〉がひかる。'
-        'スラが「ハロー！」と、はじめて言（い）えた。',
+    cleared: '村（むら）に声（こえ）がもどった！ 最初（さいしょ）の〈声（こえ）の石（いし）〉が、あたたかく ひかる。\n'
+        'スラが「Hello！」と、はじめて言（い）えた。あおい 光（ひかり）が、スラの からだを つつんだ。\n'
+        '灰守（はいもり）セルが、きみの てに 小（ちい）さな しおりを おしつけた。'
+        '「これは…むかし、やさしい ひとが かいた おはなしの さいしょの 1ページ。'
+        '〈サイレント〉は、ずっと まえは やさしい ひとだった。'
+        'しずけさは、そとから きたんじゃない。まんなかから、あるいて きたんだよ。」\n'
+        'しおりには、ほんの すこしだけ、ことばが のこっていた――「Once, I」',
     encounters: [
       // ── Phase A: phonics (SATPIN). Each step shows a giant glyph + Ember-Keeper
       //    villager; 🔊 plays a pure phoneme (founder records later); pick the
@@ -358,7 +366,9 @@ const List<QuestTown> kQuestTowns = [
           QuestOption(label: 's', audioAsset: 'audio/phonics/phoneme_s.mp3', isCorrect: true),
           QuestOption(label: 'a', audioAsset: 'audio/phonics/phoneme_a.mp3'),
         ],
-        onCorrect: 'sss…！ セルの目（め）に光（ひかり）がもどった。「これが…わたしの、さいしょの音（おと）…」',
+        onCorrect: 'sss…！ セルの目（め）に光（ひかり）がもどった。「これが…わたしの、さいしょの音（おと）…'
+            'ここでは みんな ひとつの おとしか だせない。…でも きみは、まだ きこえるんだね。」'
+            'かまどの ひが、すこし あかるく なった。',
       ),
       // 2 — /a/ アン. Short /a/ — guard vs カタカナ「ア」 later.
       TeachSound(
@@ -406,7 +416,8 @@ const List<QuestTown> kQuestTowns = [
           QuestOption(label: 'sat', audioAsset: 'audio/phonics/blend_sat.mp3', isCorrect: true),
           QuestOption(label: 's', audioAsset: 'audio/phonics/phoneme_s.mp3'),
         ],
-        onCorrect: '"sat"！ つながった！ スラが はねた。「これで、ことばが つくれる！」',
+        onCorrect: '"sat"！ つながった！ スラが はねた。「…ぷる、"sat"！ きみが いえたから、ぼくも いえた！'
+            'ぼく、きみの あとを おいかける。もうすこし、おしえて。」',
       ),
       // ── Phase B: real 英検5級 CVC words. New sounds /c/, /o/, /g/ introduced
       //    just-in-time; one new sound per step, the rest review.
@@ -532,8 +543,9 @@ const List<QuestTown> kQuestTowns = [
           QuestOption(label: 'Hello!', audioAsset: 'audio/phonics/phrase_hello.mp3', isCorrect: true),
           QuestOption(label: 'cat', audioAsset: 'audio/phonics/blend_cat.mp3'),
         ],
-        onCorrect: 'Hello！ スラが はじめて 文（ぶん）を いえた。「これで…みんなと はなせる！'
-            'さあ、村（むら）の おくへ いこう！」',
+        onCorrect: 'Hello！ スラが はじめて あいさつを いえた。あおい 光（ひかり）が、スラを やさしく つつんだ。'
+            '「H…Hello！ きみが おしえてくれたから、いえた！ ぼく、きみの いう ことば、'
+            'ぜんぶ おぼえていく。さあ、村（むら）の おくへ いこう！」',
       ),
       // ──────────────────────────────────────────────────────────────────────
       // Phase C (cont.) — the existing 20-encounter grammar arc. The child can
@@ -548,7 +560,9 @@ const List<QuestTown> kQuestTowns = [
         choices: ['Goodbye.', 'Hello!', 'Thank you.', 'I am sorry.'],
         correctIndex: 1,
         onCorrect:
-            "H...Hello! ...I remember it now — Hello! You gave me back my first word. I'm Sura. Can I come with you?",
+            "H... Hello! ...I remember it now. You said it first, and then I could too. "
+            "You gave me back my first word. I'm Sura. I'm one step behind you — "
+            "but I'll keep catching up. Can I come with you?",
       ),
       // 2 — be動詞 I am + 定型応答. (大問2型)
       QuestEncounter(
@@ -590,16 +604,21 @@ const List<QuestTown> kQuestTowns = [
         correctIndex: 2,
         onCorrect: 'Yes! She is very kind. You speak well, traveller!',
       ),
-      // 6 — this / that + be動詞. (大問1型)
+      // 6 — this / that + be動詞. (大問1型) — 灰守セル/おばあさん: Ch.1 mystery clue
       QuestEncounter(
         npcName: 'おばあさん',
         npcEmoji: '👵',
         npcLine: '(pointing far away) What is that on the hill?',
-        npcLineJa: '（遠（とお）くを指（ゆび）さして）あの丘（おか）の上（うえ）にあるのは、何（なん）ですか？',
+        npcLineJa: '（遠（とお）くを指（ゆび）さして）あの丘（おか）の上（うえ）にあるのは、何（なん）ですか？'
+            '「ちかくにあるものは this、遠（とお）くにあるものは…？」',
         choices: ['This is a castle.', 'That is a castle.', 'That is castle.', 'These is a castle.'],
         correctIndex: 1,
         onCorrect:
-            'That is the old hall... where the first word was ever spoken, they say. Strange — when you talk, I can almost hear it breathing again. You listen the way careful listeners used to.',
+            "That is the old hall — where the first word was ever spoken, they say. "
+            "Strange... when you talk, I can almost hear it breathing again. "
+            "Listen, child: this silence did not come from outside. "
+            "It walked here from the middle — from the very centre of the world. "
+            "I have been waiting for someone who could still hear that.",
       ),
       // 7 — 冠詞 a / an. (大問1型)
       QuestEncounter(
@@ -609,7 +628,9 @@ const List<QuestTown> kQuestTowns = [
         npcLineJa: 'おなか、すいてる？ ほら、これは ___ りんごだよ。 ___ は？',
         choices: ['a', 'an', 'the', 'one'],
         correctIndex: 1,
-        onCorrect: "An apple — well said! Take it. A growing traveller must eat.",
+        onCorrect: "An apple! シャキッ — the apple blushed red in the baker's hand. "
+            "'apple starts with a vowel sound, so it's an — not a!' "
+            "Here, take it. A growing traveller must eat.",
       ),
       // 8 — 複数形 -s. (大問1型)
       QuestEncounter(

@@ -27,6 +27,8 @@ import '../../core/audio/audio_cue_service.dart';
 import '../quest/ui/dq_ui.dart';
 import 'eiken_exam_config.dart';
 import 'listening_data.dart';
+import 'pass/cse_model.dart';
+import 'pass/skill_accuracy_store.dart';
 
 class ListeningPracticeScreen extends StatefulWidget {
   const ListeningPracticeScreen({
@@ -98,8 +100,26 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
     });
   }
 
+  /// Records the completed session result into [SkillAccuracyStore].
+  /// listening → EikenSkill.listening.
+  Future<void> _recordSessionResult() async {
+    if (_items.isEmpty) return;
+    try {
+      final store = await SkillAccuracyStore.getInstance();
+      await store.record(
+        grade: widget.eikenGrade,
+        skill: EikenSkill.listening,
+        correct: _correctCount,
+        total: _items.length,
+      );
+    } catch (_) {
+      // Store errors are non-fatal — never interrupt the learner.
+    }
+  }
+
   void _next() {
     if (_currentIdx >= _items.length - 1) {
+      _recordSessionResult(); // fire-and-forget; UI does not wait
       setState(() => _sessionDone = true);
     } else {
       setState(() {
