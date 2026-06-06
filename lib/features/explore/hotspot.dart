@@ -115,42 +115,52 @@ final SceneDef kTown5Scene = SceneDef(
   parallaxLayers: const [],
   titleJa: 'ことばを失（うしな）った村（むら）',
   hotspots: [
-    // ── NPC 1: 時計職人（灰守セル） — the /s/ phoneme phonics step ────────────
+    // ── NPC 1: 灰守（はいもり）セル — the Ember-Keeper / first phonics step ──
     // Encounter index 0 from kQuestTowns[0].encounters (TeachSound /s/).
-    // The framing re-casts the phonics ナゾ as a mystery beat.
+    // セル tends the village hearth — the only fire that never went out.
+    // Her mini-mystery: 「なぜ かまどの ひは きえないの？」→ she was waiting for a listener.
     Hotspot.npc(
       pos: const Alignment(-0.45, 0.10),
       size: 0.20,
       step: _kStep(0),
-      clueLineJa: '「あの時計（とけい）、ずっと止（と）まったまま……'
-          'もしかして、なにかの音（おと）がいるのかな？」',
-      framingJa: 'この時計台（とけいだい）、サイレントが来（き）てから動（うご）かなくなった。'
-          '「ssss…」——ヘビのように ながく のばす音（おと）が 聞（き）こえる？',
+      clueLineJa: '「かまどの ひが、まだ きえていない。'
+          'まだ きける ひとを、まっていたんだ。」',
+      framingJa: '灰守（はいもり）セルは、ずっと かまどを まもっていた。\n'
+          'サイレントが きてから、村（むら）の ひとは「ひとつの おと」しか だせない。\n'
+          'セルの くちから もれる おとは… 「ssss…」\n'
+          'ヘビのように、ながく のばす音（おと）。きこえる？',
       npcGreyAsset: 'assets/art/scenes_layton/npc_clockmaker_grey.png',
       npcColorAsset: 'assets/art/scenes_layton/npc_clockmaker_color.png',
     ),
-    // ── NPC 2: スラ（小スライム） — the first greeting QuestEncounter ─────────
+    // ── NPC 2: スラ — きみの かがみ、いちほ うしろの なかま ─────────────────
     // Encounter index 12 = first QuestEncounter (「Hello!」greeting).
-    // framingJa sets up the silent-slime story beat.
+    // スラ is always one step behind: きみが いえたから、ぼくも いえる。
     Hotspot.npc(
       pos: const Alignment(0.30, 0.30),
       size: 0.16,
       step: _kStep(12),
-      clueLineJa: 'ちいさなスライムが口（くち）をひらく……でも、なんにも出（で）てこない。',
-      framingJa: 'このスライム、ずっと ことばを さがしてる。'
-          'あいさつの ことばを おしえてあげよう！',
+      clueLineJa: 'ちいさなスライムが口（くち）をひらく… 「…ヘッ…ど…？」\n'
+          'ことばが、もうすこしのところで 出（で）てこない。',
+      framingJa: 'このスライムの名前（なまえ）は まだ ない。\n'
+          'きみが いえたとき、はじめて ぼくも いえる。\n'
+          'あいさつの ことばを、きみから おしえてあげよう。\n'
+          'スラは いつも、きみの いちほ うしろに いる。',
       npcGreyAsset: 'assets/art/scenes_layton/npc_slime_grey.png',
       npcColorAsset: 'assets/art/scenes_layton/npc_slime_color.png',
     ),
-    // ── NPC 3: 門番（もんばん） — be動詞 are (Quiz, cloze) ────────────────────
+    // ── NPC 3: 門番（もんばん） と 時計じい — be動詞 are (Quiz, cloze) ─────────
     // Encounter index 15 = be動詞 人称一致「You ___ a traveller.」cloze.
+    // 時計じい stands beside the frozen gate-clock; the gate guard echoes his mystery.
     Hotspot.npc(
       pos: const Alignment(0.68, -0.20),
       size: 0.17,
       step: _kStep(15),
-      clueLineJa: '「ここを通（とお）りたいなら……正（ただ）しい言葉（ことば）で答（こた）えてみよ！」',
-      framingJa: '村（むら）の門（もん）。門番（もんばん）が立（た）ちはだかる。'
-          '正（ただ）しい形（かたち）の動詞（どうし）を選（えら）べ。',
+      clueLineJa: '「ここを通（とお）りたいなら……正（ただ）しい言葉（ことば）で答（こた）えてみよ。」\n'
+          '門（もん）の かたわらで、おじいさんが とまった 時計（とけい）を みつめている。',
+      framingJa: '村（むら）の門（もん）。門番（もんばん）が 立（た）ちはだかる。\n'
+          '「You ___ a traveller.」— ことばの かたちを えらべ。\n'
+          'かたわらの 時計（とけい）は サイレントが きてから ずっと とまったまま。\n'
+          '正（ただ）しい ことばが もどれば、とけいも うごきだす かもしれない。',
       npcGreyAsset: 'assets/art/scenes_layton/npc_gatekeeper_grey.png',
       npcColorAsset: 'assets/art/scenes_layton/npc_gatekeeper_color.png',
     ),
@@ -159,7 +169,8 @@ final SceneDef kTown5Scene = SceneDef(
       pos: const Alignment(-0.75, -0.35),
       size: 0.11,
       coinValue: 1,
-      clueLineJa: 'スラ：「光（ひかり）がどこかに……ランプの近（ちか）くかな？」',
+      clueLineJa: 'スラ：「…ぷる？ ひかりが どこかに…！ ランプの ちかくかな？ '
+          'ぼく、まだ うまく いえないけど… あっち！」',
     ),
   ],
 );

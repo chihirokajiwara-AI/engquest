@@ -680,7 +680,10 @@ const List<QuestTown> kQuestTowns = [
         npcLineJa: '歌（うた）が消（き）えてしまった。いっしょに歌（うた）って ___ ？ ___ は？',
         choices: ['Are', 'Do', 'Can', 'Is'],
         correctIndex: 2,
-        onCorrect: "Yes! Together — la la la! See, words come back when we are not afraid to use them.",
+        onCorrect: "Can — yes! Together — la, la, la! "
+            "Listen... do you hear that? The melody is coming back to the street. "
+            "Words return when we are not afraid to use them. "
+            "Sura is humming behind you — it learns from you, note by note.",
       ),
       // 13 — 疑問詞 what + be動詞. (大問2型)
       QuestEncounter(
@@ -690,7 +693,9 @@ const List<QuestTown> kQuestTowns = [
         npcLineJa: '（スラがふしぎな果物（くだもの）を指（ゆび）さして）これは ___ ？ ___ は？',
         choices: ['Who', 'Where', 'What', 'How'],
         correctIndex: 2,
-        onCorrect: "It's a peach! What is this, what is that — Sura wants to learn every word now!",
+        onCorrect: "What! It's a peach! Sura bounced: 'W-What? What is this? What is THAT?' "
+            "It's asking about everything now — one step behind you, but catching up fast. "
+            "Every word you teach it, it keeps.",
       ),
       // 14 — 疑問詞 who + 代名詞. (大問2型)
       QuestEncounter(
@@ -701,7 +706,10 @@ const List<QuestTown> kQuestTowns = [
         choices: ['It is a gate.', 'He is my guard.', 'She is my guard.', 'Who is my guard.'],
         correctIndex: 1,
         onCorrect:
-            'He is my guard, yes. He has waited years for someone who could still speak to come back... and your voice can still be heard. I wonder if you are the one.',
+            'He is my guard, yes. He has waited years for someone who could still speak to come back. '
+            'The old clockmaker at the corner — his watch has not moved since the silence came. '
+            'But just now... I thought I heard it tick. '
+            'Your voice can still be heard. I wonder if you are the one.',
       ),
       // 15 — 疑問詞 where + 前置詞 in/on/under. (大問1 前置詞型)
       QuestEncounter(
@@ -731,7 +739,10 @@ const List<QuestTown> kQuestTowns = [
         npcLineJa: '見（み）て！ いま、お城（しろ）の絵（え）を ___ いるところ。 ___ は？',
         choices: ['paint', 'paints', 'painting', 'painted'],
         correctIndex: 2,
-        onCorrect: "I'm painting the town, yes — adding back the colours as you bring the words home. ...They say someone is on the road again, someone whose words still hold their colour.",
+        onCorrect: "I'm painting! Each word you return gives me another colour to work with. "
+            "...They say someone is on the road again — someone whose words still hold their colour. "
+            "The old clockmaker told me: the silence started at the centre of the world "
+            "and walked outward from there. Strange to think, isn't it?",
       ),
       // 18 — 命令文 / Let's. (大問2型)
       QuestEncounter(
@@ -767,7 +778,12 @@ const List<QuestTown> kQuestTowns = [
         ],
         correctIndex: 2,
         onCorrect:
-            "...You are not afraid of sound. The first word is returned, traveller. But the world holds six more silences... and I will be at the last.",
+            "...You are not afraid of sound. "
+            "I did not expect that. "
+            "The first word is returned, traveller — this village is warm again. "
+            "I am not your enemy. I am... tired. And very, very quiet. "
+            "Six more silences remain along the road. I will be at the last one, waiting. "
+            "...I wonder: do you know why I stopped speaking?",
       ),
     ],
   ),
