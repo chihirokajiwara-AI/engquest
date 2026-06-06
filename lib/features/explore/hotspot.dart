@@ -418,6 +418,191 @@ final SceneDef kTownPre2Scene = SceneDef(
 /// Helper: look up encounter [i] from kQuestTowns[3] (英検準2級) at const-eval time.
 QuestStep _kStepPre2(int i) => kQuestTowns[3].encounters[i];
 
+// ── 英検準2級プラス scene — 試練（しれん）の橋（はし） ──────────────────────────
+
+/// The bridge district between 準2級 and 2級 (the 2025 新設 grade).
+/// Reuses gatekeeper (番人) + fisher (渡し守) archetype art; only the background
+/// is new. Steps referenced from kQuestTowns[4].encounters.
+final SceneDef kTownPre2PlusScene = SceneDef(
+  backgroundAsset: 'assets/art/scenes_layton/town_pre2plus_bridge.png',
+  parallaxLayers: const [],
+  titleJa: '試練（しれん）の橋（はし）',
+  hotspots: [
+    // はしの番人 — 現在完了 (idx 0): "I ___ on this bridge since 2025."
+    Hotspot.npc(
+      pos: const Alignment(-0.48, -0.02),
+      size: 0.18,
+      step: _kStepPre2Plus(0),
+      clueLineJa: '「2025年（ねん）、この橋（はし）が あらたに かけられて から、'
+          'わたしは ずっと ここに 立（た）ってきた。」',
+      framingJa: '準2級（きゅう）と 2級（きゅう）の あいだに かかる、'
+          '長（なが）い 石（いし）の橋（はし）。\n'
+          '番人（ばんにん）は「ずっと〜してきた」を かたる ことば — '
+          '現在完了（げんざいかんりょう） — で きみの 覚悟（かくご）を 問（と）う。\n'
+          '「I ___ on this bridge since 2025.」— どの かたちが はいる？',
+      npcGreyAsset: 'assets/art/scenes_layton/npc_gatekeeper_grey.png',
+      npcColorAsset: 'assets/art/scenes_layton/npc_gatekeeper_color.png',
+    ),
+    // 渡し守 — 関係副詞 where (idx 1): "the place ___ many travellers turn back."
+    Hotspot.npc(
+      pos: const Alignment(0.50, 0.16),
+      size: 0.17,
+      step: _kStepPre2Plus(1),
+      clueLineJa: '「ここは、おおくの 旅人（たびびと）が ひきかえす“場所（ばしょ）”…'
+          'それを いい表（あらわ）す ことばを、きみは もっているか？」',
+      framingJa: '橋（はし）の なかほど。渡（わた）し守（もり）が ふかい きりの '
+          'たにを 見下（みお）ろしている。\n'
+          '「〜する 場所（ばしょ）」を つなぐ ことば — 関係副詞（かんけいふくし）'
+          'where — が ためされる。\n'
+          '「This is the place ___ many travellers turn back.」',
+      npcGreyAsset: 'assets/art/scenes_layton/npc_fisher_grey.png',
+      npcColorAsset: 'assets/art/scenes_layton/npc_fisher_color.png',
+    ),
+    // Coin — スラ (the companion) voices the hint here, as in every district.
+    Hotspot.coin(
+      pos: const Alignment(0.04, 0.42),
+      size: 0.12,
+      coinValue: 1,
+      clueLineJa: 'スラ：「この橋（はし）、たかいね…！ でも、らんかんの うえで '
+          'なにか ひかってる。きみが いくなら、ぼくも いく。いちほ うしろで。」',
+    ),
+  ],
+);
+
+/// Helper: look up encounter [i] from kQuestTowns[4] (準2級プラス) at const-eval time.
+QuestStep _kStepPre2Plus(int i) => kQuestTowns[4].encounters[i];
+
+// ── 英検2級 scene — 学者（がくしゃ）の城下町（じょうかまち） ────────────────────
+
+/// Reuses librarian (せんせい) + captain (やくにん) + scholar (がくせい) art;
+/// only the background is new. Steps from kQuestTowns[5].encounters.
+final SceneDef kTown2Scene = SceneDef(
+  backgroundAsset: 'assets/art/scenes_layton/town_2_castle.png',
+  parallaxLayers: const [],
+  titleJa: '学者（がくしゃ）の城下町（じょうかまち）',
+  hotspots: [
+    // せんせい — academic-register response (idx 0)
+    Hotspot.npc(
+      pos: const Alignment(-0.50, -0.05),
+      size: 0.18,
+      step: _kStep2(0),
+      clueLineJa: '「もう 十年（じゅうねん）、ここで おしえている… '
+          'こういう 話（はなし）に、なんと こたえるのが ふさわしい？」',
+      framingJa: '城（しろ）を のぞむ 学者（がくしゃ）の 城下町（じょうかまち）。\n'
+          '大人（おとな）どうしの 会話（かいわ）に ふさわしい こたえ方（かた） — '
+          '英検2級（きゅう）の 社会（しゃかい）的な やりとり — が ためされる。\n'
+          'せんせいの ことばに、ていねいに 共感（きょうかん）する こたえを えらべ。',
+      npcGreyAsset: 'assets/art/scenes_layton/npc_librarian_grey.png',
+      npcColorAsset: 'assets/art/scenes_layton/npc_librarian_color.png',
+    ),
+    // やくにん — passive voice (idx 2): "The new library ___ by the city council."
+    Hotspot.npc(
+      pos: const Alignment(0.50, -0.10),
+      size: 0.17,
+      step: _kStep2(2),
+      clueLineJa: '「あたらしい 図書館（としょかん）は、市（し）の 議会（ぎかい）に'
+          'よって どう されたか… その ことばが 出（で）てこない。」',
+      framingJa: '城下町（じょうかまち）の 役所（やくしょ）。\n'
+          '「〜された」を かたる ことば — 受動態（じゅどうたい） — が ためされる。\n'
+          '「The new library ___ by the city council two years ago.」',
+      npcGreyAsset: 'assets/art/scenes_layton/npc_captain_grey.png',
+      npcColorAsset: 'assets/art/scenes_layton/npc_captain_color.png',
+    ),
+    // がくせい — relative pronoun who (idx 3)
+    Hotspot.npc(
+      pos: const Alignment(0.06, 0.40),
+      size: 0.15,
+      step: _kStep2(3),
+      clueLineJa: '「この本（ほん）を かいた 教授（きょうじゅ）が、'
+          'こんや 城（しろ）の ホールで 講演（こうえん）する… のに、'
+          'その“人（ひと）”を つなぐ ことばが…」',
+      framingJa: '人（ひと）を つなぐ ことば — 関係代名詞（かんけいだいめいし）'
+          'who — が ためされる。\n'
+          '「The professor ___ wrote this book is giving a lecture tonight.」',
+      npcGreyAsset: 'assets/art/scenes_layton/npc_scholar_grey.png',
+      npcColorAsset: 'assets/art/scenes_layton/npc_scholar_color.png',
+    ),
+    Hotspot.coin(
+      pos: const Alignment(-0.80, -0.48),
+      size: 0.11,
+      coinValue: 1,
+      clueLineJa: 'スラ：「…ぷる！ 城（しろ）への かいだんの うえで、'
+          'なにか きらっと ひかった！」',
+    ),
+  ],
+);
+
+/// Helper: look up encounter [i] from kQuestTowns[5] (英検2級) at const-eval time.
+QuestStep _kStep2(int i) => kQuestTowns[5].encounters[i];
+
+// ── 英検準1級 scene — 灰色（はいいろ）の ひろば / The Grey Square ───────────────
+
+/// The CLIMAX district: the heart of the サイレント. The square art is itself
+/// colour-drained; colour returns only as the player restores its NPCs. Reuses
+/// gatekeeper (門の守り手); the 元・宰相 + 城の治癒師 get NEW art for the climax.
+/// Steps from kQuestTowns[6].encounters.
+final SceneDef kTownPre1Scene = SceneDef(
+  backgroundAsset: 'assets/art/scenes_layton/town_pre1_grey_square.png',
+  parallaxLayers: const [],
+  titleJa: '灰色（はいいろ）の ひろば',
+  hotspots: [
+    // 門の守り手 — advanced collocation make a decision (idx 0)
+    Hotspot.npc(
+      pos: const Alignment(-0.52, 0.02),
+      size: 0.18,
+      step: _kStepPre1(0),
+      clueLineJa: '「ここから さきは、サイレントの こころの まんなか。'
+          'はいる“決断（けつだん）”を、きみは くだせるか？」',
+      framingJa: 'すべての 色（いろ）が きえた、しずかな ひろば。'
+          'ここが サイレントの こころの まんなか。\n'
+          '英検準1級（きゅう）の こなれた 言（い）い回（まわ）し — '
+          '「決断（けつだん）を くだす」は make — が ためされる。\n'
+          '正（ただ）しい ことばが、灰色（はいいろ）に 最初（さいしょ）の 色（いろ）を もどす。',
+      npcGreyAsset: 'assets/art/scenes_layton/npc_gatekeeper_grey.png',
+      npcColorAsset: 'assets/art/scenes_layton/npc_gatekeeper_color.png',
+    ),
+    // 元・宰相 — phrasal verb carry out (idx 2)
+    Hotspot.npc(
+      pos: const Alignment(0.48, -0.12),
+      size: 0.19,
+      step: _kStepPre1(2),
+      clueLineJa: '「わたしは かつて、この くにの すべてを “carry out” してきた…'
+          'いまは、その ことばさえ おもいだせない。」',
+      framingJa: 'ひろばの 中央（ちゅうおう）、ひびわれた 石（いし）の 円卓（えんたく）の そばに、'
+          '元（もと）・宰相（さいしょう）が ひとり すわっている。\n'
+          'かれは サイレントが くる まえ、この くにを うごかしていた 人（ひと）。\n'
+          '句動詞（くどうし）の せいかくな いみ — carry out =「やりとげる」 — '
+          'を とりもどせ。',
+      npcGreyAsset: 'assets/art/scenes_layton/npc_chancellor_grey.png',
+      npcColorAsset: 'assets/art/scenes_layton/npc_chancellor_color.png',
+    ),
+    // 城の治癒師 — abstract derivational noun resilience (idx 3)
+    Hotspot.npc(
+      pos: const Alignment(0.04, 0.40),
+      size: 0.16,
+      step: _kStepPre1(3),
+      clueLineJa: '「おれた こころが、また 立（た）ちあがる ちから… '
+          'その ことばを とりもどせば、この くにも たちなおれる。」',
+      framingJa: 'ひろばの すみ、こわれた ふんすいの そばに 治癒師（ちゆし）が いる。\n'
+          '英検準1級（きゅう）の ぬきだし語（ご） — '
+          '「立（た）ちなおる ちから」= resilience（ちゅうしょう名詞） — を えらべ。\n'
+          'この ことばが もどれば、ひろばに ひかりが さしはじめる。',
+      npcGreyAsset: 'assets/art/scenes_layton/npc_healer_grey.png',
+      npcColorAsset: 'assets/art/scenes_layton/npc_healer_color.png',
+    ),
+    Hotspot.coin(
+      pos: const Alignment(-0.80, -0.50),
+      size: 0.11,
+      coinValue: 1,
+      clueLineJa: 'スラ：「…ぷる。ここ、さむいね。でも きみが ことばを もどすたび、'
+          'すこしずつ あたたかくなる。あそこにも、ひとつ…！」',
+    ),
+  ],
+);
+
+/// Helper: look up encounter [i] from kQuestTowns[6] (英検準1級) at const-eval time.
+QuestStep _kStepPre1(int i) => kQuestTowns[6].encounters[i];
+
 // ── Scene registry ──────────────────────────────────────────────────────────
 
 /// Painted コトバ探偵 scenes keyed by 英検 grade. Grades without a scene yet are
@@ -427,6 +612,9 @@ final Map<String, SceneDef> kScenesByGrade = {
   '4': kTown4Scene,
   '3': kTown3Scene,
   'pre2': kTownPre2Scene,
+  'pre2plus': kTownPre2PlusScene,
+  '2': kTown2Scene,
+  'pre1': kTownPre1Scene,
 };
 
 /// Returns the painted scene for [grade], or null when that grade has no scene

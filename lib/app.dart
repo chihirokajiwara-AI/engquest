@@ -321,6 +321,15 @@ Widget _previewFor(String? name) {
     case 'explorepre2':
       // Wave 2 — Layton-style SceneView for the 英検準2級 trade-port city.
       return SceneView(scene: kTownPre2Scene, eikenLevel: 'pre2');
+    case 'explorepre2plus':
+      // Wave 2 — 英検準2級プラス bridge district.
+      return SceneView(scene: kTownPre2PlusScene, eikenLevel: 'pre2plus');
+    case 'explore2':
+      // Wave 2 — 英検2級 castle town.
+      return SceneView(scene: kTown2Scene, eikenLevel: '2');
+    case 'explorepre1':
+      // Wave 2 — 英検準1級 climax: The Grey Square.
+      return SceneView(scene: kTownPre1Scene, eikenLevel: 'pre1');
     case 'mock':
       // Playable timed フル模試 (seed fixed for a reproducible preview).
       return const MockExamScreen(eikenGrade: '5', seed: 1);

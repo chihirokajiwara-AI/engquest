@@ -135,6 +135,48 @@ JOBS = [
      "a lively quayside market merchant in an apron behind a stall of fruit and cloth, "
      "smiling warmly, full warm colour restored, hopeful, single character, simple soft "
      "market background", 832, 1216, DISTRICT_SEED + 3022),
+
+    # ── 英検準2級プラス district — 試練（しれん）の橋（はし） ───────────────────
+    # The bridge between 準2級 and 2級. Reuses gatekeeper (はしの番人) + fisher
+    # (渡し守) NPC art; only the background is new.
+    ("town_pre2plus_bridge.png",
+     "a great ancient stone bridge with tall arched spans crossing a deep misty river "
+     "ravine, a stone gatehouse tower, hanging lanterns, distant mountains, gentle haze, NO "
+     "PEOPLE, empty bridge, wide establishing scene", 1216, 832, DISTRICT_SEED + 4000),
+
+    # ── 英検2級 district — 学者（がくしゃ）の城下町（じょうかまち） ──────────────
+    # Reuses librarian (せんせい) + scholar (がくせい) + captain (やくにん) art;
+    # only the background is new.
+    ("town_2_castle.png",
+     "a european castle town at soft afternoon below a great castle on a hill, scholarly "
+     "stone halls with banners, a market street, stone staircases climbing toward the "
+     "castle, gentle haze, NO PEOPLE, empty street, wide establishing scene",
+     1216, 832, DISTRICT_SEED + 5000),
+
+    # ── 英検準1級 district — 灰色（はいいろ）の ひろば / The Grey Square ─────────
+    # The CLIMAX district: the heart of the サイレント. The square itself stays
+    # colour-drained grey — colour returns only as the player restores its NPCs.
+    ("town_pre1_grey_square.png",
+     "a grand stone city square drained of all colour, desaturated grey and ash, a great "
+     "silent hall, weathered statues, a dry stone fountain, overcast melancholy light, "
+     "stillness, NO PEOPLE, empty square, wide establishing scene",
+     1216, 832, DISTRICT_SEED + 6000),
+    ("npc_chancellor_grey.png",
+     "a dignified elderly former chancellor in formal layered robes and chain of office, "
+     "weary and sorrowful, desaturated muted greyscale, colour drained away, single "
+     "character, simple soft grand-hall background", 832, 1216, DISTRICT_SEED + 6011),
+    ("npc_chancellor_color.png",
+     "a dignified elderly former chancellor in formal layered robes and chain of office, "
+     "standing tall with quiet hope, full warm colour restored, single character, simple "
+     "soft grand-hall background", 832, 1216, DISTRICT_SEED + 6011),
+    ("npc_healer_grey.png",
+     "a gentle city healer in flowing robes holding a small lantern and herbs, kind, "
+     "desaturated muted greyscale, colour drained away, single character, simple soft "
+     "background", 832, 1216, DISTRICT_SEED + 6022),
+    ("npc_healer_color.png",
+     "a gentle city healer in flowing robes holding a glowing lantern and herbs, kind and "
+     "hopeful, full warm colour restored, single character, simple soft background",
+     832, 1216, DISTRICT_SEED + 6022),
 ]
 
 
@@ -161,7 +203,10 @@ def main():
         print(f"  generating {fn} ({w}x{h}, seed {seed})…")
         img = pipe(prompt=prompt, negative_prompt=NEG, width=w, height=h,
                    num_inference_steps=28, guidance_scale=6.5, generator=g).images[0]
-        img.save(out)
+        # Pass format explicitly: PIL's lazy extension registry may not be
+        # initialised in a fresh process, so inferring "PNG" from the ".png"
+        # suffix can raise "unknown file extension".
+        img.save(out, format="PNG")
         print(f"  ok  {out}")
     print(f"DONE: {len(JOBS)} images → {OUT}")
 
