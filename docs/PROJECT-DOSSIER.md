@@ -50,10 +50,15 @@ pre-launch); 17-screen smoke-test backlog; distractor *contextual* quality polis
   firebase_analytics ^12.4 / firebase_messaging ^16.2; shared_preferences ^2.2; http ^1.1;
   audioplayers ^5.2; **speech_to_text ^7.0** (the 二次 capture path); purchases_flutter
   ^8.11 (RevenueCat, mobile IAP); google_fonts ^8.0; crypto ^3.
-- **Backend:** `backend/server.js` (Node) — a proxy that holds server-side keys: **Claude
-  API** (rate-limited 10/min/IP, 60/hr/UID) and **Stripe** (checkout sessions + a Map-based
-  subscriptions store — ⚠️ in-memory, not a real DB yet). This is where the planned
-  `/v1/pronounce` (Azure) endpoint will live.
+- **Backend:** `backend/server.js` (Node, NOT deployed — see §6) — a key-holding proxy:
+  **Claude API** (rate-limited 10/min/IP, 60/hr/UID), **Stripe** (checkout sessions + an
+  in-memory subscriptions Map ⚠️). Env vars it needs: `CLAUDE_API_KEY`, `STRIPE_SECRET_KEY`,
+  `STRIPE_PRICE_ID`, `STRIPE_WEBHOOK_SECRET`, `FIREBASE_PROJECT_ID`, `ALLOWED_ORIGINS`,
+  `PORT`, `NODE_ENV`. This is where the planned `/v1/pronounce` (Azure 二次) endpoint lives.
+- **Firebase:** `firebase.json` + `firestore.rules` + `lib/core/firebase/firebase_config.dart`
+  exist (anonymous auth, COPPA). ⚠️ No `lib/firebase_options.dart` found — the actual
+  Firebase project (id, web/app keys, deployed Firestore rules) must be verified/documented
+  before launch (not inspected in this dossier).
 - **SRS:** custom **FSRS-4.5** in lib/core/fsrs (schedule/Grade{again,hard,good,easy}). Now
   load-bearing via the 館 design; per-word keying + read-back is the efficacy spine.
 - **AI / local (¥0):** **Kokoro TTS** (venv `~/.venvs/kokoro`) for all generated speech
@@ -89,17 +94,52 @@ pre-launch); 17-screen smoke-test backlog; distractor *contextual* quality polis
   banks are demo-sized (need dozens/大問/grade for real coverage + re-attempts); 準2級プラス
   absent from kEikenExams config; per-word FSRS keying + read-back (館) not yet wired.
 
-## 6. INFRA, DEPLOY & COST
-- **Hosting:** Hetzner VPS `178.105.113.79` (also reachable as ssh `root@178.105.113.79`;
-  note: the alias `vps-edilab` is a DIFFERENT box `46.225.27.98` — do not confuse). nginx.
-- **Demo:** `http://178.105.113.79:8088` → `/srv/engquest-web` (no-cache + service-worker
-  DISABLED so reloads always show latest; production `:80` serves other edilab sites,
-  untouched). Deploy = `flutter build web --release --pwa-strategy=none` then
-  `rsync -az --delete build/web/ root@178.105.113.79:/srv/engquest-web/`.
-- **Cost model:** runs within the flat-rate Claude subscription (Claude Code; no per-token
-  API billing). Image/voice gen = local ¥0 (Animagine/Kokoro). VPS = existing. Only
-  per-usage cost on the horizon = Azure Pronunciation (~$0.006/min, ~5% of revenue at 5k
-  users) for 二次 — needs an Azure account/key (CEO to provide).
+## 6. INFRA, DEPLOY & COST (verified by SSH inspection 2026-06-06)
+### The VPS (engquest is a GUEST on a shared production box)
+- **Host:** `hermes-agent-prod` @ `178.105.113.79` (ssh `root@178.105.113.79`). Ubuntu
+  **24.04.4 LTS**, **4 vCPU / 7.6 GiB RAM / 150 GB disk (40% used, ~87 GB free)**, uptime
+  ~13 days, load ~0.05. ⚠️ The ssh alias `vps-edilab` is a DIFFERENT box (`46.225.27.98`,
+  hostname `clawdbot-1`) — I once mis-deployed there; always use `root@178.105.113.79`.
+- **This box also runs MANY production edilab services** (do NOT disrupt): Docker
+  containers — edilab-admin(:3005), edilab-paypal(:3001), edilab-platform(:3006),
+  comiru-dashboard(:3004), ogbadge(:3460→`node build/server.js` PORT=3456), moot-app
+  (:8080/:8000, moot-redis :6379), n8n-vps(:5678). nginx fronts them on :80/:443 with
+  Let's Encrypt SSL for admin/comiru/moot/ogbadge/payment/paypal/platform.edilab.jp.
+- **engquest's footprint:** ONE nginx vhost `/etc/nginx/sites-available/engquest`:
+  `listen 8088; root /srv/engquest-web;` with `Cache-Control no-cache` + gzip (full config
+  is short — static SPA, `try_files … /index.html`). **`/srv/engquest-web` = ~1.0 GB** (the
+  build bundles all generated vocab/quiz/listening audio — large; a candidate to slim).
+
+### Deploy pipeline
+1. `scripts/safe-job.sh eq_build 600 flutter build web --release --pwa-strategy=none`
+   (service worker OFF so reloads always show latest).
+2. `rsync -az --delete build/web/ root@178.105.113.79:/srv/engquest-web/`.
+3. nginx serves it immediately (no reload needed; static). Verify: `curl …:8088`.
+- Local AI assets are generated first via `scripts/safe-job.sh` (Kokoro/Animagine), bundled
+  into the build, then rsync'd. Audio mp3s are gitignored/regeneratable.
+
+### ⚠️ CRITICAL GAPS in the live demo (operational truth)
+- **The backend (`backend/server.js`, the Claude+Stripe proxy) is NOT DEPLOYED.** No
+  engquest node process runs on the VPS (the `node build/server.js` there is ogbadge). So
+  on the live demo, anything needing the backend **does not function**: AI-graded Writing
+  falls back to its self-check checklist; the planned `/v1/pronounce` (二次 Azure) has no
+  host yet; Stripe checkout is unreachable. Deploying the backend (pm2/systemd/Docker +
+  env keys for Claude/Stripe/Azure) is a prerequisite for those features to work live.
+- **Demo is HTTP-only on a bare IP:8088 — no domain, no HTTPS** (the edilab sites have
+  domains+SSL; engquest does not). Fine for a demo; NOT production-ready. Production needs:
+  a domain + HTTPS, the backend deployed, a real subscriptions DB (the backend currently
+  stores subs in an in-memory Map — lost on restart), and Firebase project config wired.
+- **Firebase:** the app initialises Firebase (main.dart) — the actual Firebase project
+  (Auth/Firestore/Analytics) config + security rules should be documented/verified before
+  launch (not inspected here; flagged).
+
+### Cost model
+- Dev runs within the flat-rate Claude subscription (Claude Code; **no per-token API
+  billing**). Image/voice generation = **local ¥0** (Animagine on the M4 / Kokoro). VPS =
+  existing/shared (no new cost). The ONLY per-usage cost on the horizon: **Azure
+  Pronunciation** for 二次 (~$0.006/min ≈ ~5% of revenue at 5k users) + the production
+  backend's own Claude API calls for writing/二次 grading (rate-limited 10/min/IP,
+  60/hr/UID in server.js). Azure needs an account/key (CEO to provide).
 
 ## 7. GOVERNANCE & QUALITY (read docs/governance/QUALITY-CONSTITUTION.md)
 - **R1–R9 enforced rules** + `scripts/verify_quality.sh` (content-integrity / asset-contract
