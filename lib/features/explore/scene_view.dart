@@ -25,6 +25,7 @@ export 'hotspot.dart'
         kTown5Scene,
         kTown4Scene,
         kTown3Scene,
+        kTownPre2Scene,
         kScenesByGrade,
         sceneForGrade,
         SceneDef;

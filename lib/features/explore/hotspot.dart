@@ -340,6 +340,84 @@ final SceneDef kTown3Scene = SceneDef(
 /// Helper: look up encounter [i] from kQuestTowns[2] (英検3級) at const-eval time.
 QuestStep _kStep3(int i) => kQuestTowns[2].encounters[i];
 
+// ── 英検準2級 scene — 社会（しゃかい）の港町（みなとまち） ──────────────────────
+
+/// Wave 2 vertical-slice scene: the fourth コトバ探偵 district.
+///
+/// 社会の港町 is a GRAND trade-port city (distinct from 4級's small fishing
+/// harbour) whose public commerce stilled when the words of society — the
+/// passive voice, relative clauses — were carried off. NPC ナゾ steps are
+/// REFERENCED from kQuestTowns[3].encounters; framingJa only adds flavour.
+///
+/// Art: town_pre2_port.png + merchant/captain grey→colour pairs. とうだいもり
+/// reuses 4級's lampkeeper art (the same kind of harbour-light keeper).
+final SceneDef kTownPre2Scene = SceneDef(
+  backgroundAsset: 'assets/art/scenes_layton/town_pre2_port.png',
+  parallaxLayers: const [],
+  titleJa: '社会（しゃかい）の港町（みなとまち）',
+  hotspots: [
+    // ── NPC 1: しょうにん — 波止場（はとば）の商人 / 受動態 ───────────────────
+    // Encounter index 2: 「Do you know where they are grown?」(passive voice).
+    Hotspot.npc(
+      pos: const Alignment(-0.50, 0.12),
+      size: 0.18,
+      step: _kStepPre2(2),
+      clueLineJa: '「この香辛料（こうしんりょう）が どこで“育（そだ）てられて”いるか… '
+          'それを いう ことばが、波（なみ）に さらわれた。」',
+      framingJa: '社会（しゃかい）の港町（みなとまち）。世界中（せかいじゅう）の '
+          'しなものが あつまる 大（おお）きな 波止場（はとば）。\n'
+          '商人（しょうにん）は「〜される」を かたる ことば — 受動態（じゅどうたい） — '
+          'を なくした。\n'
+          '「Do you know where they ___ ?」— ものが どう されるかを いう かたちは？',
+      npcGreyAsset: 'assets/art/scenes_layton/npc_merchant_grey.png',
+      npcColorAsset: 'assets/art/scenes_layton/npc_merchant_color.png',
+    ),
+    // ── NPC 2: せんちょう — 大船（おおぶね）の船長 / 関係代名詞 who ────────────
+    // Encounter index 3: 「What kind of sailor do you respect?」(relative who).
+    Hotspot.npc(
+      pos: const Alignment(0.50, -0.08),
+      size: 0.18,
+      step: _kStepPre2(3),
+      clueLineJa: '「信（しん）じられる 仲間（なかま）を いい表（あらわ）す ことばが、'
+          'もう 出（で）てこないんだ。」',
+      framingJa: '埠頭（ふとう）に つながれた 大船（おおぶね）。'
+          '船長（せんちょう）が きみを 見定（みさだ）める。\n'
+          '「どんな 人（ひと）か」を つなぐ ことば — 関係代名詞（かんけいだいめいし）'
+          'who — を なくした。\n'
+          '「A sailor ___ never gives up in a storm.」— 人（ひと）を つなぐ かたちは？',
+      npcGreyAsset: 'assets/art/scenes_layton/npc_captain_grey.png',
+      npcColorAsset: 'assets/art/scenes_layton/npc_captain_color.png',
+    ),
+    // ── NPC 3: とうだいもり — 港（みなと）の灯（あか）り守 / 関係副詞 where ──────
+    // Encounter index 4: 「describe the place ships feel safe」(relative where).
+    Hotspot.npc(
+      pos: const Alignment(0.78, -0.42),
+      size: 0.16,
+      step: _kStepPre2(4),
+      clueLineJa: '「船（ふね）が やすらぐ“場所（ばしょ）”を いい表（あらわ）す ことば… '
+          'それが きえると、灯台（とうだい）の あかりも にぶる。」',
+      framingJa: '港（みなと）の はずれの 灯台（とうだい）。'
+          'ふるい 灯（あか）り守（もり）が 海（うみ）を みつめている。\n'
+          '「〜する 場所（ばしょ）」を つなぐ ことば — 関係副詞（かんけいふくし）'
+          'where — を なくした。\n'
+          '「the harbour ___ the storms cannot reach」— 場所（ばしょ）を つなぐ かたちは？',
+      npcGreyAsset: 'assets/art/scenes_layton/npc_lampkeeper_grey.png',
+      npcColorAsset: 'assets/art/scenes_layton/npc_lampkeeper_color.png',
+    ),
+    // ── Coin: hidden among the moored ships' rigging ────────────────────────
+    Hotspot.coin(
+      pos: const Alignment(-0.80, -0.50),
+      size: 0.11,
+      coinValue: 1,
+      clueLineJa: 'スラ：「…ぷる！ ふねの ロープの あいだで、なにかが ゆれて ひかってる。'
+          'たかい ところだなぁ…！」',
+    ),
+  ],
+);
+
+/// Helper: look up encounter [i] from kQuestTowns[3] (英検準2級) at const-eval time.
+QuestStep _kStepPre2(int i) => kQuestTowns[3].encounters[i];
+
 // ── Scene registry ──────────────────────────────────────────────────────────
 
 /// Painted コトバ探偵 scenes keyed by 英検 grade. Grades without a scene yet are
@@ -348,6 +426,7 @@ final Map<String, SceneDef> kScenesByGrade = {
   '5': kTown5Scene,
   '4': kTown4Scene,
   '3': kTown3Scene,
+  'pre2': kTownPre2Scene,
 };
 
 /// Returns the painted scene for [grade], or null when that grade has no scene

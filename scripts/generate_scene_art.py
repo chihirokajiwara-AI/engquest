@@ -107,6 +107,34 @@ JOBS = [
      "a young earnest student scholar with a satchel and an open notebook, tousled hair, "
      "smiling brightly, full warm colour restored, hopeful, single character, simple soft "
      "courtyard background", 832, 1216, DISTRICT_SEED + 2022),
+
+    # ── 英検準2級 district — 社会（しゃかい）の港町（みなとまち） ────────────────
+    # The fourth コトバ探偵 district: a GRAND trade-port city (distinct from 4級's
+    # small fishing harbour by scale) — a great customs hall, tall merchant ships,
+    # quayside market — where the words of society (passive voice, relative
+    # clauses, opinion) were carried off, stilling all public commerce.
+    # とうだいもり (lighthouse keeper) reuses 4級's npc_lampkeeper art.
+    ("town_pre2_port.png",
+     "a grand european trade-port city at soft afternoon, a great stone customs hall with "
+     "flags and a clocktower, tall three-masted merchant sailing ships at a busy stone quay, "
+     "warehouses, quayside market stalls with striped awnings, gulls, gentle sea haze, NO "
+     "PEOPLE, empty waterfront, wide establishing scene", 1216, 832, DISTRICT_SEED + 3000),
+    ("npc_captain_grey.png",
+     "a weathered sea captain in a long coat and captain's hat with a spyglass, dignified, "
+     "desaturated muted greyscale, colour drained away, sorrowful quiet, single character, "
+     "simple soft harbour background", 832, 1216, DISTRICT_SEED + 3011),
+    ("npc_captain_color.png",
+     "a weathered sea captain in a long coat and captain's hat with a spyglass, dignified, "
+     "smiling warmly, full warm colour restored, hopeful, single character, simple soft "
+     "harbour background", 832, 1216, DISTRICT_SEED + 3011),
+    ("npc_merchant_grey.png",
+     "a lively quayside market merchant in an apron behind a stall of fruit and cloth, "
+     "desaturated muted greyscale, colour drained away, sorrowful quiet, single character, "
+     "simple soft market background", 832, 1216, DISTRICT_SEED + 3022),
+    ("npc_merchant_color.png",
+     "a lively quayside market merchant in an apron behind a stall of fruit and cloth, "
+     "smiling warmly, full warm colour restored, hopeful, single character, simple soft "
+     "market background", 832, 1216, DISTRICT_SEED + 3022),
 ]
 
 
