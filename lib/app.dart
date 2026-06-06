@@ -22,6 +22,9 @@ import 'package:engquest/features/home/daily_home_screen.dart';
 import 'package:engquest/core/storage/preferences_service.dart';
 import 'package:engquest/features/quest/ui/dq_ui.dart';
 import 'package:engquest/features/explore/scene_view.dart';
+import 'package:engquest/features/exam_practice/pass/pass_meter_screen.dart';
+import 'package:engquest/features/speaking/speaking_consent_notice.dart';
+import 'package:engquest/features/speaking/speaking_screen.dart';
 
 // ---------------------------------------------------------------------------
 // Onboarding state management
@@ -437,6 +440,12 @@ Widget _previewFor(String? name) {
           description: 'Preview',
         ),
       );
+    case 'passmeter':
+      return const PassMeterScreen();
+    case 'speaking':
+      return const SpeakingScreen(eikenGrade: '3');
+    case 'speakingconsent':
+      return SpeakingConsentNotice(eikenGrade: '3', onConsent: () {});
     case 'listening2':
       // Preview: 英検2級 リスニング
       return ListeningPracticeScreen(

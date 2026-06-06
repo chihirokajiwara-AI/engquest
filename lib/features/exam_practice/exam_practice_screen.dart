@@ -16,6 +16,8 @@ import 'reading_practice_screen.dart';
 import 'vocab_grammar_practice_screen.dart';
 import 'word_ordering_practice_screen.dart';
 import 'writing_practice_screen.dart';
+import '../speaking/speaking_consent_notice.dart';
+import '../speaking/speaking_screen.dart';
 
 class ExamPracticeScreen extends StatelessWidget {
   const ExamPracticeScreen({
@@ -192,8 +194,19 @@ class ExamPracticeScreen extends StatelessWidget {
           ),
         );
       case ExamSectionType.speaking:
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('${section.nameJa}は準備中です')),
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => SpeakingConsentNotice(
+              eikenGrade: eikenGrade,
+              onConsent: () => Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => SpeakingScreen(eikenGrade: eikenGrade),
+                ),
+              ),
+            ),
+          ),
         );
     }
   }
