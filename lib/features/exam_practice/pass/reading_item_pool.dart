@@ -1077,6 +1077,7 @@ const _grade2Reading = [
 
 // ── 英検準1級 ─────────────────────────────────────────────────────────────────
 const _pre1Reading = [
+  // Existing 5 retained; choices reordered to remove the all-correctIdx-0 bias.
   ReadingMockItem(
     id: 'p1_r_001',
     sectionId: 'p1_r1',
@@ -1084,8 +1085,8 @@ const _pre1Reading = [
         'The government\'s plan to ( ) urban areas by expanding public '
         'transport has gained widespread support.',
     questionText: 'Choose the best word for the blank.',
-    choices: ['revitalise', 'replicate', 'retrieve', 'regulate'],
-    correctIdx: 0,
+    choices: ['replicate', 'retrieve', 'revitalize', 'regulate'],
+    correctIdx: 2,
   ),
   ReadingMockItem(
     id: 'p1_r_002',
@@ -1106,12 +1107,12 @@ const _pre1Reading = [
         'Scientists attribute these shifts primarily to rising global temperatures.',
     questionText: 'What is causing the changes in precipitation patterns?',
     choices: [
-      'Rising global temperatures',
       'Decreased solar activity',
+      'Rising global temperatures',
       'Changes in ocean currents only',
       'Volcanic eruptions',
     ],
-    correctIdx: 0,
+    correctIdx: 1,
   ),
   ReadingMockItem(
     id: 'p1_r_004',
@@ -1120,15 +1121,15 @@ const _pre1Reading = [
         'The concept of circular economy aims to ( ) waste by keeping '
         'materials in use for as long as possible through recycling and repair.',
     questionText: 'Choose the best phrase for the blank.',
-    choices: ['eliminate', 'create', 'ignore', 'transfer'],
-    correctIdx: 0,
+    choices: ['create', 'ignore', 'transfer', 'eliminate'],
+    correctIdx: 3,
   ),
   ReadingMockItem(
     id: 'p1_r_005',
     sectionId: 'p1_r3',
     passageText:
         'Artificial intelligence is increasingly being used in medical diagnosis. '
-        'Machine learning algorithms can analyse medical images with an accuracy '
+        'Machine learning algorithms can analyze medical images with an accuracy '
         'that rivals or surpasses experienced physicians in some fields.',
     questionText: 'How does AI compare to physicians in some diagnostic fields?',
     choices: [
@@ -1138,5 +1139,153 @@ const _pre1Reading = [
       'It replaces all clinical judgment.',
     ],
     correctIdx: 0,
+  ),
+  // ── 大問1 短文語句空所補充 (advanced vocabulary + phrasal verbs, CEFR B2) ──
+  ReadingMockItem(
+    id: 'p1_r_006',
+    sectionId: 'p1_r1',
+    passageText:
+        'The new evidence completely ( ) the detective\'s theory, so he '
+        'had to start the investigation over.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['supported', 'ignored', 'repeated', 'undermined'],
+    correctIdx: 3,
+  ),
+  ReadingMockItem(
+    id: 'p1_r_007',
+    sectionId: 'p1_r1',
+    passageText:
+        'During the recession, the company was forced to ( ) hundreds of '
+        'workers.',
+    questionText: 'Choose the best phrase for the blank.',
+    choices: ['take on', 'lay off', 'put up', 'look after'],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: 'p1_r_008',
+    sectionId: 'p1_r1',
+    passageText:
+        'Despite the serious setback, she remained ( ) and continued her '
+        'research.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['disheartened', 'indifferent', 'undeterred', 'complacent'],
+    correctIdx: 2,
+  ),
+  ReadingMockItem(
+    id: 'p1_r_009',
+    sectionId: 'p1_r1',
+    passageText:
+        'The politician\'s vague answers only ( ) the public\'s suspicion '
+        'rather than easing it.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['fueled', 'reduced', 'satisfied', 'ignored'],
+    correctIdx: 0,
+  ),
+  ReadingMockItem(
+    id: 'p1_r_010',
+    sectionId: 'p1_r1',
+    passageText:
+        'The ancient manuscript was so ( ) that scholars could barely read '
+        'the text.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['legible', 'ornate', 'pristine', 'illegible'],
+    correctIdx: 3,
+  ),
+  ReadingMockItem(
+    id: 'p1_r_011',
+    sectionId: 'p1_r1',
+    passageText:
+        'Her argument was so ( ) that no one in the room could find a flaw '
+        'in it.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['confusing', 'compelling', 'weak', 'vague'],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: 'p1_r_012',
+    sectionId: 'p1_r1',
+    passageText:
+        'The team needs to ( ) alternative solutions before the deadline.',
+    questionText: 'Choose the best phrase for the blank.',
+    choices: ['come up with', 'get away with', 'put up with', 'do away with'],
+    correctIdx: 0,
+  ),
+  ReadingMockItem(
+    id: 'p1_r_013',
+    sectionId: 'p1_r1',
+    passageText: 'For best results, the medicine should be taken at regular ( ).',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['distances', 'amounts', 'intervals', 'degrees'],
+    correctIdx: 2,
+  ),
+  ReadingMockItem(
+    id: 'p1_r_014',
+    sectionId: 'p1_r1',
+    passageText:
+        'The company decided to ( ) the product launch because of serious '
+        'technical problems.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['promote', 'pursue', 'produce', 'postpone'],
+    correctIdx: 3,
+  ),
+  ReadingMockItem(
+    id: 'p1_r_015',
+    sectionId: 'p1_r1',
+    passageText:
+        'His extremely rude behavior at the ceremony was completely ( ).',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['tolerable', 'inexcusable', 'commendable', 'justified'],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: 'p1_r_016',
+    sectionId: 'p1_r1',
+    passageText:
+        'Health officials are working around the clock to ( ) the spread of '
+        'the disease.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['maintain', 'obtain', 'contain', 'retain'],
+    correctIdx: 2,
+  ),
+  ReadingMockItem(
+    id: 'p1_r_017',
+    sectionId: 'p1_r1',
+    passageText:
+        'The two approaches work well together; they ( ) each other\'s '
+        'strengths.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['complement', 'contradict', 'replace', 'weaken'],
+    correctIdx: 0,
+  ),
+  // ── 大問2 長文の語句空所補充 (passage cloze) ──────────────────────────────
+  ReadingMockItem(
+    id: 'p1_r_018',
+    sectionId: 'p1_r2',
+    passageText:
+        'Bilingual education has gained popularity in recent decades. Research '
+        'suggests that learning two languages from a young age can ( ) '
+        'cognitive flexibility and may even delay the onset of certain brain '
+        'diseases.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['reduce', 'prevent', 'enhance', 'replace'],
+    correctIdx: 2,
+  ),
+  // ── 大問3 長文の内容一致選択 (passage comprehension) ──────────────────────
+  ReadingMockItem(
+    id: 'p1_r_019',
+    sectionId: 'p1_r3',
+    passageText:
+        'Urban farming is growing in popularity. By growing food within cities, '
+        'communities can reduce the distance food must travel, lower '
+        'transportation costs, and provide fresh produce to neighborhoods that '
+        'lack access to grocery stores.',
+    questionText: 'According to the passage, what is one benefit of urban farming?',
+    choices: [
+      'It eliminates the need for farms.',
+      'It shortens the distance food travels.',
+      'It lowers housing prices.',
+      'It increases city traffic.',
+    ],
+    correctIdx: 1,
   ),
 ];
