@@ -38,6 +38,13 @@ class ReadingMockItem extends MockMcqItem {
 /// Returns reading mock items for [grade].
 /// The pool is intentionally small (a representative seed); items are drawn
 /// and shuffled by [MockExamAssembler] so repeated mock attempts vary.
+/// Raw [ReadingMockItem]s for a grade (passage + instruction kept separate).
+/// Exposed for integrity tests that must validate the SOURCE fields rather than
+/// the composed [readingItemsFor] output (which concatenates passage+instruction
+/// and would mask an empty passage). Returns const empty for unknown grades.
+List<ReadingMockItem> rawReadingItemsFor(String grade) =>
+    _kReadingPool[grade] ?? const <ReadingMockItem>[];
+
 List<MockMcqItem> readingItemsFor(String grade) =>
     (_kReadingPool[grade] ?? const <ReadingMockItem>[])
         // Compose the passage/cloze sentence ABOVE the instruction so the rendered
