@@ -170,12 +170,14 @@ echo ""
 # ╔═══════════════════════════════════════════════════════════════════════════╗
 # ║  R6 — CLEAN-CHECKOUT DEPENDENCY                                          ║
 # ╚═══════════════════════════════════════════════════════════════════════════╝
-# Catches the failure class where an [auto-sync] commit grabs a TRACKED edit
-# that imports a NEW file, but leaves that new file UNTRACKED → a clean checkout
-# (CI / fresh clone) does not compile, yet flutter analyze on the dirty working
-# tree is green (the file is present locally). Happened 2026-06-08 (audio_assets
-# .dart orphaned by f39e49f) and earlier (content_filter.dart / T34). Pure git —
-# no rebuild — so it runs even in --fast mode.
+# Fast local pre-filter (defense-in-depth) for the failure class where an
+# [auto-sync] commit grabs a TRACKED edit that references a NEW file, but leaves
+# that new file UNTRACKED → a clean checkout (CI / fresh clone) does not compile,
+# yet flutter analyze on the dirty working tree is green (the file is present
+# locally). Happened 2026-06-08 (audio_assets.dart orphaned by f39e49f) and
+# earlier (content_filter.dart / T34). The LOAD-BEARING guard is the pre-push
+# hook + CI, which analyze a real clean checkout; this is a fast pure-git heads-up
+# so you catch it BEFORE pushing. Runs even in --fast mode.
 hr
 echo -e "${BOLD}R6 CLEAN-CHECKOUT DEPENDENCY${RESET}"
 hr
@@ -186,11 +188,15 @@ UNTRACKED_DART=$(cd "$REPO_ROOT" && git ls-files --others --exclude-standard -- 
 if [[ -n "$UNTRACKED_DART" ]]; then
   while IFS= read -r f; do
     [[ -z "$f" ]] && continue
-    suffix="${f#lib/}"                 # e.g. core/audio/audio_assets.dart
-    esc="${suffix//./\\.}"             # escape dots for the regex
-    # Does any TRACKED dart file import this untracked file (relative or package)?
-    if (cd "$REPO_ROOT" && git grep -lE "import .*${esc}'" -- '*.dart' >/dev/null 2>&1); then
-      R6_VIOLATIONS+="  [FAIL] $f is imported by tracked code but is UNTRACKED (clean checkout won't compile)\n"
+    base="$(basename "$f")"            # e.g. audio_assets.dart
+    esc="${base//./\\.}"               # escape dots for the regex
+    # Does any TRACKED dart file reference this untracked file via import/export/
+    # part? Match the basename preceded by a path boundary (quote or slash) and
+    # followed by a closing quote — covers relative (same-dir or deep), package:,
+    # export, part, and both quote styles. Basename match (collisions are rare;
+    # over-flagging is safer than missing for a clean-checkout guard).
+    if (cd "$REPO_ROOT" && git grep -lE "(import|export|part).*[/'\"]${esc}[\"']" -- '*.dart' >/dev/null 2>&1); then
+      R6_VIOLATIONS+="  [FAIL] $f is referenced by tracked code but is UNTRACKED (clean checkout won't compile)\n"
     fi
   done <<< "$UNTRACKED_DART"
 fi
