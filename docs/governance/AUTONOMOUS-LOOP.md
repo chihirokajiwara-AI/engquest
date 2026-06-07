@@ -56,6 +56,13 @@ find the flaw, the shallowness, the 英検-spec violation, the thing a world-cla
   refute → block.
 - Every ~5 iterations, also run a **COMPLETENESS CRITIC**: "what's missing,
   shallow, or unverified across the product?" → its findings become backlog.
+- Every ~5 iterations, also run a **UX / JOURNEY WALKTHROUGH** (added 2026-06-07
+  after CEO 721: the loop caught content bugs but missed screen-structure defects
+  — it found 4 core screens crashing to blank grey). An agent screenshots every
+  `?preview=` route on the live demo + reads the backing code, hunting: blank/
+  crashing screens, button label≠behavior, dead ends, confusing labels, too-hard/
+  too-easy steps, missing expected pages, child-UX/immersion gaps → P0–P2 backlog.
+  A single happy-path screenshot is NOT enough; walk the WHOLE journey.
 
 ### 7. SHIP (only if 4+5+6 all pass)
 Commit (descriptive, prefix per CLAUDE.md) → push → build web → **demo-deploy
