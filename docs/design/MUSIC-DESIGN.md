@@ -27,14 +27,26 @@ Implementation knob: gate the BGM layer-stack on the SAME
 
 ---
 
-## 1. The two non-negotiables (evidence-based)
+## 1. The principles (CEO direction + evidence reconciled)
+
+**CEO directive (2026-06-07): BGM should ALWAYS be playing — even when the child
+is just looking at a screen — because it elevates the worldview.** We honor this:
+music is *continuous* across the app; the world never goes dead-silent (except the
+narrative サイレント device, §0). We reconcile "always-on" with the learning
+evidence via DUCKING, not silence:
 
 1. **Instrumental only, app-wide.** Lyrics — especially *English* lyrics — badly
    hurt reading/listening in an English app (irrelevant-speech effect; worst when
-   lyric language = task language). (Vasilev 2023; Zhang 2024.)
-2. **Quiet or silent during any reading / listening / timed task.** BGM harms
-   hard verbal tasks; the timed mock must mirror real 英検 silence. Music earns
-   its place on *engagement* screens, not *test* screens. (Cheah et al. 2022.)
+   lyric language = task language). This is the hard rule that lets music stay on
+   everywhere safely. (Vasilev 2023; Zhang 2024.)
+2. **Always-on, but DUCKED to a low instrumental bed during reading / listening /
+   verbal tasks** (never loud, never lyrics). A low instrumental bed is
+   evidence-neutral (doesn't credibly help or hurt), so the world stays alive
+   without impairing verbal work — the best of both. (Cheah et al. 2022; Vasilev
+   2023: instrumental "did not credibly hinder.")
+3. **Timed mock exam:** keep a *very* low neutral bed on by default (per CEO
+   always-on), with an obvious one-tap OFF for kids who want real-exam silence —
+   so we respect both the worldview wish and test-focus needs.
 
 The "Mozart effect" is a myth — we design around evidence, not it. (Oviedo-Caro 2023.)
 
@@ -47,10 +59,10 @@ The "Mozart effect" is a myth — we design around evidence, not it. (Oviedo-Car
 | Title / opening | **Yes** | One warm, singable **title theme** (the leitmotif, full) | starts on the Start-button tap (autoplay rule) |
 | World map / hub | Yes (default on) | Instrumental, calm→mid, **anti-fatigue** | "safe" feeling; vary loops |
 | Town / district explore | Yes | District arrangement of the leitmotif; **layered by restoration %** | the silence→music mechanic lives here |
-| NPC dialog (ナゾ) | Low bed or none | very low instrumental | TTS/voice takes priority — duck hard |
-| Vocab battle / flashcards | Low or none | sparse, very low | verbal task; SFX feedback OK |
-| Reading / listening practice | **No** | — | high verbal load; lyrics catastrophic |
-| **Timed mock exam** | **No (default off)** | optional neutral ambient only | mirror real 英検 silence |
+| NPC dialog (ナゾ) | Yes, ducked | very low instrumental | TTS/voice takes priority — duck hard under speech |
+| Vocab battle / flashcards | Yes, ducked low | sparse, very low | verbal task; SFX feedback on top |
+| Reading / listening practice | Yes, ducked LOW | low instrumental bed only | high verbal load — keep minimal; never lyrics; duck under listening audio |
+| **Timed mock exam** | Yes, very low (one-tap OFF) | minimal neutral bed | always-on per CEO; OFF available for real-exam silence |
 | Reward / level-up / streak | Yes (short) | **stinger** from the leitmotif | brief, bright, not startling |
 | District-restored (climax) | Yes | full restored theme blooms from silence | the silence→colour payoff |
 | Settings | — | — | Music / SFX / Voice sliders + global mute + sensory-friendly mode |
