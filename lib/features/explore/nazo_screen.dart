@@ -428,10 +428,16 @@ class _NazoScreenState extends State<NazoScreen> {
         st = DqChoiceState.wrong;
       }
       final audioKey = o.audioAsset ?? quizAudioAsset(o.label);
+      // When this step's audio isn't bundled (founder-pending phonemes), the
+      // per-option 🔊 would be dead too — drop it so options aren't a silent
+      // guessing trap; the glyph on the teach card keeps them answerable. (#43)
+      final onAudio = (audioKey == null || _audioMissing)
+          ? null
+          : () => _cue.play(audioKey);
       return AudioOptionButton(
         label: o.label,
         state: st,
-        onAudio: audioKey == null ? null : () => _cue.play(audioKey),
+        onAudio: onAudio,
         onChoose: _revealed ? null : () => _choose(i),
       );
     });
