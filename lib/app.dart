@@ -19,6 +19,7 @@ import 'package:engquest/features/exam_practice/writing_practice_screen.dart';
 import 'package:engquest/features/exam_practice/eiken_exam_config.dart';
 import 'package:engquest/features/achievements/achievements_screen.dart';
 import 'package:engquest/features/parent_dashboard/parent_dashboard_screen.dart';
+import 'package:engquest/features/parent_dashboard/parent_login_screen.dart';
 import 'package:engquest/features/home/daily_home_screen.dart';
 import 'package:engquest/core/storage/preferences_service.dart';
 import 'package:engquest/features/quest/ui/dq_ui.dart';
@@ -294,7 +295,7 @@ const List<String> kPreviewRouteNames = [
   'quest2', 'battle', 'dialog', 'voice', 'exam', 'writing', 'writing2',
   'writingp1', 'listening', 'listening4', 'listening3', 'listeningp2',
   'kotobahome', 'passmeter', 'passmetermissing', 'speaking', 'speakingconsent',
-  'listening2', 'achievements', 'parent',
+  'listening2', 'achievements', 'parent', 'parentlogin',
 ];
 
 /// Test-visible wrapper for the private preview harness.
@@ -528,6 +529,8 @@ Widget _previewFor(String? name) {
       return const AchievementsScreen();
     case 'parent':
       return const ParentDashboardScreen();
+    case 'parentlogin':
+      return const ParentLoginScreen();
     default:
       return const _AppEntryPoint();
   }

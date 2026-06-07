@@ -7,24 +7,49 @@ import 'package:firebase_auth/firebase_auth.dart';
 /// an email account to monitor progress from a separate device. A 6-digit
 /// link code connects the parent account to the child's anonymous UID.
 class ParentAuthService {
-  FirebaseAuth get _auth => FirebaseAuth.instance;
-  FirebaseFirestore get _db => FirebaseFirestore.instance;
+  // Null-safe lazy access — FirebaseAuth/Firestore.instance throw when Firebase
+  // failed to initialize (offline/placeholder keys). Returning null here keeps
+  // sync getters (used in build) from crashing the screen; the async methods
+  // below throw a clear StateError that their UI call sites already catch.
+  FirebaseAuth? get _auth {
+    try {
+      return FirebaseAuth.instance;
+    } catch (_) {
+      return null;
+    }
+  }
 
-  /// Current Firebase user (null if not signed in).
-  User? get currentUser => _auth.currentUser;
+  FirebaseFirestore? get _db {
+    try {
+      return FirebaseFirestore.instance;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// Current Firebase user (null if not signed in or Firebase unavailable).
+  User? get currentUser => _auth?.currentUser;
 
   /// True when the current user signed in with email (not anonymous).
   bool get isParentUser {
-    final user = _auth.currentUser;
+    final user = _auth?.currentUser;
     if (user == null) return false;
     return !user.isAnonymous && user.email != null;
   }
+
+  /// Resolves the auth instance or throws a clear error (callers catch it).
+  FirebaseAuth get _requireAuth =>
+      _auth ?? (throw StateError('Firebase Auth unavailable'));
+
+  /// Resolves the Firestore instance or throws a clear error (callers catch it).
+  FirebaseFirestore get _requireDb =>
+      _db ?? (throw StateError('Firestore unavailable'));
 
   // ── Email Auth ──────────────────────────────────────────────────────────
 
   /// Create a new parent account with email and password.
   Future<UserCredential> signUp(String email, String password) async {
-    return _auth.createUserWithEmailAndPassword(
+    return _requireAuth.createUserWithEmailAndPassword(
       email: email.trim(),
       password: password,
     );
@@ -32,14 +57,14 @@ class ParentAuthService {
 
   /// Sign in an existing parent with email and password.
   Future<UserCredential> signIn(String email, String password) async {
-    return _auth.signInWithEmailAndPassword(
+    return _requireAuth.signInWithEmailAndPassword(
       email: email.trim(),
       password: password,
     );
   }
 
   /// Sign out the current user.
-  Future<void> signOut() => _auth.signOut();
+  Future<void> signOut() => _requireAuth.signOut();
 
   // ── Link Code Generation (from child's device) ─────────────────────────
 
@@ -52,7 +77,7 @@ class ParentAuthService {
     final code = (hash.abs() % 900000 + 100000).toString();
 
     // Delete any existing codes for this child
-    final existing = await _db
+    final existing = await _requireDb
         .collection('link_codes')
         .where('childUid', isEqualTo: childUid)
         .get();
@@ -61,7 +86,7 @@ class ParentAuthService {
     }
 
     // Create new code document
-    await _db.collection('link_codes').doc(code).set({
+    await _requireDb.collection('link_codes').doc(code).set({
       'childUid': childUid,
       'createdAt': FieldValue.serverTimestamp(),
       'expiresAt': Timestamp.fromDate(now.add(const Duration(hours: 1))),
@@ -77,12 +102,12 @@ class ParentAuthService {
   ///
   /// Throws [LinkCodeException] if code is invalid or expired.
   Future<String> redeemLinkCode(String code) async {
-    final user = _auth.currentUser;
+    final user = _requireAuth.currentUser;
     if (user == null || user.isAnonymous) {
       throw LinkCodeException('保護者アカウントでログインしてください');
     }
 
-    final doc = await _db.collection('link_codes').doc(code.trim()).get();
+    final doc = await _requireDb.collection('link_codes').doc(code.trim()).get();
     if (!doc.exists) {
       throw LinkCodeException('リンクコードが見つかりません');
     }
@@ -99,7 +124,7 @@ class ParentAuthService {
     }
 
     // Add child to parent's linked children
-    await _db.collection('parent_links').doc(user.uid).set({
+    await _requireDb.collection('parent_links').doc(user.uid).set({
       'children': FieldValue.arrayUnion([childUid]),
       'email': user.email,
       'updatedAt': FieldValue.serverTimestamp(),
@@ -113,10 +138,10 @@ class ParentAuthService {
 
   /// Get the list of child UIDs linked to the current parent.
   Future<List<String>> getLinkedChildren() async {
-    final user = _auth.currentUser;
+    final user = _requireAuth.currentUser;
     if (user == null) return [];
 
-    final doc = await _db.collection('parent_links').doc(user.uid).get();
+    final doc = await _requireDb.collection('parent_links').doc(user.uid).get();
     if (!doc.exists) return [];
 
     final data = doc.data()!;

@@ -1,0 +1,97 @@
+{
+  "summary": "Expert research: high-accuracy + low-cost speech recognition / pronunciation scoring for Japanese kids speaking English (英検 二次), Flutter-feasible + COPPA-safe",
+  "agentCount": 4,
+  "logs": [
+    "3 experts researching ASR + pronunciation + cost/privacy (dated sources)…"
+  ],
+  "result": {
+    "pick": "Use Azure Pronunciation Assessment (batch REST, ~$0.006–0.022/min, phoneme + fluency + prosody + completeness scoring) as the scoring engine, called through your existing backend proxy, with a Claude Haiku layer on top that maps Azure's raw scores to the 英検 二次 rubric (音読 accuracy/fluency, Q&A grammar/vocab, 4コマ narration completeness) and runs the \"never go silent\" アティチュード coach. Capture audio on-device (record package web+mobile), gate the whole feature behind a 保護者同意 (verifiable parental consent) screen, and keep self-hosted fine-tuned Whisper on the VPS as the v2 cost/privacy escape hatch — NOT as v1, because raw Whisper gives transcription only and you would still have to build a phoneme scorer.",
+    "why": "All three analyses converge: Azure is the ONLY production-ready phoneme-level pronunciation-scoring API that fits the unit economics, and 英検 二次 needs scoring (phoneme accuracy, fluency, intonation), not transcription — so transcription-only options (Deepgram, raw/self-hosted Whisper, Web Speech API, on-device Moonshine/Apple SpeechAnalyzer) are disqualified for the core feature regardless of their WER. ACCURACY: no published Japanese-child-L2 benchmark exists for ANY engine (a real risk you must calibrate around), but Azure documents >0.5 Pearson with human judges and explicitly tells you to loosen child thresholds; open-source GOP/wav2vec2 sits at F1~0.41 (NOCASA 2025) — not shippable; Speechace has the best published child number (F1 0.86) but is 4-5x Azure's price. COST at 5,000 users (≈30 min/user/mo ≈ 150k min/mo): Azure batch ≈ $3,600/mo (~5% of revenue) is the only cloud option that fits ¥1,480; Azure real-time (~$13k) and Speechace/ELSA (~$19k, 26-33%) do not. Self-hosted Whisper is ~$0 compute but the M4 alone cannot serve 5,000 users (throughput-bound per analysis 3) and gives no scoring — so it is a v2 cost-reducer, not a v1 path. PRIVACY: child voice is now biometric under COPPA 2025 (deadline 2026-04-22) and APPI 2026 (under-16 guardian consent), so ANY cloud send — including a self-hosted EU VPS — requires a parental-consent gate; Azure with a DPA + Japan East region + immediate-delete is compliant and the consent screen is mandatory either way. FLUTTER: Azure short-audio REST (≤30s covers 5級–2級 音読) works identically on web and mobile via http through your existing backend proxy; Whisper WASM in Flutter web is explicitly NOT production-ready in 2026 (memory/latency, no mature package). SOLO-SUSTAINABILITY: one REST endpoint added to the proxy you already have (Stripe+Claude+rate-limiting) plus a Claude Haiku rubric prompt (≈$4/mo total) — no GPU ops, no Kaldi/MFA forced-alignment project. The アティチュード coach is a client-side VAD + prompt feature, independent of ASR vendor.",
+    "buildApproach": "WHERE THINGS RUN — Device (Flutter web+mobile): capture 16kHz mono WAV with the `record` package; run client-side VAD (energy threshold / WebRTC VAD) for the \"silence >3s → encouraging prompt\" アティチュード coach; render phoneme-highlighted score UI. Our infra (backend/server.js on the VPS — extend the existing proxy): add POST /v1/pronounce that (1) enforces the existing per-UID rate limiter, (2) checks the parental-consent flag, (3) forwards audio + reference text to Azure Pronunciation Assessment REST (key server-side, same pattern as the Claude key), (4) passes Azure's structured JSON + reference text + 英検 grade + rubric to Claude Haiku (reuse the existing Claude proxy path) to produce the 英検 4-point band + child-friendly Japanese feedback, (5) returns scores and immediately discards audio (no storage). Cloud: Azure Speech (Japan East) for scoring; Anthropic Haiku for rubric mapping/coaching. Audio NEVER persists; only derived scores are stored in Firestore. ADD A HARD LAUNCH GATE: a 保護者同意 consent screen (opt-in, names Microsoft Azure as processor, states immediate deletion) before the speaking feature unlocks — add this to the CLAUDE.md launch-blockers list. For 準1級 narration passages that exceed Azure's 30s REST limit, chunk into ≤30s segments and aggregate scores server-side. Calibrate scoring on real Japanese-child audio in closed beta before trusting absolute scores — start lenient (pass/encourage bias) since no JP-child benchmark exists.",
+    "v1": "Cheapest viable v1 (ship now, solo, ~2-4 weeks): record on-device → POST to a new /v1/pronounce endpoint on the existing VPS proxy → Azure Pronunciation Assessment BATCH mode (~$0.006/min, ≈$3,600/mo at full 5k scale, realistically far less since usage spikes only pre-exam) → Claude Haiku maps to 英検 rubric + Japanese feedback (~$4/mo) → client-side VAD アティチュード coach. Gated behind the mandatory 保護者同意 screen. This is the whole product: phoneme/fluency/prosody scoring, 英検 band, and the coach, with no GPU ops and one new endpoint on infrastructure you already run.",
+    "v2": "Higher-accuracy / lower-cost v2 (post-launch, only after you have data): (a) collect opt-in Japanese-child English audio in beta and fine-tune Whisper large-v3-turbo for this exact population (literature shows 20-55% relative WER reduction from child fine-tuning) to improve the transcription/alignment backbone; (b) build a self-hosted GOP/forced-alignment phoneme scorer (wav2vec2-CTC + CTC-segmentation, validated against your held-out Azure+human-rated set) on the VPS — moving scoring off Azure removes per-minute cost AND removes the cloud-biometric exposure entirely (strongest privacy position); (c) run Speechace on a 5-10% sample during beta as an independent child-accuracy benchmark to decide whether to negotiate an enterprise rate or trust your own scorer. Keep Azure as fallback until the self-hosted scorer demonstrably matches it on Japanese-child audio.",
+    "biggestRisk": "There is NO published WER or pronunciation-scoring benchmark for the exact target population — Japanese children aged 6–15 speaking accented L2 English — and child + L1-Japanese + L2-disfluency compounds badly (extrapolated 25-40%+ WER even fine-tuned; Arabic-child Whisper hit 66% / 4.1x adult degradation). Azure's >0.5 Pearson is self-reported on general (non-JP-child) data. So the scoring engine may mis-score real kids: harshly fail a child who said it acceptably (kills retention and parent trust) or falsely pass real mispronunciations (breaks the \"kid PASSES 英検\" moat — your entire differentiation). MITIGATION: this is not buildable blind — you MUST validate and calibrate on real Japanese-child audio in a closed beta before public launch, bias scoring lenient/encouraging for young grades per Microsoft's own child guidance, and treat the score as formative coaching (\"もう少しゆっくり\") rather than a hard pass/fail verdict until the JP-child correlation is measured. Secondary risk: the parental-consent gate is a launch blocker, not optional — shipping cloud voice capture for minors without verifiable consent is a COPPA-2025/APPI-2026 violation with real fines.",
+    "sources": [
+      {
+        "title": "Azure Pronunciation Assessment: Characteristics and Limitations (Microsoft)",
+        "url": "https://learn.microsoft.com/en-us/azure/foundry/responsible-ai/speech-service/pronunciation-assessment/characteristics-and-limitations-pronunciation-assessment",
+        "date": "2026-03-31"
+      },
+      {
+        "title": "Azure Interactive Language Learning with Pronunciation Assessment (Microsoft)",
+        "url": "https://learn.microsoft.com/en-us/azure/ai-services/speech-service/language-learning-with-pronunciation-assessment",
+        "date": "2026-02-25"
+      },
+      {
+        "title": "Best STT APIs 2026: Benchmarks & Pricing — FutureAGI",
+        "url": "https://futureagi.com/blog/speech-to-text-apis-in-2026-benchmarks-pricing-developer-s-decision-guide/",
+        "date": "2026-05-01"
+      },
+      {
+        "title": "Best Speech-to-Text APIs 2025 Pricing Comparison — VocaFuse",
+        "url": "https://vocafuse.com/blog/best-speech-to-text-api-comparison-2025/",
+        "date": "2026-01-01"
+      },
+      {
+        "title": "Using the Speechace API as Voice AI for Kids — Speechace docs",
+        "url": "https://www.speechace.com/using-the-speechace-api-as-voice-ai-for-kids/",
+        "date": "2026-06-01"
+      },
+      {
+        "title": "Closing the Child Speech Recognition Gap — The Learning Agency",
+        "url": "https://the-learning-agency.com/guides-resources/closing-the-child-speech-recognition-gap-evidence-limitations-and-paths-forward/",
+        "date": "2024-01-01"
+      },
+      {
+        "title": "Adapting Whisper for Lightweight Child ASR for On-device Edge (arXiv:2507.14451)",
+        "url": "https://arxiv.org/html/2507.14451v1",
+        "date": "2025-07-01"
+      },
+      {
+        "title": "Evaluating Logit-Based GOP Scores for Mispronunciation Detection (arXiv:2506.12067v2)",
+        "url": "https://arxiv.org/html/2506.12067v2",
+        "date": "2025-06-01"
+      },
+      {
+        "title": "Comparison of End-to-end Speech Assessment Models for NOCASA 2025 (arXiv:2509.03256)",
+        "url": "https://arxiv.org/html/2509.03256v1",
+        "date": "2025-09-01"
+      },
+      {
+        "title": "Arabic Little STT: Arabic Children Speech Recognition (arXiv:2510.23319)",
+        "url": "https://arxiv.org/pdf/2510.23319",
+        "date": "2025-10-01"
+      },
+      {
+        "title": "COPPA Compliance in 2025: A Practical Guide — Promise Legal",
+        "url": "https://blog.promise.legal/startup-central/coppa-compliance-in-2025-a-practical-guide-for-tech-edtech-and-kids-apps/",
+        "date": "2025-01-01"
+      },
+      {
+        "title": "Japan APPI 2026 Amendments — Children's Data Protections (Mori Hamada & Matsumoto)",
+        "url": "https://www.morihamada.com/en/insights/newsletters/138006",
+        "date": "2026-04-07"
+      },
+      {
+        "title": "Whisper Benchmark on Apple Silicon M3/M4 — JustVoice",
+        "url": "https://justvoice.ai/blog/whisper-benchmark-apple-silicon-m3-m4",
+        "date": "2026-01-01"
+      },
+      {
+        "title": "Whisper WASM Browser Experiment — Vibed Lab",
+        "url": "https://vibed-lab.com/blog/devlog-whisper-browser-wasm-experiment",
+        "date": "2026-01-01"
+      },
+      {
+        "title": "WWDC25: SpeechAnalyzer On-Device Speech-to-Text — Apple Developer",
+        "url": "https://developer.apple.com/videos/play/wwdc2025/277/",
+        "date": "2025-06-01"
+      },
+      {
+        "title": "Rubric-Guided Fine-tuning of SpeechLLMs for L2 Reading-Speech Assessment (arXiv:2603.16889)",
+        "url": "https://arxiv.org/pdf/2603.16889",
+        "date": "2026-03-01"
+      }
+    ]
+  }
+}
