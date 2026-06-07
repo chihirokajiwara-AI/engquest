@@ -22,6 +22,7 @@ import 'package:engquest/core/fsrs/fsrs_card.dart';
 import 'package:engquest/core/storage/preferences_service.dart';
 import 'package:engquest/features/home/streak_service.dart';
 import 'package:engquest/features/home/kotoba_home_screen.dart';
+import 'package:engquest/features/exam_practice/exam_practice_screen.dart';
 
 // ── Mock helpers ──────────────────────────────────────────────────────────────
 
@@ -187,6 +188,26 @@ void main() {
     ));
     await _settle(tester);
     expect(find.textContaining('ちずを みる'), findsOneWidget);
+  });
+
+  testWidgets(
+      'KotobaHomeScreen: 英検 practice CTA navigates to ExamPracticeScreen',
+      (tester) async {
+    // The exam-practice hub (大問/模試/合格メーター) was previously reachable only
+    // from the orphaned WorldMapScreen hub. This CTA is the live entry point —
+    // tap-and-assert-navigation (not just text presence) so the core 合格 surface
+    // cannot silently become unreachable again (a dropped onTap would pass a
+    // text-only check).
+    await tester.pumpWidget(_wrap(
+      streakService: _MockStreakService(const StreakState.zero()),
+      cardRepository: InMemoryFsrsCardRepository(),
+    ));
+    await _settle(tester);
+    final cta = find.byIcon(Icons.fact_check_outlined);
+    expect(cta, findsOneWidget);
+    await tester.tap(cta);
+    await tester.pumpAndSettle();
+    expect(find.byType(ExamPracticeScreen), findsOneWidget);
   });
 
   // ── Panel titles ──────────────────────────────────────────────────────────

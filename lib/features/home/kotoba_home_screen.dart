@@ -27,6 +27,7 @@ import 'package:engquest/core/fsrs/fsrs_card_repository.dart';
 import 'package:engquest/core/storage/preferences_service.dart';
 import 'package:engquest/features/explore/scene_view.dart';
 import 'package:engquest/features/home/streak_service.dart';
+import 'package:engquest/features/exam_practice/exam_practice_screen.dart';
 import 'package:engquest/features/quest/quest_map_screen.dart';
 import 'package:engquest/features/quest/ui/dq_ui.dart';
 import 'package:engquest/features/settings/settings_screen.dart';
@@ -175,6 +176,18 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
     );
   }
 
+  /// Navigate to the 英検 practice hub (vocab/grammar 大問, listening, writing,
+  /// full mock 模試, and the 合格メーター). This is the app's core 合格 surface and
+  /// was previously reachable ONLY from the now-orphaned WorldMapScreen hub, so
+  /// no live user could open it — this CTA restores access from the home.
+  void _goToExamPractice() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => ExamPracticeScreen(eikenGrade: _eikenLevel),
+      ),
+    );
+  }
+
   // ── Build ─────────────────────────────────────────────────────────────────
 
   @override
@@ -204,6 +217,8 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
             _buildPrimaryCta(),
             const SizedBox(height: 12),
             _buildSecondaryMap(),
+            const SizedBox(height: 12),
+            _buildExamCta(),
             const SizedBox(height: 20),
           ],
         ),
@@ -467,6 +482,37 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
             const SizedBox(width: 8),
             Text(
               'ちずを みる　／　Adventure Map',
+              style: dqText(size: 14, w: FontWeight.w700, color: dqInk),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ── Tertiary CTA: 英検れんしゅう (the exam-practice hub + 合格メーター) ──────
+  // Restores access to the core 合格 surface (大問 practice / 模試 / 合格率),
+  // which was previously reachable only from the orphaned WorldMapScreen hub.
+
+  Widget _buildExamCta() {
+    return GestureDetector(
+      onTap: _goToExamPractice,
+      child: Container(
+        width: double.infinity,
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(vertical: 13),
+        decoration: BoxDecoration(
+          color: dqBox.withAlpha(200),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: dqBorder.withAlpha(180), width: 1.5),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.fact_check_outlined, color: dqGold, size: 20),
+            const SizedBox(width: 8),
+            Text(
+              '英検（えいけん）れんしゅう　／　Eiken Practice',
               style: dqText(size: 14, w: FontWeight.w700, color: dqInk),
             ),
           ],
