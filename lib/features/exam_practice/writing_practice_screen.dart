@@ -361,22 +361,16 @@ const List<WritingPrompt> kWritingPrompts = [
 ];
 
 /// Returns the appropriate prompts for a given Eiken grade + section.
+/// Writing prompts for a grade — ONLY that grade's own prompts (id prefix
+/// `"{grade}_"`). 5級/4級 have NO writing section in 英検 → return empty.
+/// 準2級プラス returns its own prompts (empty until authored). Prefixes don't
+/// collide: "pre2_" does not match "pre2plus_" (char 5 differs). The previous
+/// default returned cross-grade opinion essays — wrong for 5/4級 (no writing)
+/// and a grade-mix for pre2plus.
 List<WritingPrompt> promptsForGrade(String eikenGrade) {
-  switch (eikenGrade) {
-    case '3':
-      return kWritingPrompts.where((p) => p.id.startsWith('3_')).toList();
-    case 'pre2':
-      return kWritingPrompts.where((p) => p.id.startsWith('pre2_')).toList();
-    case '2':
-      return kWritingPrompts.where((p) => p.id.startsWith('2_')).toList();
-    case 'pre1':
-      return kWritingPrompts.where((p) => p.id.startsWith('pre1_')).toList();
-    default:
-      // Fallback: opinion prompts for any grade
-      return kWritingPrompts
-          .where((p) => p.type == WritingTaskType.opinion)
-          .toList();
-  }
+  return kWritingPrompts
+      .where((p) => p.id.startsWith('${eikenGrade}_'))
+      .toList();
 }
 
 // ── Grading result ───────────────────────────────────────────────────────────
@@ -549,11 +543,10 @@ class _WritingPracticeScreenState extends State<WritingPracticeScreen> {
   void initState() {
     super.initState();
     _prompts = promptsForGrade(widget.eikenGrade);
-    if (_prompts.isEmpty) {
-      // Fallback: use all prompts rather than crashing
-      _prompts = kWritingPrompts.toList();
-    }
-    if (widget.previewPromptId != null) {
+    // No cross-grade fallback: an empty list means this grade has no writing
+    // section (5級/4級) or no prompts authored yet (準2級プラス). build() shows an
+    // honest empty-state instead of loading another grade's essays.
+    if (widget.previewPromptId != null && _prompts.isNotEmpty) {
       final idx = _prompts.indexWhere((p) => p.id == widget.previewPromptId);
       _promptIdx = idx >= 0 ? idx : 0;
     } else {
@@ -685,6 +678,42 @@ class _WritingPracticeScreenState extends State<WritingPracticeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Honest empty-state: 5級/4級 have no writing section; 準2級プラス has no
+    // prompts authored yet. Never index _prompt when there are none.
+    if (_prompts.isEmpty) {
+      return DqScene(
+        child: SafeArea(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+                child: Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.arrow_back, color: dqInk),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                  ],
+                ),
+              ),
+              const Expanded(
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(24),
+                    child: Text(
+                      'この級（きゅう）には ライティングは ありません。\n'
+                      'リーディングと リスニングで れんしゅうしよう！',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: dqInk, fontSize: 16, height: 1.6),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
     return DqScene(
       child: Column(
         children: [

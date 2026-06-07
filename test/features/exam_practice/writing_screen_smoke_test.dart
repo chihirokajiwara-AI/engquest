@@ -166,7 +166,8 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('unknown grade falls back to opinion prompts', (tester) async {
+    testWidgets('unknown grade shows empty-state, no crash (no cross-grade fallback)',
+        (tester) async {
       await tester.pumpWidget(wrap(
         const WritingPracticeScreen(
           eikenGrade: 'unknown_grade',
@@ -174,6 +175,7 @@ void main() {
         ),
       ));
       await tester.pump();
+      expect(find.textContaining('ライティングは'), findsOneWidget);
       expect(tester.takeException(), isNull);
     });
 
@@ -269,6 +271,30 @@ void main() {
 
     test('prompts for grade pre1 exist', () {
       expect(promptsForGrade('pre1').isNotEmpty, isTrue);
+    });
+
+    // P0-2 regression: 5級/4級 have NO writing section → empty (NOT cross-grade
+    // opinion essays); "pre2" must not leak "pre2plus" prompts (prefix guard).
+    test('grade 5 and 4 have NO writing prompts', () {
+      expect(promptsForGrade('5'), isEmpty);
+      expect(promptsForGrade('4'), isEmpty);
+    });
+
+    test('grade pre2 prompts exclude any pre2plus prompt', () {
+      expect(
+        promptsForGrade('pre2').any((p) => p.id.startsWith('pre2plus_')),
+        isFalse,
+      );
+    });
+
+    testWidgets('grade 5 writing screen shows honest empty-state, no crash',
+        (tester) async {
+      await tester.pumpWidget(wrap(
+        const WritingPracticeScreen(eikenGrade: '5', section: writingSection),
+      ));
+      await tester.pump();
+      expect(find.textContaining('ライティングは'), findsOneWidget);
+      expect(tester.takeException(), isNull);
     });
   });
 }
