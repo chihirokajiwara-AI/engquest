@@ -58,6 +58,22 @@ void main() {
           greaterThan(zeroWriting!.readinessPct));
     });
 
+    test('CseEstimator marks skills with no data as unmeasured (not failed)',
+        () {
+      // 3級 tests reading + writing + listening. Give only reading data.
+      final est = CseEstimator.estimate(
+        grade: '3',
+        accuracies: const [
+          SkillAccuracy(
+              skill: EikenSkill.reading, accuracy: 0.8, itemsAttempted: 10),
+        ],
+      );
+      expect(est, isNotNull);
+      expect(est!.unmeasuredSkills, contains(EikenSkill.writing));
+      expect(est.unmeasuredSkills, contains(EikenSkill.listening));
+      expect(est.unmeasuredSkills, isNot(contains(EikenSkill.reading)));
+    });
+
     test('all-correct answers score higher readiness than all-wrong', () {
       final exam = MockExamAssembler.assemble('5', seed: 1);
 

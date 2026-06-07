@@ -109,6 +109,7 @@ class PassMeterScreen extends StatelessWidget {
               _WeakSkillCta(
                 skill: est.limitingSkill!,
                 gradeLabel: gradeLabel,
+                unmeasured: est.unmeasuredSkills.contains(est.limitingSkill),
               ),
 
             if (est.isPredictedPass) ...[
@@ -188,6 +189,18 @@ class _PassHero extends StatelessWidget {
             style: dqText(size: 12, color: dqGold),
           ),
 
+          // Provisional caption when a skill has no data yet — the headline %
+          // counts that skill as 0, so it will rise once the child practices it.
+          if (est.unmeasuredSkills.isNotEmpty) ...[
+            const SizedBox(height: 6),
+            Text(
+              '※ まだ れんしゅうしていない ぎじゅつが あるよ。\n'
+              'やってみると ごうかくりつは かわります（とちゅうけいさん）。',
+              textAlign: TextAlign.center,
+              style: dqText(size: 11, color: const Color(0xFF8A93B5)),
+            ),
+          ],
+
           const SizedBox(height: 12),
 
           // Progress bar
@@ -243,6 +256,7 @@ class _SkillBars extends StatelessWidget {
             score: est.skillScores[skill] ?? 0,
             maxScore: maxScores[skill] ?? 1,
             isLimiting: est.limitingSkill == skill,
+            unmeasured: est.unmeasuredSkills.contains(skill),
           ),
           const SizedBox(height: 10),
         ],
@@ -256,17 +270,27 @@ class _SkillBar extends StatelessWidget {
   final int score;
   final int maxScore;
   final bool isLimiting;
+
+  /// True when the learner has no data for this skill — its 0 means "not yet
+  /// measured", not "tested and failed". Shown as 未測定 with a muted bar.
+  final bool unmeasured;
+
   const _SkillBar({
     required this.skill,
     required this.score,
     required this.maxScore,
     required this.isLimiting,
+    this.unmeasured = false,
   });
 
   @override
   Widget build(BuildContext context) {
     final ratio = maxScore > 0 ? (score / maxScore).clamp(0.0, 1.0) : 0.0;
-    final barColor = isLimiting ? const Color(0xFFE8B050) : const Color(0xFF6ABFEF);
+    const mutedColor = Color(0xFF3A4256); // unmeasured: neutral, not warning
+    // Unmeasured skills are NOT flagged as the "failed" limiter — show neutral.
+    final barColor = unmeasured
+        ? mutedColor
+        : (isLimiting ? const Color(0xFFE8B050) : const Color(0xFF6ABFEF));
     final pctText = '${(ratio * 100).toStringAsFixed(0)}%';
 
     return Column(
@@ -277,7 +301,7 @@ class _SkillBar extends StatelessWidget {
           children: [
             Row(
               children: [
-                if (isLimiting)
+                if (isLimiting && !unmeasured)
                   const Padding(
                     padding: EdgeInsets.only(right: 6),
                     child: Icon(Icons.warning_amber, color: dqGold, size: 16),
@@ -290,8 +314,11 @@ class _SkillBar extends StatelessWidget {
               ],
             ),
             Text(
-              '$score / $maxScore  ($pctText)',
-              style: dqText(size: 13, color: dqGold),
+              unmeasured ? 'まだ / not measured' : '$score / $maxScore  ($pctText)',
+              style: dqText(
+                size: 13,
+                color: unmeasured ? const Color(0xFF8A93B5) : dqGold,
+              ),
             ),
           ],
         ),
@@ -299,7 +326,7 @@ class _SkillBar extends StatelessWidget {
         ClipRRect(
           borderRadius: BorderRadius.circular(6),
           child: LinearProgressIndicator(
-            value: ratio,
+            value: unmeasured ? 0.0 : ratio,
             minHeight: 14,
             backgroundColor: const Color(0xFF1A2244),
             valueColor: AlwaysStoppedAnimation<Color>(barColor),
@@ -315,7 +342,17 @@ class _SkillBar extends StatelessWidget {
 class _WeakSkillCta extends StatelessWidget {
   final EikenSkill skill;
   final String gradeLabel;
-  const _WeakSkillCta({required this.skill, required this.gradeLabel});
+
+  /// True when the limiting skill has NO data yet. Then the framing is "you
+  /// haven't tried this — give it a go" (so we can measure you), NOT "your weak
+  /// skill" — the child has nothing weak to improve, they simply haven't started.
+  final bool unmeasured;
+
+  const _WeakSkillCta({
+    required this.skill,
+    required this.gradeLabel,
+    this.unmeasured = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -323,7 +360,9 @@ class _WeakSkillCta extends StatelessWidget {
     final labelEn = CseEstimator.skillLabelEn(skill);
 
     return DqDialogBox(
-      speaker: 'よわいぎじゅつ / Weak skill',
+      speaker: unmeasured
+          ? 'まだの ぎじゅつ / Not tried yet'
+          : 'よわいぎじゅつ / Weak skill',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -333,7 +372,7 @@ class _WeakSkillCta extends StatelessWidget {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  '$labelJaを のばそう！',
+                  unmeasured ? '$labelJaを ためしてみよう！' : '$labelJaを のばそう！',
                   style: dqText(size: 17, color: dqGold),
                 ),
               ),
@@ -341,8 +380,11 @@ class _WeakSkillCta extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            '$labelJa ($labelEn) が $gradeLabel ごうかくの カギです。'
-            'まいにち すこしずつ れんしゅうしよう！',
+            unmeasured
+                ? '$labelJa ($labelEn) は まだ いちども やっていないよ。'
+                    'いちど やってみると、ごうかくりつが もっと せいかくに なります。'
+                : '$labelJa ($labelEn) が $gradeLabel ごうかくの カギです。'
+                    'まいにち すこしずつ れんしゅうしよう！',
             style: dqText(size: 14),
           ),
         ],
@@ -422,6 +464,12 @@ String _motivationalNote(CseEstimate est) {
   final limitJa = est.limitingSkill != null
       ? CseEstimator.skillLabelJa(est.limitingSkill!)
       : 'れんしゅう';
+  // If the weakest skill is simply untried, urge trying it (not "improve").
+  if (est.limitingSkill != null &&
+      est.unmeasuredSkills.contains(est.limitingSkill)) {
+    return '$limitJa を まだ ためしていないよ。いちど やってみると、'
+        'ごうかくりつが もっと せいかくに わかります！';
+  }
   final needed = est.pointsNeeded;
   return '$limitJa を のばすと ごうかくに ちかづきます。'
       'あと $needed ポイント。まいにち すこしずつ れんしゅうすれば'

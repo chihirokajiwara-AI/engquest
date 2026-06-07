@@ -94,6 +94,12 @@ class CseEstimate {
   /// 0 when already at or above the passing score.
   final int pointsNeeded;
 
+  /// Applicable skills the learner has NO data for (itemsAttempted == 0). These
+  /// score 0 in [skillScores], but that 0 means "not yet measured", NOT "tested
+  /// and failed" — the UI must show them as 未測定 so 合格率 is honest. Empty
+  /// when every applicable skill has data.
+  final Set<EikenSkill> unmeasuredSkills;
+
   const CseEstimate({
     required this.grade,
     required this.skillScores,
@@ -103,6 +109,7 @@ class CseEstimate {
     required this.readinessPct,
     required this.limitingSkill,
     required this.pointsNeeded,
+    this.unmeasuredSkills = const {},
   });
 
   /// True when readinessPct >= 100 (predicted pass).
@@ -211,6 +218,7 @@ class CseEstimator {
 
     final maxScores = spec.skillMaxScores;
     final skillScores = <EikenSkill, int>{};
+    final unmeasured = <EikenSkill>{};
 
     // Build an accuracy lookup (unrecognised skills are ignored).
     final accMap = {for (final a in accuracies) a.skill: a};
@@ -219,8 +227,10 @@ class CseEstimator {
       final acc = accMap[skill];
       final max = maxScores[skill]!;
       if (acc == null || !acc.attempted) {
-        // No data for this skill → estimate 0 (conservative/safe).
+        // No data for this skill → estimate 0 (conservative/safe) and mark it
+        // as unmeasured so the UI shows 未測定 rather than implying a failed 0.
         skillScores[skill] = 0;
+        unmeasured.add(skill);
       } else {
         // Clamp accuracy to [0,1] defensively.
         final a = acc.accuracy.clamp(0.0, 1.0);
@@ -260,6 +270,7 @@ class CseEstimator {
       maxScore: spec.firstMaxScore,
       readinessPct: readinessPct,
       limitingSkill: limiting,
+      unmeasuredSkills: Set.unmodifiable(unmeasured),
       pointsNeeded: pointsNeeded,
     );
   }

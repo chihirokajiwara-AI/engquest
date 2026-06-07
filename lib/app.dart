@@ -25,6 +25,7 @@ import 'package:engquest/features/quest/ui/dq_ui.dart';
 import 'package:engquest/features/explore/scene_view.dart';
 import 'package:engquest/features/home/kotoba_home_screen.dart';
 import 'package:engquest/features/exam_practice/pass/pass_meter_screen.dart';
+import 'package:engquest/features/exam_practice/pass/cse_model.dart';
 import 'package:engquest/features/speaking/speaking_consent_notice.dart';
 import 'package:engquest/features/speaking/speaking_screen.dart';
 
@@ -467,6 +468,20 @@ Widget _previewFor(String? name) {
       return const KotobaHomeScreen();
     case 'passmeter':
       return const PassMeterScreen();
+    case 'passmetermissing':
+      // 3級 with reading+listening data but NO writing practice → writing shows
+      // 未測定 (not a failed 0). Render-proof for the #17 honesty fix.
+      return PassMeterScreen(
+        estimate: CseEstimator.estimate(
+          grade: '3',
+          accuracies: const [
+            SkillAccuracy(
+                skill: EikenSkill.reading, accuracy: 0.72, itemsAttempted: 20),
+            SkillAccuracy(
+                skill: EikenSkill.listening, accuracy: 0.61, itemsAttempted: 18),
+          ],
+        ),
+      );
     case 'speaking':
       return const SpeakingScreen(eikenGrade: '3');
     case 'speakingconsent':
