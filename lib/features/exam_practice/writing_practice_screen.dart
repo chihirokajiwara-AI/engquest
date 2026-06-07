@@ -696,15 +696,24 @@ class _WritingPracticeScreenState extends State<WritingPracticeScreen> {
                   ],
                 ),
               ),
-              const Expanded(
+              Expanded(
                 child: Center(
                   child: Padding(
-                    padding: EdgeInsets.all(24),
+                    padding: const EdgeInsets.all(24),
                     child: Text(
-                      'この級（きゅう）には ライティングは ありません。\n'
-                      'リーディングと リスニングで れんしゅうしよう！',
+                      // Honest distinction: 5級/4級 have no writing section at all;
+                      // a grade WITH a writing skill but no prompts yet (e.g.
+                      // 準2級プラス) is "準備中", not "ありません".
+                      (CseEstimator.skillsForGrade(widget.eikenGrade)
+                                  ?.contains(EikenSkill.writing) ??
+                              false)
+                          ? 'この級（きゅう）の ライティングは じゅんびちゅうです。\n'
+                              'もうしばらく おまちください。'
+                          : 'この級（きゅう）には ライティングは ありません。\n'
+                              'リーディングと リスニングで れんしゅうしよう！',
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: dqInk, fontSize: 16, height: 1.6),
+                      style: const TextStyle(
+                          color: dqInk, fontSize: 16, height: 1.6),
                     ),
                   ),
                 ),

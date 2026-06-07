@@ -126,6 +126,33 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Honest empty-state: grades with no dedicated passages (e.g. 準2級プラス)
+    // — never index into an empty _passages list.
+    if (_passages.isEmpty) {
+      return Scaffold(
+        backgroundColor: const Color(0xFFF5F7FA),
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF4FC3F7),
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.close, color: Colors.white),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          title: const Text('リーディング',
+              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        ),
+        body: const Center(
+          child: Padding(
+            padding: EdgeInsets.all(24),
+            child: Text(
+              'この級（きゅう）の長文（ちょうぶん）問題（もんだい）は\n準備中（じゅんびちゅう）です。',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Color(0xFF263238), fontSize: 16, height: 1.6),
+            ),
+          ),
+        ),
+      );
+    }
     return Scaffold(
       backgroundColor: const Color(0xFFF5F7FA),
       appBar: AppBar(
@@ -437,7 +464,9 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
       case 'pre1':
         return _pre1Passages;
       default:
-        return _grade3Passages;
+        // No dedicated passages for this grade (e.g. 準2級プラス) → empty, so the
+        // screen shows a 準備中 state rather than silently serving 3級 passages.
+        return const [];
     }
   }
 

@@ -51,6 +51,12 @@ class _VocabGrammarPracticeScreenState
   }
 
   Future<void> _loadQuestions() async {
+    // No dedicated vocab DB for this grade (e.g. 準2級プラス) → show the empty/
+    // 準備中 state instead of silently falling back to 英検5級 words.
+    if (!VocabRepository.hasGrade(widget.eikenGrade)) {
+      if (mounted) setState(() => _loading = false);
+      return;
+    }
     try {
       await _vocabRepo.initialize(eikenGrade: widget.eikenGrade);
       final allWords = _vocabRepo.getAll();
@@ -178,7 +184,15 @@ class _VocabGrammarPracticeScreenState
             : _sessionDone
                 ? _buildResults()
                 : _questions.isEmpty
-                    ? const Center(child: Text('問題を生成できませんでした'))
+                    ? const Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(24),
+                          child: Text(
+                            'この級（きゅう）の問題（もんだい）は\n準備中（じゅんびちゅう）です。',
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      )
                     : _buildQuestion(),
       ),
     );

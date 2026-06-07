@@ -282,6 +282,64 @@ const Map<String, EikenExamDef> kEikenExams = {
       ),
     ],
   ),
+  // 準2級プラス (2025新設). Verified eiken.or.jp 2025newgrade (2026-06-07):
+  // R31 (大問1=17, 大問2 長文空所=6, 大問3 内容一致=8), W2 (要約+意見), L30 (15+15);
+  // 一次満点 1875 (625×3), 合格基準 1402.
+  'pre2plus': EikenExamDef(
+    grade: 'pre2plus',
+    labelJa: '英検準2級プラス',
+    cefrLevel: 'B1',
+    totalMinutes: 110, // 一次 = 筆記85分 + リスニング約25分 (eiken.or.jp, 2026-06-07)
+    passingScore: 1402,
+    maxScore: 1875,
+    sections: [
+      ExamSection(
+        id: 'p2p_r1',
+        nameJa: '筆記1: 短文の語句空所補充',
+        nameEn: 'Reading 1: Vocabulary/Grammar',
+        type: ExamSectionType.vocabGrammar,
+        questionCount: 17,
+        timeLimitMinutes: 12,
+        description: '短い文の空所に入る適切な語句を4つの選択肢から選ぶ',
+      ),
+      ExamSection(
+        id: 'p2p_r2',
+        nameJa: '筆記2: 長文の語句空所補充',
+        nameEn: 'Reading 2: Passage Cloze',
+        type: ExamSectionType.readingComprehension,
+        questionCount: 6,
+        timeLimitMinutes: 12,
+        description: '長文の空所に入る適切な語句を選ぶ',
+      ),
+      ExamSection(
+        id: 'p2p_r3',
+        nameJa: '筆記3: 長文の内容一致選択',
+        nameEn: 'Reading 3: Reading Comprehension',
+        type: ExamSectionType.readingComprehension,
+        questionCount: 8,
+        timeLimitMinutes: 22,
+        description: '長文を読んで質問に答える',
+      ),
+      ExamSection(
+        id: 'p2p_w1',
+        nameJa: '筆記4: ライティング（要約＋意見）',
+        nameEn: 'Writing: Summary + Opinion',
+        type: ExamSectionType.writing,
+        questionCount: 2,
+        timeLimitMinutes: 34,
+        description: '英文要約（45〜55語）＋与えられたトピックについて意見を書く（50〜60語）',
+      ),
+      ExamSection(
+        id: 'p2p_l',
+        nameJa: 'リスニング (第1部〜第2部)',
+        nameEn: 'Listening (Parts 1–2)',
+        type: ExamSectionType.listening,
+        questionCount: 30,
+        timeLimitMinutes: 24,
+        description: '第1部: 会話内容一致15問 / 第2部: 文章内容一致15問',
+      ),
+    ],
+  ),
   '2': EikenExamDef(
     grade: '2',
     labelJa: '英検2級',

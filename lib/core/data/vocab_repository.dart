@@ -74,6 +74,11 @@ class VocabRepository {
     'pre1': 'assets/data/eiken_pre1_vocab.json',
   };
 
+  /// True when a dedicated vocab DB exists for [grade]. Callers should check
+  /// this before initialize() to avoid silently serving 5級 words for a grade
+  /// with no DB yet (e.g. 準2級プラス) — show a 準備中 state instead.
+  static bool hasGrade(String grade) => _assetPaths.containsKey(grade);
+
   List<VocabItem> _words = [];
   VocabDatabaseMeta? _meta;
   bool _initialized = false;
