@@ -16,17 +16,35 @@ import 'eiken_exam_config.dart';
 import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
 
-/// A word ordering problem.
+/// A 語句整序 (word-ordering) problem in the authentic 英検 大問3 form: a Japanese
+/// sentence plus exactly FIVE 語句 (chunks ①–⑤) that combine into one correct
+/// English sentence. The real exam then asks for the combination at the 2nd and
+/// 4th positions — [secondChunk] / [fourthChunk] expose that so the screen can
+/// teach the actual question format. (Spec: eiken.or.jp 4級 大問3, verified
+/// 2026-06-07; 2025–2026 format unchanged.)
 class _OrderingProblem {
   final String jpSentence;
+
+  /// The five 語句 in the single correct order.
   final List<String> correctOrder;
   final List<String> scrambled;
 
   _OrderingProblem({
     required this.jpSentence,
     required this.correctOrder,
-  }) : scrambled = List.from(correctOrder)..shuffle(Random());
+  })  : assert(correctOrder.length == 5,
+            '英検 大問3 語句整序 is exactly 5 chunks: $correctOrder'),
+        scrambled = List.from(correctOrder)..shuffle(Random());
+
+  /// The 語句 at the 2nd position (what the real exam asks for).
+  String get secondChunk => correctOrder[1];
+
+  /// The 語句 at the 4th position (what the real exam asks for).
+  String get fourthChunk => correctOrder[3];
 }
+
+/// Circled position markers for the answer slots (①②③④⑤).
+const List<String> _kCircled = ['①', '②', '③', '④', '⑤'];
 
 class WordOrderingPracticeScreen extends StatefulWidget {
   const WordOrderingPracticeScreen({
@@ -205,7 +223,7 @@ class _WordOrderingPracticeScreenState
             child: Column(
               children: [
                 const Text(
-                  '次の日本語を英語にしなさい：',
+                  '日本文の意味になるように、語句を並べかえましょう：',
                   style: TextStyle(color: Color(0xFF607D8B), fontSize: 12),
                 ),
                 const SizedBox(height: 8),
@@ -251,13 +269,29 @@ class _WordOrderingPracticeScreenState
                 : Wrap(
                     spacing: 6,
                     runSpacing: 6,
+                    crossAxisAlignment: WrapCrossAlignment.center,
                     children: List.generate(_selectedWords.length, (i) {
                       return GestureDetector(
                         onTap: () => _removeWord(i),
-                        child: _WordChip(
-                          word: _selectedWords[i],
-                          selected: true,
-                          removable: !_answered,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // Position marker ①②③④⑤ — the slots the real exam
+                            // counts ("2番目と4番目").
+                            Text(
+                              i < _kCircled.length ? _kCircled[i] : '${i + 1}',
+                              style: const TextStyle(
+                                fontSize: 11,
+                                color: Color(0xFF0288D1),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            _WordChip(
+                              word: _selectedWords[i],
+                              selected: true,
+                              removable: !_answered,
+                            ),
+                          ],
                         ),
                       );
                     }),
@@ -274,6 +308,45 @@ class _WordOrderingPracticeScreenState
                 fontWeight: FontWeight.w600,
               ),
               textAlign: TextAlign.center,
+            ),
+          ],
+          // Exam-format teach: connect the arrangement to how 英検 actually asks
+          // the question (the combination at the 2nd & 4th positions).
+          if (_answered) ...[
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: const Color(0xFFE1F5FE),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: const Color(0xFF4FC3F7).withAlpha(110)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    '📝 本番（英検）の問い方',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF0277BD),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  const Text(
+                    '2番目と4番目にくる語句の組み合わせを答えます。',
+                    style: TextStyle(fontSize: 12.5, color: Color(0xFF37474F)),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      _posPill('2番目', p.secondChunk),
+                      const SizedBox(width: 8),
+                      _posPill('4番目', p.fourthChunk),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
           const SizedBox(height: 20),
@@ -331,6 +404,39 @@ class _WordOrderingPracticeScreenState
               ),
             ),
         ],
+      ),
+    );
+  }
+
+  Widget _posPill(String label, String chunk) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: const Color(0xFF4FC3F7)),
+      ),
+      child: Text.rich(
+        TextSpan(
+          children: [
+            TextSpan(
+              text: '$label: ',
+              style: const TextStyle(
+                fontSize: 11.5,
+                color: Color(0xFF0288D1),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            TextSpan(
+              text: chunk,
+              style: const TextStyle(
+                fontSize: 13,
+                color: Color(0xFF263238),
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -394,205 +500,131 @@ class _WordOrderingPracticeScreenState
   // ── Static problem bank ─────────────────────────────────────────────────
 
   static List<_OrderingProblem> _generateProblems(String grade) {
-    // Grade-appropriate sentence ordering problems
-    final problems = <_OrderingProblem>[];
-
-    if (grade == '5') {
-      problems.addAll([
-        _OrderingProblem(
-          jpSentence: '私は毎日学校へ歩いて行きます。',
-          correctOrder: ['I', 'walk', 'to', 'school', 'every', 'day'],
-        ),
-        _OrderingProblem(
-          jpSentence: '彼女は英語を勉強しています。',
-          correctOrder: ['She', 'is', 'studying', 'English'],
-        ),
-        _OrderingProblem(
-          jpSentence: 'あなたは何が好きですか？',
-          correctOrder: ['What', 'do', 'you', 'like'],
-        ),
-        _OrderingProblem(
-          jpSentence: '私の兄はサッカーが上手です。',
-          correctOrder: ['My', 'brother', 'is', 'good', 'at', 'soccer'],
-        ),
-        _OrderingProblem(
-          jpSentence: '今日は天気がいいです。',
-          correctOrder: ['It', 'is', 'nice', 'today'],
-        ),
-        // Added 2026-06-07: sentences chosen so the scrambled words have ONE
-        // valid English order (the screen requires an exact match), CEFR A1.
-        _OrderingProblem(
-          jpSentence: 'これは私のかばんです。',
-          correctOrder: ['This', 'is', 'my', 'bag'],
-        ),
-        _OrderingProblem(
-          jpSentence: '彼らは公園にいます。',
-          correctOrder: ['They', 'are', 'in', 'the', 'park'],
-        ),
-        _OrderingProblem(
-          jpSentence: '私は犬を2匹飼っています。',
-          correctOrder: ['I', 'have', 'two', 'dogs'],
-        ),
-        _OrderingProblem(
-          jpSentence: 'あの女の子はとても親切です。',
-          correctOrder: ['That', 'girl', 'is', 'very', 'kind'],
-        ),
-        _OrderingProblem(
-          jpSentence: 'あなたはピアノを弾けますか。',
-          correctOrder: ['Can', 'you', 'play', 'the', 'piano'],
-        ),
-      ]);
-    } else if (grade == '4') {
-      problems.addAll([
-        _OrderingProblem(
-          jpSentence: '私は昨日図書館で本を読みました。',
-          correctOrder: [
-            'I',
-            'read',
-            'a',
-            'book',
-            'in',
-            'the',
-            'library',
-            'yesterday'
-          ],
-        ),
-        _OrderingProblem(
-          jpSentence: '彼は私より背が高いです。',
-          correctOrder: ['He', 'is', 'taller', 'than', 'me'],
-        ),
-        _OrderingProblem(
-          jpSentence: 'もし明日雨なら、家にいます。',
-          correctOrder: [
-            'If',
-            'it',
-            'rains',
-            'tomorrow',
-            'I',
-            'will',
-            'stay',
-            'home'
-          ],
-        ),
-        _OrderingProblem(
-          jpSentence: 'この映画を見たことがありますか？',
-          correctOrder: ['Have', 'you', 'ever', 'seen', 'this', 'movie'],
-        ),
-        _OrderingProblem(
-          jpSentence: '彼女は3年間ピアノを弾いています。',
-          correctOrder: [
-            'She',
-            'has',
-            'played',
-            'the',
-            'piano',
-            'for',
-            'three',
-            'years'
-          ],
-        ),
-        // Added 2026-06-07: single-valid-order sentences, CEFR A2.
-        _OrderingProblem(
-          jpSentence: '私は彼に手紙を書きました。',
-          correctOrder: ['I', 'wrote', 'him', 'a', 'letter'],
-        ),
-        _OrderingProblem(
-          jpSentence: '彼女は将来医者になりたいです。',
-          correctOrder: ['She', 'wants', 'to', 'be', 'a', 'doctor'],
-        ),
-        // Replaced「その本は机の上にあります」(adversarial audit): "The book is on
-        // the desk" has a valid locative-inversion alt "On the desk is the book"
-        // (same meaning) that the exact-match grader would wrongly fail. Use a
-        // pure SVO sentence with no frontable constituent → single valid order.
-        _OrderingProblem(
-          jpSentence: '私は新しい自転車が欲しいです。',
-          correctOrder: ['I', 'want', 'a', 'new', 'bicycle'],
-        ),
-        _OrderingProblem(
-          jpSentence: '私たちはその映画を見て楽しみました。',
-          correctOrder: ['We', 'enjoyed', 'watching', 'the', 'movie'],
-        ),
-        _OrderingProblem(
-          jpSentence: '彼は宿題を終えなければなりません。',
-          correctOrder: ['He', 'has', 'to', 'finish', 'his', 'homework'],
-        ),
-      ]);
-    } else {
-      // Grade 3+ problems
-      problems.addAll([
-        _OrderingProblem(
-          jpSentence: '彼がその仕事を終えるのにどのくらいかかりましたか？',
-          correctOrder: [
-            'How',
-            'long',
-            'did',
-            'it',
-            'take',
-            'him',
-            'to',
-            'finish',
-            'the',
-            'work'
-          ],
-        ),
-        _OrderingProblem(
-          jpSentence: '私はあなたにそのパーティーに来てほしいです。',
-          correctOrder: [
-            'I',
-            'want',
-            'you',
-            'to',
-            'come',
-            'to',
-            'the',
-            'party'
-          ],
-        ),
-        _OrderingProblem(
-          jpSentence: 'この本は世界中で読まれています。',
-          correctOrder: [
-            'This',
-            'book',
-            'is',
-            'read',
-            'around',
-            'the',
-            'world'
-          ],
-        ),
-        _OrderingProblem(
-          jpSentence: '彼女が作ったケーキはとてもおいしかった。',
-          correctOrder: [
-            'The',
-            'cake',
-            'she',
-            'made',
-            'was',
-            'very',
-            'delicious'
-          ],
-        ),
-        _OrderingProblem(
-          jpSentence: '電車に乗り遅れないように早く起きました。',
-          correctOrder: [
-            'I',
-            'got',
-            'up',
-            'early',
-            'so',
-            'that',
-            'I',
-            'would',
-            'not',
-            'miss',
-            'the',
-            'train'
-          ],
-        ),
-      ]);
+    // Authentic 英検 大問3 語句整序: every item is exactly FIVE 語句 (chunks) that
+    // form ONE correct English sentence matching the Japanese. Chunks are chosen
+    // so there is a SINGLE valid arrangement (the exact-match grader would
+    // wrongly fail a synonymous alternative order). Content-QA + 英検-spec
+    // audited 2026-06-07.
+    // INVARIANT (content-QA 2026-06-07): every item must have exactly ONE
+    // grammatical order of its 5 chunks matching the Japanese, because the
+    // grader is exact-match. To guarantee that, NONE of these use a
+    // sentence-frontable adverbial/PP ("In the future…", "For five years…"),
+    // a mobile sentence-adverb ("now"), reversible coordination ("dogs and
+    // cats"), or dative alternation ("wrote him a letter"/"…to him"). Adjuncts
+    // appear only as position-locked manner units ("very well", "faster than
+    // me") or not at all.
+    switch (grade) {
+      case '5':
+        // CEFR A1 — present simple, be, can, have; pure SVO / SVC, wh-question.
+        return [
+          _OrderingProblem(
+            jpSentence: 'これは私の新しいかばんです。',
+            correctOrder: ['This', 'is', 'my', 'new', 'bag'],
+          ),
+          _OrderingProblem(
+            jpSentence: '彼女は青いぼうしを持っています。',
+            correctOrder: ['She', 'has', 'a', 'blue', 'hat'],
+          ),
+          _OrderingProblem(
+            jpSentence: 'この本はとてもおもしろいです。',
+            correctOrder: ['This', 'book', 'is', 'very', 'interesting'],
+          ),
+          _OrderingProblem(
+            jpSentence: '私の父は車を運転できます。',
+            correctOrder: ['My father', 'can', 'drive', 'a', 'car'],
+          ),
+          _OrderingProblem(
+            jpSentence: '私は犬が大好きです。',
+            correctOrder: ['I', 'like', 'dogs', 'very', 'much'],
+          ),
+          _OrderingProblem(
+            jpSentence: '彼らは音楽を聞いています。',
+            correctOrder: ['They', 'are', 'listening', 'to', 'music'],
+          ),
+          _OrderingProblem(
+            jpSentence: 'あの男の子はとても親切です。',
+            correctOrder: ['That', 'boy', 'is', 'very', 'kind'],
+          ),
+          _OrderingProblem(
+            jpSentence: 'あなたは何時に起きますか。',
+            correctOrder: ['What time', 'do', 'you', 'get', 'up'],
+          ),
+        ];
+      case '4':
+        // CEFR A2 — to-infinitive, comparative, have to, SVOC (make), gerund
+        // object, give/show double-object, ask O to do. The task's focus.
+        return [
+          _OrderingProblem(
+            jpSentence: '彼は私に古い写真を見せてくれた。',
+            correctOrder: ['He', 'showed', 'me', 'an', 'old photo'],
+          ),
+          _OrderingProblem(
+            jpSentence: '彼女は医者になりたいと思っています。',
+            correctOrder: ['She', 'wants', 'to be', 'a', 'doctor'],
+          ),
+          _OrderingProblem(
+            jpSentence: '彼は私より速く走ることができます。',
+            correctOrder: ['He', 'can', 'run', 'faster', 'than me'],
+          ),
+          _OrderingProblem(
+            jpSentence: '私は宿題を終えなければなりません。',
+            correctOrder: ['I', 'have to', 'finish', 'my', 'homework'],
+          ),
+          _OrderingProblem(
+            jpSentence: 'その映画は私を悲しい気持ちにさせました。',
+            correctOrder: ['The movie', 'made', 'me', 'feel', 'sad'],
+          ),
+          _OrderingProblem(
+            jpSentence: '私は音楽を聞くのが好きです。',
+            correctOrder: ['I', 'like', 'listening', 'to', 'music'],
+          ),
+          _OrderingProblem(
+            jpSentence: '私の姉は英語をとても上手に話します。',
+            correctOrder: ['My sister', 'speaks', 'English', 'very', 'well'],
+          ),
+          _OrderingProblem(
+            jpSentence: '彼は宿題を手伝ってくれるよう私に頼みました。',
+            correctOrder: ['He', 'asked', 'me', 'to help', 'him'],
+          ),
+          _OrderingProblem(
+            jpSentence: 'あなたは何になりたいですか。',
+            correctOrder: ['What', 'do', 'you', 'want', 'to be'],
+          ),
+          _OrderingProblem(
+            jpSentence: '私の母はちょうど夕食を作り終えたところです。',
+            correctOrder: ['My mother', 'has just', 'finished', 'cooking', 'dinner'],
+          ),
+        ];
+      default:
+        // 英検3級 — CEFR A2–B1: contact relative clause, want O to do, passive
+        // with by-agent, SVOC (make), gerund subject, present-perfect just.
+        return [
+          _OrderingProblem(
+            jpSentence: '彼女が作ったケーキは本当においしかった。',
+            correctOrder: ['The cake', 'she made', 'was', 'really', 'good'],
+          ),
+          _OrderingProblem(
+            jpSentence: '私はあなたにこのパーティーに来てほしい。',
+            correctOrder: ['I', 'want', 'you', 'to come', 'to this party'],
+          ),
+          _OrderingProblem(
+            jpSentence: 'この本は多くの人々に読まれています。',
+            correctOrder: ['This book', 'is', 'read', 'by', 'many people'],
+          ),
+          _OrderingProblem(
+            jpSentence: '彼の言葉は私をとても怒らせた。',
+            correctOrder: ['His words', 'made', 'me', 'very', 'angry'],
+          ),
+          _OrderingProblem(
+            jpSentence: '英語を話すことはそんなに難しくない。',
+            correctOrder: ['Speaking English', 'is', 'not', 'so', 'difficult'],
+          ),
+          _OrderingProblem(
+            jpSentence: '彼はちょうど駅に着いたところです。',
+            correctOrder: ['He', 'has just', 'arrived', 'at', 'the station'],
+          ),
+        ];
     }
-
-    return problems;
   }
 }
 
@@ -647,3 +679,12 @@ class _WordChip extends StatelessWidget {
     );
   }
 }
+
+/// Test-only: the correct chunk orders for a grade, so the content invariant
+/// (exactly 5 chunks per item, no duplicate that could fool the exact-match
+/// grader) can be asserted in CI.
+@visibleForTesting
+List<List<String>> wordOrderingChunksForTest(String grade) =>
+    _WordOrderingPracticeScreenState._generateProblems(grade)
+        .map((p) => p.correctOrder)
+        .toList();

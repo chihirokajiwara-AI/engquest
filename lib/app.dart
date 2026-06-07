@@ -17,6 +17,7 @@ import 'package:engquest/features/exam_practice/mock_exam_screen.dart';
 import 'package:engquest/features/exam_practice/listening_practice_screen.dart';
 import 'package:engquest/features/exam_practice/writing_practice_screen.dart';
 import 'package:engquest/features/exam_practice/eiken_exam_config.dart';
+import 'package:engquest/features/exam_practice/word_ordering_practice_screen.dart';
 import 'package:engquest/features/achievements/achievements_screen.dart';
 import 'package:engquest/features/parent_dashboard/parent_dashboard_screen.dart';
 import 'package:engquest/features/parent_dashboard/parent_login_screen.dart';
@@ -295,7 +296,7 @@ const List<String> kPreviewRouteNames = [
   'quest2', 'battle', 'dialog', 'voice', 'exam', 'writing', 'writing2',
   'writingp1', 'listening', 'listening4', 'listening3', 'listeningp2',
   'kotobahome', 'passmeter', 'passmetermissing', 'speaking', 'speakingconsent',
-  'listening2', 'achievements', 'parent', 'parentlogin',
+  'listening2', 'achievements', 'parent', 'parentlogin', 'wordorder',
 ];
 
 /// Test-visible wrapper for the private preview harness.
@@ -391,6 +392,20 @@ Widget _previewFor(String? name) {
       return const VoiceScreen();
     case 'exam':
       return const ExamPracticeScreen(eikenGrade: '5');
+    case 'wordorder':
+      // 英検4級 大問3 語句整序 — authentic 5-chunk ordering practice.
+      return const WordOrderingPracticeScreen(
+        eikenGrade: '4',
+        section: ExamSection(
+          id: '4_p3',
+          nameJa: '筆記3: 語句の並びかえ',
+          nameEn: 'Word Ordering',
+          type: ExamSectionType.wordOrdering,
+          questionCount: 10,
+          timeLimitMinutes: 10,
+          description: 'Preview',
+        ),
+      );
     case 'writing':
       // Preview: 英検3級 Eメール返信 — the simplest task type.
       return WritingPracticeScreen(
