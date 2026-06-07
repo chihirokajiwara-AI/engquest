@@ -17,6 +17,7 @@
 import 'package:flutter/material.dart';
 import '../../core/billing/billing_service.dart';
 import '../../core/config/flavor_config.dart';
+import '../exam_practice/eiken_exam_config.dart';
 
 class GradeGateScreen extends StatefulWidget {
   const GradeGateScreen({
@@ -44,24 +45,8 @@ class _GradeGateScreenState extends State<GradeGateScreen> {
   bool _purchasing = false;
   String? _errorMessage;
 
-  String get _gradeDisplay {
-    switch (widget.eikenGrade) {
-      case '5':
-        return '英検5級';
-      case '4':
-        return '英検4級';
-      case '3':
-        return '英検3級';
-      case 'pre2':
-        return '英検準2級';
-      case '2':
-        return '英検2級';
-      case 'pre1':
-        return '英検準1級';
-      default:
-        return '英検${widget.eikenGrade}級';
-    }
-  }
+  // Canonical label (handles pre2plus → 英検準2級プラス; was missing → raw key).
+  String get _gradeDisplay => gradeLabelJa(widget.eikenGrade);
 
   Future<void> _handlePurchase() async {
     setState(() {

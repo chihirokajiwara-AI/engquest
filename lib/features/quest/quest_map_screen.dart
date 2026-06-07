@@ -13,6 +13,7 @@ import 'package:engquest/features/explore/scene_view.dart';
 import 'ui/dq_ui.dart';
 import 'quest_data.dart';
 import 'battle/quest_town_battle_flow.dart';
+import '../exam_practice/eiken_exam_config.dart';
 
 class QuestMapScreen extends StatefulWidget {
   /// 英検 level the student starts at ('5','4','3','pre2','2','pre1').
@@ -501,18 +502,9 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
       );
 
   // ── Eiken label helpers (5級 / 準2級 / 準2級+ etc.) ──
-  static String _eikenLabel(String level) {
-    switch (level) {
-      case 'pre2':
-        return '英検準2級';
-      case 'pre2plus':
-        return '英検準2級+';
-      case 'pre1':
-        return '英検準1級';
-      default:
-        return '英検$level級';
-    }
-  }
+  // Canonical label (was '英検準2級+' for pre2plus — now '英検準2級プラス', matching
+  // every other screen via the single source of truth).
+  static String _eikenLabel(String level) => gradeLabelJa(level);
 }
 
 /// Luminance-weighted desaturation + a brightness lift so locked towns read as

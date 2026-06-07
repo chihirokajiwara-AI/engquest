@@ -11,6 +11,7 @@ import '../../core/audio/audio_cue_service.dart';
 import '../../core/sound/sound_service.dart';
 import 'quest_data.dart';
 import 'ui/dq_ui.dart';
+import '../exam_practice/eiken_exam_config.dart';
 
 class QuestScreen extends StatefulWidget {
   final QuestTown town;
@@ -188,7 +189,7 @@ class _QuestScreenState extends State<QuestScreen> {
   Widget _intro() {
     return Column(
       children: [
-        _header('${widget.town.name}（英検${widget.town.eikenLevel}級）'),
+        _header('${widget.town.name}（${gradeLabelJa(widget.town.eikenLevel)}）'),
         const Spacer(),
         DqDialogBox(
           speaker: 'ものがたり',

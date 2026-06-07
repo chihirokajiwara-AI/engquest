@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import '../../../core/fsrs/fsrs_card_repository.dart';
 import '../quest_data.dart';
 import '../ui/dq_ui.dart';
+import '../../exam_practice/eiken_exam_config.dart';
 import 'silent_battle_controller.dart';
 import 'silent_battle_screen.dart';
 
@@ -160,7 +161,7 @@ class _QuestTownBattleFlowState extends State<QuestTownBattleFlow> {
                 ),
                 Expanded(
                   child: Text(
-                    '${widget.town.name}（英検${widget.town.eikenLevel}級）',
+                    '${widget.town.name}（${gradeLabelJa(widget.town.eikenLevel)}）',
                     textAlign: TextAlign.center,
                     style: dqText(
                         size: 18, w: FontWeight.w800, color: dqGold),

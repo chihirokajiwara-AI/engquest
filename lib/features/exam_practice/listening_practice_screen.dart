@@ -230,11 +230,7 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
           Expanded(
             child: dqBilingual(
               'リスニング / Listening',
-              widget.eikenGrade == 'pre2'
-                  ? '準2級'
-                  : widget.eikenGrade == 'pre1'
-                      ? '準1級'
-                      : '英検${widget.eikenGrade}級',
+              gradeLabelJa(widget.eikenGrade),
               jpSize: 17,
               stacked: false,
             ),

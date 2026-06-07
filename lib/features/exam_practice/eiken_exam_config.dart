@@ -442,3 +442,10 @@ const Map<String, EikenExamDef> kEikenExams = {
     ],
   ),
 };
+
+/// Canonical child-facing 漢字 grade label (英検5級 … 英検準1級 / 英検準2級プラス).
+/// SINGLE SOURCE OF TRUTH — use this everywhere instead of ad-hoc '英検$grade級',
+/// which renders the raw key for the NAMED grades (e.g. "英検pre2plus級",
+/// "英検pre1級") and let inconsistent spellings drift (e.g. "英検準2級+" vs
+/// "英検準2級プラス"). Accepts the grade keys '5'|'4'|'3'|'pre2'|'pre2plus'|'2'|'pre1'.
+String gradeLabelJa(String grade) => kEikenExams[grade]?.labelJa ?? '英検$grade級';
