@@ -20,9 +20,12 @@
 // All data is injected via constructor so ?preview=kotobahome works with NO
 // Firebase (R4).  Internal async loads are guarded with try/catch.
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
+import 'package:engquest/core/data/vocab_repository.dart';
 import 'package:engquest/core/fsrs/fsrs_card_repository.dart';
 import 'package:engquest/core/storage/preferences_service.dart';
 import 'package:engquest/features/explore/scene_view.dart';
@@ -121,6 +124,15 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
       } catch (_) {
         // Keep default '5' — safe.
       }
+    }
+
+    // 2.5 Pre-warm the selected grade's vocab DB during idle. The multi-MB
+    //     load+decode (3.89MB for 準1級) is the verified cause of the "tap into
+    //     vocab practice feels frozen" lag (#52); warming it here, off the tap,
+    //     means the later entry hits VocabRepository's session cache instead of
+    //     blocking the (single-threaded, on web) UI thread on decode.
+    if (VocabRepository.hasGrade(_eikenLevel)) {
+      unawaited(VocabRepository.prewarm(_eikenLevel));
     }
 
     // 3. FSRS due-count — guarded; repo may be empty or throw.

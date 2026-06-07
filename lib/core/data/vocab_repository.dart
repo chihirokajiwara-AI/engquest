@@ -3,6 +3,7 @@
 // Loads 600-word eiken5 database from bundled JSON asset; syncs with Firestore for user progress
 
 import 'dart:convert';
+import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:flutter/services.dart' show rootBundle;
 import '../models/vocab_item.dart';
 
@@ -79,6 +80,49 @@ class VocabRepository {
   /// with no DB yet (e.g. 準2級プラス) — show a 準備中 state instead.
   static bool hasGrade(String grade) => _assetPaths.containsKey(grade);
 
+  /// Process-wide cache of the DECODED vocab JSON, keyed by asset path. The
+  /// rootBundle.loadString + jsonDecode of these files (up to 3.89MB for 準1級)
+  /// is the dominant UI-thread cost on entering vocab practice and was paid on
+  /// EVERY screen instance — a verified "tap feels frozen" cause (#52). Decode
+  /// once per grade per session; later screen instances reuse it (re-mapping to
+  /// fresh VocabItems stays per-instance, so no shared-mutation). Web is
+  /// single-threaded, so the win is doing the decode AT MOST once (+ off the tap
+  /// via [prewarm]), not parallelism.
+  static final Map<String, Map<String, dynamic>> _decodedByPath = {};
+
+  static Future<Map<String, dynamic>> _decodedJson(String path) async {
+    final cached = _decodedByPath[path];
+    if (cached != null) return cached;
+    // Benign race: if a tap into practice beats an in-flight prewarm for the
+    // same path, both decode once (last write wins). Idempotent — same data —
+    // so we keep the simple result-cache rather than a Future-cache that would
+    // need rejection-eviction.
+    final json = jsonDecode(await rootBundle.loadString(path))
+        as Map<String, dynamic>;
+    _decodedByPath[path] = json;
+    return json;
+  }
+
+  /// Decode [grade]'s vocab into the shared cache ahead of time (call from a
+  /// post-first-frame idle callback on the home screen) so a later tap into
+  /// vocab practice hits a warm cache instead of blocking on the multi-MB decode.
+  static Future<void> prewarm(String grade) async {
+    final path = _assetPaths[grade];
+    if (path == null) return; // no DB for this grade — nothing to warm
+    try {
+      await _decodedJson(path);
+    } catch (_) {
+      // Best-effort warm-up; a real failure surfaces later in initialize().
+    }
+  }
+
+  @visibleForTesting
+  static bool isGradeCached(String grade) =>
+      _decodedByPath.containsKey(_assetPaths[grade]);
+
+  @visibleForTesting
+  static void resetCacheForTest() => _decodedByPath.clear();
+
   List<VocabItem> _words = [];
   VocabDatabaseMeta? _meta;
   bool _initialized = false;
@@ -96,8 +140,7 @@ class VocabRepository {
     if (_initialized && _loadedGrade == eikenGrade) return;
 
     final path = _assetPaths[eikenGrade] ?? _assetPaths['5']!;
-    final jsonString = await rootBundle.loadString(path);
-    final json = jsonDecode(jsonString) as Map<String, dynamic>;
+    final json = await _decodedJson(path); // cached after first decode per session
 
     _meta = VocabDatabaseMeta.fromJson(json);
     _words = (json['words'] as List<dynamic>)
