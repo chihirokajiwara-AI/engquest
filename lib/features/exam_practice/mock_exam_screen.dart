@@ -132,6 +132,7 @@ class _MockExamScreenState extends State<MockExamScreen> {
     // which records into the same store). Without this the mock counted writing
     // as 0% for every 3級+ grade and understated 合格率 by a full skill.
     double writingAccuracy = 0.0;
+    int writingAttempted = 0;
     try {
       final store = await SkillAccuracyStore.getInstance();
       for (final skill in total.keys) {
@@ -146,7 +147,10 @@ class _MockExamScreenState extends State<MockExamScreen> {
       final writing = store
           .readAccuracies(widget.eikenGrade)
           .firstWhere((a) => a.skill == EikenSkill.writing);
-      writingAccuracy = writing.accuracy; // 0.0 only if writing never practiced
+      writingAccuracy = writing.accuracy;
+      // 0 when writing was never practiced → the scorer marks it 未測定 (not a
+      // measured 0%), so the mock's 合格率 is provisional, not falsely low.
+      writingAttempted = writing.itemsAttempted;
     } catch (_) {
       // Storage failure is non-fatal — the estimate below still renders.
     }
@@ -155,6 +159,7 @@ class _MockExamScreenState extends State<MockExamScreen> {
       exam: _exam,
       answers: _answers,
       writingAccuracy: writingAccuracy,
+      writingAttempted: writingAttempted,
     );
     if (!mounted) return;
     if (estimate == null) {

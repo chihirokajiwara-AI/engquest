@@ -113,8 +113,12 @@ class CseEstimate {
     this.unmeasuredSkills = const {},
   });
 
-  /// True when readinessPct >= 100 (predicted pass).
-  bool get isPredictedPass => readinessPct >= 100.0;
+  /// True when readinessPct >= 100 AND every applicable skill has been measured.
+  /// We never predict a PASS while a required skill is 未測定 — readinessPct is
+  /// provisional over measured skills, so 100% with an untested skill means
+  /// "on track so far", not "will pass".
+  bool get isPredictedPass =>
+      readinessPct >= 100.0 && unmeasuredSkills.isEmpty;
 }
 
 // ── Grade spec table ──────────────────────────────────────────────────────────
@@ -254,7 +258,16 @@ class CseEstimator {
 
     final totalScore = skillScores.values.fold(0, (s, v) => s + v);
 
-    // readinessPct: how far toward the passing threshold. Cap at 100.
+    // readinessPct = "BANKED progress" toward the full passing threshold:
+    // points earned so far / points needed. An unmeasured skill contributes 0
+    // here (you haven't banked it yet) — but it is also added to
+    // [unmeasuredSkills] so the UI shows it as 未測定 (NOT a failed 0). This is
+    // the honest headline: it can never falsely read 100% while a required skill
+    // is untested (for the 3-skill grades two skills alone cannot reach the
+    // 3-skill threshold), and it never implies a kid FAILED a skill they simply
+    // haven't practiced. (An earlier "provisional over measured skills" variant
+    // was reverted — it let a kid with only R+L practised show a green 100%,
+    // trading a downward lie for a worse upward one.)
     final readinessPct =
         (totalScore / spec.firstPassScore * 100.0).clamp(0.0, 100.0);
 

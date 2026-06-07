@@ -400,4 +400,65 @@ void main() {
       expect(a.attempted, isTrue);
     });
   });
+
+  // ── 未測定 honesty: banked readiness never false-100 while untested (#36) ────
+  group('CseEstimator.estimate — unmeasured-skill honesty', () {
+    test('3級: strong R+L but writing 未測定 → 未測定 flag, NOT a green 100%', () {
+      final est = CseEstimator.estimate(
+        grade: '3',
+        accuracies: const [
+          SkillAccuracy(skill: EikenSkill.reading, accuracy: 0.8, itemsAttempted: 30),
+          SkillAccuracy(skill: EikenSkill.listening, accuracy: 0.8, itemsAttempted: 30),
+          // writing never practiced → itemsAttempted 0 → 未測定 (not a failed 0)
+          SkillAccuracy(skill: EikenSkill.writing, accuracy: 0.0, itemsAttempted: 0),
+        ],
+      )!;
+      // Banked: 440+440 = 880 / 1103 = 79.8%. Writing is flagged 未測定 (the UI
+      // shows it as such, not a fail). The headline must NOT read 100% / predict
+      // a pass while a required skill is untested.
+      expect(est.unmeasuredSkills, contains(EikenSkill.writing));
+      expect(est.readinessPct, closeTo(79.8, 0.5));
+      expect(est.readinessPct, lessThan(100.0));
+      expect(est.isPredictedPass, isFalse);
+    });
+
+    test('未測定 vs measured-0: same banked %, but the 未測定 flag differs', () {
+      // The honest distinction is the flag (display), not the number.
+      final unmeasured = CseEstimator.estimate(
+        grade: '3',
+        accuracies: const [
+          SkillAccuracy(skill: EikenSkill.reading, accuracy: 1.0, itemsAttempted: 30),
+          SkillAccuracy(skill: EikenSkill.listening, accuracy: 1.0, itemsAttempted: 30),
+          SkillAccuracy(skill: EikenSkill.writing, accuracy: 0.0, itemsAttempted: 0),
+        ],
+      )!;
+      final measuredZero = CseEstimator.estimate(
+        grade: '3',
+        accuracies: const [
+          SkillAccuracy(skill: EikenSkill.reading, accuracy: 1.0, itemsAttempted: 30),
+          SkillAccuracy(skill: EikenSkill.listening, accuracy: 1.0, itemsAttempted: 30),
+          SkillAccuracy(skill: EikenSkill.writing, accuracy: 0.0, itemsAttempted: 2),
+        ],
+      )!;
+      expect(unmeasured.readinessPct, equals(measuredZero.readinessPct));
+      expect(unmeasured.unmeasuredSkills, contains(EikenSkill.writing));
+      expect(measuredZero.unmeasuredSkills, isNot(contains(EikenSkill.writing)));
+      // Neither predicts a pass (R+L=1100 < 1103); writing is the bottleneck.
+      expect(unmeasured.isPredictedPass, isFalse);
+      expect(measuredZero.isPredictedPass, isFalse);
+    });
+
+    test('a genuine fully-measured pass is still predicted', () {
+      final est = CseEstimator.estimate(
+        grade: '3',
+        accuracies: const [
+          SkillAccuracy(skill: EikenSkill.reading, accuracy: 0.9, itemsAttempted: 30),
+          SkillAccuracy(skill: EikenSkill.writing, accuracy: 0.9, itemsAttempted: 2),
+          SkillAccuracy(skill: EikenSkill.listening, accuracy: 0.9, itemsAttempted: 30),
+        ],
+      )!;
+      expect(est.unmeasuredSkills, isEmpty);
+      expect(est.isPredictedPass, isTrue);
+    });
+  });
 }

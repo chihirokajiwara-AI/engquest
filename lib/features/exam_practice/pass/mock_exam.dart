@@ -274,6 +274,7 @@ class MockExamScorer {
     required MockExam exam,
     required Map<String, int> answers,
     double writingAccuracy = 0.0,
+    int writingAttempted = 0,
   }) {
     // Tally correct/attempted per skill for MCQ items.
     final correct = <EikenSkill, int>{};
@@ -300,13 +301,19 @@ class MockExamScorer {
       ));
     }
 
-    // Writing skill.
-    final writingCount = exam.writingSlots.length;
-    if (writingCount > 0) {
+    // Writing skill. The mock has no writing UI, so its score comes from the
+    // learner's PRIOR writing-practice data ([writingAttempted] from the store).
+    // If they've never practiced writing, itemsAttempted == 0 → writing is
+    // 未測定 and excluded from the provisional 合格率 (NOT counted as a measured
+    // 0%, which used to drag every 3級+ learner's meter down a whole skill).
+    final gradeHasWriting =
+        (CseEstimator.skillsForGrade(exam.grade) ?? const [])
+            .contains(EikenSkill.writing);
+    if (gradeHasWriting) {
       accuracies.add(SkillAccuracy(
         skill: EikenSkill.writing,
-        accuracy: writingAccuracy,
-        itemsAttempted: writingCount,
+        accuracy: writingAttempted > 0 ? writingAccuracy : 0.0,
+        itemsAttempted: writingAttempted,
       ));
     }
 

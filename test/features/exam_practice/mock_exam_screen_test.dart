@@ -48,14 +48,27 @@ void main() {
       final answers = <String, int>{
         for (final it in exam.mcqItems) it.id: it.correctIdx,
       };
-      final zeroWriting =
-          MockExamScorer.score(exam: exam, answers: answers, writingAccuracy: 0.0);
-      final goodWriting =
-          MockExamScorer.score(exam: exam, answers: answers, writingAccuracy: 0.9);
+      // When writing HAS been practiced (writingAttempted>0), a higher writing
+      // score must raise readiness vs a measured 0.
+      final zeroWriting = MockExamScorer.score(
+          exam: exam, answers: answers, writingAccuracy: 0.0, writingAttempted: 2);
+      final goodWriting = MockExamScorer.score(
+          exam: exam, answers: answers, writingAccuracy: 0.9, writingAttempted: 2);
       expect(zeroWriting, isNotNull);
       expect(goodWriting, isNotNull);
       expect(goodWriting!.readinessPct,
           greaterThan(zeroWriting!.readinessPct));
+
+      // #36: UNATTEMPTED writing (writingAttempted==0) is flagged 未測定 (so the
+      // PassMeter shows it as such, not a failed 0-bar), whereas a measured 0
+      // (writingAttempted>0) is NOT. The banked readiness number is the same in
+      // both cases — the honest difference is the 未測定 flag, and neither lets
+      // the meter falsely read "ready".
+      final unpracticedWriting = MockExamScorer.score(
+          exam: exam, answers: answers, writingAccuracy: 0.0, writingAttempted: 0)!;
+      expect(unpracticedWriting.unmeasuredSkills, contains(EikenSkill.writing));
+      expect(zeroWriting.unmeasuredSkills, isNot(contains(EikenSkill.writing)));
+      expect(unpracticedWriting.readinessPct, equals(zeroWriting.readinessPct));
     });
 
     test('CseEstimator marks skills with no data as unmeasured (not failed)',
