@@ -13,7 +13,6 @@
 # ---------------------------------------------------------------------------
 # 6 founder phoneme clips — pure /s/ /a/ /t/ /c/ /o/ /g/ sounds.
 # These will be professionally recorded; the UI falls back gracefully
-# (AudioCueService swallows errors, replay button always present).
 audio/phonics/phoneme_s.mp3 | 2026-06-06 | founder-record pending: pure /s/ phoneme clip
 audio/phonics/phoneme_a.mp3 | 2026-06-06 | founder-record pending: pure /a/ phoneme clip
 audio/phonics/phoneme_t.mp3 | 2026-06-06 | founder-record pending: pure /t/ phoneme clip
@@ -29,61 +28,3 @@ assets/art/scenes/town_pre2.png | 2026-06-06 | T31 pending: 英検準2級 town s
 assets/art/scenes/town_pre2plus.png | 2026-06-06 | T31 pending: 英検準2級+ town scene art
 assets/art/scenes/town_2.png | 2026-06-06 | T31 pending: 英検2級 town scene art
 # ---------------------------------------------------------------------------
-# Listening audio clips — 52 items across grades 5/4/3/準2/2 (seed bank).
-# Kokoro TTS synthesis is CPU-heavy and must run via scripts/safe-job.sh.
-# Run: scripts/safe-job.sh generate_listening 3600 python3 scripts/generate_listening_audio.py
-# Until generated, AudioCueService swallows missing-clip errors gracefully;
-# the 🔊 replay button is always visible so the question is still answerable.
-# Remove these entries once audio/listening/<key>.mp3 files are on disk.
-audio/listening/l5_p1_01.mp3 | 2026-06-06 | Kokoro generation pending: 英検5級 第1部 item 01
-audio/listening/l5_p1_02.mp3 | 2026-06-06 | Kokoro generation pending: 英検5級 第1部 item 02
-audio/listening/l5_p1_03.mp3 | 2026-06-06 | Kokoro generation pending: 英検5級 第1部 item 03
-audio/listening/l5_p1_04.mp3 | 2026-06-06 | Kokoro generation pending: 英検5級 第1部 item 04
-audio/listening/l5_p2_01.mp3 | 2026-06-06 | Kokoro generation pending: 英検5級 第2部 item 01
-audio/listening/l5_p2_02.mp3 | 2026-06-06 | Kokoro generation pending: 英検5級 第2部 item 02
-audio/listening/l5_p2_03.mp3 | 2026-06-06 | Kokoro generation pending: 英検5級 第2部 item 03
-audio/listening/l5_p2_04.mp3 | 2026-06-06 | Kokoro generation pending: 英検5級 第2部 item 04
-audio/listening/l5_p3_01.mp3 | 2026-06-06 | Kokoro generation pending: 英検5級 第3部 item 01
-audio/listening/l5_p3_02.mp3 | 2026-06-06 | Kokoro generation pending: 英検5級 第3部 item 02
-audio/listening/l5_p3_03.mp3 | 2026-06-06 | Kokoro generation pending: 英検5級 第3部 item 03
-audio/listening/l5_p3_04.mp3 | 2026-06-06 | Kokoro generation pending: 英検5級 第3部 item 04
-audio/listening/l4_p1_01.mp3 | 2026-06-06 | Kokoro generation pending: 英検4級 第1部 item 01
-audio/listening/l4_p1_02.mp3 | 2026-06-06 | Kokoro generation pending: 英検4級 第1部 item 02
-audio/listening/l4_p1_03.mp3 | 2026-06-06 | Kokoro generation pending: 英検4級 第1部 item 03
-audio/listening/l4_p1_04.mp3 | 2026-06-06 | Kokoro generation pending: 英検4級 第1部 item 04
-audio/listening/l4_p2_01.mp3 | 2026-06-06 | Kokoro generation pending: 英検4級 第2部 item 01
-audio/listening/l4_p2_02.mp3 | 2026-06-06 | Kokoro generation pending: 英検4級 第2部 item 02
-audio/listening/l4_p2_03.mp3 | 2026-06-06 | Kokoro generation pending: 英検4級 第2部 item 03
-audio/listening/l4_p2_04.mp3 | 2026-06-06 | Kokoro generation pending: 英検4級 第2部 item 04
-audio/listening/l4_p3_01.mp3 | 2026-06-06 | Kokoro generation pending: 英検4級 第3部 item 01
-audio/listening/l4_p3_02.mp3 | 2026-06-06 | Kokoro generation pending: 英検4級 第3部 item 02
-audio/listening/l4_p3_03.mp3 | 2026-06-06 | Kokoro generation pending: 英検4級 第3部 item 03
-audio/listening/l4_p3_04.mp3 | 2026-06-06 | Kokoro generation pending: 英検4級 第3部 item 04
-audio/listening/l3_p1_01.mp3 | 2026-06-06 | Kokoro generation pending: 英検3級 第1部 item 01
-audio/listening/l3_p1_02.mp3 | 2026-06-06 | Kokoro generation pending: 英検3級 第1部 item 02
-audio/listening/l3_p1_03.mp3 | 2026-06-06 | Kokoro generation pending: 英検3級 第1部 item 03
-audio/listening/l3_p1_04.mp3 | 2026-06-06 | Kokoro generation pending: 英検3級 第1部 item 04
-audio/listening/l3_p2_01.mp3 | 2026-06-06 | Kokoro generation pending: 英検3級 第2部 item 01
-audio/listening/l3_p2_02.mp3 | 2026-06-06 | Kokoro generation pending: 英検3級 第2部 item 02
-audio/listening/l3_p2_03.mp3 | 2026-06-06 | Kokoro generation pending: 英検3級 第2部 item 03
-audio/listening/l3_p2_04.mp3 | 2026-06-06 | Kokoro generation pending: 英検3級 第2部 item 04
-audio/listening/l3_p3_01.mp3 | 2026-06-06 | Kokoro generation pending: 英検3級 第3部 item 01
-audio/listening/l3_p3_02.mp3 | 2026-06-06 | Kokoro generation pending: 英検3級 第3部 item 02
-audio/listening/l3_p3_03.mp3 | 2026-06-06 | Kokoro generation pending: 英検3級 第3部 item 03
-audio/listening/l3_p3_04.mp3 | 2026-06-06 | Kokoro generation pending: 英検3級 第3部 item 04
-audio/listening/lp2_p1_01.mp3 | 2026-06-06 | Kokoro generation pending: 英検準2級 第1部 item 01
-audio/listening/lp2_p1_02.mp3 | 2026-06-06 | Kokoro generation pending: 英検準2級 第1部 item 02
-audio/listening/lp2_p1_03.mp3 | 2026-06-06 | Kokoro generation pending: 英検準2級 第1部 item 03
-audio/listening/lp2_p1_04.mp3 | 2026-06-06 | Kokoro generation pending: 英検準2級 第1部 item 04
-audio/listening/lp2_p2_01.mp3 | 2026-06-06 | Kokoro generation pending: 英検準2級 第2部 item 01
-audio/listening/lp2_p2_02.mp3 | 2026-06-06 | Kokoro generation pending: 英検準2級 第2部 item 02
-audio/listening/lp2_p2_03.mp3 | 2026-06-06 | Kokoro generation pending: 英検準2級 第2部 item 03
-audio/listening/lp2_p2_04.mp3 | 2026-06-06 | Kokoro generation pending: 英検準2級 第2部 item 04
-audio/listening/l2_p1_01.mp3 | 2026-06-06 | Kokoro generation pending: 英検2級 第1部 item 01
-audio/listening/l2_p1_02.mp3 | 2026-06-06 | Kokoro generation pending: 英検2級 第1部 item 02
-audio/listening/l2_p1_03.mp3 | 2026-06-06 | Kokoro generation pending: 英検2級 第1部 item 03
-audio/listening/l2_p1_04.mp3 | 2026-06-06 | Kokoro generation pending: 英検2級 第1部 item 04
-audio/listening/l2_p2_01.mp3 | 2026-06-06 | Kokoro generation pending: 英検2級 第2部 item 01
-audio/listening/l2_p2_02.mp3 | 2026-06-06 | Kokoro generation pending: 英検2級 第2部 item 02
-audio/listening/l2_p2_03.mp3 | 2026-06-06 | Kokoro generation pending: 英検2級 第2部 item 03
-audio/listening/l2_p2_04.mp3 | 2026-06-06 | Kokoro generation pending: 英検2級 第2部 item 04
