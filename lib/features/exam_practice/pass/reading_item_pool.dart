@@ -331,6 +331,149 @@ const _grade4Reading = [
     choices: ["Tom's birthday", "Lucy's birthday", 'A holiday', 'A school event'],
     correctIdx: 0,
   ),
+  // ── 大問1 語句空所補充 (grammar + vocabulary, CEFR A2) ────────────────────
+  ReadingMockItem(
+    id: '4_r_007',
+    sectionId: '4_r1',
+    passageText: 'Yesterday I ( ) to the zoo with my family.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['go', 'going', 'goes', 'went'],
+    correctIdx: 3,
+  ),
+  ReadingMockItem(
+    id: '4_r_008',
+    sectionId: '4_r1',
+    passageText: 'She ( ) a letter to her friend last night.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['wrote', 'write', 'written', 'writes'],
+    correctIdx: 0,
+  ),
+  ReadingMockItem(
+    id: '4_r_009',
+    sectionId: '4_r1',
+    passageText: 'It is cloudy. I think it ( ) rain soon.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['will', 'is', 'was', 'does'],
+    correctIdx: 0,
+  ),
+  ReadingMockItem(
+    // NOTE: replaced an earlier will/be-going-to item — that distinction is a
+    // 3級+ nuance and contradicted 4_r_009's cloudy→will mapping (adversarial
+    // audit, 2026-06-07). This tests the clean A2 collocation "good at".
+    id: '4_r_010',
+    sectionId: '4_r1',
+    passageText: 'My sister is very good ( ) playing tennis.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['in', 'on', 'at', 'of'],
+    correctIdx: 2,
+  ),
+  ReadingMockItem(
+    id: '4_r_011',
+    sectionId: '4_r1',
+    passageText: 'My brother is ( ) than me.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['tall', 'taller', 'tallest', 'more tall'],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: '4_r_012',
+    sectionId: '4_r1',
+    passageText: 'This is the ( ) mountain in Japan.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['higher', 'high', 'highest', 'more high'],
+    correctIdx: 2,
+  ),
+  ReadingMockItem(
+    id: '4_r_013',
+    sectionId: '4_r1',
+    passageText: 'I want ( ) a new bike for my birthday.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['buying', 'bought', 'to buy', 'buy'],
+    correctIdx: 2,
+  ),
+  ReadingMockItem(
+    id: '4_r_014',
+    sectionId: '4_r1',
+    passageText: 'He enjoys ( ) soccer after school.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['play', 'to play', 'played', 'playing'],
+    correctIdx: 3,
+  ),
+  ReadingMockItem(
+    id: '4_r_015',
+    sectionId: '4_r1',
+    passageText: 'I have ( ) my homework already.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['finishing', 'finish', 'finishes', 'finished'],
+    correctIdx: 3,
+  ),
+  ReadingMockItem(
+    id: '4_r_016',
+    sectionId: '4_r1',
+    passageText: 'You look sick. You ( ) see a doctor.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['should', 'can', 'will', 'do'],
+    correctIdx: 0,
+  ),
+  ReadingMockItem(
+    id: '4_r_017',
+    sectionId: '4_r1',
+    passageText: 'I was very tired ( ) I worked hard all day.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['but', 'so', 'because', 'or'],
+    correctIdx: 2,
+  ),
+  ReadingMockItem(
+    id: '4_r_018',
+    sectionId: '4_r1',
+    passageText: '( ) I was a child, I lived in Osaka.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['What', 'When', 'Which', 'Who'],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: '4_r_019',
+    sectionId: '4_r1',
+    passageText: 'Please ( ) the door. It is cold outside.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['close', 'open', 'wash', 'read'],
+    correctIdx: 0,
+  ),
+  ReadingMockItem(
+    id: '4_r_020',
+    sectionId: '4_r1',
+    passageText: 'I am thirsty. Let us have some ( ).',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['bread', 'water', 'rice', 'soup'],
+    correctIdx: 1,
+  ),
+  // ── 大問2 会話文の文空所補充 (conversation response) ──────────────────────
+  ReadingMockItem(
+    id: '4_r_021',
+    sectionId: '4_r2',
+    passageText: 'A: How was the movie?  B: ( ) I really liked it.',
+    questionText: 'Choose the best response.',
+    choices: ['I am fifteen.', 'Yes, I do.', 'On Sunday.', 'It was great.'],
+    correctIdx: 3,
+  ),
+  // ── 大問3 長文の内容一致選択 (notice / email comprehension) ────────────────
+  ReadingMockItem(
+    id: '4_r_022',
+    sectionId: '4_r4',
+    passageText:
+        'From: Green Park School  To: All students\n'
+        'Our school sports day is on October 5th. It will start at 9:00 in the '
+        'morning. Please bring your hat and water bottle. Do not bring food, '
+        'because lunch will be given to everyone at noon.',
+    questionText: 'What should students bring?',
+    choices: [
+      'A book and pen',
+      'Lunch',
+      'A hat and water bottle',
+      'A camera',
+    ],
+    correctIdx: 2,
+  ),
 ];
 
 // ── 英検3級 ──────────────────────────────────────────────────────────────────
