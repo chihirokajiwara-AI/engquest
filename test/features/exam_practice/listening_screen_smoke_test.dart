@@ -204,12 +204,13 @@ void main() {
     testWidgets('unknown grade — shows empty state without exception', (tester) async {
       await tester.pumpWidget(_wrap(
         ListeningPracticeScreen(
-          eikenGrade: 'pre1',
-          section: _listeningSection('p1_l', 'リスニング 準1級', 30, 30),
+          eikenGrade: 'unknown',
+          section: _listeningSection('x_l', 'リスニング', 30, 30),
         ),
       ));
       await tester.pump();
-      // pre1 has no seed items → empty state
+      // A grade with no seed items → empty state. (All real grades 5..pre1 are
+      // now seeded; 'unknown' exercises the fallback.)
       expect(find.textContaining('準備中'), findsOneWidget);
       expect(tester.takeException(), isNull);
     });
@@ -308,8 +309,8 @@ void main() {
       }
     });
 
-    test('grades 5 and 4 have items in all 3 parts', () {
-      for (final grade in ['5', '4']) {
+    test('grades 5, 4 and pre1 have items in all 3 parts', () {
+      for (final grade in ['5', '4', 'pre1']) {
         for (final part in [1, 2, 3]) {
           final items = listeningItemsFor(grade, part);
           expect(

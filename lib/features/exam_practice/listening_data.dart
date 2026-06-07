@@ -1281,6 +1281,276 @@ const _gradePre2PlusPart2 = <ListeningItem>[
   ),
 ];
 
+// ── 英検準1級 (CEFR B2) ───────────────────────────────────────────────────────
+// Listening is 3 部 / 29問: 第1部 会話内容一致(12) / 第2部 文内容一致(~150語 学術
+// パッセージ, 12) / 第3部 Real-Life形式(状況設定が印刷, 5). Representative seed
+// (4 items/部); B2 themes (business/academic/social). Audio via Kokoro.
+const _gradePre1Part1 = <ListeningItem>[
+  // 第1部: 会話の内容一致 — longer B2 dialogue + a spoken question.
+  ListeningItem(
+    part: 1,
+    grade: 'pre1',
+    audioKey: 'lpre1_p1_01.mp3',
+    transcripts: [
+      'A: Have you had a chance to review the quarterly figures I sent?',
+      'B: I skimmed them, but I am concerned the marketing costs have risen sharply.',
+      'A: That is because we expanded into two new regions.',
+      'B: I see. Then it might pay off next quarter.',
+      'Question: Why have the marketing costs risen?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'Why have the marketing costs risen?',
+    choices: [
+      'Because the company expanded into new regions.',
+      'Because the quarterly figures were wrong.',
+      'Because the marketing campaign failed.',
+      'Because of next quarter\'s budget cuts.',
+    ],
+    correctIndex: 0,
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre1',
+    audioKey: 'lpre1_p1_02.mp3',
+    transcripts: [
+      'A: Professor, I am struggling to narrow down my thesis topic.',
+      'B: That is common. Try focusing on a single case study rather than the whole field.',
+      'A: That makes sense. I will look at one company in depth.',
+      'Question: What does the professor advise the student to do?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What does the professor advise the student to do?',
+    choices: [
+      'Focus on a single case study.',
+      'Change her field of study.',
+      'Read everything in the whole field.',
+      'Find a different professor.',
+    ],
+    correctIndex: 0,
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre1',
+    audioKey: 'lpre1_p1_03.mp3',
+    transcripts: [
+      'A: I would like to change my flight to an earlier one on Friday.',
+      'B: There is a seat on the nine a.m., but there is a change fee of fifty dollars.',
+      'A: That is fine. Please go ahead.',
+      'Question: What will the woman most likely do?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What will the woman most likely do?',
+    choices: [
+      'Pay the fee and take the earlier flight.',
+      'Cancel her trip entirely.',
+      'Keep her original flight.',
+      'Fly on Saturday instead.',
+    ],
+    correctIndex: 0,
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre1',
+    audioKey: 'lpre1_p1_04.mp3',
+    transcripts: [
+      'A: Did you hear they are turning the old factory into a community center?',
+      'B: Yes, though some residents worry about the increased traffic.',
+      'A: True, but it will create jobs and a space for local events.',
+      'Question: What is one concern some residents have?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What is one concern some residents have?',
+    choices: [
+      'The increased traffic.',
+      'The loss of local jobs.',
+      'A rise in their taxes.',
+      'The closing of the factory.',
+    ],
+    correctIndex: 0,
+  ),
+];
+
+const _gradePre1Part2 = <ListeningItem>[
+  // 第2部: 文内容一致 — short academic passage (B2) + a content question.
+  ListeningItem(
+    part: 2,
+    grade: 'pre1',
+    audioKey: 'lpre1_p2_01.mp3',
+    transcripts: [
+      'Coral reefs support roughly a quarter of all marine species, yet they '
+          'cover less than one percent of the ocean floor. Rising sea '
+          'temperatures cause corals to expel the algae that give them both '
+          'their color and their food, a process called bleaching. If the water '
+          'cools in time, the coral can recover, but repeated bleaching often '
+          'proves fatal. Scientists are now breeding heat-resistant corals to '
+          'give reefs a better chance of survival.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'What are scientists doing to help coral reefs?',
+    choices: [
+      'Breeding heat-resistant corals.',
+      'Lowering the ocean temperature.',
+      'Moving reefs into deeper water.',
+      'Removing all algae from the corals.',
+    ],
+    correctIndex: 0,
+  ),
+  ListeningItem(
+    part: 2,
+    grade: 'pre1',
+    audioKey: 'lpre1_p2_02.mp3',
+    transcripts: [
+      'The popularity of tea in Britain owes much to the seventeenth century, '
+          'when it arrived from China as an expensive luxury. At first only the '
+          'wealthy could afford it, but as trade increased, prices fell and tea '
+          'spread to ordinary households. By the nineteenth century it had '
+          'become the national drink, served at every level of society and even '
+          'shaping daily routines such as the afternoon tea break.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'Why did tea spread to ordinary households?',
+    choices: [
+      'Increased trade lowered its price.',
+      'The wealthy stopped drinking it.',
+      'It began to be grown in Britain.',
+      'The government encouraged people to drink it.',
+    ],
+    correctIndex: 0,
+  ),
+  ListeningItem(
+    part: 2,
+    grade: 'pre1',
+    audioKey: 'lpre1_p2_03.mp3',
+    transcripts: [
+      'Recent studies suggest that the brain does much of its housekeeping '
+          'during sleep. While we rest, it clears away waste that builds up '
+          'during waking hours and strengthens the connections involved in '
+          'learning. This may explain why students who sleep well after '
+          'studying tend to remember more than those who stay up late. Far from '
+          'being wasted time, sleep appears to be an active and essential part '
+          'of how we learn.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'Why do well-rested students tend to remember more?',
+    choices: [
+      'Sleep strengthens the connections used in learning.',
+      'They simply study for longer hours.',
+      'They wake up earlier in the morning.',
+      'They eat a healthier breakfast.',
+    ],
+    correctIndex: 0,
+  ),
+  ListeningItem(
+    part: 2,
+    grade: 'pre1',
+    audioKey: 'lpre1_p2_04.mp3',
+    transcripts: [
+      'Machine translation has improved dramatically in the past decade. Early '
+          'systems translated word by word and often produced awkward results. '
+          'Modern systems, trained on vast amounts of text, can capture context '
+          'and produce far more natural sentences. Still, they struggle with '
+          'humor, cultural references, and ambiguity, areas where human '
+          'translators remain essential. Experts believe the two will '
+          'increasingly work together rather than one replacing the other.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'What do experts believe about the future of translation?',
+    choices: [
+      'Humans and machines will increasingly work together.',
+      'Machines will completely replace human translators.',
+      'Human translators will soon disappear.',
+      'Machine translation will stop improving.',
+    ],
+    correctIndex: 0,
+  ),
+];
+
+const _gradePre1Part3 = <ListeningItem>[
+  // 第3部: Real-Life形式 — a printed situation, then an announcement is heard.
+  ListeningItem(
+    part: 3,
+    grade: 'pre1',
+    audioKey: 'lpre1_p3_01.mp3',
+    transcripts: [
+      'Attention passengers on Flight 207 to Seattle. Because of a mechanical '
+          'issue, departure has been delayed by about two hours. Passengers may '
+          'collect a meal voucher at the service desk near Gate 12. We will '
+          'announce the new boarding time as soon as it is confirmed.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: '状況: あなたは空港の乗客です。\nWhat should passengers do now?',
+    choices: [
+      'Collect a meal voucher at the service desk.',
+      'Board the plane immediately at Gate 12.',
+      'Rebook on a different airline.',
+      'Leave the airport and go home.',
+    ],
+    correctIndex: 0,
+  ),
+  ListeningItem(
+    part: 3,
+    grade: 'pre1',
+    audioKey: 'lpre1_p3_02.mp3',
+    transcripts: [
+      'Welcome to the team. Your first week will mostly be training. On Monday '
+          'and Tuesday you will shadow a senior colleague. From Wednesday, you '
+          'will start handling simple tasks on your own, but someone will '
+          'always be available if you have questions.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: '状況: あなたは新入社員です。\nWhat will you do on Wednesday?',
+    choices: [
+      'Start handling simple tasks on your own.',
+      'Shadow a senior colleague all day.',
+      'Finish all of your training.',
+      'Take the day off.',
+    ],
+    correctIndex: 0,
+  ),
+  ListeningItem(
+    part: 3,
+    grade: 'pre1',
+    audioKey: 'lpre1_p3_03.mp3',
+    transcripts: [
+      'The special exhibition on the second floor closes at four today, half an '
+          'hour earlier than usual, to prepare for an evening event. The '
+          'permanent galleries on the first and third floors stay open until '
+          'six. Photography is allowed everywhere except in the special '
+          'exhibition.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: '状況: あなたは美術館にいます。\nWhere is photography NOT allowed?',
+    choices: [
+      'In the special exhibition.',
+      'On the first floor.',
+      'On the third floor.',
+      'Nowhere — it is allowed everywhere.',
+    ],
+    correctIndex: 0,
+  ),
+  ListeningItem(
+    part: 3,
+    grade: 'pre1',
+    audioKey: 'lpre1_p3_04.mp3',
+    transcripts: [
+      'Because of the heavy snow forecast for tomorrow morning, classes will '
+          'start two hours late, at ten o\'clock. Club activities scheduled '
+          'before school are canceled, but afternoon clubs will run as normal. '
+          'Please check the school website tonight in case the schedule changes '
+          'again.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: '状況: あなたは生徒です。\nWhat time will classes start tomorrow?',
+    choices: [
+      'At ten o\'clock.',
+      'At eight o\'clock.',
+      'Two hours earlier than usual.',
+      'Classes are canceled all day.',
+    ],
+    correctIndex: 0,
+  ),
+];
+
 const Map<String, List<ListeningItem>> kListeningItems = {
   '5': [..._grade5Part1, ..._grade5Part2, ..._grade5Part3],
   '4': [..._grade4Part1, ..._grade4Part2, ..._grade4Part3],
@@ -1288,6 +1558,7 @@ const Map<String, List<ListeningItem>> kListeningItems = {
   'pre2': [..._gradePre2Part1, ..._gradePre2Part2],
   'pre2plus': [..._gradePre2PlusPart1, ..._gradePre2PlusPart2],
   '2': [..._grade2Part1, ..._grade2Part2],
+  'pre1': [..._gradePre1Part1, ..._gradePre1Part2, ..._gradePre1Part3],
 };
 
 /// Convenience: get items for a specific grade and part number.
