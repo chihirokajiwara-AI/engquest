@@ -38,6 +38,26 @@ void main() {
       }
     });
 
+    test('injected writingAccuracy raises 3級 readiness (writing no longer 0%)',
+        () {
+      // 3級 has a writing section; the mock injects the learner's accumulated
+      // writing accuracy. A non-zero writing score must raise readiness vs 0%.
+      final exam = MockExamAssembler.assemble('3', seed: 1);
+      expect(exam.writingSlots, isNotEmpty,
+          reason: '3級 mock must include a writing slot');
+      final answers = <String, int>{
+        for (final it in exam.mcqItems) it.id: it.correctIdx,
+      };
+      final zeroWriting =
+          MockExamScorer.score(exam: exam, answers: answers, writingAccuracy: 0.0);
+      final goodWriting =
+          MockExamScorer.score(exam: exam, answers: answers, writingAccuracy: 0.9);
+      expect(zeroWriting, isNotNull);
+      expect(goodWriting, isNotNull);
+      expect(goodWriting!.readinessPct,
+          greaterThan(zeroWriting!.readinessPct));
+    });
+
     test('all-correct answers score higher readiness than all-wrong', () {
       final exam = MockExamAssembler.assemble('5', seed: 1);
 

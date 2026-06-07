@@ -11,9 +11,11 @@
 //      per-skill result into SkillAccuracyStore (so the live 合格メーター reflects
 //      it too) → navigate to PassMeterScreen with the REAL estimate.
 //
-// Writing slots are surfaced as a closing note (writing requires AI grading in
-// the writing engine); they are NOT auto-scored here, matching MockExamScorer's
-// contract (writingAccuracy defaults to 0.0 — an honest "not yet graded").
+// Writing is not administered inside the mock (it requires AI grading via the
+// not-yet-deployed backend). Instead the mock injects the learner's ACCUMULATED
+// writing-practice accuracy (from SkillAccuracyStore) as the writing component
+// of the CSE — non-zero for learners who have practiced writing, honestly 0 for
+// those who have not. (Previously writing was hard-0 in every mock.)
 //
 // NO dart:io. No Firebase in build/init. AudioCueService is created lazily and
 // play() is only called from user-gesture handlers (web autoplay contract). R4.
@@ -124,6 +126,12 @@ class _MockExamScreenState extends State<MockExamScreen> {
         correct[item.skill] = (correct[item.skill] ?? 0) + 1;
       }
     }
+    // The mock has no writing UI, and live AI essay grading needs the (not-yet-
+    // deployed) backend — so the writing component of the mock's CSE uses the
+    // learner's ACCUMULATED writing-practice accuracy (from WritingPracticeScreen,
+    // which records into the same store). Without this the mock counted writing
+    // as 0% for every 3級+ grade and understated 合格率 by a full skill.
+    double writingAccuracy = 0.0;
     try {
       final store = await SkillAccuracyStore.getInstance();
       for (final skill in total.keys) {
@@ -134,11 +142,20 @@ class _MockExamScreenState extends State<MockExamScreen> {
           total: total[skill]!,
         );
       }
+      // readAccuracies always returns all three skills (writing included).
+      final writing = store
+          .readAccuracies(widget.eikenGrade)
+          .firstWhere((a) => a.skill == EikenSkill.writing);
+      writingAccuracy = writing.accuracy; // 0.0 only if writing never practiced
     } catch (_) {
       // Storage failure is non-fatal — the estimate below still renders.
     }
 
-    final estimate = MockExamScorer.score(exam: _exam, answers: _answers);
+    final estimate = MockExamScorer.score(
+      exam: _exam,
+      answers: _answers,
+      writingAccuracy: writingAccuracy,
+    );
     if (!mounted) return;
     if (estimate == null) {
       Navigator.of(context).pop();
