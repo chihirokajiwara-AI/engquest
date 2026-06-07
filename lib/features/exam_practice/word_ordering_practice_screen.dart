@@ -419,6 +419,28 @@ class _WordOrderingPracticeScreenState
           jpSentence: '今日は天気がいいです。',
           correctOrder: ['It', 'is', 'nice', 'today'],
         ),
+        // Added 2026-06-07: sentences chosen so the scrambled words have ONE
+        // valid English order (the screen requires an exact match), CEFR A1.
+        _OrderingProblem(
+          jpSentence: 'これは私のかばんです。',
+          correctOrder: ['This', 'is', 'my', 'bag'],
+        ),
+        _OrderingProblem(
+          jpSentence: '彼らは公園にいます。',
+          correctOrder: ['They', 'are', 'in', 'the', 'park'],
+        ),
+        _OrderingProblem(
+          jpSentence: '私は犬を2匹飼っています。',
+          correctOrder: ['I', 'have', 'two', 'dogs'],
+        ),
+        _OrderingProblem(
+          jpSentence: 'あの女の子はとても親切です。',
+          correctOrder: ['That', 'girl', 'is', 'very', 'kind'],
+        ),
+        _OrderingProblem(
+          jpSentence: 'あなたはピアノを弾けますか。',
+          correctOrder: ['Can', 'you', 'play', 'the', 'piano'],
+        ),
       ]);
     } else if (grade == '4') {
       problems.addAll([
@@ -468,6 +490,31 @@ class _WordOrderingPracticeScreenState
             'three',
             'years'
           ],
+        ),
+        // Added 2026-06-07: single-valid-order sentences, CEFR A2.
+        _OrderingProblem(
+          jpSentence: '私は彼に手紙を書きました。',
+          correctOrder: ['I', 'wrote', 'him', 'a', 'letter'],
+        ),
+        _OrderingProblem(
+          jpSentence: '彼女は将来医者になりたいです。',
+          correctOrder: ['She', 'wants', 'to', 'be', 'a', 'doctor'],
+        ),
+        // Replaced「その本は机の上にあります」(adversarial audit): "The book is on
+        // the desk" has a valid locative-inversion alt "On the desk is the book"
+        // (same meaning) that the exact-match grader would wrongly fail. Use a
+        // pure SVO sentence with no frontable constituent → single valid order.
+        _OrderingProblem(
+          jpSentence: '私は新しい自転車が欲しいです。',
+          correctOrder: ['I', 'want', 'a', 'new', 'bicycle'],
+        ),
+        _OrderingProblem(
+          jpSentence: '私たちはその映画を見て楽しみました。',
+          correctOrder: ['We', 'enjoyed', 'watching', 'the', 'movie'],
+        ),
+        _OrderingProblem(
+          jpSentence: '彼は宿題を終えなければなりません。',
+          correctOrder: ['He', 'has', 'to', 'finish', 'his', 'homework'],
         ),
       ]);
     } else {
