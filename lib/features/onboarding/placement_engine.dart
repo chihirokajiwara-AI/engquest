@@ -165,12 +165,28 @@ class PlacementEngine {
   ///
   /// NON-DISCOURAGE GUARD: after a wrong answer, use floor(θ) instead of
   /// round(θ) so the next item is slightly easier — prevents a failure spiral.
+  ///
+  /// GENTLE STAIRCASE (CEO 721): the test must ALWAYS open at 5級/A1 (rung 0) and
+  /// climb only as the child earns it — never jump to too-hard items just because
+  /// an older age seeded θ high. The presented rung is capped at one above the
+  /// highest rung the child has actually PASSED. First item: highest-passed = -1
+  /// → cap 0 → rung 0 (5級). θ/EWMA still drives the final placement; this only
+  /// bounds what is *shown*, so the diagnostic feels encouraging, not crushing.
   int nextGrade() {
-    if (answers.isNotEmpty && !answers.last) {
-      // Last answer wrong → floor (easier)
-      return theta.floor().clamp(0, 6);
+    final target = (answers.isNotEmpty && !answers.last)
+        ? theta.floor().clamp(0, 6) // last wrong → easier
+        : theta.round().clamp(0, 6);
+    final cap = (_highestPassedRung() + 1).clamp(0, 6);
+    return target > cap ? cap : target;
+  }
+
+  /// Highest rung the child has answered correctly so far; -1 if none yet.
+  int _highestPassedRung() {
+    var highest = -1;
+    for (var i = 0; i < answers.length; i++) {
+      if (answers[i] && askedGrades[i] > highest) highest = askedGrades[i];
     }
-    return theta.round().clamp(0, 6);
+    return highest;
   }
 
   // ── §3: Record answer + EWMA update ──────────────────────────────────────

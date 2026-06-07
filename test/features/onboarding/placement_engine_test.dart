@@ -394,4 +394,41 @@ void main() {
       });
     }
   });
+
+  // ── Gentle staircase (CEO 721): always open easy, climb only by earned steps ──
+  group('gentle staircase opening', () {
+    test('first item is rung 0 (5級) even for the oldest age seed', () {
+      // Age 16+ seeds θ high (4.0); the test must STILL open at 5級.
+      final e = PlacementEngine.fromAge(18);
+      expect(e.nextGrade(), 0);
+    });
+
+    test('first item is rung 0 for every age', () {
+      for (final age in [4, 7, 10, 13, 16, 99]) {
+        expect(PlacementEngine.fromAge(age).nextGrade(), 0,
+            reason: 'age $age must still open at rung 0');
+      }
+    });
+
+    test('presented rung never jumps more than one above highest passed', () {
+      final e = PlacementEngine.fromAge(18); // high θ seed
+      var presented = e.nextGrade();
+      expect(presented, 0);
+      var highestPassed = -1;
+      for (var i = 0; i < 8; i++) {
+        presented = e.nextGrade();
+        expect(presented, lessThanOrEqualTo(highestPassed + 1),
+            reason: 'must not jump ahead of earned level');
+        // Simulate an advanced learner answering everything correctly.
+        e.record(true, grade: presented);
+        if (presented > highestPassed) highestPassed = presented;
+      }
+    });
+
+    test('wrong first answer keeps it at rung 0 (no discourage spiral)', () {
+      final e = PlacementEngine.fromAge(18);
+      e.record(false, grade: 0); // failed the opening 5級 item
+      expect(e.nextGrade(), 0);
+    });
+  });
 }
