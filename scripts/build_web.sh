@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 # scripts/build_web.sh — canonical A-KEN Quest web build.
 #
-# --no-web-resources-cdn: self-host CanvasKit from /canvaskit/ instead of fetching
-# it from https://www.gstatic.com/flutter-canvaskit/<rev> on the CRITICAL boot
-# path. Removes an uncontrolled cross-origin DNS+TLS+download from every cold open
-# (faster + deterministic + offline-capable + resilient on JP/school networks that
-# may throttle/filter gstatic). The matching canvaskit/ is emitted into build/web
-# by this same build, so revisions stay in lockstep (deploy build/web wholesale).
-# Decided by the perf design-panel (agent team), 2026-06-08; CEO load-speed P0.
+# CanvasKit source: gstatic CDN (Flutter default — NO --no-web-resources-cdn).
+# Measured 2026-06-08 (scripts/qa/perf_audit.mjs breakdown): canvaskit.wasm is the
+# single biggest cold-boot cost. gstatic = 0.35s / 2.27MB (Brotli, global edge incl.
+# a Tokyo PoP for our JP users); self-hosting from the single-origin Hetzner VPS
+# (Germany, gzip-only) = 3.21s / 3.23MB — ~9× SLOWER. An earlier self-host attempt
+# (--no-web-resources-cdn, commit b07140b) was therefore a ~2.8s boot REGRESSION and
+# is reverted here. gstatic is a Google CDN (widely reachable in Japan); the
+# speculative "school-filter" resilience does not justify a measured 9× slowdown.
 #
-# HEAVY JOB: always run via scripts/safe-job.sh (detached + timeout), never in the
-# agent tool loop:
+# HEAVY JOB: always run via scripts/safe-job.sh, never in the agent tool loop:
 #   scripts/safe-job.sh webbuild 900 scripts/build_web.sh
 set -euo pipefail
 cd "$(dirname "$0")/.."
-exec flutter build web --release --no-web-resources-cdn "$@"
+exec flutter build web --release "$@"
