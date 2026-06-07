@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:engquest/core/audio/audio_mute.dart';
-import 'package:engquest/features/exam_practice/muted_voice_banner.dart';
+import 'package:engquest/features/quest/ui/muted_voice_banner.dart';
 import 'package:engquest/features/exam_practice/mock_exam_screen.dart';
 import 'package:engquest/features/exam_practice/pass/cse_model.dart';
 import 'package:engquest/features/exam_practice/pass/mock_exam.dart';

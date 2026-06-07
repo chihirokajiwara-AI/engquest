@@ -1,25 +1,42 @@
-// lib/features/exam_practice/muted_voice_banner.dart
-// Shared in-session "sound is off" affordance for audio-dependent exercises.
+// lib/features/quest/ui/muted_voice_banner.dart
+// Shared in-session "sound is off" affordance for any audio-dependent exercise.
 //
-// 英検 listening (practice AND the full mock) is 100% audio — if the child muted
-// the Voice channel they'd face a silent, unanswerable section and score a false
-// 0, dragging their 合格率 down for the wrong reason. This banner warns them and
-// offers a one-tap unmute, right where the audio matters.
-//
-// Single source of truth so the listening-practice screen and the mock-exam
-// screen present an identical affordance (no copy-paste drift).
+// Lives beside dq_ui (the shared design system) because it is used across
+// features: the 英検 listening practice + full mock (exam_practice) AND the
+// quest/phonics surfaces (nazo / silent battle / quest), where the child must
+// HEAR a phoneme or word to answer. If the Voice channel is muted, those
+// exercises are silent and unanswerable — this warns the child and offers a
+// one-tap unmute, right where the audio matters. Single source of truth so
+// every surface presents an identical affordance (no copy-paste drift).
 
 import 'package:flutter/material.dart';
 
-import '../../core/audio/audio_mute.dart';
-import '../quest/ui/dq_ui.dart';
+import '../../../core/audio/audio_mute.dart';
+import 'dq_ui.dart';
+
+/// Default message — for the 英検 listening sections (practice + mock).
+const String kListeningMutedMessage = 'おとが オフだよ。リスニングには おとが ひつようです。\n'
+    'Sound is off — listening needs audio.';
+
+/// Message for the quest/phonics surfaces, where the child listens to a sound
+/// or word and chooses the matching answer.
+const String kPhonicsMutedMessage = 'おとが オフだよ。おとを きいて こたえてね。\n'
+    'Sound is off — turn it on to hear the answer.';
 
 class MutedVoiceBanner extends StatelessWidget {
   /// Called after the Voice channel is un-muted so the host can rebuild (the
   /// banner is shown conditionally on [AudioMute.voiceMuted]).
   final VoidCallback onUnmute;
 
-  const MutedVoiceBanner({super.key, required this.onUnmute});
+  /// The bilingual warning line. Defaults to the listening message; quest
+  /// surfaces pass [kPhonicsMutedMessage].
+  final String message;
+
+  const MutedVoiceBanner({
+    super.key,
+    required this.onUnmute,
+    this.message = kListeningMutedMessage,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +54,7 @@ class MutedVoiceBanner extends StatelessWidget {
           const SizedBox(width: 10),
           Expanded(
             child: Text(
-              'おとが オフだよ。リスニングには おとが ひつようです。\n'
-              'Sound is off — listening needs audio.',
+              message,
               style: dqText(size: 11.5, w: FontWeight.w600, color: dqInk)
                   .copyWith(height: 1.4),
             ),

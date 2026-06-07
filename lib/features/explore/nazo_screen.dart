@@ -18,12 +18,14 @@
 import 'package:flutter/material.dart';
 
 import '../../core/audio/audio_cue_service.dart';
+import '../../core/audio/audio_mute.dart';
 import '../../core/gamification/hint_coin_service.dart';
 import '../../core/gamification/picarat_controller.dart';
 import '../../core/sound/sound_service.dart';
 import '../quest/quest_data.dart';
 import '../quest/quest_screen.dart' show QuestScreen;
 import '../quest/ui/dq_ui.dart';
+import '../quest/ui/muted_voice_banner.dart';
 import 'hotspot.dart';
 
 // ── Result returned to the caller on dismiss ─────────────────────────────────
@@ -118,7 +120,8 @@ class _NazoScreenState extends State<NazoScreen> {
   }
 
   void _dismiss() {
-    Navigator.of(context).pop(const NazoResult(solved: false, picaratEarned: 0));
+    Navigator.of(context)
+        .pop(const NazoResult(solved: false, picaratEarned: 0));
   }
 
   // ── Hint ladder ───────────────────────────────────────────────────────────
@@ -169,6 +172,15 @@ class _NazoScreenState extends State<NazoScreen> {
               const SizedBox(height: 12),
               _picaratRow(),
               const SizedBox(height: 12),
+              // This ナゾ plays a phoneme/word the child must HEAR to answer —
+              // if Voice is muted, warn + offer a one-tap unmute.
+              if (AudioMute.voiceMuted && _step.autoPlayAudio != null) ...[
+                MutedVoiceBanner(
+                  onUnmute: () => setState(() {}),
+                  message: kPhonicsMutedMessage,
+                ),
+                const SizedBox(height: 12),
+              ],
               if (widget.hotspot.framingJa != null) ...[
                 _framingBox(),
                 const SizedBox(height: 10),
@@ -217,7 +229,8 @@ class _NazoScreenState extends State<NazoScreen> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text('✦', style: TextStyle(color: Color(0xFFFFD700), fontSize: 16)),
+                const Text('✦',
+                    style: TextStyle(color: Color(0xFFFFD700), fontSize: 16)),
                 const SizedBox(width: 3),
                 Text('$_coinBalance', style: dqText(size: 14, color: dqGold)),
               ],
@@ -242,7 +255,8 @@ class _NazoScreenState extends State<NazoScreen> {
               children: [
                 Text(
                   'ピカラット',
-                  style: dqText(size: 11, color: dqGold, w: FontWeight.w800, spacing: 1),
+                  style: dqText(
+                      size: 11, color: dqGold, w: FontWeight.w800, spacing: 1),
                 ),
                 const SizedBox(height: 2),
                 Text(
@@ -271,7 +285,8 @@ class _NazoScreenState extends State<NazoScreen> {
         title: 'じょうきょう / Scene',
         child: Text(
           widget.hotspot.framingJa!,
-          style: dqText(size: 13, w: FontWeight.w500, color: dqInk).copyWith(height: 1.7),
+          style: dqText(size: 13, w: FontWeight.w500, color: dqInk)
+              .copyWith(height: 1.7),
         ),
       );
 
@@ -295,7 +310,9 @@ class _NazoScreenState extends State<NazoScreen> {
                 Text(step.npcLine, style: dqText(size: 19, w: FontWeight.w700)),
                 if (step.npcLineJa != null) ...[
                   const SizedBox(height: 8),
-                  Text(step.npcLineJa!, style: dqText(size: 12, color: dqInk, w: FontWeight.w400)),
+                  Text(step.npcLineJa!,
+                      style:
+                          dqText(size: 12, color: dqInk, w: FontWeight.w400)),
                 ],
               ],
             ),
@@ -340,11 +357,14 @@ class _NazoScreenState extends State<NazoScreen> {
         ),
         if (step.autoPlayAudio != null) ...[
           const SizedBox(height: 12),
-          DqReplayButton(onTap: () => _cue.play(step.autoPlayAudio), label: '🔊 おとを きく'),
+          DqReplayButton(
+              onTap: () => _cue.play(step.autoPlayAudio), label: '🔊 おとを きく'),
         ],
         if (step.teachJa != null) ...[
           const SizedBox(height: 14),
-          DqDialogBox(speaker: step.npcName, child: Text(step.teachJa!, style: dqText(size: 15))),
+          DqDialogBox(
+              speaker: step.npcName,
+              child: Text(step.teachJa!, style: dqText(size: 15))),
         ],
       ],
     );
@@ -389,7 +409,10 @@ class _NazoScreenState extends State<NazoScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           for (int tier = 1; tier <= 3; tier++) ...[
-            _hintTile(tier, hints.firstWhere((h) => h.tier == tier, orElse: () => hints.last)),
+            _hintTile(
+                tier,
+                hints.firstWhere((h) => h.tier == tier,
+                    orElse: () => hints.last)),
             if (tier < 3) const SizedBox(height: 8),
           ],
         ],
@@ -401,7 +424,9 @@ class _NazoScreenState extends State<NazoScreen> {
     final unlocked = _hintsShown >= tier;
     final cost = HintCoinService.costForTier(tier);
     return GestureDetector(
-      onTap: (unlocked || _coinLoading || _revealed) ? null : () => _tryUnlockHint(tier),
+      onTap: (unlocked || _coinLoading || _revealed)
+          ? null
+          : () => _tryUnlockHint(tier),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
         padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
@@ -421,13 +446,17 @@ class _NazoScreenState extends State<NazoScreen> {
               unlocked ? '💡' : '✦',
               style: TextStyle(
                 fontSize: 18,
-                color: unlocked ? const Color(0xFFFFD700) : const Color(0xFFB8923C),
+                color: unlocked
+                    ? const Color(0xFFFFD700)
+                    : const Color(0xFFB8923C),
               ),
             ),
             const SizedBox(width: 8),
             Expanded(
               child: unlocked
-                  ? Text(hint.textJa, style: dqText(size: 13, w: FontWeight.w500, color: dqInk).copyWith(height: 1.6))
+                  ? Text(hint.textJa,
+                      style: dqText(size: 13, w: FontWeight.w500, color: dqInk)
+                          .copyWith(height: 1.6))
                   : Text(
                       'T$tier ヒント — コイン $cost 枚（まい）',
                       style: dqText(size: 13, color: dqGold),
@@ -437,7 +466,8 @@ class _NazoScreenState extends State<NazoScreen> {
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text('✦', style: TextStyle(color: Color(0xFFFFD700), fontSize: 13)),
+                  const Text('✦',
+                      style: TextStyle(color: Color(0xFFFFD700), fontSize: 13)),
                   const SizedBox(width: 2),
                   Text('$cost', style: dqText(size: 13, color: dqGold)),
                 ],

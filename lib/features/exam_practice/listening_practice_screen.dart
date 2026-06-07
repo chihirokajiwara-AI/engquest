@@ -28,7 +28,7 @@ import '../../core/audio/audio_mute.dart';
 import '../quest/ui/dq_ui.dart';
 import 'eiken_exam_config.dart';
 import 'listening_data.dart';
-import 'muted_voice_banner.dart';
+import '../quest/ui/muted_voice_banner.dart';
 import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
 

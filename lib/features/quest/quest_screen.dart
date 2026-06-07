@@ -8,9 +8,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../core/audio/audio_cue_service.dart';
+import '../../core/audio/audio_mute.dart';
 import '../../core/sound/sound_service.dart';
 import 'quest_data.dart';
 import 'ui/dq_ui.dart';
+import 'ui/muted_voice_banner.dart';
 import '../exam_practice/eiken_exam_config.dart';
 
 class QuestScreen extends StatefulWidget {
@@ -18,7 +20,8 @@ class QuestScreen extends StatefulWidget {
 
   /// Design-audit only: jump straight to this encounter index (skips intro).
   final int? previewEncounterIndex;
-  const QuestScreen({super.key, required this.town, this.previewEncounterIndex});
+  const QuestScreen(
+      {super.key, required this.town, this.previewEncounterIndex});
 
   @override
   State<QuestScreen> createState() => _QuestScreenState();
@@ -34,12 +37,22 @@ enum _Phase { intro, encounter, cleared }
 class _QuestScreenState extends State<QuestScreen> {
   // 声の石 per town, by order.
   static const _stoneNames = [
-    'あいさつの石', 'くらしの石', 'まなびの石', 'しゃかいの石',
-    'しれんの石', 'がくもんの石', '王（おう）の石',
+    'あいさつの石',
+    'くらしの石',
+    'まなびの石',
+    'しゃかいの石',
+    'しれんの石',
+    'がくもんの石',
+    '王（おう）の石',
   ];
   static const _stoneColors = [
-    Color(0xFF6FC9FF), Color(0xFF7BE08B), Color(0xFFFFC857), Color(0xFF4FD6E0),
-    Color(0xFFC58BEA), Color(0xFFFF8A8A), Color(0xFFFFD86A),
+    Color(0xFF6FC9FF),
+    Color(0xFF7BE08B),
+    Color(0xFFFFC857),
+    Color(0xFF4FD6E0),
+    Color(0xFFC58BEA),
+    Color(0xFFFF8A8A),
+    Color(0xFFFFD86A),
   ];
 
   final _sound = SoundService();
@@ -109,15 +122,19 @@ class _QuestScreenState extends State<QuestScreen> {
       }
     });
   }
+
   bool get _hasEncounters => widget.town.encounters.isNotEmpty;
   int get _townIdx => kQuestTowns.indexWhere((t) => t.id == widget.town.id);
-  String get _stoneName =>
-      _townIdx >= 0 && _townIdx < _stoneNames.length ? _stoneNames[_townIdx] : 'こえの石';
-  Color get _stoneColor =>
-      _townIdx >= 0 && _townIdx < _stoneColors.length ? _stoneColors[_townIdx] : dqGold;
+  String get _stoneName => _townIdx >= 0 && _townIdx < _stoneNames.length
+      ? _stoneNames[_townIdx]
+      : 'こえの石';
+  Color get _stoneColor => _townIdx >= 0 && _townIdx < _stoneColors.length
+      ? _stoneColors[_townIdx]
+      : dqGold;
 
   // Optional per-town scene art (falls back to the night gradient).
-  String get _sceneAsset => 'assets/art/scenes/town_${widget.town.eikenLevel}.png';
+  String get _sceneAsset =>
+      'assets/art/scenes/town_${widget.town.eikenLevel}.png';
 
   void _start() {
     setState(() => _phase = _hasEncounters ? _Phase.encounter : _Phase.cleared);
@@ -196,7 +213,9 @@ class _QuestScreenState extends State<QuestScreen> {
           child: Text(widget.town.intro, style: dqText(size: 15)),
         ),
         const SizedBox(height: 24),
-        DqButton(label: _hasEncounters ? '▶ ぼうけんを はじめる' : '準備中', onTap: _hasEncounters ? _start : null),
+        DqButton(
+            label: _hasEncounters ? '▶ ぼうけんを はじめる' : '準備中',
+            onTap: _hasEncounters ? _start : null),
         const Spacer(),
       ],
     );
@@ -210,6 +229,15 @@ class _QuestScreenState extends State<QuestScreen> {
         children: [
           _header('${_index + 1} / $total'),
           const SizedBox(height: 4),
+          // This step plays a phoneme/word the child must HEAR — if Voice is
+          // muted, warn + offer a one-tap unmute.
+          if (AudioMute.voiceMuted && step.autoPlayAudio != null) ...[
+            MutedVoiceBanner(
+              onUnmute: () => setState(() {}),
+              message: kPhonicsMutedMessage,
+            ),
+            const SizedBox(height: 8),
+          ],
           // Kind-dispatch: phonics/blend/word/phrase get a teach card; Quiz keeps
           // the original NPC-dialogue layout.
           switch (step) {
@@ -267,7 +295,9 @@ class _QuestScreenState extends State<QuestScreen> {
               child: Text(step.onCorrect, style: dqText(size: 15)),
             ),
             const SizedBox(height: 16),
-            DqButton(label: _index < total - 1 ? '▶ つぎへ' : '▶ 街（まち）をクリア！', onTap: _next),
+            DqButton(
+                label: _index < total - 1 ? '▶ つぎへ' : '▶ 街（まち）をクリア！',
+                onTap: _next),
           ],
           const SizedBox(height: 20),
           _party(),
@@ -318,7 +348,8 @@ class _QuestScreenState extends State<QuestScreen> {
 
   Widget _quizPrompt(QuestEncounter q) => Column(
         children: [
-          DqPortrait(imageAsset: _npcImage(q.npcName), emoji: q.npcEmoji, size: 76),
+          DqPortrait(
+              imageAsset: _npcImage(q.npcName), emoji: q.npcEmoji, size: 76),
           const SizedBox(height: 16),
           DqDialogBox(
             speaker: q.npcName,
@@ -328,7 +359,9 @@ class _QuestScreenState extends State<QuestScreen> {
                 Text(q.npcLine, style: dqText(size: 19, w: FontWeight.w700)),
                 if (q.npcLineJa != null) ...[
                   const SizedBox(height: 8),
-                  Text(q.npcLineJa!, style: dqText(size: 12, color: dqInk, w: FontWeight.w400)),
+                  Text(q.npcLineJa!,
+                      style:
+                          dqText(size: 12, color: dqInk, w: FontWeight.w400)),
                 ],
               ],
             ),
@@ -392,7 +425,9 @@ class _QuestScreenState extends State<QuestScreen> {
           ),
         ),
         const SizedBox(height: 24),
-        DqButton(label: '▶ 地図（ちず）にもどる', onTap: () => Navigator.of(context).pop(true)),
+        DqButton(
+            label: '▶ 地図（ちず）にもどる',
+            onTap: () => Navigator.of(context).pop(true)),
         const Spacer(),
       ],
     );
@@ -413,9 +448,15 @@ class _QuestScreenState extends State<QuestScreen> {
                 colors: [Colors.white, _stoneColor, _stoneColor.withAlpha(170)],
                 stops: const [0.0, 0.55, 1.0],
               ),
-              boxShadow: [BoxShadow(color: _stoneColor.withAlpha(150), blurRadius: 34, spreadRadius: 4)],
+              boxShadow: [
+                BoxShadow(
+                    color: _stoneColor.withAlpha(150),
+                    blurRadius: 34,
+                    spreadRadius: 4)
+              ],
             ),
-            child: const Center(child: Text('💎', style: TextStyle(fontSize: 46))),
+            child:
+                const Center(child: Text('💎', style: TextStyle(fontSize: 46))),
           ),
         ),
       );
@@ -424,15 +465,23 @@ class _QuestScreenState extends State<QuestScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Column(children: [
-            const DqPortrait(imageAsset: 'assets/art/masters/hero.png', emoji: '🧭', size: 44),
+            const DqPortrait(
+                imageAsset: 'assets/art/masters/hero.png',
+                emoji: '🧭',
+                size: 44),
             const SizedBox(height: 2),
-            Text('きみ', style: dqText(size: 10, color: dqInk, w: FontWeight.w400)),
+            Text('きみ',
+                style: dqText(size: 10, color: dqInk, w: FontWeight.w400)),
           ]),
           const SizedBox(width: 22),
           Column(children: [
-            const DqPortrait(imageAsset: 'assets/art/masters/slime.png', emoji: '🟢', size: 44),
+            const DqPortrait(
+                imageAsset: 'assets/art/masters/slime.png',
+                emoji: '🟢',
+                size: 44),
             const SizedBox(height: 2),
-            Text('スラ', style: dqText(size: 10, color: dqInk, w: FontWeight.w400)),
+            Text('スラ',
+                style: dqText(size: 10, color: dqInk, w: FontWeight.w400)),
           ]),
         ],
       );

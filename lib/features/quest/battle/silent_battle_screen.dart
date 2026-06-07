@@ -13,6 +13,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../../core/audio/audio_cue_service.dart';
+import '../../../core/audio/audio_mute.dart';
 import '../../../core/firebase/auth_service.dart';
 import '../../../core/fsrs/firestore_card_repository.dart';
 import '../../../core/fsrs/fsrs_card_repository.dart';
@@ -21,6 +22,7 @@ import '../../../features/home/streak_service.dart';
 import '../quest_data.dart';
 import '../quest_screen.dart';
 import '../ui/dq_ui.dart';
+import '../ui/muted_voice_banner.dart';
 import 'battle_rewards.dart';
 import 'silent_battle_controller.dart';
 
@@ -193,6 +195,17 @@ class _SilentBattleScreenState extends State<SilentBattleScreen> {
             const SizedBox(height: 6),
             _buildHearts(ctrl),
             const SizedBox(height: 4),
+            // The prompt plays a phoneme/word the child must HEAR to pick the
+            // right answer — if Voice is muted, warn + offer a one-tap unmute.
+            if (ctrl.phase == BattlePhase.prompt &&
+                AudioMute.voiceMuted &&
+                ctrl.currentStep.autoPlayAudio != null) ...[
+              MutedVoiceBanner(
+                onUnmute: () => setState(() {}),
+                message: kPhonicsMutedMessage,
+              ),
+              const SizedBox(height: 6),
+            ],
             Expanded(
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 280),
@@ -236,8 +249,7 @@ class _SilentBattleScreenState extends State<SilentBattleScreen> {
             ),
           ),
         ),
-        if (_showComboFlash && ctrl.combo >= 2)
-          _ComboFlash(combo: ctrl.combo),
+        if (_showComboFlash && ctrl.combo >= 2) _ComboFlash(combo: ctrl.combo),
         const SizedBox(width: 8),
       ],
     );
@@ -301,9 +313,7 @@ class _SilentBattleScreenState extends State<SilentBattleScreen> {
                 '♥',
                 style: TextStyle(
                   fontSize: 22,
-                  color: i < ctrl.hearts
-                      ? const Color(0xFFFF6B8A)
-                      : dqGoldDeep,
+                  color: i < ctrl.hearts ? const Color(0xFFFF6B8A) : dqGoldDeep,
                   shadows: const [
                     Shadow(color: Colors.black54, blurRadius: 4),
                   ],
@@ -470,13 +480,11 @@ class _SilentBattleScreenState extends State<SilentBattleScreen> {
           _ShardsRow(shards: ctrl.shards),
           const SizedBox(height: 12),
           Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
               color: dqNight0.withAlpha(180),
               borderRadius: BorderRadius.circular(8),
-              border:
-                  Border.all(color: dqGold.withAlpha(160), width: 1.5),
+              border: Border.all(color: dqGold.withAlpha(160), width: 1.5),
             ),
             child: Text(
               '✨ +$xp XP 獲得！',
@@ -513,8 +521,7 @@ class _SilentBattleScreenState extends State<SilentBattleScreen> {
               children: [
                 Text(
                   'ことばが まだ たりない…',
-                  style: dqText(
-                      size: 18, w: FontWeight.w800, color: dqInk),
+                  style: dqText(size: 18, w: FontWeight.w800, color: dqInk),
                 ),
                 const SizedBox(height: 8),
                 Text(
@@ -533,8 +540,7 @@ class _SilentBattleScreenState extends State<SilentBattleScreen> {
           ),
           const SizedBox(height: 12),
           GestureDetector(
-            onTap:
-                widget.onDefeat ?? () => Navigator.of(context).maybePop(),
+            onTap: widget.onDefeat ?? () => Navigator.of(context).maybePop(),
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: Text(
@@ -609,15 +615,11 @@ class _SilentBattleScreenState extends State<SilentBattleScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(q.npcLine,
-                  style: dqText(size: 19, w: FontWeight.w700)),
+              Text(q.npcLine, style: dqText(size: 19, w: FontWeight.w700)),
               if (q.npcLineJa != null) ...[
                 const SizedBox(height: 8),
                 Text(q.npcLineJa!,
-                    style: dqText(
-                        size: 12,
-                        color: dqInk,
-                        w: FontWeight.w400)),
+                    style: dqText(size: 12, color: dqInk, w: FontWeight.w400)),
               ],
             ],
           ),
@@ -696,10 +698,26 @@ class _GreyPortrait extends StatelessWidget {
   Widget build(BuildContext context) {
     return ColorFiltered(
       colorFilter: const ColorFilter.matrix([
-        0.213, 0.715, 0.072, 0, 0,
-        0.213, 0.715, 0.072, 0, 0,
-        0.213, 0.715, 0.072, 0, 0,
-        0,     0,     0,     1, 0,
+        0.213,
+        0.715,
+        0.072,
+        0,
+        0,
+        0.213,
+        0.715,
+        0.072,
+        0,
+        0,
+        0.213,
+        0.715,
+        0.072,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
       ]),
       child: DqPortrait(
         imageAsset: QuestScreen.npcImage(npcName),
@@ -741,10 +759,26 @@ class _PortraitReveal extends StatelessWidget {
 
     return ColorFiltered(
       colorFilter: ColorFilter.matrix([
-        r0, r1, r2, 0, 0,
-        g0, g1, g2, 0, 0,
-        b0, b1, b2, 0, 0,
-        0,  0,  0,  1, 0,
+        r0,
+        r1,
+        r2,
+        0,
+        0,
+        g0,
+        g1,
+        g2,
+        0,
+        0,
+        b0,
+        b1,
+        b2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
       ]),
       child: DqPortrait(
         imageAsset: QuestScreen.npcImage(npcName),
@@ -766,8 +800,7 @@ class _ComboFlash extends StatelessWidget {
       tween: Tween(begin: 1.2, end: 1.0),
       duration: const Duration(milliseconds: 300),
       curve: Curves.elasticOut,
-      builder: (_, scale, child) =>
-          Transform.scale(scale: scale, child: child),
+      builder: (_, scale, child) => Transform.scale(scale: scale, child: child),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
         decoration: BoxDecoration(
