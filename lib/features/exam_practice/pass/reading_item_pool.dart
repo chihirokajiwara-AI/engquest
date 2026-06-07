@@ -879,14 +879,15 @@ const _pre2Reading = [
 
 // ── 英検2級 ──────────────────────────────────────────────────────────────────
 const _grade2Reading = [
+  // Existing 5 retained; choices reordered to remove the all-correctIdx-0 bias.
   ReadingMockItem(
     id: '2_r_001',
     sectionId: '2_r1',
     passageText:
         'The committee ( ) new regulations to reduce carbon emissions.',
     questionText: 'Choose the best word for the blank.',
-    choices: ['introduced', 'intervened', 'invested', 'invented'],
-    correctIdx: 0,
+    choices: ['intervened', 'invested', 'introduced', 'invented'],
+    correctIdx: 2,
   ),
   ReadingMockItem(
     id: '2_r_002',
@@ -906,12 +907,12 @@ const _grade2Reading = [
         'infections could be life-threatening.',
     questionText: 'What was the significance of penicillin?',
     choices: [
-      'It made minor infections treatable.',
       'It prevented all diseases.',
+      'It made minor infections treatable.',
       'It replaced surgery.',
       'It cured all cancers.',
     ],
-    correctIdx: 0,
+    correctIdx: 1,
   ),
   ReadingMockItem(
     id: '2_r_004',
@@ -921,8 +922,8 @@ const _grade2Reading = [
         'are cleared, animals ( ) their natural habitats and are forced to '
         'move elsewhere or face extinction.',
     questionText: 'Choose the best phrase for the blank.',
-    choices: ['lose', 'gain', 'protect', 'restore'],
-    correctIdx: 0,
+    choices: ['gain', 'protect', 'restore', 'lose'],
+    correctIdx: 3,
   ),
   ReadingMockItem(
     id: '2_r_005',
@@ -939,6 +940,138 @@ const _grade2Reading = [
       'Its effect on physical fitness',
     ],
     correctIdx: 0,
+  ),
+  // ── 大問1 短文語句空所補充 (vocabulary, phrasal verbs, grammar; CEFR B1–B2) ─
+  ReadingMockItem(
+    id: '2_r_006',
+    sectionId: '2_r1',
+    passageText: 'We had to ( ) the meeting until next week because of the storm.',
+    questionText: 'Choose the best phrase for the blank.',
+    choices: ['put on', 'put off', 'put up', 'put out'],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    // Distractors upgraded (adversarial audit): effort/account/attempt were
+    // non-parallel filler eliminable on grammar alone — below 2級. Now all four
+    // are abstract nouns; only "impact" collocates with "had a significant ___
+    // on", forcing genuine collocation discrimination. ("effect"/"influence"
+    // deliberately excluded — both would create a true double-answer.)
+    id: '2_r_007',
+    sectionId: '2_r1',
+    passageText: 'The new tax policy had a significant ( ) on small businesses.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['result', 'response', 'outcome', 'impact'],
+    correctIdx: 3,
+  ),
+  ReadingMockItem(
+    id: '2_r_008',
+    sectionId: '2_r1',
+    passageText: 'If I had studied harder, I ( ) the entrance exam.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['will pass', 'would pass', 'would have passed', 'passed'],
+    correctIdx: 2,
+  ),
+  ReadingMockItem(
+    id: '2_r_009',
+    sectionId: '2_r1',
+    passageText: '( ) tired after the long trip, she went straight to bed.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['Feeling', 'Felt', 'To feel', 'Feels'],
+    correctIdx: 0,
+  ),
+  ReadingMockItem(
+    id: '2_r_010',
+    sectionId: '2_r1',
+    passageText: 'Please tell me ( ) you want for your birthday.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['which', 'that', 'what', 'whose'],
+    correctIdx: 2,
+  ),
+  ReadingMockItem(
+    id: '2_r_011',
+    sectionId: '2_r1',
+    passageText: 'The researchers spent months trying to ( ) the data.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['apologize', 'analyze', 'advertise', 'assemble'],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: '2_r_012',
+    sectionId: '2_r1',
+    passageText: 'Despite the difficulties, the team decided to ( ) with the plan.',
+    questionText: 'Choose the best phrase for the blank.',
+    choices: ['go off', 'go out', 'go down', 'go ahead'],
+    correctIdx: 3,
+  ),
+  ReadingMockItem(
+    id: '2_r_013',
+    sectionId: '2_r1',
+    passageText: 'The government introduced new measures to ( ) unemployment.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['reduce', 'refuse', 'reply', 'remind'],
+    correctIdx: 0,
+  ),
+  ReadingMockItem(
+    id: '2_r_014',
+    sectionId: '2_r1',
+    passageText: 'It was John ( ) broke the window, not his sister.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['which', 'who', 'whom', 'whose'],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: '2_r_015',
+    sectionId: '2_r1',
+    passageText: 'Reading a wide variety of books can ( ) your vocabulary.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['expend', 'expose', 'expand', 'expire'],
+    correctIdx: 2,
+  ),
+  ReadingMockItem(
+    id: '2_r_016',
+    sectionId: '2_r1',
+    passageText: 'The two companies finally reached an ( ) after long talks.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['argument', 'amount', 'advantage', 'agreement'],
+    correctIdx: 3,
+  ),
+  ReadingMockItem(
+    id: '2_r_017',
+    sectionId: '2_r1',
+    passageText: 'The famous detective was finally able to ( ) the mystery.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['solve', 'melt', 'spend', 'waste'],
+    correctIdx: 0,
+  ),
+  // ── 大問2 長文の語句空所補充 (passage cloze) ──────────────────────────────
+  ReadingMockItem(
+    id: '2_r_018',
+    sectionId: '2_r2',
+    passageText:
+        'Renewable energy is becoming more important worldwide. Solar and '
+        'wind power generate electricity without ( ) harmful gases, which '
+        'helps countries fight climate change.',
+    questionText: 'Choose the best phrase for the blank.',
+    choices: ['collecting', 'storing', 'releasing', 'buying'],
+    correctIdx: 2,
+  ),
+  // ── 大問3 長文の内容一致選択 (passage comprehension) ──────────────────────
+  ReadingMockItem(
+    id: '2_r_019',
+    sectionId: '2_r3',
+    passageText:
+        'Many cities have introduced bike-sharing systems. These programs '
+        'reduce traffic and air pollution, and they encourage people to '
+        'exercise. However, some cities struggle to maintain the bicycles in '
+        'good condition.',
+    questionText: 'What is one problem the passage mentions with bike-sharing?',
+    choices: [
+      'Heavier traffic',
+      'Maintaining the bicycles',
+      'A lack of exercise',
+      'Having too few users',
+    ],
+    correctIdx: 1,
   ),
 ];
 
