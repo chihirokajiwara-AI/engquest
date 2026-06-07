@@ -95,13 +95,18 @@ fi
 echo ""
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
-# ║  R3 — SMOKE-TEST PRESENCE (warn-only in v1)                              ║
+# ║  R3 — SMOKE-TEST PRESENCE (HARD-FAIL: backlog cleared 2026-06-08)         ║
 # ╚═══════════════════════════════════════════════════════════════════════════╝
+# The 14-screen backlog was cleared to 0 — promote R3 to a hard gate so any new
+# screen shipped without a smoke test BLOCKS, preventing the debt re-accruing
+# (the #24 "crash to blank grey" class shipped precisely because a screen had no
+# render test). To consciously add a screen ahead of its test, register it the
+# same way other gaps are waived, or temporarily run with HARD_FAIL=0.
 hr
 echo -e "${BOLD}R3 SMOKE-TEST PRESENCE${RESET}"
 hr
 
-R3_OUTPUT=$(python3 "$REPO_ROOT/scripts/qa/check_smoke_tests.py" 2>&1)
+R3_OUTPUT=$(HARD_FAIL="${HARD_FAIL:-1}" python3 "$REPO_ROOT/scripts/qa/check_smoke_tests.py" 2>&1)
 R3_EXIT=$?
 echo "$R3_OUTPUT"
 echo ""
