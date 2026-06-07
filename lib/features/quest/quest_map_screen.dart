@@ -152,13 +152,13 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
   // Painted town plates (reused from the explorable SceneDefs) shown as the
   // node art on the overworld trail — so the map shows real PLACES, not a list.
   static const Map<String, String> _townArt = {
-    '5': 'assets/art/scenes_layton/town5_lane.png',
-    '4': 'assets/art/scenes_layton/town4_harbor.png',
-    '3': 'assets/art/scenes_layton/town3_academy.png',
-    'pre2': 'assets/art/scenes_layton/town_pre2_port.png',
-    'pre2plus': 'assets/art/scenes_layton/town_pre2plus_bridge.png',
-    '2': 'assets/art/scenes_layton/town_2_castle.png',
-    'pre1': 'assets/art/scenes_layton/town_pre1_grey_square.png',
+    '5': 'assets/art/scenes_layton/town5_lane.webp',
+    '4': 'assets/art/scenes_layton/town4_harbor.webp',
+    '3': 'assets/art/scenes_layton/town3_academy.webp',
+    'pre2': 'assets/art/scenes_layton/town_pre2_port.webp',
+    'pre2plus': 'assets/art/scenes_layton/town_pre2plus_bridge.webp',
+    '2': 'assets/art/scenes_layton/town_2_castle.webp',
+    'pre1': 'assets/art/scenes_layton/town_pre1_grey_square.webp',
   };
 
   // ── The journey: prologue, 声の石 progress, then the painted overworld ──

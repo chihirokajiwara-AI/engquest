@@ -194,19 +194,33 @@ def main():
     pipe.set_progress_bar_config(disable=True)
 
     for fn, subject, w, h, seed in JOBS:
-        out = OUT / fn
+        # The app bundles WebP, not PNG: full-size painted PNGs were 54MB (a
+        # heavy web/app payload). We emit .webp (RGB; sprites are circle-masked
+        # in-app so no alpha is needed) at ~93% smaller. NPC sprites display at
+        # most ~0.20*480px (a small hotspot), so 768px max-dim is still
+        # oversized-safe — town plates keep native size.
+        webp = fn[:-4] + ".webp" if fn.endswith(".png") else fn
+        out = OUT / webp
         if out.exists():
-            print(f"  skip {fn} (exists)")
+            print(f"  skip {webp} (exists)")
             continue
         prompt = f"{subject}, {POS}"
         g = torch.Generator(device="mps").manual_seed(seed)
-        print(f"  generating {fn} ({w}x{h}, seed {seed})…")
+        print(f"  generating {webp} ({w}x{h}, seed {seed})…")
         img = pipe(prompt=prompt, negative_prompt=NEG, width=w, height=h,
                    num_inference_steps=28, guidance_scale=6.5, generator=g).images[0]
+        if fn.startswith("npc_"):
+            from PIL import Image
+            scale = min(768 / max(img.size), 1.0)
+            if scale < 1.0:
+                img = img.resize(
+                    (round(img.width * scale), round(img.height * scale)),
+                    Image.LANCZOS,
+                )
         # Pass format explicitly: PIL's lazy extension registry may not be
-        # initialised in a fresh process, so inferring "PNG" from the ".png"
+        # initialised in a fresh process, so inferring the format from the
         # suffix can raise "unknown file extension".
-        img.save(out, format="PNG")
+        img.save(out, format="WEBP", quality=85, method=6)
         print(f"  ok  {out}")
     print(f"DONE: {len(JOBS)} images → {OUT}")
 

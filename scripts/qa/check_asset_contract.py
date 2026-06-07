@@ -63,10 +63,10 @@ def collect_referenced_keys():
     # Patterns that yield literal string paths:
     #   audioAsset: 'audio/phonics/phoneme_s.mp3'
     #   autoPlayAudio: 'audio/phonics/blend_cat.mp3'
-    #   backgroundAsset: 'assets/art/scenes_layton/town5_lane.png'
+    #   backgroundAsset: 'assets/art/scenes_layton/town5_lane.webp'
     #   parallaxLayers: ['assets/...', 'assets/...']
-    #   npcGreyAsset: 'assets/art/scenes_layton/npc_clockmaker_grey.png'
-    #   npcColorAsset: 'assets/art/scenes_layton/npc_clockmaker_color.png'
+    #   npcGreyAsset: 'assets/art/scenes_layton/npc_clockmaker_grey.webp'
+    #   npcColorAsset: 'assets/art/scenes_layton/npc_clockmaker_color.webp'
     #   image: AssetImage('assets/art/crest.png')
     #   Image.asset('assets/art/title_bg.png')
 
