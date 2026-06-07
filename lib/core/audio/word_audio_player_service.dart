@@ -14,6 +14,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 
+import 'audio_mute.dart';
 import 'tts_service.dart';
 
 /// Playback state for word audio
@@ -22,7 +23,13 @@ enum WordAudioState { idle, loading, playing, error }
 /// WordAudioPlayerService — manages TTS fetch + audio playback for Battle
 class WordAudioPlayerService extends ChangeNotifier {
   final TtsService _tts;
-  final AudioPlayer _audioPlayer;
+  // Lazily created (like SoundService) so constructing the service never touches
+  // the audio platform — important when the Voice channel is muted (the player
+  // is never built) and for tests.
+  final AudioPlayer? _injectedPlayer;
+  AudioPlayer? _playerInstance;
+  AudioPlayer get _audioPlayer =>
+      _playerInstance ??= (_injectedPlayer ?? AudioPlayer());
 
   WordAudioState _state = WordAudioState.idle;
   String? _currentVocabId;
@@ -33,7 +40,10 @@ class WordAudioPlayerService extends ChangeNotifier {
 
   WordAudioPlayerService({TtsService? ttsService, AudioPlayer? audioPlayer})
       : _tts = ttsService ?? TtsService(),
-        _audioPlayer = audioPlayer ?? AudioPlayer();
+        _injectedPlayer = audioPlayer;
+
+  // The Voice-channel mute lives in [AudioMute] (shared with AudioCueService)
+  // so one Settings toggle silences every voice/word-audio path.
 
   WordAudioState get state => _state;
   String? get currentVocabId => _currentVocabId;
@@ -68,6 +78,8 @@ class WordAudioPlayerService extends ChangeNotifier {
   /// 2. Fetch from TTS (lazy) → play
   /// 3. On error → set error state, do NOT crash
   Future<void> playWord({required String vocabId, required String word}) async {
+    // Voice channel muted in Settings → do not fetch or play anything.
+    if (AudioMute.voiceMuted) return;
     if (_state == WordAudioState.playing && _currentVocabId == vocabId) {
       return; // already playing this word
     }
@@ -126,7 +138,7 @@ class WordAudioPlayerService extends ChangeNotifier {
 
   @override
   void dispose() {
-    _audioPlayer.dispose();
+    _playerInstance?.dispose(); // only if one was ever created
     super.dispose();
   }
 

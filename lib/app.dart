@@ -19,6 +19,7 @@ import 'package:engquest/features/exam_practice/writing_practice_screen.dart';
 import 'package:engquest/features/exam_practice/eiken_exam_config.dart';
 import 'package:engquest/features/exam_practice/word_ordering_practice_screen.dart';
 import 'package:engquest/features/exam_practice/conversation_practice_screen.dart';
+import 'package:engquest/features/settings/settings_screen.dart';
 import 'package:engquest/features/achievements/achievements_screen.dart';
 import 'package:engquest/features/parent_dashboard/parent_dashboard_screen.dart';
 import 'package:engquest/features/parent_dashboard/parent_login_screen.dart';
@@ -298,7 +299,7 @@ const List<String> kPreviewRouteNames = [
   'writingp1', 'listening', 'listening4', 'listening3', 'listeningp2',
   'kotobahome', 'passmeter', 'passmetermissing', 'speaking', 'speakingconsent',
   'listening2', 'achievements', 'parent', 'parentlogin', 'wordorder',
-  'conversation',
+  'conversation', 'settings',
 ];
 
 /// Test-visible wrapper for the private preview harness.
@@ -394,6 +395,8 @@ Widget _previewFor(String? name) {
       return const VoiceScreen();
     case 'exam':
       return const ExamPracticeScreen(eikenGrade: '5');
+    case 'settings':
+      return const SettingsScreen();
     case 'conversation':
       // 英検3級 大問2 会話文の文空所補充 — grade-differentiated dialogue practice.
       return const ConversationPracticeScreen(

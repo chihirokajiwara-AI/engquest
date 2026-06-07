@@ -11,6 +11,8 @@ import 'package:engquest/core/config/flavor_config.dart';
 import 'package:engquest/core/firebase/firebase_config.dart';
 import 'package:engquest/core/notifications/notification_service.dart';
 import 'package:engquest/core/storage/preferences_service.dart';
+import 'package:engquest/core/sound/sound_service.dart';
+import 'package:engquest/core/audio/audio_mute.dart';
 import 'package:engquest/app.dart';
 
 void main() async {
@@ -20,6 +22,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await PreferencesService.getInstance();
+  await SoundService().loadPreferences();
+  await AudioMute.loadVoicePreference();
 
   bool firebaseAvailable = false;
   try {

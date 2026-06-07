@@ -20,7 +20,8 @@ abstract class PrefKeys {
   static const String reminderMinute = 'reminder_minute';
 
   // Sound preferences
-  static const String soundMuted = 'sound_muted';
+  static const String soundMuted = 'sound_muted'; // SFX channel (effects)
+  static const String voiceMuted = 'voice_muted'; // Voice channel (word audio)
 
   // Legacy keys kept for backward-compat with OnboardingStorage
   static const String onboardingAge = 'onboarding_age';

@@ -5,6 +5,8 @@ import 'package:engquest/core/config/flavor_config.dart';
 import 'package:engquest/core/firebase/firebase_config.dart';
 import 'package:engquest/core/notifications/notification_service.dart';
 import 'package:engquest/core/storage/preferences_service.dart';
+import 'package:engquest/core/sound/sound_service.dart';
+import 'package:engquest/core/audio/audio_mute.dart';
 import 'package:engquest/app.dart';
 
 void main() async {
@@ -16,6 +18,11 @@ void main() async {
 
   // 1. SharedPreferences — pre-warm so the first frame has data.
   await PreferencesService.getInstance();
+
+  // 1b. Apply persisted audio mute settings before the first screen (prologue,
+  //     deep-links, Battle) so a child's mute choice is honoured everywhere.
+  await SoundService().loadPreferences();
+  await AudioMute.loadVoicePreference();
 
   // 2. Firebase initialization — skipped gracefully if placeholder keys.
   bool firebaseAvailable = false;

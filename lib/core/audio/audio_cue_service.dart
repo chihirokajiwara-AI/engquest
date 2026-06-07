@@ -14,18 +14,26 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 
+import 'audio_mute.dart';
+
 /// Plays a single bundled audio asset by key (relative to `assets/`, e.g.
 /// 'audio/phonics/phoneme_s.mp3'). Fire-and-forget; errors are swallowed so a
 /// missing/unrecorded clip (founder records phonemes later) never crashes the UI.
 class AudioCueService {
-  AudioCueService({AudioPlayer? player}) : _player = player ?? AudioPlayer();
+  AudioCueService({AudioPlayer? player}) : _injectedPlayer = player;
 
-  final AudioPlayer _player;
+  // Lazily created so the player is never built when voice is muted (or in
+  // tests that only exercise the mute gate).
+  final AudioPlayer? _injectedPlayer;
+  AudioPlayer? _playerInstance;
+  AudioPlayer get _player => _playerInstance ??= (_injectedPlayer ?? AudioPlayer());
 
   /// Play the asset at [assetKey]. Restarts cleanly if a clip is already playing
   /// (e.g. the child taps 🔊 repeatedly to imitate). Must be invoked from a
   /// user-gesture chain on web.
   Future<void> play(String? assetKey) async {
+    // Voice channel muted in Settings → silence ALL word/pronunciation audio.
+    if (AudioMute.voiceMuted) return;
     if (assetKey == null || assetKey.isEmpty) return;
     try {
       await _player.stop();
@@ -37,9 +45,9 @@ class AudioCueService {
 
   Future<void> stop() async {
     try {
-      await _player.stop();
+      await _playerInstance?.stop();
     } catch (_) {/* ignore */}
   }
 
-  void dispose() => _player.dispose();
+  void dispose() => _playerInstance?.dispose();
 }

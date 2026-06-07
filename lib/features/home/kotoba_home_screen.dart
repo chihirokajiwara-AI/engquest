@@ -29,6 +29,9 @@ import 'package:engquest/features/explore/scene_view.dart';
 import 'package:engquest/features/home/streak_service.dart';
 import 'package:engquest/features/quest/quest_map_screen.dart';
 import 'package:engquest/features/quest/ui/dq_ui.dart';
+import 'package:engquest/features/settings/settings_screen.dart';
+import 'package:engquest/core/sound/sound_service.dart';
+import 'package:engquest/core/audio/audio_mute.dart';
 
 // ---------------------------------------------------------------------------
 // KotobaHomeScreen
@@ -93,6 +96,11 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
   // ── Data loading ──────────────────────────────────────────────────────────
 
   Future<void> _loadData() async {
+    // 0. Apply persisted audio settings app-wide (SFX + Voice channels) so a
+    //    child's mute choice is honoured everywhere, not just in Battle.
+    await SoundService().loadPreferences();
+    await AudioMute.loadVoicePreference();
+
     // 1. Streak — SharedPreferences backed, always safe.
     StreakState streak = const StreakState.zero();
     try {
@@ -209,7 +217,20 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const SizedBox(height: 8),
+        // Settings gear (mute / how-to-play) — top-right, title stays centred.
+        Align(
+          alignment: Alignment.centerRight,
+          child: GestureDetector(
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const SettingsScreen()),
+            ),
+            child: Container(
+              // ≥44px hit target for small fingers.
+              padding: const EdgeInsets.all(10),
+              child: const Icon(Icons.settings, color: dqGold, size: 24),
+            ),
+          ),
+        ),
         Text(
           'コトバ探偵',
           textAlign: TextAlign.center,
