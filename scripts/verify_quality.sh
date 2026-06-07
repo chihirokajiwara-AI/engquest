@@ -167,6 +167,47 @@ fi
 
 echo ""
 
+# ╔═══════════════════════════════════════════════════════════════════════════╗
+# ║  R6 — CLEAN-CHECKOUT DEPENDENCY                                          ║
+# ╚═══════════════════════════════════════════════════════════════════════════╝
+# Catches the failure class where an [auto-sync] commit grabs a TRACKED edit
+# that imports a NEW file, but leaves that new file UNTRACKED → a clean checkout
+# (CI / fresh clone) does not compile, yet flutter analyze on the dirty working
+# tree is green (the file is present locally). Happened 2026-06-08 (audio_assets
+# .dart orphaned by f39e49f) and earlier (content_filter.dart / T34). Pure git —
+# no rebuild — so it runs even in --fast mode.
+hr
+echo -e "${BOLD}R6 CLEAN-CHECKOUT DEPENDENCY${RESET}"
+hr
+
+R6_VIOLATIONS=""
+# Untracked Dart files under lib/ (what a clean checkout would NOT have).
+UNTRACKED_DART=$(cd "$REPO_ROOT" && git ls-files --others --exclude-standard -- '*.dart' | grep '^lib/' || true)
+if [[ -n "$UNTRACKED_DART" ]]; then
+  while IFS= read -r f; do
+    [[ -z "$f" ]] && continue
+    suffix="${f#lib/}"                 # e.g. core/audio/audio_assets.dart
+    esc="${suffix//./\\.}"             # escape dots for the regex
+    # Does any TRACKED dart file import this untracked file (relative or package)?
+    if (cd "$REPO_ROOT" && git grep -lE "import .*${esc}'" -- '*.dart' >/dev/null 2>&1); then
+      R6_VIOLATIONS+="  [FAIL] $f is imported by tracked code but is UNTRACKED (clean checkout won't compile)\n"
+    fi
+  done <<< "$UNTRACKED_DART"
+fi
+
+if [[ -n "$R6_VIOLATIONS" ]]; then
+  echo -e "$R6_VIOLATIONS"
+  fail "R6 CLEAN-CHECKOUT DEPENDENCY — tracked code imports untracked file(s)"
+  echo "  Fix: 'git add' the new file(s) so a clean checkout / CI compiles."
+  FAILURES+=("R6: tracked code imports untracked file(s) — clean checkout won't compile")
+else
+  echo "  No tracked-imports-untracked violations."
+  echo ""
+  pass "R6 CLEAN-CHECKOUT DEPENDENCY"
+fi
+
+echo ""
+
 if [[ $FAST_MODE -ne 1 ]]; then
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
