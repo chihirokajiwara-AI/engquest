@@ -14,6 +14,7 @@
 //   4級    |  1000   |   622   | R:500(100%)    L:500(100%)      | R, L
 //   3級    |  1650   |  1103   | R:550  W:550   L:550           | R, W, L
 //   準2級  |  1800   |  1322   | R:600  W:600   L:600           | R, W, L
+//   準2級+ |  1875   |  1402   | R:625  W:625   L:625           | R, W, L (2025新設)
 //   2級    |  1950   |  1520   | R:650  W:650   L:650           | R, W, L (一次)
 //   準1級  |  2250   |  1792   | R:750  W:750   L:750           | R, W, L (一次)
 //
@@ -178,6 +179,14 @@ const Map<String, _GradeSpec> _kGradeSpecs = {
     skills: [EikenSkill.reading, EikenSkill.writing, EikenSkill.listening],
     firstPassScore: 1322,
     firstMaxScore: 1800,
+  ),
+  // 準2級プラス (2025 new grade). Verified eiken.or.jp 2025newgrade (2026-06-07):
+  // per-skill 一次 CSE max 625 → 一次満点 625×3 = 1875; 一次合格基準 1402.
+  'pre2plus': _GradeSpec(
+    grade: 'pre2plus',
+    skills: [EikenSkill.reading, EikenSkill.writing, EikenSkill.listening],
+    firstPassScore: 1402,
+    firstMaxScore: 1875,
   ),
   '2': _GradeSpec(
     grade: '2',

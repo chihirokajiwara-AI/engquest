@@ -12,6 +12,7 @@
 //   4級   |    35     |     0     |     30      |  65
 //   3級   |    30     |     2     |     30      |  62 (Eメール + 英作文)
 //   準2級 |    29     |     2     |     30      |  61 (Eメール + 意見論述)
+//   準2級+|    31     |     2     |     30      |  63 (要約 + 意見論述, 2025新設)
 //   2級   |    31     |     2     |     30      |  63 (要約 + 意見論述)
 //   準1級 |    31     |     2     |     29      |  62 (要約 + 意見論述)
 //
@@ -136,6 +137,12 @@ const Map<String, Map<EikenSkill, int>> _kTargetCounts = {
   },
   'pre2': {
     EikenSkill.reading: 29,
+    EikenSkill.writing: 2,
+    EikenSkill.listening: 30,
+  },
+  // 準2級プラス (2025): R31 (大問1=17,2=6,3=8) / W2 (要約+意見) / L30 (15+15).
+  'pre2plus': {
+    EikenSkill.reading: 31,
     EikenSkill.writing: 2,
     EikenSkill.listening: 30,
   },

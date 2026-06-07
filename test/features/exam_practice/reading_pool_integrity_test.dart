@@ -22,7 +22,7 @@
 //      skipped test with the gap in its reason — NOT buried in a comment.
 //
 // Official 英検 targets (verified eiken.or.jp, 2026-06-07):
-//   reading  5級25 4級35 3級30 準2級29 2級31 準1級41
+//   reading  5級25 4級35 3級30 準2級29 2級31 準1級31
 //   listening 5級25 4級30 3級30 準2級30 2級30 準1級30
 
 import 'package:flutter_test/flutter_test.dart';

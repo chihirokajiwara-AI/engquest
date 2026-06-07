@@ -59,6 +59,14 @@ void main() {
       expect(m.values.fold(0, (s, v) => s + v), equals(1950));
     });
 
+    test('準2級プラス: R=W=L=625 (1875÷3=625 exact)', () {
+      final m = CseEstimator.skillMaxScores('pre2plus')!;
+      expect(m[EikenSkill.reading], equals(625));
+      expect(m[EikenSkill.writing], equals(625));
+      expect(m[EikenSkill.listening], equals(625));
+      expect(m.values.fold(0, (s, v) => s + v), equals(1875));
+    });
+
     test('準1級: R=W=L=750 (2250÷3=750 exact)', () {
       final m = CseEstimator.skillMaxScores('pre1')!;
       expect(m[EikenSkill.reading], equals(750));
@@ -309,6 +317,35 @@ void main() {
       expect(est.totalScore, equals(1200));
       expect(est.isPredictedPass, isFalse);
       expect(est.limitingSkill, equals(EikenSkill.listening));
+    });
+  });
+
+  // ── estimate: 準2級プラス ───────────────────────────────────────────────────
+
+  group('CseEstimator.estimate — 準2級プラス', () {
+    test('passing score 1402 / maxScore 1875; perfect → pass', () {
+      final est = CseEstimator.estimate(
+        grade: 'pre2plus',
+        accuracies: [
+          const SkillAccuracy(skill: EikenSkill.reading, accuracy: 1.0, itemsAttempted: 31),
+          const SkillAccuracy(skill: EikenSkill.writing, accuracy: 1.0, itemsAttempted: 2),
+          const SkillAccuracy(skill: EikenSkill.listening, accuracy: 1.0, itemsAttempted: 30),
+        ],
+      )!;
+      expect(est.passingScore, equals(1402));
+      expect(est.maxScore, equals(1875));
+      expect(est.totalScore, equals(1875));
+      expect(est.isPredictedPass, isTrue);
+    });
+
+    test('no data → all skills 未測定, readiness 0', () {
+      final est = CseEstimator.estimate(grade: 'pre2plus', accuracies: [])!;
+      expect(est.readinessPct, equals(0.0));
+      expect(est.unmeasuredSkills, containsAll(<EikenSkill>[
+        EikenSkill.reading,
+        EikenSkill.writing,
+        EikenSkill.listening,
+      ]));
     });
   });
 
