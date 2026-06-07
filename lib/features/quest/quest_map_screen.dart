@@ -182,13 +182,15 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
   // サイレント mechanic, so the map itself tells the restoration story.
   Widget _trailMap() {
     const rowH = 142.0;
-    const r = 47.0;
+    const r = 44.0;
     final n = kQuestTowns.length;
     return LayoutBuilder(
       builder: (context, c) {
         final w = c.maxWidth;
-        final leftX = w * 0.30;
-        final rightX = w * 0.70;
+        // Push the medallions toward their edge so the name column on the open
+        // side has room even on a 320 px phone (≈0.74·w − 64 ≈ 150 px there).
+        final leftX = w * 0.26;
+        final rightX = w * 0.74;
         final centers = <Offset>[
           for (var i = 0; i < n; i++)
             Offset(i.isEven ? leftX : rightX, i * rowH + rowH / 2),
@@ -274,6 +276,9 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
       width: d,
       height: d,
       fit: BoxFit.cover,
+      // Decode at ~2× the on-screen size, not the full ~1.7 MB plate — keeps the
+      // map light (7 scene PNGs would otherwise decode at full resolution).
+      cacheWidth: 188,
       errorBuilder: (_, __, ___) => Container(
         color: dqNight1,
         alignment: Alignment.center,
@@ -288,15 +293,16 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
     }
     final ring = (isCleared || isStart)
         ? dqGold
-        : (dim ? dqGoldDeep.withAlpha(130) : dqBorder);
+        : (dim ? dqGoldDeep.withAlpha(190) : dqBorder);
     return GestureDetector(
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(color: ring, width: isStart ? 3.2 : 2.4),
+          // Even locked towns get a faint halo so they read as places, not holes.
           boxShadow: dim
-              ? null
+              ? [BoxShadow(color: dqGoldDeep.withAlpha(90), blurRadius: 6)]
               : [BoxShadow(color: dqGold.withAlpha(isStart ? 150 : 80), blurRadius: isStart ? 14 : 8)],
         ),
         child: ClipOval(
@@ -304,9 +310,11 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
             fit: StackFit.expand,
             children: [
               img,
-              if (dim) Container(color: dqNight0.withAlpha(120)),
+              // A light scrim (not the old near-opaque one) just to lift the
+              // lock icon's contrast — the greyscale art stays visible beneath.
+              if (isLocked) Container(color: dqNight0.withAlpha(70)),
               if (isLocked)
-                const Center(child: Icon(Icons.lock, color: Colors.white70, size: 26)),
+                const Center(child: Icon(Icons.lock, color: Colors.white, size: 26)),
               if (isCleared)
                 Positioned(
                   right: 3,
@@ -356,21 +364,25 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             textAlign: onLeft ? TextAlign.left : TextAlign.right,
-            style: dqText(size: 14.5, w: FontWeight.w700, color: dim ? dqInk.withAlpha(160) : Colors.white),
+            style: dqText(size: 13.5, w: FontWeight.w700, color: dim ? dqInk.withAlpha(170) : Colors.white),
           ),
           const SizedBox(height: 4),
+          // Keep the secondary line terse — the lock icon already carries
+          // "locked"; a full sentence under every town is noise for a young
+          // reader. (Adversarial child-UX note, 2026-06-07.)
           if (isStart)
             _badge('スタート / Start')
           else if (isCleared)
             _badge('クリア / Clear')
           else if (isLocked)
-            Text('カギがかかっている / Locked',
-                textAlign: onLeft ? TextAlign.left : TextAlign.right,
-                style: dqText(size: 10.5, w: FontWeight.w600, color: dqGoldDeep.withAlpha(170)))
-          else if (isSkipped)
-            Text('クリア済みのレベル / Cleared level',
-                textAlign: onLeft ? TextAlign.left : TextAlign.right,
-                style: dqText(size: 10.5, w: FontWeight.w600, color: dqGoldDeep.withAlpha(170))),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.lock, size: 11, color: dqGoldDeep.withAlpha(190)),
+                const SizedBox(width: 3),
+                Text('まだ', style: dqText(size: 10.5, w: FontWeight.w700, color: dqGoldDeep.withAlpha(190))),
+              ],
+            ),
         ],
       ),
     );
@@ -503,12 +515,15 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
   }
 }
 
-/// Luminance-weighted desaturation — locked towns render in grey (the サイレント
-/// state) and bloom into colour only once reached.
+/// Luminance-weighted desaturation + a brightness lift so locked towns read as
+/// ghostly-grey PLACES (the サイレント state) on the night field rather than
+/// black discs — they bloom into full colour only once reached. The +52 offset
+/// is essential: the source scenes are already dark night art, so plain
+/// greyscale alone left them invisible against the background.
 const List<double> _kGreyscale = <double>[
-  0.2126, 0.7152, 0.0722, 0, 0,
-  0.2126, 0.7152, 0.0722, 0, 0,
-  0.2126, 0.7152, 0.0722, 0, 0,
+  0.2126, 0.7152, 0.0722, 0, 52,
+  0.2126, 0.7152, 0.0722, 0, 52,
+  0.2126, 0.7152, 0.0722, 0, 52,
   0, 0, 0, 1, 0,
 ];
 
