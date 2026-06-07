@@ -334,6 +334,9 @@ Widget _previewFor(String? name) {
     case 'mock':
       // Playable timed フル模試 (seed fixed for a reproducible preview).
       return const MockExamScreen(eikenGrade: '5', seed: 1);
+    case 'mockpre2plus':
+      // 準2級プラス mock — render-proof of the new pre2plus reading content.
+      return const MockExamScreen(eikenGrade: 'pre2plus', seed: 1);
     case 'quest':
       return QuestScreen(town: kQuestTowns.first);
     case 'quest5t': // 英検5級 Phase A — first TeachSound (/s/) step

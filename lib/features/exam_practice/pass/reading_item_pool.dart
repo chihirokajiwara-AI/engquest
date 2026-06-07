@@ -65,6 +65,7 @@ const Map<String, List<ReadingMockItem>> _kReadingPool = {
   '4': _grade4Reading,
   '3': _grade3Reading,
   'pre2': _pre2Reading,
+  'pre2plus': _pre2plusReading,
   '2': _grade2Reading,
   'pre1': _pre1Reading,
 };
@@ -1292,6 +1293,147 @@ const _pre1Reading = [
       'It shortens the distance food travels.',
       'It lowers housing prices.',
       'It increases city traffic.',
+    ],
+    correctIdx: 1,
+  ),
+];
+
+// ── 英検準2級プラス (2025新設, CEFR B1, between 準2級 and 2級) ──────────────────
+// 大問1 短文語句空所補充 (grammar + vocabulary + phrasal verbs) + 大問3 内容一致.
+// Single-valid-answer, non-cyclic key distribution, English same-POS distractors.
+const _pre2plusReading = [
+  ReadingMockItem(
+    id: 'p2p_r_001',
+    sectionId: 'p2p_r1',
+    passageText: 'She ( ) for this company since 2020.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['works', 'worked', 'has been working', 'is working'],
+    correctIdx: 2,
+  ),
+  ReadingMockItem(
+    id: 'p2p_r_002',
+    sectionId: 'p2p_r1',
+    passageText: 'The report ( ) by the committee before the meeting started.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['had been reviewed', 'reviewed', 'reviews', 'is reviewing'],
+    correctIdx: 0,
+  ),
+  ReadingMockItem(
+    // Reworded (adversarial audit): the original was a garden-path sentence.
+    // Clean, natural possessive-relative frame.
+    id: 'p2p_r_003',
+    sectionId: 'p2p_r1',
+    passageText: 'Do you know the man ( ) car is parked outside?',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['who', 'which', 'whom', 'whose'],
+    correctIdx: 3,
+  ),
+  ReadingMockItem(
+    id: 'p2p_r_004',
+    sectionId: 'p2p_r1',
+    passageText: 'This is the building ( ) the treaty was signed.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['which', 'where', 'that', 'when'],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: 'p2p_r_005',
+    sectionId: 'p2p_r1',
+    passageText: 'You will not pass the exam ( ) you study harder.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['if', 'because', 'unless', 'although'],
+    correctIdx: 2,
+  ),
+  ReadingMockItem(
+    id: 'p2p_r_006',
+    sectionId: 'p2p_r1',
+    passageText: '( ) she was very tired, she finished the marathon.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['Although', 'Because', 'So', 'Unless'],
+    correctIdx: 0,
+  ),
+  ReadingMockItem(
+    // Reworded (adversarial audit): "carry on the mission" was a defensible
+    // second answer. "exactly as it was written" forces carry out = execute.
+    id: 'p2p_r_007',
+    sectionId: 'p2p_r1',
+    passageText: 'The team must ( ) the plan exactly as it was written.',
+    questionText: 'Choose the best phrase for the blank.',
+    choices: ['carry on', 'carry out', 'put off', 'take after'],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: 'p2p_r_008',
+    sectionId: 'p2p_r1',
+    passageText: 'The outdoor concert was ( ) because of the heavy storm.',
+    questionText: 'Choose the best phrase for the blank.',
+    choices: ['put on', 'put up', 'put away', 'put off'],
+    correctIdx: 3,
+  ),
+  ReadingMockItem(
+    id: 'p2p_r_009',
+    sectionId: 'p2p_r1',
+    passageText: 'Eating vegetables is a good way to ( ) the risk of illness.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['reduce', 'raise', 'cause', 'produce'],
+    correctIdx: 0,
+  ),
+  ReadingMockItem(
+    id: 'p2p_r_010',
+    sectionId: 'p2p_r1',
+    passageText: 'The new technology had a major ( ) on daily life.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['effort', 'result', 'impact', 'attempt'],
+    correctIdx: 2,
+  ),
+  ReadingMockItem(
+    id: 'p2p_r_011',
+    sectionId: 'p2p_r1',
+    passageText: 'The ( ) you finish, the more free time you will have.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['soon', 'sooner', 'soonest', 'more soon'],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: 'p2p_r_012',
+    sectionId: 'p2p_r1',
+    passageText: 'She is experienced ( ) to lead the whole project.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['too', 'very', 'so', 'enough'],
+    correctIdx: 3,
+  ),
+  ReadingMockItem(
+    id: 'p2p_r_013',
+    sectionId: 'p2p_r1',
+    passageText: 'The teacher will ( ) a new topic in tomorrow\'s class.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['introduce', 'produce', 'reduce', 'conclude'],
+    correctIdx: 0,
+  ),
+  ReadingMockItem(
+    id: 'p2p_r_014',
+    sectionId: 'p2p_r1',
+    passageText: 'The novel, ( ) by millions of people worldwide, became a film.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['reading', 'reads', 'read', 'to read'],
+    correctIdx: 2,
+  ),
+  // ── 大問3 長文の内容一致選択 ──────────────────────────────────────────────
+  ReadingMockItem(
+    id: 'p2p_r_015',
+    sectionId: 'p2p_r3',
+    passageText:
+        'Many companies now allow employees to work from home. This flexibility '
+        'can improve work-life balance and cut commuting time. However, some '
+        'workers report feeling isolated and find it harder to separate work '
+        'from their personal lives.',
+    questionText:
+        'According to the passage, what is one disadvantage of working from home?',
+    choices: [
+      'Higher commuting costs',
+      'Feeling isolated',
+      'Lower salaries',
+      'Longer working hours',
     ],
     correctIdx: 1,
   ),
