@@ -148,9 +148,15 @@ class _DqHeader extends StatelessWidget {
 class DialogScreen extends StatefulWidget {
   final DialogScenario scenario;
 
+  /// When false, the screen does NOT fire the initial NPC greeting (which makes
+  /// a network call to the Claude backend). Renders the chat shell only.
+  /// Defaults to true; set false in widget tests to keep initState R4-clean.
+  final bool autoGreet;
+
   const DialogScreen({
     super.key,
     this.scenario = DialogScenario.greetNpc,
+    this.autoGreet = true,
   });
 
   @override
@@ -171,8 +177,8 @@ class _DialogScreenState extends State<DialogScreen> {
     _service = DialogService(
       client: ClaudeClient(),
     );
-    // Initial NPC greeting
-    _addNpcGreeting();
+    // Initial NPC greeting (network call — suppressed in tests via autoGreet).
+    if (widget.autoGreet) _addNpcGreeting();
   }
 
   @override
