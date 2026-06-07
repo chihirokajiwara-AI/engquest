@@ -636,7 +636,7 @@ const _grade3Reading = [
     sectionId: '3_r1',
     passageText: 'The weather was terrible, so the baseball game was ( ).',
     questionText: 'Choose the best word for the blank.',
-    choices: ['cancelled', 'started', 'won', 'bought'],
+    choices: ['canceled', 'started', 'won', 'bought'],
     correctIdx: 0,
   ),
   ReadingMockItem(
