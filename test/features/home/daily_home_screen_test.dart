@@ -94,10 +94,13 @@ void main() {
     expect(find.text('発音チェック'), findsOneWidget);
   });
 
-  testWidgets('DailyHomeScreen shows world map link', (tester) async {
+  testWidgets('DailyHomeScreen shows the village-square (hub) link',
+      (tester) async {
     await tester.pumpWidget(_wrap());
     await _settle(tester);
-    expect(find.textContaining('ワールドマップ'), findsWidgets);
+    // The hub screen titles itself はじまりの村 / Village Square, so the link to
+    // it now matches that name (was the ambiguous "ワールドマップ / World Map").
+    expect(find.textContaining('はじまりの村'), findsWidgets);
   });
 
   testWidgets('DailyHomeScreen shows streak section', (tester) async {

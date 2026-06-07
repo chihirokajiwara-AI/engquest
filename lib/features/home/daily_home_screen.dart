@@ -37,8 +37,7 @@ const Map<String, String> _kAvatarEmoji = {
   'healer': '🌟',
 };
 
-String _avatarEmoji(String? avatarId) =>
-    _kAvatarEmoji[avatarId] ?? '🧙';
+String _avatarEmoji(String? avatarId) => _kAvatarEmoji[avatarId] ?? '🧙';
 
 // ── Week day labels (bilingual ✓ indicators) ──────────────────────────────────
 
@@ -255,8 +254,7 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                 decoration: BoxDecoration(
-                  gradient:
-                      const LinearGradient(colors: [dqGold, dqGoldDeep]),
+                  gradient: const LinearGradient(colors: [dqGold, dqGoldDeep]),
                   borderRadius: BorderRadius.circular(6),
                   border: Border.all(color: dqBorder, width: 1.5),
                 ),
@@ -336,8 +334,7 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
                     ),
                     child: Center(
                       child: studied
-                          ? const Icon(Icons.check,
-                              color: dqGold, size: 16)
+                          ? const Icon(Icons.check, color: dqGold, size: 16)
                           : null,
                     ),
                   ),
@@ -387,9 +384,8 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
                 style: dqText(
                   size: 13,
                   w: FontWeight.w600,
-                  color: achieved
-                      ? const Color(0xFF8BE08B)
-                      : dqInk.withAlpha(200),
+                  color:
+                      achieved ? const Color(0xFF8BE08B) : dqInk.withAlpha(200),
                 ),
               ),
             ],
@@ -444,7 +440,8 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
                 const SizedBox(width: 4),
                 Text(
                   'XP',
-                  style: dqText(size: 12, w: FontWeight.w600, color: dqGoldDeep),
+                  style:
+                      dqText(size: 12, w: FontWeight.w600, color: dqGoldDeep),
                 ),
               ],
             ),
@@ -465,7 +462,8 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
           padding: const EdgeInsets.only(left: 2, bottom: 10),
           child: Text(
             'クエスト / Quests',
-            style: dqText(size: 13, w: FontWeight.w800, color: dqGold, spacing: 2),
+            style:
+                dqText(size: 13, w: FontWeight.w800, color: dqGold, spacing: 2),
           ),
         ),
         ...actions.map(
@@ -485,7 +483,7 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
 
   Widget _buildWorldMapButton(BuildContext context) {
     return DqButton(
-      label: 'ワールドマップ / World Map',
+      label: 'はじまりの村 / Village Square',
       onTap: _goToWorldMap,
     );
   }

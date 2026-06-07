@@ -335,7 +335,8 @@ class _VoiceScreenState extends State<VoiceScreen>
             borderRadius: BorderRadius.circular(12),
             border: Border.all(color: frame, width: 2.5),
             boxShadow: const [
-              BoxShadow(color: Colors.black54, blurRadius: 14, offset: Offset(0, 5)),
+              BoxShadow(
+                  color: Colors.black54, blurRadius: 14, offset: Offset(0, 5)),
             ],
           ),
           child: Column(
@@ -701,7 +702,7 @@ class _VoiceScreenState extends State<VoiceScreen>
             TextButton(
               onPressed: () => Navigator.maybePop(context),
               child: Text(
-                '← ワールドマップに戻る / Back to Map',
+                '← はじまりの村にもどる / Back to Village',
                 style: dqText(size: 13, color: dqGoldDeep),
               ),
             ),

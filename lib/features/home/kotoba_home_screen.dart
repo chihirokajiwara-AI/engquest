@@ -234,7 +234,8 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
         Text(
           'コトバ探偵',
           textAlign: TextAlign.center,
-          style: dqText(size: 28, w: FontWeight.w800, color: dqGold, spacing: 4),
+          style:
+              dqText(size: 28, w: FontWeight.w800, color: dqGold, spacing: 4),
         ),
         const SizedBox(height: 6),
         Text(
@@ -280,7 +281,8 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
           const SizedBox(height: 8),
           Text(
             streakMessage,
-            style: dqText(size: 13, w: FontWeight.w500, color: dqInk.withAlpha(210))
+            style: dqText(
+                    size: 13, w: FontWeight.w500, color: dqInk.withAlpha(210))
                 .copyWith(height: 1.6),
           ),
           const SizedBox(height: 14),
@@ -372,7 +374,10 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
                   const SizedBox(height: 4),
                   Text(
                     'じけんげんばへ むかおう。',
-                    style: dqText(size: 12, w: FontWeight.w500, color: dqInk.withAlpha(180)),
+                    style: dqText(
+                        size: 12,
+                        w: FontWeight.w500,
+                        color: dqInk.withAlpha(180)),
                   ),
                 ] else ...[
                   Text(
@@ -382,7 +387,10 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
                   const SizedBox(height: 4),
                   Text(
                     '新しい ナゾを 探（さが）しに 出（で）かけよう！',
-                    style: dqText(size: 12, w: FontWeight.w500, color: dqInk.withAlpha(180)),
+                    style: dqText(
+                        size: 12,
+                        w: FontWeight.w500,
+                        color: dqInk.withAlpha(180)),
                   ),
                 ],
               ],
@@ -411,7 +419,10 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: dqBorder, width: 2),
           boxShadow: [
-            BoxShadow(color: dqGoldDeep.withAlpha(140), blurRadius: 16, offset: const Offset(0, 4)),
+            BoxShadow(
+                color: dqGoldDeep.withAlpha(140),
+                blurRadius: 16,
+                offset: const Offset(0, 4)),
           ],
         ),
         child: Row(
@@ -455,7 +466,7 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
             const Icon(Icons.map_outlined, color: dqGold, size: 20),
             const SizedBox(width: 8),
             Text(
-              'ちずを みる　／　World Map',
+              'ちずを みる　／　Adventure Map',
               style: dqText(size: 14, w: FontWeight.w700, color: dqInk),
             ),
           ],

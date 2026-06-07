@@ -89,9 +89,7 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
       return;
     }
     final cleared = await Navigator.of(context).push<bool>(
-      MaterialPageRoute(
-          builder: (_) =>
-              QuestTownBattleFlow(town: town)),
+      MaterialPageRoute(builder: (_) => QuestTownBattleFlow(town: town)),
     );
     if (cleared == true && i + 1 > _unlocked) {
       setState(() => _unlocked = i + 1);
@@ -140,7 +138,7 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
             const SizedBox(width: 36),
           Expanded(
             child: Center(
-              child: dqBilingual('ぼうけんの地図', 'World Map', jpSize: 19),
+              child: dqBilingual('ぼうけんの地図', 'Adventure Map', jpSize: 19),
             ),
           ),
           const SizedBox(width: 36),
@@ -204,11 +202,11 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
             children: [
               Positioned.fill(
                 child: CustomPaint(
-                  painter: _TrailPainter(centers: centers, reachedIndex: reached),
+                  painter:
+                      _TrailPainter(centers: centers, reachedIndex: reached),
                 ),
               ),
-              for (var i = 0; i < n; i++)
-                ..._nodeWidgets(i, centers[i], r, w),
+              for (var i = 0; i < n; i++) ..._nodeWidgets(i, centers[i], r, w),
             ],
           ),
         );
@@ -304,7 +302,11 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
           // Even locked towns get a faint halo so they read as places, not holes.
           boxShadow: dim
               ? [BoxShadow(color: dqGoldDeep.withAlpha(90), blurRadius: 6)]
-              : [BoxShadow(color: dqGold.withAlpha(isStart ? 150 : 80), blurRadius: isStart ? 14 : 8)],
+              : [
+                  BoxShadow(
+                      color: dqGold.withAlpha(isStart ? 150 : 80),
+                      blurRadius: isStart ? 14 : 8)
+                ],
         ),
         child: ClipOval(
           child: Stack(
@@ -315,7 +317,8 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
               // lock icon's contrast — the greyscale art stays visible beneath.
               if (isLocked) Container(color: dqNight0.withAlpha(70)),
               if (isLocked)
-                const Center(child: Icon(Icons.lock, color: Colors.white, size: 26)),
+                const Center(
+                    child: Icon(Icons.lock, color: Colors.white, size: 26)),
               if (isCleared)
                 Positioned(
                   right: 3,
@@ -326,7 +329,8 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
                       shape: BoxShape.circle,
                       gradient: LinearGradient(colors: [dqGold, dqGoldDeep]),
                     ),
-                    child: const Icon(Icons.check, color: Color(0xFF2A1C00), size: 14),
+                    child: const Icon(Icons.check,
+                        color: Color(0xFF2A1C00), size: 14),
                   ),
                 ),
             ],
@@ -357,7 +361,10 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
           Text(
             _eikenLabel(town.eikenLevel),
             textAlign: onLeft ? TextAlign.left : TextAlign.right,
-            style: dqText(size: 11, w: FontWeight.w800, color: dim ? dqGoldDeep.withAlpha(160) : dqGold),
+            style: dqText(
+                size: 11,
+                w: FontWeight.w800,
+                color: dim ? dqGoldDeep.withAlpha(160) : dqGold),
           ),
           const SizedBox(height: 2),
           Text(
@@ -365,7 +372,10 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             textAlign: onLeft ? TextAlign.left : TextAlign.right,
-            style: dqText(size: 13.5, w: FontWeight.w700, color: dim ? dqInk.withAlpha(170) : Colors.white),
+            style: dqText(
+                size: 13.5,
+                w: FontWeight.w700,
+                color: dim ? dqInk.withAlpha(170) : Colors.white),
           ),
           const SizedBox(height: 4),
           // Keep the secondary line terse — the lock icon already carries
@@ -381,7 +391,11 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
               children: [
                 Icon(Icons.lock, size: 11, color: dqGoldDeep.withAlpha(190)),
                 const SizedBox(width: 3),
-                Text('まだ', style: dqText(size: 10.5, w: FontWeight.w700, color: dqGoldDeep.withAlpha(190))),
+                Text('まだ',
+                    style: dqText(
+                        size: 10.5,
+                        w: FontWeight.w700,
+                        color: dqGoldDeep.withAlpha(190))),
               ],
             ),
         ],
@@ -394,12 +408,16 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const DqPortrait(imageAsset: 'assets/art/masters/hero.png', emoji: '🧭', size: 48),
+            const DqPortrait(
+                imageAsset: 'assets/art/masters/hero.png',
+                emoji: '🧭',
+                size: 48),
             const SizedBox(width: 14),
             Expanded(
               child: Text(
                 kQuestPrologue,
-                style: dqText(size: 13.5, w: FontWeight.w500, color: dqInk).copyWith(height: 1.7),
+                style: dqText(size: 13.5, w: FontWeight.w500, color: dqInk)
+                    .copyWith(height: 1.7),
               ),
             ),
           ],
@@ -416,7 +434,8 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              for (var i = 0; i < kQuestTowns.length; i++) _stone(i < _stonesWon),
+              for (var i = 0; i < kQuestTowns.length; i++)
+                _stone(i < _stonesWon),
             ],
           ),
           const SizedBox(height: 10),
@@ -448,8 +467,11 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
               )
             : null,
         color: lit ? null : dqNight0,
-        border: Border.all(color: lit ? dqBorder : dqGoldDeep.withAlpha(110), width: 1.6),
-        boxShadow: lit ? [BoxShadow(color: dqGold.withAlpha(150), blurRadius: 8)] : null,
+        border: Border.all(
+            color: lit ? dqBorder : dqGoldDeep.withAlpha(110), width: 1.6),
+        boxShadow: lit
+            ? [BoxShadow(color: dqGold.withAlpha(150), blurRadius: 8)]
+            : null,
       ),
       child: Icon(
         Icons.brightness_1,
@@ -466,13 +488,16 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
       padding: const EdgeInsets.fromLTRB(18, 10, 18, 28),
       children: [
         const SizedBox(height: 4),
-        Center(child: dqBilingual('どの級からはじめますか？', 'Choose your level', jpSize: 20, align: TextAlign.center)),
+        Center(
+            child: dqBilingual('どの級からはじめますか？', 'Choose your level',
+                jpSize: 20, align: TextAlign.center)),
         const SizedBox(height: 12),
         DqDialogBox(
           child: Text(
             'いま持っている英検の級をえらぶと、その街から旅がはじまります。\n'
             'Pick the Eiken grade you hold — your journey begins from that town.',
-            style: dqText(size: 13, w: FontWeight.w500, color: dqInk).copyWith(height: 1.7),
+            style: dqText(size: 13, w: FontWeight.w500, color: dqInk)
+                .copyWith(height: 1.7),
           ),
         ),
         const SizedBox(height: 18),
@@ -487,7 +512,6 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
     );
   }
 
-
   Widget _badge(String text) => Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
         decoration: BoxDecoration(
@@ -497,7 +521,11 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
         ),
         child: Text(
           text,
-          style: dqText(size: 10, w: FontWeight.w800, color: const Color(0xFF2A1C00), spacing: 0.5),
+          style: dqText(
+              size: 10,
+              w: FontWeight.w800,
+              color: const Color(0xFF2A1C00),
+              spacing: 0.5),
         ),
       );
 
@@ -513,10 +541,26 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
 /// is essential: the source scenes are already dark night art, so plain
 /// greyscale alone left them invisible against the background.
 const List<double> _kGreyscale = <double>[
-  0.2126, 0.7152, 0.0722, 0, 52,
-  0.2126, 0.7152, 0.0722, 0, 52,
-  0.2126, 0.7152, 0.0722, 0, 52,
-  0, 0, 0, 1, 0,
+  0.2126,
+  0.7152,
+  0.0722,
+  0,
+  52,
+  0.2126,
+  0.7152,
+  0.0722,
+  0,
+  52,
+  0.2126,
+  0.7152,
+  0.0722,
+  0,
+  52,
+  0,
+  0,
+  0,
+  1,
+  0,
 ];
 
 /// Paints the winding golden road between town medallions. Segments leading to
