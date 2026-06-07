@@ -366,7 +366,10 @@ class _DialogScreenState extends State<DialogScreen> {
                 border: Border.all(color: dqBorder, width: 1.5),
                 boxShadow: _isLoading
                     ? null
-                    : [BoxShadow(color: dqGoldDeep.withAlpha(120), blurRadius: 10)],
+                    : [
+                        BoxShadow(
+                            color: dqGoldDeep.withAlpha(120), blurRadius: 10)
+                      ],
               ),
               child: const Icon(Icons.send, color: Color(0xFF2A1C00), size: 20),
             ),
@@ -444,9 +447,8 @@ class _ChatBubbleState extends State<_ChatBubble>
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 11),
                   decoration: BoxDecoration(
-                    color: _isNpc
-                        ? dqBox.withAlpha(235)
-                        : dqNight1.withAlpha(235),
+                    color:
+                        _isNpc ? dqBox.withAlpha(235) : dqNight1.withAlpha(235),
                     borderRadius: BorderRadius.only(
                       topLeft: const Radius.circular(10),
                       topRight: const Radius.circular(10),

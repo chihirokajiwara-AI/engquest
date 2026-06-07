@@ -47,6 +47,8 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 400));
     expect(find.byType(SilentBattleScreen), findsOneWidget);
+    // silent-blank guard: a screen that degrades to an empty Scaffold fails.
+    expect(find.byType(Text), findsWidgets);
     expect(tester.takeException(), isNull);
   });
 }
