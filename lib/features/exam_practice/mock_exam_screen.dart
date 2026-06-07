@@ -25,8 +25,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../core/audio/audio_cue_service.dart';
+import '../../core/audio/audio_mute.dart';
 import '../quest/ui/dq_ui.dart';
 import 'eiken_exam_config.dart';
+import 'muted_voice_banner.dart';
 import 'pass/cse_model.dart';
 import 'pass/mock_exam.dart';
 import 'pass/pass_meter_screen.dart';
@@ -256,6 +258,15 @@ class _MockExamScreenState extends State<MockExamScreen> {
                 child: ListView(
                   padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
                   children: [
+                    // A muted Voice channel makes the listening items silent →
+                    // false wrong answers → understated 合格率. Warn + one-tap
+                    // unmute, same affordance as the listening-practice screen.
+                    if (isListening && AudioMute.voiceMuted)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child:
+                            MutedVoiceBanner(onUnmute: () => setState(() {})),
+                      ),
                     if (isListening)
                       Padding(
                         padding: const EdgeInsets.only(bottom: 12),
@@ -283,9 +294,7 @@ class _MockExamScreenState extends State<MockExamScreen> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
                 child: DqButton(
-                  label: _isLast
-                      ? '採点（さいてん）する  /  Score'
-                      : 'つぎへ  /  Next',
+                  label: _isLast ? '採点（さいてん）する  /  Score' : 'つぎへ  /  Next',
                   onTap: _selected == null ? null : _advance,
                 ),
               ),
