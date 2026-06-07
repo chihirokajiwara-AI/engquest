@@ -5,7 +5,7 @@
 //   1. Screen renders without crash (basic smoke test)
 //   2. Greeting text "おかえり！" is visible after loading
 //   3. Quick action buttons are present (単語バトル, 会話練習, 発音チェック)
-//   4. ワールドマップ link is visible
+//   4. はじまりの村 (hub) link is visible
 //   5. Streak section is visible (日連続 text)
 //   6. Today's goal section is present
 //

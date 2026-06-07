@@ -7,7 +7,7 @@
 //   2. Streak panel: fire + れんぞく/Streak count + weekly ✓ indicators
 //   3. Today's-goal panel: goal progress bar + total XP
 //   4. Quick-start command tiles: 単語バトル / 模擬試験 / 会話練習 / 発音チェック
-//   5. ワールドマップ / World Map gold action button
+//   5. はじまりの村 / Village Square (hub) gold action button
 //
 // Streak data is loaded via StreakService (SharedPreferences-backed).
 // XP/level data is loaded via XpService (Firestore-backed, offline-tolerant).
@@ -479,7 +479,7 @@ class _DailyHomeScreenState extends State<DailyHomeScreen> {
     );
   }
 
-  // ── Section: World Map Button ─────────────────────────────────────────────
+  // ── Section: Village Square (hub) Button ──────────────────────────────────
 
   Widget _buildWorldMapButton(BuildContext context) {
     return DqButton(
