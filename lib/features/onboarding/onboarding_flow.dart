@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/config/flavor_config.dart';
 import '../quest/ui/dq_ui.dart';
 import 'placement_engine.dart';
 import 'placement_item_bank.dart';
@@ -140,10 +141,10 @@ class _OnboardingFlowState extends State<OnboardingFlow>
   int _age = 8;
 
   // Step 2 — adaptive placement
-  PlacementEngine? _engine;        // created once age is committed
-  PlacementItem? _currentItem;     // item being shown
-  int? _currentItemBankIdx;        // its index in kPlacementBank
-  PlacementOutcome? _outcome;      // set when engine.done == true
+  PlacementEngine? _engine; // created once age is committed
+  PlacementItem? _currentItem; // item being shown
+  int? _currentItemBankIdx; // its index in kPlacementBank
+  PlacementOutcome? _outcome; // set when engine.done == true
 
   // Step 3 — avatar
   String _selectedAvatarId = _avatars.first.id;
@@ -354,7 +355,10 @@ class _StepAge extends StatelessWidget {
           const SizedBox(height: 8),
           Center(
             child: dqBilingual(
-              'ENG Quest へようこそ',
+              // Flavor-aware: aken → "A-KEN Quest", edilab → "ENG Quest".
+              // Was a hardcoded "ENG Quest" (old codename) shown even on the
+              // commercial build — the first screen after Start (#25, UX P1).
+              '${FlavorConfig.instanceOrNull?.appName ?? 'A-KEN Quest'} へようこそ',
               'Welcome, brave one',
               jpSize: 22,
               jpColor: dqGold,
@@ -391,7 +395,8 @@ class _StepAge extends StatelessWidget {
                     text: TextSpan(children: [
                       TextSpan(
                         text: '$age',
-                        style: dqText(size: 56, w: FontWeight.w800, color: dqGold),
+                        style:
+                            dqText(size: 56, w: FontWeight.w800, color: dqGold),
                       ),
                       TextSpan(
                         text: '  さい',
@@ -422,9 +427,11 @@ class _StepAge extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('4さい',
-                        style: dqText(size: 12, color: dqInk, w: FontWeight.w500)),
+                        style:
+                            dqText(size: 12, color: dqInk, w: FontWeight.w500)),
                     Text('18さい',
-                        style: dqText(size: 12, color: dqInk, w: FontWeight.w500)),
+                        style:
+                            dqText(size: 12, color: dqInk, w: FontWeight.w500)),
                   ],
                 ),
               ],
@@ -576,7 +583,8 @@ class _PlacementResult extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text(
                   outcome.cefr,
-                  style: dqText(size: 18, w: FontWeight.w700, color: dqGoldDeep),
+                  style:
+                      dqText(size: 18, w: FontWeight.w700, color: dqGoldDeep),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
@@ -699,7 +707,9 @@ class _AvatarCard extends StatelessWidget {
               ? [BoxShadow(color: dqGold.withAlpha(110), blurRadius: 12)]
               : const [
                   BoxShadow(
-                      color: Colors.black54, blurRadius: 6, offset: Offset(0, 3))
+                      color: Colors.black54,
+                      blurRadius: 6,
+                      offset: Offset(0, 3))
                 ],
         ),
         child: Column(
@@ -776,7 +786,8 @@ class _StepGoal extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: DqDialogBox(
-                  speaker: '${avatar.name} / ${_avatarClassEn(avatar.jobTitle)}',
+                  speaker:
+                      '${avatar.name} / ${_avatarClassEn(avatar.jobTitle)}',
                   child: Text(
                     '準備はいい？\n${_eikenLabel(outcome?.eikenLevel ?? '5')} から旅を はじめよう！',
                     style: dqText(size: 15, color: dqInk),
@@ -801,16 +812,22 @@ class _StepGoal extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         decoration: BoxDecoration(
                           gradient: selected
-                              ? const LinearGradient(colors: [dqGold, dqGoldDeep])
+                              ? const LinearGradient(
+                                  colors: [dqGold, dqGoldDeep])
                               : null,
                           color: selected ? null : dqNight0.withAlpha(180),
                           borderRadius: BorderRadius.circular(9),
                           border: Border.all(
-                            color: selected ? dqBorder : dqGoldDeep.withAlpha(110),
+                            color:
+                                selected ? dqBorder : dqGoldDeep.withAlpha(110),
                             width: selected ? 2 : 1.5,
                           ),
                           boxShadow: selected
-                              ? [BoxShadow(color: dqGold.withAlpha(90), blurRadius: 8)]
+                              ? [
+                                  BoxShadow(
+                                      color: dqGold.withAlpha(90),
+                                      blurRadius: 8)
+                                ]
                               : null,
                         ),
                         child: Column(
@@ -820,9 +837,8 @@ class _StepGoal extends StatelessWidget {
                               style: dqText(
                                 size: 22,
                                 w: FontWeight.w800,
-                                color: selected
-                                    ? const Color(0xFF2A1C00)
-                                    : dqGold,
+                                color:
+                                    selected ? const Color(0xFF2A1C00) : dqGold,
                               ),
                             ),
                             Text(
@@ -830,9 +846,8 @@ class _StepGoal extends StatelessWidget {
                               style: dqText(
                                 size: 11,
                                 w: FontWeight.w600,
-                                color: selected
-                                    ? const Color(0xFF2A1C00)
-                                    : dqInk,
+                                color:
+                                    selected ? const Color(0xFF2A1C00) : dqInk,
                                 spacing: 1,
                               ),
                             ),
@@ -862,9 +877,7 @@ class _StepGoal extends StatelessWidget {
                     value: '${avatar.emoji} ${avatar.name}'),
                 const SizedBox(height: 6),
                 _SummaryRow(
-                    jp: 'もくひょう',
-                    en: 'Goal',
-                    value: '毎日 $goalMinutes min'),
+                    jp: 'もくひょう', en: 'Goal', value: '毎日 $goalMinutes min'),
               ],
             ),
           ),

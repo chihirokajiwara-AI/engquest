@@ -52,6 +52,11 @@ class FlavorConfig {
     return _instance!;
   }
 
+  /// The active config, or null if [setFlavor] has not run yet (preview routes,
+  /// widget tests). Use for non-critical reads (e.g. display copy) that must not
+  /// throw before bootstrap. Prefer [instance] on real launch paths.
+  static FlavorConfig? get instanceOrNull => _instance;
+
   /// Initialises the singleton with the given [flavor].
   ///
   /// Call this once in your flavor-specific main entry point before [runApp].
