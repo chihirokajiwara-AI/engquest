@@ -311,8 +311,10 @@ class _WordOrderingPracticeScreenState
             ),
           ],
           // Exam-format teach: connect the arrangement to how 英検 actually asks
-          // the question (the combination at the 2nd & 4th positions).
-          if (_answered) ...[
+          // the question (the combination at the 2nd & 4th positions). Guarded
+          // on length so a malformed (<5-chunk) item can never RangeError in
+          // release mode, where the constructor assert is stripped.
+          if (_answered && p.correctOrder.length >= 4) ...[
             const SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.all(12),
@@ -338,10 +340,13 @@ class _WordOrderingPracticeScreenState
                     style: TextStyle(fontSize: 12.5, color: Color(0xFF37474F)),
                   ),
                   const SizedBox(height: 8),
-                  Row(
+                  // Wrap (not Row) so long chunks ("to this party", "old
+                  // photo") reflow instead of overflowing on narrow phones.
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
                     children: [
                       _posPill('2番目', p.secondChunk),
-                      const SizedBox(width: 8),
                       _posPill('4番目', p.fourthChunk),
                     ],
                   ),
