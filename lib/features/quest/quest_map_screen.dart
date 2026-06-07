@@ -148,7 +148,19 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
     );
   }
 
-  // ── The journey: prologue, 声の石 progress, then the town trail ──
+  // Painted town plates (reused from the explorable SceneDefs) shown as the
+  // node art on the overworld trail — so the map shows real PLACES, not a list.
+  static const Map<String, String> _townArt = {
+    '5': 'assets/art/scenes_layton/town5_lane.png',
+    '4': 'assets/art/scenes_layton/town4_harbor.png',
+    '3': 'assets/art/scenes_layton/town3_academy.png',
+    'pre2': 'assets/art/scenes_layton/town_pre2_port.png',
+    'pre2plus': 'assets/art/scenes_layton/town_pre2plus_bridge.png',
+    '2': 'assets/art/scenes_layton/town_2_castle.png',
+    'pre1': 'assets/art/scenes_layton/town_pre1_grey_square.png',
+  };
+
+  // ── The journey: prologue, 声の石 progress, then the painted overworld ──
   Widget _buildJourney() {
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 6, 16, 28),
@@ -157,8 +169,210 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
         const SizedBox(height: 14),
         _stonesPanel(),
         const SizedBox(height: 18),
-        for (var i = 0; i < kQuestTowns.length; i++) _townNode(i),
+        _trailMap(),
       ],
+    );
+  }
+
+  // ── The painted overworld: towns as medallions on a winding trail ──
+  // A serpentine path (Duolingo-style guided progression + JRPG overworld):
+  // each town is a circular plate of its own painted scene, alternating
+  // left/right, joined by a glowing golden road. Reached towns are in colour;
+  // still-locked towns are GREY — the same grey→colour language as the game's
+  // サイレント mechanic, so the map itself tells the restoration story.
+  Widget _trailMap() {
+    const rowH = 142.0;
+    const r = 47.0;
+    final n = kQuestTowns.length;
+    return LayoutBuilder(
+      builder: (context, c) {
+        final w = c.maxWidth;
+        final leftX = w * 0.30;
+        final rightX = w * 0.70;
+        final centers = <Offset>[
+          for (var i = 0; i < n; i++)
+            Offset(i.isEven ? leftX : rightX, i * rowH + rowH / 2),
+        ];
+        final reached = _unlocked.clamp(0, n - 1);
+        return SizedBox(
+          width: w,
+          height: n * rowH,
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: CustomPaint(
+                  painter: _TrailPainter(centers: centers, reachedIndex: reached),
+                ),
+              ),
+              for (var i = 0; i < n; i++)
+                ..._nodeWidgets(i, centers[i], r, w),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  List<Widget> _nodeWidgets(int i, Offset center, double r, double w) {
+    final town = kQuestTowns[i];
+    final isSkipped = i < _startIdx;
+    final isUnlocked = i >= _startIdx && i <= _unlocked;
+    final isCleared = i < _unlocked && !isSkipped;
+    final isLocked = i > _unlocked;
+    final isStart = i == _startIdx;
+    final onLeft = i.isEven;
+    final onTap = isUnlocked ? () => _openTown(i) : null;
+
+    return [
+      // The painted town plate.
+      Positioned(
+        left: center.dx - r,
+        top: center.dy - r,
+        width: 2 * r,
+        height: 2 * r,
+        child: _medallion(
+          town,
+          d: 2 * r,
+          isStart: isStart,
+          isCleared: isCleared,
+          isLocked: isLocked,
+          isSkipped: isSkipped,
+          onTap: onTap,
+        ),
+      ),
+      // The name / grade / state, on the open side beside the plate.
+      Positioned(
+        top: center.dy - 42,
+        height: 84,
+        left: onLeft ? center.dx + r + 12 : 8,
+        right: onLeft ? 8 : (w - (center.dx - r - 12)),
+        child: _nodeInfo(
+          town,
+          onLeft: onLeft,
+          isStart: isStart,
+          isCleared: isCleared,
+          isLocked: isLocked,
+          isSkipped: isSkipped,
+          onTap: onTap,
+        ),
+      ),
+    ];
+  }
+
+  Widget _medallion(
+    QuestTown town, {
+    required double d,
+    required bool isStart,
+    required bool isCleared,
+    required bool isLocked,
+    required bool isSkipped,
+    required VoidCallback? onTap,
+  }) {
+    final dim = isLocked || isSkipped;
+    Widget img = Image.asset(
+      _townArt[town.eikenLevel] ?? _townArt['5']!,
+      width: d,
+      height: d,
+      fit: BoxFit.cover,
+      errorBuilder: (_, __, ___) => Container(
+        color: dqNight1,
+        alignment: Alignment.center,
+        child: const Icon(Icons.castle, color: dqGold, size: 28),
+      ),
+    );
+    if (dim) {
+      img = ColorFiltered(
+        colorFilter: const ColorFilter.matrix(_kGreyscale),
+        child: img,
+      );
+    }
+    final ring = (isCleared || isStart)
+        ? dqGold
+        : (dim ? dqGoldDeep.withAlpha(130) : dqBorder);
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(color: ring, width: isStart ? 3.2 : 2.4),
+          boxShadow: dim
+              ? null
+              : [BoxShadow(color: dqGold.withAlpha(isStart ? 150 : 80), blurRadius: isStart ? 14 : 8)],
+        ),
+        child: ClipOval(
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              img,
+              if (dim) Container(color: dqNight0.withAlpha(120)),
+              if (isLocked)
+                const Center(child: Icon(Icons.lock, color: Colors.white70, size: 26)),
+              if (isCleared)
+                Positioned(
+                  right: 3,
+                  bottom: 3,
+                  child: Container(
+                    padding: const EdgeInsets.all(2),
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: LinearGradient(colors: [dqGold, dqGoldDeep]),
+                    ),
+                    child: const Icon(Icons.check, color: Color(0xFF2A1C00), size: 14),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _nodeInfo(
+    QuestTown town, {
+    required bool onLeft,
+    required bool isStart,
+    required bool isCleared,
+    required bool isLocked,
+    required bool isSkipped,
+    required VoidCallback? onTap,
+  }) {
+    final dim = isLocked || isSkipped;
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment:
+            onLeft ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+        children: [
+          Text(
+            _eikenLabel(town.eikenLevel),
+            textAlign: onLeft ? TextAlign.left : TextAlign.right,
+            style: dqText(size: 11, w: FontWeight.w800, color: dim ? dqGoldDeep.withAlpha(160) : dqGold),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            town.name,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            textAlign: onLeft ? TextAlign.left : TextAlign.right,
+            style: dqText(size: 14.5, w: FontWeight.w700, color: dim ? dqInk.withAlpha(160) : Colors.white),
+          ),
+          const SizedBox(height: 4),
+          if (isStart)
+            _badge('スタート / Start')
+          else if (isCleared)
+            _badge('クリア / Clear')
+          else if (isLocked)
+            Text('カギがかかっている / Locked',
+                textAlign: onLeft ? TextAlign.left : TextAlign.right,
+                style: dqText(size: 10.5, w: FontWeight.w600, color: dqGoldDeep.withAlpha(170)))
+          else if (isSkipped)
+            Text('クリア済みのレベル / Cleared level',
+                textAlign: onLeft ? TextAlign.left : TextAlign.right,
+                style: dqText(size: 10.5, w: FontWeight.w600, color: dqGoldDeep.withAlpha(170))),
+        ],
+      ),
     );
   }
 
@@ -260,180 +474,6 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
     );
   }
 
-  // ── A town node on the trail ──
-  Widget _townNode(int i) {
-    final town = kQuestTowns[i];
-    final isSkipped = i < _startIdx; // below the student's starting level
-    final isUnlocked = i >= _startIdx && i <= _unlocked;
-    final isCleared = i < _unlocked && !isSkipped;
-    final isLocked = i > _unlocked;
-    final isStart = i == _startIdx;
-    final isLast = i == kQuestTowns.length - 1;
-
-    return IntrinsicHeight(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // The vertical trail + waypoint marker.
-          SizedBox(
-            width: 40,
-            child: Column(
-              children: [
-                _waypoint(isCleared: isCleared, isUnlocked: isUnlocked, isStart: isStart, isLocked: isLocked || isSkipped),
-                Expanded(
-                  child: isLast
-                      ? const SizedBox()
-                      : Container(
-                          width: 3,
-                          margin: const EdgeInsets.symmetric(vertical: 2),
-                          color: (isCleared ? dqGold : dqGoldDeep).withAlpha(isLocked ? 50 : 150),
-                        ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 6),
-          // The town card.
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 14),
-              child: _townCard(
-                town: town,
-                isStart: isStart,
-                isSkipped: isSkipped,
-                isCleared: isCleared,
-                isLocked: isLocked,
-                isUnlocked: isUnlocked,
-                onTap: isUnlocked ? () => _openTown(i) : null,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _waypoint({
-    required bool isCleared,
-    required bool isUnlocked,
-    required bool isStart,
-    required bool isLocked,
-  }) {
-    final lit = isCleared || isUnlocked;
-    return Container(
-      width: 24,
-      height: 24,
-      margin: const EdgeInsets.only(top: 18),
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: isCleared ? dqGold : (lit ? dqNight1 : dqNight0),
-        border: Border.all(color: lit ? dqBorder : dqGoldDeep.withAlpha(110), width: 2),
-        boxShadow: (lit && !isLocked) ? [BoxShadow(color: dqGold.withAlpha(120), blurRadius: 7)] : null,
-      ),
-      child: Icon(
-        isCleared
-            ? Icons.check
-            : (isLocked ? Icons.lock : Icons.place),
-        size: 13,
-        color: isCleared ? const Color(0xFF2A1C00) : (isLocked ? dqGoldDeep.withAlpha(120) : dqGold),
-      ),
-    );
-  }
-
-  Widget _townCard({
-    required QuestTown town,
-    required bool isStart,
-    required bool isSkipped,
-    required bool isCleared,
-    required bool isLocked,
-    required bool isUnlocked,
-    required VoidCallback? onTap,
-  }) {
-    final dim = isLocked || isSkipped;
-    final borderColor = isStart ? dqGold : dqBorder;
-    final borderWidth = isStart ? 2.4 : 2.0;
-
-    return Opacity(
-      opacity: isLocked ? 0.55 : 1.0,
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.fromLTRB(14, 13, 12, 13),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: dim
-                  ? [dqNight0.withAlpha(230), dqNight0.withAlpha(230)]
-                  : [dqBox.withAlpha(238), dqNight1.withAlpha(238)],
-            ),
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: dim ? dqGoldDeep.withAlpha(120) : borderColor, width: borderWidth),
-            boxShadow: dim
-                ? null
-                : [const BoxShadow(color: Colors.black54, blurRadius: 8, offset: Offset(0, 3))],
-          ),
-          child: Row(
-            children: [
-              // Eiken grade crest.
-              Container(
-                width: 50,
-                height: 50,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: dqNight0,
-                  border: Border.all(color: dim ? dqGoldDeep.withAlpha(130) : dqGold, width: 2),
-                  boxShadow: dim ? null : [BoxShadow(color: dqGold.withAlpha(60), blurRadius: 8)],
-                ),
-                child: Text(
-                  _eikenShort(town.eikenLevel),
-                  textAlign: TextAlign.center,
-                  style: dqText(size: 12, w: FontWeight.w800, color: dim ? dqInk.withAlpha(150) : dqGold, spacing: 0),
-                ),
-              ),
-              const SizedBox(width: 13),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Flexible(
-                          child: Text(
-                            town.name,
-                            style: dqText(size: 16, w: FontWeight.w700, color: dim ? dqInk.withAlpha(170) : Colors.white),
-                          ),
-                        ),
-                        if (isStart) ...[
-                          const SizedBox(width: 8),
-                          _badge('スタート / Start'),
-                        ] else if (isCleared) ...[
-                          const SizedBox(width: 8),
-                          _badge('クリア / Clear'),
-                        ],
-                      ],
-                    ),
-                    const SizedBox(height: 3),
-                    Text(
-                      isSkipped ? '（あなたのレベルより前の街） / Below your level' : town.tagline,
-                      style: dqText(size: 12, w: FontWeight.w500, color: dim ? dqInk.withAlpha(130) : dqGold),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 8),
-              Icon(
-                isLocked
-                    ? Icons.lock
-                    : (isSkipped ? Icons.remove : Icons.play_arrow),
-                color: dim ? dqGoldDeep.withAlpha(130) : dqGold,
-                size: isUnlocked && !isSkipped ? 22 : 18,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 
   Widget _badge(String text) => Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
@@ -461,17 +501,61 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
         return '英検$level級';
     }
   }
+}
 
-  static String _eikenShort(String level) {
-    switch (level) {
-      case 'pre2':
-        return '準2\n級';
-      case 'pre2plus':
-        return '準2+\n級';
-      case 'pre1':
-        return '準1\n級';
-      default:
-        return '$level\n級';
+/// Luminance-weighted desaturation — locked towns render in grey (the サイレント
+/// state) and bloom into colour only once reached.
+const List<double> _kGreyscale = <double>[
+  0.2126, 0.7152, 0.0722, 0, 0,
+  0.2126, 0.7152, 0.0722, 0, 0,
+  0.2126, 0.7152, 0.0722, 0, 0,
+  0, 0, 0, 1, 0,
+];
+
+/// Paints the winding golden road between town medallions. Segments leading to
+/// a reached town glow gold; the road ahead stays a dim, unlit trail.
+class _TrailPainter extends CustomPainter {
+  final List<Offset> centers;
+  final int reachedIndex;
+
+  const _TrailPainter({required this.centers, required this.reachedIndex});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (centers.length < 2) return;
+    for (var i = 0; i < centers.length - 1; i++) {
+      final a = centers[i];
+      final b = centers[i + 1];
+      final midY = (a.dy + b.dy) / 2;
+      // An S-curve from a to b (control points pull the road sideways so the
+      // serpentine reads as a road, not a zigzag).
+      final path = Path()
+        ..moveTo(a.dx, a.dy)
+        ..cubicTo(a.dx, midY, b.dx, midY, b.dx, b.dy);
+      final lit = (i + 1) <= reachedIndex;
+      if (lit) {
+        canvas.drawPath(
+          path,
+          Paint()
+            ..style = PaintingStyle.stroke
+            ..strokeCap = StrokeCap.round
+            ..strokeWidth = 15
+            ..color = dqGold.withAlpha(55)
+            ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 6),
+        );
+      }
+      canvas.drawPath(
+        path,
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeCap = StrokeCap.round
+          ..strokeWidth = 6
+          ..color = lit ? dqGold : dqGoldDeep.withAlpha(90),
+      );
     }
   }
+
+  @override
+  bool shouldRepaint(_TrailPainter old) =>
+      old.reachedIndex != reachedIndex || old.centers != centers;
 }
