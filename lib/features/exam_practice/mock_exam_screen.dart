@@ -179,7 +179,7 @@ class _MockExamScreenState extends State<MockExamScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final label = kEikenExams[widget.eikenGrade]?.labelJa ?? widget.eikenGrade;
+    final label = gradeLabelJa(widget.eikenGrade);
 
     // No drawable items (a grade whose pools are empty) — be honest, don't fake.
     if (_items.isEmpty) {

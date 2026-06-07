@@ -1047,20 +1047,8 @@ class _DqWritingHeader extends StatelessWidget {
   final WritingTaskType taskType;
   final VoidCallback onBack;
 
-  String get _gradeLabel {
-    switch (grade) {
-      case '3':
-        return '英検3級';
-      case 'pre2':
-        return '英検準2級';
-      case '2':
-        return '英検2級';
-      case 'pre1':
-        return '英検準1級';
-      default:
-        return '英検';
-    }
-  }
+  // Canonical label — the old switch was missing pre2plus (→ bare "英検").
+  String get _gradeLabel => gradeLabelJa(grade);
 
   String get _taskLabel {
     switch (taskType) {

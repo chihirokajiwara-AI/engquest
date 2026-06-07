@@ -28,6 +28,7 @@ import 'package:flutter/material.dart';
 import '../../core/voice/speech_recognition_service.dart';
 import '../../core/voice/voice_service.dart';
 import '../quest/ui/dq_ui.dart';
+import '../exam_practice/eiken_exam_config.dart';
 import 'pronunciation_scorer.dart';
 import 'speaking_session.dart';
 
@@ -296,13 +297,8 @@ class _SpeakingScreenState extends State<SpeakingScreen>
   // ── Header ──────────────────────────────────────────────────────────────────
 
   Widget _buildHeader(BuildContext context) {
-    final gradeLabel = {
-          '3': '英検3級',
-          'pre2': '英検準2級',
-          '2': '英検2級',
-          'pre1': '英検準1級',
-        }[widget.eikenGrade] ??
-        '英検 二次';
+    // Canonical label (the old map was missing pre2plus, which has a 二次).
+    final gradeLabel = gradeLabelJa(widget.eikenGrade);
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 6, 16, 6),
