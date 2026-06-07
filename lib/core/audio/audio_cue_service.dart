@@ -28,6 +28,12 @@ class AudioCueService {
   AudioPlayer? _playerInstance;
   AudioPlayer get _player => _playerInstance ??= (_injectedPlayer ?? AudioPlayer());
 
+  /// Test-only: true once a real player has been constructed. Lets a CI test
+  /// prove the mute gate prevents playback (player never built → nothing
+  /// played) without relying on the platform throwing.
+  @visibleForTesting
+  bool get debugPlayerCreated => _playerInstance != null;
+
   /// Play the asset at [assetKey]. Restarts cleanly if a clip is already playing
   /// (e.g. the child taps 🔊 repeatedly to imitate). Must be invoked from a
   /// user-gesture chain on web.
