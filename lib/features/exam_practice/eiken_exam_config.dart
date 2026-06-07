@@ -233,7 +233,7 @@ const Map<String, EikenExamDef> kEikenExams = {
     cefrLevel: 'B1',
     totalMinutes: 75,
     passingScore: 1322,
-    maxScore: 1980,
+    maxScore: 1800, // 一次満点 = 600×3 (corrected 2026-06-07; was inflated 1980)
     sections: [
       ExamSection(
         id: 'p2_r1',
@@ -288,7 +288,7 @@ const Map<String, EikenExamDef> kEikenExams = {
     cefrLevel: 'B1-B2',
     totalMinutes: 85,
     passingScore: 1520,
-    maxScore: 2600,
+    maxScore: 1950, // 一次満点 = 650×3 (corrected 2026-06-07; was inflated 2600)
     sections: [
       ExamSection(
         id: '2_r1',
@@ -343,7 +343,7 @@ const Map<String, EikenExamDef> kEikenExams = {
     cefrLevel: 'B2',
     totalMinutes: 90,
     passingScore: 1792,
-    maxScore: 3000,
+    maxScore: 2250, // 一次満点 = 750×3 (corrected 2026-06-07; was inflated 3000)
     sections: [
       ExamSection(
         id: 'p1_r1',

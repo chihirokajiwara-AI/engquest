@@ -37,10 +37,11 @@ void main() {
 
   // Regression ratchet — current achieved counts. RAISE toward the target; never lower.
   const readingFloor = {'5': 24, '4': 22, '3': 22, 'pre2': 19, '2': 19, 'pre1': 19};
-  const readingTarget = {'5': 25, '4': 35, '3': 30, 'pre2': 29, '2': 31, 'pre1': 41};
+  // Official reading 大問 counts (verified eiken.or.jp, 2026-06-07).
+  const readingTarget = {'5': 25, '4': 35, '3': 30, 'pre2': 29, '2': 31, 'pre1': 31};
   // Listening: pre1 is currently 0 (no pool) — the worst pool defect in the app.
   const listeningTarget = {
-    '5': 25, '4': 30, '3': 30, 'pre2': 30, '2': 30, 'pre1': 30,
+    '5': 25, '4': 30, '3': 30, 'pre2': 30, '2': 30, 'pre1': 29,
   };
 
   group('reading pool — structural integrity (raw source data, R1)', () {

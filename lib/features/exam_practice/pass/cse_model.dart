@@ -13,9 +13,9 @@
 //   5級    |   850   |   419   | R:425(100%)    L:425(100%)      | R, L
 //   4級    |  1000   |   622   | R:500(100%)    L:500(100%)      | R, L
 //   3級    |  1650   |  1103   | R:550  W:550   L:550           | R, W, L
-//   準2級  |  1980   |  1322   | R:660  W:660   L:660           | R, W, L
-//   2級    |  2600   |  1520   | R:650  W:650   L:650  [+S 650] | R, W, L (一次)
-//   準1級  |  3000   |  1792   | R:750  W:750   L:750  [+S 750] | R, W, L (一次)
+//   準2級  |  1800   |  1322   | R:600  W:600   L:600           | R, W, L
+//   2級    |  1950   |  1520   | R:650  W:650   L:650           | R, W, L (一次)
+//   準1級  |  2250   |  1792   | R:750  W:750   L:750           | R, W, L (一次)
 //
 // NOTE: 一次試験 covers Reading + Writing (where applicable) + Listening.
 //       Speaking (二次) is a SEPARATE exam stage; this model covers 一次 only.
@@ -168,23 +168,28 @@ const Map<String, _GradeSpec> _kGradeSpecs = {
     firstPassScore: 1103,
     firstMaxScore: 1650,
   ),
+  // CORRECTED 2026-06-07 (verified eiken.or.jp/cse): firstMaxScore is the 一次
+  // max = sum of per-skill CSE maxes (R+W+L) EXCLUDING 二次 speaking. The old
+  // 1980/2600/3000 were inflated (they included speaking / wrong scaling), which
+  // OVERSTATED 合格率 for borderline learners. Per-skill maxes: 準2級600, 2級650,
+  // 準1級750 → 一次満点 1800/1950/2250.
   'pre2': _GradeSpec(
     grade: 'pre2',
     skills: [EikenSkill.reading, EikenSkill.writing, EikenSkill.listening],
     firstPassScore: 1322,
-    firstMaxScore: 1980,
+    firstMaxScore: 1800,
   ),
   '2': _GradeSpec(
     grade: '2',
     skills: [EikenSkill.reading, EikenSkill.writing, EikenSkill.listening],
     firstPassScore: 1520,
-    firstMaxScore: 2600,
+    firstMaxScore: 1950,
   ),
   'pre1': _GradeSpec(
     grade: 'pre1',
     skills: [EikenSkill.reading, EikenSkill.writing, EikenSkill.listening],
     firstPassScore: 1792,
-    firstMaxScore: 3000,
+    firstMaxScore: 2250,
   ),
 };
 

@@ -5,14 +5,13 @@
 //   5級  一次合格419 / 満点850  (R/L equal split: R=425, L=425)
 //   4級  一次合格622 / 満点1000 (R/L: R=500, L=500)
 //   3級  一次合格1103/ 満点1650 (R/W/L: R=550, W=550, L=550)
-//   準2級 一次合格1322/ 満点1980 (R/W/L: R=660, W=660, L=660)
-//   2級  一次合格1520/ 満点2600 (R/W/L: R=867, W=866, L=867 — or nearest thirds)
-//   準1級 一次合格1792/ 満点3000 (R/W/L: each 1000)
+//   準2級 一次合格1322/ 満点1800 (R/W/L: R=600, W=600, L=600)
+//   2級  一次合格1520/ 満点1950 (R/W/L: R=650, W=650, L=650)
+//   準1級 一次合格1792/ 満点2250 (R/W/L: each 750)
 //
-// NOTE on 2級/準1級 technical rounding:
-//   _GradeSpec.skillMaxScores: base = maxScore ÷ 3 (integer), last skill absorbs residual.
-//   2600 ÷ 3 = 866 rem 2 → R=866, W=866, L=868  (L absorbs residual 2)
-//   3000 ÷ 3 = 1000 rem 0 → R=W=L=1000 exactly.
+// CORRECTED 2026-06-07 (verified eiken.or.jp/cse): prior 1980/2600/3000 were
+// inflated (per-skill 660/867/1000 wrongly included 二次/scaling). The 一次満点 =
+// sum of per-skill 一次 CSE maxes (600/650/750), each divides exactly by 3.
 
 import 'package:test/test.dart';
 
@@ -44,30 +43,28 @@ void main() {
       expect(m.values.fold(0, (s, v) => s + v), equals(1650));
     });
 
-    test('準2級: R=W=L=660 (1980÷3=660 exact)', () {
+    test('準2級: R=W=L=600 (1800÷3=600 exact)', () {
       final m = CseEstimator.skillMaxScores('pre2')!;
-      expect(m[EikenSkill.reading], equals(660));
-      expect(m[EikenSkill.writing], equals(660));
-      expect(m[EikenSkill.listening], equals(660));
-      expect(m.values.fold(0, (s, v) => s + v), equals(1980));
+      expect(m[EikenSkill.reading], equals(600));
+      expect(m[EikenSkill.writing], equals(600));
+      expect(m[EikenSkill.listening], equals(600));
+      expect(m.values.fold(0, (s, v) => s + v), equals(1800));
     });
 
-    test('2級: sum = 2600 (R+W+L distributed)', () {
+    test('2級: R=W=L=650 (1950÷3=650 exact)', () {
       final m = CseEstimator.skillMaxScores('2')!;
-      final total = m.values.fold(0, (s, v) => s + v);
-      expect(total, equals(2600));
-      // Each skill gets ≈ 866-868 points
-      for (final v in m.values) {
-        expect(v, inInclusiveRange(865, 870));
-      }
+      expect(m[EikenSkill.reading], equals(650));
+      expect(m[EikenSkill.writing], equals(650));
+      expect(m[EikenSkill.listening], equals(650));
+      expect(m.values.fold(0, (s, v) => s + v), equals(1950));
     });
 
-    test('準1級: R=W=L=1000 (3000÷3=1000 exact)', () {
+    test('準1級: R=W=L=750 (2250÷3=750 exact)', () {
       final m = CseEstimator.skillMaxScores('pre1')!;
-      expect(m[EikenSkill.reading], equals(1000));
-      expect(m[EikenSkill.writing], equals(1000));
-      expect(m[EikenSkill.listening], equals(1000));
-      expect(m.values.fold(0, (s, v) => s + v), equals(3000));
+      expect(m[EikenSkill.reading], equals(750));
+      expect(m[EikenSkill.writing], equals(750));
+      expect(m[EikenSkill.listening], equals(750));
+      expect(m.values.fold(0, (s, v) => s + v), equals(2250));
     });
 
     test('unknown grade returns null', () {
@@ -226,7 +223,7 @@ void main() {
   // ── estimate: 2級 ──────────────────────────────────────────────────────────
 
   group('CseEstimator.estimate — 2級', () {
-    test('spec example: R=80% W=60% L=70% → ~83% readiness, Writing is limiting', () {
+    test('spec example: R=80% W=60% L=70% → ~90% readiness, NOT passing, Writing limiting', () {
       final est = CseEstimator.estimate(
         grade: '2',
         accuracies: [
@@ -235,11 +232,12 @@ void main() {
           const SkillAccuracy(skill: EikenSkill.listening, accuracy: 0.70, itemsAttempted: 30),
         ],
       )!;
-      // maxScores: R=866, W=866, L=868
-      // estimated: R≈693, W≈520, L≈608 → total≈1821
-      // readinessPct = 1821/1520 * 100 ≈ 119.8% → clamped to 100
-      // (Above passing — but Writing is still the lowest ratio: 520/866≈0.60)
-      expect(est.readinessPct, equals(100.0)); // passes because total > 1520
+      // maxScores: R=W=L=650. estimated: R=520, W=390, L=455 → total=1365.
+      // readinessPct = 1365/1520 * 100 ≈ 89.8% → NOT passing (the corrected max;
+      // the old inflated 2600 max wrongly showed this profile as 100%/passing).
+      expect(est.totalScore, equals(1365));
+      expect(est.readinessPct, closeTo(89.8, 0.3));
+      expect(est.isPredictedPass, isFalse);
       expect(est.limitingSkill, equals(EikenSkill.writing));
     });
 
@@ -266,7 +264,7 @@ void main() {
           const SkillAccuracy(skill: EikenSkill.listening, accuracy: 1.0, itemsAttempted: 30),
         ],
       )!;
-      expect(est.totalScore, equals(2600));
+      expect(est.totalScore, equals(1950));
       expect(est.isPredictedPass, isTrue);
       expect(est.pointsNeeded, equals(0));
     });
@@ -282,33 +280,33 @@ void main() {
   // ── estimate: 準1級 ────────────────────────────────────────────────────────
 
   group('CseEstimator.estimate — 準1級', () {
-    test('passing score 1792 / maxScore 3000', () {
+    test('passing score 1792 / maxScore 2250', () {
       final est = CseEstimator.estimate(
         grade: 'pre1',
         accuracies: [
-          const SkillAccuracy(skill: EikenSkill.reading, accuracy: 1.0, itemsAttempted: 41),
+          const SkillAccuracy(skill: EikenSkill.reading, accuracy: 1.0, itemsAttempted: 31),
           const SkillAccuracy(skill: EikenSkill.writing, accuracy: 1.0, itemsAttempted: 2),
-          const SkillAccuracy(skill: EikenSkill.listening, accuracy: 1.0, itemsAttempted: 30),
+          const SkillAccuracy(skill: EikenSkill.listening, accuracy: 1.0, itemsAttempted: 29),
         ],
       )!;
       expect(est.passingScore, equals(1792));
-      expect(est.maxScore, equals(3000));
-      expect(est.totalScore, equals(3000));
+      expect(est.maxScore, equals(2250));
+      expect(est.totalScore, equals(2250));
     });
 
-    test('Listening=0 with Writing+Reading perfect → fails (KEY RULE)', () {
-      // R=1000 + W=1000 + L=0 = 2000 > 1792 → actually passes in this case!
-      // But in a narrower scenario: R=80% W=80% L=0 → 800+800+0=1600 < 1792
+    test('Listening=0 with Writing+Reading strong → fails (KEY RULE)', () {
+      // 技能均等: a zeroed skill caps the total. R=80% W=80% L=0 at 750/skill →
+      // 600+600+0 = 1200 < 1792.
       final est = CseEstimator.estimate(
         grade: 'pre1',
         accuracies: [
-          const SkillAccuracy(skill: EikenSkill.reading, accuracy: 0.80, itemsAttempted: 41),
+          const SkillAccuracy(skill: EikenSkill.reading, accuracy: 0.80, itemsAttempted: 31),
           const SkillAccuracy(skill: EikenSkill.writing, accuracy: 0.80, itemsAttempted: 2),
           const SkillAccuracy(skill: EikenSkill.listening, accuracy: 0.0, itemsAttempted: 1),
         ],
       )!;
-      // R=800, W=800, L=0 → total=1600 < 1792
-      expect(est.totalScore, equals(1600));
+      // R=600, W=600, L=0 → total=1200 < 1792
+      expect(est.totalScore, equals(1200));
       expect(est.isPredictedPass, isFalse);
       expect(est.limitingSkill, equals(EikenSkill.listening));
     });

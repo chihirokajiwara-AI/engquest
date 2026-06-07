@@ -5,16 +5,15 @@
 // draws items from existing pools (vocab/reading/listening/writing), and
 // scores the result into CseEstimate via CseEstimator.
 //
-// 大問 PROPORTIONS (verified, EIKEN-MASTERY-AND-GAPS-2026-06-06.json):
+// 大問 PROPORTIONS (verified eiken.or.jp solutions pages, accessed 2026-06-07):
 //   Grade | Reading Q | Writing Q | Listening Q | Total
 //   ------|-----------|-----------|-------------|------
 //   5級   |    25     |     0     |     25      |  50
 //   4級   |    35     |     0     |     30      |  65
-//   3級   |    30     |     1     |     30      |  61 (Eメール counts as 1 writing item)
-//   準2級 |    32     |     2     |     30      |  64 (Eメール + 意見論述)
+//   3級   |    30     |     2     |     30      |  62 (Eメール + 英作文)
+//   準2級 |    29     |     2     |     30      |  61 (Eメール + 意見論述)
 //   2級   |    31     |     2     |     30      |  63 (要約 + 意見論述)
-//   準1級 |    41     |     2     |     30*     |  73 (要約 + 意見論述)
-//         (* 準1級 listening is 30Q per spec but no pool yet → 0 items seeded)
+//   準1級 |    31     |     2     |     29      |  62 (要約 + 意見論述)
 //
 // The mock always draws from the EXISTING item pools; it never generates new
 // content. When a pool has fewer items than the target count, the mock uses
@@ -127,13 +126,16 @@ const Map<String, Map<EikenSkill, int>> _kTargetCounts = {
     EikenSkill.reading: 35,
     EikenSkill.listening: 30,
   },
+  // Counts CORRECTED 2026-06-07 (verified eiken.or.jp solutions pages, post-2024
+  // reform): 3級 writing 1→2 (added Eメール); 準2級 reading 32→29; 準1級 reading
+  // 41→31 and listening 30→29.
   '3': {
     EikenSkill.reading: 30,
-    EikenSkill.writing: 1,
+    EikenSkill.writing: 2,
     EikenSkill.listening: 30,
   },
   'pre2': {
-    EikenSkill.reading: 32,
+    EikenSkill.reading: 29,
     EikenSkill.writing: 2,
     EikenSkill.listening: 30,
   },
@@ -143,9 +145,9 @@ const Map<String, Map<EikenSkill, int>> _kTargetCounts = {
     EikenSkill.listening: 30,
   },
   'pre1': {
-    EikenSkill.reading: 41,
+    EikenSkill.reading: 31,
     EikenSkill.writing: 2,
-    EikenSkill.listening: 30,
+    EikenSkill.listening: 29,
   },
 };
 
