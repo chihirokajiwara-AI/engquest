@@ -84,6 +84,7 @@ def build_clip(pipeline, transcripts: list[str]) -> "np.ndarray | None":
     - 0.5s gap between turns; 0.7s after the last content line before Question.
     """
     import numpy as np
+    import re
     parts: list["np.ndarray"] = []
     gap_turn    = _silence(0.5)   # between dialogue turns
     gap_q       = _silence(0.7)   # before the "Question:" line
@@ -99,7 +100,12 @@ def build_clip(pipeline, transcripts: list[str]) -> "np.ndarray | None":
 
         for i, line in enumerate(content_lines):
             voice = VOICE_A if i % 2 == 0 else VOICE_B
-            seg = _synth(pipeline, line, voice)
+            # Drop the textual speaker label ("A: " / "B: "). The two distinct
+            # voices already mark who is speaking; real 英検 never announces "A"/
+            # "B", so synthesizing the label spoke a spurious "ay"/"bee" before
+            # every turn. (Question: lines are handled separately below.)
+            clean = re.sub(r'^[A-Za-z]:\s+', '', line)
+            seg = _synth(pipeline, clean, voice)
             if seg is not None:
                 parts.append(seg)
             if i < len(content_lines) - 1:

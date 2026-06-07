@@ -299,7 +299,7 @@ const List<String> kPreviewRouteNames = [
   'writingp1', 'listening', 'listening4', 'listening3', 'listeningp2',
   'kotobahome', 'passmeter', 'passmetermissing', 'speaking', 'speakingconsent',
   'listening2', 'achievements', 'parent', 'parentlogin', 'wordorder',
-  'conversation', 'settings',
+  'conversation', 'settings', 'listeningpp',
 ];
 
 /// Test-visible wrapper for the private preview harness.
@@ -545,6 +545,20 @@ Widget _previewFor(String? name) {
       return const SpeakingScreen(eikenGrade: '3');
     case 'speakingconsent':
       return SpeakingConsentNotice(eikenGrade: '3', onConsent: () {});
+    case 'listeningpp':
+      // Preview: 英検準2級プラス リスニング (newly seeded, 第1部〜第2部)
+      return ListeningPracticeScreen(
+        eikenGrade: 'pre2plus',
+        section: const ExamSection(
+          id: 'pp_l',
+          nameJa: 'リスニング (第1部〜第2部)',
+          nameEn: 'Listening (Parts 1–2)',
+          type: ExamSectionType.listening,
+          questionCount: 30,
+          timeLimitMinutes: 25,
+          description: 'Preview',
+        ),
+      );
     case 'listening2':
       // Preview: 英検2級 リスニング
       return ListeningPracticeScreen(

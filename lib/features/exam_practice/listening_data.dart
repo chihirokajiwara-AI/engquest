@@ -1114,11 +1114,179 @@ const _grade2Part2 = <ListeningItem>[
 
 /// All listening items grouped by grade.
 /// Key format: grade string as used in kEikenExams.
+// ── 英検準2級プラス (2025新設, CEFR A2–B1) ──────────────────────────────────────
+// Listening is 2 部 (第1部 会話応答選択 / 第2部 文内容一致), between 準2級 and 2級.
+// Representative seed (4 items/部); audio via scripts/generate_listening_audio.py.
+const _gradePre2PlusPart1 = <ListeningItem>[
+  // 第1部: 会話応答選択 — hear a short dialogue + a spoken question, pick the answer.
+  ListeningItem(
+    part: 1,
+    grade: 'pre2plus',
+    audioKey: 'lpp_p1_01.mp3',
+    transcripts: [
+      'A: Excuse me, what time does the library close today?',
+      'B: On weekdays it closes at eight, but today is Saturday, so it closes at six.',
+      'A: Oh, I see. Thank you.',
+      'Question: What time does the library close today?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What time does the library close today?',
+    choices: [
+      'At six.',
+      'At eight.',
+      'At seven.',
+      'It is closed all day.',
+    ],
+    correctIndex: 0,
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre2plus',
+    audioKey: 'lpp_p1_02.mp3',
+    transcripts: [
+      'A: Are you free this Sunday? I am thinking of going hiking.',
+      'B: I would love to, but I promised to help my brother move.',
+      'A: No problem. Maybe next time.',
+      'Question: Why can the man not go hiking?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'Why can the man not go hiking?',
+    choices: [
+      'He promised to help his brother move.',
+      'He does not enjoy hiking.',
+      'He has to work on Sunday.',
+      'The weather will be bad.',
+    ],
+    correctIndex: 0,
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre2plus',
+    audioKey: 'lpp_p1_03.mp3',
+    transcripts: [
+      'A: I think I left my umbrella on the train.',
+      'B: You should call the station\'s lost and found. They often keep items for a few days.',
+      'A: Good idea. I will do that.',
+      'Question: What does the man suggest the woman do?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What does the man suggest the woman do?',
+    choices: [
+      'Call the station\'s lost and found.',
+      'Buy a new umbrella.',
+      'Get off at the next station.',
+      'Check the train schedule.',
+    ],
+    correctIndex: 0,
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre2plus',
+    audioKey: 'lpp_p1_04.mp3',
+    transcripts: [
+      'A: This restaurant is really crowded tonight.',
+      'B: Yes, their seafood pasta is supposed to be excellent.',
+      'A: Then I will order that.',
+      'Question: What will the woman order?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What will the woman order?',
+    choices: [
+      'The seafood pasta.',
+      'A green salad.',
+      'Nothing — they will leave.',
+      'The same as the man.',
+    ],
+    correctIndex: 0,
+  ),
+];
+
+const _gradePre2PlusPart2 = <ListeningItem>[
+  // 第2部: 文内容一致 — hear a short announcement/passage, answer a content question.
+  ListeningItem(
+    part: 2,
+    grade: 'pre2plus',
+    audioKey: 'lpp_p2_01.mp3',
+    transcripts: [
+      'Attention shoppers. The supermarket will close thirty minutes early '
+          'today, at eight thirty, for cleaning. Please bring your items to the '
+          'checkout by eight fifteen. We are sorry for any inconvenience.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'What time should shoppers finish at the checkout?',
+    choices: [
+      'By eight fifteen.',
+      'By eight thirty.',
+      'By nine o\'clock.',
+      'By eight o\'clock.',
+    ],
+    correctIndex: 0,
+  ),
+  ListeningItem(
+    part: 2,
+    grade: 'pre2plus',
+    audioKey: 'lpp_p2_02.mp3',
+    transcripts: [
+      'This weekend\'s outdoor music festival has been moved indoors to the '
+          'city hall because rain is forecast. Tickets bought online are still '
+          'valid. The festival will start at noon on Saturday.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'Why was the festival moved indoors?',
+    choices: [
+      'Because rain is forecast.',
+      'Because the tickets sold out.',
+      'Because the city hall is larger.',
+      'Because it now starts earlier.',
+    ],
+    correctIndex: 0,
+  ),
+  ListeningItem(
+    part: 2,
+    grade: 'pre2plus',
+    audioKey: 'lpp_p2_03.mp3',
+    transcripts: [
+      'Many people enjoy growing vegetables at home. Tomatoes are a popular '
+          'choice because they grow quickly and need only sunlight and water. '
+          'Beginners are often surprised at how much one small plant can produce.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'Why are tomatoes popular with beginners?',
+    choices: [
+      'They grow quickly and need only sunlight and water.',
+      'They are cheaper than other vegetables.',
+      'They taste better than any other vegetable.',
+      'They can grow without any sunlight.',
+    ],
+    correctIndex: 0,
+  ),
+  ListeningItem(
+    part: 2,
+    grade: 'pre2plus',
+    audioKey: 'lpp_p2_04.mp3',
+    transcripts: [
+      'The school library is starting a new program next month. Students will '
+          'be able to borrow up to five books at a time, instead of three. The '
+          'loan period will also be extended from two weeks to three weeks.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'What is one change in the new program?',
+    choices: [
+      'Students can borrow more books at a time.',
+      'The library will open earlier each day.',
+      'Books must be returned within one week.',
+      'The library will buy more computers.',
+    ],
+    correctIndex: 0,
+  ),
+];
+
 const Map<String, List<ListeningItem>> kListeningItems = {
   '5': [..._grade5Part1, ..._grade5Part2, ..._grade5Part3],
   '4': [..._grade4Part1, ..._grade4Part2, ..._grade4Part3],
   '3': [..._grade3Part1, ..._grade3Part2, ..._grade3Part3],
   'pre2': [..._gradePre2Part1, ..._gradePre2Part2],
+  'pre2plus': [..._gradePre2PlusPart1, ..._gradePre2PlusPart2],
   '2': [..._grade2Part1, ..._grade2Part2],
 };
 
