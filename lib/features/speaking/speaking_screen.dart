@@ -31,6 +31,21 @@ import '../quest/ui/dq_ui.dart';
 import 'pronunciation_scorer.dart';
 import 'speaking_session.dart';
 
+// ── Child-facing practice-guide copy (NO engineering jargon) ────────────────────
+//
+// Shown with the formative score in the result state. Honest framing: this
+// score is a practice guide, and the real 二次 (interview) is human-scored —
+// without exposing internal implementation details. Kept as named constants so
+// a CI test can assert the copy stays jargon-free + honest. Furigana is applied
+// consistently to every non-trivial 漢字 for young (6+) readers.
+const String kSpeakingPracticeNoteJa =
+    'このスコアは れんしゅうの めやすだよ。本番（ほんばん）の 二次（にじ）'
+    'しけんでは、しけんかんの 先生（せんせい）が きみの 話（はな）す えいごを '
+    '聞（き）いて さいてんします。たくさん 声（こえ）に出（だ）して れんしゅうしよう！';
+const String kSpeakingPracticeNoteEn =
+    'This score is a practice guide — in the real interview a teacher listens '
+    'and scores your speaking. Keep practising out loud!';
+
 // ── Screen state ──────────────────────────────────────────────────────────────
 
 enum _ScreenState {
@@ -706,11 +721,7 @@ class _SpeakingScreenState extends State<SpeakingScreen>
           const SizedBox(width: 8),
           Expanded(
             child: Text(
-              'このスコアは れんしゅうの めやすだよ。本番（ほんばん）の 二次（にじ）'
-              'しけんでは、しけんかんの 先生（せんせい）が きみの 話す英語を 聞いて'
-              'さいてんします。たくさん 声に出して れんしゅうしよう！\n'
-              'This score is a practice guide — in the real interview a teacher '
-              'listens and scores your speaking. Keep practising out loud!',
+              '$kSpeakingPracticeNoteJa\n$kSpeakingPracticeNoteEn',
               style: dqText(size: 11, color: dqInk, spacing: 0.2)
                   .copyWith(height: 1.5),
             ),

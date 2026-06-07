@@ -155,6 +155,29 @@ void main() {
   });
 
   // ────────────────────────────────────────────────────────────────────────────
+  // Practice-note copy — covers the RESULT-state text the idle pump never
+  // renders (closes the audit's test-coverage gap, 2026-06-08).
+  // ────────────────────────────────────────────────────────────────────────────
+  group('Speaking practice-note copy', () {
+    test('contains no engineering jargon', () {
+      final copy = '$kSpeakingPracticeNoteJa $kSpeakingPracticeNoteEn';
+      for (final jargon in const [
+        '開発中', 'Azure', '/v1', 'stub', 'Stub', '[Dev]', 'pronounce', 'TODO',
+      ]) {
+        expect(copy.contains(jargon), isFalse, reason: 'jargon "$jargon" in note');
+      }
+    });
+
+    test('stays honest — frames the score as a guide, real exam human-scored',
+        () {
+      // Must NOT imply the displayed score is an official/accurate assessment.
+      expect(kSpeakingPracticeNoteJa, contains('めやす')); // "a guide"
+      expect(kSpeakingPracticeNoteJa, contains('先生')); // a teacher scores the real exam
+      expect(kSpeakingPracticeNoteEn.toLowerCase(), contains('practice guide'));
+    });
+  });
+
+  // ────────────────────────────────────────────────────────────────────────────
   // SpeakingSession — unit tests
   // ────────────────────────────────────────────────────────────────────────────
 
