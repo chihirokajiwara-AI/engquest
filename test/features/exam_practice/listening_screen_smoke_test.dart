@@ -12,6 +12,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:engquest/features/exam_practice/listening_practice_screen.dart';
 import 'package:engquest/features/exam_practice/listening_data.dart';
 import 'package:engquest/features/exam_practice/eiken_exam_config.dart';
+import 'package:engquest/core/audio/audio_mute.dart';
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -31,6 +32,41 @@ Widget _wrap(Widget child) => MaterialApp(home: child);
 // ── Tests ─────────────────────────────────────────────────────────────────────
 
 void main() {
+  group('ListeningPracticeScreen — muted guard', () {
+    testWidgets('shows a "sound off" banner + unmute when Voice is muted',
+        (tester) async {
+      AudioMute.voiceMuted = true;
+      addTearDown(() => AudioMute.voiceMuted = false);
+      await tester.pumpWidget(_wrap(
+        ListeningPracticeScreen(
+          eikenGrade: '5',
+          section: _listeningSection('5_l', 'リスニング 5級', 25, 20),
+        ),
+      ));
+      await tester.pump();
+      // A listening exercise must not silently strand a muted child.
+      expect(find.textContaining('おとが オフ'), findsOneWidget);
+      expect(find.text('おんを オンにする'), findsOneWidget);
+      // Tapping unmute clears the banner.
+      await tester.tap(find.text('おんを オンにする'));
+      await tester.pump();
+      expect(AudioMute.voiceMuted, isFalse);
+      expect(find.textContaining('おとが オフ'), findsNothing);
+    });
+
+    testWidgets('no banner when not muted', (tester) async {
+      AudioMute.voiceMuted = false;
+      await tester.pumpWidget(_wrap(
+        ListeningPracticeScreen(
+          eikenGrade: '5',
+          section: _listeningSection('5_l', 'リスニング 5級', 25, 20),
+        ),
+      ));
+      await tester.pump();
+      expect(find.textContaining('おとが オフ'), findsNothing);
+    });
+  });
+
   group('ListeningPracticeScreen — smoke tests (R3)', () {
     testWidgets('grade 5 — pumps without exception', (tester) async {
       await tester.pumpWidget(_wrap(
@@ -285,8 +321,8 @@ void main() {
       }
     });
 
-    test('grades pre2 and 2 have items in parts 1 and 2', () {
-      for (final grade in ['pre2', '2']) {
+    test('grades pre2, pre2plus and 2 have items in parts 1 and 2', () {
+      for (final grade in ['pre2', 'pre2plus', '2']) {
         for (final part in [1, 2]) {
           final items = listeningItemsFor(grade, part);
           expect(
