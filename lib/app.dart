@@ -18,6 +18,7 @@ import 'package:engquest/features/exam_practice/listening_practice_screen.dart';
 import 'package:engquest/features/exam_practice/writing_practice_screen.dart';
 import 'package:engquest/features/exam_practice/eiken_exam_config.dart';
 import 'package:engquest/features/exam_practice/word_ordering_practice_screen.dart';
+import 'package:engquest/features/exam_practice/conversation_practice_screen.dart';
 import 'package:engquest/features/achievements/achievements_screen.dart';
 import 'package:engquest/features/parent_dashboard/parent_dashboard_screen.dart';
 import 'package:engquest/features/parent_dashboard/parent_login_screen.dart';
@@ -297,6 +298,7 @@ const List<String> kPreviewRouteNames = [
   'writingp1', 'listening', 'listening4', 'listening3', 'listeningp2',
   'kotobahome', 'passmeter', 'passmetermissing', 'speaking', 'speakingconsent',
   'listening2', 'achievements', 'parent', 'parentlogin', 'wordorder',
+  'conversation',
 ];
 
 /// Test-visible wrapper for the private preview harness.
@@ -392,6 +394,20 @@ Widget _previewFor(String? name) {
       return const VoiceScreen();
     case 'exam':
       return const ExamPracticeScreen(eikenGrade: '5');
+    case 'conversation':
+      // 英検3級 大問2 会話文の文空所補充 — grade-differentiated dialogue practice.
+      return const ConversationPracticeScreen(
+        eikenGrade: '3',
+        section: ExamSection(
+          id: '3_p2',
+          nameJa: '筆記2: 会話文の文空所補充',
+          nameEn: 'Conversation Completion',
+          type: ExamSectionType.conversationComplete,
+          questionCount: 8,
+          timeLimitMinutes: 8,
+          description: 'Preview',
+        ),
+      );
     case 'wordorder':
       // 英検4級 大問3 語句整序 — authentic 5-chunk ordering practice.
       return const WordOrderingPracticeScreen(

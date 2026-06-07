@@ -491,66 +491,206 @@ class _ConversationPracticeScreenState
           correctIdx: 0,
         ),
       ];
-    } else {
-      // Grade 3+
+    } else if (grade == '3') {
+      // 英検3級 (CEFR A1–A2): everyday school/home/shop exchanges; grammar at
+      // 3級 level (present perfect, can, since). One clearly-best response;
+      // distractors are same-register but off-function. Content-QA'd 2026-06-08.
       return const [
         _ConversationProblem(
-          context: 'At work',
-          speakerA: "I heard you're thinking about changing jobs.",
+          context: 'At school',
+          speakerA: 'Have you finished your homework yet?',
           speakerB: '(        )',
           choices: [
-            "Yes, I've been looking for something more challenging.",
-            'I started this job three years ago.',
-            'My office is very comfortable.',
-            'I work from Monday to Friday.',
+            "Not yet. I'll do it after dinner.",
+            'I have a lot of homework today.',
+            'Homework is really difficult.',
+            'Yes, I like doing homework.',
           ],
           correctIdx: 0,
         ),
         _ConversationProblem(
-          context: 'At a café',
-          speakerA: "Do you mind if I sit here?",
+          context: 'At a store',
+          speakerA: 'Excuse me, where can I find notebooks?',
           speakerB: '(        )',
           choices: [
-            'No, not at all. Please go ahead.',
-            'I mind very much.',
-            'This café is popular.',
-            'I usually sit over there.',
+            "They're on the shelf next to the pens.",
+            'I need a new notebook.',
+            'Notebooks are very cheap here.',
+            'This store is really big.',
           ],
           correctIdx: 0,
         ),
         _ConversationProblem(
-          context: 'At the doctor',
-          speakerA: "How long have you had this headache?",
+          context: 'At home',
+          speakerA: 'Why are you so tired today?',
           speakerB: '(        )',
           choices: [
-            "It started about three days ago.",
-            'I take medicine every day.',
-            'Headaches are common.',
-            'I went to the hospital last year.',
+            'Because I practiced soccer for three hours.',
+            'I am usually very busy.',
+            'Tired people need sleep.',
+            'Today is a school day.',
           ],
           correctIdx: 0,
         ),
         _ConversationProblem(
-          context: 'Planning a trip',
-          speakerA: "What do you think about visiting Kyoto this summer?",
+          context: 'On the phone',
+          speakerA: 'Can you come to my birthday party on Saturday?',
           speakerB: '(        )',
           choices: [
-            "That sounds wonderful! I've always wanted to go there.",
-            'Kyoto is in Japan.',
-            'Summer is very hot.',
-            'I visited Tokyo last year.',
+            'Sure! What time should I come?',
+            "It's my birthday too.",
+            'I really like parties.',
+            'Saturday comes after Friday.',
+          ],
+          correctIdx: 0,
+        ),
+        _ConversationProblem(
+          context: 'In the classroom',
+          speakerA: "I can't open this door. Is it locked?",
+          speakerB: '(        )',
+          choices: [
+            'Yes. The teacher has the key.',
+            'Doors are made of wood.',
+            'I opened it this morning.',
+            'The classroom is very clean.',
+          ],
+          correctIdx: 0,
+        ),
+        _ConversationProblem(
+          context: 'At lunchtime',
+          speakerA: 'Do you want to eat lunch together?',
+          speakerB: '(        )',
+          choices: [
+            'Sorry, I already ate. Maybe tomorrow.',
+            'Lunch is my favorite meal.',
+            'The cafeteria is over there.',
+            'I usually eat rice for lunch.',
+          ],
+          correctIdx: 0,
+        ),
+        _ConversationProblem(
+          context: 'After class',
+          speakerA: 'You speak English really well. How did you learn it?',
+          speakerB: '(        )',
+          choices: [
+            "Thank you. I've studied it since I was six.",
+            'English is a useful language.',
+            'I want to learn French too.',
+            'Many people speak English.',
+          ],
+          correctIdx: 0,
+        ),
+        _ConversationProblem(
+          context: 'Talking about the weekend',
+          speakerA: 'How was your trip to the mountains?',
+          speakerB: '(        )',
+          choices: [
+            'It was great! We saw a beautiful lake.',
+            'Mountains are very tall.',
+            'I want to go on a trip.',
+            'The weekend was two days.',
+          ],
+          correctIdx: 0,
+        ),
+      ];
+    } else {
+      // 英検準2級 (CEFR A2–B1): the only other grade whose 一次 includes 大問2
+      // 会話文の文空所補充. Slightly longer social/transactional exchanges; a
+      // single best functional response. Content-QA'd 2026-06-08.
+      return const [
+        _ConversationProblem(
+          context: 'At a restaurant',
+          speakerA: 'Would you like to order now, or do you need more time?',
+          speakerB: '(        )',
+          choices: [
+            'Could you give us a few more minutes, please?',
+            'This restaurant is very popular.',
+            'We came here last weekend.',
+            'The waiter is really friendly.',
+          ],
+          correctIdx: 0,
+        ),
+        _ConversationProblem(
+          context: 'At the office',
+          speakerA: "I'm having trouble finishing this report by Friday.",
+          speakerB: '(        )',
+          choices: [
+            'Would you like me to give you a hand?',
+            'Reports are usually boring.',
+            'Friday is the last weekday.',
+            'I finished mine yesterday.',
+          ],
+          correctIdx: 0,
+        ),
+        _ConversationProblem(
+          context: 'Making plans',
+          speakerA: "The concert is sold out. We couldn't get tickets.",
+          speakerB: '(        )',
+          choices: [
+            "That's too bad. Let's do something else instead.",
+            'Concerts are usually loud.',
+            'I love listening to music.',
+            'The tickets were expensive.',
+          ],
+          correctIdx: 0,
+        ),
+        _ConversationProblem(
+          context: 'At a clothing shop',
+          speakerA: 'I bought this jacket here last week, but the zipper is broken.',
+          speakerB: '(        )',
+          choices: [
+            "I'm sorry about that. Would you like a refund or an exchange?",
+            'That jacket looks warm.',
+            'We sell many jackets here.',
+            'Last week was very busy.',
+          ],
+          correctIdx: 0,
+        ),
+        _ConversationProblem(
+          context: 'Asking a favor',
+          speakerA: 'Could you water my plants while I am away next week?',
+          speakerB: '(        )',
+          choices: [
+            'Of course. Just leave me your key.',
+            'Plants need a lot of water.',
+            'I water my plants every morning.',
+            'Your garden is beautiful.',
           ],
           correctIdx: 0,
         ),
         _ConversationProblem(
           context: 'At the library',
-          speakerA: "I'm looking for books about environmental issues.",
+          speakerA: 'Excuse me, am I allowed to borrow these magazines?',
           speakerB: '(        )',
           choices: [
-            "You'll find them in the science section on the second floor.",
-            'I like reading books.',
-            'The library closes at five.',
-            'Environmental issues are important.',
+            "I'm afraid magazines can only be read here, not taken out.",
+            'Magazines come out every month.',
+            'The library has many books.',
+            'I enjoy reading magazines.',
+          ],
+          correctIdx: 0,
+        ),
+        _ConversationProblem(
+          context: 'Catching up',
+          speakerA: 'I heard you moved to a new apartment. How do you like it?',
+          speakerB: '(        )',
+          choices: [
+            "It's much closer to the station, so I'm really happy.",
+            'Moving takes a lot of work.',
+            'Apartments can be expensive.',
+            'I lived there for two years.',
+          ],
+          correctIdx: 0,
+        ),
+        _ConversationProblem(
+          context: 'At school',
+          speakerA: "I'm thinking of joining the volunteer club. What do you think?",
+          speakerB: '(        )',
+          choices: [
+            "That's a great idea. They do a lot of good work.",
+            'Clubs meet after school.',
+            'There are many clubs here.',
+            'I joined the tennis club.',
           ],
           correctIdx: 0,
         ),
@@ -628,3 +768,13 @@ class _ChatBubble extends StatelessWidget {
     );
   }
 }
+
+/// Test-only: the choices + correct index per conversation item, so the content
+/// invariant (4 distinct non-empty choices, valid correctIdx) can be asserted
+/// in CI without exposing the private problem type.
+@visibleForTesting
+List<({List<String> choices, int correctIdx})> conversationItemsForTest(
+        String grade) =>
+    _ConversationPracticeScreenState._getProblems(grade)
+        .map((p) => (choices: p.choices, correctIdx: p.correctIdx))
+        .toList();
