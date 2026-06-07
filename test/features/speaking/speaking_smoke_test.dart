@@ -127,12 +127,28 @@ void main() {
         expect(tester.takeException(), isNull);
       });
 
-      testWidgets('grade $grade — shows stub disclaimer', (tester) async {
+      testWidgets('grade $grade — shows NO engineering jargon to children',
+          (tester) async {
         await tester.pumpWidget(wrap(
           SpeakingScreen(eikenGrade: grade),
         ));
         await tester.pump();
-        expect(find.textContaining('開発中'), findsOneWidget);
+        // Children must never see internal implementation details. Guards the
+        // exact defect class fixed 2026-06-08 (the old "[Dev] … Azure …
+        // /v1/pronounce" banner shown on every step).
+        for (final jargon in const [
+          '開発中',
+          'Azure',
+          '/v1',
+          'stub',
+          'Stub',
+          '[Dev]',
+          'pronounce',
+        ]) {
+          expect(find.textContaining(jargon), findsNothing,
+              reason: 'child-facing jargon "$jargon" leaked into the Speaking '
+                  'screen UI');
+        }
         expect(tester.takeException(), isNull);
       });
     }

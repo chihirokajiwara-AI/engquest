@@ -353,8 +353,13 @@ class _SpeakingScreenState extends State<SpeakingScreen>
           if (_state == _ScreenState.recording) _buildRecordingArea(),
           if (_state == _ScreenState.evaluating) _buildEvaluatingArea(),
           if (_state == _ScreenState.result) _buildResultArea(),
-          const SizedBox(height: 8),
-          _buildStubDisclaimer(),
+          // Honest practice-guide note, shown only WITH a score (result state),
+          // so the child sees it in context and is never shown internal
+          // engineering details (no "Azure", "/v1/...", "開発中").
+          if (_state == _ScreenState.result) ...[
+            const SizedBox(height: 10),
+            _buildPracticeNote(),
+          ],
         ],
       ),
     );
@@ -678,21 +683,39 @@ class _SpeakingScreenState extends State<SpeakingScreen>
     );
   }
 
-  // ── Stub disclaimer ──────────────────────────────────────────────────────────
-
-  Widget _buildStubDisclaimer() {
+  // ── Practice-guide note (child-facing, honest, no engineering jargon) ───────
+  //
+  // Replaces the old "[Dev] … Azure … /v1/pronounce" banner that was shown to
+  // children. It stays HONEST — the score here is a practice guide, and the real
+  // 二次 (interview) is scored by a human examiner — without exposing internal
+  // implementation details. (How the real Azure scorer wires in is documented
+  // in pronunciation_scorer.dart, not on a child's screen.)
+  Widget _buildPracticeNote() {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: const Color(0xFF1A1A10),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: dqGoldDeep.withAlpha(100), width: 1),
+        color: dqNight1.withAlpha(160),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: dqGoldDeep.withAlpha(90), width: 1),
       ),
-      child: Text(
-        '【開発中】採点はスタブ（仮）です。Azure Pronunciation Assessment接続後に本番スコアに切り替わります。\n'
-        '[Dev] Scoring is a formative stub. Real Azure scoring wires in via /v1/pronounce when ready.',
-        style: dqText(size: 10, color: dqGoldDeep, spacing: 0.2),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Icon(Icons.lightbulb_outline, color: dqGold, size: 18),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              'このスコアは れんしゅうの めやすだよ。本番（ほんばん）の 二次（にじ）'
+              'しけんでは、しけんかんの 先生（せんせい）が きみの 話す英語を 聞いて'
+              'さいてんします。たくさん 声に出して れんしゅうしよう！\n'
+              'This score is a practice guide — in the real interview a teacher '
+              'listens and scores your speaking. Keep practising out loud!',
+              style: dqText(size: 11, color: dqInk, spacing: 0.2)
+                  .copyWith(height: 1.5),
+            ),
+          ),
+        ],
       ),
     );
   }
