@@ -151,11 +151,13 @@ void main() {
       expect(e.nextGrade(), equals(2));
     });
 
-    test('after a correct answer, nextGrade uses round(θ)', () {
+    test('after a correct answer, nextGrade climbs by the earned staircase', () {
       final e = PlacementEngine.fromAge(10); // θ=2
-      e.record(true, grade: 2);  // step 1.5 → θ=3.5
-      // After correct: nextGrade = round(3.5) = 4 (Dart rounds half-up)
-      expect(e.nextGrade(), equals(4));
+      e.record(true, grade: 2); // step 1.5 → θ=3.5
+      // round(3.5)=4, but the gentle staircase (CEO 721) caps the presented rung
+      // at highest-passed (2) + 1 = 3 — never jump from a passed rung-2 straight
+      // to rung 4, skipping rung 3.
+      expect(e.nextGrade(), equals(3));
     });
 
     test('no two consecutive failed-rung items at the same rung', () {
