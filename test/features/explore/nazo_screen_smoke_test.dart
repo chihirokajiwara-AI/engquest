@@ -9,6 +9,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:engquest/core/audio/audio_assets.dart';
 import 'package:engquest/core/audio/audio_mute.dart';
 import 'package:engquest/features/explore/hotspot.dart';
 import 'package:engquest/features/explore/nazo_screen.dart';
@@ -17,6 +18,7 @@ import 'package:engquest/features/quest/ui/muted_voice_banner.dart';
 void main() {
   setUpAll(() => GoogleFonts.config.allowRuntimeFetching = false);
   setUp(() => SharedPreferences.setMockInitialValues({}));
+  tearDown(AudioAssets.resetForTest);
 
   group('NazoScreen — smoke tests (R3)', () {
     testWidgets('first 5級 NPC hotspot — pumps without exception',
@@ -35,13 +37,17 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('audio ナゾ shows the muted-voice banner when Voice is muted',
+    testWidgets(
+        'audio ナゾ shows the muted-voice banner when Voice is muted (clip present)',
         (tester) async {
       // This ナゾ plays a phoneme the child must hear — a muted child needs the
       // warning + one-tap unmute (#42).
       final hotspot = kTown5Scene.hotspots.firstWhere(
         (h) => h.kind == HotspotKind.npc && h.step?.autoPlayAudio != null,
       );
+      // Treat this step's clip as bundled so the audio affordance is live (the
+      // muted banner is suppressed when the clip is missing — see #43).
+      AudioAssets.debugAssets = {'assets/${hotspot.step!.autoPlayAudio!}'};
 
       AudioMute.voiceMuted = true;
       addTearDown(() => AudioMute.voiceMuted = false);
@@ -66,6 +72,7 @@ void main() {
       final hotspot = kTown5Scene.hotspots.firstWhere(
         (h) => h.kind == HotspotKind.npc && h.step?.autoPlayAudio != null,
       );
+      AudioAssets.debugAssets = {'assets/${hotspot.step!.autoPlayAudio!}'};
       AudioMute.voiceMuted = false;
       await tester.pumpWidget(MaterialApp(
         home: NazoScreen(hotspot: hotspot, eikenLevel: '5'),
@@ -73,6 +80,50 @@ void main() {
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 100));
       expect(find.byType(MutedVoiceBanner), findsNothing);
+      expect(tester.takeException(), isNull);
+    });
+  });
+
+  group('NazoScreen — missing-audio feedback (#43)', () {
+    testWidgets('missing clip → honest 準備中 note, no dead 🔊, no muted banner',
+        (tester) async {
+      final hotspot = kTown5Scene.hotspots.firstWhere(
+        (h) => h.kind == HotspotKind.npc && h.step?.autoPlayAudio != null,
+      );
+      // Clip is NOT bundled (e.g. founder-pending phoneme). Even with Voice
+      // muted, the dead 🔊 + muted banner must be replaced by an honest note.
+      AudioAssets.debugAssets = <String>{};
+      AudioMute.voiceMuted = true;
+      addTearDown(() => AudioMute.voiceMuted = false);
+
+      await tester.pumpWidget(MaterialApp(
+        home: NazoScreen(hotspot: hotspot, eikenLevel: '5'),
+      ));
+      await tester.pump(); // let the async existence check resolve
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(find.textContaining('じゅんびちゅう'), findsOneWidget); // 準備中 note
+      expect(find.textContaining('おとを きく'), findsNothing); // no dead 🔊 button
+      expect(
+          find.byType(MutedVoiceBanner), findsNothing); // unmute wouldn't help
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('present clip → 🔊 replay button, no 準備中 note', (tester) async {
+      final hotspot = kTown5Scene.hotspots.firstWhere(
+        (h) => h.kind == HotspotKind.npc && h.step?.autoPlayAudio != null,
+      );
+      AudioAssets.debugAssets = {'assets/${hotspot.step!.autoPlayAudio!}'};
+      AudioMute.voiceMuted = false;
+
+      await tester.pumpWidget(MaterialApp(
+        home: NazoScreen(hotspot: hotspot, eikenLevel: '5'),
+      ));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(find.textContaining('じゅんびちゅう'), findsNothing);
+      expect(find.textContaining('おとを きく'), findsOneWidget); // live 🔊 button
       expect(tester.takeException(), isNull);
     });
   });

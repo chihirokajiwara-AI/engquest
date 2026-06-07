@@ -17,6 +17,7 @@
 
 import 'package:flutter/material.dart';
 
+import '../../core/audio/audio_assets.dart';
 import '../../core/audio/audio_cue_service.dart';
 import '../../core/audio/audio_mute.dart';
 import '../../core/gamification/hint_coin_service.dart';
@@ -69,6 +70,10 @@ class _NazoScreenState extends State<NazoScreen> {
   int _coinBalance = 0;
   int _hintsShown = 0; // 0 = none; 1/2/3 = tiers revealed so far
   bool _coinLoading = false;
+  // True when this ナゾ references an audio clip that isn't bundled (e.g. the
+  // founder-pending 5級 phonemes). We then hide the dead 🔊 button + show an
+  // honest "準備中" note instead of leaving the child with silence (#43).
+  bool _audioMissing = false;
 
   QuestStep get _step => widget.hotspot.step!;
 
@@ -80,6 +85,12 @@ class _NazoScreenState extends State<NazoScreen> {
     );
     _coins = widget.hintCoinService ?? HintCoinService();
     _loadCoinBalance();
+    final audio = _step.autoPlayAudio;
+    if (audio != null && audio.isNotEmpty) {
+      AudioAssets.exists(audio).then((ok) {
+        if (mounted && !ok) setState(() => _audioMissing = true);
+      });
+    }
   }
 
   Future<void> _loadCoinBalance() async {
@@ -173,8 +184,11 @@ class _NazoScreenState extends State<NazoScreen> {
               _picaratRow(),
               const SizedBox(height: 12),
               // This ナゾ plays a phoneme/word the child must HEAR to answer —
-              // if Voice is muted, warn + offer a one-tap unmute.
-              if (AudioMute.voiceMuted && _step.autoPlayAudio != null) ...[
+              // if Voice is muted, warn + offer a one-tap unmute. Suppressed when
+              // the clip is missing (unmuting wouldn't help → show 準備中 instead).
+              if (AudioMute.voiceMuted &&
+                  _step.autoPlayAudio != null &&
+                  !_audioMissing) ...[
                 MutedVoiceBanner(
                   onUnmute: () => setState(() {}),
                   message: kPhonicsMutedMessage,
@@ -209,6 +223,24 @@ class _NazoScreenState extends State<NazoScreen> {
       ),
     );
   }
+
+  /// Honest stand-in when this step's audio clip isn't bundled yet (e.g. the
+  /// founder-pending 5級 phonemes, #45) — better than a dead 🔊 button + silence.
+  Widget _comingSoonNote() => Container(
+        width: double.infinity,
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        decoration: BoxDecoration(
+          color: dqBox.withAlpha(200),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: dqGoldDeep.withAlpha(120)),
+        ),
+        child: Text(
+          '🔇 おとは じゅんびちゅう / Sound coming soon',
+          textAlign: TextAlign.center,
+          style: dqText(size: 12, w: FontWeight.w600, color: dqInk),
+        ),
+      );
 
   Widget _header() => Row(
         children: [
@@ -319,10 +351,13 @@ class _NazoScreenState extends State<NazoScreen> {
           ),
           if (step.autoPlayAudio != null) ...[
             const SizedBox(height: 12),
-            DqReplayButton(
-              onTap: () => _cue.play(step.autoPlayAudio),
-              label: '🔊 もういちど きく',
-            ),
+            if (_audioMissing)
+              _comingSoonNote()
+            else
+              DqReplayButton(
+                onTap: () => _cue.play(step.autoPlayAudio),
+                label: '🔊 もういちど きく',
+              ),
           ],
         ],
       );
@@ -357,8 +392,11 @@ class _NazoScreenState extends State<NazoScreen> {
         ),
         if (step.autoPlayAudio != null) ...[
           const SizedBox(height: 12),
-          DqReplayButton(
-              onTap: () => _cue.play(step.autoPlayAudio), label: '🔊 おとを きく'),
+          if (_audioMissing)
+            _comingSoonNote()
+          else
+            DqReplayButton(
+                onTap: () => _cue.play(step.autoPlayAudio), label: '🔊 おとを きく'),
         ],
         if (step.teachJa != null) ...[
           const SizedBox(height: 14),
