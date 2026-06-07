@@ -682,14 +682,15 @@ const _grade3Reading = [
 
 // ── 英検準2級 ─────────────────────────────────────────────────────────────────
 const _pre2Reading = [
+  // Existing 5 retained; choices reordered to remove the all-correctIdx-0 bias.
   ReadingMockItem(
     id: 'p2_r_001',
     sectionId: 'p2_r1',
     passageText:
         'The new program was ( ) for beginners who had no coding experience.',
     questionText: 'Choose the best word for the blank.',
-    choices: ['designed', 'decided', 'defeated', 'declared'],
-    correctIdx: 0,
+    choices: ['defeated', 'decided', 'designed', 'declared'],
+    correctIdx: 2,
   ),
   ReadingMockItem(
     id: 'p2_r_002',
@@ -697,8 +698,8 @@ const _pre2Reading = [
     passageText:
         'It is important to ( ) enough sleep every night for good health.',
     questionText: 'Choose the best word for the blank.',
-    choices: ['get', 'give', 'grow', 'gain'],
-    correctIdx: 0,
+    choices: ['give', 'get', 'grow', 'gain'],
+    correctIdx: 1,
   ),
   ReadingMockItem(
     id: 'p2_r_003',
@@ -710,8 +711,8 @@ const _pre2Reading = [
     questionText: 'According to the passage, when did online learning grow quickly?',
     choices: [
       'After 2020',
-      'Before 2010',
       'In the 1990s',
+      'Before 2010',
       'In the early 2000s',
     ],
     correctIdx: 0,
@@ -723,8 +724,8 @@ const _pre2Reading = [
         'A: "I need to ( ) this project by Friday." '
         'B: "Don\'t worry. I\'ll help you."',
     questionText: 'Choose the best phrase for the blank.',
-    choices: ['finish', 'beginning', 'gone', 'start again'],
-    correctIdx: 0,
+    choices: ['beginning', 'gone', 'start again', 'finish'],
+    correctIdx: 3,
   ),
   ReadingMockItem(
     id: 'p2_r_005',
@@ -741,6 +742,138 @@ const _pre2Reading = [
       'It reduces noise pollution.',
     ],
     correctIdx: 0,
+  ),
+  // ── 大問1 語句空所補充 (grammar + vocabulary, CEFR B1) ─────────────────────
+  ReadingMockItem(
+    id: 'p2_r_006',
+    sectionId: 'p2_r1',
+    passageText: 'She has been ( ) English for five years.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['studied', 'studies', 'study', 'studying'],
+    correctIdx: 3,
+  ),
+  ReadingMockItem(
+    id: 'p2_r_007',
+    sectionId: 'p2_r1',
+    passageText: 'When I arrived at the platform, the train had already ( ).',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['leave', 'leaving', 'left', 'leaves'],
+    correctIdx: 2,
+  ),
+  ReadingMockItem(
+    id: 'p2_r_008',
+    sectionId: 'p2_r1',
+    passageText: 'I met a writer ( ) novels are famous around the world.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['who', 'whose', 'whom', 'which'],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: 'p2_r_009',
+    sectionId: 'p2_r1',
+    passageText: 'This is the town ( ) I grew up.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['where', 'which', 'that', 'when'],
+    correctIdx: 0,
+  ),
+  ReadingMockItem(
+    // Reworded: "repaired ... cannot cross" was a semantic contradiction
+    // (adversarial audit). "closed" makes meaning coherent, same passive-
+    // present-perfect grammar point. Key moved to idx3 (de-cycle, see below).
+    id: 'p2_r_010',
+    sectionId: 'p2_r1',
+    passageText: 'The old bridge ( ) since last year, so we cannot cross it.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['closed', 'is closing', 'closes', 'has been closed'],
+    correctIdx: 3,
+  ),
+  ReadingMockItem(
+    id: 'p2_r_011',
+    sectionId: 'p2_r1',
+    passageText: 'The sad ending of the movie made everyone ( ).',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['to cry', 'crying', 'cry', 'cried'],
+    correctIdx: 2,
+  ),
+  ReadingMockItem(
+    id: 'p2_r_012',
+    sectionId: 'p2_r1',
+    passageText: 'The ( ) you practice, the better you will become.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['most', 'more', 'many', 'much'],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: 'p2_r_013',
+    sectionId: 'p2_r1',
+    passageText: 'This box is too heavy ( ) carry by myself.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['that', 'for', 'to', 'so'],
+    correctIdx: 2,
+  ),
+  ReadingMockItem(
+    id: 'p2_r_014',
+    sectionId: 'p2_r1',
+    passageText: 'Please call me ( ) you arrive at the airport.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['as long as', 'as soon as', 'even if', 'in case'],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: 'p2_r_015',
+    sectionId: 'p2_r1',
+    passageText: 'For your health, you should avoid ( ) too much sugar.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['eating', 'eat', 'to eat', 'ate'],
+    correctIdx: 0,
+  ),
+  ReadingMockItem(
+    id: 'p2_r_016',
+    sectionId: 'p2_r1',
+    passageText: 'The company decided to ( ) a new smartphone next spring.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['lend', 'lock', 'lift', 'launch'],
+    correctIdx: 3,
+  ),
+  ReadingMockItem(
+    id: 'p2_r_017',
+    sectionId: 'p2_r1',
+    passageText: 'The new medicine had a positive ( ) on her health.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['effect', 'affect', 'cause', 'reason'],
+    correctIdx: 0,
+  ),
+  // ── 大問2 会話文の文空所補充 (conversation response) ──────────────────────
+  ReadingMockItem(
+    id: 'p2_r_018',
+    sectionId: 'p2_r2',
+    passageText:
+        'A: Could you tell me how to get to the museum?  B: ( )',
+    questionText: 'Choose the best response.',
+    choices: [
+      'Yes, I am a student.',
+      'Sure, go straight and turn left.',
+      'No, I do not like it.',
+      'It was yesterday.',
+    ],
+    correctIdx: 1,
+  ),
+  // ── 大問3 長文の内容一致選択 (passage comprehension) ──────────────────────
+  ReadingMockItem(
+    id: 'p2_r_019',
+    sectionId: 'p2_r3',
+    passageText:
+        'Volunteering has many benefits. It helps people in need, and it also '
+        'gives volunteers a chance to learn new skills and meet new people '
+        'from different backgrounds.',
+    questionText: 'According to the passage, what is one benefit for volunteers?',
+    choices: [
+      'They earn high salaries.',
+      'They get free food.',
+      'They can learn new skills.',
+      'They can travel abroad.',
+    ],
+    correctIdx: 2,
   ),
 ];
 
