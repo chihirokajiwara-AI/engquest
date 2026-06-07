@@ -205,6 +205,8 @@ void main() {
     await _settle(tester);
     final cta = find.byIcon(Icons.fact_check_outlined);
     expect(cta, findsOneWidget);
+    await tester.ensureVisible(cta); // 3rd CTA — scroll into view before tapping
+    await tester.pumpAndSettle();
     await tester.tap(cta);
     await tester.pumpAndSettle();
     expect(find.byType(ExamPracticeScreen), findsOneWidget);
