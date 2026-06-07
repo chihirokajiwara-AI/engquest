@@ -18,18 +18,34 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:engquest/core/models/progress_data.dart';
 
 class FirestoreProgressRepository {
-  final FirebaseFirestore _db;
+  // Lazily resolved so constructing the repository never touches
+  // FirebaseFirestore.instance, which throws when Firebase failed to
+  // initialize (offline/placeholder keys). Every read/write below returns
+  // null / falls back on error, so a lazy throw degrades gracefully rather
+  // than blanking the Parent Dashboard at construction.
+  final FirebaseFirestore? _injectedDb;
+  FirebaseFirestore? _dbCache;
 
   FirestoreProgressRepository({FirebaseFirestore? firestore})
-      : _db = firestore ?? FirebaseFirestore.instance {
-    _configureOfflinePersistence();
+      : _injectedDb = firestore;
+
+  /// Resolves (and memoizes) the Firestore instance on first use, configuring
+  /// offline persistence once. May throw if Firebase is unavailable — callers
+  /// wrap usage in try/catch and fall back to mock data.
+  FirebaseFirestore get _db {
+    final cached = _dbCache;
+    if (cached != null) return cached;
+    final db = _injectedDb ?? FirebaseFirestore.instance;
+    _dbCache = db;
+    _configureOfflinePersistence(db);
+    return db;
   }
 
   // ── Offline persistence ───────────────────────────────────────────────────
 
-  void _configureOfflinePersistence() {
+  void _configureOfflinePersistence(FirebaseFirestore db) {
     try {
-      _db.settings = const Settings(
+      db.settings = const Settings(
         persistenceEnabled: true,
         cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
       );

@@ -55,10 +55,18 @@ class XpAwardResult {
 // ── XpService ─────────────────────────────────────────────────────────────────
 
 class XpService {
-  final FirebaseFirestore _db;
+  // Lazily resolved so constructing this service never touches
+  // FirebaseFirestore.instance — which throws when Firebase failed to
+  // initialize (e.g. demo/offline with placeholder keys). All _db usages
+  // below are inside try/catch or async-with-catchError, so a lazy throw on
+  // offline access degrades gracefully instead of blanking the screen.
+  final FirebaseFirestore? _injectedDb;
+  FirebaseFirestore? _dbCache;
 
-  XpService({FirebaseFirestore? firestore})
-      : _db = firestore ?? FirebaseFirestore.instance;
+  XpService({FirebaseFirestore? firestore}) : _injectedDb = firestore;
+
+  FirebaseFirestore get _db =>
+      _dbCache ??= (_injectedDb ?? FirebaseFirestore.instance);
 
   // ── In-memory cache ────────────────────────────────────────────────────────
 

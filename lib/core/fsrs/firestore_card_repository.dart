@@ -38,19 +38,35 @@ import 'fsrs_card_repository.dart';
 /// final repo = FirestoreFsrsCardRepository(firestore: mockFirestore);
 /// ```
 class FirestoreFsrsCardRepository implements FsrsCardRepository {
-  final FirebaseFirestore _db;
+  // Lazily resolved so constructing the repository never touches
+  // FirebaseFirestore.instance, which throws when Firebase failed to
+  // initialize (offline/placeholder keys). Every _db usage below is inside a
+  // try/catch that falls back to [_fallback], so a lazy throw degrades to the
+  // in-memory repo rather than blanking the Battle screen at construction.
+  final FirebaseFirestore? _injectedDb;
+  FirebaseFirestore? _dbCache;
   final InMemoryFsrsCardRepository _fallback = InMemoryFsrsCardRepository();
 
   FirestoreFsrsCardRepository({FirebaseFirestore? firestore})
-      : _db = firestore ?? FirebaseFirestore.instance {
-    _configureOfflinePersistence();
+      : _injectedDb = firestore;
+
+  /// Resolves (and memoizes) the Firestore instance on first use, configuring
+  /// offline persistence once. May throw if Firebase is unavailable — callers
+  /// wrap usage in try/catch and fall back to [_fallback].
+  FirebaseFirestore get _db {
+    final cached = _dbCache;
+    if (cached != null) return cached;
+    final db = _injectedDb ?? FirebaseFirestore.instance;
+    _dbCache = db;
+    _configureOfflinePersistence(db);
+    return db;
   }
 
   // ── Offline persistence ───────────────────────────────────────────────────
 
-  void _configureOfflinePersistence() {
+  void _configureOfflinePersistence(FirebaseFirestore db) {
     try {
-      _db.settings = const Settings(
+      db.settings = const Settings(
         persistenceEnabled: true,
         cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
       );
@@ -139,18 +155,19 @@ class FirestoreFsrsCardRepository implements FsrsCardRepository {
     const batchLimit = 500;
     for (var offset = 0; offset < cards.length; offset += batchLimit) {
       final chunk = cards.skip(offset).take(batchLimit).toList();
-      final batch = _db.batch();
-      for (final card in chunk) {
-        batch.set(
-          _cardsCol(userId).doc(card.vocabId),
-          _toFirestore(card),
-          SetOptions(merge: true),
-        );
-      }
       try {
+        final batch = _db.batch();
+        for (final card in chunk) {
+          batch.set(
+            _cardsCol(userId).doc(card.vocabId),
+            _toFirestore(card),
+            SetOptions(merge: true),
+          );
+        }
         await batch.commit();
       } catch (_) {
-        // Batch queued offline; will sync when connectivity restored.
+        // Firestore unavailable or batch queued offline; the in-memory
+        // fallback above already holds the data, so this is non-fatal.
       }
     }
   }

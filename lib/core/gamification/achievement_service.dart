@@ -24,10 +24,17 @@ import 'package:flutter/foundation.dart';
 import 'achievement.dart';
 
 class AchievementService {
-  final FirebaseFirestore _db;
+  // Lazily resolved — see XpService for the rationale. Constructing this
+  // service must never touch FirebaseFirestore.instance, which throws when
+  // Firebase failed to initialize (offline/placeholder keys). All _db usages
+  // are guarded, so a lazy throw degrades gracefully.
+  final FirebaseFirestore? _injectedDb;
+  FirebaseFirestore? _dbCache;
 
-  AchievementService({FirebaseFirestore? firestore})
-      : _db = firestore ?? FirebaseFirestore.instance;
+  AchievementService({FirebaseFirestore? firestore}) : _injectedDb = firestore;
+
+  FirebaseFirestore get _db =>
+      _dbCache ??= (_injectedDb ?? FirebaseFirestore.instance);
 
   // ── In-memory cache ──────────────────────────────────────────────────────
   Map<String, AchievementState>? _cache;

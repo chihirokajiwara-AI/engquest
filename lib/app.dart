@@ -280,6 +280,27 @@ ThemeData _dqTheme() {
 ///
 /// On onboarding completion, [OnboardingResult] is persisted via
 /// [OnboardingStorage.save] and the user is forwarded to the world map.
+/// Every `?preview=<name>` route name, in switch order. Kept beside
+/// [_previewFor] so the offline-render smoke test (test/smoke/preview_routes_
+/// offline_test.dart) can assert EVERY route renders without Firebase — the
+/// structural guard against the blank-grey-screen defect class (task #24).
+@visibleForTesting
+const List<String> kPreviewRouteNames = [
+  'title', 'onboarding', 'placement', 'worldmap', 'home', 'questmap',
+  'silentbattle', 'silentbattle4', 'prologue', 'prologue3', 'prologue4',
+  'prologue5', 'explore', 'explore4', 'explore3', 'explorepre2',
+  'explorepre2plus', 'explore2', 'explorepre1', 'mock', 'mockpre2plus',
+  'quest', 'quest5t', 'quest5', 'quest5q', 'quest5c', 'quest4', 'quest3',
+  'quest2', 'battle', 'dialog', 'voice', 'exam', 'writing', 'writing2',
+  'writingp1', 'listening', 'listening4', 'listening3', 'listeningp2',
+  'kotobahome', 'passmeter', 'passmetermissing', 'speaking', 'speakingconsent',
+  'listening2', 'achievements', 'parent',
+];
+
+/// Test-visible wrapper for the private preview harness.
+@visibleForTesting
+Widget previewWidgetForTest(String? name) => _previewFor(name);
+
 /// Design-audit harness: `?preview=<name>` renders one screen in isolation so
 /// every page can be screenshotted. Returns the normal entry point otherwise.
 Widget _previewFor(String? name) {
