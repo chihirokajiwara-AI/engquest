@@ -5,7 +5,7 @@
 // command windows. Replaces the bright pastel card UI.
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:engquest/core/ui/app_fonts.dart';
 
 // ── Palette ──
 const dqNight0 = Color(0xFF0A0E24);
@@ -17,7 +17,7 @@ const dqGoldDeep = Color(0xFFB8923C);
 const dqInk = Color(0xFFEDE3C8);
 
 TextStyle dqText({double size = 16, FontWeight w = FontWeight.w600, Color color = Colors.white, double spacing = 0.5}) =>
-    GoogleFonts.notoSerifJp(
+    notoSerifJp(
       color: color,
       fontSize: size,
       fontWeight: w,
@@ -106,7 +106,7 @@ class DqDialogBox extends StatelessWidget {
                 border: Border.all(color: dqBorder, width: 1.5),
               ),
               child: Text(speaker!,
-                  style: GoogleFonts.notoSerifJp(
+                  style: notoSerifJp(
                       color: const Color(0xFF2A1C00), fontSize: 13, fontWeight: FontWeight.w800)),
             ),
           ),
@@ -197,7 +197,7 @@ class DqButton extends StatelessWidget {
           boxShadow: onTap == null ? null : [BoxShadow(color: dqGoldDeep.withAlpha(120), blurRadius: 14)],
         ),
         child: Text(label,
-            style: GoogleFonts.notoSerifJp(
+            style: notoSerifJp(
                 color: const Color(0xFF2A1C00), fontSize: 17, fontWeight: FontWeight.w800, letterSpacing: 2)),
       ),
     );
@@ -405,7 +405,7 @@ class DqReplayButton extends StatelessWidget {
             const Text('🔊', style: TextStyle(fontSize: 26)),
             const SizedBox(width: 10),
             Text(label,
-                style: GoogleFonts.notoSerifJp(
+                style: notoSerifJp(
                     color: const Color(0xFF2A1C00),
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
@@ -455,7 +455,7 @@ class PhonicsLetterCard extends StatelessWidget {
             boxShadow: [BoxShadow(color: dqGold.withAlpha(90), blurRadius: 20)],
           ),
           child: Text(glyph,
-              style: GoogleFonts.notoSerifJp(
+              style: notoSerifJp(
                   color: Colors.white, fontSize: 96, fontWeight: FontWeight.w800)),
         ),
         const SizedBox(height: 16),
@@ -540,7 +540,7 @@ class BlendWordCard extends StatelessWidget {
             : null,
       ),
       child: Text(letter,
-          style: GoogleFonts.notoSerifJp(
+          style: notoSerifJp(
               color: active ? const Color(0xFFCFF5CF) : Colors.white,
               fontSize: 44,
               fontWeight: FontWeight.w800)),

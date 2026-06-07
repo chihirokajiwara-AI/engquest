@@ -4,7 +4,7 @@
 // → beveled crest logo → cursor menu. Verified against the DQ3 reference.
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:engquest/core/ui/app_fonts.dart';
 
 class QuestTitleScreen extends StatelessWidget {
   /// Called when the player chooses はじめる.
@@ -130,7 +130,7 @@ class QuestTitleScreen extends StatelessWidget {
               _menu(),
               const Spacer(flex: 2),
               Text('© A-KEN QUEST  英検学習RPG',
-                  style: GoogleFonts.notoSerifJp(color: _ink.withAlpha(140), fontSize: 9, letterSpacing: 1)),
+                  style: notoSerifJp(color: _ink.withAlpha(140), fontSize: 9, letterSpacing: 1)),
               const SizedBox(height: 8),
             ],
           ),
@@ -161,7 +161,7 @@ class QuestTitleScreen extends StatelessWidget {
 
   // beveled blue+white title (DQ-style: gradient fill, light top, dark outline)
   Widget _logo() {
-    final style = GoogleFonts.notoSerifJp(
+    final style = notoSerifJp(
       fontSize: 42,
       fontWeight: FontWeight.w900,
       letterSpacing: 2,
@@ -200,7 +200,7 @@ class QuestTitleScreen extends StatelessWidget {
           border: Border.all(color: _gold, width: 1),
         ),
         child: Text('英検（えいけん）の ぼうけん',
-            style: GoogleFonts.notoSerifJp(
+            style: notoSerifJp(
                 color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700, letterSpacing: 2)),
       );
 
@@ -241,7 +241,7 @@ class QuestTitleScreen extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Text(label,
                     maxLines: 1,
-                    style: GoogleFonts.notoSerifJp(
+                    style: notoSerifJp(
                       color: selected ? Colors.white : _ink.withAlpha(190),
                       fontSize: 18,
                       fontWeight: FontWeight.w700,

@@ -20,7 +20,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:engquest/core/ui/app_fonts.dart';
 
 import '../../core/dialog/claude_client.dart';
 import '../quest/ui/dq_ui.dart';
@@ -833,7 +833,7 @@ class _WritingPracticeScreenState extends State<WritingPracticeScreen> {
                     onChanged: (_) => setState(() {}),
                     maxLines: 8,
                     minLines: 6,
-                    style: GoogleFonts.notoSerif(
+                    style: notoSerif(
                       color: Colors.white,
                       fontSize: 15,
                       height: 1.7,
@@ -917,7 +917,7 @@ class _WritingPracticeScreenState extends State<WritingPracticeScreen> {
                         children: [
                           Text(
                             '${result.total}',
-                            style: GoogleFonts.notoSerifJp(
+                            style: notoSerifJp(
                               color: dqGold,
                               fontSize: 48,
                               fontWeight: FontWeight.w900,
@@ -1129,7 +1129,7 @@ class _TaskTypeBadge extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: GoogleFonts.notoSerifJp(
+        style: notoSerifJp(
           color: color,
           fontSize: 13,
           fontWeight: FontWeight.w700,
@@ -1239,7 +1239,7 @@ class _RubricScoreRow extends StatelessWidget {
               ),
               child: Text(
                 '$i',
-                style: GoogleFonts.notoSerifJp(
+                style: notoSerifJp(
                   color: score >= i
                       ? const Color(0xFF1A2244)
                       : dqInk.withAlpha(80),

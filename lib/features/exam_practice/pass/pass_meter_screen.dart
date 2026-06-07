@@ -27,7 +27,7 @@
 // NO dart:io. No Firebase. No network. (R4)
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:engquest/core/ui/app_fonts.dart';
 
 import '../../quest/ui/dq_ui.dart';
 import 'cse_model.dart';
@@ -172,7 +172,7 @@ class _PassHero extends StatelessWidget {
           Text(
             '${pct.toStringAsFixed(0)}%',
             textAlign: TextAlign.center,
-            style: GoogleFonts.notoSerifJp(
+            style: notoSerifJp(
               color: _meterColor(pct),
               fontSize: 64,
               fontWeight: FontWeight.w900,

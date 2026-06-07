@@ -72,3 +72,12 @@ flutter:
     - assets/art/scenes/
     - assets/art/npc/
     - assets/art/scenes_layton/
+
+  # Bundled Japanese serif — replaces google_fonts' RUNTIME CDN fetch, which did
+  # not reliably land on the demo and left every Japanese glyph as tofu (□). One
+  # variable TTF carries all weights (w100–w900 via the `wght` axis), so
+  # TextStyle.fontWeight is honored from the single file. See lib/core/ui/app_fonts.dart.
+  fonts:
+    - family: Noto Serif JP
+      fonts:
+        - asset: assets/fonts/NotoSerifJP.ttf

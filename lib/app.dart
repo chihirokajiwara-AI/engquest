@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:engquest/core/ui/app_fonts.dart';
 import 'package:engquest/core/config/flavor_config.dart';
 import 'package:engquest/features/world_map/world_map_screen.dart';
 import 'package:engquest/features/battle/battle_screen.dart';
@@ -224,7 +224,7 @@ ThemeData _dqTheme() {
   // Noto Serif JP applied over the dark base text theme, recoloured to cream
   // ink so default Material text (dialogs, tooltips) reads on the night field.
   final base = ThemeData.dark(useMaterial3: true);
-  final textTheme = GoogleFonts.notoSerifJpTextTheme(base.textTheme).apply(
+  final textTheme = notoSerifJpTextTheme(base.textTheme).apply(
     bodyColor: dqInk,
     displayColor: dqInk,
   );
