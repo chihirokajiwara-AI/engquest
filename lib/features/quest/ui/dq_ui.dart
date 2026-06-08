@@ -143,30 +143,43 @@ class DqChoice extends StatelessWidget {
       border = const Color(0xFFE89090);
       fill = const Color(0xFF3A1414).withAlpha(235);
     }
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 9),
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
-          decoration: BoxDecoration(
-            color: fill,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: border, width: 2),
-          ),
-          child: Row(
-            children: [
-              SizedBox(
-                width: 22,
-                child: showCursor ? const Icon(Icons.play_arrow, color: dqGold, size: 18) : null,
-              ),
-              Expanded(child: Text(label, style: dqText(size: 16))),
-              if (state == DqChoiceState.correct)
-                const Icon(Icons.check, color: Color(0xFF8BE08B), size: 20)
-              else if (state == DqChoiceState.wrong)
-                const Icon(Icons.close, color: Color(0xFFE89090), size: 20),
-            ],
+    // Screen-reader label: the choice text + its answered state, so a child
+    // using VoiceOver/TalkBack hears "<choice>, せいかい/ふせいかい, ボタン".
+    final semanticsLabel = state == DqChoiceState.correct
+        ? '$label、せいかい'
+        : state == DqChoiceState.wrong
+            ? '$label、ふせいかい'
+            : label;
+    return Semantics(
+      button: true,
+      label: semanticsLabel,
+      onTap: onTap,
+      excludeSemantics: true,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 9),
+        child: GestureDetector(
+          onTap: onTap,
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+            decoration: BoxDecoration(
+              color: fill,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: border, width: 2),
+            ),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 22,
+                  child: showCursor ? const Icon(Icons.play_arrow, color: dqGold, size: 18) : null,
+                ),
+                Expanded(child: Text(label, style: dqText(size: 16))),
+                if (state == DqChoiceState.correct)
+                  const Icon(Icons.check, color: Color(0xFF8BE08B), size: 20)
+                else if (state == DqChoiceState.wrong)
+                  const Icon(Icons.close, color: Color(0xFFE89090), size: 20),
+              ],
+            ),
           ),
         ),
       ),
@@ -182,7 +195,13 @@ class DqButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return Semantics(
+      button: true,
+      enabled: onTap != null,
+      label: label,
+      onTap: onTap,
+      excludeSemantics: true,
+      child: GestureDetector(
       onTap: onTap,
       child: Container(
         width: double.infinity,
@@ -199,6 +218,7 @@ class DqButton extends StatelessWidget {
         child: Text(label,
             style: notoSerifJp(
                 color: const Color(0xFF2A1C00), fontSize: 17, fontWeight: FontWeight.w800, letterSpacing: 2)),
+      ),
       ),
     );
   }
@@ -334,7 +354,12 @@ class DqTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final accent = color ?? dqGold;
-    return Padding(
+    return Semantics(
+      button: true,
+      label: '$jp $en',
+      onTap: onTap,
+      excludeSemantics: true,
+      child: Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: GestureDetector(
         onTap: onTap,
@@ -370,6 +395,7 @@ class DqTile extends StatelessWidget {
           ),
         ),
       ),
+      ),
     );
   }
 }
@@ -389,7 +415,12 @@ class DqReplayButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return Semantics(
+      button: true,
+      label: label,
+      onTap: onTap,
+      excludeSemantics: true,
+      child: GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
@@ -413,6 +444,7 @@ class DqReplayButton extends StatelessWidget {
                     letterSpacing: 1)),
           ],
         ),
+      ),
       ),
     );
   }
@@ -584,7 +616,22 @@ class AudioOptionButton extends StatelessWidget {
     // Body tap = choose (and play, so the child hears their pick). The leading
     // 🔊 is its OWN tap target that only auditions the clip — so a learner can
     // hear each option before committing (no accidental wrong-answer on a listen).
-    return Padding(
+    final semanticsLabel = state == DqChoiceState.correct
+        ? '$label、せいかい'
+        : state == DqChoiceState.wrong
+            ? '$label、ふせいかい'
+            : '$label。きくこともできます';
+    return Semantics(
+      button: true,
+      label: semanticsLabel,
+      onTap: (onAudio == null && onChoose == null)
+          ? null
+          : () {
+              onAudio?.call();
+              onChoose?.call();
+            },
+      excludeSemantics: true,
+      child: Padding(
       padding: const EdgeInsets.only(bottom: 9),
       child: GestureDetector(
         onTap: (onAudio == null && onChoose == null)
@@ -621,6 +668,7 @@ class AudioOptionButton extends StatelessWidget {
             ],
           ),
         ),
+      ),
       ),
     );
   }
