@@ -431,7 +431,8 @@ class _PassCelebration extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Text('🎉', style: TextStyle(fontSize: 40)),
+          const Icon(Icons.workspace_premium_rounded,
+              color: Color(0xFF8BE08B), size: 42),
           const SizedBox(height: 8),
           Text(
             '$gradeLabel ごうかくけん！',

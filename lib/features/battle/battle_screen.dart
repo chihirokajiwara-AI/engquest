@@ -765,7 +765,7 @@ class _BattleScreenState extends State<BattleScreen>
             icon: const Icon(Icons.arrow_back, color: dqInk),
             onPressed: () => Navigator.maybePop(context),
           ),
-          Text('⚔', style: dqText(size: 20, color: dqGold)),
+          const Icon(Icons.style_rounded, color: dqGold, size: 22),
           const SizedBox(width: 8),
           dqBilingual('たんごバトル', 'Word Battle',
               jpSize: 17, jpColor: dqGold, stacked: true),
@@ -1066,7 +1066,8 @@ class _BattleScreenState extends State<BattleScreen>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('🎉', style: TextStyle(fontSize: 64)),
+                const Icon(Icons.military_tech_rounded,
+                    color: dqGold, size: 64),
                 const SizedBox(height: 12),
                 dqBilingual(
                   'セッション完了！',
@@ -1118,7 +1119,7 @@ class _BattleScreenState extends State<BattleScreen>
                     _StatTile(
                       label: '平均評価 / Avg. grade',
                       value: avgGrade.toStringAsFixed(2),
-                      icon: '⭐',
+                      icon: Icons.grade_rounded,
                     ),
                     const Divider(color: dqGoldDeep, height: 18),
                     _StatTile(
@@ -1126,7 +1127,8 @@ class _BattleScreenState extends State<BattleScreen>
                       value: total > 0
                           ? '${(((counts[Grade.good]! + counts[Grade.easy]!) / total) * 100).round()}%'
                           : '—',
-                      icon: '✅',
+                      icon: Icons.check_circle_rounded,
+                      iconColor: const Color(0xFF8BE08B),
                     ),
                   ],
                 ),
@@ -1486,12 +1488,14 @@ class _SummaryRow extends StatelessWidget {
 class _StatTile extends StatelessWidget {
   final String label;
   final String value;
-  final String icon;
+  final IconData icon;
+  final Color iconColor;
 
   const _StatTile({
     required this.label,
     required this.value,
     required this.icon,
+    this.iconColor = dqGold,
   });
 
   @override
@@ -1500,7 +1504,7 @@ class _StatTile extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         children: [
-          Text(icon, style: const TextStyle(fontSize: 18)),
+          Icon(icon, color: iconColor, size: 19),
           const SizedBox(width: 10),
           Expanded(
             child: Text(label, style: dqText(size: 13, color: dqInk)),

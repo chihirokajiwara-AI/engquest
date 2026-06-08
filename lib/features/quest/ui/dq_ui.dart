@@ -402,7 +402,8 @@ class DqReplayButton extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text('🔊', style: TextStyle(fontSize: 26)),
+            const Icon(Icons.volume_up_rounded,
+                color: Color(0xFF2A1C00), size: 24),
             const SizedBox(width: 10),
             Text(label,
                 style: notoSerifJp(
@@ -607,7 +608,7 @@ class AudioOptionButton extends StatelessWidget {
                 onTap: onAudio,
                 child: const Padding(
                   padding: EdgeInsets.only(right: 12),
-                  child: Text('🔊', style: TextStyle(fontSize: 22)),
+                  child: Icon(Icons.volume_up_rounded, color: dqGold, size: 22),
                 ),
               ),
               Expanded(
