@@ -240,7 +240,13 @@ const Map<String, EikenExamDef> kEikenExams = {
         nameJa: '筆記1: 短文の語句空所補充',
         nameEn: 'Reading 1: Vocabulary/Grammar',
         type: ExamSectionType.vocabGrammar,
-        questionCount: 20,
+        // 2024 reform: 準2級 大問1 cut 20→15 (reading total 37→29; the 長文空所
+        // 大問3 also dropped 5→2). The stale 20 was the pre-reform value — it
+        // over-served the vocab screen and contradicted this app's own mock
+        // reading target (29 = 15+5+2+7). Verified eiken.or.jp grade_p2 +
+        // eslclub 2024renewal, 2026-06-09. (The missing 長文空所=2 section is a
+        // separate #60 structural re-author.)
+        questionCount: 15,
         timeLimitMinutes: 12,
         description: '短い文の空所に入る適切な語句を4つの選択肢から選ぶ',
       ),
@@ -408,9 +414,14 @@ const Map<String, EikenExamDef> kEikenExams = {
         nameJa: '筆記1: 短文の語句空所補充',
         nameEn: 'Reading 1: Vocabulary/Grammar',
         type: ExamSectionType.vocabGrammar,
-        questionCount: 25,
+        // 2024 reform: 準1級 大問1 cut 25→18 (14 単語 + 4 熟語); reading total
+        // 41→31. The hub tile shows this count AND the vocab screen generates
+        // exactly this many items, so the stale 25 over-served + misstated the
+        // flagship grade's exam. Verified eiken.or.jp/obunsha 2024renewal,
+        // 2026-06. (大問3 10→7 still pending — bank is 2×5, needs a re-author.)
+        questionCount: 18,
         timeLimitMinutes: 15,
-        description: '短い文の空所に入る適切な語句を4つの選択肢から選ぶ',
+        description: '短い文の空所に入る適切な語句を4つの選択肢から選ぶ（単語14・熟語4）',
       ),
       ExamSection(
         id: 'p1_r2',

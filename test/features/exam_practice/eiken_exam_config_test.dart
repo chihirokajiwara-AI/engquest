@@ -30,4 +30,37 @@ void main() {
               '(was likely a 筆記-only / pre-reform value)');
     }
   });
+
+  // grade → official post-2024-reform 大問1 (短文の語句空所補充 / vocab) question
+  // count. The exam hub shows this number AND the vocab-cloze screen generates
+  // exactly this many items, so a stale value both misstates the real exam and
+  // over/under-serves practice. The 2024 reform cut 準1級 25→18, 2級 20→17,
+  // 準2級 20→15; 3/4/5級 大問1 unchanged at 15. Verified eiken.or.jp +
+  // 旺文社/eslclub 2024renewal (reading totals 準1 41→31, 2級 38→31, 準2 37→29;
+  // 準2 reconciles only as 15+5+2+7=29, matching this app's mock reading target),
+  // accessed 2026-06-09. 準2級プラス has no standalone 大問1 vocab section here.
+  const vocabQ1 = <String, int>{
+    '5': 15,
+    '4': 15,
+    '3': 15,
+    'pre2': 15,
+    '2': 17,
+    'pre1': 18,
+  };
+
+  test('大問1 (vocabGrammar) question count matches the official post-2024 spec',
+      () {
+    for (final entry in vocabQ1.entries) {
+      final def = kEikenExams[entry.key];
+      expect(def, isNotNull, reason: 'missing exam def for ${entry.key}');
+      final vocab = def!.sections
+          .where((s) => s.type == ExamSectionType.vocabGrammar)
+          .toList();
+      expect(vocab, isNotEmpty,
+          reason: '英検${entry.key} should have a 大問1 vocab section');
+      expect(vocab.first.questionCount, entry.value,
+          reason: '英検${entry.key} 大問1 should be ${entry.value}問 '
+              '(post-2024 reform; 準1級 was a stale pre-reform 25)');
+    }
+  });
 }
