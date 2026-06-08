@@ -36,9 +36,10 @@
 //   3級: 3部 = 30問
 //   準2級プラス/2級: 第1部15 (会話応答選択) + 第2部15 (文内容一致) = 30
 // Seed bank covers the VERIFIED per-grade 部 structure. Volume is being expanded
-// toward the real-exam per-part counts (#10): 3級 第1部 is at 10/10; the other
-// parts/grades remain at the initial ~4-item sample and are visible as shortfalls
-// in reading_pool_integrity_test (skip with the exact gap to target).
+// toward the real-exam per-part counts (#10): 英検3級 is COMPLETE at 10/10/10 = 30
+// (a full real-exam listening section); the other grades remain at the initial
+// ~4-item sample and are visible as shortfalls in reading_pool_integrity_test
+// (skip with the exact gap to target).
 
 class ListeningItem {
   final int part;
@@ -793,6 +794,134 @@ const _grade3Part2 = <ListeningItem>[
     ],
     correctIndex: 1,
   ),
+  // ── #10 volume expansion: 3級 第2部 4→10 (会話内容一致). Audio pending Kokoro;
+  //    keys in ALLOWED_MISSING. Content-QA'd 2026-06-09.
+  ListeningItem(
+    part: 2,
+    grade: '3',
+    audioKey: 'l3_p2_05.mp3',
+    transcripts: [
+      'A: How was your weekend trip to Kyoto?',
+      'B: It was great, but the trains were really crowded.',
+      'A: Did you visit many temples?',
+      'B: Yes, we saw five in one day.',
+      'Question: How many temples did they visit?',
+    ],
+    questionType: ListeningQuestionType.dialogueContent,
+    question: 'How many temples did they visit?',
+    choices: [
+      'Two temples.',
+      'Three temples.',
+      'Five temples.',
+      'Ten temples.',
+    ],
+    correctIndex: 2,
+  ),
+  ListeningItem(
+    part: 2,
+    grade: '3',
+    audioKey: 'l3_p2_06.mp3',
+    transcripts: [
+      'A: I\'m thinking of buying a new bicycle.',
+      'B: Why? Is something wrong with your old one?',
+      'A: The brakes are broken, and it has become too small for me.',
+      'B: You should try the shop near the station.',
+      'Question: Why does the boy want a new bicycle?',
+    ],
+    questionType: ListeningQuestionType.dialogueContent,
+    question: 'Why does the boy want a new bicycle?',
+    choices: [
+      'His old one was stolen.',
+      'The brakes are broken and it is too small.',
+      'He wants a faster one for racing.',
+      'His friend gave him money for it.',
+    ],
+    correctIndex: 1,
+  ),
+  ListeningItem(
+    part: 2,
+    grade: '3',
+    audioKey: 'l3_p2_07.mp3',
+    transcripts: [
+      'A: Excuse me, I would like to return this shirt.',
+      'B: Sure. Is there a problem with it?',
+      'A: Yes, it is the wrong size. Do you have a larger one?',
+      'B: Let me check the storeroom.',
+      'Question: Why does the woman want to return the shirt?',
+    ],
+    questionType: ListeningQuestionType.dialogueContent,
+    question: 'Why does the woman want to return the shirt?',
+    choices: [
+      'It is the wrong color.',
+      'It is the wrong size.',
+      'It is damaged.',
+      'It was too expensive.',
+    ],
+    correctIndex: 1,
+  ),
+  ListeningItem(
+    part: 2,
+    grade: '3',
+    audioKey: 'l3_p2_08.mp3',
+    transcripts: [
+      'A: Did you hear that our school festival is next month?',
+      'B: Yes! Our class is going to run a food stall.',
+      'A: What are we going to sell?',
+      'B: We finally decided on takoyaki.',
+      'Question: What will the class sell at the festival?',
+    ],
+    questionType: ListeningQuestionType.dialogueContent,
+    question: 'What will the class sell at the festival?',
+    choices: [
+      'Drinks.',
+      'Takoyaki.',
+      'Ice cream.',
+      'Sandwiches.',
+    ],
+    correctIndex: 1,
+  ),
+  ListeningItem(
+    part: 2,
+    grade: '3',
+    audioKey: 'l3_p2_09.mp3',
+    transcripts: [
+      'A: You look excited. What happened?',
+      'B: I won first prize in the speech contest!',
+      'A: Congratulations! How did you prepare?',
+      'B: I practiced in front of my family every night.',
+      'Question: How did the girl prepare for the contest?',
+    ],
+    questionType: ListeningQuestionType.dialogueContent,
+    question: 'How did the girl prepare for the contest?',
+    choices: [
+      'She watched videos of other speeches.',
+      'She practiced in front of her family.',
+      'She took lessons from a teacher.',
+      'She wrote many different drafts.',
+    ],
+    correctIndex: 1,
+  ),
+  ListeningItem(
+    part: 2,
+    grade: '3',
+    audioKey: 'l3_p2_10.mp3',
+    transcripts: [
+      'A: Are you free this Saturday?',
+      'B: I have a piano lesson in the morning, but I am free after lunch.',
+      'A: Let\'s go to the new aquarium then.',
+      'B: Sounds good!',
+      'Question: When will they go to the aquarium?',
+    ],
+    questionType: ListeningQuestionType.dialogueContent,
+    question: 'When will they go to the aquarium?',
+    choices: [
+      'Saturday morning.',
+      'Saturday afternoon.',
+      'Sunday morning.',
+      'Friday evening.',
+    ],
+    correctIndex: 1,
+  ),
 ];
 
 const _grade3Part3 = <ListeningItem>[
@@ -870,6 +999,122 @@ const _grade3Part3 = <ListeningItem>[
       'At nine in the morning.',
       'At ten in the morning.',
       'At eleven in the morning.',
+    ],
+    correctIndex: 1,
+  ),
+  // ── #10 volume expansion: 3級 第3部 4→10 (文内容一致). Audio pending Kokoro;
+  //    keys in ALLOWED_MISSING. Content-QA'd 2026-06-09.
+  ListeningItem(
+    part: 3,
+    grade: '3',
+    audioKey: 'l3_p3_05.mp3',
+    transcripts: [
+      'Tom started a small vegetable garden behind his house last year. He grows '
+          'tomatoes, carrots, and beans. Every morning before school, he waters the '
+          'plants and checks if any vegetables are ready to pick.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'What does Tom do every morning before school?',
+    choices: [
+      'He sells vegetables at the market.',
+      'He waters the plants and checks them.',
+      'He cooks breakfast for his family.',
+      'He buys seeds at the garden store.',
+    ],
+    correctIndex: 1,
+  ),
+  ListeningItem(
+    part: 3,
+    grade: '3',
+    audioKey: 'l3_p3_06.mp3',
+    transcripts: [
+      'Welcome to the Central Library. Please remember that food and drinks are '
+          'not allowed inside. If you want to borrow books, you will need a library '
+          'card. The card is free for all city residents.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'What do you need in order to borrow books?',
+    choices: [
+      'A student ID.',
+      'A library card.',
+      'A reservation.',
+      'A small fee.',
+    ],
+    correctIndex: 1,
+  ),
+  ListeningItem(
+    part: 3,
+    grade: '3',
+    audioKey: 'l3_p3_07.mp3',
+    transcripts: [
+      'Last summer, our school held a charity event to help children in need. '
+          'Students sold handmade crafts and baked goods. We raised over fifty '
+          'thousand yen and sent it to a local children\'s home.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'What did the students do at the charity event?',
+    choices: [
+      'They cleaned a local park.',
+      'They sold crafts and baked goods.',
+      'They performed a concert.',
+      'They collected old clothes.',
+    ],
+    correctIndex: 1,
+  ),
+  ListeningItem(
+    part: 3,
+    grade: '3',
+    audioKey: 'l3_p3_08.mp3',
+    transcripts: [
+      'Attention, passengers. The 10:30 train to Osaka has been delayed by about '
+          'twenty minutes because of heavy rain. We are very sorry for the '
+          'inconvenience. Please wait on platform three.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'Why was the train delayed?',
+    choices: [
+      'There was an accident.',
+      'There was heavy rain.',
+      'There was a signal problem.',
+      'There were too many passengers.',
+    ],
+    correctIndex: 1,
+  ),
+  ListeningItem(
+    part: 3,
+    grade: '3',
+    audioKey: 'l3_p3_09.mp3',
+    transcripts: [
+      'Kenta loves playing soccer, but last month he hurt his leg during a game. '
+          'The doctor told him to rest for three weeks. Now he is better and can '
+          'play again with his team.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'Why couldn\'t Kenta play soccer last month?',
+    choices: [
+      'He was too busy with studying.',
+      'He hurt his leg during a game.',
+      'He moved to a new city.',
+      'His team was already full.',
+    ],
+    correctIndex: 1,
+  ),
+  ListeningItem(
+    part: 3,
+    grade: '3',
+    audioKey: 'l3_p3_10.mp3',
+    transcripts: [
+      'Thank you for visiting the art museum. The special exhibition on the second '
+          'floor closes at five o\'clock today. The museum shop on the first floor '
+          'will stay open until six.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'What time does the special exhibition close today?',
+    choices: [
+      'At four o\'clock.',
+      'At five o\'clock.',
+      'At six o\'clock.',
+      'At seven o\'clock.',
     ],
     correctIndex: 1,
   ),
