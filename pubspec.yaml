@@ -57,12 +57,14 @@ flutter:
     - assets/audio/phonics/
     - assets/audio/quiz/
     - assets/audio/listening/
-    - assets/audio/eiken5/
-    - assets/audio/eiken4/
-    - assets/audio/eiken3/
-    - assets/audio/eiken_pre2/
-    - assets/audio/eiken2/
-    - assets/audio/eiken_pre1/
+    # NOTE: per-word 英検 vocab MP3s (eiken5..eiken_pre1, ~21k files) are
+    # deliberately NOT bundled. They added ~21,184 of the AssetManifest's 23,266
+    # entries (a 1.3MB manifest fetched+parsed on EVERY cold start) and ~925MB to
+    # the web build — yet are never served live: the deploy excludes audio and the
+    # Google-TTS key is unconfigured, so TtsService already falls through to
+    # "unavailable". Bundling them was pure cold-start tax for zero live audio.
+    # When per-word pronunciation ships, serve it on demand (network/CDN), not as
+    # a bundled asset. Keeps quiz/phonics/listening/a1 (quest + exam + legacy).
     - assets/images/
     - assets/images/categories/
     - assets/content/

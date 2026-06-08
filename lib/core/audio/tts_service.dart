@@ -347,6 +347,13 @@ class TtsService {
 
   /// Try loading a pre-generated Kokoro TTS MP3 from bundled assets.
   /// Asset path: assets/audio/{grade}/{vocabId}_{sanitized_word}.mp3
+  ///
+  /// NOTE: the per-word 英検 grade dirs (eiken5..eiken_pre1) are intentionally
+  /// NOT bundled (see pubspec.yaml assets — they cost ~21k AssetManifest entries
+  /// / ~925MB for zero live audio). This lookup therefore 404s and falls through
+  /// to the API/unavailable path for those grades, which is the existing live
+  /// behaviour. When per-word pronunciation ships it should be served on demand
+  /// (network/CDN), not re-bundled. a1 + quiz + phonics + listening remain.
   Future<TtsAudioResult?> _loadBundledAsset(
       String vocabId, String word) async {
     final grade = _gradeFromVocabId(vocabId);
