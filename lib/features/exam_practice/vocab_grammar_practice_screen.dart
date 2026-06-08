@@ -16,6 +16,14 @@ import 'eiken_exam_config.dart';
 import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
 
+/// First WHOLE-WORD (\b-bounded), case-insensitive match of [word] in [sentence],
+/// or null. Boundary-anchored so an inflected form never matches a stem fragment
+/// ("ant" must NOT match inside "ants") — used to avoid highlighting a fragment
+/// in the post-answer example sentence. Top-level + public so it is unit-testable.
+RegExpMatch? wholeWordMatch(String sentence, String word) =>
+    RegExp('\\b${RegExp.escape(word)}\\b', caseSensitive: false)
+        .firstMatch(sentence);
+
 class VocabGrammarPracticeScreen extends StatefulWidget {
   const VocabGrammarPracticeScreen({
     super.key,
@@ -110,11 +118,14 @@ class _VocabGrammarPracticeScreenState
     return '(        ) — $sentence';
   }
 
-  /// Split [sentence] at the first case-insensitive occurrence of [word] and
-  /// emphasise the word (bold + amber) so the child sees the answer in context.
+  /// Split [sentence] at the first WHOLE-WORD occurrence of [word] and emphasise
+  /// it (bold + amber) so the child sees the answer in context. Word boundaries
+  /// (\b) are required so an inflected form never highlights a fragment — e.g.
+  /// "ant" in "ants" must NOT show "[ant]s". When there is no whole-word match
+  /// (inflected/underscore-key forms), the sentence is shown plainly, unhighlighted
+  /// — honest context without a misleading partial highlight.
   List<TextSpan> _sentenceSpans(String sentence, String word) {
-    final match =
-        RegExp(RegExp.escape(word), caseSensitive: false).firstMatch(sentence);
+    final match = wholeWordMatch(sentence, word);
     if (match == null) {
       return [TextSpan(text: sentence)];
     }
@@ -405,9 +416,11 @@ class _VocabGrammarPracticeScreenState
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
+                          // Underscore keys (ice_cream, thank_you) are storage
+                          // keys, not spelling — show them spaced for the child.
                           q.word.reading.isNotEmpty
-                              ? '${q.word.word}（${q.word.reading}）— ${q.word.jpTranslation}'
-                              : '${q.word.word} — ${q.word.jpTranslation}',
+                              ? '${q.word.word.replaceAll('_', ' ')}（${q.word.reading}）— ${q.word.jpTranslation}'
+                              : '${q.word.word.replaceAll('_', ' ')} — ${q.word.jpTranslation}',
                           style: const TextStyle(
                             color: Color(0xFF263238),
                             fontSize: 14,

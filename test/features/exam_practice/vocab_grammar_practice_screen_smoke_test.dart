@@ -26,6 +26,28 @@ void main() {
   setUpAll(() => GoogleFonts.config.allowRuntimeFetching = false);
   setUp(() => SharedPreferences.setMockInitialValues({}));
 
+  // The example-sentence highlight must never emphasise a fragment of an
+  // inflected form (adversarial-audit fix: "ant" inside "ants").
+  group('wholeWordMatch (#77 highlight honesty)', () {
+    test('matches a standalone word', () {
+      final m = wholeWordMatch('The cat sat down.', 'cat');
+      expect(m, isNotNull);
+      expect(m!.start, 4);
+    });
+    test('does NOT match a stem inside an inflected form', () {
+      expect(wholeWordMatch('A line of ants moved.', 'ant'), isNull);
+      expect(wholeWordMatch('She teaches me daily.', 'teach'), isNull);
+      expect(wholeWordMatch('The fastest animal.', 'fast'), isNull);
+    });
+    test('case-insensitive whole-word match', () {
+      expect(wholeWordMatch('Run fast!', 'fast'), isNotNull);
+      expect(wholeWordMatch('FAST and slow', 'fast'), isNotNull);
+    });
+    test('no match when the word is absent (underscore-key form)', () {
+      expect(wholeWordMatch('I like ice cream.', 'ice_cream'), isNull);
+    });
+  });
+
   group('VocabGrammarPracticeScreen — smoke tests (R3)', () {
     testWidgets('grade 5 (has vocab DB) — loads real questions, no exception',
         (tester) async {
