@@ -17,6 +17,7 @@ import '../../core/audio/audio_cue_service.dart';
 import '../../core/gamification/hint_coin_service.dart';
 import '../../core/sound/sound_service.dart';
 import '../quest/ui/dq_ui.dart';
+import '../home/streak_service.dart';
 import 'hotspot.dart';
 import 'nazo_screen.dart';
 
@@ -181,6 +182,12 @@ class _SceneViewState extends State<SceneView> {
     if (result != null && result.solved) {
       setState(() => _solved[idx] = true);
       _sound.playCorrect();
+      // Front-door 英検 puzzle solved → feed the home engagement spine (streak +
+      // daily-goal), same as exam practice. Before this, scene play earned ZERO
+      // streak/goal credit. (合格率 is NOT recorded here: a ナゾ allows retries so
+      // NazoResult.solved cannot give an honest first-try correct/total — that
+      // needs a separate change, see backlog, to avoid inflating 合格率.)
+      recordExamHabit(1);
     }
   }
 
