@@ -345,42 +345,59 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
                   const Icon(Icons.chevron_right, color: dqGold, size: 22),
                 ],
               )
-            : Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  // Compact arc gauge — the same designed meter as the full
-                  // PassMeter, so the 合格率 reads as one thing everywhere (#68).
-                  PassGauge(
-                    pct: est.readinessPct,
-                    color: est.isPredictedPass
-                        ? const Color(0xFF8BE08B)
-                        : dqGold,
-                    size: 66,
-                    stroke: 7,
-                    fontSize: 18,
-                  ),
-                  const SizedBox(width: 14),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          est.isPredictedPass
-                              ? 'ごうかくけん！'
-                              : 'ごうかくまで あと ${est.pointsNeeded} ポイント',
-                          style: dqText(
-                              size: 13, w: FontWeight.w700, color: dqInk),
-                        ),
-                        const SizedBox(height: 4),
-                        Text('タップで くわしく / Details',
-                            style: dqText(size: 11, color: dqGold)),
-                      ],
-                    ),
-                  ),
-                  const Icon(Icons.chevron_right, color: dqGold, size: 22),
-                ],
-              ),
+            : _buildReadinessData(est),
       ),
+    );
+  }
+
+  // Honesty (audit 2026-06-08): a 5級 child who maxes R+L on a handful of items
+  // would otherwise see a confident green 100% with no basis — reading as
+  // fabricated to a paying parent. Below a minimum sample we show a MUTED
+  // "still diagnosing" gauge with the answers-remaining count; only above it do
+  // we show the gold/green confident state + the basis. Mirrors the PassMeter's
+  // #68 basis disclosure.
+  static const int _kReadinessMinItems = 20;
+
+  Widget _buildReadinessData(CseEstimate est) {
+    final n = est.totalItemsAttempted;
+    final thin = n < _kReadinessMinItems;
+    final color = thin
+        ? const Color(0xFF8A93B5) // muted neutral while diagnosing
+        : (est.isPredictedPass ? const Color(0xFF8BE08B) : dqGold);
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        // Compact arc gauge — the same designed meter as the full PassMeter,
+        // so the 合格率 reads as one thing everywhere (#68).
+        PassGauge(pct: est.readinessPct, color: color, size: 66, stroke: 7, fontSize: 18),
+        const SizedBox(width: 14),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                thin
+                    ? 'しんだんちゅう……'
+                    : (est.isPredictedPass
+                        ? 'ごうかくけん！'
+                        : 'ごうかくまで あと ${est.pointsNeeded} ポイント'),
+                style: dqText(size: 13, w: FontWeight.w700, color: dqInk),
+              ),
+              const SizedBox(height: 3),
+              Text(
+                thin
+                    ? 'あと ${_kReadinessMinItems - n}問で けっかが でるよ'
+                    : '$n問の けっかで けいさん',
+                style: dqText(size: 11, color: dqInk.withAlpha(160)),
+              ),
+              const SizedBox(height: 3),
+              Text('タップで くわしく / Details',
+                  style: dqText(size: 11, color: dqGold)),
+            ],
+          ),
+        ),
+        const Icon(Icons.chevron_right, color: dqGold, size: 22),
+      ],
     );
   }
 

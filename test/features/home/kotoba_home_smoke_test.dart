@@ -269,6 +269,27 @@ void main() {
     expect(find.byType(PassMeterScreen), findsOneWidget);
   });
 
+  testWidgets(
+      'KotobaHomeScreen: readiness card stays HONEST on thin data (audit fix)',
+      (tester) async {
+    // A few items must NOT show a confident「ごうかくけん」/pass — it would read as
+    // fabricated to a paying parent. Seed only 3 answers.
+    final store = await SkillAccuracyStore.getInstance();
+    await store.record(
+        grade: '5', skill: EikenSkill.reading, correct: 2, total: 3);
+
+    await tester.pumpWidget(_wrap(
+      streakService: _MockStreakService(const StreakState.zero()),
+      cardRepository: InMemoryFsrsCardRepository(),
+    ));
+    await _settle(tester);
+
+    expect(find.textContaining('しんだんちゅう'), findsOneWidget,
+        reason: 'thin sample → "still diagnosing", not a confident pass');
+    expect(find.textContaining('ごうかくけん'), findsNothing,
+        reason: 'must not claim 合格圏 on 3 answers');
+  });
+
   // ── Panel titles ──────────────────────────────────────────────────────────
 
   testWidgets('KotobaHomeScreen: streak panel title visible', (tester) async {
