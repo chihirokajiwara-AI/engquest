@@ -31,6 +31,7 @@ import 'package:engquest/core/storage/preferences_service.dart';
 import 'package:engquest/features/explore/scene_view.dart';
 import 'package:engquest/features/home/streak_service.dart';
 import 'package:engquest/features/exam_practice/exam_practice_screen.dart';
+import 'package:engquest/features/battle/battle_screen.dart';
 import 'package:engquest/features/quest/quest_map_screen.dart';
 import 'package:engquest/features/quest/ui/dq_ui.dart';
 import 'package:engquest/features/settings/settings_screen.dart';
@@ -80,6 +81,7 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
   StreakState _streak = const StreakState.zero();
   int _dueCount = 0; // FSRS due items today
   String _eikenLevel = '5'; // used to route to the right scene
+  int _childAge = 8; // used to age-filter the FSRS review deck
   bool _loading = true;
 
   @override
@@ -121,8 +123,10 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
         if (stored != null && stored.isNotEmpty) {
           _eikenLevel = stored;
         }
+        final age = prefs.getInt('onboarding_age');
+        if (age > 0) _childAge = age;
       } catch (_) {
-        // Keep default '5' — safe.
+        // Keep defaults — safe.
       }
     }
 
@@ -200,6 +204,19 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
     );
   }
 
+  /// Navigate to the FSRS vocabulary review (BattleScreen) — the daily
+  /// spaced-repetition drill that the「きょうの ナゾ」due-count refers to. Before
+  /// #66 this screen was only reachable via the orphaned WorldMapScreen, so the
+  /// home told the child "N reviews are due" then stranded them.
+  void _goToReview() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) =>
+            BattleScreen(childAge: _childAge, eikenGrade: _eikenLevel),
+      ),
+    );
+  }
+
   // ── Build ─────────────────────────────────────────────────────────────────
 
   @override
@@ -222,15 +239,18 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
           children: [
             _buildHeader(),
             const SizedBox(height: 18),
-            _buildStreakPanel(),
+            // ── 英検 core, foregrounded (#66, CEO 2026-06-08) ──────────────
+            // The primary daily path is 英検 practice + the FSRS review the
+            // 合格率 is built on — not the RPG world (which is now an optional
+            // reward below).
+            _buildExamCta(), // PRIMARY: 英検れんしゅう / 合格率
+            const SizedBox(height: 12),
+            _buildNazoPanel(), // tappable → FSRS vocabulary review
             const SizedBox(height: 14),
-            _buildNazoPanel(),
-            const SizedBox(height: 24),
-            _buildPrimaryCta(),
-            const SizedBox(height: 12),
-            _buildSecondaryMap(),
-            const SizedBox(height: 12),
-            _buildExamCta(),
+            _buildStreakPanel(),
+            const SizedBox(height: 18),
+            // ── ぼうけん (おまけ・任意) — demoted game world ──────────────────
+            _buildAdventureSection(),
             const SizedBox(height: 20),
           ],
         ),
@@ -379,60 +399,64 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
   Widget _buildNazoPanel() {
     final hasDue = _dueCount > 0;
 
-    return DqPanel(
-      title: 'きょうの ナゾ',
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Text('🔍', style: TextStyle(fontSize: 28)),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (hasDue) ...[
-                  // Two separate Text widgets so find.textContaining works in
-                  // tests (RichText TextSpan children are not matched by the
-                  // text-finder in flutter_test).
-                  Text(
-                    '館（やかた）に あたらしい ナゾが $_dueCount つ とどいた！',
-                    style: dqText(size: 14, w: FontWeight.w500, color: dqInk),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'じけんげんばへ むかおう。',
-                    style: dqText(
-                        size: 12,
-                        w: FontWeight.w500,
-                        color: dqInk.withAlpha(180)),
-                  ),
-                ] else ...[
-                  Text(
-                    '館（やかた）は しずか……',
-                    style: dqText(size: 14, w: FontWeight.w600, color: dqInk),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    '新しい ナゾを 探（さが）しに 出（で）かけよう！',
-                    style: dqText(
-                        size: 12,
-                        w: FontWeight.w500,
-                        color: dqInk.withAlpha(180)),
-                  ),
+    // Tappable → FSRS vocabulary review (#66): the panel announces the due-count
+    // and now actually opens the review, instead of stranding the child.
+    return GestureDetector(
+      onTap: _goToReview,
+      child: DqPanel(
+        title: 'きょうの ナゾ（たんごの ふくしゅう）',
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Text('🔍', style: TextStyle(fontSize: 28)),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (hasDue) ...[
+                    // Two separate Text widgets so find.textContaining works in
+                    // tests (RichText TextSpan children are not matched by the
+                    // text-finder in flutter_test).
+                    Text(
+                      '館（やかた）に あたらしい ナゾが $_dueCount つ とどいた！',
+                      style: dqText(size: 14, w: FontWeight.w500, color: dqInk),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'タップして たんごを ふくしゅうしよう / Review',
+                      style: dqText(
+                          size: 12, w: FontWeight.w500, color: dqGold),
+                    ),
+                  ] else ...[
+                    Text(
+                      '館（やかた）は しずか……',
+                      style: dqText(size: 14, w: FontWeight.w600, color: dqInk),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'タップして たんごを ふくしゅうしよう / Review',
+                      style: dqText(
+                          size: 12, w: FontWeight.w500, color: dqGold),
+                    ),
+                  ],
                 ],
-              ],
+              ),
             ),
-          ),
-        ],
+            const Icon(Icons.chevron_right, color: dqGold, size: 24),
+          ],
+        ),
       ),
     );
   }
 
-  // ── Primary CTA: じけんげんばへ ──────────────────────────────────────────
+  // ── PRIMARY CTA: 英検れんしゅう / 合格率 (the core 合格 surface) ─────────────
+  // Foregrounded per #66 (CEO 2026-06-08): 英検 practice + the 合格率 it builds is
+  // the product's primary daily path — the prominent gold action.
 
-  Widget _buildPrimaryCta() {
+  Widget _buildExamCta() {
     return GestureDetector(
-      onTap: _goToScene,
+      onTap: _goToExamPractice,
       child: Container(
         width: double.infinity,
         alignment: Alignment.center,
@@ -455,19 +479,17 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.play_arrow_rounded,
-                color: Color(0xFF2A1C00), size: 28),
+            const Icon(Icons.fact_check_rounded,
+                color: Color(0xFF2A1C00), size: 26),
             const SizedBox(width: 8),
-            // FittedBox scaleDown keeps the full label (no clip/ellipsis) on
-            // narrow phones (#65: overflowed at ~360px logical width).
             Flexible(
               child: FittedBox(
                 fit: BoxFit.scaleDown,
                 child: Text(
-                  'じけんげんばへ　／　つづける',
+                  '英検（えいけん）れんしゅう　／　合格率（ごうかくりつ）',
                   maxLines: 1,
                   style: dqText(
-                    size: 17,
+                    size: 16,
                     w: FontWeight.w800,
                     color: const Color(0xFF2A1C00),
                     spacing: 1,
@@ -481,69 +503,65 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
     );
   }
 
-  // ── Secondary CTA: ちずを みる ───────────────────────────────────────────
+  // ── ぼうけん (おまけ・任意) — the RPG world, demoted per #66 ─────────────────
+  // The story/scene and map are now an OPTIONAL reward, not the front door.
 
-  Widget _buildSecondaryMap() {
-    return GestureDetector(
-      onTap: _goToQuestMap,
-      child: Container(
-        width: double.infinity,
-        alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(vertical: 13),
-        decoration: BoxDecoration(
-          color: dqBox.withAlpha(200),
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: dqBorder.withAlpha(180), width: 1.5),
+  Widget _buildAdventureSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 4, bottom: 8),
+          child: Text(
+            'おまけ：ぼうけん / Adventure（あそび）',
+            style: dqText(
+                size: 12, w: FontWeight.w600, color: dqInk.withAlpha(150)),
+          ),
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.map_outlined, color: dqGold, size: 20),
-            const SizedBox(width: 8),
-            Flexible(
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  'ちずを みる　／　Adventure Map',
-                  maxLines: 1,
-                  style: dqText(size: 14, w: FontWeight.w700, color: dqInk),
-                ),
-              ),
-            ),
-          ],
+        _adventureButton(
+          icon: Icons.play_arrow_rounded,
+          label: 'じけんげんばへ　／　Story',
+          onTap: _goToScene,
         ),
-      ),
+        const SizedBox(height: 10),
+        _adventureButton(
+          icon: Icons.map_outlined,
+          label: 'ちずを みる　／　Adventure Map',
+          onTap: _goToQuestMap,
+        ),
+      ],
     );
   }
 
-  // ── Tertiary CTA: 英検れんしゅう (the exam-practice hub + 合格メーター) ──────
-  // Restores access to the core 合格 surface (大問 practice / 模試 / 合格率),
-  // which was previously reachable only from the orphaned WorldMapScreen hub.
-
-  Widget _buildExamCta() {
+  Widget _adventureButton({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
     return GestureDetector(
-      onTap: _goToExamPractice,
+      onTap: onTap,
       child: Container(
         width: double.infinity,
         alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(vertical: 13),
+        padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
-          color: dqBox.withAlpha(200),
+          color: dqBox.withAlpha(160),
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: dqBorder.withAlpha(180), width: 1.5),
+          border: Border.all(color: dqBorder.withAlpha(120), width: 1.5),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.fact_check_outlined, color: dqGold, size: 20),
+            Icon(icon, color: dqGold.withAlpha(200), size: 18),
             const SizedBox(width: 8),
             Flexible(
               child: FittedBox(
                 fit: BoxFit.scaleDown,
                 child: Text(
-                  '英検（えいけん）れんしゅう　／　Eiken Practice',
+                  label,
                   maxLines: 1,
-                  style: dqText(size: 14, w: FontWeight.w700, color: dqInk),
+                  style: dqText(
+                      size: 13, w: FontWeight.w600, color: dqInk.withAlpha(210)),
                 ),
               ),
             ),

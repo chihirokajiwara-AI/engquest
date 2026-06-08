@@ -23,6 +23,7 @@ import 'package:engquest/core/storage/preferences_service.dart';
 import 'package:engquest/features/home/streak_service.dart';
 import 'package:engquest/features/home/kotoba_home_screen.dart';
 import 'package:engquest/features/exam_practice/exam_practice_screen.dart';
+import 'package:engquest/features/battle/battle_screen.dart';
 
 // ── Mock helpers ──────────────────────────────────────────────────────────────
 
@@ -203,13 +204,37 @@ void main() {
       cardRepository: InMemoryFsrsCardRepository(),
     ));
     await _settle(tester);
-    final cta = find.byIcon(Icons.fact_check_outlined);
+    // #66: 英検 practice is now the PRIMARY (gold) CTA — fact_check_rounded.
+    final cta = find.byIcon(Icons.fact_check_rounded);
     expect(cta, findsOneWidget);
-    await tester.ensureVisible(cta); // 3rd CTA — scroll into view before tapping
+    await tester.ensureVisible(cta);
     await tester.pumpAndSettle();
     await tester.tap(cta);
     await tester.pumpAndSettle();
     expect(find.byType(ExamPracticeScreen), findsOneWidget);
+  });
+
+  testWidgets(
+      'KotobaHomeScreen: きょうの ナゾ panel navigates to FSRS review (#66)',
+      (tester) async {
+    // #66: the due-count panel now opens the FSRS vocabulary review
+    // (BattleScreen) instead of stranding the child. Before, BattleScreen was
+    // only reachable via the orphaned WorldMapScreen.
+    await tester.pumpWidget(_wrap(
+      streakService: _MockStreakService(const StreakState.zero()),
+      cardRepository: InMemoryFsrsCardRepository(),
+    ));
+    await _settle(tester);
+    final nazo = find.byIcon(Icons.chevron_right); // the panel's tap affordance
+    expect(nazo, findsOneWidget);
+    await tester.ensureVisible(nazo);
+    await tester.tap(nazo);
+    await tester.pump(); // start the route push
+    await tester.pump(const Duration(milliseconds: 500)); // advance the transition
+    expect(find.byType(BattleScreen), findsOneWidget);
+    // Unmount so the pushed screen's post-frame async does not leak.
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump(const Duration(seconds: 2));
   });
 
   // ── Panel titles ──────────────────────────────────────────────────────────
