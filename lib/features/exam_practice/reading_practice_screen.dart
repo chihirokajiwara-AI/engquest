@@ -26,6 +26,7 @@ _ComprehensionQuestion _shuffleReadingChoices(
     question: q.question,
     choices: s.choices,
     correctIdx: s.correctIdx,
+    explanation: q.explanation,
   );
 }
 
@@ -56,11 +57,58 @@ class _ComprehensionQuestion {
   final List<String> choices;
   final int correctIdx;
 
+  /// Post-answer teaching line (the 英検 reading skill is locating the evidence):
+  /// quotes the passage sentence that proves the answer, in child-facing 日本語.
+  /// Optional — grades not yet authored simply omit it (purely additive).
+  final String? explanation;
+
   const _ComprehensionQuestion({
     required this.question,
     required this.choices,
     required this.correctIdx,
+    this.explanation,
   });
+}
+
+/// Post-answer teaching panel (#5): a 💡解説 box that points the learner at the
+/// passage evidence. Mirrors the vocab screen's れい: explanation so the whole
+/// exam-practice suite teaches "why", not just right/wrong.
+class _ExplanationPanel extends StatelessWidget {
+  final String text;
+  const _ExplanationPanel({required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      key: const ValueKey('reading_explanation'),
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
+      decoration: BoxDecoration(
+        color: dqBox.withAlpha(235),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: dqGoldDeep, width: 1.5),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.lightbulb_outline_rounded,
+                  color: dqGold, size: 18),
+              const SizedBox(width: 6),
+              Text('かいせつ / Why',
+                  style: dqText(
+                      size: 12, w: FontWeight.w800, color: dqGold, spacing: 1)),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(text,
+              style: dqText(size: 14, w: FontWeight.w500, color: dqInk)
+                  .copyWith(height: 1.6)),
+        ],
+      ),
+    );
+  }
 }
 
 class ReadingPracticeScreen extends StatefulWidget {
@@ -322,13 +370,20 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text(
-                  question.question,
-                  style: dqText(size: 15, w: FontWeight.w700, color: Colors.white),
-                ),
-                const SizedBox(height: 10),
                 Expanded(
-                  child: ListView.separated(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          question.question,
+                          style: dqText(
+                              size: 15, w: FontWeight.w700, color: Colors.white),
+                        ),
+                        const SizedBox(height: 10),
+                        ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: question.choices.length,
                     separatorBuilder: (_, __) => const SizedBox(height: 8),
                     itemBuilder: (context, i) {
@@ -391,11 +446,20 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
                         ),
                       );
                     },
+                        ),
+                        if (_answered && question.explanation != null)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 12),
+                            child:
+                                _ExplanationPanel(text: question.explanation!),
+                          ),
+                      ],
+                    ),
                   ),
                 ),
                 if (_answered)
                   Padding(
-                    padding: const EdgeInsets.only(top: 8, bottom: 8),
+                    padding: const EdgeInsets.only(top: 12),
                     child: DqButton(label: '次へ', onTap: _next),
                   ),
               ],
@@ -497,6 +561,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'On Monday, November 17',
           ],
           correctIdx: 1,
+          explanation: '本文に "a school festival on Saturday, November 15" '
+              'とあるね。だから「11月15日（土）」が正解だよ。',
         ),
         _ComprehensionQuestion(
           question: 'What will Class 5-A do?',
@@ -507,6 +573,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'Have a card game',
           ],
           correctIdx: 1,
+          explanation: '"Class 5-A will sell rice balls." とあるよ。'
+              '5-Aは「おにぎりを売る（sell rice balls）」が正解。',
         ),
       ],
     ),
@@ -529,6 +597,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'A rabbit',
           ],
           correctIdx: 2,
+          explanation: '"I have a cat. Her name is Mimi." とあるね。'
+              'ユキのペットは「ねこ（a cat）」だよ。',
         ),
         _ComprehensionQuestion(
           question: 'Where does Mimi like to sleep?',
@@ -539,6 +609,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'In the kitchen',
           ],
           correctIdx: 2,
+          explanation: '"She likes to sleep on my bed." の my はユキのこと。'
+              'だから「ユキのベッドの上（on Yuki\'s bed）」が正解。',
         ),
       ],
     ),
@@ -570,6 +642,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'One week',
           ],
           correctIdx: 1,
+          explanation: '"We stayed there for three days." とあるよ。'
+              '答えは「3日間（three days）」。',
         ),
         _ComprehensionQuestion(
           question: 'What did they do on the first day?',
@@ -580,6 +654,9 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'Said goodbye',
           ],
           correctIdx: 2,
+          explanation:
+              '"On the first day, we hiked to a lake and went swimming." '
+              'とあるね。最初の日は「湖で泳いだ（went swimming in a lake）」。',
         ),
         _ComprehensionQuestion(
           question: 'Who cooked the rice?',
@@ -590,6 +667,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'Everyone together',
           ],
           correctIdx: 1,
+          explanation: '"my friend Tom cooked the rice." とあるよ。'
+              'ごはんを炊いたのは「トム（Tom）」。',
         ),
       ],
     ),
@@ -615,6 +694,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'Twice a week',
           ],
           correctIdx: 1,
+          explanation: '"Reading Club (every Saturday, 2:00-3:30 p.m.)" '
+              'とあるね。読書クラブは「毎週土曜日（every Saturday）」。',
         ),
         _ComprehensionQuestion(
           question: 'What must you do to join the Art Workshop?',
@@ -625,6 +706,9 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'Come with a parent',
           ],
           correctIdx: 2,
+          explanation: '"Please sign up at the front desk by March 15." '
+              'とあるよ。だから「3月15日までに申し込む（sign up by March 15）」が正解。'
+              '（材料は用意されているよ：Materials provided.）',
         ),
       ],
     ),

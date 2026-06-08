@@ -151,6 +151,26 @@ void main() {
       expect(find.text('次へ'), findsOneWidget);
     });
 
+    testWidgets('after answering, teaches WHY with passage evidence (#5)',
+        (tester) async {
+      await pumpReading(tester, '5', grade5Section);
+
+      // Before answering there is no explanation — it is a reveal, not a hint.
+      expect(find.byKey(const ValueKey('reading_explanation')), findsNothing);
+      expect(find.text('かいせつ / Why'), findsNothing);
+
+      // Answer → the 解説 panel must appear and quote the passage evidence
+      // (the 英検 reading skill is locating the proof sentence).
+      await tester.tap(choice('On Saturday, November 15'));
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(const ValueKey('reading_explanation')), findsOneWidget);
+      expect(find.text('かいせつ / Why'), findsOneWidget);
+      expect(find.textContaining('November 15', findRichText: true),
+          findsWidgets,
+          reason: 'explanation should quote the passage evidence');
+    });
+
     testWidgets('advances through questions and shows results', (tester) async {
       await pumpReading(tester, '5', grade5Section);
 
