@@ -35,8 +35,10 @@
 //   4級: same structure as 5級 (3部, 30問 total)
 //   3級: 3部 = 30問
 //   準2級プラス/2級: 第1部15 (会話応答選択) + 第2部15 (文内容一致) = 30
-// Seed bank covers the VERIFIED per-grade 部 structure with a representative
-// sample (4 items per part per grade) for the initial launch.
+// Seed bank covers the VERIFIED per-grade 部 structure. Volume is being expanded
+// toward the real-exam per-part counts (#10): 3級 第1部 is at 10/10; the other
+// parts/grades remain at the initial ~4-item sample and are visible as shortfalls
+// in reading_pool_integrity_test (skip with the exact gap to target).
 
 class ListeningItem {
   final int part;
@@ -586,6 +588,123 @@ const _grade3Part1 = <ListeningItem>[
       'Romance movies.',
     ],
     correctIndex: 2,
+  ),
+  // ── #10 volume expansion: 3級 第1部 4→10 (会話内容一致, A2–B1). Audio pending
+  //    Kokoro gen → keys registered in ALLOWED_MISSING; items work via the
+  //    transcript reveal. Content-QA'd 2026-06-09.
+  ListeningItem(
+    part: 1,
+    grade: '3',
+    audioKey: 'l3_p1_05.mp3',
+    transcripts: [
+      'A: Did you finish reading the book I lent you?',
+      'B: Not yet. I\'ve been busy with club activities, but I\'ll return it next week.',
+      'Question: When will the boy return the book?',
+    ],
+    questionType: ListeningQuestionType.dialogueContent,
+    question: 'When will the boy return the book?',
+    choices: [
+      'Today.',
+      'Tomorrow.',
+      'Next week.',
+      'Next month.',
+    ],
+    correctIndex: 2,
+  ),
+  ListeningItem(
+    part: 1,
+    grade: '3',
+    audioKey: 'l3_p1_06.mp3',
+    transcripts: [
+      'A: Excuse me, what time does the next bus to the station leave?',
+      'B: The next one is at 3:15, but it is often a few minutes late.',
+      'Question: When is the next bus scheduled to leave?',
+    ],
+    questionType: ListeningQuestionType.dialogueContent,
+    question: 'When is the next bus scheduled to leave?',
+    choices: [
+      'At 3:00.',
+      'At 3:15.',
+      'At 3:30.',
+      'At 3:50.',
+    ],
+    correctIndex: 1,
+  ),
+  ListeningItem(
+    part: 1,
+    grade: '3',
+    audioKey: 'l3_p1_07.mp3',
+    transcripts: [
+      'A: You look tired today. Did you stay up late?',
+      'B: Yeah, I was practicing the piano for the school concert.',
+      'Question: Why is the girl tired?',
+    ],
+    questionType: ListeningQuestionType.dialogueContent,
+    question: 'Why is the girl tired?',
+    choices: [
+      'She studied all night.',
+      'She practiced the piano.',
+      'She watched TV late.',
+      'She had a fever.',
+    ],
+    correctIndex: 1,
+  ),
+  ListeningItem(
+    part: 1,
+    grade: '3',
+    audioKey: 'l3_p1_08.mp3',
+    transcripts: [
+      'A: I can\'t decide what to give my mother for her birthday.',
+      'B: How about flowers? She loves the roses in your garden.',
+      'Question: What does the boy suggest as a present?',
+    ],
+    questionType: ListeningQuestionType.dialogueContent,
+    question: 'What does the boy suggest as a present?',
+    choices: [
+      'A book.',
+      'Flowers.',
+      'A cake.',
+      'A scarf.',
+    ],
+    correctIndex: 1,
+  ),
+  ListeningItem(
+    part: 1,
+    grade: '3',
+    audioKey: 'l3_p1_09.mp3',
+    transcripts: [
+      'A: Have you ever been to the new science museum downtown?',
+      'B: Yes, I went last weekend. The space exhibit was amazing.',
+      'Question: What did the girl think of the science museum?',
+    ],
+    questionType: ListeningQuestionType.dialogueContent,
+    question: 'What did the girl think of the science museum?',
+    choices: [
+      'It was boring.',
+      'It was too crowded.',
+      'The space exhibit was amazing.',
+      'It was closed.',
+    ],
+    correctIndex: 2,
+  ),
+  ListeningItem(
+    part: 1,
+    grade: '3',
+    audioKey: 'l3_p1_10.mp3',
+    transcripts: [
+      'A: Could you help me carry these boxes to the classroom?',
+      'B: Sure, but I have to meet my teacher first. Can you wait ten minutes?',
+      'Question: What will the boy do first?',
+    ],
+    questionType: ListeningQuestionType.dialogueContent,
+    question: 'What will the boy do first?',
+    choices: [
+      'Carry the boxes.',
+      'Meet his teacher.',
+      'Go home.',
+      'Call his friend.',
+    ],
+    correctIndex: 1,
   ),
 ];
 
