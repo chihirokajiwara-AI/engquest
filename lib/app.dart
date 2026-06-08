@@ -19,6 +19,7 @@ import 'package:engquest/features/exam_practice/listening_practice_screen.dart';
 import 'package:engquest/features/exam_practice/writing_practice_screen.dart';
 import 'package:engquest/features/exam_practice/eiken_exam_config.dart';
 import 'package:engquest/features/exam_practice/word_ordering_practice_screen.dart';
+import 'package:engquest/features/exam_practice/vocab_grammar_practice_screen.dart';
 import 'package:engquest/features/exam_practice/conversation_practice_screen.dart';
 import 'package:engquest/features/settings/settings_screen.dart';
 import 'package:engquest/features/achievements/achievements_screen.dart';
@@ -297,7 +298,7 @@ const List<String> kPreviewRouteNames = [
   'prologue5', 'explore', 'explore4', 'explore3', 'explorepre2',
   'explorepre2plus', 'explore2', 'explorepre1', 'mock', 'mockpre2plus',
   'quest', 'quest5t', 'quest5', 'quest5q', 'quest5c', 'quest4', 'quest3',
-  'quest2', 'battle', 'dialog', 'voice', 'exam', 'exampre1', 'writing', 'writing2',
+  'quest2', 'battle', 'dialog', 'voice', 'exam', 'exampre1', 'vocab', 'writing', 'writing2',
   'writingp1', 'listening', 'listening4', 'listening3', 'listeningp2',
   'kotobahome', 'passmeter', 'passmetermissing', 'passprogress', 'speaking',
   'speakingconsent',
@@ -421,6 +422,21 @@ Widget _previewFor(String? name) {
           type: ExamSectionType.conversationComplete,
           questionCount: 8,
           timeLimitMinutes: 8,
+          description: 'Preview',
+        ),
+      );
+    case 'vocab':
+      // 英検5級 大問1 語句空所補充 — render-proofs the post-answer explanation
+      // (word in context, #77). Tap a choice to reveal the れい: example.
+      return const VocabGrammarPracticeScreen(
+        eikenGrade: '5',
+        section: ExamSection(
+          id: '5_vg',
+          nameJa: '筆記1: 短文の語句空所補充',
+          nameEn: 'Vocabulary & Grammar',
+          type: ExamSectionType.vocabGrammar,
+          questionCount: 10,
+          timeLimitMinutes: 10,
           description: 'Preview',
         ),
       );

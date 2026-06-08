@@ -48,6 +48,29 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
+    testWidgets('after answering, shows the word IN CONTEXT (れい:) — #77',
+        (tester) async {
+      await tester.pumpWidget(MaterialApp(
+        home: VocabGrammarPracticeScreen(
+          eikenGrade: '5',
+          section: _vocabSection(),
+        ),
+      ));
+      await tester.runAsync(
+          () => Future<void>.delayed(const Duration(milliseconds: 400)));
+      await tester.pump();
+      // Before answering there is no explanation. (findRichText: the example
+      // line is a RichText so the word can be highlighted in the sentence.)
+      expect(find.textContaining('れい:', findRichText: true), findsNothing);
+      // Answer (tap the first choice) → the post-answer explanation must teach
+      // the word in a real sentence, not just show right/wrong.
+      await tester.tap(find.byType(InkWell).first);
+      await tester.pump();
+      expect(find.textContaining('れい:', findRichText: true), findsOneWidget,
+          reason: 'must show the example sentence after answering');
+      expect(tester.takeException(), isNull);
+    });
+
     testWidgets('grade pre2plus (no vocab DB) — shows 準備中, no exception',
         (tester) async {
       await tester.pumpWidget(MaterialApp(

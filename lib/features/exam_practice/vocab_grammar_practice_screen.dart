@@ -110,6 +110,25 @@ class _VocabGrammarPracticeScreenState
     return '(        ) — $sentence';
   }
 
+  /// Split [sentence] at the first case-insensitive occurrence of [word] and
+  /// emphasise the word (bold + amber) so the child sees the answer in context.
+  List<TextSpan> _sentenceSpans(String sentence, String word) {
+    final match =
+        RegExp(RegExp.escape(word), caseSensitive: false).firstMatch(sentence);
+    if (match == null) {
+      return [TextSpan(text: sentence)];
+    }
+    return [
+      TextSpan(text: sentence.substring(0, match.start)),
+      TextSpan(
+        text: sentence.substring(match.start, match.end),
+        style: const TextStyle(
+            color: Color(0xFFE65100), fontWeight: FontWeight.w800),
+      ),
+      TextSpan(text: sentence.substring(match.end)),
+    ];
+  }
+
   void _selectAnswer(int idx) {
     if (_answered) return;
     setState(() {
@@ -221,7 +240,9 @@ class _VocabGrammarPracticeScreenState
   Widget _buildQuestion() {
     final q = _questions[_currentIdx];
 
-    return Padding(
+    // Scrollable so the question + 4 choices + the explanation never overflow on
+    // small phones / landscape (the column was previously fixed-height).
+    return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -364,7 +385,7 @@ class _VocabGrammarPracticeScreenState
               ),
             );
           }),
-          const Spacer(),
+          const SizedBox(height: 24),
           // Explanation + Next button (shown after answering)
           if (_answered) ...[
             Container(
@@ -373,17 +394,46 @@ class _VocabGrammarPracticeScreenState
                 color: const Color(0xFFFFF8E1),
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Row(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(Icons.lightbulb_outline,
-                      color: Color(0xFFFF8F00), size: 20),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      '${q.word.word} — ${q.word.jpTranslation}',
-                      style: const TextStyle(
-                        color: Color(0xFF263238),
-                        fontSize: 14,
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Icon(Icons.lightbulb_outline,
+                          color: Color(0xFFFF8F00), size: 20),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          q.word.reading.isNotEmpty
+                              ? '${q.word.word}（${q.word.reading}）— ${q.word.jpTranslation}'
+                              : '${q.word.word} — ${q.word.jpTranslation}',
+                          style: const TextStyle(
+                            color: Color(0xFF263238),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  // The word IN CONTEXT — for a cloze item this is the real
+                  // lesson: see the answer resolved in a natural sentence, not
+                  // just its meaning. Converts a wrong answer into learning.
+                  const SizedBox(height: 8),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 28),
+                    child: RichText(
+                      text: TextSpan(
+                        style: const TextStyle(
+                            color: Color(0xFF455A64), fontSize: 13, height: 1.4),
+                        children: [
+                          const TextSpan(
+                            text: 'れい:  ',
+                            style: TextStyle(fontWeight: FontWeight.w700),
+                          ),
+                          ..._sentenceSpans(q.originalSentence, q.word.word),
+                        ],
                       ),
                     ),
                   ),
