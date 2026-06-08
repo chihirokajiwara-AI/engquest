@@ -405,41 +405,66 @@ class _StepAge extends StatelessWidget {
                     ]),
                   ),
                 ),
-                const SizedBox(height: 8),
-                SliderTheme(
-                  data: SliderTheme.of(context).copyWith(
-                    activeTrackColor: dqGold,
-                    inactiveTrackColor: dqNight1,
-                    thumbColor: dqGold,
-                    overlayColor: dqGold.withAlpha(40),
-                    valueIndicatorColor: dqGoldDeep,
-                  ),
-                  child: Slider(
-                    value: age.toDouble(),
-                    min: 4,
-                    max: 18,
-                    divisions: 14,
-                    label: '$age',
-                    onChanged: (v) => onAgeChanged(v.round()),
-                  ),
-                ),
+                const SizedBox(height: 10),
+                // Large tappable −/+ steppers instead of a thin slider: a young
+                // child (and a parent) can hit ≥48dp buttons, whereas a slider
+                // thumb demands fine motor control they don't have (§H audit).
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('4さい',
-                        style:
-                            dqText(size: 12, color: dqInk, w: FontWeight.w500)),
-                    Text('18さい',
-                        style:
-                            dqText(size: 12, color: dqInk, w: FontWeight.w500)),
+                    _AgeStepButton(
+                      icon: Icons.remove_rounded,
+                      onTap: age > 4 ? () => onAgeChanged(age - 1) : null,
+                    ),
+                    const SizedBox(width: 44),
+                    _AgeStepButton(
+                      icon: Icons.add_rounded,
+                      onTap: age < 18 ? () => onAgeChanged(age + 1) : null,
+                    ),
                   ],
                 ),
+                const SizedBox(height: 8),
+                Text('（4さい 〜 18さい）',
+                    textAlign: TextAlign.center,
+                    style: dqText(size: 11, color: dqInk.withAlpha(150))),
               ],
             ),
           ),
           const Spacer(),
           DqButton(label: 'つぎへ / Next ▶', onTap: onNext),
         ],
+      ),
+    );
+  }
+}
+
+/// A large (≥48dp) circular −/+ button for the age stepper. [onTap] null = the
+/// limit (4 or 18) is reached → muted/disabled.
+class _AgeStepButton extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback? onTap;
+  const _AgeStepButton({required this.icon, this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final enabled = onTap != null;
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 56,
+        height: 56,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: enabled
+              ? const LinearGradient(colors: [dqGold, dqGoldDeep])
+              : null,
+          color: enabled ? null : dqNight1,
+          border: Border.all(color: dqBorder, width: 2),
+        ),
+        child: Icon(icon,
+            color: enabled ? const Color(0xFF2A1C00) : dqInk.withAlpha(80),
+            size: 30),
       ),
     );
   }
