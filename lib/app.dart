@@ -415,7 +415,8 @@ Widget _previewFor(String? name) {
     case 'settings':
       return const SettingsScreen();
     case 'conversation':
-      // 英検3級 大問2 会話文の文空所補充 — grade-differentiated dialogue practice.
+      // 英検3級 大問2 会話文の文空所補充 — render-proofs the 3級 会話 解説 (#103,
+      // highest-enrollment grade). Tap a choice → 💡かいせつ teaches the reply skill.
       return const ConversationPracticeScreen(
         eikenGrade: '3',
         section: ExamSection(
@@ -430,7 +431,7 @@ Widget _previewFor(String? name) {
       );
     case 'conversation5':
       // 英検5級 大問2 — render-proofs the post-answer 解説 (#7). Tap a choice to
-      // reveal the 💡かいせつ panel (3級 'conversation' route has no 解説 yet).
+      // reveal the 💡かいせつ panel.
       return const ConversationPracticeScreen(
         eikenGrade: '5',
         section: ExamSection(

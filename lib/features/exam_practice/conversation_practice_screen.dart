@@ -591,6 +591,8 @@ class _ConversationPracticeScreenState
             'Yes, I like doing homework.',
           ],
           correctIdx: 0,
+          explanation:
+              '「Have you finished 〜 yet?(もう〜し終えた?)」は現在完了の質問。終わったかどうかを返すのが答えで、「Not yet(まだ)」が自然。ほかは宿題の話だが「終わったか」には答えていない。',
         ),
         _ConversationProblem(
           context: 'At a store',
@@ -603,6 +605,8 @@ class _ConversationPracticeScreenState
             'This store is really big.',
           ],
           correctIdx: 0,
+          explanation:
+              '「Where can I find 〜?(どこにありますか?)」は場所をたずねる質問。場所（ペンの隣）を答える文が正解。ほかはノートの話でも「どこ」に答えていない。',
         ),
         _ConversationProblem(
           context: 'At home',
@@ -615,6 +619,8 @@ class _ConversationPracticeScreenState
             'Today is a school day.',
           ],
           correctIdx: 0,
+          explanation:
+              '「Why 〜?(なぜ?)」には Because 〜（〜だから）で理由を答えるのが基本。「3時間サッカーを練習したから」と理由を述べる文が正解。',
         ),
         _ConversationProblem(
           context: 'On the phone',
@@ -627,6 +633,8 @@ class _ConversationPracticeScreenState
             'Saturday comes after Friday.',
           ],
           correctIdx: 0,
+          explanation:
+              '「Can you come 〜?」はさそい。「Sure!(いいよ)」と受けて「何時に行けばいい?」と話を前に進める返事が自然。さそいには"受ける/断る"で応じる。',
         ),
         _ConversationProblem(
           context: 'In the classroom',
@@ -639,6 +647,8 @@ class _ConversationPracticeScreenState
             'The classroom is very clean.',
           ],
           correctIdx: 0,
+          explanation:
+              '「Is it locked?(かぎがかかってる?)」は Yes/No でたずねる質問。「Yes」と答え、「かぎは先生が持っている」と情報を足すと会話がかみ合う。',
         ),
         _ConversationProblem(
           context: 'At lunchtime',
@@ -651,6 +661,8 @@ class _ConversationPracticeScreenState
             'I usually eat rice for lunch.',
           ],
           correctIdx: 0,
+          explanation:
+              '「Do you want to 〜 together?」はさそい。断るときは「Sorry(ごめん)＋理由(もう食べた)＋代わりの案(また明日)」の流れが自然で、ていねい。',
         ),
         _ConversationProblem(
           context: 'After class',
@@ -663,6 +675,8 @@ class _ConversationPracticeScreenState
             'Many people speak English.',
           ],
           correctIdx: 0,
+          explanation:
+              '「How did you learn it?(どうやって覚えた?)」への答え。ほめ言葉に「Thank you」と返し、「6歳のころから(since)ずっと勉強している」と"いつから続けているか"を答えるのが正解。',
         ),
         _ConversationProblem(
           context: 'Talking about the weekend',
@@ -675,6 +689,8 @@ class _ConversationPracticeScreenState
             'The weekend was two days.',
           ],
           correctIdx: 0,
+          explanation:
+              '「How was 〜?(どうだった?)」は感想をたずねる質問。「It was great!(よかった)」と感想を述べ、「きれいな湖を見た」と具体的な中身を足すのが自然。',
         ),
       ];
     } else if (grade == 'pre2') {
