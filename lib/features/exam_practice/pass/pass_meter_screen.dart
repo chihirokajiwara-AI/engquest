@@ -189,6 +189,28 @@ class _PassHero extends StatelessWidget {
             style: dqText(size: 12, color: dqGold),
           ),
 
+          // Basis disclosure: show how many questions back the % so a high
+          // number built on few answers reads as provisional, not fabricated.
+          if (est.totalItemsAttempted > 0) ...[
+            const SizedBox(height: 6),
+            Text(
+              'これまでの ${est.totalItemsAttempted}もんを もとに けいさん\n'
+              'based on ${est.totalItemsAttempted} answers',
+              textAlign: TextAlign.center,
+              style: dqText(size: 11, color: const Color(0xFF8A93B5)),
+            ),
+          ],
+          // Thin-sample honesty: a prediction on very few answers is a rough
+          // guide, not a promise — say so rather than imply false precision.
+          if (est.totalItemsAttempted > 0 && est.totalItemsAttempted < 20) ...[
+            const SizedBox(height: 4),
+            Text(
+              '※ まだ データが すくないので、おおよその めやすです。',
+              textAlign: TextAlign.center,
+              style: dqText(size: 11, color: const Color(0xFFE8B050)),
+            ),
+          ],
+
           // Provisional caption when a skill has no data yet — the headline %
           // counts that skill as 0, so it will rise once the child practices it.
           if (est.unmeasuredSkills.isNotEmpty) ...[
@@ -257,6 +279,7 @@ class _SkillBars extends StatelessWidget {
             maxScore: maxScores[skill] ?? 1,
             isLimiting: est.limitingSkill == skill,
             unmeasured: est.unmeasuredSkills.contains(skill),
+            itemsAttempted: est.itemsAttempted[skill] ?? 0,
           ),
           const SizedBox(height: 10),
         ],
@@ -275,12 +298,18 @@ class _SkillBar extends StatelessWidget {
   /// measured", not "tested and failed". Shown as 未測定 with a muted bar.
   final bool unmeasured;
 
+  /// How many questions this skill's score is based on — surfaced so a thin
+  /// sample (e.g. writing on 2 items) is visible rather than hidden behind a
+  /// confident-looking score.
+  final int itemsAttempted;
+
   const _SkillBar({
     required this.skill,
     required this.score,
     required this.maxScore,
     required this.isLimiting,
     this.unmeasured = false,
+    this.itemsAttempted = 0,
   });
 
   @override
@@ -296,28 +325,36 @@ class _SkillBar extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Responsive: a stacked (vertical) label + a wrappable right-aligned
+        // readout so the row never overflows on a narrow phone (the inline
+        // "JP / EN" label + score + sample count was ~230px too wide at 360px).
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Row(
-              children: [
-                if (isLimiting && !unmeasured)
-                  const Padding(
-                    padding: EdgeInsets.only(right: 6),
-                    child: Icon(Icons.warning_amber, color: dqGold, size: 16),
-                  ),
-                dqBilingual(
-                  CseEstimator.skillLabelJa(skill),
-                  CseEstimator.skillLabelEn(skill),
-                  jpSize: 14,
-                ),
-              ],
+            if (isLimiting && !unmeasured)
+              const Padding(
+                padding: EdgeInsets.only(right: 6, bottom: 2),
+                child: Icon(Icons.warning_amber, color: dqGold, size: 16),
+              ),
+            Expanded(
+              child: dqBilingual(
+                CseEstimator.skillLabelJa(skill),
+                CseEstimator.skillLabelEn(skill),
+                jpSize: 14,
+                stacked: true,
+              ),
             ),
-            Text(
-              unmeasured ? 'まだ / not measured' : '$score / $maxScore  ($pctText)',
-              style: dqText(
-                size: 13,
-                color: unmeasured ? const Color(0xFF8A93B5) : dqGold,
+            const SizedBox(width: 8),
+            Flexible(
+              child: Text(
+                unmeasured
+                    ? 'まだ / not measured'
+                    : '$score / $maxScore ($pctText)・$itemsAttemptedもん',
+                textAlign: TextAlign.right,
+                style: dqText(
+                  size: 13,
+                  color: unmeasured ? const Color(0xFF8A93B5) : dqGold,
+                ),
               ),
             ),
           ],

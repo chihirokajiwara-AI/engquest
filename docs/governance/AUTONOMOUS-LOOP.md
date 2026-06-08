@@ -281,3 +281,40 @@ Procedure:
 CEO 914 lens (subtract-before-add): the core value is 英検 PASSING. Treat game-y decoration on
 the critical path as a defect to SUBTRACT, never a feature to add. The pass-meter + grade-
 targeted practice are the product; the world is, at most, an optional reward.
+
+**Audit DIMENSIONS — every run MUST score all of these (CEO msg 919, 2026-06-08).** The first
+run used only 4 lenses; that is not "super-strict." A sellable, world-class bar requires the
+full set below. Assign them across the panel (several dimensions per critic), tier the models
+(Sonnet for most lenses, Opus for the hard-judgment ones: art direction, commercial-readiness,
+subtract), and **adversarially verify every factual claim** (§H.3). A dimension with no finding
+must be stated as "checked, no blocker" — silence ≠ pass.
+
+1. **Pedagogy / 英検-passing efficacy** — does each screen advance real passing skill, or is
+   time spent on filler?
+2. **Content accuracy (英検-spec)** — section structure, CEFR, counts, vocab/distractors, writing
+   tasks correct vs eiken.or.jp + the codebase's own guards. (Verify; a critic CAN be wrong.)
+3. **Art direction / visual craft** — composition, colour, typography, image quality, ONE design
+   system (no style clash), no AI-slop/placeholder/programmer-art.
+4. **Product / UX & information hierarchy** — clarity of the next action, friction, the value
+   ("my kid passes 英検") is obvious and foremost.
+5. **Child-UX & accessibility** — ≥48dp tap targets, contrast/WCAG, motor limits, real ruby
+   furigana, ひらがな-forward for the young, dyslexia/特別支援 path.
+6. **Japanese-language quality** — natural native JP, age-appropriate tone, correct furigana, no
+   文字化け/tofu, no dev-placeholder bilingual clutter.
+7. **Trust & credibility (paying parent)** — efficacy proof, the 合格率's DISCLOSED basis (n
+   questions), who-made-it, data/privacy transparency; nothing that reads as fabricated.
+8. **Commercial funnel / conversion** — onboarding → value → pricing clarity, free-vs-paid, no
+   dark patterns, value+trust shown before the paywall.
+9. **Performance & load** — cold-start, tap latency, asset weight — measured in a real browser
+   (ties #48/#49/#52), not assumed.
+10. **Technical / render integrity** — no overflow/clipping, no broken/missing images, no
+    perpetual spinner/empty async screen, cross-device.
+11. **Sound & audio** — TTS naturalness, no silent dead-ends (the 5級 front door), audio-failure
+    feedback.
+12. **Motion / feel** — transitions and animation polish; entering a screen is composed, not a
+    teleport.
+13. **Retention / habit** — streak/daily-return design that drives study (not vanity), honest.
+14. **Brand & naming consistency** — ことばの勇者 / コトバ探偵 / A-KEN Quest must not confuse.
+15. **Subtract-skeptic (CEO 914)** — every game-y element on the critical path is a cut candidate.
+16. **Child-safety & compliance** — content boundaries, COPPA/個情法, consent/legal, and the CEO's
+    no-word-policing rule (do not re-add a word-reaction mechanism).

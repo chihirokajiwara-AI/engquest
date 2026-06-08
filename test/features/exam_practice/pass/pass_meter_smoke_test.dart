@@ -178,4 +178,54 @@ void main() {
       expect(tester.takeException(), isNull);
     });
   });
+
+  // #68: the 合格率 must DISCLOSE its basis (how many questions back it) so a
+  // high % built on few answers reads as provisional, not fabricated.
+  group('PassMeterScreen — basis disclosure (#68)', () {
+    testWidgets('hero shows the total-answers basis', (tester) async {
+      // reading 10 + listening 10 = 20 answers.
+      final est = _estimate(grade: '5', reading: 0.7, listening: 0.7);
+      await tester.pumpWidget(_wrap(PassMeterScreen(estimate: est)));
+      await tester.pump();
+      expect(find.textContaining('based on 20 answers'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('each skill row shows its sample count (もん)', (tester) async {
+      final est = _estimate(grade: '5', reading: 0.7, listening: 0.7);
+      await tester.pumpWidget(_wrap(PassMeterScreen(estimate: est)));
+      await tester.pump();
+      // Two measured skills → at least two "…もん" readouts.
+      expect(find.textContaining('もん'), findsWidgets);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('thin sample (<20) shows the "rough estimate" caption',
+        (tester) async {
+      final est = CseEstimator.estimate(grade: '5', accuracies: const [
+        SkillAccuracy(
+            skill: EikenSkill.reading, accuracy: 0.8, itemsAttempted: 3),
+        SkillAccuracy(
+            skill: EikenSkill.listening, accuracy: 0.8, itemsAttempted: 2),
+      ])!;
+      expect(est.totalItemsAttempted, 5);
+      await tester.pumpWidget(_wrap(PassMeterScreen(estimate: est)));
+      await tester.pump();
+      expect(find.textContaining('おおよその めやす'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+
+    test('estimate carries per-skill itemsAttempted + correct total', () {
+      final est = CseEstimator.estimate(grade: '3', accuracies: const [
+        SkillAccuracy(
+            skill: EikenSkill.reading, accuracy: 0.7, itemsAttempted: 31),
+        SkillAccuracy(
+            skill: EikenSkill.writing, accuracy: 0.6, itemsAttempted: 2),
+        SkillAccuracy(
+            skill: EikenSkill.listening, accuracy: 0.7, itemsAttempted: 30),
+      ])!;
+      expect(est.itemsAttempted[EikenSkill.writing], 2);
+      expect(est.totalItemsAttempted, 63);
+    });
+  });
 }

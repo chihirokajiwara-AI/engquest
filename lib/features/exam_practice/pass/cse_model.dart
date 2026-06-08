@@ -101,6 +101,13 @@ class CseEstimate {
   /// when every applicable skill has data.
   final Set<EikenSkill> unmeasuredSkills;
 
+  /// Per-skill number of questions the estimate is built on
+  /// ({EikenSkill → itemsAttempted}). The 合格率 must DISCLOSE its basis — a 92%
+  /// built on 2 writing items is not the same as one built on 200. The UI shows
+  /// these counts (and a "rough estimate" caption when the sample is thin) so the
+  /// number is credible rather than reading as fabricated.
+  final Map<EikenSkill, int> itemsAttempted;
+
   const CseEstimate({
     required this.grade,
     required this.skillScores,
@@ -111,7 +118,12 @@ class CseEstimate {
     required this.limitingSkill,
     required this.pointsNeeded,
     this.unmeasuredSkills = const {},
+    this.itemsAttempted = const {},
   });
+
+  /// Total questions answered across all skills — the overall basis of the %.
+  int get totalItemsAttempted =>
+      itemsAttempted.values.fold(0, (s, v) => s + v);
 
   /// True when readinessPct >= 100 AND every applicable skill has been measured.
   /// We never predict a PASS while a required skill is 未測定 — readinessPct is
@@ -237,6 +249,7 @@ class CseEstimator {
     final maxScores = spec.skillMaxScores;
     final skillScores = <EikenSkill, int>{};
     final unmeasured = <EikenSkill>{};
+    final attempted = <EikenSkill, int>{};
 
     // Build an accuracy lookup (unrecognised skills are ignored).
     final accMap = {for (final a in accuracies) a.skill: a};
@@ -244,6 +257,7 @@ class CseEstimator {
     for (final skill in spec.skills) {
       final acc = accMap[skill];
       final max = maxScores[skill]!;
+      attempted[skill] = acc?.itemsAttempted ?? 0;
       if (acc == null || !acc.attempted) {
         // No data for this skill → estimate 0 (conservative/safe) and mark it
         // as unmeasured so the UI shows 未測定 rather than implying a failed 0.
@@ -299,6 +313,7 @@ class CseEstimator {
       limitingSkill: limiting,
       unmeasuredSkills: Set.unmodifiable(unmeasured),
       pointsNeeded: pointsNeeded,
+      itemsAttempted: Map.unmodifiable(attempted),
     );
   }
 
