@@ -305,7 +305,7 @@ const List<String> kPreviewRouteNames = [
   'speakingconsent',
   'listening2', 'achievements', 'parent', 'parentlogin', 'wordorder',
   'conversation', 'conversation5', 'conversation4', 'reading', 'reading3',
-  'readingpre2', 'settings', 'listeningpp', 'listeningp1',
+  'readingpre2', 'reading2', 'settings', 'listeningpp', 'listeningp1',
 ];
 
 /// Test-visible wrapper for the private preview harness.
@@ -484,6 +484,21 @@ Widget _previewFor(String? name) {
           type: ExamSectionType.readingComprehension,
           questionCount: 10,
           timeLimitMinutes: 15,
+          description: 'Preview',
+        ),
+      );
+    case 'reading2':
+      // 英検2級 (B1-B2) 長文の内容一致選択 — render-proofs the 2級 解説 (#5/#98) on the
+      // highest-enrollment upper paying grade. Tap a choice → 💡かいせつ quotes evidence.
+      return const ReadingPracticeScreen(
+        eikenGrade: '2',
+        section: ExamSection(
+          id: '2_r3',
+          nameJa: '筆記3: 長文の内容一致選択',
+          nameEn: 'Reading Comprehension',
+          type: ExamSectionType.readingComprehension,
+          questionCount: 12,
+          timeLimitMinutes: 25,
           description: 'Preview',
         ),
       );
