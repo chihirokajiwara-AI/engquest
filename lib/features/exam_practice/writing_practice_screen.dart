@@ -24,6 +24,7 @@ import 'package:engquest/core/ui/app_fonts.dart';
 
 import '../../core/dialog/claude_client.dart';
 import '../quest/ui/dq_ui.dart';
+import '../home/streak_service.dart';
 import 'eiken_exam_config.dart';
 import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
@@ -590,6 +591,10 @@ class _WritingPracticeScreenState extends State<WritingPracticeScreen> {
 
   Future<void> _submit() async {
     if (!_canSubmit) return;
+    // Writing a full essay is a study session — count it toward the home streak
+    // + daily-goal even when offline (AI grading may be unavailable), so writing
+    // practice is never invisible to the engagement spine.
+    recordExamHabit(1);
     setState(() {
       _phase = _Phase.grading;
       _gradingError = null;

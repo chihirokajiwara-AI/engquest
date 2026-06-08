@@ -16,6 +16,8 @@
 //   - If today is 2+ days after lastStudyDate → streak resets to 1
 //   - New user with no lastStudyDate → streak starts at 1
 
+import 'dart:async';
+
 import 'package:engquest/core/storage/preferences_service.dart';
 
 // ── Streak state ──────────────────────────────────────────────────────────────
@@ -224,4 +226,24 @@ class StreakService {
       dailyGoal: storedGoal > 0 ? storedGoal : kDefaultDailyGoal,
     );
   }
+}
+
+/// Record a completed 英検 study session into the home engagement spine: marks
+/// today as a study day (advances the streak) and adds [answered] problems to
+/// the daily-goal ring. Fire-and-forget — every exam-practice surface should
+/// call this on session-end so the streak/goal reflect ALL practice, not just
+/// the FSRS battle (StreakService's doc contract says "after any battle/exam
+/// completion"; previously only the battles honoured it). Prefs failures are
+/// swallowed; never blocks or interrupts the learner.
+void recordExamHabit(int answered) {
+  if (answered <= 0) return;
+  unawaited(() async {
+    try {
+      final streak = StreakService();
+      await streak.recordStudySession();
+      await streak.recordProgress(answered);
+    } catch (_) {
+      // Non-fatal: SharedPreferences failure is rare and must not surface.
+    }
+  }());
 }

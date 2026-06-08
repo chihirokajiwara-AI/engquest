@@ -26,6 +26,7 @@ import 'package:flutter/material.dart';
 import '../../core/audio/audio_cue_service.dart';
 import '../../core/audio/audio_mute.dart';
 import '../quest/ui/dq_ui.dart';
+import '../home/streak_service.dart';
 import 'eiken_exam_config.dart';
 import 'listening_data.dart';
 import '../quest/ui/muted_voice_banner.dart';
@@ -120,6 +121,7 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
   /// listening → EikenSkill.listening.
   Future<void> _recordSessionResult() async {
     if (_items.isEmpty) return;
+    recordExamHabit(_items.length); // streak + daily-goal, not just 合格率
     try {
       final store = await SkillAccuracyStore.getInstance();
       await store.record(

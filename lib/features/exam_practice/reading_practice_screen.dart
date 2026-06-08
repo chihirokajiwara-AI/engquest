@@ -11,6 +11,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:engquest/features/quest/ui/dq_ui.dart';
+import 'package:engquest/features/home/streak_service.dart';
 import 'eiken_exam_config.dart';
 import 'choice_shuffle.dart';
 import 'pass/cse_model.dart';
@@ -183,6 +184,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
   /// readingComprehension + passage fill-in → EikenSkill.reading.
   Future<void> _recordSessionResult() async {
     if (_totalQuestions <= 0) return;
+    // Feed the home engagement spine (streak + daily-goal), not just 合格率.
+    recordExamHabit(_totalQuestions);
     try {
       final store = await SkillAccuracyStore.getInstance();
       await store.record(

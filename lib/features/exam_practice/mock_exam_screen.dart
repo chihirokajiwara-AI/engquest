@@ -33,6 +33,7 @@ import 'pass/cse_model.dart';
 import 'pass/mock_exam.dart';
 import 'pass/pass_meter_screen.dart';
 import 'pass/skill_accuracy_store.dart';
+import '../home/streak_service.dart';
 
 class MockExamScreen extends StatefulWidget {
   final String eikenGrade;
@@ -128,6 +129,8 @@ class _MockExamScreenState extends State<MockExamScreen> {
         correct[item.skill] = (correct[item.skill] ?? 0) + 1;
       }
     }
+    // A completed 模試 is a big study session — feed the home streak + daily-goal.
+    recordExamHabit(_items.length);
     // The mock has no writing UI, and live AI essay grading needs the (not-yet-
     // deployed) backend — so the writing component of the mock's CSE uses the
     // learner's ACCUMULATED writing-practice accuracy (from WritingPracticeScreen,

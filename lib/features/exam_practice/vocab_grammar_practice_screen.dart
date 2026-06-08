@@ -16,6 +16,7 @@ import 'eiken_exam_config.dart';
 import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
 import '../quest/ui/dq_ui.dart';
+import '../home/streak_service.dart';
 
 /// First WHOLE-WORD (\b-bounded), case-insensitive match of [word] in [sentence],
 /// or null. Boundary-anchored so an inflected form never matches a stem fragment
@@ -188,6 +189,7 @@ class _VocabGrammarPracticeScreenState
   /// vocabGrammar → EikenSkill.reading (Part 1 = Reading大問).
   Future<void> _recordSessionResult() async {
     if (_questions.isEmpty) return;
+    recordExamHabit(_questions.length); // streak + daily-goal, not just 合格率
     try {
       final store = await SkillAccuracyStore.getInstance();
       await store.record(

@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'eiken_exam_config.dart';
 import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
+import '../home/streak_service.dart';
 
 /// A 語句整序 (word-ordering) problem in the authentic 英検 大問3 form: a Japanese
 /// sentence plus exactly FIVE 語句 (chunks ①–⑤) that combine into one correct
@@ -118,6 +119,7 @@ class _WordOrderingPracticeScreenState
   /// wordOrdering → EikenSkill.reading (Part 3 = Reading大問, 5/4級).
   Future<void> _recordSessionResult() async {
     if (_problems.isEmpty) return;
+    recordExamHabit(_problems.length); // streak + daily-goal, not just 合格率
     try {
       final store = await SkillAccuracyStore.getInstance();
       await store.record(

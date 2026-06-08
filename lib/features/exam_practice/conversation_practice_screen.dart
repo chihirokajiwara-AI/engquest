@@ -12,6 +12,7 @@ import 'choice_shuffle.dart';
 import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
 import '../quest/ui/dq_ui.dart';
+import '../home/streak_service.dart';
 
 /// Returns [p] with its choices shuffled and [correctIdx] remapped. The authored
 /// data is 92% correctIdx:0, which let a child score ~92% by always tapping
@@ -119,6 +120,7 @@ class _ConversationPracticeScreenState
   /// conversationComplete → EikenSkill.reading (Part 2 = Reading大問).
   Future<void> _recordSessionResult() async {
     if (_problems.isEmpty) return;
+    recordExamHabit(_problems.length); // streak + daily-goal, not just 合格率
     try {
       final store = await SkillAccuracyStore.getInstance();
       await store.record(

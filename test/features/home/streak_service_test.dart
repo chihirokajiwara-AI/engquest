@@ -150,4 +150,28 @@ void main() {
     expect(state.problemsToday, 3);
     expect(state.dailyGoal, kDefaultDailyGoal);
   });
+
+  // recordExamHabit is the helper every exam-practice screen calls on session
+  // end — it makes the streak/daily-goal reflect ALL 英検 practice, not just the
+  // FSRS battle (the engagement spine was behaviourally dead elsewhere before).
+  test('recordExamHabit advances the streak + adds problems to the daily goal',
+      () async {
+    recordExamHabit(5);
+    // Fire-and-forget (unawaited) — let the writes settle before asserting.
+    await Future<void>.delayed(const Duration(milliseconds: 60));
+    final state = await StreakService().load();
+    expect(state.currentStreak, greaterThanOrEqualTo(1),
+        reason: 'a completed exam session must mark today a study day');
+    expect(state.problemsToday, 5,
+        reason: 'the answered count must feed the daily-goal ring');
+  });
+
+  test('recordExamHabit(0) is a no-op (no credit for an empty session)',
+      () async {
+    recordExamHabit(0);
+    await Future<void>.delayed(const Duration(milliseconds: 60));
+    final state = await StreakService().load();
+    expect(state.currentStreak, 0);
+    expect(state.problemsToday, 0);
+  });
 }
