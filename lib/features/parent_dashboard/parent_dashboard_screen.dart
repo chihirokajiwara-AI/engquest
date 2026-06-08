@@ -79,13 +79,40 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
                   );
                 }
                 if (snap.hasError) {
+                  // A paying parent must never see a raw exception string (e.g.
+                  // "Bad state: Firebase Auth unavailable"). Show a calm,
+                  // bilingual offline state with a retry instead.
                   return Center(
                     child: Padding(
                       padding: const EdgeInsets.all(24),
-                      child: Text('Error: ${snap.error}',
-                          textAlign: TextAlign.center,
-                          style: dqText(
-                              size: 14, color: const Color(0xFFE89090))),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.cloud_off, color: dqGold, size: 40),
+                          const SizedBox(height: 14),
+                          Text(
+                            'いまは きろくを よみこめませんでした。\n'
+                            'インターネットの せつぞくを かくにんして、'
+                            'もう一度（いちど）おためしください。',
+                            textAlign: TextAlign.center,
+                            style: dqText(size: 14, color: dqInk).copyWith(
+                                height: 1.6),
+                          ),
+                          const SizedBox(height: 6),
+                          Text(
+                            "Couldn't load progress. Check your connection "
+                            'and try again.',
+                            textAlign: TextAlign.center,
+                            style: dqText(
+                                size: 11, color: dqInk.withAlpha(160)),
+                          ),
+                          const SizedBox(height: 18),
+                          DqButton(
+                            label: 'もう一度（いちど）よみこむ / Retry',
+                            onTap: _loadProgress,
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 }

@@ -25,6 +25,8 @@ const _dataScreens = <String>[
   'questmap',
   'parentlogin',
   'battle',
+  'parent', // parent dashboard — must show a graceful state offline, not a
+  //           raw "Bad state: Firebase Auth unavailable" exception.
 ];
 
 void main() {
@@ -57,6 +59,13 @@ void main() {
         reason: '"$name" is stuck on a loading spinner — its async load never '
             'resolved (a child would see an infinite spinner).',
       );
+
+      // No raw exception string must leak to the user (paying parents must never
+      // see "Bad state:" / "Exception:" — show a graceful state instead).
+      for (final marker in const ['Bad state:', 'Exception:', 'Error: ']) {
+        expect(find.textContaining(marker), findsNothing,
+            reason: '"$name" leaked a raw exception ("$marker…") to the UI.');
+      }
 
       // Drain post-frame timers so teardown is clean.
       await tester.pumpWidget(const SizedBox());
