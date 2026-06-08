@@ -306,7 +306,10 @@ must be stated as "checked, no blocker" — silence ≠ pass.
 8. **Commercial funnel / conversion** — onboarding → value → pricing clarity, free-vs-paid, no
    dark patterns, value+trust shown before the paywall.
 9. **Performance & load** — cold-start, tap latency, asset weight — measured in a real browser
-   (ties #48/#49/#52), not assumed.
+   (ties #48/#49/#52), not assumed. STANDING TOOL: `node scripts/qa/perf_audit.mjs <url> 4000`
+   (flags broken routes / over-budget / asset-404s). Baseline + findings:
+   `docs/perf/PERF-BASELINE-2026-06-08.md` (2026-06-08: render clean, warm ~1.8s, but cold boot
+   ~7s — a transport/infra lever, escalated).
 10. **Technical / render integrity** — no overflow/clipping, no broken/missing images, no
     perpetual spinner/empty async screen, cross-device.
 11. **Sound & audio** — TTS naturalness, no silent dead-ends (the 5級 front door), audio-failure
