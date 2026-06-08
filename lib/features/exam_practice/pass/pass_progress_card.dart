@@ -70,6 +70,21 @@ class PassProgressCard extends StatelessWidget {
     );
   }
 
+  /// The encouragement / disclosure line under the headline. When the % is based
+  /// on only some skills (Battle feeds reading; writing+listening untested for
+  /// 3級+), it DISCLOSES the unmeasured skills so the % is never mistaken for a
+  /// full readiness read — the same honesty the PassMeter enforces.
+  String _subtext() {
+    final un = post.unmeasuredSkills;
+    if (un.isEmpty) return 'れんしゅうした ぶんだけ 合格（ごうかく）に 近（ちか）づく。';
+    final names = [
+      if (un.contains(EikenSkill.writing)) 'ライティング',
+      if (un.contains(EikenSkill.listening)) 'リスニング',
+      if (un.contains(EikenSkill.reading)) 'リーディング',
+    ].join('・');
+    return '※ $names は これから 測（はか）るよ';
+  }
+
   Widget _buildConfident() {
     final pct = post.readinessPct;
     final color = post.isPredictedPass ? _pass : (pct >= 65 ? _near : _far);
@@ -83,6 +98,10 @@ class PassProgressCard extends StatelessWidget {
     } else {
       headline = '合格（ごうかく）まで あと ${post.pointsNeeded}ポイント';
     }
+    // NOTE: 合格圏 only fires when isPredictedPass — which requires
+    // unmeasuredSkills to be empty (cse_model) — so we never claim PASS while a
+    // required skill is untested. The % itself can still be from one skill only
+    // (Battle feeds reading), so the subtext DISCLOSES what is not yet measured.
 
     return Row(
       children: [
@@ -109,7 +128,7 @@ class PassProgressCard extends StatelessWidget {
               Text(headline,
                   style: dqText(size: 14, w: FontWeight.w800, color: color)),
               const SizedBox(height: 3),
-              Text('れんしゅうした ぶんだけ 合格（ごうかく）に 近（ちか）づく。',
+              Text(_subtext(),
                   style: dqText(
                       size: 11,
                       w: FontWeight.w500,

@@ -336,13 +336,8 @@ class _BattleScreenState extends State<BattleScreen>
       // so we can compute real elapsed minutes when the session completes.
       _sessionStartTime = DateTime.now();
       // Clear last session's progress snapshot so the summary recomputes fresh.
+      _preEstimate = null;
       _postEstimate = null;
-    });
-
-    // Capture the 合格率 baseline BEFORE this session records anything, so the
-    // session-end card can show how far the child moved (+N%).
-    liveCseEstimate(widget.eikenGrade).then((e) {
-      if (mounted) _preEstimate = e;
     });
   }
 
@@ -470,6 +465,11 @@ class _BattleScreenState extends State<BattleScreen>
   /// guarded in-memory fallback.
   void _recordSkillAccuracy() {
     unawaited(() async {
+      // Capture the baseline BEFORE recording this session — deterministically,
+      // in the same closure, so the +delta can never be collapsed by a race with
+      // an async pre-capture (the pre always reflects prior sessions only).
+      final pre = await liveCseEstimate(widget.eikenGrade);
+
       final c = battleReadingContribution(_sessionResults.map((r) => r.grade));
       if (c.total > 0) {
         try {
@@ -486,7 +486,12 @@ class _BattleScreenState extends State<BattleScreen>
       }
       // Recompute AFTER recording so the summary reflects this session.
       final post = await liveCseEstimate(widget.eikenGrade);
-      if (mounted) setState(() => _postEstimate = post);
+      if (mounted) {
+        setState(() {
+          _preEstimate = pre;
+          _postEstimate = post;
+        });
+      }
     }());
   }
 

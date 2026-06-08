@@ -12,11 +12,11 @@ import 'package:engquest/features/exam_practice/pass/pass_progress_card.dart';
 CseEstimate _est({
   required double readinessPct,
   required int totalItems,
-  bool pass = false,
   int pointsNeeded = 120,
+  Set<EikenSkill> unmeasured = const {},
 }) {
   return CseEstimate(
-    grade: '5',
+    grade: '3',
     skillScores: const {EikenSkill.reading: 300},
     totalScore: 300,
     passingScore: 419,
@@ -24,7 +24,7 @@ CseEstimate _est({
     readinessPct: readinessPct,
     limitingSkill: EikenSkill.reading,
     pointsNeeded: pointsNeeded,
-    unmeasuredSkills: pass ? const {} : const {},
+    unmeasuredSkills: unmeasured,
     // Spread items across reading so totalItemsAttempted == totalItems.
     itemsAttempted: {EikenSkill.reading: totalItems},
   );
@@ -63,10 +63,30 @@ void main() {
     expect(find.textContaining('アップ'), findsNothing);
   });
 
-  testWidgets('predicted pass → 合格圏 headline', (tester) async {
+  testWidgets('predicted pass (all skills measured) → 合格圏 headline',
+      (tester) async {
     await tester.pumpWidget(_wrap(PassProgressCard(
-      post: _est(readinessPct: 100, totalItems: 40, pass: true),
+      post: _est(readinessPct: 100, totalItems: 40), // unmeasured = {}
     )));
     expect(find.textContaining('合格圏'), findsOneWidget);
+  });
+
+  testWidgets(
+      'high % but writing+listening UNMEASURED → NOT 合格圏, discloses basis',
+      (tester) async {
+    // The honesty boundary: a reading-only Battle for 3級+ can push readiness
+    // high, but must NOT claim 合格圏 while skills are untested, and MUST disclose
+    // which skills are not yet measured.
+    await tester.pumpWidget(_wrap(PassProgressCard(
+      post: _est(
+        readinessPct: 100,
+        totalItems: 40,
+        unmeasured: const {EikenSkill.writing, EikenSkill.listening},
+      ),
+    )));
+    expect(find.textContaining('合格圏'), findsNothing);
+    expect(find.textContaining('ライティング'), findsOneWidget);
+    expect(find.textContaining('リスニング'), findsOneWidget);
+    expect(find.textContaining('これから'), findsOneWidget);
   });
 }
