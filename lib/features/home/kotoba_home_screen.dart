@@ -237,7 +237,15 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
     final weak = await Navigator.of(context).push<EikenSkill?>(
       MaterialPageRoute(builder: (_) => PassMeterScreen(estimate: est)),
     );
-    if (weak != null && mounted) _goToExamPractice();
+    if (!mounted) return;
+    if (weak != null) {
+      // The meter pointed at a weak skill → go practise it (that screen reloads
+      // home state on its own return via _pushThenRefresh).
+      _goToExamPractice();
+    } else {
+      // Plain back from the meter — reload so the ring/合格率 reflect any change.
+      await _loadData();
+    }
   }
 
   // ── Build ─────────────────────────────────────────────────────────────────
