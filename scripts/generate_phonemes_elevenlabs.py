@@ -41,13 +41,17 @@ OUT_DIR = Path(__file__).parent.parent / "assets" / "audio" / "phonics"
 # phoneme key -> (bare IPA symbol to input as text, short note)
 # CEO 969 directive: input ONLY the single phonetic symbol so the model produces
 # the pure phoneme, not a syllable. a→æ, o→ɒ (英検5級 short vowels: cat/dog).
+# CEO ear-QA (msg 984): a OK, c(=/k/ from "k") OK & best. s too short → sustain;
+# o(ɒ) sounded between オ/ア → try open-o "ɔ". t→"ティー" and g→"ジィー" (read as
+# LETTER NAMES): bare-letter TTS can't make these voiceless/voiced stops — they are
+# the founder's hand-record job (frozen-spec). Kept here for the record only.
 PHONEMES = {
-    "phoneme_s": ("s", "/s/ — voiceless continuant (sustained 'sss')"),
-    "phoneme_a": ("æ", "/æ/ — short a as in 'cat' (vowel)"),
-    "phoneme_t": ("t", "/t/ — voiceless STOP (schwa/letter-name risk)"),
-    "phoneme_c": ("k", "/k/ — voiceless STOP (schwa/letter-name risk)"),
-    "phoneme_o": ("ɒ", "/ɒ/ — short o as in 'dog' (vowel)"),
-    "phoneme_g": ("ɡ", "/ɡ/ — voiced STOP (schwa/letter-name risk)"),
+    "phoneme_s": ("ssss", "/s/ — sustained voiceless continuant"),
+    "phoneme_a": ("æ", "/æ/ — short a as in 'cat' (vowel) [CEO OK]"),
+    "phoneme_t": ("t", "/t/ — STOP — TTS reads 'tee'; HAND-RECORD"),
+    "phoneme_c": ("k", "/k/ — STOP [CEO OK, best]"),
+    "phoneme_o": ("ɔ", "/ɒ/ — short o as in 'dog' (vowel)"),
+    "phoneme_g": ("ɡ", "/ɡ/ — STOP — TTS reads 'gee'; HAND-RECORD"),
 }
 
 
@@ -87,8 +91,12 @@ def main() -> int:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 
     print(f"[phonemes] voice={voice} model={model} → {OUT_DIR}")
+    only = set(os.environ.get("ONLY", "").split()) if os.environ.get("ONLY") else None
     failed = 0
     for key, (ipa, note) in PHONEMES.items():
+        if only is not None and key not in only:
+            print(f"[phonemes] skip {key} (not in ONLY)")
+            continue
         try:
             audio = synth(key, ipa, voice, model)
             (OUT_DIR / f"{key}.mp3").write_bytes(audio)
