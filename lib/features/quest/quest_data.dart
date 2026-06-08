@@ -1631,19 +1631,28 @@ const List<QuestTown> kQuestTowns = [
     name: '試練（しれん）の橋（はし）',
     tagline: '2級への橋をわたる町',
     intro: '準2級（じゅんにきゅう）の先（さき）、2級（にきゅう）へつづく長（なが）い橋（はし）。'
-        '2025年（ねん）に新（あら）たにかけられた橋（はし）だ。ここでは「理由（りゆう）」と「まとめ（要約・ようやく）」を語（かた）る力（ちから）がためされる。',
-    cleared: '橋（はし）の向（む）こうに、城（しろ）の灯（あか）りが見（み）えた。五（いつ）つ目（め）の〈声（こえ）の石（いし）〉を手（て）に。'
+        '2025年（ねん）に新（あら）たにかけられた橋（はし）だ。ここでは「理由（りゆう）」と「まとめ（要約・ようやく）」を語（かた）る力（ちから）がためされる。\n'
+        '橋守（はしもり）ロウは、たった一人（ひとり）で灯（あか）りを掲（かか）げ、誰（だれ）も渡（わた）らせまいとしている。'
+        '昔（むかし）、彼（かれ）が運（はこ）んだ伝言（でんごん）が誤（あやま）って伝（つた）わり、人（ひと）が傷（きず）ついた。'
+        '「誰（だれ）も語（かた）らなければ、誰（だれ）も傷（きず）つかない」――サイレントと同（おな）じ考（かんが）えに、彼（かれ）は囚（とら）われている。\n'
+        '「意味（いみ）」を正（ただ）しく運（はこ）ぶ力（ちから）で、向（む）こう岸（ぎし）に声（こえ）をとどけよう。',
+    cleared: '橋守（はしもり）ロウは、灯（あか）りを掲（かか）げたまま動（うご）かない――けれど、'
+        '向（む）こう岸（ぎし）の声（こえ）が、たしかに届（とど）いた。「…ことばは、無事（ぶじ）に渡（わた）れるのか。知（し）らなかった」。\n'
+        '橋（はし）の向（む）こうに、城（しろ）の灯（あか）りが見（み）えた。五（いつ）つ目（め）の〈声（こえ）の石（いし）〉を手（て）に。'
         'ハーモニーが言（い）う――「のこる石（いし）はあと一（ひと）つ。さいごの ひろばに、しずけさ〈サイレント〉が いる」。',
     encounters: [
       // 1 — 準2確実化: 現在完了 vs 過去 (since の手がかり). (大問1 文法型)
       QuestEncounter(
-        npcName: "はしの番人",
-        npcEmoji: "🌉",
+        npcName: "橋守（はしもり）ロウ",
+        npcEmoji: "🏮",
         npcLine: "I ___ on this bridge since the new grade was added in 2025. Show me your purpose.",
         npcLineJa: "2025年（ねん）に新（あら）しい級（きゅう）ができてから、ずっとこの橋（はし）にいます。 ___ に入（はい）るのは？",
         choices: ["work", "have worked", "worked", "am working"],
         correctIndex: 1,
-        onCorrect: "Yes — \"have worked ... since 2025.\" A keeper of the bridge knows his tenses. Step on.",
+        onCorrect:
+            "...\"have worked ... since 2025.\" Tsk — correct. I have kept this bridge alone, "
+            "so that no message crosses to be misheard. If no one speaks, no one is wounded… "
+            "that is what I told myself. Carry meaning whole, traveller, and maybe I'll believe otherwise.",
       ),
       // 2 — 関係副詞 where (vs 関係代名詞). (大問1 文法型)
       QuestEncounter(
