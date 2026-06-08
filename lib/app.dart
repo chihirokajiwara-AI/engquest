@@ -645,37 +645,45 @@ class _AppEntryPointState extends State<_AppEntryPoint> {
     setState(() => _onboardingComplete = true);
   }
 
-  @override
-  Widget build(BuildContext context) {
+  // Builds the current top-level phase, each wrapped in a unique ValueKey so the
+  // [AnimatedSwitcher] in [build] cross-fades between them. Same key = no
+  // transition, so the keys are what make the seam animate.
+  Widget _buildPhase() {
     if (_loading) {
       // Minimal splash while SharedPreferences warms up (<100 ms typically).
       // Deep-night field with gold spinner so the first frame is already 本格.
       final flavor = EngQuestApp._flavor;
-      return Scaffold(
-        backgroundColor: dqNight0,
-        body: DecoratedBox(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [dqNight0, dqNight1, dqNight0],
+      return KeyedSubtree(
+        key: const ValueKey('phase-loading'),
+        child: Scaffold(
+          backgroundColor: dqNight0,
+          body: DecoratedBox(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [dqNight0, dqNight1, dqNight0],
+              ),
             ),
-          ),
-          child: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const CircularProgressIndicator(color: dqGold),
-                const SizedBox(height: 16),
-                Text(flavor.splashText, style: dqText(size: 14, color: dqInk)),
-              ],
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const CircularProgressIndicator(color: dqGold),
+                  const SizedBox(height: 16),
+                  Text(flavor.splashText, style: dqText(size: 14, color: dqInk)),
+                ],
+              ),
             ),
           ),
         ),
       );
     }
     if (!_started) {
-      return QuestTitleScreen(onStart: () => setState(() => _started = true));
+      return KeyedSubtree(
+        key: const ValueKey('phase-title'),
+        child: QuestTitleScreen(onStart: () => setState(() => _started = true)),
+      );
     }
     if (_onboardingComplete) {
       // First time into the adventure: the opening PROLOGUE plays once, then the
@@ -684,10 +692,47 @@ class _AppEntryPointState extends State<_AppEntryPoint> {
       // fix for the buried-soul seam (Opus review 2026-06-06): the painted world is
       // the landing, not a level-select menu. The map stays reachable from the home.
       if (!_prologueSeen) {
-        return PrologueScreen(onDone: _handlePrologueDone);
+        return KeyedSubtree(
+          key: const ValueKey('phase-prologue'),
+          child: PrologueScreen(onDone: _handlePrologueDone),
+        );
       }
-      return const KotobaHomeScreen();
+      return const KeyedSubtree(
+        key: ValueKey('phase-home'),
+        child: KotobaHomeScreen(),
+      );
     }
-    return OnboardingFlow(onComplete: _handleOnboardingComplete);
+    return KeyedSubtree(
+      key: const ValueKey('phase-onboarding'),
+      child: OnboardingFlow(onComplete: _handleOnboardingComplete),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Cross-fade between top-level phases (loading → title → onboarding →
+    // prologue → home) so entering the game is a composed transition, not a
+    // single-frame teleport — the「はじめる→いきなりコトバ探偵」seam the CEO flagged
+    // (構成 audit #50; agent-team decision 2026-06-07; Professor Layton-grade
+    // polish reference). Spec-safe: the painted コトバ探偵 home is still the landing
+    // — only the seam between phases changes. A dark-to-dark dissolve, no new
+    // assets. AnimatedSwitcher is self-managing (no AnimationController); the
+    // full-screen Stack layoutBuilder prevents reflow while the outgoing and
+    // incoming screens overlap during the fade.
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 450),
+      switchInCurve: Curves.easeInOut,
+      switchOutCurve: Curves.easeInOut,
+      transitionBuilder: (child, animation) =>
+          FadeTransition(opacity: animation, child: child),
+      layoutBuilder: (currentChild, previousChildren) => Stack(
+        alignment: Alignment.center,
+        children: <Widget>[
+          ...previousChildren,
+          if (currentChild != null) currentChild,
+        ],
+      ),
+      child: _buildPhase(),
+    );
   }
 }
