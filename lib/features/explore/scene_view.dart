@@ -18,6 +18,8 @@ import '../../core/gamification/hint_coin_service.dart';
 import '../../core/sound/sound_service.dart';
 import '../quest/ui/dq_ui.dart';
 import '../home/streak_service.dart';
+import '../exam_practice/pass/cse_model.dart';
+import '../exam_practice/pass/skill_accuracy_store.dart';
 import 'hotspot.dart';
 import 'nazo_screen.dart';
 
@@ -184,11 +186,31 @@ class _SceneViewState extends State<SceneView> {
       _sound.playCorrect();
       // Front-door 英検 puzzle solved → feed the home engagement spine (streak +
       // daily-goal), same as exam practice. Before this, scene play earned ZERO
-      // streak/goal credit. (合格率 is NOT recorded here: a ナゾ allows retries so
-      // NazoResult.solved cannot give an honest first-try correct/total — that
-      // needs a separate change, see backlog, to avoid inflating 合格率.)
+      // streak/goal credit.
       recordExamHabit(1);
+      // …and feed 合格率 with an HONEST signal: record first-try correctness
+      // (a ナゾ retries to solve, so 1/1 every time would inflate the meter).
+      // Scene ナゾ test vocab/reading 英検 knowledge → EikenSkill.reading.
+      _recordSkill(result.firstTryCorrect);
     }
+  }
+
+  /// Records one front-door ナゾ into 合格率 (SkillAccuracyStore). Fire-and-forget;
+  /// storage failures are swallowed and never interrupt the learner.
+  void _recordSkill(bool firstTryCorrect) {
+    () async {
+      try {
+        final store = await SkillAccuracyStore.getInstance();
+        await store.record(
+          grade: widget.eikenLevel,
+          skill: EikenSkill.reading,
+          correct: firstTryCorrect ? 1 : 0,
+          total: 1,
+        );
+      } catch (_) {
+        // Non-fatal: the pass meter simply won't reflect this one puzzle.
+      }
+    }();
   }
 
   Future<void> _collectCoin(int idx, Hotspot h) async {

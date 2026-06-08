@@ -34,7 +34,18 @@ import 'hotspot.dart';
 class NazoResult {
   final bool solved;
   final int picaratEarned;
-  const NazoResult({required this.solved, required this.picaratEarned});
+
+  /// Whether the learner's FIRST answer was correct. Feeds 合格率 honestly: a
+  /// ナゾ can be retried until solved, so [solved] alone would record every
+  /// puzzle as 100% and inflate the pass meter — first-try correctness is the
+  /// real comprehension signal. Defaults to false (e.g. an abandoned puzzle).
+  final bool firstTryCorrect;
+
+  const NazoResult({
+    required this.solved,
+    required this.picaratEarned,
+    this.firstTryCorrect = false,
+  });
 }
 
 // ── NazoScreen ────────────────────────────────────────────────────────────────
@@ -67,6 +78,10 @@ class _NazoScreenState extends State<NazoScreen> {
 
   int? _picked;
   bool _revealed = false;
+  // First-answer tracking for an honest 合格率 signal (#89): record whether the
+  // child's very first choice was correct, regardless of later retries.
+  bool _firstAttempted = false;
+  bool _firstTryCorrect = false;
   int _coinBalance = 0;
   int _hintsShown = 0; // 0 = none; 1/2/3 = tiers revealed so far
   bool _coinLoading = false;
@@ -109,6 +124,11 @@ class _NazoScreenState extends State<NazoScreen> {
   void _choose(int i) {
     if (_revealed) return;
     final correct = i == _step.correctIndex;
+    // Capture the FIRST answer for the 合格率 signal, before any early return.
+    if (!_firstAttempted) {
+      _firstAttempted = true;
+      _firstTryCorrect = correct;
+    }
     if (!correct && !_step.penalizeWrong) {
       // No-scold: replay the audio without advancing.
       _cue.play(_step.autoPlayAudio);
@@ -127,7 +147,11 @@ class _NazoScreenState extends State<NazoScreen> {
 
   void _finish() {
     final earned = _picarat.earn();
-    Navigator.of(context).pop(NazoResult(solved: true, picaratEarned: earned));
+    Navigator.of(context).pop(NazoResult(
+      solved: true,
+      picaratEarned: earned,
+      firstTryCorrect: _firstTryCorrect,
+    ));
   }
 
   void _dismiss() {

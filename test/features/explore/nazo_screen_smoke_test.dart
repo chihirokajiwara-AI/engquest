@@ -13,6 +13,7 @@ import 'package:engquest/core/audio/audio_assets.dart';
 import 'package:engquest/core/audio/audio_mute.dart';
 import 'package:engquest/features/explore/hotspot.dart';
 import 'package:engquest/features/explore/nazo_screen.dart';
+import 'package:engquest/features/quest/ui/dq_ui.dart';
 import 'package:engquest/features/quest/ui/muted_voice_banner.dart';
 
 void main() {
@@ -81,6 +82,76 @@ void main() {
       await tester.pump(const Duration(milliseconds: 100));
       expect(find.byType(MutedVoiceBanner), findsNothing);
       expect(tester.takeException(), isNull);
+    });
+  });
+
+  group('NazoScreen — first-try correctness for honest 合格率 (#89)', () {
+    // A ナゾ can be retried until solved, so the 合格率 signal must be the FIRST
+    // answer, not "solved". Guards against inflating the pass meter to 100%.
+    Future<NazoResult?> solveSequence(
+        WidgetTester tester, List<int> taps) async {
+      // Tall phone surface so the answer tiles are on-screen + hittable.
+      tester.view.physicalSize = const Size(440, 1600);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+      final hotspot = kTown5Scene.hotspots
+          .firstWhere((h) => h.kind == HotspotKind.npc && h.step != null);
+      NazoResult? captured;
+      await tester.pumpWidget(MaterialApp(
+        home: Builder(
+          builder: (ctx) => Scaffold(
+            body: Center(
+              child: ElevatedButton(
+                onPressed: () async {
+                  captured = await Navigator.of(ctx).push<NazoResult>(
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          NazoScreen(hotspot: hotspot, eikenLevel: '5'),
+                    ),
+                  );
+                },
+                child: const Text('go'),
+              ),
+            ),
+          ),
+        ),
+      ));
+      await tester.tap(find.text('go'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+      for (final i in taps) {
+        await tester.tap(find.byType(AudioOptionButton).at(i));
+        await tester.pump();
+      }
+      // The reveal shows the「▶ ナゾ、解けた！」finish button.
+      await tester.tap(find.textContaining('解'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+      return captured;
+    }
+
+    int correctIdxOf5kuNpc() => kTown5Scene.hotspots
+        .firstWhere((h) => h.kind == HotspotKind.npc && h.step != null)
+        .step!
+        .correctIndex;
+
+    testWidgets('correct on first try → firstTryCorrect == true', (t) async {
+      final c = correctIdxOf5kuNpc();
+      final r = await solveSequence(t, [c]);
+      expect(r, isNotNull);
+      expect(r!.solved, isTrue);
+      expect(r.firstTryCorrect, isTrue);
+    });
+
+    testWidgets('wrong then correct → firstTryCorrect == false (no inflation)',
+        (t) async {
+      final c = correctIdxOf5kuNpc();
+      final wrong = c == 0 ? 1 : 0;
+      final r = await solveSequence(t, [wrong, c]);
+      expect(r, isNotNull);
+      expect(r!.solved, isTrue);
+      expect(r.firstTryCorrect, isFalse,
+          reason: 'a retried solve must NOT count as a first-try correct');
     });
   });
 
