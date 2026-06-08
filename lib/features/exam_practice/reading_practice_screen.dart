@@ -10,6 +10,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:engquest/features/quest/ui/dq_ui.dart';
 import 'eiken_exam_config.dart';
 import 'choice_shuffle.dart';
 import 'pass/cse_model.dart';
@@ -155,58 +156,60 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
   Widget build(BuildContext context) {
     // Honest empty-state: grades with no dedicated passages (e.g. 準2級プラス)
     // — never index into an empty _passages list.
+    final title = _isPassageFillIn ? '長文語句空所補充' : '長文読解';
     if (_passages.isEmpty) {
-      return Scaffold(
-        backgroundColor: const Color(0xFFF5F7FA),
-        appBar: AppBar(
-          backgroundColor: const Color(0xFF4FC3F7),
-          elevation: 0,
-          leading: IconButton(
-            icon: const Icon(Icons.close, color: Colors.white),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-          title: const Text('リーディング',
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-        ),
-        body: const Center(
-          child: Padding(
-            padding: EdgeInsets.all(24),
-            child: Text(
-              'この級（きゅう）の長文（ちょうぶん）問題（もんだい）は\n準備中（じゅんびちゅう）です。',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Color(0xFF263238), fontSize: 16, height: 1.6),
+      return DqScene(
+        child: Column(
+          children: [
+            _header(title),
+            Expanded(
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Text(
+                    'この級（きゅう）の長文（ちょうぶん）問題（もんだい）は\n準備中（じゅんびちゅう）です。',
+                    textAlign: TextAlign.center,
+                    style: dqText(size: 16, w: FontWeight.w600, color: dqInk),
+                  ),
+                ),
+              ),
             ),
-          ),
+          ],
         ),
       );
     }
-    return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA),
-      appBar: AppBar(
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF4FC3F7), Color(0xFF29B6F6)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+    return DqScene(
+      child: Column(
+        children: [
+          _header(title),
+          Expanded(
+            child: _sessionDone ? _buildResults() : _buildReading(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Dark command-bar header: a gold ✕ close + centred gold title, matching the
+  /// vocab / conversation practice screens (one coherent 本格 exam surface).
+  Widget _header(String title) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(4, 4, 12, 4),
+      child: Row(
+        children: [
+          IconButton(
+            icon: const Icon(Icons.close, color: dqInk),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          Expanded(
+            child: Text(
+              title,
+              textAlign: TextAlign.center,
+              style: dqText(size: 16, w: FontWeight.w800, color: dqGold),
             ),
           ),
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.close, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        title: Text(
-          _isPassageFillIn ? '長文語句空所補充' : '長文読解',
-          style:
-              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-      ),
-      body: SafeArea(
-        child: _sessionDone ? _buildResults() : _buildReading(),
+          const SizedBox(width: 36), // balance the close button so title centres
+        ],
       ),
     );
   }
@@ -226,22 +229,20 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
       children: [
         // Progress
         Padding(
-          padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+          padding: const EdgeInsets.fromLTRB(20, 4, 20, 0),
           child: Row(
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF9C27B0).withAlpha(20),
+                  color: dqBox,
                   borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: dqGoldDeep, width: 1),
                 ),
                 child: Text(
                   passage.type.toUpperCase(),
-                  style: const TextStyle(
-                    color: Color(0xFF9C27B0),
-                    fontSize: 11,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: dqText(
+                      size: 11, w: FontWeight.w800, color: dqGold, spacing: 1.5),
                 ),
               ),
               const SizedBox(width: 8),
@@ -253,9 +254,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
                         ? (answeredSoFar + (_answered ? 1 : 0)) /
                             _totalQuestions
                         : 0,
-                    backgroundColor: Colors.grey[200],
-                    valueColor:
-                        const AlwaysStoppedAnimation<Color>(Color(0xFF4FC3F7)),
+                    backgroundColor: dqNight1,
+                    valueColor: const AlwaysStoppedAnimation<Color>(dqGold),
                     minHeight: 6,
                   ),
                 ),
@@ -263,28 +263,18 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
               const SizedBox(width: 8),
               Text(
                 '${answeredSoFar + 1}/$_totalQuestions',
-                style: TextStyle(color: Colors.grey[600], fontSize: 13),
+                style: dqText(size: 13, w: FontWeight.w600, color: dqInk),
               ),
               const SizedBox(width: 8),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF4CAF50).withAlpha(20),
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Text(
-                  '✓$_correctCount',
-                  style: const TextStyle(
-                    color: Color(0xFF4CAF50),
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+              Text(
+                '✓$_correctCount',
+                style: dqText(
+                    size: 13, w: FontWeight.w800, color: const Color(0xFF8BE08B)),
               ),
             ],
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 10),
         // Passage
         Expanded(
           flex: 3,
@@ -292,14 +282,12 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             margin: const EdgeInsets.symmetric(horizontal: 16),
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: dqBox.withAlpha(235),
               borderRadius: BorderRadius.circular(12),
-              boxShadow: [
+              border: Border.all(color: dqBorder, width: 2),
+              boxShadow: const [
                 BoxShadow(
-                  color: Colors.black.withAlpha(8),
-                  blurRadius: 6,
-                  offset: const Offset(0, 2),
-                ),
+                    color: Colors.black54, blurRadius: 10, offset: Offset(0, 3)),
               ],
             ),
             child: SingleChildScrollView(
@@ -311,20 +299,14 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
                       padding: const EdgeInsets.only(bottom: 8),
                       child: Text(
                         passage.title,
-                        style: const TextStyle(
-                          color: Color(0xFF263238),
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style:
+                            dqText(size: 16, w: FontWeight.w800, color: dqGold),
                       ),
                     ),
                   Text(
                     passage.content,
-                    style: const TextStyle(
-                      color: Color(0xFF37474F),
-                      fontSize: 15,
-                      height: 1.7,
-                    ),
+                    style: dqText(size: 15, w: FontWeight.w500, color: dqInk)
+                        .copyWith(height: 1.7),
                   ),
                 ],
               ),
@@ -342,54 +324,68 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
               children: [
                 Text(
                   question.question,
-                  style: const TextStyle(
-                    color: Color(0xFF263238),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: dqText(size: 15, w: FontWeight.w700, color: Colors.white),
                 ),
                 const SizedBox(height: 10),
                 Expanded(
                   child: ListView.separated(
                     itemCount: question.choices.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 6),
+                    separatorBuilder: (_, __) => const SizedBox(height: 8),
                     itemBuilder: (context, i) {
                       final isSelected = _selectedAnswer == i;
                       final isCorrect = i == question.correctIdx;
 
-                      Color bgColor = Colors.white;
-                      Color borderColor = Colors.grey.shade300;
+                      Color bgColor = dqBox;
+                      Color borderColor = dqGoldDeep.withAlpha(120);
+                      Color textColor = dqInk;
 
                       if (_answered) {
                         if (isCorrect) {
-                          bgColor = const Color(0xFFE8F5E9);
-                          borderColor = const Color(0xFF4CAF50);
+                          bgColor = const Color(0xFF14301B);
+                          borderColor = const Color(0xFF8BE08B);
+                          textColor = const Color(0xFF8BE08B);
                         } else if (isSelected) {
-                          bgColor = const Color(0xFFFFEBEE);
-                          borderColor = const Color(0xFFF44336);
+                          bgColor = const Color(0xFF3A1A1A);
+                          borderColor = const Color(0xFFE0853A);
+                          textColor = const Color(0xFFE89A82);
                         }
+                      } else if (isSelected) {
+                        borderColor = dqGold;
+                        bgColor = dqNight1;
                       }
 
                       return Material(
                         color: bgColor,
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(10),
                         child: InkWell(
                           key: ValueKey('reading_choice_$i'),
                           onTap: () => _selectAnswer(i),
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(10),
                           child: Container(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 10),
+                                horizontal: 14, vertical: 12),
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: borderColor),
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: borderColor, width: 2),
                             ),
-                            child: Text(
-                              '${i + 1}. ${question.choices[i]}',
-                              style: const TextStyle(
-                                color: Color(0xFF263238),
-                                fontSize: 14,
-                              ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    '${i + 1}. ${question.choices[i]}',
+                                    style: dqText(
+                                        size: 15,
+                                        w: FontWeight.w600,
+                                        color: textColor),
+                                  ),
+                                ),
+                                if (_answered && isCorrect)
+                                  const Icon(Icons.check_circle_rounded,
+                                      color: Color(0xFF8BE08B), size: 20),
+                                if (_answered && isSelected && !isCorrect)
+                                  const Icon(Icons.cancel_rounded,
+                                      color: Color(0xFFE0853A), size: 20),
+                              ],
                             ),
                           ),
                         ),
@@ -400,19 +396,7 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
                 if (_answered)
                   Padding(
                     padding: const EdgeInsets.only(top: 8, bottom: 8),
-                    child: ElevatedButton(
-                      onPressed: _next,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF4FC3F7),
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      child: const Text('次へ',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                    ),
+                    child: DqButton(label: '次へ', onTap: _next),
                   ),
               ],
             ),
@@ -429,43 +413,33 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
     final passed = pct >= 60;
 
     return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            passed ? Icons.emoji_events : Icons.refresh,
-            size: 72,
-            color: passed ? const Color(0xFFFFD700) : Colors.grey,
-          ),
-          const SizedBox(height: 16),
-          Text(
-            passed ? '合格ライン到達！' : 'もう少し！',
-            style: const TextStyle(
-              color: Color(0xFF263238),
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 40),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              passed ? Icons.workspace_premium_rounded : Icons.refresh_rounded,
+              size: 72,
+              color: passed ? dqGold : dqInk.withAlpha(140),
             ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            '$_correctCount / $_totalQuestions 正解 ($pct%)',
-            style: TextStyle(color: Colors.grey[700], fontSize: 18),
-          ),
-          const SizedBox(height: 32),
-          ElevatedButton(
-            onPressed: () => Navigator.of(context).pop(),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF4FC3F7),
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 40),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
+            const SizedBox(height: 16),
+            Text(
+              passed ? '合格ライン到達！' : 'もう少し！',
+              style: dqText(size: 24, w: FontWeight.w900, color: dqGold),
             ),
-            child: const Text('戻る',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          ),
-        ],
+            const SizedBox(height: 12),
+            Text(
+              '$_correctCount / $_totalQuestions 正解 ($pct%)',
+              style: dqText(size: 18, w: FontWeight.w600, color: dqInk),
+            ),
+            const SizedBox(height: 32),
+            DqButton(
+              label: '戻る',
+              onTap: () => Navigator.of(context).pop(),
+            ),
+          ],
+        ),
       ),
     );
   }

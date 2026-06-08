@@ -21,6 +21,7 @@ import 'package:engquest/features/exam_practice/eiken_exam_config.dart';
 import 'package:engquest/features/exam_practice/word_ordering_practice_screen.dart';
 import 'package:engquest/features/exam_practice/vocab_grammar_practice_screen.dart';
 import 'package:engquest/features/exam_practice/conversation_practice_screen.dart';
+import 'package:engquest/features/exam_practice/reading_practice_screen.dart';
 import 'package:engquest/features/settings/settings_screen.dart';
 import 'package:engquest/features/achievements/achievements_screen.dart';
 import 'package:engquest/features/parent_dashboard/parent_dashboard_screen.dart';
@@ -303,7 +304,7 @@ const List<String> kPreviewRouteNames = [
   'kotobahome', 'passmeter', 'passmetermissing', 'passprogress', 'speaking',
   'speakingconsent',
   'listening2', 'achievements', 'parent', 'parentlogin', 'wordorder',
-  'conversation', 'settings', 'listeningpp', 'listeningp1',
+  'conversation', 'reading', 'settings', 'listeningpp', 'listeningp1',
 ];
 
 /// Test-visible wrapper for the private preview harness.
@@ -422,6 +423,21 @@ Widget _previewFor(String? name) {
           type: ExamSectionType.conversationComplete,
           questionCount: 8,
           timeLimitMinutes: 8,
+          description: 'Preview',
+        ),
+      );
+    case 'reading':
+      // 英検5級 大問3 長文読解 — render-proofs the dark dq-themed reading flow
+      // (passage + shuffled MCQ). Unifies the visual system (#67).
+      return const ReadingPracticeScreen(
+        eikenGrade: '5',
+        section: ExamSection(
+          id: '5_r3',
+          nameJa: '筆記3: 長文読解',
+          nameEn: 'Reading Comprehension',
+          type: ExamSectionType.readingComprehension,
+          questionCount: 4,
+          timeLimitMinutes: 10,
           description: 'Preview',
         ),
       );

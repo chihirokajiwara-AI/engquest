@@ -93,6 +93,20 @@ void main() {
     );
   }
 
+  // Pump at a realistic tall-phone viewport. The choices live in a scrollable
+  // ListView; at the default 800×600 test surface only ~3 of 4 choices are laid
+  // out, so when the answer-key-bias shuffle lands the answer in the 4th slot a
+  // content finder sees 0 (a real phone is tall and renders all four). A fixed
+  // tall view makes the choice tests deterministic and matches real usage.
+  Future<void> pumpReading(
+      WidgetTester tester, String grade, ExamSection section) async {
+    tester.view.physicalSize = const Size(440, 1400);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(buildScreen(grade, section));
+    await tester.pumpAndSettle();
+  }
+
   // Answer positions are now shuffled per session (positional answer-key-bias
   // fix), so locate a choice by its TEXT regardless of which slot it landed in.
   // A choice renders as "<n>. <answer>", so an anchored regex matches the choice
@@ -114,8 +128,7 @@ void main() {
 
   group('ReadingPracticeScreen', () {
     testWidgets('renders passage and question for grade 5', (tester) async {
-      await tester.pumpWidget(buildScreen('5', grade5Section));
-      await tester.pumpAndSettle();
+      await pumpReading(tester, '5', grade5Section);
 
       // Should show the title '長文読解'
       expect(find.text('長文読解'), findsOneWidget);
@@ -128,8 +141,7 @@ void main() {
     });
 
     testWidgets('selecting an answer highlights correct/wrong', (tester) async {
-      await tester.pumpWidget(buildScreen('5', grade5Section));
-      await tester.pumpAndSettle();
+      await pumpReading(tester, '5', grade5Section);
 
       // Tap correct answer (wherever it shuffled to)
       await tester.tap(choice('On Saturday, November 15'));
@@ -140,8 +152,7 @@ void main() {
     });
 
     testWidgets('advances through questions and shows results', (tester) async {
-      await tester.pumpWidget(buildScreen('5', grade5Section));
-      await tester.pumpAndSettle();
+      await pumpReading(tester, '5', grade5Section);
 
       // Answer all 4 questions (2 passages × 2 questions). Tap whatever choice
       // is in slot 0 — we only need to advance, not be correct.
@@ -157,8 +168,7 @@ void main() {
     });
 
     testWidgets('grade 4 shows correct number of passages', (tester) async {
-      await tester.pumpWidget(buildScreen('4', grade4Section));
-      await tester.pumpAndSettle();
+      await pumpReading(tester, '4', grade4Section);
 
       // Grade 4 should show article type first
       expect(find.text('ARTICLE'), findsOneWidget);
@@ -166,8 +176,7 @@ void main() {
     });
 
     testWidgets('grade 3 has at least 10 questions total', (tester) async {
-      await tester.pumpWidget(buildScreen('3', grade3Section));
-      await tester.pumpAndSettle();
+      await pumpReading(tester, '3', grade3Section);
 
       // Grade 3 should show notice type first
       expect(find.text('NOTICE'), findsOneWidget);
@@ -176,24 +185,21 @@ void main() {
     });
 
     testWidgets('pre-2 has at least 7 questions total', (tester) async {
-      await tester.pumpWidget(buildScreen('pre2', pre2Section));
-      await tester.pumpAndSettle();
+      await pumpReading(tester, 'pre2', pre2Section);
 
       // Progress should show /7
       expect(find.textContaining('/7'), findsOneWidget);
     });
 
     testWidgets('grade 2 comprehension has 12 questions', (tester) async {
-      await tester.pumpWidget(buildScreen('2', grade2Section));
-      await tester.pumpAndSettle();
+      await pumpReading(tester, '2', grade2Section);
 
       // Progress should show /12
       expect(find.textContaining('/12'), findsOneWidget);
     });
 
     testWidgets('grade 2 fill-in shows correct title', (tester) async {
-      await tester.pumpWidget(buildScreen('2', grade2FillInSection));
-      await tester.pumpAndSettle();
+      await pumpReading(tester, '2', grade2FillInSection);
 
       // Should show fill-in specific title
       expect(find.text('長文語句空所補充'), findsOneWidget);
@@ -202,24 +208,21 @@ void main() {
     });
 
     testWidgets('pre-1 comprehension has 10 questions', (tester) async {
-      await tester.pumpWidget(buildScreen('pre1', pre1Section));
-      await tester.pumpAndSettle();
+      await pumpReading(tester, 'pre1', pre1Section);
 
       // Progress should show /10
       expect(find.textContaining('/10'), findsOneWidget);
     });
 
     testWidgets('pre-1 fill-in shows correct title and count', (tester) async {
-      await tester.pumpWidget(buildScreen('pre1', pre1FillInSection));
-      await tester.pumpAndSettle();
+      await pumpReading(tester, 'pre1', pre1FillInSection);
 
       expect(find.text('長文語句空所補充'), findsOneWidget);
       expect(find.textContaining('/6'), findsOneWidget);
     });
 
     testWidgets('results show pass when >= 60%', (tester) async {
-      await tester.pumpWidget(buildScreen('5', grade5Section));
-      await tester.pumpAndSettle();
+      await pumpReading(tester, '5', grade5Section);
 
       // Answer all 4 correctly by their TEXT (positions are now shuffled).
       await answer(tester, 'On Saturday, November 15');
