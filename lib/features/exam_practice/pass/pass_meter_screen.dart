@@ -300,10 +300,15 @@ class _SkillBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final ratio = maxScore > 0 ? (score / maxScore).clamp(0.0, 1.0) : 0.0;
     const mutedColor = Color(0xFF3A4256); // unmeasured: neutral, not warning
-    // Unmeasured skills are NOT flagged as the "failed" limiter — show neutral.
+    // Performance-coded so a parent reads strong vs weak at a glance (audit):
+    // green ≥80%, gold 65–79%, amber <65%. Unmeasured stays neutral (not failed).
     final barColor = unmeasured
         ? mutedColor
-        : (isLimiting ? const Color(0xFFE8B050) : const Color(0xFF6ABFEF));
+        : ratio >= 0.8
+            ? const Color(0xFF8BE08B) // green — strong
+            : ratio >= 0.65
+                ? const Color(0xFFE8B050) // gold — building
+                : const Color(0xFFE0853A); // amber — needs work
     final pctText = '${(ratio * 100).toStringAsFixed(0)}%';
 
     return Column(
