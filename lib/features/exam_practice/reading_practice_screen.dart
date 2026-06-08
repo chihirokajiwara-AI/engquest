@@ -977,6 +977,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'Over 50%',
           ],
           correctIdx: 2,
+          explanation:
+              '"By 2025, that figure had risen to nearly 20%." とあるね。2025年には新車（しんしゃ）の「約20%」が電気自動車（でんきじどうしゃ）だったよ。',
         ),
         _ComprehensionQuestion(
           question: 'How much have battery costs decreased since 2010?',
@@ -987,6 +989,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'By about 95%',
           ],
           correctIdx: 2,
+          explanation:
+              '"the cost of batteries has dropped ... by about 80% since 2010" とあるよ。電池（でんち）のコストは「約80%」下がった。',
         ),
         _ComprehensionQuestion(
           question: 'What is one challenge mentioned about EVs in rural areas?',
@@ -997,6 +1001,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'The roads are too rough for EVs',
           ],
           correctIdx: 1,
+          explanation:
+              '"Many rural areas still lack charging stations" とあるね。地方（ちほう）の課題（かだい）は「じゅうでんスタンドが足りない」こと。',
         ),
         _ComprehensionQuestion(
           question:
@@ -1008,6 +1014,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'Factory smoke causes air pollution',
           ],
           correctIdx: 1,
+          explanation:
+              '"mining lithium and cobalt can damage ecosystems" とあるよ。電池作りの問題は「リチウムやコバルトをほり出すと自然（しぜん）をこわすこと」。',
         ),
       ],
     ),
@@ -1041,6 +1049,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'Six weeks',
           ],
           correctIdx: 2,
+          explanation:
+              '"expand the program from two weeks to four weeks" とあるね。来年（らいねん）のプログラムは「4週間（four weeks）」になるよ。',
         ),
         _ComprehensionQuestion(
           question: 'What is a new activity added to the program?',
@@ -1051,6 +1061,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'Taking a language certification test',
           ],
           correctIdx: 1,
+          explanation:
+              '"attend classes at a local high school" とあるよ。新しい活動の一つは「地元（じもと）の高校で授業（じゅぎょう）を受ける」こと。',
         ),
         _ComprehensionQuestion(
           question: 'How much deposit must be paid by March 31?',
@@ -1061,6 +1073,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             '\$3,200',
           ],
           correctIdx: 1,
+          explanation:
+              '"A deposit of \$500 is required by March 31" とあるね。3月31日までに払う前金（まえきん）は「500ドル」が正解。',
         ),
       ],
     ),
