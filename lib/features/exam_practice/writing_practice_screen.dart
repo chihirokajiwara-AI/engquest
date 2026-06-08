@@ -391,6 +391,21 @@ class WritingRubricResult {
   int get maxScore => scores.length * 4;
 }
 
+/// The (correct, total) signal a graded writing [result] contributes to the
+/// 合格率 — or null when it must NOT be recorded.
+///
+/// Writing is recorded ONLY when the AI grader was available: an offline /
+/// ungraded submission must not pollute the baseline with a 0 (that is the #36
+/// "未測定, not 0" honesty). A graded result is mapped to a binary pass/fail at
+/// 50% of the rubric maximum (one prompt per session → one signal). Pulled out
+/// as a pure function so the record-path integrity (#37) is pinned without a
+/// live AI grader; [_WritingPracticeScreenState._recordWritingResult] uses it.
+({int correct, int total})? writingAccuracySignal(WritingRubricResult result) {
+  if (!result.apiAvailable) return null;
+  if (result.maxScore <= 0) return null;
+  return (correct: result.total >= result.maxScore / 2 ? 1 : 0, total: 1);
+}
+
 // ── Grading prompt builder ────────────────────────────────────────────────────
 
 String _buildGradingSystemPrompt(WritingPrompt prompt) {
@@ -644,17 +659,16 @@ class _WritingPracticeScreenState extends State<WritingPracticeScreen> {
   /// ungraded submissions do not pollute the accuracy baseline.
   Future<void> _recordWritingResult() async {
     final result = _result;
-    if (result == null || !result.apiAvailable) return;
-    if (result.maxScore <= 0) return;
+    if (result == null) return;
+    final signal = writingAccuracySignal(result);
+    if (signal == null) return; // ungraded / no API → 未測定, never a 0
     try {
       final store = await SkillAccuracyStore.getInstance();
-      // Binary signal: pass if ≥50% of rubric total earned.
-      final correct = result.total >= result.maxScore / 2 ? 1 : 0;
       await store.record(
         grade: widget.eikenGrade,
         skill: EikenSkill.writing,
-        correct: correct,
-        total: 1,
+        correct: signal.correct,
+        total: signal.total,
       );
     } catch (_) {
       // Store errors are non-fatal — never interrupt the learner.
