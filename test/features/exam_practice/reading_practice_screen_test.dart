@@ -151,6 +151,19 @@ void main() {
       expect(find.text('次へ'), findsOneWidget);
     });
 
+    testWidgets('answered choice tiles expose せいかい/ふせいかい to screen readers (#92)',
+        (tester) async {
+      final handle = tester.ensureSemantics();
+      await pumpReading(tester, '5', grade5Section);
+      // Pick a WRONG answer so we get both a せいかい (the correct tile) and a
+      // ふせいかい (the wrong pick) announced — the a11y answered-state feedback.
+      await tester.tap(choice('On Friday, November 14'));
+      await tester.pumpAndSettle();
+      expect(find.bySemanticsLabel(RegExp('せいかい')), findsWidgets);
+      expect(find.bySemanticsLabel(RegExp('ふせいかい')), findsOneWidget);
+      handle.dispose();
+    });
+
     testWidgets('after answering, teaches WHY with passage evidence (#5)',
         (tester) async {
       await pumpReading(tester, '5', grade5Section);

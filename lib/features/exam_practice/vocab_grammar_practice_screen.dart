@@ -361,9 +361,19 @@ class _VocabGrammarPracticeScreenState
               bgColor = dqNight1;
             }
 
+            final semLabel = _answered && isCorrect
+                ? '${i + 1}. ${q.choices[i]}、せいかい'
+                : _answered && isSelected && !isCorrect
+                    ? '${i + 1}. ${q.choices[i]}、ふせいかい'
+                    : '${i + 1}. ${q.choices[i]}';
             return Padding(
               padding: const EdgeInsets.only(bottom: 10),
-              child: Material(
+              child: Semantics(
+                button: true,
+                label: semLabel,
+                onTap: _answered ? null : () => _selectAnswer(i),
+                excludeSemantics: true,
+                child: Material(
                 color: bgColor,
                 borderRadius: BorderRadius.circular(12),
                 child: InkWell(
@@ -420,6 +430,7 @@ class _VocabGrammarPracticeScreenState
                     ),
                   ),
                 ),
+              ),
               ),
             );
           }),

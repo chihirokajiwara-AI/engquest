@@ -307,7 +307,17 @@ class _ConversationPracticeScreenState
                         bgColor = dqNight1;
                       }
 
-                      return Material(
+                      final semLabel = _answered && isCorrect
+                          ? '${i + 1}. ${p.choices[i]}、せいかい'
+                          : _answered && isSelected && !isCorrect
+                              ? '${i + 1}. ${p.choices[i]}、ふせいかい'
+                              : '${i + 1}. ${p.choices[i]}';
+                      return Semantics(
+                        button: true,
+                        label: semLabel,
+                        onTap: _answered ? null : () => _selectAnswer(i),
+                        excludeSemantics: true,
+                        child: Material(
                         color: bgColor,
                         borderRadius: BorderRadius.circular(10),
                         child: InkWell(
@@ -350,6 +360,7 @@ class _ConversationPracticeScreenState
                             ),
                           ),
                         ),
+                      ),
                       );
                     },
                   ),
