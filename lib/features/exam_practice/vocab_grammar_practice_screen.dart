@@ -138,6 +138,26 @@ class _VocabGrammarPracticeScreenState
     }
   }
 
+  /// Test hook (#37 record-path integrity): the correct choice text for each
+  /// generated question, in order. Questions are randomised at runtime from the
+  /// vocab DB, so the record-path test cannot know the answers from outside;
+  /// this lets it answer deterministically and assert the recorded (skill,
+  /// correct, total) faithfully matches the session.
+  @visibleForTesting
+  List<String> get debugCorrectChoices =>
+      _questions.map((q) => q.choices[q.correctIdx]).toList();
+
+  /// Test hook (#37): a choice text for [questionIdx] that is NOT the correct
+  /// answer — lets the record-path test deliberately answer one question wrong.
+  @visibleForTesting
+  String debugWrongChoiceFor(int questionIdx) {
+    final q = _questions[questionIdx];
+    for (var i = 0; i < q.choices.length; i++) {
+      if (i != q.correctIdx) return q.choices[i];
+    }
+    return q.choices.first;
+  }
+
   void _nextQuestion() {
     if (_currentIdx >= _questions.length - 1) {
       _recordSessionResult(); // fire-and-forget; UI does not wait

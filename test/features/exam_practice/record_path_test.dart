@@ -27,6 +27,7 @@ import 'package:engquest/features/exam_practice/conversation_practice_screen.dar
 import 'package:engquest/features/exam_practice/word_ordering_practice_screen.dart';
 import 'package:engquest/features/exam_practice/listening_practice_screen.dart';
 import 'package:engquest/features/exam_practice/listening_data.dart';
+import 'package:engquest/features/exam_practice/vocab_grammar_practice_screen.dart';
 import 'package:engquest/features/quest/ui/dq_ui.dart';
 
 ExamSection _section(ExamSectionType type) => ExamSection(
@@ -208,4 +209,106 @@ void main() {
     expect(reading.itemsAttempted, equals(0),
         reason: 'listening leaked into reading — the copy-paste miswire bug');
   });
+
+  // ── 大問1 vocab/grammar (#37) ──────────────────────────────────────────────
+  // The highest-VOLUME practice section (every grade's biggest part) and thus
+  // the biggest lever on each learner's 合格率. Questions are randomised from the
+  // vocab DB at runtime, so we read the correct answers via the screen's
+  // @visibleForTesting hook and answer deterministically.
+  //
+  // The screen loads the vocab JSON via rootBundle (real async I/O) in initState
+  // — pumpAndSettle (fake-async) starves it while the loading spinner animates,
+  // so we let the load complete inside tester.runAsync, then pump to rebuild.
+
+  Future<_VocabState> pumpVocab(WidgetTester tester, String grade) async {
+    // Tall surface so the question content + 次の問題へ button are on-screen and
+    // tappable (the default 800x600 is too short for the cloze + 4 choices).
+    tester.view.physicalSize = const Size(800, 1600);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(MaterialApp(
+      home: VocabGrammarPracticeScreen(
+        eikenGrade: grade,
+        section: _section(ExamSectionType.vocabGrammar),
+      ),
+    ));
+    await tester.pump(); // initState fires _loadQuestions (real async)
+    await tester.runAsync(() async {
+      // Real event loop turns here: rootBundle.loadString + jsonDecode resolve.
+      await Future<void>.delayed(const Duration(milliseconds: 500));
+    });
+    await tester.pump(); // rebuild now that _loading=false & questions are set
+    final state = tester.state(find.byType(VocabGrammarPracticeScreen));
+    final corrects =
+        ((state as dynamic).debugCorrectChoices as List).cast<String>();
+    return _VocabState(state, corrects);
+  }
+
+  testWidgets('大問1 vocab/grammar records reading accuracy for the right grade',
+      (tester) async {
+    const grade = '5';
+    final v = await pumpVocab(tester, grade);
+    expect(v.corrects, isNotEmpty,
+        reason: '5級 has 600 eligible words → should generate questions');
+
+    for (var i = 0; i < v.corrects.length; i++) {
+      await tester.tap(find.text(v.corrects[i]).first);
+      await tester.pump();
+      await tester
+          .tap(find.text(i < v.corrects.length - 1 ? '次の問題へ' : '結果を見る'));
+      await tester.pump();
+    }
+    await tester.pump(const Duration(milliseconds: 300));
+    await tester.pump();
+
+    final reading = await _readingFor(grade);
+    expect(reading.itemsAttempted, equals(v.corrects.length),
+        reason: 'must record total = #questions to the reading skill');
+    expect(reading.accuracy, equals(1.0),
+        reason: 'all-correct → 100% reading accuracy');
+
+    // SKILL ISOLATION: 大問1 is a READING 大問 — it must NOT touch listening.
+    final listening = await _skillFor(grade, EikenSkill.listening);
+    expect(listening.itemsAttempted, equals(0),
+        reason: '大問1 vocab must not record to the listening meter');
+
+    // GRADE ISOLATION.
+    final other = await _readingFor('4');
+    expect(other.itemsAttempted, equals(0));
+  });
+
+  testWidgets('大問1: a WRONG answer is recorded as correct<total (not full marks)',
+      (tester) async {
+    const grade = '5';
+    final v = await pumpVocab(tester, grade);
+    final n = v.corrects.length;
+    expect(n, greaterThanOrEqualTo(2),
+        reason: 'need ≥2 questions to make one wrong, rest right');
+
+    for (var i = 0; i < n; i++) {
+      if (i == 0) {
+        // Deliberately answer the FIRST question wrong.
+        final wrong = (v.state as dynamic).debugWrongChoiceFor(0) as String;
+        await tester.tap(find.text(wrong).first);
+      } else {
+        await tester.tap(find.text(v.corrects[i]).first);
+      }
+      await tester.pump();
+      await tester.tap(find.text(i < n - 1 ? '次の問題へ' : '結果を見る'));
+      await tester.pump();
+    }
+    await tester.pump(const Duration(milliseconds: 300));
+    await tester.pump();
+
+    final reading = await _readingFor(grade);
+    expect(reading.itemsAttempted, equals(n));
+    expect(reading.accuracy, closeTo((n - 1) / n, 0.001),
+        reason: 'one wrong → correct = N-1, faithfully recorded');
+  });
+}
+
+class _VocabState {
+  _VocabState(this.state, this.corrects);
+  final dynamic state;
+  final List<String> corrects;
 }
