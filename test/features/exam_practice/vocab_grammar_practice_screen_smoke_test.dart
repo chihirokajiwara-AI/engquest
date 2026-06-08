@@ -26,6 +26,30 @@ void main() {
   setUpAll(() => GoogleFonts.config.allowRuntimeFetching = false);
   setUp(() => SharedPreferences.setMockInitialValues({}));
 
+  // A cloze must never leak the answer via a suffix/compound (#78).
+  group('hasCleanCloze (#78 no-leak filter)', () {
+    test('accepts a clean single whole-word occurrence', () {
+      expect(hasCleanCloze('The cat sat on the mat.', 'cat'), isTrue);
+    });
+    test('rejects an inflected form (would blank "(  )s")', () {
+      expect(hasCleanCloze('A line of ants moved along.', 'ant'), isFalse);
+      expect(hasCleanCloze('She teaches every morning.', 'teach'), isFalse);
+    });
+    test('rejects a compound substring leak (snow in snowman)', () {
+      expect(hasCleanCloze('We built a snowman in the snow.', 'snow'), isFalse);
+    });
+    test('rejects a double whole-word occurrence', () {
+      expect(hasCleanCloze('I see a dog and a dog.', 'dog'), isFalse);
+    });
+    test('rejects multi-word / underscore keys', () {
+      expect(hasCleanCloze('I like ice cream a lot.', 'ice cream'), isFalse);
+      expect(hasCleanCloze('Say thank you to her.', 'thank_you'), isFalse);
+    });
+    test('rejects when the word is absent', () {
+      expect(hasCleanCloze('A short sentence.', 'elephant'), isFalse);
+    });
+  });
+
   // The example-sentence highlight must never emphasise a fragment of an
   // inflected form (adversarial-audit fix: "ant" inside "ants").
   group('wholeWordMatch (#77 highlight honesty)', () {

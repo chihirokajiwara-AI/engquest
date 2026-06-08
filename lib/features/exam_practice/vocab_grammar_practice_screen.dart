@@ -24,6 +24,23 @@ RegExpMatch? wholeWordMatch(String sentence, String word) =>
     RegExp('\\b${RegExp.escape(word)}\\b', caseSensitive: false)
         .firstMatch(sentence);
 
+/// True when [word] can be cleanly blanked in [sentence] for a cloze: it appears
+/// as a whole word EXACTLY once and NOT as a substring of any other word (#78).
+/// This rejects the leaky cases — inflected forms ("ant" → "(  )s" reveals the
+/// plural), compounds ("snow" inside "snowman" while standalone "snow" stays
+/// visible), and multi-word/underscore keys — so a child never sees the answer.
+bool hasCleanCloze(String sentence, String word) {
+  final w = word.trim();
+  if (w.isEmpty || w.contains('_') || w.contains(' ')) return false;
+  final whole =
+      RegExp('\\b${RegExp.escape(w)}\\b', caseSensitive: false)
+          .allMatches(sentence)
+          .length;
+  final anySub =
+      RegExp(RegExp.escape(w), caseSensitive: false).allMatches(sentence).length;
+  return whole == 1 && anySub == 1;
+}
+
 class VocabGrammarPracticeScreen extends StatefulWidget {
   const VocabGrammarPracticeScreen({
     super.key,
@@ -69,10 +86,15 @@ class _VocabGrammarPracticeScreenState
       await _vocabRepo.initialize(eikenGrade: widget.eikenGrade);
       final allWords = _vocabRepo.getAll();
 
-      // Filter to words that have distractors and example sentences
+      // Eligible = has 3 distractors AND a first example sentence that can be
+      // CLEANLY clozed (#78): the word appears as a whole word exactly once and
+      // not inside another word, so the blank never leaks a suffix/compound.
+      // 61–80% of items qualify per grade — far more than a session needs.
       final eligible = allWords
-          .where(
-              (w) => w.distractors.length >= 3 && w.exampleSentences.isNotEmpty)
+          .where((w) =>
+              w.distractors.length >= 3 &&
+              w.exampleSentences.isNotEmpty &&
+              hasCleanCloze(w.exampleSentences.first, w.word))
           .toList()
         ..shuffle(_rng);
 
@@ -113,15 +135,13 @@ class _VocabGrammarPracticeScreenState
     }
   }
 
-  /// Replace the target word in the sentence with (    ).
+  /// Blank the target WHOLE word in the sentence (#78). Items are pre-filtered by
+  /// [hasCleanCloze] so a whole-word match exists and is unique; the prepend
+  /// fallback is a safety net that should not normally trigger.
   String _makeCloze(String sentence, String word) {
-    // Case-insensitive replacement of the word
-    final pattern = RegExp(RegExp.escape(word), caseSensitive: false);
-    if (pattern.hasMatch(sentence)) {
-      return sentence.replaceFirst(pattern, '(        )');
-    }
-    // If word not found in sentence, prepend cloze
-    return '(        ) — $sentence';
+    final m = wholeWordMatch(sentence, word);
+    if (m == null) return '(        ) — $sentence';
+    return '${sentence.substring(0, m.start)}(        )${sentence.substring(m.end)}';
   }
 
   /// Split [sentence] at the first WHOLE-WORD occurrence of [word] and emphasise
