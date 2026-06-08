@@ -51,6 +51,7 @@ import '../../core/data/vocab_repository.dart';
 import '../../core/models/vocab_item.dart';
 import '../exam_practice/pass/cse_model.dart';
 import '../exam_practice/pass/skill_accuracy_store.dart';
+import '../exam_practice/pass/pass_progress_card.dart';
 import '../home/streak_service.dart';
 import '../quest/ui/dq_ui.dart';
 
@@ -173,6 +174,11 @@ class _BattleScreenState extends State<BattleScreen>
   // ── Session stats ──────────────────────────────────────────────────────────
   final List<_CardResult> _sessionResults = [];
   bool _sessionDone = false;
+
+  // 合格率 before this session (baseline) and after (for the session-end progress
+  // moment). Null until computed / when the grade has no estimate yet.
+  CseEstimate? _preEstimate;
+  CseEstimate? _postEstimate;
 
   // ── Session timer (P0.1) ────────────────────────────────────────────────────
   /// Wall-clock timestamp captured when the deck finishes loading and the first
@@ -329,6 +335,14 @@ class _BattleScreenState extends State<BattleScreen>
       // Session begins now — first card is visible. Capture start timestamp
       // so we can compute real elapsed minutes when the session completes.
       _sessionStartTime = DateTime.now();
+      // Clear last session's progress snapshot so the summary recomputes fresh.
+      _postEstimate = null;
+    });
+
+    // Capture the 合格率 baseline BEFORE this session records anything, so the
+    // session-end card can show how far the child moved (+N%).
+    liveCseEstimate(widget.eikenGrade).then((e) {
+      if (mounted) _preEstimate = e;
     });
   }
 
@@ -450,19 +464,29 @@ class _BattleScreenState extends State<BattleScreen>
   /// Bridges the daily vocab Battle into the 合格率 (#35): records this session's
   /// vocab accuracy into [SkillAccuracyStore] as reading-skill evidence, so daily
   /// practice actually moves the pass-probability (it previously did not). Bounded
-  /// + conservative — see [battleReadingContribution]. Fire-and-forget; storage
-  /// errors are swallowed by the store's guarded in-memory fallback.
+  /// + conservative — see [battleReadingContribution]. Then recomputes the live
+  /// 合格率 so the session-end [PassProgressCard] shows the child their movement
+  /// toward 合格. Fire-and-forget; storage errors are swallowed by the store's
+  /// guarded in-memory fallback.
   void _recordSkillAccuracy() {
-    final c = battleReadingContribution(_sessionResults.map((r) => r.grade));
-    if (c.total <= 0) return;
     unawaited(() async {
-      final store = await SkillAccuracyStore.getInstance();
-      await store.record(
-        grade: widget.eikenGrade,
-        skill: EikenSkill.reading,
-        correct: c.correct,
-        total: c.total,
-      );
+      final c = battleReadingContribution(_sessionResults.map((r) => r.grade));
+      if (c.total > 0) {
+        try {
+          final store = await SkillAccuracyStore.getInstance();
+          await store.record(
+            grade: widget.eikenGrade,
+            skill: EikenSkill.reading,
+            correct: c.correct,
+            total: c.total,
+          );
+        } catch (_) {
+          // Non-fatal: in-memory fallback handles store errors.
+        }
+      }
+      // Recompute AFTER recording so the summary reflects this session.
+      final post = await liveCseEstimate(widget.eikenGrade);
+      if (mounted) setState(() => _postEstimate = post);
     }());
   }
 
@@ -1063,6 +1087,13 @@ class _BattleScreenState extends State<BattleScreen>
                   child: Text('✨ +$_totalXp XP 獲得！',
                       style: dqText(size: 16, w: FontWeight.w800, color: dqGold)),
                 ),
+                // 合格率 progress moment — the in-context "I'm closer to 合格"
+                // signal at peak engagement (the daily-return spine, CEO 951).
+                // Skipped when there's no estimate yet (never fabricate).
+                if (_postEstimate != null) ...[
+                  const SizedBox(height: 22),
+                  PassProgressCard(pre: _preEstimate, post: _postEstimate!),
+                ],
                 const SizedBox(height: 28),
                 _SummaryCard(
                   title: 'けっか / Results',

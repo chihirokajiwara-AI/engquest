@@ -30,6 +30,7 @@ import 'package:engquest/features/quest/ui/dq_ui.dart';
 import 'package:engquest/features/explore/scene_view.dart';
 import 'package:engquest/features/home/kotoba_home_screen.dart';
 import 'package:engquest/features/exam_practice/pass/pass_meter_screen.dart';
+import 'package:engquest/features/exam_practice/pass/pass_progress_card.dart';
 import 'package:engquest/features/exam_practice/pass/cse_model.dart';
 import 'package:engquest/features/speaking/speaking_consent_notice.dart';
 import 'package:engquest/features/speaking/speaking_screen.dart';
@@ -298,7 +299,8 @@ const List<String> kPreviewRouteNames = [
   'quest', 'quest5t', 'quest5', 'quest5q', 'quest5c', 'quest4', 'quest3',
   'quest2', 'battle', 'dialog', 'voice', 'exam', 'writing', 'writing2',
   'writingp1', 'listening', 'listening4', 'listening3', 'listeningp2',
-  'kotobahome', 'passmeter', 'passmetermissing', 'speaking', 'speakingconsent',
+  'kotobahome', 'passmeter', 'passmetermissing', 'passprogress', 'speaking',
+  'speakingconsent',
   'listening2', 'achievements', 'parent', 'parentlogin', 'wordorder',
   'conversation', 'settings', 'listeningpp', 'listeningp1',
 ];
@@ -547,6 +549,37 @@ Widget _previewFor(String? name) {
             SkillAccuracy(
                 skill: EikenSkill.listening, accuracy: 0.61, itemsAttempted: 18),
           ],
+        ),
+      );
+    case 'passprogress':
+      // Session-end 合格率 progress moment (gain state): readiness rose this
+      // session, so the card shows a +delta badge + gauge.
+      return Scaffold(
+        backgroundColor: dqNight0,
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(18),
+            child: PassProgressCard(
+              pre: CseEstimator.estimate(
+                grade: '5',
+                accuracies: const [
+                  SkillAccuracy(
+                      skill: EikenSkill.reading,
+                      accuracy: 0.58,
+                      itemsAttempted: 30),
+                ],
+              ),
+              post: CseEstimator.estimate(
+                grade: '5',
+                accuracies: const [
+                  SkillAccuracy(
+                      skill: EikenSkill.reading,
+                      accuracy: 0.74,
+                      itemsAttempted: 48),
+                ],
+              )!,
+            ),
+          ),
         ),
       );
     case 'speaking':
