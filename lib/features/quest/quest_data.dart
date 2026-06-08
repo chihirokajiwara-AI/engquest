@@ -1843,9 +1843,13 @@ const List<QuestTown> kQuestTowns = [
     cefr: 'B1-B2',
     name: '学者（がくしゃ）の城下町（じょうかまち）',
     tagline: '学問とビジネスの町',
-    intro: '学者（がくしゃ）の城下町（じょうかまち）。学問（がくもん）とビジネスの言葉（ことば）が交（か）わされる町（まち）。'
-        'ここまで来（こ）られる勇者（ゆうしゃ）は少（すく）ない。最後（さいご）の〈声（こえ）の石（いし）〉が、城（しろ）の奥（おく）に眠（ねむ）る。',
-    cleared: '六（むっ）つ目（め）――最後（さいご）の〈声（こえ）の石（いし）〉がそろった！ むねの石（いし）と合（あ）わせ、〈ことばの紋章（もんしょう）〉が かんせいする。'
+    intro: '学者（がくしゃ）の城下町（じょうかまち）。学問（がくもん）とビジネスの言葉（ことば）が交（か）わされる町（まち）。\n'
+        '城（しろ）の門（もん）を守（まも）るのは、学士（がくし）オーレン。かつて彼（かれ）は「沈黙（ちんもく）は安全（あんぜん）だ」と考（かんが）え、'
+        'サイレントに同意（どうい）して、ある一冊（いっさつ）の本（ほん）を書庫（しょこ）から消（け）した――なぜ？\n'
+        '正（ただ）しい言（こと）づかい（仮定法（かていほう）・論（ろん）の運（はこ）び）で彼（かれ）と論（ろん）じ合（あ）い、最後（さいご）の〈声（こえ）の石（いし）〉をとり戻（もど）そう。',
+    cleared: '学士（がくし）オーレンは、静（しず）かに門（もん）をひらいた――'
+        '「私（わたし）は まちがっていた。沈黙（ちんもく）は、安全（あんぜん）などではなかった」。\n'
+        '六（むっ）つ目（め）――最後（さいご）の〈声（こえ）の石（いし）〉がそろった！ むねの石（いし）と合（あ）わせ、〈ことばの紋章（もんしょう）〉が かんせいする。'
         'それは、きみが すべての こえを かえしてきた、たしかな あかし。さいごの ひろばへの みちが、ひとりでに ひらいた。',
     encounters: [
       // 1 — Academic-register appropriate response. (大問1会話/Listening応答型)
@@ -2040,13 +2044,13 @@ const List<QuestTown> kQuestTowns = [
       ),
       // 20 — Mini-boss「論駁（ろんばく）の番人」: 要約の本質を見抜く. (要約タスク総合)
       QuestEncounter(
-        npcName: "論駁の番人",
-        npcEmoji: "🗿",
-        npcLine: "(A stone guardian blocks the keep.) The Silence ate the world's words because it thought them noise. Prove you can hold meaning, not mere noise: which choice truly summarises an argument — capturing its point without copying its words or adding your own?",
-        npcLineJa: "（石（いし）の番人（ばんにん）が天守（てんしゅ）をふさいでいる。）サイレントは、ことばを「ただの雑音（ざつおん）」と思（おも）い、世界（せかい）から食（た）べてしまった。お前（まえ）が雑音（ざつおん）ではなく「意味（いみ）」を扱（あつか）える証（あかし）を見（み）せよ。本当（ほんとう）に論（ろん）を要約（ようやく）しているのは――言葉（ことば）を写（うつ）さず、自分（じぶん）の意見（いけん）も足（た）さず、要点（ようてん）をつかむのは、どれだ？",
+        npcName: "学士（がくし）オーレン",
+        npcEmoji: "🎓",
+        npcLine: "(Scholar Oren bars the keep, robed and formal.) The Silence and I agreed: words are mere noise, and silence is safe. Yet you would speak. Then prove you hold MEANING, not noise — which choice truly summarises an argument, capturing its point without copying its words or adding your own?",
+        npcLineJa: "（学士（がくし）オーレンが、礼装（れいそう）で天守（てんしゅ）をふさいでいる。）「ことばは ただの雑音（ざつおん）、沈黙（ちんもく）こそ安全（あんぜん）」――サイレントと私（わたし）は、そう同意（どうい）した。それでも語（かた）るというなら、雑音（ざつおん）ではなく『意味（いみ）』を扱（あつか）える証（あかし）を見（み）せよ。本当（ほんとう）に論（ろん）を要約（ようやく）しているのは――言葉（ことば）を写（うつ）さず、自分（じぶん）の意見（いけん）も足（た）さず、要点（ようてん）をつかむのは、どれだ？",
         choices: ["Repeating the author's strongest sentence word for word, exactly as written.", "Adding your own opinion about whether the author was right or wrong.", "Restating the author's main idea in fewer, different words, with nothing added.", "Listing every example the author gave, in the same order, leaving none out."],
         correctIndex: 2,
-        onCorrect: "(The guardian's stone eyes glow, then still.) ...You hold meaning, not noise. A summary is the idea, reborn in your own words. Pass, traveller — the sixth Stone of Voice is yours, and the keep doors open.",
+        onCorrect: "(Oren lowers his gaze.) ...You hold meaning, not noise. We agreed silence was safer — and we let it swallow the rest. You have shown me another way. The sixth Stone of Voice is yours; the keep doors open.",
       ),
     ],
   ),
