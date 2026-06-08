@@ -120,6 +120,10 @@ void main() {
       await tester.pump();
       expect(find.textContaining('れい:', findRichText: true), findsOneWidget,
           reason: 'must show the example sentence after answering');
+      // The reveal now teaches the wrong choices too (#97): each distractor is a
+      // real same-grade word with a meaning, so the panel lists them.
+      expect(find.text('ほかの言葉 / Other choices'), findsOneWidget,
+          reason: 'reveal must gloss the other choices as a vocab lesson');
       expect(tester.takeException(), isNull);
     });
 

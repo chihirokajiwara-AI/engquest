@@ -112,6 +112,11 @@ class _VocabGrammarPracticeScreenState
       // same-grade / same-POS / SAME-first-letter single-word distractors via
       // buildAntiLeakDistractors — killing the orthographic leak by construction.
       // Items whose grade bank can't yield three clean distractors are skipped.
+      // word → Japanese meaning, used to gloss every distractor in the reveal.
+      final glossOf = <String, String>{
+        for (final w in allWords) w.word.toLowerCase(): w.jpTranslation,
+      };
+
       final wanted = widget.section.questionCount;
       final questions = <_Question>[];
       for (final word in eligible) {
@@ -129,6 +134,11 @@ class _VocabGrammarPracticeScreenState
           correctIdx: choices.indexOf(word.word),
           word: word,
           originalSentence: sentence,
+          choiceGloss: {
+            for (final d in distractors)
+              if ((glossOf[d.toLowerCase()] ?? '').isNotEmpty)
+                d: glossOf[d.toLowerCase()]!,
+          },
         ));
       }
       _questions = questions;
@@ -490,6 +500,49 @@ class _VocabGrammarPracticeScreenState
                       ),
                     ),
                   ),
+                  // Teach the wrong choices too: each is a real same-grade word
+                  // with a different meaning that doesn't fit the blank. Turns one
+                  // cloze into a 4-word vocab lesson (#76 follow-through).
+                  if (q.choiceGloss.isNotEmpty) ...[
+                    const SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 28),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'ほかの言葉 / Other choices',
+                            style: dqText(
+                                size: 11,
+                                w: FontWeight.w700,
+                                color: dqInk.withAlpha(150)),
+                          ),
+                          const SizedBox(height: 3),
+                          ...q.choiceGloss.entries.map(
+                            (e) => Padding(
+                              padding: const EdgeInsets.only(top: 2),
+                              child: RichText(
+                                text: TextSpan(
+                                  style: dqText(
+                                      size: 12,
+                                      w: FontWeight.w500,
+                                      color: dqInk.withAlpha(190)),
+                                  children: [
+                                    TextSpan(
+                                      text: e.key.replaceAll('_', ' '),
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w800),
+                                    ),
+                                    TextSpan(text: ' — ${e.value}'),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -552,11 +605,19 @@ class _Question {
   final VocabItem word;
   final String originalSentence;
 
+  /// distractor word → its Japanese meaning, so the post-answer panel can teach
+  /// every choice (the answer + 3 real same-grade words). Turns one cloze into a
+  /// 4-word vocab lesson and shows the wrong choices are real words that simply
+  /// don't fit — not random noise (#76 follow-through). Excludes the answer,
+  /// whose meaning is shown prominently at the top of the panel.
+  final Map<String, String> choiceGloss;
+
   const _Question({
     required this.cloze,
     required this.choices,
     required this.correctIdx,
     required this.word,
     required this.originalSentence,
+    this.choiceGloss = const {},
   });
 }
