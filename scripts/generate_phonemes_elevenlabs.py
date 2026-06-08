@@ -38,26 +38,28 @@ from pathlib import Path
 
 OUT_DIR = Path(__file__).parent.parent / "assets" / "audio" / "phonics"
 
-# phoneme key -> (CMU arpabet symbol, grapheme inside the tag, short IPA note)
-# CMU arpabet is more consistent than IPA per ElevenLabs guidance. The short
-# vowels use the 英検5級 CVC values (cat / dog), NOT letter names.
+# phoneme key -> (bare IPA symbol to input as text, short note)
+# CEO 969 directive: input ONLY the single phonetic symbol so the model produces
+# the pure phoneme, not a syllable. a→æ, o→ɒ (英検5級 short vowels: cat/dog).
 PHONEMES = {
-    "phoneme_s": ("S", "s", "/s/ — voiceless, sustained 'sss' (continuant)"),
-    "phoneme_a": ("AE", "a", "/æ/ — short a as in 'cat' (continuant)"),
-    "phoneme_t": ("T", "t", "/t/ — voiceless STOP (schwa risk)"),
-    "phoneme_c": ("K", "c", "/k/ — voiceless STOP (schwa risk)"),
-    "phoneme_o": ("AA", "o", "/ɑ/ — short o as in 'dog' (continuant)"),
-    "phoneme_g": ("G", "g", "/g/ — voiced STOP (schwa risk)"),
+    "phoneme_s": ("s", "/s/ — voiceless continuant (sustained 'sss')"),
+    "phoneme_a": ("æ", "/æ/ — short a as in 'cat' (vowel)"),
+    "phoneme_t": ("t", "/t/ — voiceless STOP (schwa/letter-name risk)"),
+    "phoneme_c": ("k", "/k/ — voiceless STOP (schwa/letter-name risk)"),
+    "phoneme_o": ("ɒ", "/ɒ/ — short o as in 'dog' (vowel)"),
+    "phoneme_g": ("ɡ", "/ɡ/ — voiced STOP (schwa/letter-name risk)"),
 }
 
 
-def synth(key: str, arpabet: str, grapheme: str, voice: str, model: str) -> bytes:
-    ssml = f'<phoneme alphabet="cmu-arpabet" ph="{arpabet}">{grapheme}</phoneme>'
+def synth(key: str, ipa: str, voice: str, model: str) -> bytes:
+    # Input the bare IPA symbol as the text (CEO 969). Low style, max stability
+    # so the voice does not add prosody/vowels around the sound.
     body = json.dumps(
         {
-            "text": ssml,
+            "text": ipa,
             "model_id": model,
-            "voice_settings": {"stability": 0.5, "similarity_boost": 0.75},
+            "voice_settings": {"stability": 0.85, "similarity_boost": 0.4,
+                               "style": 0.0},
         }
     ).encode("utf-8")
     req = urllib.request.Request(
@@ -78,15 +80,17 @@ def main() -> int:
     if not os.environ.get("ELEVENLABS_API_KEY"):
         print("[phonemes] ERROR: ELEVENLABS_API_KEY not set in env", file=sys.stderr)
         return 2
-    voice = os.environ.get("ELEVENLABS_VOICE", "21m00Tcm4TlvDq8ikWAM")  # Rachel
-    model = os.environ.get("ELEVENLABS_MODEL", "eleven_flash_v2")
+    # Jessica — playful, bright, warm, young, American (best for kids' phonics;
+    # CEO 970/978 approved a warm young female American voice). Verified via /voices.
+    voice = os.environ.get("ELEVENLABS_VOICE", "cgSgspJ2msm6clMCkdW9")
+    model = os.environ.get("ELEVENLABS_MODEL", "eleven_multilingual_v2")
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 
     print(f"[phonemes] voice={voice} model={model} → {OUT_DIR}")
     failed = 0
-    for key, (arpabet, grapheme, note) in PHONEMES.items():
+    for key, (ipa, note) in PHONEMES.items():
         try:
-            audio = synth(key, arpabet, grapheme, voice, model)
+            audio = synth(key, ipa, voice, model)
             (OUT_DIR / f"{key}.mp3").write_bytes(audio)
             print(f"[phonemes] OK  {key}.mp3  {len(audio):>6} bytes  ({note})")
         except urllib.error.HTTPError as e:
