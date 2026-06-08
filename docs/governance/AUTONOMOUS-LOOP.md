@@ -171,3 +171,81 @@ Until done, the loop should prefer these (they realise the frozen pivot):
 - Do NOT reintroduce: character map-movement, level grinding, a large NPC roster, or the
   prince/heir/throne thread. These are the removed warp (`COMPOSITION-ARCHITECTURE.md §7–8`).
 - Spec-freeze: the four lean-Layton docs change only via CEO approval (§8).
+
+### E. Living-foundation refresh (CEO msg 869, 2026-06-08)
+The design bibles in `docs/design/*.md` are a **living foundation, not a frozen one-time
+artifact**. Continuous *building* (§A–B) and the every-5-iteration completeness critic (§6)
+are not enough — the **research itself must be periodically re-run** so the foundation does
+not go stale as the craft (Layton/DQ/learning-science/Flutter-web) and the 英検 spec evolve.
+
+- **Mechanism:** the committed, reusable `foundation-refresh` workflow
+  (`.claude/workflows/foundation-refresh.js`). It sends a discipline team to **re-research
+  the latest (dated, LATEST-FIRST) craft**, **score each bible for staleness/gaps**, and
+  emit a **concrete, per-doc, dated proposal**. It is **non-destructive**: the lean-Layton
+  docs are spec-frozen (§D), so it **PROPOSES diffs for CEO approval** — it never auto-edits.
+- **Cadence:** run it **~every 10 iterations**, on a **major external change** (英検 reform,
+  Flutter/renderer shift, new platform capability), or on **CEO signal**. Invoke by name:
+  `Workflow({ name: "foundation-refresh" })`.
+- **Output handling:** present the proposal to the CEO; on approval, apply the diffs in a
+  normal gated iteration, and append a dated entry (sources + headline findings) to
+  `docs/design/RESEARCH-LOG.md` so the foundation's evolution is auditable.
+- **Honesty rule:** propose nothing rather than churn — if a bible is already world-class and
+  current, the refresh says so. Staleness is reported with a 0–10 score per doc.
+
+### F. Commercial / growth pillars (CEO msg 872, 2026-06-08)
+Pillars 1–12 (§A) make the app **world-class**; they do not by themselves make it **売れる
+(sellable)**. A great app that no parent discovers, trusts, or pays for fails the business.
+These commercial pillars are now **first-class loop concerns**, advanced and audited like the
+rest. (Several touch the FORBIDDEN set — paid APIs, billing, legal, customer-facing copy,
+store publishing — so those are DESIGNED/queued in the loop but **executed only on CEO
+approval**, not auto-shipped.)
+
+13. **Monetization & billing correctness** — subscription (¥999, decided), Stripe + store
+    IAP (App Store / Google Play) with **server-side receipt validation**; no in-memory
+    billing (see "launch-blockers" memory). [Ties #7, #30, #55.] *gated: paid/legal*
+14. **Activation & conversion funnel** — first-session "aha" (a kid solves a real 英検 item
+    and feels it), free→paid trial design, parent paywall timing, conversion measurement.
+15. **Parent value & ROI proof** — the parent dashboard must *prove* progress toward 合格
+    (CSE trajectory, mock pass-rate, time-on-task) so the ¥999 is obviously worth it; this
+    is the purchase justification, not a nicety.
+16. **Efficacy evidence & social proof** — measured score gains, 合格 stories, ratings/review
+    prompts at the right moment. A paid 英検 app lives or dies on "does it actually work."
+17. **Growth / discoverability** — ASO (store listing, keywords, screenshots, preview),
+    referral/word-of-mouth, SEO for the web build. *store publishing gated*
+18. **Analytics & experimentation** — activation/retention-cohort/churn/conversion metrics
+    + an A/B framework (partially exists) to optimize the funnel on evidence, not guesses.
+19. **Trust, support & compliance** — privacy/COPPA, 特定商取引法 + 返金 policy + 利用規約
+    (#55), crisis-safety routing, a feedback/support channel. *legal gated*
+
+**How they run:** same studio cadence (§B) — a commercial pillar can be the iteration's top
+pick (esp. once the product bar is high enough to monetize), convene a discipline team
+(growth/edu-marketing/biz/legal lenses), set a world-class bar (e.g. Duolingo-grade
+onboarding funnel, mikan-grade efficacy proof), adversarial-audit it. **The completeness
+critic (§6) now scores ALL 19 pillars.** The biggest current commercial gaps are tracked as
+backlog tasks; pedagogy + content (1–2) still outrank them — a sellable app that doesn't
+teach 英検 is worthless.
+
+### G. Per-discipline standing studio loops (CEO msg 874, 2026-06-08)
+A discipline is not "done" after one pass — each needs a **standing, expert-staffed loop that
+keeps DESIGNING DEEPER and FURTHER AHEAD**, not a one-off mechanic. The §B rotation picks the
+top pillar each iteration; this section makes the deep work **reusable** as named workflows so
+a discipline can be pushed to world-class repeatedly. Each is **non-destructive** (proposes;
+CEO approves spec-frozen changes) and **model-tiered** (Sonnet lenses, Opus director).
+
+- **`character-studio`** (`.claude/workflows/character-studio.js`) — CEO 874: a world-class
+  **character designer + art director + producer/director + narrative writer + pedagogy**
+  team deeply develops the cast (silhouette/colour language, expression range, backstory,
+  arc, voice, 英検-skill embodiment, vocab-task scaling), thinking across the whole 7-case
+  journey — not just one mechanic (per-character restoration is ONE example, not the design).
+  Proposes `CHARACTER-BIBLE.md` diffs + a per-character production asset list.
+  `Workflow({ name: "character-studio", args: "<character or grade, optional>" })`.
+- **`foundation-refresh`** (§E) — the cross-cutting re-research loop.
+- **Template for the rest:** the same pattern extends to `world-studio`, `art-studio`,
+  `sound-studio`, `pedagogy-studio`, etc. — author one when that discipline becomes the top
+  pillar and needs deep, recurring, expert-driven development. Each: ~5 discipline lenses →
+  Opus director → CEO-gated bible proposal + production list. Reuse `character-studio.js` as
+  the structural template.
+
+Rule: do not mistake a single mechanic for the design. When a discipline is the iteration
+focus, run (or author) its studio loop and push to the world-class bar, then adversarial-audit
+(§6) against named masters.
