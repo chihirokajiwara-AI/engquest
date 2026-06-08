@@ -138,20 +138,25 @@ Never use complex grammar. Always stay in character as ${scenario.npcName}.''';
   /// Sends [userInput] to Claude (or returns an offline fallback) and returns
   /// the NPC's response text.
   ///
-  /// Input is checked by [ContentFilter.isSafe] before being forwarded to the
-  /// API.  If the input is unsafe the method returns
-  /// [ContentFilter.rejectionMessage] without making a network call.
-  /// The model's response is also post-filtered via [ContentFilter.filterResponse].
+  /// The child's input is NOT word-policed (CEO decision, 2026-06-08): the app
+  /// does not react to individual words (no profanity/self-harm scold). It is
+  /// only trimmed/length-capped and stripped of personal info before being
+  /// forwarded ([ContentFilter.sanitize]); when there is nothing safe to send
+  /// (empty / unsupported script / personal info), the NPC simply continues in
+  /// character rather than scolding. The model's response is still post-filtered
+  /// via [ContentFilter.filterResponse] so the AI never shows a child something
+  /// inappropriate.
   Future<String> chat({
     required DialogScenario scenario,
     required List<ChatMessage> history,
     required String userInput,
     String playerName = 'Hero',
   }) async {
-    // ── Input safety gate ─────────────────────────────────────────────────
+    // Prepare the input (no word-reaction); when nothing is safe to forward,
+    // continue the conversation in character instead of reacting.
     final safeInput = ContentFilter.sanitize(userInput);
     if (safeInput == null) {
-      return ContentFilter.rejectionMessage();
+      return _nextOfflineResponse(scenario);
     }
 
     if (_client.isOfflineMode) {

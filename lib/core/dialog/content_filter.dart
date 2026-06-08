@@ -1,9 +1,20 @@
-/// Content filter for child-safe NPC dialog input and output.
+/// Content filter for the AI NPC dialog.
 ///
-/// Enforced before sending user input to the Claude API and after receiving
-/// the model's response, ensuring age-appropriate content for users aged 4-18.
+/// PRODUCT DECISION (CEO, 2026-06-08): the app does NOT react to individual
+/// words a child types. Profanity or self-harm phrasing in the child's INPUT is
+/// neither scolded nor blocked — learning interactions are judged only correct
+/// vs incorrect. So this filter no longer word-polices input; [sanitize] only
+/// (a) caps length and (b) keeps a child's personal info (phone/email/postal)
+/// from being transmitted to the external AI (privacy / COPPA — a data concern,
+/// not word-policing).
+///
+/// The block lists below are retained for ONE purpose only: [filterResponse]
+/// post-filters the MODEL'S OUTPUT so the AI never shows a child something
+/// inappropriate (protecting the child FROM the model — a different axis than
+/// reacting to the child). Model-level safety also comes from the system-prompt
+/// prefix in DialogService.
 class ContentFilter {
-  // ── Block lists ────────────────────────────────────────────────────────────
+  // ── Output block lists (used by [filterResponse] only) ──────────────────────
 
   /// Common English profanity and offensive terms (lowercase).
   static const List<String> _englishProfanity = [
@@ -140,66 +151,31 @@ class ContentFilter {
 
   // ── Public API ─────────────────────────────────────────────────────────────
 
-  /// Returns `true` if [input] is safe for a child to send.
+  /// Prepares the child's [input] for the AI, or returns `null` when there is
+  /// nothing to forward.
   ///
-  /// Checks:
-  /// 1. Non-empty after trimming whitespace
-  /// 2. Does not exceed [maxLength]
-  /// 3. Contains at least one allowed character (Latin/Japanese/digit)
-  /// 4. No profanity (English or Japanese)
-  /// 5. No personal information patterns
-  /// 6. No violent/sexual keywords
-  static bool isSafe(String input) {
-    return sanitize(input) != null;
-  }
-
-  /// Returns a sanitized (trimmed) version of [input], or `null` if the
-  /// input is completely unsafe and should be rejected entirely.
+  /// Deliberately does NOT react to vocabulary: profanity or self-harm phrasing
+  /// is neither scolded nor blocked (CEO decision, 2026-06-08 — the app judges
+  /// only correct/incorrect and does not police individual words). It only:
+  ///   1. trims and caps length (truncates rather than rejecting);
+  ///   2. returns null for empty / unsupported-script-only input (nothing to
+  ///      send — the caller continues without reacting);
+  ///   3. keeps personal info (phone/email/postal) from reaching the external
+  ///      AI by returning null when present — a privacy/COPPA data guard, not
+  ///      word-policing; the caller does not scold, it simply continues.
   static String? sanitize(String input) {
-    final trimmed = input.trim();
+    var trimmed = input.trim();
 
-    // 1. Reject empty / whitespace-only
     if (trimmed.isEmpty) return null;
-
-    // 2. Reject over-length
-    if (trimmed.length > maxLength) return null;
-
-    // 3. Reject if input contains NO allowed characters
     if (!_hasAllowedChar(trimmed)) return null;
+    if (trimmed.length > maxLength) trimmed = trimmed.substring(0, maxLength);
 
-    final lower = trimmed.toLowerCase();
-
-    // 4. Profanity check (English)
-    for (final word in _englishProfanity) {
-      if (lower.contains(word)) return null;
-    }
-
-    // 5. Profanity check (Japanese)
-    for (final word in _japaneseProfanity) {
-      if (trimmed.contains(word)) return null;
-    }
-
-    // 6. Personal information patterns
+    // Privacy: never transmit a child's personal info to the AI service.
     if (_phonePattern.hasMatch(trimmed)) return null;
     if (_emailPattern.hasMatch(trimmed)) return null;
     if (_postalCodePattern.hasMatch(trimmed)) return null;
 
-    // 7. Violent / self-harm keywords
-    for (final kw in _violentKeywords) {
-      if (lower.contains(kw)) return null;
-    }
-
-    // 8. Sexual keywords
-    for (final kw in _sexualKeywords) {
-      if (lower.contains(kw)) return null;
-    }
-
     return trimmed;
-  }
-
-  /// Returns a child-friendly rejection message in Japanese (hiragana).
-  static String rejectionMessage() {
-    return 'その言葉は使えないよ。べつの言い方をしてみてね！';
   }
 
   /// Checks whether [response] from the AI contains any blocked keywords.
