@@ -116,7 +116,7 @@ void main() {
       expect(find.textContaining('れい:', findRichText: true), findsNothing);
       // Answer (tap the first choice) → the post-answer explanation must teach
       // the word in a real sentence, not just show right/wrong.
-      await tester.tap(find.byType(InkWell).first);
+      await tester.tap(find.byKey(const ValueKey('vg_choice_0')));
       await tester.pump();
       expect(find.textContaining('れい:', findRichText: true), findsOneWidget,
           reason: 'must show the example sentence after answering');

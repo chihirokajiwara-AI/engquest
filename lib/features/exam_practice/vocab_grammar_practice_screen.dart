@@ -15,6 +15,7 @@ import '../../core/models/vocab_item.dart';
 import 'eiken_exam_config.dart';
 import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
+import '../quest/ui/dq_ui.dart';
 
 /// First WHOLE-WORD (\b-bounded), case-insensitive match of [word] in [sentence],
 /// or null. Boundary-anchored so an inflected form never matches a stem fragment
@@ -166,7 +167,7 @@ class _VocabGrammarPracticeScreenState
       TextSpan(
         text: sentence.substring(match.start, match.end),
         style: const TextStyle(
-            color: Color(0xFFE65100), fontWeight: FontWeight.w800),
+            color: dqGold, fontWeight: FontWeight.w800),
       ),
       TextSpan(text: sentence.substring(match.end)),
     ];
@@ -235,47 +236,47 @@ class _VocabGrammarPracticeScreenState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA),
-      appBar: AppBar(
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF4FC3F7), Color(0xFF29B6F6)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+    return DqScene(
+      child: Column(
+        children: [
+          // Dark header (matches the home / quest / exam hub — #67 cohesion).
+          Padding(
+            padding: const EdgeInsets.fromLTRB(4, 4, 12, 4),
+            child: Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.close, color: dqInk),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+                Expanded(
+                  child: Text(
+                    widget.section.nameJa,
+                    style: dqText(size: 15, w: FontWeight.w800, color: dqGold),
+                  ),
+                ),
+              ],
             ),
           ),
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.close, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        title: Text(
-          widget.section.nameJa,
-          style: const TextStyle(
-              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
-        ),
-        centerTitle: true,
-      ),
-      body: SafeArea(
-        child: _loading
-            ? const Center(child: CircularProgressIndicator())
-            : _sessionDone
-                ? _buildResults()
-                : _questions.isEmpty
-                    ? const Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(24),
-                          child: Text(
-                            'この級（きゅう）の問題（もんだい）は\n準備中（じゅんびちゅう）です。',
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      )
-                    : _buildQuestion(),
+          Expanded(
+            child: _loading
+                ? const Center(
+                    child: CircularProgressIndicator(color: dqGold))
+                : _sessionDone
+                    ? _buildResults()
+                    : _questions.isEmpty
+                        ? Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(24),
+                              child: Text(
+                                'この級（きゅう）の問題（もんだい）は\n準備中（じゅんびちゅう）です。',
+                                textAlign: TextAlign.center,
+                                style: dqText(size: 15, color: dqInk),
+                              ),
+                            ),
+                          )
+                        : _buildQuestion(),
+          ),
+        ],
       ),
     );
   }
@@ -295,51 +296,40 @@ class _VocabGrammarPracticeScreenState
             children: [
               Text(
                 '問${_currentIdx + 1} / ${_questions.length}',
-                style: const TextStyle(
-                  color: Color(0xFF263238),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: dqText(size: 14, w: FontWeight.w700, color: dqInk),
               ),
               const Spacer(),
               Text(
                 '正答: $_correctCount',
-                style: TextStyle(
-                  color: Colors.green[700],
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: dqText(
+                    size: 14,
+                    w: FontWeight.w700,
+                    color: const Color(0xFF8BE08B)),
               ),
             ],
           ),
           const SizedBox(height: 8),
-          LinearProgressIndicator(
-            value: (_currentIdx + 1) / _questions.length,
-            backgroundColor: Colors.grey[200],
-            valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF4FC3F7)),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(4),
+            child: LinearProgressIndicator(
+              value: (_currentIdx + 1) / _questions.length,
+              backgroundColor: dqNight1,
+              valueColor: const AlwaysStoppedAnimation<Color>(dqGold),
+            ),
           ),
           const SizedBox(height: 24),
           // Cloze sentence
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withAlpha(8),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ],
+              color: dqBox,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: dqGoldDeep.withAlpha(120), width: 1.5),
             ),
             child: Text(
               q.cloze,
-              style: const TextStyle(
-                color: Color(0xFF263238),
-                fontSize: 18,
-                height: 1.6,
-              ),
+              style: dqText(size: 18, w: FontWeight.w500, color: dqInk)
+                  .copyWith(height: 1.6),
             ),
           ),
           const SizedBox(height: 24),
@@ -348,23 +338,25 @@ class _VocabGrammarPracticeScreenState
             final isSelected = _selectedAnswer == i;
             final isCorrect = i == q.correctIdx;
 
-            Color bgColor = Colors.white;
-            Color borderColor = Colors.grey.shade300;
-            Color textColor = const Color(0xFF263238);
+            // Dark dq palette (#67). Answer-state greens/reds tuned for the dark
+            // background; correct = pass-green, wrong = soft red.
+            Color bgColor = dqBox;
+            Color borderColor = dqGoldDeep.withAlpha(120);
+            Color textColor = dqInk;
 
             if (_answered) {
               if (isCorrect) {
-                bgColor = const Color(0xFFE8F5E9);
-                borderColor = const Color(0xFF4CAF50);
-                textColor = const Color(0xFF2E7D32);
+                bgColor = const Color(0xFF14301B);
+                borderColor = const Color(0xFF8BE08B);
+                textColor = const Color(0xFF8BE08B);
               } else if (isSelected && !isCorrect) {
-                bgColor = const Color(0xFFFFEBEE);
-                borderColor = const Color(0xFFF44336);
-                textColor = const Color(0xFFC62828);
+                bgColor = const Color(0xFF3A1A1A);
+                borderColor = const Color(0xFFE0853A);
+                textColor = const Color(0xFFE89A82);
               }
             } else if (isSelected) {
-              borderColor = const Color(0xFF4FC3F7);
-              bgColor = const Color(0xFFE1F5FE);
+              borderColor = dqGold;
+              bgColor = dqNight1;
             }
 
             return Padding(
@@ -373,6 +365,7 @@ class _VocabGrammarPracticeScreenState
                 color: bgColor,
                 borderRadius: BorderRadius.circular(12),
                 child: InkWell(
+                  key: ValueKey('vg_choice_$i'),
                   onTap: () => _selectAnswer(i),
                   borderRadius: BorderRadius.circular(12),
                   child: Container(
@@ -416,11 +409,11 @@ class _VocabGrammarPracticeScreenState
                           ),
                         ),
                         if (_answered && isCorrect)
-                          const Icon(Icons.check_circle,
-                              color: Color(0xFF4CAF50), size: 22),
+                          const Icon(Icons.check_circle_rounded,
+                              color: Color(0xFF8BE08B), size: 22),
                         if (_answered && isSelected && !isCorrect)
-                          const Icon(Icons.cancel,
-                              color: Color(0xFFF44336), size: 22),
+                          const Icon(Icons.cancel_rounded,
+                              color: Color(0xFFE0853A), size: 22),
                       ],
                     ),
                   ),
@@ -434,8 +427,9 @@ class _VocabGrammarPracticeScreenState
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: const Color(0xFFFFF8E1),
+                color: dqBox,
                 borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: dqGold.withAlpha(90)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -443,8 +437,8 @@ class _VocabGrammarPracticeScreenState
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Icon(Icons.lightbulb_outline,
-                          color: Color(0xFFFF8F00), size: 20),
+                      const Icon(Icons.lightbulb_rounded,
+                          color: dqGold, size: 20),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
@@ -453,11 +447,8 @@ class _VocabGrammarPracticeScreenState
                           q.word.reading.isNotEmpty
                               ? '${q.word.word.replaceAll('_', ' ')}（${q.word.reading}）— ${q.word.jpTranslation}'
                               : '${q.word.word.replaceAll('_', ' ')} — ${q.word.jpTranslation}',
-                          style: const TextStyle(
-                            color: Color(0xFF263238),
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
-                          ),
+                          style: dqText(
+                              size: 14, w: FontWeight.w800, color: dqGold),
                         ),
                       ),
                     ],
@@ -470,12 +461,15 @@ class _VocabGrammarPracticeScreenState
                     padding: const EdgeInsets.only(left: 28),
                     child: RichText(
                       text: TextSpan(
-                        style: const TextStyle(
-                            color: Color(0xFF455A64), fontSize: 13, height: 1.4),
+                        style: dqText(
+                                size: 13,
+                                w: FontWeight.w500,
+                                color: dqInk.withAlpha(220))
+                            .copyWith(height: 1.5),
                         children: [
                           const TextSpan(
                             text: 'れい:  ',
-                            style: TextStyle(fontWeight: FontWeight.w700),
+                            style: TextStyle(fontWeight: FontWeight.w800),
                           ),
                           ..._sentenceSpans(q.originalSentence, q.word.word),
                         ],
@@ -486,24 +480,9 @@ class _VocabGrammarPracticeScreenState
               ),
             ),
             const SizedBox(height: 12),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _nextQuestion,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF4FC3F7),
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: Text(
-                  _currentIdx < _questions.length - 1 ? '次の問題へ' : '結果を見る',
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ),
+            DqButton(
+              label: _currentIdx < _questions.length - 1 ? '次の問題へ' : '結果を見る',
+              onTap: _nextQuestion,
             ),
           ],
         ],
@@ -524,45 +503,26 @@ class _VocabGrammarPracticeScreenState
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
-              passed ? Icons.emoji_events : Icons.refresh,
+              passed
+                  ? Icons.workspace_premium_rounded
+                  : Icons.refresh_rounded,
               size: 72,
-              color: passed ? const Color(0xFFFFD700) : Colors.grey,
+              color: passed ? dqGold : dqInk.withAlpha(140),
             ),
             const SizedBox(height: 16),
             Text(
               passed ? '合格ライン到達！' : 'もう少し！',
-              style: const TextStyle(
-                color: Color(0xFF263238),
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              style: dqText(size: 24, w: FontWeight.w900, color: dqGold),
             ),
             const SizedBox(height: 12),
             Text(
               '$_correctCount / ${_questions.length} 正解 ($pct%)',
-              style: TextStyle(
-                color: Colors.grey[700],
-                fontSize: 18,
-              ),
+              style: dqText(size: 18, w: FontWeight.w600, color: dqInk),
             ),
             const SizedBox(height: 32),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () => Navigator.of(context).pop(),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF4FC3F7),
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: const Text(
-                  '戻る',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ),
+            DqButton(
+              label: '戻る',
+              onTap: () => Navigator.of(context).pop(),
             ),
           ],
         ),
