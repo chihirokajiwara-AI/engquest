@@ -93,6 +93,25 @@ void main() {
     );
   }
 
+  // Answer positions are now shuffled per session (positional answer-key-bias
+  // fix), so locate a choice by its TEXT regardless of which slot it landed in.
+  // A choice renders as "<n>. <answer>", so an anchored regex matches the choice
+  // exactly and can never accidentally hit the passage body.
+  Finder choice(String answer) => find.byWidgetPredicate(
+        (w) =>
+            w is Text &&
+            w.data != null &&
+            RegExp('^\\d+\\. ${RegExp.escape(answer)}\$').hasMatch(w.data!),
+        description: 'choice "$answer" at any position',
+      );
+
+  Future<void> answer(WidgetTester tester, String correct) async {
+    await tester.tap(choice(correct));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('次へ'));
+    await tester.pumpAndSettle();
+  }
+
   group('ReadingPracticeScreen', () {
     testWidgets('renders passage and question for grade 5', (tester) async {
       await tester.pumpWidget(buildScreen('5', grade5Section));
@@ -104,16 +123,16 @@ void main() {
       expect(find.text('NOTICE'), findsOneWidget);
       // Should show first question
       expect(find.text('When is the school festival?'), findsOneWidget);
-      // Should show answer choices
-      expect(find.text('2. On Saturday, November 15'), findsOneWidget);
+      // Should show the answer choice (now at a shuffled position)
+      expect(choice('On Saturday, November 15'), findsOneWidget);
     });
 
     testWidgets('selecting an answer highlights correct/wrong', (tester) async {
       await tester.pumpWidget(buildScreen('5', grade5Section));
       await tester.pumpAndSettle();
 
-      // Tap correct answer
-      await tester.tap(find.text('2. On Saturday, November 15'));
+      // Tap correct answer (wherever it shuffled to)
+      await tester.tap(choice('On Saturday, November 15'));
       await tester.pumpAndSettle();
 
       // Next button should appear
@@ -124,12 +143,11 @@ void main() {
       await tester.pumpWidget(buildScreen('5', grade5Section));
       await tester.pumpAndSettle();
 
-      // Answer all 4 questions (2 passages × 2 questions)
+      // Answer all 4 questions (2 passages × 2 questions). Tap whatever choice
+      // is in slot 0 — we only need to advance, not be correct.
       for (int i = 0; i < 4; i++) {
-        // Tap first choice
-        await tester.tap(find.text('1. ${_getFirstChoice(i)}').hitTestable());
+        await tester.tap(find.byKey(const ValueKey('reading_choice_0')));
         await tester.pumpAndSettle();
-        // Tap next
         await tester.tap(find.text('次へ'));
         await tester.pumpAndSettle();
       }
@@ -203,45 +221,15 @@ void main() {
       await tester.pumpWidget(buildScreen('5', grade5Section));
       await tester.pumpAndSettle();
 
-      // Answer all 4 correctly (pick correct answers)
-      // Q1: idx 1 (Saturday November 15)
-      await tester.tap(find.text('2. On Saturday, November 15'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('次へ'));
-      await tester.pumpAndSettle();
-
-      // Q2: idx 1 (Sell rice balls)
-      await tester.tap(find.text('2. Sell rice balls'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('次へ'));
-      await tester.pumpAndSettle();
-
-      // Q3: idx 2 (A cat)
-      await tester.tap(find.text('3. A cat'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('次へ'));
-      await tester.pumpAndSettle();
-
-      // Q4: idx 2 (On Yuki's bed)
-      await tester.tap(find.text("3. On Yuki's bed"));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('次へ'));
-      await tester.pumpAndSettle();
+      // Answer all 4 correctly by their TEXT (positions are now shuffled).
+      await answer(tester, 'On Saturday, November 15');
+      await answer(tester, 'Sell rice balls');
+      await answer(tester, 'A cat');
+      await answer(tester, "On Yuki's bed");
 
       // Should show pass result
       expect(find.text('合格ライン到達！'), findsOneWidget);
       expect(find.text('4 / 4 正解 (100%)'), findsOneWidget);
     });
   });
-}
-
-// Helper to get the first choice text for each question in grade 5
-String _getFirstChoice(int questionIndex) {
-  const firstChoices = [
-    'On Friday, November 14',
-    'Have a fishing game',
-    'A dog',
-    'On the sofa',
-  ];
-  return firstChoices[questionIndex];
 }

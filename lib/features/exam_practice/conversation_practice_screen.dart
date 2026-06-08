@@ -4,11 +4,29 @@
 // Two speakers have a conversation with one blank line.
 // User picks the most natural response from 4 choices.
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'eiken_exam_config.dart';
+import 'choice_shuffle.dart';
 import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
 import '../quest/ui/dq_ui.dart';
+
+/// Returns [p] with its choices shuffled and [correctIdx] remapped. The authored
+/// data is 92% correctIdx:0, which let a child score ~92% by always tapping
+/// choice 1 — inflating 合格率 with no real comprehension. See [shuffledChoiceSet].
+_ConversationProblem _shuffleConversationChoices(
+    _ConversationProblem p, Random rng) {
+  final s = shuffledChoiceSet(p.choices, p.correctIdx, rng);
+  return _ConversationProblem(
+    speakerA: p.speakerA,
+    speakerB: p.speakerB,
+    context: p.context,
+    choices: s.choices,
+    correctIdx: s.correctIdx,
+  );
+}
 
 class _ConversationProblem {
   final String speakerA;
@@ -49,11 +67,14 @@ class _ConversationPracticeScreenState
   bool _answered = false;
   int _correctCount = 0;
   bool _sessionDone = false;
+  final Random _rng = Random();
 
   @override
   void initState() {
     super.initState();
-    _problems = _getProblems(widget.eikenGrade);
+    _problems = _getProblems(widget.eikenGrade)
+        .map((p) => _shuffleConversationChoices(p, _rng))
+        .toList();
   }
 
   void _selectAnswer(int idx) {

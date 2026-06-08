@@ -7,10 +7,34 @@
 //   1. Standard comprehension — read passage, answer questions about content
 //   2. Passage fill-in (空所補充) — passage has blanks, choose what fits
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'eiken_exam_config.dart';
+import 'choice_shuffle.dart';
 import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
+
+/// Returns [q] with its choices shuffled and [correctIdx] remapped. The authored
+/// reading keys cluster at idx 1–2 (93%); shuffling at load removes that
+/// positional tell (the answer feeds 合格率). See [shuffledChoiceSet].
+_ComprehensionQuestion _shuffleReadingChoices(
+    _ComprehensionQuestion q, Random rng) {
+  final s = shuffledChoiceSet(q.choices, q.correctIdx, rng);
+  return _ComprehensionQuestion(
+    question: q.question,
+    choices: s.choices,
+    correctIdx: s.correctIdx,
+  );
+}
+
+_ReadingPassage _shufflePassageChoices(_ReadingPassage p, Random rng) =>
+    _ReadingPassage(
+      title: p.title,
+      type: p.type,
+      content: p.content,
+      questions: [for (final q in p.questions) _shuffleReadingChoices(q, rng)],
+    );
 
 class _ReadingPassage {
   final String title;
@@ -65,7 +89,10 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
   @override
   void initState() {
     super.initState();
-    _passages = _getPassages(widget.eikenGrade, widget.section.id);
+    final rng = Random();
+    _passages = _getPassages(widget.eikenGrade, widget.section.id)
+        .map((p) => _shufflePassageChoices(p, rng))
+        .toList();
     _totalQuestions = _passages.fold(0, (sum, p) => sum + p.questions.length);
   }
 
@@ -347,6 +374,7 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
                         color: bgColor,
                         borderRadius: BorderRadius.circular(8),
                         child: InkWell(
+                          key: ValueKey('reading_choice_$i'),
                           onTap: () => _selectAnswer(i),
                           borderRadius: BorderRadius.circular(8),
                           child: Container(
