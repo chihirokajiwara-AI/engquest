@@ -458,13 +458,21 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
             const Icon(Icons.play_arrow_rounded,
                 color: Color(0xFF2A1C00), size: 28),
             const SizedBox(width: 8),
-            Text(
-              'じけんげんばへ　／　つづける',
-              style: dqText(
-                size: 17,
-                w: FontWeight.w800,
-                color: const Color(0xFF2A1C00),
-                spacing: 1,
+            // FittedBox scaleDown keeps the full label (no clip/ellipsis) on
+            // narrow phones (#65: overflowed at ~360px logical width).
+            Flexible(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  'じけんげんばへ　／　つづける',
+                  maxLines: 1,
+                  style: dqText(
+                    size: 17,
+                    w: FontWeight.w800,
+                    color: const Color(0xFF2A1C00),
+                    spacing: 1,
+                  ),
+                ),
               ),
             ),
           ],
@@ -492,9 +500,15 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
           children: [
             const Icon(Icons.map_outlined, color: dqGold, size: 20),
             const SizedBox(width: 8),
-            Text(
-              'ちずを みる　／　Adventure Map',
-              style: dqText(size: 14, w: FontWeight.w700, color: dqInk),
+            Flexible(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  'ちずを みる　／　Adventure Map',
+                  maxLines: 1,
+                  style: dqText(size: 14, w: FontWeight.w700, color: dqInk),
+                ),
+              ),
             ),
           ],
         ),
@@ -523,9 +537,15 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
           children: [
             const Icon(Icons.fact_check_outlined, color: dqGold, size: 20),
             const SizedBox(width: 8),
-            Text(
-              '英検（えいけん）れんしゅう　／　Eiken Practice',
-              style: dqText(size: 14, w: FontWeight.w700, color: dqInk),
+            Flexible(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  '英検（えいけん）れんしゅう　／　Eiken Practice',
+                  maxLines: 1,
+                  style: dqText(size: 14, w: FontWeight.w700, color: dqInk),
+                ),
+              ),
             ),
           ],
         ),
