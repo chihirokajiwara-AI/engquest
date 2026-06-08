@@ -36,7 +36,7 @@ class _MockStreakService extends StreakService {
   _MockStreakService(this._state);
 
   @override
-  Future<StreakState> load() async => _state;
+  Future<StreakState> load({DateTime? now}) async => _state;
 }
 
 /// An [InMemoryFsrsCardRepository] pre-seeded with [dueCount] cards all due now.
@@ -308,5 +308,60 @@ void main() {
     ));
     await _settle(tester);
     expect(find.textContaining('きょうの'), findsWidgets);
+  });
+
+  // ── Daily-goal ring (きょうの目標) — engagement spine (CEO 951) ──────────────
+
+  testWidgets('KotobaHomeScreen: empty daily goal shows start prompt + N/goal',
+      (tester) async {
+    await tester.pumpWidget(_wrap(
+      streakService: _MockStreakService(const StreakState.zero()),
+      cardRepository: InMemoryFsrsCardRepository(),
+    ));
+    await _settle(tester);
+    // Caption nudges the child to begin (goal default = 10).
+    expect(find.textContaining('きょうの目標'), findsWidgets);
+    expect(find.textContaining('さあ はじめよう'), findsOneWidget);
+    // Ring centre shows the goal denominator.
+    expect(find.textContaining('/10問'), findsOneWidget);
+  });
+
+  testWidgets('KotobaHomeScreen: partial daily goal shows remaining count',
+      (tester) async {
+    await tester.pumpWidget(_wrap(
+      streakService: _MockStreakService(
+        const StreakState(
+          currentStreak: 1,
+          weeklyBits: 1,
+          todayCount: 1,
+          problemsToday: 4,
+          dailyGoal: 10,
+        ),
+      ),
+      cardRepository: InMemoryFsrsCardRepository(),
+    ));
+    await _settle(tester);
+    // 10 - 4 = 6 remaining.
+    expect(find.textContaining('あと 6問'), findsOneWidget);
+  });
+
+  testWidgets('KotobaHomeScreen: met daily goal celebrates (達成)',
+      (tester) async {
+    await tester.pumpWidget(_wrap(
+      streakService: _MockStreakService(
+        const StreakState(
+          currentStreak: 3,
+          weeklyBits: 7,
+          todayCount: 2,
+          problemsToday: 12,
+          dailyGoal: 10,
+        ),
+      ),
+      cardRepository: InMemoryFsrsCardRepository(),
+    ));
+    await _settle(tester);
+    expect(find.textContaining('達成'), findsOneWidget);
+    // Goal-met ring shows a check, not the numeric counter.
+    expect(find.byIcon(Icons.check_rounded), findsOneWidget);
   });
 }

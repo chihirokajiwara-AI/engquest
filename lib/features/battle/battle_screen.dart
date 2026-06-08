@@ -51,6 +51,7 @@ import '../../core/data/vocab_repository.dart';
 import '../../core/models/vocab_item.dart';
 import '../exam_practice/pass/cse_model.dart';
 import '../exam_practice/pass/skill_accuracy_store.dart';
+import '../home/streak_service.dart';
 import '../quest/ui/dq_ui.dart';
 
 // ── Bilingual + interval labels for the Grade enum (DQ command-window tiles) ──
@@ -436,6 +437,7 @@ class _BattleScreenState extends State<BattleScreen>
       _starsCtrl.forward();
       _recordSessionToFirestore();
       _recordSkillAccuracy();
+      _recordDailyHabit();
       return;
     }
 
@@ -461,6 +463,25 @@ class _BattleScreenState extends State<BattleScreen>
         correct: c.correct,
         total: c.total,
       );
+    }());
+  }
+
+  /// Records the daily-return habit: counts this review toward today's streak
+  /// and the「きょうの目標」daily-goal ring (one per card answered). The primary
+  /// FSRS review previously did NOT touch the day-streak/goal — only the quest
+  /// サイレント battle did — so a child who only did vocab review saw the home
+  /// streak/goal never move. Fire-and-forget; prefs failures are swallowed.
+  void _recordDailyHabit() {
+    final answered = _sessionResults.length;
+    if (answered <= 0) return;
+    unawaited(() async {
+      final streak = StreakService();
+      try {
+        await streak.recordStudySession();
+        await streak.recordProgress(answered);
+      } catch (_) {
+        // Non-fatal: SharedPreferences failure is rare.
+      }
     }());
   }
 

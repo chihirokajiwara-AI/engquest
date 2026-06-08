@@ -32,20 +32,47 @@ class StreakState {
   /// Number of sessions completed today.
   final int todayCount;
 
+  /// Number of practice questions answered today (resets at midnight).
+  /// Drives the「きょうの目標」daily-goal ring — the daily-return motivation
+  /// loop (Duolingo-style: a visible goal you fill each day).
+  final int problemsToday;
+
+  /// The daily question target the child is working toward today.
+  final int dailyGoal;
+
   const StreakState({
     required this.currentStreak,
     required this.weeklyBits,
     required this.todayCount,
+    this.problemsToday = 0,
+    this.dailyGoal = kDefaultDailyGoal,
   });
 
   const StreakState.zero()
       : currentStreak = 0,
         weeklyBits = 0,
-        todayCount = 0;
+        todayCount = 0,
+        problemsToday = 0,
+        dailyGoal = kDefaultDailyGoal;
 
   /// Whether the given [weekdayIndex] (0=Mon, 6=Sun) was studied.
   bool studiedOn(int weekdayIndex) => (weeklyBits >> weekdayIndex) & 1 == 1;
+
+  /// Whether today's question goal has been reached.
+  bool get goalMet => problemsToday >= dailyGoal;
+
+  /// Questions still needed to hit today's goal (never negative).
+  int get remainingToGoal =>
+      (dailyGoal - problemsToday) < 0 ? 0 : dailyGoal - problemsToday;
+
+  /// Goal completion ratio, clamped to 0..1.
+  double get goalRatio =>
+      dailyGoal <= 0 ? 0 : (problemsToday / dailyGoal).clamp(0.0, 1.0);
 }
+
+/// Default daily question goal — a calm, attainable target for a young child
+/// (≈one short review). Visible-progress beats a big number you never finish.
+const int kDefaultDailyGoal = 10;
 
 // ── Service ───────────────────────────────────────────────────────────────────
 
@@ -54,6 +81,9 @@ class StreakService {
   static const _kCurrent = 'streak_current';
   static const _kWeeklyBits = 'streak_weekly_bits';
   static const _kTodayCount = 'streak_today_count';
+  static const _kProblemsToday = 'streak_problems_today';
+  static const _kProblemsTodayDate = 'streak_problems_today_date';
+  static const _kDailyGoal = 'streak_daily_goal';
 
   // ISO-8601 date string for a given DateTime.
   static String _dateKey(DateTime d) =>
@@ -69,16 +99,50 @@ class StreakService {
   }
 
   /// Load the current streak state without modifying storage.
-  Future<StreakState> load() async {
+  ///
+  /// [now] is injectable for tests; production uses the wall clock. The daily
+  /// question count is reported as 0 once the calendar day has rolled over, so
+  /// the goal ring starts empty each morning without a write.
+  Future<StreakState> load({DateTime? now}) async {
     final prefs = await PreferencesService.getInstance();
     final streak = prefs.getInt(_kCurrent);
     final bits = prefs.getInt(_kWeeklyBits);
     final today = prefs.getInt(_kTodayCount);
+
+    final todayKey = _dateKey(now ?? DateTime.now());
+    final problemsDate = prefs.getString(_kProblemsTodayDate);
+    final problemsToday =
+        (problemsDate == todayKey) ? prefs.getInt(_kProblemsToday) : 0;
+    final storedGoal = prefs.getInt(_kDailyGoal);
+    final dailyGoal = storedGoal > 0 ? storedGoal : kDefaultDailyGoal;
+
     return StreakState(
       currentStreak: streak,
       weeklyBits: bits,
       todayCount: today,
+      problemsToday: problemsToday,
+      dailyGoal: dailyGoal,
     );
+  }
+
+  /// Record [count] practice questions answered toward today's goal.
+  ///
+  /// Resets the running count when the calendar day changes, so the goal ring
+  /// fills from zero each day. Independent of [recordStudySession] (which counts
+  /// sessions/streak) so call ordering does not matter. Returns the updated
+  /// [StreakState].
+  Future<StreakState> recordProgress(int count, {DateTime? now}) async {
+    final prefs = await PreferencesService.getInstance();
+    final todayKey = _dateKey(now ?? DateTime.now());
+
+    final problemsDate = prefs.getString(_kProblemsTodayDate);
+    final base = (problemsDate == todayKey) ? prefs.getInt(_kProblemsToday) : 0;
+    final updated = base + (count < 0 ? 0 : count);
+
+    await prefs.setInt(_kProblemsToday, updated);
+    await prefs.setString(_kProblemsTodayDate, todayKey);
+
+    return load(now: now);
   }
 
   /// Record a completed study session (called after battle/exam finish).

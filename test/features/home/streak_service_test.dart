@@ -80,4 +80,51 @@ void main() {
     expect(state.currentStreak, 1);
     expect(state.todayCount, 1);
   });
+
+  // ── Daily-goal ring (きょうの目標) ──────────────────────────────────────────
+
+  test('default daily goal is kDefaultDailyGoal and starts empty', () async {
+    final service = StreakService();
+    final state = await service.load();
+    expect(state.dailyGoal, kDefaultDailyGoal);
+    expect(state.problemsToday, 0);
+    expect(state.goalMet, isFalse);
+    expect(state.remainingToGoal, kDefaultDailyGoal);
+  });
+
+  test('recordProgress accumulates today and computes remaining', () async {
+    final service = StreakService();
+    await service.recordProgress(4);
+    final state = await service.recordProgress(3);
+    expect(state.problemsToday, 7);
+    expect(state.remainingToGoal, kDefaultDailyGoal - 7);
+    expect(state.goalMet, isFalse);
+    expect(state.goalRatio, closeTo(7 / kDefaultDailyGoal, 1e-9));
+  });
+
+  test('recordProgress marks goalMet once the target is reached', () async {
+    final service = StreakService();
+    final state = await service.recordProgress(kDefaultDailyGoal + 2);
+    expect(state.goalMet, isTrue);
+    expect(state.remainingToGoal, 0);
+    expect(state.goalRatio, 1.0);
+  });
+
+  test('progress resets when the calendar day rolls over', () async {
+    final service = StreakService();
+    final yesterday = DateTime.now().subtract(const Duration(days: 1));
+    await service.recordProgress(8, now: yesterday);
+    // A fresh day → load reports 0, not yesterday's 8.
+    final today = await service.load();
+    expect(today.problemsToday, 0);
+    // And recording today starts from 0, not 8.
+    final afterToday = await service.recordProgress(2);
+    expect(afterToday.problemsToday, 2);
+  });
+
+  test('recordProgress ignores negative counts', () async {
+    final service = StreakService();
+    final state = await service.recordProgress(-5);
+    expect(state.problemsToday, 0);
+  });
 }

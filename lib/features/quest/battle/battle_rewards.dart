@@ -71,6 +71,15 @@ class BattleRewards {
     } catch (_) {
       // Non-fatal: SharedPreferences failure is rare.
     }
+
+    // 4. Daily goal — count the questions answered toward today's「きょうの目標」
+    //    ring (one per step result). This is the daily-return progress the
+    //    child watches fill each day.
+    try {
+      await streakService.recordProgress(stepResults.length);
+    } catch (_) {
+      // Non-fatal: SharedPreferences failure is rare.
+    }
   }
 
   /// Compute the total XP that will be awarded for [stepResults].

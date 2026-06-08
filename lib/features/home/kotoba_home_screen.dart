@@ -21,6 +21,7 @@
 // Firebase (R4).  Internal async loads are guarded with try/catch.
 
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -413,6 +414,7 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Streak count — full width (kept as-is so it never crowds; #65).
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -425,11 +427,13 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
                 style: dqText(size: 40, w: FontWeight.w800, color: dqGold),
               ),
               const SizedBox(width: 8),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 4),
-                child: Text(
-                  'にち れんぞく',
-                  style: dqText(size: 16, w: FontWeight.w700, color: dqInk),
+              Flexible(
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 4),
+                  child: Text(
+                    'にち れんぞく',
+                    style: dqText(size: 16, w: FontWeight.w700, color: dqInk),
+                  ),
                 ),
               ),
             ],
@@ -442,10 +446,57 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
                 .copyWith(height: 1.6),
           ),
           const SizedBox(height: 14),
+          // 「きょうの目標」daily-goal: ring + caption. The caption is Expanded so
+          // the only fixed-width child (the ring) can never overflow (#65).
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _DailyGoalRing(
+                done: _streak.problemsToday,
+                goal: _streak.dailyGoal,
+              ),
+              const SizedBox(width: 14),
+              Expanded(child: _buildGoalCaption()),
+            ],
+          ),
+          const SizedBox(height: 14),
           // Weekly dots — subtle, no red "missed day" highlight.
           _buildWeekDots(),
         ],
       ),
+    );
+  }
+
+  /// The「きょうの目標」progress line beside the ring — honest, never shaming.
+  Widget _buildGoalCaption() {
+    final s = _streak;
+    final String title;
+    final String text;
+    final Color color;
+    if (s.goalMet) {
+      title = 'きょうの目標（もくひょう）達成（たっせい）！';
+      text = 'さすが 名探偵（めいたんてい）。';
+      color = dqGold;
+    } else if (s.problemsToday > 0) {
+      title = 'あと ${s.remainingToGoal}問（もん）！';
+      text = 'きょうの目標（もくひょう）まで もうすこし。';
+      color = dqInk;
+    } else {
+      title = 'きょうの目標（もくひょう）：${s.dailyGoal}問（もん）';
+      text = 'さあ はじめよう！';
+      color = dqInk.withAlpha(210);
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title, style: dqText(size: 14, w: FontWeight.w800, color: color)),
+        const SizedBox(height: 2),
+        Text(
+          text,
+          style: dqText(
+              size: 12, w: FontWeight.w500, color: dqInk.withAlpha(200)),
+        ),
+      ],
     );
   }
 
@@ -679,4 +730,96 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
       ),
     );
   }
+}
+
+// ── きょうの目標 daily-goal ring ──────────────────────────────────────────────
+
+/// A compact circular progress ring for today's question goal — the visible
+/// daily-return target the child fills each day (the engagement spine, not
+/// decoration). Gold fill, dark track; centre shows done/goal, or a check once
+/// the goal is met.
+class _DailyGoalRing extends StatelessWidget {
+  final int done;
+  final int goal;
+  const _DailyGoalRing({required this.done, required this.goal});
+
+  @override
+  Widget build(BuildContext context) {
+    final ratio =
+        goal <= 0 ? 0.0 : (done / goal).clamp(0.0, 1.0).toDouble();
+    final met = done >= goal && goal > 0;
+    const size = 76.0;
+    return SizedBox(
+      width: size,
+      height: size,
+      child: CustomPaint(
+        painter: _GoalRingPainter(ratio: ratio, met: met),
+        child: Center(
+          child: met
+              ? const Icon(Icons.check_rounded, color: dqGold, size: 34)
+              : Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      '$done',
+                      style: dqText(
+                          size: 24, w: FontWeight.w900, color: dqGold),
+                    ),
+                    Text(
+                      '/$goal問',
+                      style: dqText(
+                          size: 11,
+                          w: FontWeight.w600,
+                          color: dqInk.withAlpha(190)),
+                    ),
+                  ],
+                ),
+        ),
+      ),
+    );
+  }
+}
+
+class _GoalRingPainter extends CustomPainter {
+  final double ratio; // 0..1
+  final bool met;
+  _GoalRingPainter({required this.ratio, required this.met});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    const stroke = 8.0;
+    final rect = Rect.fromCircle(
+      center: Offset(size.width / 2, size.height / 2),
+      radius: (size.width - stroke) / 2,
+    );
+    // Full-circle track.
+    canvas.drawArc(
+      rect,
+      0,
+      2 * math.pi,
+      false,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = stroke
+        ..color = dqNight1,
+    );
+    // Progress fill — starts at 12 o'clock, sweeps clockwise.
+    if (ratio > 0) {
+      canvas.drawArc(
+        rect,
+        -math.pi / 2,
+        2 * math.pi * ratio,
+        false,
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = stroke
+          ..strokeCap = StrokeCap.round
+          ..color = met ? dqGold : dqGoldDeep,
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(_GoalRingPainter old) =>
+      old.ratio != ratio || old.met != met;
 }
