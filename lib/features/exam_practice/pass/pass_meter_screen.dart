@@ -26,13 +26,11 @@
 //
 // NO dart:io. No Firebase. No network. (R4)
 
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
-import 'package:engquest/core/ui/app_fonts.dart';
 
 import '../../quest/ui/dq_ui.dart';
 import 'cse_model.dart';
+import 'pass_gauge.dart';
 
 // ── Demo profile (used when estimate is null, e.g. ?preview) ─────────────────
 
@@ -179,7 +177,7 @@ class _PassHero extends StatelessWidget {
           // Pass-probability gauge: a 270° arc filling toward the ごうかく goal,
           // the % centred and a goal marker at 100% — a designed meter, not a flat
           // bar (commercial-quality audit #68).
-          _PassGauge(pct: pct, color: _meterColor(pct)),
+          PassGauge(pct: pct, color: _meterColor(pct)),
 
           const SizedBox(height: 2),
           Text(
@@ -446,104 +444,6 @@ class _PassCelebration extends StatelessWidget {
       ),
     );
   }
-}
-
-// ── Pass-probability gauge ────────────────────────────────────────────────────
-
-/// A 270° arc gauge (gap at the bottom) that fills from 0% (bottom-left) toward
-/// the ごうかく goal at 100% (bottom-right), with the percentage centred and a
-/// goal marker at the 100% end. Replaces the flat progress bar so the core value
-/// reads as a designed meter (commercial-quality audit #68).
-class _PassGauge extends StatelessWidget {
-  final double pct; // 0..100
-  final Color color;
-  const _PassGauge({required this.pct, required this.color});
-
-  @override
-  Widget build(BuildContext context) {
-    final p = pct.clamp(0.0, 100.0);
-    return SizedBox(
-      width: 180,
-      height: 168,
-      child: CustomPaint(
-        painter: _GaugePainter(pct: p, color: color),
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 6),
-            child: Text(
-              '${p.toStringAsFixed(0)}%',
-              style: notoSerifJp(
-                color: color,
-                fontSize: 52,
-                fontWeight: FontWeight.w900,
-                shadows: const [
-                  Shadow(
-                      color: Colors.black, blurRadius: 8, offset: Offset(0, 3)),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _GaugePainter extends CustomPainter {
-  final double pct; // 0..100
-  final Color color;
-  _GaugePainter({required this.pct, required this.color});
-
-  static const double _startDeg = 135.0; // bottom-left
-  static const double _sweepDeg = 270.0; // up over the top to bottom-right
-  static const double _stroke = 16.0;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final side = math.min(size.width, size.height);
-    final rect = Rect.fromCenter(
-      center: Offset(size.width / 2, size.height / 2),
-      width: side - _stroke,
-      height: side - _stroke,
-    );
-    final start = _startDeg * math.pi / 180;
-    final sweep = _sweepDeg * math.pi / 180;
-
-    final track = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = _stroke
-      ..strokeCap = StrokeCap.round
-      ..color = const Color(0xFF1A2244);
-    canvas.drawArc(rect, start, sweep, false, track);
-
-    final fill = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = _stroke
-      ..strokeCap = StrokeCap.round
-      ..color = color;
-    canvas.drawArc(rect, start, sweep * (pct / 100.0), false, fill);
-
-    // Goal marker (ごうかくライン) at the 100% end — a gold ringed dot.
-    final endAngle = start + sweep;
-    final r = rect.width / 2;
-    final goal = Offset(
-      rect.center.dx + r * math.cos(endAngle),
-      rect.center.dy + r * math.sin(endAngle),
-    );
-    canvas.drawCircle(goal, _stroke * 0.55, Paint()..color = const Color(0xFFF0D080));
-    canvas.drawCircle(
-      goal,
-      _stroke * 0.55,
-      Paint()
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 2
-        ..color = const Color(0xFF6E5320),
-    );
-  }
-
-  @override
-  bool shouldRepaint(_GaugePainter old) =>
-      old.pct != pct || old.color != color;
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────

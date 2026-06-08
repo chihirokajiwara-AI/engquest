@@ -35,6 +35,7 @@ import 'package:engquest/features/battle/battle_screen.dart';
 import 'package:engquest/features/exam_practice/pass/cse_model.dart';
 import 'package:engquest/features/exam_practice/pass/skill_accuracy_store.dart';
 import 'package:engquest/features/exam_practice/pass/pass_meter_screen.dart';
+import 'package:engquest/features/exam_practice/pass/pass_gauge.dart';
 import 'package:engquest/features/quest/quest_map_screen.dart';
 import 'package:engquest/features/quest/ui/dq_ui.dart';
 import 'package:engquest/features/settings/settings_screen.dart';
@@ -347,15 +348,16 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
             : Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
-                    '${est.readinessPct.toStringAsFixed(0)}%',
-                    style: dqText(
-                      size: 40,
-                      w: FontWeight.w900,
-                      color: est.isPredictedPass
-                          ? const Color(0xFF8BE08B)
-                          : dqGold,
-                    ),
+                  // Compact arc gauge — the same designed meter as the full
+                  // PassMeter, so the 合格率 reads as one thing everywhere (#68).
+                  PassGauge(
+                    pct: est.readinessPct,
+                    color: est.isPredictedPass
+                        ? const Color(0xFF8BE08B)
+                        : dqGold,
+                    size: 66,
+                    stroke: 7,
+                    fontSize: 18,
                   ),
                   const SizedBox(width: 14),
                   Expanded(
@@ -368,19 +370,6 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
                               : 'ごうかくまで あと ${est.pointsNeeded} ポイント',
                           style: dqText(
                               size: 13, w: FontWeight.w700, color: dqInk),
-                        ),
-                        const SizedBox(height: 6),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(6),
-                          child: LinearProgressIndicator(
-                            value: (est.readinessPct / 100).clamp(0.0, 1.0),
-                            minHeight: 10,
-                            backgroundColor: const Color(0xFF1A2244),
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                                est.isPredictedPass
-                                    ? const Color(0xFF8BE08B)
-                                    : dqGold),
-                          ),
                         ),
                         const SizedBox(height: 4),
                         Text('タップで くわしく / Details',
