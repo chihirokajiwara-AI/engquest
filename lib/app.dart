@@ -304,7 +304,8 @@ const List<String> kPreviewRouteNames = [
   'kotobahome', 'passmeter', 'passmetermissing', 'passprogress', 'speaking',
   'speakingconsent',
   'listening2', 'achievements', 'parent', 'parentlogin', 'wordorder',
-  'conversation', 'conversation5', 'conversation4', 'reading', 'reading3',
+  'conversation', 'conversation5', 'conversation4', 'conversationpre2',
+  'reading', 'reading3',
   'readingpre2', 'reading2', 'readingpre1', 'readingpre1fill', 'settings',
   'listeningpp', 'listeningp1',
 ];
@@ -455,6 +456,21 @@ Widget _previewFor(String? name) {
           nameEn: 'Conversation Completion',
           type: ExamSectionType.conversationComplete,
           questionCount: 5,
+          timeLimitMinutes: 8,
+          description: 'Preview',
+        ),
+      );
+    case 'conversationpre2':
+      // 英検準2級 大問2 — render-proofs the 準2 会話 解説 (#104, completes the
+      // conversation teach-why pillar). Tap a choice → 💡かいせつ teaches the reply.
+      return const ConversationPracticeScreen(
+        eikenGrade: 'pre2',
+        section: ExamSection(
+          id: 'p2_r2',
+          nameJa: '筆記2: 会話文の文空所補充',
+          nameEn: 'Conversation Completion',
+          type: ExamSectionType.conversationComplete,
+          questionCount: 8,
           timeLimitMinutes: 8,
           description: 'Preview',
         ),

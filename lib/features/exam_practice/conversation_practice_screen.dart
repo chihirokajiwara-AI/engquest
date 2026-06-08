@@ -711,6 +711,8 @@ class _ConversationPracticeScreenState
             'The waiter is really friendly.',
           ],
           correctIdx: 0,
+          explanation:
+              '「order now か、more time か」をたずねる選択の質問。まだ決まっていないので「Could you give us a few more minutes(もう少し時間をください)」とていねいにお願いする返事が合う。',
         ),
         _ConversationProblem(
           context: 'At the office',
@@ -723,6 +725,8 @@ class _ConversationPracticeScreenState
             'I finished mine yesterday.',
           ],
           correctIdx: 0,
+          explanation:
+              '「締め切りに間に合わず困っている」と打ち明けられた場面。「Would you like me to give you a hand?(手伝おうか?)」と手助けを申し出るのが自然な反応。',
         ),
         _ConversationProblem(
           context: 'Making plans',
@@ -735,6 +739,8 @@ class _ConversationPracticeScreenState
             'The tickets were expensive.',
           ],
           correctIdx: 0,
+          explanation:
+              '残念な知らせ（売り切れ）には「That\'s too bad(それは残念)」と共感し、「代わりに別のことをしよう(instead)」と代案を出す流れが自然。',
         ),
         _ConversationProblem(
           context: 'At a clothing shop',
@@ -748,6 +754,8 @@ class _ConversationPracticeScreenState
             'Last week was very busy.',
           ],
           correctIdx: 0,
+          explanation:
+              '商品の不具合（ファスナーが壊れた）の苦情には、店員として「I\'m sorry about that(申し訳ありません)」とあやまり、「返金か交換か(refund or exchange)」と解決策を示すのが適切。',
         ),
         _ConversationProblem(
           context: 'Asking a favor',
@@ -760,6 +768,8 @@ class _ConversationPracticeScreenState
             'Your garden is beautiful.',
           ],
           correctIdx: 0,
+          explanation:
+              '「Could you 〜?(〜してくれる?)」は依頼。引き受けるなら「Of course(もちろん)」と答え、「かぎを預けておいて」と必要なことを伝える返事が自然。',
         ),
         _ConversationProblem(
           context: 'At the library',
@@ -772,6 +782,8 @@ class _ConversationPracticeScreenState
             'I enjoy reading magazines.',
           ],
           correctIdx: 0,
+          explanation:
+              '「Am I allowed to 〜?(〜してもいい?)」と許可を求める質問。断るときは「I\'m afraid(残念ながら)」とやわらげ、「ここでしか読めない(持ち出せない)」と決まりを説明するのがていねい。',
         ),
         _ConversationProblem(
           context: 'Catching up',
@@ -784,6 +796,8 @@ class _ConversationPracticeScreenState
             'I lived there for two years.',
           ],
           correctIdx: 0,
+          explanation:
+              '「How do you like it?(どう?気に入ってる?)」は感想をたずねる質問。「駅にずっと近くて(much closer)うれしい」と良い点と気持ちを答えるのが自然。',
         ),
         _ConversationProblem(
           context: 'At school',
@@ -797,6 +811,8 @@ class _ConversationPracticeScreenState
             'I joined the tennis club.',
           ],
           correctIdx: 0,
+          explanation:
+              '「What do you think?(どう思う?)」は意見を求める質問。「That\'s a great idea(いい考えだね)」と賛成し、理由（良い活動をしている）を足すのが自然な応答。',
         ),
       ];
     }
