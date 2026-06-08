@@ -305,8 +305,8 @@ const List<String> kPreviewRouteNames = [
   'speakingconsent',
   'listening2', 'achievements', 'parent', 'parentlogin', 'wordorder',
   'conversation', 'conversation5', 'conversation4', 'reading', 'reading3',
-  'readingpre2', 'reading2', 'readingpre1', 'settings', 'listeningpp',
-  'listeningp1',
+  'readingpre2', 'reading2', 'readingpre1', 'readingpre1fill', 'settings',
+  'listeningpp', 'listeningp1',
 ];
 
 /// Test-visible wrapper for the private preview harness.
@@ -484,6 +484,21 @@ Widget _previewFor(String? name) {
           nameEn: 'Reading Comprehension',
           type: ExamSectionType.readingComprehension,
           questionCount: 10,
+          timeLimitMinutes: 15,
+          description: 'Preview',
+        ),
+      );
+    case 'readingpre1fill':
+      // 英検準1級 (B2) 長文の語句空所補充 (大問2) — render-proofs the 準1 fill-in
+      // cohesion 解説 (#102). Tap a choice → 💡かいせつ explains the discourse logic.
+      return const ReadingPracticeScreen(
+        eikenGrade: 'pre1',
+        section: ExamSection(
+          id: 'p1_r2',
+          nameJa: '筆記2: 長文の語句空所補充',
+          nameEn: 'Reading 2: Passage Fill-in',
+          type: ExamSectionType.readingComprehension,
+          questionCount: 6,
           timeLimitMinutes: 15,
           description: 'Preview',
         ),

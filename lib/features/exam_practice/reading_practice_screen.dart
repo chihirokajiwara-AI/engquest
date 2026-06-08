@@ -1668,6 +1668,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'Scientists first studied habits in the 1950s.',
           ],
           correctIdx: 0,
+          explanation:
+              '直前で「脳のコントロールが自動ルーチンを担う部分（基底核）に移る」と述べているね。空所は This is why（だから）で、その結果＝「習慣は一度身につくと楽に感じる」とまとめる文が流れに合う。',
         ),
         _ComprehensionQuestion(
           question: 'Which sentence best fits in blank ( 2 )?',
@@ -1678,6 +1680,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'Some researchers disagree with these findings.',
           ],
           correctIdx: 2,
+          explanation:
+              '前後が「行動の複雑さが大きく影響する」→（空所）→「より複雑な習慣はもっと多くの繰り返しが必要」という対比。空所には"簡単な側"の例（朝食後にコップの水を飲むような単純な行動は数週間で習慣になる）が入る。',
         ),
         _ComprehensionQuestion(
           question: 'Which sentence best fits in blank ( 3 )?',
@@ -1688,6 +1692,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'However, this technique does not work for everyone.',
           ],
           correctIdx: 1,
+          explanation:
+              '直前のフロスの例（既存の習慣の直後に新しい行動をする）を一般化する文が入る。「新しい行動を既存の習慣に結びつけると、脳が一連の流れを覚えやすい」が、次の「既存の習慣が引き金になる」へ自然につながる。',
         ),
       ],
     ),
@@ -1723,6 +1729,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'Traditional media companies are no longer profitable.',
           ],
           correctIdx: 1,
+          explanation:
+              '直前は「人は毎日6千〜1万もの広告に接する」という情報過多の話。空所はその結論＝この段落の主題「注目（アテンション）が現代デジタル経済を動かすお金になった」。次段落の attention economy の説明へつながる。',
         ),
         _ComprehensionQuestion(
           question: 'Which sentence best fits in blank ( 5 )?',
@@ -1733,6 +1741,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'Social media has many positive effects on society.',
           ],
           correctIdx: 2,
+          explanation:
+              '直後の文が "These techniques exploit ... human psychology"。この These techniques（これらの手法）が指す中身を空所で挙げる必要がある。「無限スクロール・自動再生・通知は偶然ではなく入念に設計されたもの」が入り、指示語がきれいにつながる。',
         ),
         _ComprehensionQuestion(
           question: 'Which sentence best fits in blank ( 6 )?',
@@ -1743,6 +1753,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'The problem is likely to solve itself over time.',
           ],
           correctIdx: 1,
+          explanation:
+              '直前の「民主主義への心配」を This concern（この心配）で受ける文が入る。「アルゴリズムによる情報の選別を制限すべきだという声につながった」が、直後の Others counter（反論する人もいる）と対比になる。',
         ),
       ],
     ),
