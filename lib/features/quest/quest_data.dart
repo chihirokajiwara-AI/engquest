@@ -1181,7 +1181,7 @@ const List<QuestTown> kQuestTowns = [
       QuestEncounter(
         npcName: "けんちくか",
         npcEmoji: "🏛️",
-        npcLine: "Be careful near that ___ window — Lord Silentus's shadow passed through it.",
+        npcLine: "Be careful near that ___ window — the Silence's shadow passed through it.",
         npcLineJa: "あの ___ 窓（まど）に近（ちか）づくな――サイレントの影（かげ）が通（とお）り抜（ぬ）けたのだ。「こわされた窓」。 ___ は？",
         choices: ["breaking", "broke", "broken", "breaks"],
         correctIndex: 2,
@@ -1586,14 +1586,14 @@ const List<QuestTown> kQuestTowns = [
         npcName: "クワイエト",
         npcEmoji: "🌑",
         npcLine:
-            "I serve Lord Silentus. He believes a world without words has no lies and no quarrels — that silence is peace. After all you've heard in this town, what do you say to that?",
+            "I serve the Silence. He believes a world without words has no lies and no quarrels — that silence is peace. After all you've heard in this town, what do you say to that?",
         npcLineJa:
             "私（わたし）はサイレントに仕（つか）える者（もの）。彼（かれ）は、言葉（ことば）なき世界（せかい）には嘘（うそ）も争（あらそ）いもない――しずけさこそ平和（へいわ）だと信（しん）じる。この町（まち）で聞（き）いたすべてのあと、それに何（なに）と答（こた）える？",
         choices: [
           "A silent world has no lies and no quarrels at all.",
-          "Yes, silence is peace, just as Lord Silentus believes.",
+          "Yes, silence is peace, just as the Silence believes.",
           "Without shared words, people can never understand one another or show that they care.",
-          "Lord Silentus serves a world that is peaceful and quiet.",
+          "The Silence serves a world that is peaceful and quiet.",
         ],
         correctIndex: 2,
         onCorrect:
@@ -2019,7 +2019,7 @@ const List<QuestTown> kQuestTowns = [
       QuestEncounter(
         npcName: "論駁の番人",
         npcEmoji: "🗿",
-        npcLine: "(A stone guardian blocks the keep.) Silentus ate the world's words because he thought them noise. Prove you can hold meaning, not mere noise: which choice truly summarises an argument — capturing its point without copying its words or adding your own?",
+        npcLine: "(A stone guardian blocks the keep.) The Silence ate the world's words because it thought them noise. Prove you can hold meaning, not mere noise: which choice truly summarises an argument — capturing its point without copying its words or adding your own?",
         npcLineJa: "（石（いし）の番人（ばんにん）が天守（てんしゅ）をふさいでいる。）サイレントは、ことばを「ただの雑音（ざつおん）」と思（おも）い、世界（せかい）から食（た）べてしまった。お前（まえ）が雑音（ざつおん）ではなく「意味（いみ）」を扱（あつか）える証（あかし）を見（み）せよ。本当（ほんとう）に論（ろん）を要約（ようやく）しているのは――言葉（ことば）を写（うつ）さず、自分（じぶん）の意見（いけん）も足（た）さず、要点（ようてん）をつかむのは、どれだ？",
         choices: ["Repeating the author's strongest sentence word for word, exactly as written.", "Adding your own opinion about whether the author was right or wrong.", "Restating the author's main idea in fewer, different words, with nothing added.", "Listing every example the author gave, in the same order, leaving none out."],
         correctIndex: 2,
