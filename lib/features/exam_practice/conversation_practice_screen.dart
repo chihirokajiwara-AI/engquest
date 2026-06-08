@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'eiken_exam_config.dart';
 import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
+import '../quest/ui/dq_ui.dart';
 
 class _ConversationProblem {
   final String speakerA;
@@ -98,32 +99,29 @@ class _ConversationPracticeScreenState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA),
-      appBar: AppBar(
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF4FC3F7), Color(0xFF29B6F6)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+    return DqScene(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(4, 4, 12, 4),
+            child: Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.close, color: dqInk),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+                Expanded(
+                  child: Text('会話文（かいわぶん）の空所補充（くうしょほじゅう）',
+                      style:
+                          dqText(size: 15, w: FontWeight.w800, color: dqGold)),
+                ),
+              ],
             ),
           ),
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.close, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        title: const Text(
-          '会話文の空所補充',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-      ),
-      body: SafeArea(
-        child: _sessionDone ? _buildResults() : _buildProblem(),
+          Expanded(
+            child: _sessionDone ? _buildResults() : _buildProblem(),
+          ),
+        ],
       ),
     );
   }
@@ -141,28 +139,26 @@ class _ConversationPracticeScreenState
             children: [
               Text(
                 '問${_currentIdx + 1} / ${_problems.length}',
-                style: const TextStyle(
-                  color: Color(0xFF263238),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: dqText(size: 14, w: FontWeight.w700, color: dqInk),
               ),
               const Spacer(),
               Text(
                 '正答: $_correctCount',
-                style: TextStyle(
-                  color: Colors.green[700],
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: dqText(
+                    size: 14,
+                    w: FontWeight.w700,
+                    color: const Color(0xFF8BE08B)),
               ),
             ],
           ),
           const SizedBox(height: 8),
-          LinearProgressIndicator(
-            value: (_currentIdx + 1) / _problems.length,
-            backgroundColor: Colors.grey[200],
-            valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF4FC3F7)),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(4),
+            child: LinearProgressIndicator(
+              value: (_currentIdx + 1) / _problems.length,
+              backgroundColor: dqNight1,
+              valueColor: const AlwaysStoppedAnimation<Color>(dqGold),
+            ),
           ),
           const SizedBox(height: 20),
           // Context (if any)
@@ -171,11 +167,11 @@ class _ConversationPracticeScreenState
               padding: const EdgeInsets.only(bottom: 12),
               child: Text(
                 p.context,
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  fontSize: 13,
-                  fontStyle: FontStyle.italic,
-                ),
+                style: dqText(
+                        size: 13,
+                        w: FontWeight.w500,
+                        color: dqInk.withAlpha(170))
+                    .copyWith(fontStyle: FontStyle.italic),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -183,15 +179,9 @@ class _ConversationPracticeScreenState
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: dqBox,
               borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withAlpha(8),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ],
+              border: Border.all(color: dqGoldDeep.withAlpha(120), width: 1.5),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -223,26 +213,30 @@ class _ConversationPracticeScreenState
                 final isSelected = _selectedAnswer == i;
                 final isCorrect = i == p.correctIdx;
 
-                Color bgColor = Colors.white;
-                Color borderColor = Colors.grey.shade300;
-                Color textColor = const Color(0xFF263238);
+                Color bgColor = dqBox;
+                Color borderColor = dqGoldDeep.withAlpha(120);
+                Color textColor = dqInk;
 
                 if (_answered) {
                   if (isCorrect) {
-                    bgColor = const Color(0xFFE8F5E9);
-                    borderColor = const Color(0xFF4CAF50);
-                    textColor = const Color(0xFF2E7D32);
+                    bgColor = const Color(0xFF14301B);
+                    borderColor = const Color(0xFF8BE08B);
+                    textColor = const Color(0xFF8BE08B);
                   } else if (isSelected && !isCorrect) {
-                    bgColor = const Color(0xFFFFEBEE);
-                    borderColor = const Color(0xFFF44336);
-                    textColor = const Color(0xFFC62828);
+                    bgColor = const Color(0xFF3A1A1A);
+                    borderColor = const Color(0xFFE0853A);
+                    textColor = const Color(0xFFE89A82);
                   }
+                } else if (isSelected) {
+                  borderColor = dqGold;
+                  bgColor = dqNight1;
                 }
 
                 return Material(
                   color: bgColor,
                   borderRadius: BorderRadius.circular(10),
                   child: InkWell(
+                    key: ValueKey('conv_choice_$i'),
                     onTap: () => _selectAnswer(i),
                     borderRadius: BorderRadius.circular(10),
                     child: Container(
@@ -272,11 +266,11 @@ class _ConversationPracticeScreenState
                             ),
                           ),
                           if (_answered && isCorrect)
-                            const Icon(Icons.check_circle,
-                                color: Color(0xFF4CAF50), size: 20),
+                            const Icon(Icons.check_circle_rounded,
+                                color: Color(0xFF8BE08B), size: 20),
                           if (_answered && isSelected && !isCorrect)
-                            const Icon(Icons.cancel,
-                                color: Color(0xFFF44336), size: 20),
+                            const Icon(Icons.cancel_rounded,
+                                color: Color(0xFFE0853A), size: 20),
                         ],
                       ),
                     ),
@@ -289,24 +283,10 @@ class _ConversationPracticeScreenState
           if (_answered)
             Padding(
               padding: const EdgeInsets.only(top: 12),
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: _nextProblem,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF4FC3F7),
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: Text(
+              child: DqButton(
+                label:
                     _currentIdx < _problems.length - 1 ? '次の問題へ' : '結果を見る',
-                    style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                ),
+                onTap: _nextProblem,
               ),
             ),
         ],
@@ -325,37 +305,26 @@ class _ConversationPracticeScreenState
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
-            passed ? Icons.emoji_events : Icons.refresh,
+            passed
+                ? Icons.workspace_premium_rounded
+                : Icons.refresh_rounded,
             size: 72,
-            color: passed ? const Color(0xFFFFD700) : Colors.grey,
+            color: passed ? dqGold : dqInk.withAlpha(140),
           ),
           const SizedBox(height: 16),
           Text(
             passed ? '合格ライン到達！' : 'もう少し！',
-            style: const TextStyle(
-              color: Color(0xFF263238),
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
+            style: dqText(size: 24, w: FontWeight.w900, color: dqGold),
           ),
           const SizedBox(height: 12),
           Text(
             '$_correctCount / ${_problems.length} 正解 ($pct%)',
-            style: TextStyle(color: Colors.grey[700], fontSize: 18),
+            style: dqText(size: 18, w: FontWeight.w600, color: dqInk),
           ),
           const SizedBox(height: 32),
-          ElevatedButton(
-            onPressed: () => Navigator.of(context).pop(),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF4FC3F7),
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 40),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-            child: const Text('戻る',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          DqButton(
+            label: '戻る',
+            onTap: () => Navigator.of(context).pop(),
           ),
         ],
       ),
@@ -722,9 +691,12 @@ class _ChatBubble extends StatelessWidget {
         if (isLeft) ...[
           CircleAvatar(
             radius: 16,
-            backgroundColor: const Color(0xFF4FC3F7),
+            backgroundColor: const Color(0xFF5DA9E9),
             child: Text(speaker,
-                style: const TextStyle(color: Colors.white, fontSize: 12)),
+                style: const TextStyle(
+                    color: Color(0xFF0A0E24),
+                    fontSize: 12,
+                    fontWeight: FontWeight.w800)),
           ),
           const SizedBox(width: 8),
         ],
@@ -732,26 +704,21 @@ class _ChatBubble extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             decoration: BoxDecoration(
-              color: isBlank
-                  ? const Color(0xFFFFF8E1)
-                  : (isLeft
-                      ? const Color(0xFFF5F5F5)
-                      : const Color(0xFFE3F2FD)),
+              color: isBlank ? dqNight0 : dqNight1,
               borderRadius: BorderRadius.circular(12),
-              border: isBlank
-                  ? Border.all(
-                      color: const Color(0xFFFFB74D),
-                      style: BorderStyle.solid,
-                    )
-                  : null,
+              border: Border.all(
+                color: isBlank ? dqGold : dqGoldDeep.withAlpha(90),
+                width: isBlank ? 1.5 : 1,
+              ),
             ),
             child: Text(
               text,
-              style: TextStyle(
-                color: const Color(0xFF263238),
-                fontSize: 15,
-                fontStyle: isBlank ? FontStyle.italic : FontStyle.normal,
-              ),
+              style: dqText(
+                size: 15,
+                w: FontWeight.w500,
+                color: isBlank ? dqGold : dqInk,
+              ).copyWith(
+                  fontStyle: isBlank ? FontStyle.italic : FontStyle.normal),
             ),
           ),
         ),
@@ -759,9 +726,12 @@ class _ChatBubble extends StatelessWidget {
           const SizedBox(width: 8),
           CircleAvatar(
             radius: 16,
-            backgroundColor: const Color(0xFFFF7043),
+            backgroundColor: dqGold,
             child: Text(speaker,
-                style: const TextStyle(color: Colors.white, fontSize: 12)),
+                style: const TextStyle(
+                    color: Color(0xFF2A1C00),
+                    fontSize: 12,
+                    fontWeight: FontWeight.w800)),
           ),
         ],
       ],
