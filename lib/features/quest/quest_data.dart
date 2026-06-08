@@ -1287,8 +1287,13 @@ const List<QuestTown> kQuestTowns = [
     name: '社会（しゃかい）の港町（みなとまち）',
     tagline: '世の中を語る港町',
     intro: '社会（しゃかい）の港町（みなとまち）。世（よ）の中（なか）を語（かた）り合（あ）う場所（ばしょ）。'
-        'ここで、サイレントの手（て）の者（もの）クワイエトが、人々（ひとびと）から「意見（いけん）」そのものを奪（うば）おうとしている。',
-    cleared: '港町（みなとまち）の人々（ひとびと）が、また「自分（じぶん）はこう思（おも）う」と言（い）えるようになった。四（よっ）つ目（め）の〈声（こえ）の石（いし）〉。'
+        'ここで、サイレントの手（て）の者（もの）クワイエトが、人々（ひとびと）から「意見（いけん）」そのものを奪（うば）おうとしている。\n'
+        '港（みなと）の案内人（あんないにん）ナギは、ずっと昔（むかし）、二人（ふたり）の人（ひと）が言葉（ことば）で'
+        '傷（きず）つけ合（あ）った あの会話（かいわ）を、自分（じぶん）が通訳（つうやく）したのだと悔（く）やみ続（つづ）けている。'
+        'その日（ひ）、何（なに）が語（かた）られたのか？　自分（じぶん）の「意見（いけん）」を言（い）えるようになれば、港（みなと）に声（こえ）がもどる。',
+    cleared: '港（みなと）の案内人（あんないにん）ナギが、はじめて自分（じぶん）の言葉（ことば）で言（い）った――'
+        '「わたしは、ちがうと思（おも）う」。\n'
+        '港町（みなとまち）の人々（ひとびと）も、また「自分（じぶん）はこう思（おも）う」と言（い）えるようになった。四（よっ）つ目（め）の〈声（こえ）の石（いし）〉。'
         'クワイエトは去（さ）りぎわ、ふり返（かえ）った――「…おまえの言葉（ことば）は、なぜ消（き）えない？」 遠（とお）くでサイレントの影（かげ）がうごめく。',
     encounters: [
       // 1 — 大問1 短文空所補充: past tense + because (3級→準2級 bridge review)
@@ -1311,8 +1316,8 @@ const List<QuestTown> kQuestTowns = [
       ),
       // 2 — 大問1 短文空所補充: present perfect 継続 vs past (since/for cue)
       QuestEncounter(
-        npcName: "りょうし",
-        npcEmoji: "🎣",
+        npcName: "案内人（あんないにん）ナギ",
+        npcEmoji: "⚓",
         npcLine:
             "I have lived by this harbour for thirty years. How long have you been a traveller?",
         npcLineJa:
@@ -1325,7 +1330,9 @@ const List<QuestTown> kQuestTowns = [
         ],
         correctIndex: 0,
         onCorrect:
-            "Since childhood — a long road indeed. The sea respects a patient soul.",
+            "Since childhood — a long road. I have guided ships here for thirty years… "
+            "and once, I carried words between two people who wounded each other. "
+            "The silence began after that. Help me find my own voice again.",
       ),
       // 3 — 大問1 短文空所補充: passive voice (be + past participle)
       QuestEncounter(
