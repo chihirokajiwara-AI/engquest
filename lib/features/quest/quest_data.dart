@@ -794,9 +794,14 @@ const List<QuestTown> kQuestTowns = [
     cefr: 'A2',
     name: '風（かぜ）の街',
     tagline: '毎日のくらしの街',
-    intro: '風（かぜ）の街（まち）。毎日（まいにち）のくらしの言葉（ことば）が、風（かぜ）にさらわれて消（き）えかけている。'
-        '人々（ひとびと）の一日（いちにち）を、英語（えいご）でつないであげよう。',
-    cleared: '街（まち）に毎日（まいにち）のおしゃべりがもどった。二（ふた）つ目（め）の〈声（こえ）の石（いし）〉を手（て）に。'
+    intro: '風（かぜ）の街（まち）。毎日（まいにち）のくらしの言葉（ことば）が、風（かぜ）にさらわれて消（き）えかけている。\n'
+        '街（まち）の時計屋（とけいや）トックの大（おお）きな時計（とけい）は、ある朝（あさ）ぴたりと止（と）まった――'
+        '「きのう」も「あした」も言（い）えなくなった、その日（ひ）に。\n'
+        '何時（なんじ）に、なぜ止（と）まったのか？　過去（かこ）と未来（みらい）の言葉（ことば）を'
+        'とりもどして、トックの時計（とけい）を もう一度（いちど）動（うご）かそう。',
+    cleared: 'トックの時計（とけい）が、コチコチと動（うご）き出（だ）した――'
+        '「きのう、ありがとう。あした、また会（あ）おう」。\n'
+        '街（まち）に毎日（まいにち）のおしゃべりがもどった。二（ふた）つ目（め）の〈声（こえ）の石（いし）〉を手（て）に。'
         '「サイレントは、しずけさを“へいわ”だと思（おも）っているらしい」とスラがつぶやく。',
     encounters: [
       // 1 — be動詞 過去 was/were. 5級の現在から「昨日」へ。(大問1 文法型)
@@ -841,13 +846,15 @@ const List<QuestTown> kQuestTowns = [
       ),
       // 5 — 未来 will。過去→未来へ時制を広げる。(大問1 文法型)
       QuestEncounter(
-        npcName: "おじいさん",
-        npcEmoji: "👴",
+        npcName: "時計屋（とけいや）トック",
+        npcEmoji: "🕰️",
         npcLine: "The sky is dark. I think it ___ rain soon.",
         npcLineJa: "そらが くらい。もうすぐ あめが ___ と おもうよ。",
         choices: ["rained", "will", "is", "rains"],
         correctIndex: 1,
-        onCorrect: "Yes, it will rain. Take my umbrella, young traveller. The wind here is unkind.",
+        onCorrect:
+            "Yes — it WILL rain. My clock stopped the very hour the grey began… "
+            "but I remember: it was humming, once. Help me wind it forward, traveller.",
       ),
       // 6 — be going to（予定の未来。will との別形トラップ）。(大問1 文法型)
       QuestEncounter(
