@@ -283,72 +283,72 @@ class _ConversationPracticeScreenState
                     itemCount: p.choices.length,
                     separatorBuilder: (_, __) => const SizedBox(height: 8),
                     itemBuilder: (context, i) {
-                final isSelected = _selectedAnswer == i;
-                final isCorrect = i == p.correctIdx;
+                      final isSelected = _selectedAnswer == i;
+                      final isCorrect = i == p.correctIdx;
 
-                Color bgColor = dqBox;
-                Color borderColor = dqGoldDeep.withAlpha(120);
-                Color textColor = dqInk;
+                      Color bgColor = dqBox;
+                      Color borderColor = dqGoldDeep.withAlpha(120);
+                      Color textColor = dqInk;
 
-                if (_answered) {
-                  if (isCorrect) {
-                    bgColor = const Color(0xFF14301B);
-                    borderColor = const Color(0xFF8BE08B);
-                    textColor = const Color(0xFF8BE08B);
-                  } else if (isSelected && !isCorrect) {
-                    bgColor = const Color(0xFF3A1A1A);
-                    borderColor = const Color(0xFFE0853A);
-                    textColor = const Color(0xFFE89A82);
-                  }
-                } else if (isSelected) {
-                  borderColor = dqGold;
-                  bgColor = dqNight1;
-                }
+                      if (_answered) {
+                        if (isCorrect) {
+                          bgColor = const Color(0xFF14301B);
+                          borderColor = const Color(0xFF8BE08B);
+                          textColor = const Color(0xFF8BE08B);
+                        } else if (isSelected && !isCorrect) {
+                          bgColor = const Color(0xFF3A1A1A);
+                          borderColor = const Color(0xFFE0853A);
+                          textColor = const Color(0xFFE89A82);
+                        }
+                      } else if (isSelected) {
+                        borderColor = dqGold;
+                        bgColor = dqNight1;
+                      }
 
-                return Material(
-                  color: bgColor,
-                  borderRadius: BorderRadius.circular(10),
-                  child: InkWell(
-                    key: ValueKey('conv_choice_$i'),
-                    onTap: () => _selectAnswer(i),
-                    borderRadius: BorderRadius.circular(10),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 14, vertical: 12),
-                      decoration: BoxDecoration(
+                      return Material(
+                        color: bgColor,
                         borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: borderColor),
-                      ),
-                      child: Row(
-                        children: [
-                          Text(
-                            '${i + 1}',
-                            style: TextStyle(
-                              color: textColor,
-                              fontWeight: FontWeight.bold,
+                        child: InkWell(
+                          key: ValueKey('conv_choice_$i'),
+                          onTap: () => _selectAnswer(i),
+                          borderRadius: BorderRadius.circular(10),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 14, vertical: 12),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: borderColor),
+                            ),
+                            child: Row(
+                              children: [
+                                Text(
+                                  '${i + 1}',
+                                  style: TextStyle(
+                                    color: textColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Text(
+                                    p.choices[i],
+                                    style: TextStyle(
+                                      color: textColor,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ),
+                                if (_answered && isCorrect)
+                                  const Icon(Icons.check_circle_rounded,
+                                      color: Color(0xFF8BE08B), size: 20),
+                                if (_answered && isSelected && !isCorrect)
+                                  const Icon(Icons.cancel_rounded,
+                                      color: Color(0xFFE0853A), size: 20),
+                              ],
                             ),
                           ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Text(
-                              p.choices[i],
-                              style: TextStyle(
-                                color: textColor,
-                                fontSize: 15,
-                              ),
-                            ),
-                          ),
-                          if (_answered && isCorrect)
-                            const Icon(Icons.check_circle_rounded,
-                                color: Color(0xFF8BE08B), size: 20),
-                          if (_answered && isSelected && !isCorrect)
-                            const Icon(Icons.cancel_rounded,
-                                color: Color(0xFFE0853A), size: 20),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
+                        ),
+                      );
                     },
                   ),
                   if (_answered && p.explanation != null)
@@ -365,8 +365,7 @@ class _ConversationPracticeScreenState
             Padding(
               padding: const EdgeInsets.only(top: 12),
               child: DqButton(
-                label:
-                    _currentIdx < _problems.length - 1 ? '次の問題へ' : '結果を見る',
+                label: _currentIdx < _problems.length - 1 ? '次の問題へ' : '結果を見る',
                 onTap: _nextProblem,
               ),
             ),
@@ -386,9 +385,7 @@ class _ConversationPracticeScreenState
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
-            passed
-                ? Icons.workspace_premium_rounded
-                : Icons.refresh_rounded,
+            passed ? Icons.workspace_premium_rounded : Icons.refresh_rounded,
             size: 72,
             color: passed ? dqGold : dqInk.withAlpha(140),
           ),
@@ -505,6 +502,8 @@ class _ConversationPracticeScreenState
             'It opens at nine.',
           ],
           correctIdx: 0,
+          explanation:
+              '「how to get to 〜?」は行き方（いきかた）をたずねる質問。道あんないをしている「Take the second left and go straight.」が正解だよ。',
         ),
         _ConversationProblem(
           context: 'On the phone',
@@ -517,6 +516,8 @@ class _ConversationPracticeScreenState
             "I don't think so.",
           ],
           correctIdx: 0,
+          explanation:
+              '電話（でんわ）で「いま いません」と言われたら、あとでかけてもらうよう おねがいするのが自然。「Could you ask her to call me back?」が正解。',
         ),
         _ConversationProblem(
           context: 'At school',
@@ -529,6 +530,8 @@ class _ConversationPracticeScreenState
             'The weather is bad.',
           ],
           correctIdx: 0,
+          explanation:
+              '「つかれてる？だいじょうぶ？」と聞かれているね。りゆうを答える「I stayed up late studying for the test.」が自然な返事だよ。',
         ),
         _ConversationProblem(
           context: 'Shopping',
@@ -541,6 +544,8 @@ class _ConversationPracticeScreenState
             'We close at eight.',
           ],
           correctIdx: 0,
+          explanation:
+              '店（みせ）で「smaller size はある？」と聞かれたら、店員（てんいん）は「Let me check. I\'ll be right back.」と答えるのが自然。',
         ),
         _ConversationProblem(
           context: 'At a friend\'s house',
@@ -553,6 +558,8 @@ class _ConversationPracticeScreenState
             'The cake is on the table.',
           ],
           correctIdx: 0,
+          explanation:
+              '「もっとケーキはいかが？」のおすすめには、いる か いらない で答えるよ。「No, thank you. I\'m full.」がていねいな ことわり方。',
         ),
       ];
     } else if (grade == '3') {
@@ -702,7 +709,8 @@ class _ConversationPracticeScreenState
         ),
         _ConversationProblem(
           context: 'At a clothing shop',
-          speakerA: 'I bought this jacket here last week, but the zipper is broken.',
+          speakerA:
+              'I bought this jacket here last week, but the zipper is broken.',
           speakerB: '(        )',
           choices: [
             "I'm sorry about that. Would you like a refund or an exchange?",
@@ -750,7 +758,8 @@ class _ConversationPracticeScreenState
         ),
         _ConversationProblem(
           context: 'At school',
-          speakerA: "I'm thinking of joining the volunteer club. What do you think?",
+          speakerA:
+              "I'm thinking of joining the volunteer club. What do you think?",
           speakerB: '(        )',
           choices: [
             "That's a great idea. They do a lot of good work.",

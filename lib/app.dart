@@ -304,8 +304,8 @@ const List<String> kPreviewRouteNames = [
   'kotobahome', 'passmeter', 'passmetermissing', 'passprogress', 'speaking',
   'speakingconsent',
   'listening2', 'achievements', 'parent', 'parentlogin', 'wordorder',
-  'conversation', 'conversation5', 'reading', 'reading3', 'settings',
-  'listeningpp', 'listeningp1',
+  'conversation', 'conversation5', 'conversation4', 'reading', 'reading3',
+  'settings', 'listeningpp', 'listeningp1',
 ];
 
 /// Test-visible wrapper for the private preview harness.
@@ -434,6 +434,21 @@ Widget _previewFor(String? name) {
         eikenGrade: '5',
         section: ExamSection(
           id: '5_p2',
+          nameJa: '筆記2: 会話文の文空所補充',
+          nameEn: 'Conversation Completion',
+          type: ExamSectionType.conversationComplete,
+          questionCount: 5,
+          timeLimitMinutes: 8,
+          description: 'Preview',
+        ),
+      );
+    case 'conversation4':
+      // 英検4級 大問2 — render-proofs the 4級 会話 解説 (#7). Tap a choice to
+      // reveal the 💡かいせつ that teaches the functional reply skill.
+      return const ConversationPracticeScreen(
+        eikenGrade: '4',
+        section: ExamSection(
+          id: '4_p2',
           nameJa: '筆記2: 会話文の文空所補充',
           nameEn: 'Conversation Completion',
           type: ExamSectionType.conversationComplete,
