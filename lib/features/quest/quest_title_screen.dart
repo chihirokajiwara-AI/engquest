@@ -90,20 +90,31 @@ class QuestTitleScreen extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: [
-        // textured background (generated map; parchment fallback)
+        // textured background (generated map; parchment fallback). The warm
+        // parchment field shows WHILE the painted map decodes, and the map fades
+        // in over it — so a cold boot opens on parchment→map, never a black frame
+        // inside the gold border (#56: CEO saw the painted map pop in late).
+        const DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: RadialGradient(
+              center: Alignment.center,
+              radius: 1.0,
+              colors: [Color(0xFF8A6A38), _parchment, Color(0xFF3C2C16)],
+              stops: [0.0, 0.6, 1.0],
+            ),
+          ),
+          child: SizedBox.expand(),
+        ),
         Image.asset(
           'assets/art/title_bg.png',
           fit: BoxFit.cover,
-          errorBuilder: (_, __, ___) => const DecoratedBox(
-            decoration: BoxDecoration(
-              gradient: RadialGradient(
-                center: Alignment.center,
-                radius: 1.0,
-                colors: [Color(0xFF8A6A38), _parchment, Color(0xFF3C2C16)],
-                stops: [0.0, 0.6, 1.0],
-              ),
-            ),
+          frameBuilder: (_, child, frame, wasSync) => AnimatedOpacity(
+            opacity: (frame == null && !wasSync) ? 0.0 : 1.0,
+            duration: const Duration(milliseconds: 450),
+            curve: Curves.easeIn,
+            child: child,
           ),
+          errorBuilder: (_, __, ___) => const SizedBox.shrink(),
         ),
         // darken for logo/menu legibility
         DecoratedBox(
