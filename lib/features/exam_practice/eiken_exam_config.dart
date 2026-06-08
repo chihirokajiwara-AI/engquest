@@ -75,7 +75,7 @@ const Map<String, EikenExamDef> kEikenExams = {
     grade: '5',
     labelJa: '英検5級',
     cefrLevel: 'A1',
-    totalMinutes: 25,
+    totalMinutes: 45, // 一次 = 筆記25分 + リスニング約20分 (eiken.or.jp, 2026-06)
     passingScore: 419,
     maxScore: 850,
     sections: [
@@ -121,7 +121,7 @@ const Map<String, EikenExamDef> kEikenExams = {
     grade: '4',
     labelJa: '英検4級',
     cefrLevel: 'A1-A2',
-    totalMinutes: 35,
+    totalMinutes: 65, // 一次 = リーディング35分 + リスニング約30分 (eiken.or.jp, 2026-06)
     passingScore: 622,
     maxScore: 1000,
     sections: [
@@ -176,7 +176,7 @@ const Map<String, EikenExamDef> kEikenExams = {
     grade: '3',
     labelJa: '英検3級',
     cefrLevel: 'A2',
-    totalMinutes: 50,
+    totalMinutes: 90, // 一次 = R/W 65分 + リスニング約25分 (2024改定後, eiken.or.jp 2026-06)
     passingScore: 1103,
     maxScore: 1650,
     sections: [
@@ -231,7 +231,7 @@ const Map<String, EikenExamDef> kEikenExams = {
     grade: 'pre2',
     labelJa: '英検準2級',
     cefrLevel: 'B1',
-    totalMinutes: 75,
+    totalMinutes: 105, // 一次 = R/W 80分 + リスニング約25分 (2024改定後, eiken.or.jp 2026-06)
     passingScore: 1322,
     maxScore: 1800, // 一次満点 = 600×3 (corrected 2026-06-07; was inflated 1980)
     sections: [
@@ -344,7 +344,7 @@ const Map<String, EikenExamDef> kEikenExams = {
     grade: '2',
     labelJa: '英検2級',
     cefrLevel: 'B1-B2',
-    totalMinutes: 85,
+    totalMinutes: 110, // 一次 = R/W 85分 + リスニング約25分 (eiken.or.jp, 2026-06)
     passingScore: 1520,
     maxScore: 1950, // 一次満点 = 650×3 (corrected 2026-06-07; was inflated 2600)
     sections: [
@@ -399,7 +399,7 @@ const Map<String, EikenExamDef> kEikenExams = {
     grade: 'pre1',
     labelJa: '英検準1級',
     cefrLevel: 'B2',
-    totalMinutes: 90,
+    totalMinutes: 120, // 一次 = R/W 90分 + リスニング約30分 (eiken.or.jp, 2026-06)
     passingScore: 1792,
     maxScore: 2250, // 一次満点 = 750×3 (corrected 2026-06-07; was inflated 3000)
     sections: [
