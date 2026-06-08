@@ -24,6 +24,9 @@ import 'package:engquest/features/home/streak_service.dart';
 import 'package:engquest/features/home/kotoba_home_screen.dart';
 import 'package:engquest/features/exam_practice/exam_practice_screen.dart';
 import 'package:engquest/features/battle/battle_screen.dart';
+import 'package:engquest/features/exam_practice/pass/cse_model.dart';
+import 'package:engquest/features/exam_practice/pass/skill_accuracy_store.dart';
+import 'package:engquest/features/exam_practice/pass/pass_meter_screen.dart';
 
 // ── Mock helpers ──────────────────────────────────────────────────────────────
 
@@ -95,6 +98,7 @@ void main() {
   setUp(() {
     SharedPreferences.setMockInitialValues({});
     PreferencesService.resetInstance();
+    SkillAccuracyStore.resetInstance();
 
     // Suppress Firebase-not-initialized errors — KotobaHomeScreen never calls
     // Firebase directly, but some transitively imported services may.
@@ -225,8 +229,9 @@ void main() {
       cardRepository: InMemoryFsrsCardRepository(),
     ));
     await _settle(tester);
-    final nazo = find.byIcon(Icons.chevron_right); // the panel's tap affordance
-    expect(nazo, findsOneWidget);
+    // The readiness card also has a chevron; the Nazo panel's is the last one
+    // (it sits below the readiness card).
+    final nazo = find.byIcon(Icons.chevron_right).last;
     await tester.ensureVisible(nazo);
     await tester.tap(nazo);
     await tester.pump(); // start the route push
@@ -235,6 +240,33 @@ void main() {
     // Unmount so the pushed screen's post-frame async does not leak.
     await tester.pumpWidget(const SizedBox());
     await tester.pump(const Duration(seconds: 2));
+  });
+
+  testWidgets(
+      'KotobaHomeScreen: readiness card shows live 合格率 + opens PassMeter (#66/#68)',
+      (tester) async {
+    // Seed practice data so the card shows a live readiness %.
+    final store = await SkillAccuracyStore.getInstance();
+    await store.record(
+        grade: '5', skill: EikenSkill.reading, correct: 8, total: 10);
+    await store.record(
+        grade: '5', skill: EikenSkill.listening, correct: 7, total: 10);
+
+    await tester.pumpWidget(_wrap(
+      streakService: _MockStreakService(const StreakState.zero()),
+      cardRepository: InMemoryFsrsCardRepository(),
+    ));
+    await _settle(tester);
+
+    expect(find.textContaining('合格率'), findsWidgets);
+    expect(find.textContaining('%'), findsWidgets); // the live readiness %
+
+    // The readiness card sits at the top — its chevron is the first.
+    final card = find.byIcon(Icons.chevron_right).first;
+    await tester.ensureVisible(card);
+    await tester.tap(card);
+    await tester.pumpAndSettle();
+    expect(find.byType(PassMeterScreen), findsOneWidget);
   });
 
   // ── Panel titles ──────────────────────────────────────────────────────────

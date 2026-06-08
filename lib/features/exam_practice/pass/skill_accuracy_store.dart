@@ -191,3 +191,20 @@ class SkillAccuracyStore {
     return false;
   }
 }
+
+/// Builds the learner's LIVE 合格率 estimate from their accumulated practice
+/// accuracy, or null when there is no data yet (→ show a "practice first"
+/// prompt) or the grade is unsupported. Shared so the parent sees pass-readiness
+/// at the top level (home readiness card, #66/#68).
+Future<CseEstimate?> liveCseEstimate(String grade) async {
+  try {
+    final store = await SkillAccuracyStore.getInstance();
+    if (!store.hasAnyData(grade)) return null;
+    return CseEstimator.estimate(
+      grade: grade,
+      accuracies: store.readAccuracies(grade),
+    );
+  } catch (_) {
+    return null;
+  }
+}

@@ -32,6 +32,9 @@ import 'package:engquest/features/explore/scene_view.dart';
 import 'package:engquest/features/home/streak_service.dart';
 import 'package:engquest/features/exam_practice/exam_practice_screen.dart';
 import 'package:engquest/features/battle/battle_screen.dart';
+import 'package:engquest/features/exam_practice/pass/cse_model.dart';
+import 'package:engquest/features/exam_practice/pass/skill_accuracy_store.dart';
+import 'package:engquest/features/exam_practice/pass/pass_meter_screen.dart';
 import 'package:engquest/features/quest/quest_map_screen.dart';
 import 'package:engquest/features/quest/ui/dq_ui.dart';
 import 'package:engquest/features/settings/settings_screen.dart';
@@ -82,6 +85,7 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
   int _dueCount = 0; // FSRS due items today
   String _eikenLevel = '5'; // used to route to the right scene
   int _childAge = 8; // used to age-filter the FSRS review deck
+  CseEstimate? _estimate; // live 合格率, null until the child has practice data
   bool _loading = true;
 
   @override
@@ -152,10 +156,14 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
       dueCount = 0;
     }
 
+    // Live 合格率 for the home readiness card (null until there is practice data).
+    final estimate = await liveCseEstimate(_eikenLevel);
+
     if (!mounted) return;
     setState(() {
       _streak = streak;
       _dueCount = dueCount;
+      _estimate = estimate;
       _loading = false;
     });
   }
@@ -217,6 +225,21 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
     );
   }
 
+  /// Open the full 合格メーター from the home readiness card. With no data yet,
+  /// send the child to practice (so a meter can be produced). If the meter pops
+  /// a weak skill ("practise X"), route to the exam hub to do so. #66/#68.
+  Future<void> _goToPassMeter() async {
+    final est = _estimate;
+    if (est == null) {
+      _goToExamPractice();
+      return;
+    }
+    final weak = await Navigator.of(context).push<EikenSkill?>(
+      MaterialPageRoute(builder: (_) => PassMeterScreen(estimate: est)),
+    );
+    if (weak != null && mounted) _goToExamPractice();
+  }
+
   // ── Build ─────────────────────────────────────────────────────────────────
 
   @override
@@ -238,7 +261,11 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             _buildHeader(),
-            const SizedBox(height: 18),
+            const SizedBox(height: 16),
+            // ── 合格率 readiness, surfaced at the top (#66/#68) — the parent's
+            // first signal of "is my kid on track to pass". ──────────────────
+            _buildReadinessCard(),
+            const SizedBox(height: 14),
             // ── 英検 core, foregrounded (#66, CEO 2026-06-08) ──────────────
             // The primary daily path is 英検 practice + the FSRS review the
             // 合格率 is built on — not the RPG world (which is now an optional
@@ -291,6 +318,80 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
           style: dqText(size: 13, w: FontWeight.w500, color: dqInk),
         ),
       ],
+    );
+  }
+
+  // ── Section: 合格率 readiness card (#66/#68) ──────────────────────────────
+
+  Widget _buildReadinessCard() {
+    final est = _estimate;
+    return GestureDetector(
+      onTap: _goToPassMeter,
+      child: DqPanel(
+        title: '合格率（ごうかくりつ） / Pass readiness',
+        child: est == null
+            ? Row(
+                children: [
+                  const Icon(Icons.insights_outlined, color: dqGold, size: 28),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      'れんしゅうすると、合格（ごうかく）まで あと どれくらいか'
+                      ' わかるよ。タップして はじめよう！',
+                      style: dqText(size: 13, color: dqInk).copyWith(height: 1.5),
+                    ),
+                  ),
+                  const Icon(Icons.chevron_right, color: dqGold, size: 22),
+                ],
+              )
+            : Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    '${est.readinessPct.toStringAsFixed(0)}%',
+                    style: dqText(
+                      size: 40,
+                      w: FontWeight.w900,
+                      color: est.isPredictedPass
+                          ? const Color(0xFF8BE08B)
+                          : dqGold,
+                    ),
+                  ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          est.isPredictedPass
+                              ? 'ごうかくけん！'
+                              : 'ごうかくまで あと ${est.pointsNeeded} ポイント',
+                          style: dqText(
+                              size: 13, w: FontWeight.w700, color: dqInk),
+                        ),
+                        const SizedBox(height: 6),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(6),
+                          child: LinearProgressIndicator(
+                            value: (est.readinessPct / 100).clamp(0.0, 1.0),
+                            minHeight: 10,
+                            backgroundColor: const Color(0xFF1A2244),
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                est.isPredictedPass
+                                    ? const Color(0xFF8BE08B)
+                                    : dqGold),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text('タップで くわしく / Details',
+                            style: dqText(size: 11, color: dqGold)),
+                      ],
+                    ),
+                  ),
+                  const Icon(Icons.chevron_right, color: dqGold, size: 22),
+                ],
+              ),
+      ),
     );
   }
 
