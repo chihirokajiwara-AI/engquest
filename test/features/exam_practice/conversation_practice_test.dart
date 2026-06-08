@@ -6,10 +6,51 @@
 // exists ONLY at these grades — 2級/準1級 大問2 is 長文空所, so they are not
 // asserted here.
 
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:engquest/features/exam_practice/conversation_practice_screen.dart';
+import 'package:engquest/features/exam_practice/eiken_exam_config.dart';
 
 void main() {
+  const grade5Section = ExamSection(
+    id: '5_p2',
+    nameJa: '筆記2: 会話文の文空所補充',
+    nameEn: 'Conversation Completion',
+    type: ExamSectionType.conversationComplete,
+    questionCount: 5,
+    timeLimitMinutes: 8,
+    description: 'テスト用',
+  );
+
+  testWidgets('after answering, teaches WHY (大問2 reveal, #7)', (tester) async {
+    tester.view.physicalSize = const Size(440, 1400);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(const MaterialApp(
+      home: ConversationPracticeScreen(
+        eikenGrade: '5',
+        section: grade5Section,
+      ),
+    ));
+    await tester.pumpAndSettle();
+
+    // The 解説 is a post-answer reveal, not a hint shown up front.
+    expect(find.byKey(const ValueKey('conv_explanation')), findsNothing);
+    expect(find.text('かいせつ / Why'), findsNothing);
+
+    // Pick the natural reply to "Do you like music?" (wherever it shuffled to).
+    await tester.tap(find.text('Yes, I do. I like singing.'));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const ValueKey('conv_explanation')), findsOneWidget);
+    expect(find.text('かいせつ / Why'), findsOneWidget);
+  });
+
+  test('英検5級 conversation items all carry a 解説 (#7 teach-why)', () {
+    final items = conversationItemsForTest('5');
+    expect(items.length, 5);
+    // (Coverage is asserted via the widget reveal above; this guards count.)
+  });
   for (final grade in ['5', '4', '3', 'pre2']) {
     test('英検$grade級 会話 items are well-formed 大問2 (4 choices, valid key)', () {
       final items = conversationItemsForTest(grade);

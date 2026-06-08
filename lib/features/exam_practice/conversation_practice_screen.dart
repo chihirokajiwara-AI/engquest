@@ -25,6 +25,7 @@ _ConversationProblem _shuffleConversationChoices(
     context: p.context,
     choices: s.choices,
     correctIdx: s.correctIdx,
+    explanation: p.explanation,
   );
 }
 
@@ -35,12 +36,18 @@ class _ConversationProblem {
   final List<String> choices;
   final int correctIdx;
 
+  /// Post-answer teaching line (大問2 skill = matching the response TYPE to the
+  /// question/cue): names what the prompt calls for and why the answer fits, in
+  /// child-facing 日本語. Optional — grades not yet authored simply omit it.
+  final String? explanation;
+
   const _ConversationProblem({
     required this.speakerA,
     required this.speakerB,
     this.context = '',
     required this.choices,
     required this.correctIdx,
+    this.explanation,
   });
 }
 
@@ -69,12 +76,21 @@ class _ConversationPracticeScreenState
   bool _sessionDone = false;
   final Random _rng = Random();
 
+  // Scrolls the 解説 (rendered below the choices on answer) into view.
+  final ScrollController _qScroll = ScrollController();
+
   @override
   void initState() {
     super.initState();
     _problems = _getProblems(widget.eikenGrade)
         .map((p) => _shuffleConversationChoices(p, _rng))
         .toList();
+  }
+
+  @override
+  void dispose() {
+    _qScroll.dispose();
+    super.dispose();
   }
 
   void _selectAnswer(int idx) {
@@ -86,6 +102,17 @@ class _ConversationPracticeScreenState
         _correctCount++;
       }
     });
+    if (_problems[_currentIdx].explanation != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (_qScroll.hasClients) {
+          _qScroll.animateTo(
+            _qScroll.position.maxScrollExtent,
+            duration: const Duration(milliseconds: 320),
+            curve: Curves.easeOut,
+          );
+        }
+      });
+    }
   }
 
   /// Records the completed session result into [SkillAccuracyStore].
@@ -106,6 +133,7 @@ class _ConversationPracticeScreenState
   }
 
   void _nextProblem() {
+    if (_qScroll.hasClients) _qScroll.jumpTo(0);
     if (_currentIdx >= _problems.length - 1) {
       _recordSessionResult(); // fire-and-forget; UI does not wait
       setState(() => _sessionDone = true);
@@ -225,12 +253,19 @@ class _ConversationPracticeScreenState
             ),
           ),
           const SizedBox(height: 20),
-          // Answer choices
+          // Answer choices (+ 解説 after answering) — scrollable, button pinned.
           Expanded(
-            child: ListView.separated(
-              itemCount: p.choices.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 8),
-              itemBuilder: (context, i) {
+            child: SingleChildScrollView(
+              controller: _qScroll,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: p.choices.length,
+                    separatorBuilder: (_, __) => const SizedBox(height: 8),
+                    itemBuilder: (context, i) {
                 final isSelected = _selectedAnswer == i;
                 final isCorrect = i == p.correctIdx;
 
@@ -297,10 +332,18 @@ class _ConversationPracticeScreenState
                     ),
                   ),
                 );
-              },
+                    },
+                  ),
+                  if (_answered && p.explanation != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12),
+                      child: _ConvExplanationPanel(text: p.explanation!),
+                    ),
+                ],
+              ),
             ),
           ),
-          // Next button
+          // Next button (pinned below the scrollable choices + 解説)
           if (_answered)
             Padding(
               padding: const EdgeInsets.only(top: 12),
@@ -368,6 +411,9 @@ class _ConversationPracticeScreenState
             'I go to school.',
           ],
           correctIdx: 0,
+          explanation: '「Do you like 〜?」は do で始まる質問だから、Yes, I do. / '
+              'No, I don\'t. で答えるよ。"Yes, I do. I like singing." が自然。'
+              '"No, I am not." は be動詞の答えで、do の質問には合わないんだ。',
         ),
         _ConversationProblem(
           context: 'At home',
@@ -380,6 +426,9 @@ class _ConversationPracticeScreenState
             'It is sunny today.',
           ],
           correctIdx: 1,
+          explanation: '「What time 〜?」は時間（なんじ？）をたずねる質問。'
+              'だから「7時に起きるよ（I get up at seven.）」が正解。'
+              '"I am fine, thank you." は How are you? への返事だね。',
         ),
         _ConversationProblem(
           context: 'In the park',
@@ -392,6 +441,8 @@ class _ConversationPracticeScreenState
             'My dog is white.',
           ],
           correctIdx: 0,
+          explanation: '「How many 〜?」は数（いくつ？）をたずねる質問。'
+              '数で答えている「2ひき いるよ（I have two dogs.）」が正解だよ。',
         ),
         _ConversationProblem(
           context: 'At a restaurant',
@@ -404,6 +455,9 @@ class _ConversationPracticeScreenState
             'Thank you very much.',
           ],
           correctIdx: 1,
+          explanation: '「What would you like to drink?」は「何を飲みますか？」と'
+              '注文をきく言い方。飲み物で答える「オレンジジュースをください'
+              '（Orange juice, please.）」が自然。hamburgers は食べ物だね。',
         ),
         _ConversationProblem(
           context: 'After school',
@@ -416,6 +470,9 @@ class _ConversationPracticeScreenState
             'My racket is new.',
           ],
           correctIdx: 0,
+          explanation: '「Let\'s 〜（〜しよう）」のさそいには、いいよ / ごめんできない '
+              'で返事をするよ。「ごめん、できないんだ。宿題があるの'
+              '（Sorry, I can\'t. I have homework.）」がさそいへの自然な返事。',
         ),
       ];
     } else if (grade == '4') {
@@ -756,6 +813,47 @@ class _ChatBubble extends StatelessWidget {
           ),
         ],
       ],
+    );
+  }
+}
+
+/// Post-answer teaching panel (#7): a 💡解説 box explaining why the chosen
+/// response fits the conversation (大問2 = match the answer TYPE to the cue).
+/// Mirrors the reading/vocab explanation so the suite teaches "why" everywhere.
+class _ConvExplanationPanel extends StatelessWidget {
+  final String text;
+  const _ConvExplanationPanel({required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      key: const ValueKey('conv_explanation'),
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
+      decoration: BoxDecoration(
+        color: dqBox.withAlpha(235),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: dqGoldDeep, width: 1.5),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.lightbulb_outline_rounded,
+                  color: dqGold, size: 18),
+              const SizedBox(width: 6),
+              Text('かいせつ / Why',
+                  style: dqText(
+                      size: 12, w: FontWeight.w800, color: dqGold, spacing: 1)),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(text,
+              style: dqText(size: 14, w: FontWeight.w500, color: dqInk)
+                  .copyWith(height: 1.6)),
+        ],
+      ),
     );
   }
 }
