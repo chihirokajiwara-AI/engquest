@@ -157,6 +157,29 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
+    testWidgets('grade 5 — answering reveals the スクリプト transcript (#4)',
+        (tester) async {
+      await tester.pumpWidget(_wrap(
+        ListeningPracticeScreen(
+          eikenGrade: '5',
+          section: _listeningSection('5_l', 'リスニング 5級', 25, 20),
+        ),
+      ));
+      await tester.pump();
+      await tester.tap(find.textContaining('はじめる'));
+      await tester.pump();
+      // Before answering there is no transcript (it is a post-answer reveal).
+      expect(find.byKey(const ValueKey('listening_transcript')), findsNothing);
+      // Answer → the スクリプト of what was said must appear so a child who
+      // misheard can read it (the listening learning loop).
+      await tester.tap(find.textContaining('1.  ').first);
+      await tester.pump();
+      expect(
+          find.byKey(const ValueKey('listening_transcript')), findsOneWidget);
+      expect(find.text('スクリプト / Script'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+
     testWidgets('grade 4 — pumps without exception', (tester) async {
       await tester.pumpWidget(_wrap(
         ListeningPracticeScreen(

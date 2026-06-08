@@ -58,6 +58,10 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
   bool _sessionDone = false;
   bool _partHeaderShown = false;
 
+  // Brings the post-answer スクリプト (transcript) into view — it renders below
+  // the choices, so without this the listening 解説 sits below the fold.
+  final ScrollController _scroll = ScrollController();
+
   @override
   void initState() {
     super.initState();
@@ -68,6 +72,7 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
 
   @override
   void dispose() {
+    _scroll.dispose();
     _cue.dispose();
     super.dispose();
   }
@@ -100,6 +105,15 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
       _answered = true;
       if (idx == item.correctIndex) _correctCount++;
     });
+    // Reveal the スクリプト (what was said) so the child can read what they
+    // misheard — the listening learning loop, using the authored transcript.
+    // jumpTo (not animateTo): instant, leaves no pending animation that would
+    // fight a flow that pumps single frames.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scroll.hasClients) {
+        _scroll.jumpTo(_scroll.position.maxScrollExtent);
+      }
+    });
   }
 
   /// Records the completed session result into [SkillAccuracyStore].
@@ -120,6 +134,7 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
   }
 
   void _next() {
+    if (_scroll.hasClients) _scroll.jumpTo(0);
     if (_currentIdx >= _items.length - 1) {
       _recordSessionResult(); // fire-and-forget; UI does not wait
       setState(() => _sessionDone = true);
@@ -295,6 +310,7 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
     if (item == null) return const SizedBox.shrink();
 
     return SingleChildScrollView(
+      controller: _scroll,
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -347,6 +363,14 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
               onTap: _answered ? null : () => _selectAnswer(i),
             );
           }),
+
+          // 解説 after answer: show the スクリプト (what was said) so a child who
+          // misheard can read it — the listening learning loop. Replay (🔊 above)
+          // stays available to hear it again.
+          if (_answered) ...[
+            const SizedBox(height: 14),
+            _TranscriptPanel(item: item),
+          ],
 
           // Next button after answer
           if (_answered) ...[
@@ -444,6 +468,57 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Post-answer スクリプト panel (#4): reveals the authored transcript of what was
+/// said, so a child who misheard can READ it (the listening learning loop —
+/// listening had only a Next button before). Dialogue items (2 speakers) are
+/// labelled A / B; a monologue passage is shown as plain lines.
+class _TranscriptPanel extends StatelessWidget {
+  final ListeningItem item;
+  const _TranscriptPanel({required this.item});
+
+  @override
+  Widget build(BuildContext context) {
+    // Render VERBATIM: the authored transcripts already carry their own speaker
+    // labels ("A:" / "B:") and a trailing "Question:" line where applicable, so
+    // we must NOT re-prefix (that would double-label and mislabel the question).
+    final lines = item.transcripts;
+    return Container(
+      key: const ValueKey('listening_transcript'),
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
+      decoration: BoxDecoration(
+        color: dqBox.withAlpha(235),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: dqGoldDeep, width: 1.5),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.subject_rounded, color: dqGold, size: 18),
+              const SizedBox(width: 6),
+              Text('スクリプト / Script',
+                  style: dqText(
+                      size: 12, w: FontWeight.w800, color: dqGold, spacing: 1)),
+            ],
+          ),
+          const SizedBox(height: 8),
+          for (final line in lines)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 4),
+              child: Text(
+                line,
+                style: dqText(size: 14, w: FontWeight.w500, color: dqInk)
+                    .copyWith(height: 1.5),
+              ),
+            ),
+        ],
       ),
     );
   }
