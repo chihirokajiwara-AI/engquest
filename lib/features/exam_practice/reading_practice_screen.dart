@@ -280,7 +280,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
               style: dqText(size: 16, w: FontWeight.w800, color: dqGold),
             ),
           ),
-          const SizedBox(width: 36), // balance the close button so title centres
+          const SizedBox(
+              width: 36), // balance the close button so title centres
         ],
       ),
     );
@@ -314,7 +315,10 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
                 child: Text(
                   passage.type.toUpperCase(),
                   style: dqText(
-                      size: 11, w: FontWeight.w800, color: dqGold, spacing: 1.5),
+                      size: 11,
+                      w: FontWeight.w800,
+                      color: dqGold,
+                      spacing: 1.5),
                 ),
               ),
               const SizedBox(width: 8),
@@ -341,7 +345,9 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
               Text(
                 '✓$_correctCount',
                 style: dqText(
-                    size: 13, w: FontWeight.w800, color: const Color(0xFF8BE08B)),
+                    size: 13,
+                    w: FontWeight.w800,
+                    color: const Color(0xFF8BE08B)),
               ),
             ],
           ),
@@ -359,7 +365,9 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
               border: Border.all(color: dqBorder, width: 2),
               boxShadow: const [
                 BoxShadow(
-                    color: Colors.black54, blurRadius: 10, offset: Offset(0, 3)),
+                    color: Colors.black54,
+                    blurRadius: 10,
+                    offset: Offset(0, 3)),
               ],
             ),
             child: SingleChildScrollView(
@@ -403,74 +411,78 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
                         Text(
                           question.question,
                           style: dqText(
-                              size: 15, w: FontWeight.w700, color: Colors.white),
+                              size: 15,
+                              w: FontWeight.w700,
+                              color: Colors.white),
                         ),
                         const SizedBox(height: 10),
                         ListView.separated(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: question.choices.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 8),
-                    itemBuilder: (context, i) {
-                      final isSelected = _selectedAnswer == i;
-                      final isCorrect = i == question.correctIdx;
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: question.choices.length,
+                          separatorBuilder: (_, __) =>
+                              const SizedBox(height: 8),
+                          itemBuilder: (context, i) {
+                            final isSelected = _selectedAnswer == i;
+                            final isCorrect = i == question.correctIdx;
 
-                      Color bgColor = dqBox;
-                      Color borderColor = dqGoldDeep.withAlpha(120);
-                      Color textColor = dqInk;
+                            Color bgColor = dqBox;
+                            Color borderColor = dqGoldDeep.withAlpha(120);
+                            Color textColor = dqInk;
 
-                      if (_answered) {
-                        if (isCorrect) {
-                          bgColor = const Color(0xFF14301B);
-                          borderColor = const Color(0xFF8BE08B);
-                          textColor = const Color(0xFF8BE08B);
-                        } else if (isSelected) {
-                          bgColor = const Color(0xFF3A1A1A);
-                          borderColor = const Color(0xFFE0853A);
-                          textColor = const Color(0xFFE89A82);
-                        }
-                      } else if (isSelected) {
-                        borderColor = dqGold;
-                        bgColor = dqNight1;
-                      }
+                            if (_answered) {
+                              if (isCorrect) {
+                                bgColor = const Color(0xFF14301B);
+                                borderColor = const Color(0xFF8BE08B);
+                                textColor = const Color(0xFF8BE08B);
+                              } else if (isSelected) {
+                                bgColor = const Color(0xFF3A1A1A);
+                                borderColor = const Color(0xFFE0853A);
+                                textColor = const Color(0xFFE89A82);
+                              }
+                            } else if (isSelected) {
+                              borderColor = dqGold;
+                              bgColor = dqNight1;
+                            }
 
-                      return Material(
-                        color: bgColor,
-                        borderRadius: BorderRadius.circular(10),
-                        child: InkWell(
-                          key: ValueKey('reading_choice_$i'),
-                          onTap: () => _selectAnswer(i),
-                          borderRadius: BorderRadius.circular(10),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 14, vertical: 12),
-                            decoration: BoxDecoration(
+                            return Material(
+                              color: bgColor,
                               borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: borderColor, width: 2),
-                            ),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    '${i + 1}. ${question.choices[i]}',
-                                    style: dqText(
-                                        size: 15,
-                                        w: FontWeight.w600,
-                                        color: textColor),
+                              child: InkWell(
+                                key: ValueKey('reading_choice_$i'),
+                                onTap: () => _selectAnswer(i),
+                                borderRadius: BorderRadius.circular(10),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 14, vertical: 12),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                        color: borderColor, width: 2),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          '${i + 1}. ${question.choices[i]}',
+                                          style: dqText(
+                                              size: 15,
+                                              w: FontWeight.w600,
+                                              color: textColor),
+                                        ),
+                                      ),
+                                      if (_answered && isCorrect)
+                                        const Icon(Icons.check_circle_rounded,
+                                            color: Color(0xFF8BE08B), size: 20),
+                                      if (_answered && isSelected && !isCorrect)
+                                        const Icon(Icons.cancel_rounded,
+                                            color: Color(0xFFE0853A), size: 20),
+                                    ],
                                   ),
                                 ),
-                                if (_answered && isCorrect)
-                                  const Icon(Icons.check_circle_rounded,
-                                      color: Color(0xFF8BE08B), size: 20),
-                                if (_answered && isSelected && !isCorrect)
-                                  const Icon(Icons.cancel_rounded,
-                                      color: Color(0xFFE0853A), size: 20),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    },
+                              ),
+                            );
+                          },
                         ),
                         if (_answered && question.explanation != null)
                           Padding(
@@ -771,6 +783,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'Weekends only',
           ],
           correctIdx: 0,
+          explanation:
+              '本文に "Beginners: Mon & Wed, 9:00-10:00 a.m." とあるね。初級（しょきゅう）のスイミングは「月・水の朝（Monday and Wednesday mornings）」だよ。',
         ),
         _ComprehensionQuestion(
           question: 'What is included in the English Drama Camp fee?',
@@ -781,6 +795,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'Transportation',
           ],
           correctIdx: 1,
+          explanation:
+              'ドラマキャンプの料金（りょうきん）は "(lunch included)" とあるよ。「ひるごはん（lunch）」がふくまれているね。',
         ),
         _ComprehensionQuestion(
           question: 'How can you get 10% off?',
@@ -791,6 +807,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'By paying in cash',
           ],
           correctIdx: 2,
+          explanation:
+              '"Early bird discount: 10% off if you register before June 15." とあるね。6月15日より前に申し込むと「10％オフ」になるよ。',
         ),
       ],
     ),
@@ -819,6 +837,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'Gave a gift to the family',
           ],
           correctIdx: 2,
+          explanation:
+              '"He helped my mother cook dinner on Tuesday" とあるよ。火曜日にケンジがしたのは「夕食（ゆうしょく）づくりの手伝い」。',
         ),
         _ComprehensionQuestion(
           question: 'Why was Kenji surprised at the beach?',
@@ -829,6 +849,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'The sand was red',
           ],
           correctIdx: 1,
+          explanation:
+              '"He was surprised that the water was so warm in February." とあるね。2月なのに海の水があたたかくて、ケンジはおどろいたんだ。',
         ),
         _ComprehensionQuestion(
           question: 'Where did the Smith family put the Japanese fan?',
@@ -839,6 +861,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'In the garden',
           ],
           correctIdx: 2,
+          explanation:
+              '"We put it on our wall in the living room." とあるよ。日本のせんすは「リビングのかべ（on the living room wall）」にかざったよ。',
         ),
       ],
     ),
@@ -870,6 +894,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'Jeans and a T-shirt',
           ],
           correctIdx: 1,
+          explanation:
+              '"Boys often wear black or dark blue suits" とあるね。日本の男子（だんし）がよく着るのは「黒（くろ）か こん色のスーツ」。',
         ),
         _ComprehensionQuestion(
           question: 'Why do Australian schools require hats?',
@@ -880,6 +906,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'Because it rains a lot',
           ],
           correctIdx: 2,
+          explanation:
+              '"...wear a hat outside to protect them from the sun." とあるよ。オーストラリアでぼうしが必要（ひつよう）なのは「日ざしから身を守るため」。',
         ),
         _ComprehensionQuestion(
           question: 'What is one reason people support school uniforms?',
@@ -890,6 +918,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'Students can wear any color they like',
           ],
           correctIdx: 2,
+          explanation:
+              '"...families save money on clothes." とあるね。せいふくに さんせいする理由（りゆう）の一つは「服（ふく）のお金をせつやくできる」こと。',
         ),
         _ComprehensionQuestion(
           question: 'In which country do students often wear ties to school?',
@@ -900,6 +930,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'All three countries',
           ],
           correctIdx: 2,
+          explanation:
+              '"In England... Students usually wear a white shirt, a tie..." とあるよ。ネクタイ（tie）をするのは「イングランド（England）」。',
         ),
       ],
     ),

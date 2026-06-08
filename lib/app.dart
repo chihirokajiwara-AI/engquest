@@ -304,8 +304,8 @@ const List<String> kPreviewRouteNames = [
   'kotobahome', 'passmeter', 'passmetermissing', 'passprogress', 'speaking',
   'speakingconsent',
   'listening2', 'achievements', 'parent', 'parentlogin', 'wordorder',
-  'conversation', 'conversation5', 'reading', 'settings', 'listeningpp',
-  'listeningp1',
+  'conversation', 'conversation5', 'reading', 'reading3', 'settings',
+  'listeningpp', 'listeningp1',
 ];
 
 /// Test-visible wrapper for the private preview harness.
@@ -454,6 +454,21 @@ Widget _previewFor(String? name) {
           type: ExamSectionType.readingComprehension,
           questionCount: 4,
           timeLimitMinutes: 10,
+          description: 'Preview',
+        ),
+      );
+    case 'reading3':
+      // 英検3級 大問3 長文の内容一致選択 — render-proofs the 3級 解説 (#5) on the
+      // highest-enrollment grade. Tap a choice → 💡かいせつ quotes the evidence.
+      return const ReadingPracticeScreen(
+        eikenGrade: '3',
+        section: ExamSection(
+          id: '3_r3',
+          nameJa: '筆記3: 長文の内容一致選択',
+          nameEn: 'Reading Comprehension',
+          type: ExamSectionType.readingComprehension,
+          questionCount: 10,
+          timeLimitMinutes: 15,
           description: 'Preview',
         ),
       );
