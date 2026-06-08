@@ -202,17 +202,49 @@ class _ExamPracticeScreenState extends State<ExamPracticeScreen> {
         return;
       }
       // LIVE path: real estimate injected. NOT the demo fallback.
-      Navigator.push(
+      // Awaits the screen: if the child taps "practise <weak skill>", the meter
+      // pops the limiting EikenSkill and we route straight into a section that
+      // trains it — closing the diagnose→practice loop (#68).
+      final weakSkill = await Navigator.push<EikenSkill?>(
         context,
         MaterialPageRoute(
           builder: (_) => PassMeterScreen(estimate: estimate),
         ),
       );
+      if (weakSkill == null || !context.mounted) return;
+      final exam = kEikenExams[grade];
+      if (exam == null) return;
+      for (final section in exam.sections) {
+        if (_skillForSectionType(section.type) == weakSkill) {
+          _navigateToSection(context, section);
+          return;
+        }
+      }
     } catch (e) {
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('合格メーターの読み込みに失敗しました')),
       );
+    }
+  }
+
+  /// Which 合格率 skill a section trains. Reading 大問 (vocab/会話/並びかえ/長文) all
+  /// feed reading; listening and writing map 1:1. Used to route the PassMeter's
+  /// weak-skill CTA into a matching section (#68).
+  static EikenSkill _skillForSectionType(ExamSectionType t) {
+    switch (t) {
+      case ExamSectionType.listening:
+        return EikenSkill.listening;
+      case ExamSectionType.writing:
+        return EikenSkill.writing;
+      case ExamSectionType.vocabGrammar:
+      case ExamSectionType.conversationComplete:
+      case ExamSectionType.readingComprehension:
+      case ExamSectionType.wordOrdering:
+      // speaking is 二次 (not in the 一次 合格率 R/W/L) — it never appears in the
+      // section list nor as a limiting skill, so reading is a harmless fallback.
+      case ExamSectionType.speaking:
+        return EikenSkill.reading;
     }
   }
 

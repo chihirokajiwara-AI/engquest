@@ -135,7 +135,13 @@ class PassMeterScreen extends StatelessWidget {
             // ── Action button (placeholder — wired by CEO) ───────────────────
             DqButton(
               label: _ctaLabel(est),
-              onTap: () => Navigator.maybePop(context),
+              // Close the diagnose→practice loop: pop with the WEAKEST skill so
+              // the caller (exam hub) routes the child straight into practising
+              // it. Passing → pop null (just go back). #68
+              onTap: () => Navigator.maybePop(
+                context,
+                est.isPredictedPass ? null : est.limitingSkill,
+              ),
             ),
           ],
         ),
@@ -592,5 +598,12 @@ String _motivationalNote(CseEstimate est) {
 }
 
 String _ctaLabel(CseEstimate est) {
-  return est.isPredictedPass ? 'もどる' : 'れんしゅうする';
+  if (est.isPredictedPass) return 'もどる';
+  final skill = est.limitingSkill;
+  if (skill != null) {
+    // Name the weakest skill so the CTA is an explicit "practise THIS" action,
+    // not vague advice (#68 — diagnose→practice loop).
+    return '${CseEstimator.skillLabelJa(skill)}を れんしゅうする';
+  }
+  return 'れんしゅうする';
 }

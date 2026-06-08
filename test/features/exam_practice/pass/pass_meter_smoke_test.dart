@@ -228,4 +228,71 @@ void main() {
       expect(est.totalItemsAttempted, 63);
     });
   });
+
+  // #68: the meter must turn its diagnosis into action — the CTA names the
+  // weakest skill and pops it so the caller routes straight into practising it.
+  group('PassMeterScreen — diagnose→practice CTA (#68)', () {
+    testWidgets('CTA names + pops the weakest skill', (tester) async {
+      // Both below mastery (so NOT predicted-pass) with listening the weakest.
+      final est = _estimate(grade: '5', reading: 0.5, listening: 0.2);
+      expect(est.isPredictedPass, isFalse, reason: 'sanity: not passing');
+      expect(est.limitingSkill, EikenSkill.listening,
+          reason: 'sanity: listening is the bottleneck here');
+
+      EikenSkill? popped;
+      await tester.pumpWidget(MaterialApp(
+        home: Builder(
+          builder: (ctx) => ElevatedButton(
+            onPressed: () async {
+              popped = await Navigator.push<EikenSkill?>(
+                ctx,
+                MaterialPageRoute(
+                    builder: (_) => PassMeterScreen(estimate: est)),
+              );
+            },
+            child: const Text('open'),
+          ),
+        ),
+      ));
+      await tester.tap(find.text('open'));
+      await tester.pumpAndSettle();
+
+      // The CTA explicitly names the weak skill ("…を れんしゅうする").
+      expect(find.textContaining('を れんしゅうする'), findsOneWidget);
+
+      await tester.ensureVisible(find.textContaining('を れんしゅうする'));
+      await tester.tap(find.textContaining('を れんしゅうする'));
+      await tester.pumpAndSettle();
+
+      expect(popped, EikenSkill.listening,
+          reason: 'tapping practice must pop the limiting skill so the caller '
+              'can route into it');
+    });
+
+    testWidgets('passing state CTA pops null (no weak-skill routing)',
+        (tester) async {
+      final est = _estimate(grade: '5', reading: 1.0, listening: 1.0);
+      Object? popped = 'sentinel';
+      await tester.pumpWidget(MaterialApp(
+        home: Builder(
+          builder: (ctx) => ElevatedButton(
+            onPressed: () async {
+              popped = await Navigator.push<EikenSkill?>(
+                ctx,
+                MaterialPageRoute(
+                    builder: (_) => PassMeterScreen(estimate: est)),
+              );
+            },
+            child: const Text('open'),
+          ),
+        ),
+      ));
+      await tester.tap(find.text('open'));
+      await tester.pumpAndSettle();
+      await tester.ensureVisible(find.text('もどる'));
+      await tester.tap(find.text('もどる'));
+      await tester.pumpAndSettle();
+      expect(popped, isNull);
+    });
+  });
 }
