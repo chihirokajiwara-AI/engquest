@@ -201,6 +201,18 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
+    testWidgets('grade pre1 — pumps without exception (#75)', (tester) async {
+      // 準1 listening was unreachable before #75 (no section in the exam config).
+      await tester.pumpWidget(_wrap(
+        ListeningPracticeScreen(
+          eikenGrade: 'pre1',
+          section: _listeningSection('p1_l', 'リスニング 準1級', 29, 30),
+        ),
+      ));
+      await tester.pump();
+      expect(tester.takeException(), isNull);
+    });
+
     testWidgets('unknown grade — shows empty state without exception', (tester) async {
       await tester.pumpWidget(_wrap(
         ListeningPracticeScreen(

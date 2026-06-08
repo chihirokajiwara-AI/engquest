@@ -439,6 +439,20 @@ const Map<String, EikenExamDef> kEikenExams = {
         timeLimitMinutes: 30,
         description: '英文要約＋社会性のあるトピックについて意見を書く（2024年新形式）',
       ),
+      // Listening was MISSING from 準1 — the marquee grade (the product's stated
+      // goal). Without it the exam hub showed no listening tile, so a 準1 child
+      // could never practise listening and their 合格率 listening skill stayed
+      // 未測定. The 12 'pre1' items in listening_data.dart were unreachable.
+      // Verified against eiken.or.jp (2025/26, unchanged): 29 questions, 3 parts.
+      ExamSection(
+        id: 'p1_l',
+        nameJa: 'リスニング (第1部〜第3部)',
+        nameEn: 'Listening (Parts 1–3)',
+        type: ExamSectionType.listening,
+        questionCount: 29,
+        timeLimitMinutes: 30,
+        description: '第1部: 会話の内容一致12問 / 第2部: 説明文の内容一致12問 / 第3部: Real-Life形式5問',
+      ),
     ],
   ),
 };

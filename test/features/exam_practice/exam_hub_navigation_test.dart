@@ -97,6 +97,37 @@ void main() {
       });
     }
 
+    // The loop above is grade '5' only — explicitly cover 準1 (pre1), whose
+    // listening section was entirely MISSING (#75) so no test caught it. Assert
+    // the listening tile both EXISTS and opens its screen for the flagship grade.
+    testWidgets('準1 (pre1) listening tile exists and opens (#75 regression)',
+        (tester) async {
+      tester.view.physicalSize = const Size(1200, 3200);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      await tester.pumpWidget(
+          const MaterialApp(home: ExamPracticeScreen(eikenGrade: 'pre1')));
+      await tester.pump();
+
+      final pre1 = kEikenExams['pre1']!;
+      expect(
+        pre1.sections.any((s) => s.type == ExamSectionType.listening),
+        isTrue,
+        reason: '準1 must have a listening section (#75)',
+      );
+
+      final tile = find.text('Listening (Parts 1–3)').first;
+      await tester.ensureVisible(tile);
+      await tester.pump();
+      await tester.tap(tile);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+      expect(find.byType(ListeningPracticeScreen), findsOneWidget,
+          reason: '準1 listening tile did not open its practice screen');
+      expect(tester.takeException(), isNull);
+    });
+
     testWidgets('合格メーター with no practice data → honest "practice first" prompt',
         (tester) async {
       // With empty prefs there is no SkillAccuracyStore data, so the honest

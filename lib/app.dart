@@ -297,7 +297,7 @@ const List<String> kPreviewRouteNames = [
   'prologue5', 'explore', 'explore4', 'explore3', 'explorepre2',
   'explorepre2plus', 'explore2', 'explorepre1', 'mock', 'mockpre2plus',
   'quest', 'quest5t', 'quest5', 'quest5q', 'quest5c', 'quest4', 'quest3',
-  'quest2', 'battle', 'dialog', 'voice', 'exam', 'writing', 'writing2',
+  'quest2', 'battle', 'dialog', 'voice', 'exam', 'exampre1', 'writing', 'writing2',
   'writingp1', 'listening', 'listening4', 'listening3', 'listeningp2',
   'kotobahome', 'passmeter', 'passmetermissing', 'passprogress', 'speaking',
   'speakingconsent',
@@ -405,6 +405,9 @@ Widget _previewFor(String? name) {
       return const VoiceScreen();
     case 'exam':
       return const ExamPracticeScreen(eikenGrade: '5');
+    case 'exampre1':
+      // 準1 hub — verifies the listening tile is present (#75) for the flagship grade.
+      return const ExamPracticeScreen(eikenGrade: 'pre1');
     case 'settings':
       return const SettingsScreen();
     case 'conversation':

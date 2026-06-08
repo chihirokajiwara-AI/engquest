@@ -265,6 +265,12 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
       if (part == 2) return '会話内容一致 / Dialogue Content';
       return '文内容一致 / Passage Content';
     }
+    if (grade == 'pre1') {
+      // 準1: 第1部 会話の内容一致 / 第2部 説明文の内容一致 / 第3部 Real-Life形式.
+      if (part == 1) return '会話の内容一致 / Dialogue Content';
+      if (part == 2) return '説明文の内容一致 / Passage Content';
+      return 'Real-Life形式 / Real-Life';
+    }
     // pre2 / 2
     if (part == 1) return '会話応答選択 / Dialogue Q&A';
     return '文内容一致 / Passage Content';
