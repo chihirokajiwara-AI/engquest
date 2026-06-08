@@ -73,6 +73,38 @@ void main() {
     });
   }
 
+  test('準2級プラス serves NO 会話 items (大問2 is 長文空所 there) — #7', () {
+    // Regression guard: the catch-all else used to serve 準2-level items to
+    // pre2plus mislabelled as 準2級プラス (misinformation). Unauthored grades
+    // must return [] so the screen shows an honest 準備中, never wrong content.
+    expect(conversationItemsForTest('pre2plus'), isEmpty);
+    expect(conversationItemsForTest('2'), isEmpty);
+    expect(conversationItemsForTest('pre1'), isEmpty);
+    // The authored grades still have their banks.
+    expect(conversationItemsForTest('pre2'), isNotEmpty);
+  });
+
+  testWidgets('準2級プラス shows honest 準備中, never another grade\'s items (#7)',
+      (tester) async {
+    await tester.pumpWidget(const MaterialApp(
+      home: ConversationPracticeScreen(
+        eikenGrade: 'pre2plus',
+        section: ExamSection(
+          id: 'p2p_p2',
+          nameJa: '会話',
+          nameEn: 'Conversation',
+          type: ExamSectionType.conversationComplete,
+          questionCount: 0,
+          timeLimitMinutes: 0,
+          description: 'test',
+        ),
+      ),
+    ));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('準備中'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   test('3級 and 準2級 have DIFFERENT conversation banks (not the old shared set)',
       () {
     // Regression guard for the defect fixed 2026-06-08: both upper grades used

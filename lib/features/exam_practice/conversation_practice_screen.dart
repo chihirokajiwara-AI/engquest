@@ -168,9 +168,26 @@ class _ConversationPracticeScreenState
             ),
           ),
           Expanded(
-            child: _sessionDone ? _buildResults() : _buildProblem(),
+            child: _problems.isEmpty
+                ? _buildEmpty()
+                : (_sessionDone ? _buildResults() : _buildProblem()),
           ),
         ],
+      ),
+    );
+  }
+
+  // Honest 準備中 for grades with no authored 大問2 会話 (準2級プラス/2級/準1級
+  // use 長文空所) — never serve another grade's items mislabelled (#7).
+  Widget _buildEmpty() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Text(
+          'この級（きゅう）の会話（かいわ）もんだいは\n準備中（じゅんびちゅう）です。',
+          textAlign: TextAlign.center,
+          style: dqText(size: 16, w: FontWeight.w600, color: dqInk),
+        ),
       ),
     );
   }
@@ -640,10 +657,12 @@ class _ConversationPracticeScreenState
           correctIdx: 0,
         ),
       ];
-    } else {
-      // 英検準2級 (CEFR A2–B1): the only other grade whose 一次 includes 大問2
-      // 会話文の文空所補充. Slightly longer social/transactional exchanges; a
-      // single best functional response. Content-QA'd 2026-06-08.
+    } else if (grade == 'pre2') {
+      // 英検準2級 (CEFR A2–B1): 大問2 会話文の文空所補充. Slightly longer
+      // social/transactional exchanges; a single best functional response.
+      // Content-QA'd 2026-06-08. 大問2 会話 exists ONLY at 5/4/3/準2 — 準2級プラス
+      // /2級/準1級 大問2 is 長文空所, so any other grade returns [] (honest 準備中)
+      // rather than serving these 準2-level items mislabelled (completeness #7).
       return const [
         _ConversationProblem(
           context: 'At a restaurant',
@@ -743,6 +762,8 @@ class _ConversationPracticeScreenState
         ),
       ];
     }
+    // No authored 大問2 会話 for this grade (準2級プラス/2級/準1級 use 長文空所).
+    return const [];
   }
 }
 
