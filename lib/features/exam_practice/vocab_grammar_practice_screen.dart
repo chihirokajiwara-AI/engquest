@@ -82,7 +82,13 @@ class _VocabGrammarPracticeScreenState
         final sentence = word.exampleSentences.first;
         final cloze = _makeCloze(sentence, word.word);
 
-        // Build choices: correct + 3 distractors, shuffled
+        // Build choices: correct + 3 distractors, shuffled.
+        // NOTE (#76): 62–88% of stored distractor sets share one first letter ≠
+        // the answer, making the answer the trivial odd-one-out. A naive
+        // regenerate-from-pool fix was built + content-QA'd and BLOCKED (40% clean
+        // — random same-POS words cause semantic ambiguity / multi-word contamination
+        // / domain-mismatch triviality that pure sampling can't avoid). The correct
+        // fix is an LLM semantic-validator pass (#32), which needs the backend (#7).
         final choices = [word.word, ...word.distractors.take(3)];
         choices.shuffle(_rng);
         final newCorrectIdx = choices.indexOf(word.word);
