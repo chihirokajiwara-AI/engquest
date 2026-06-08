@@ -33,6 +33,33 @@ export 'hotspot.dart'
         sceneForGrade,
         SceneDef;
 
+/// Saturation [ColorFilter] matrix. `s == 1` → identity (full colour); `s == 0`
+/// → greyscale (Rec.709 luma weights). This is the lean-Layton "ことばで世界に色が
+/// 戻る" verb (ART-DIRECTION.md §1.2): a scene renders DESATURATED while its ナゾ are
+/// unsolved, then the whole plate floods grey→colour on chapter clear — at runtime,
+/// reusing the colour plate (no separate _grey asset).
+List<double> saturationMatrix(double s) {
+  const lr = 0.2126, lg = 0.7152, lb = 0.0722;
+  final ir = (1 - s) * lr, ig = (1 - s) * lg, ib = (1 - s) * lb;
+  return <double>[
+    ir + s, ig, ib, 0, 0, //
+    ir, ig + s, ib, 0, 0, //
+    ir, ig, ib + s, 0, 0, //
+    0, 0, 0, 1, 0, //
+  ];
+}
+
+/// True when every NPC ナゾ in [scene] is solved (or the scene has none) — i.e. the
+/// scene's colour is "restored". Drives the whole-plate grey→colour flood.
+bool allNpcsSolved(SceneDef scene, Map<int, bool> solved) {
+  for (var i = 0; i < scene.hotspots.length; i++) {
+    if (scene.hotspots[i].kind == HotspotKind.npc && solved[i] != true) {
+      return false;
+    }
+  }
+  return true;
+}
+
 class SceneView extends StatefulWidget {
   final SceneDef scene;
 
@@ -67,6 +94,10 @@ class _SceneViewState extends State<SceneView> {
   // Parallax offset driven by pan gesture
   double _parallaxOffset = 0.0;
   static const _parallaxMaxShift = 0.04; // fraction of container width
+
+  /// Saturation of an unsolved scene — muted "the world lost its words" grade,
+  /// NOT dead grey (s=0 reads as a broken image). Floods to 1.0 on chapter clear.
+  static const _kMutedSaturation = 0.35;
 
   // Services
   final _cue = AudioCueService();
@@ -163,6 +194,10 @@ class _SceneViewState extends State<SceneView> {
 
   // ── Build ─────────────────────────────────────────────────────────────────
 
+  /// Whole-scene colour is "restored" once every ナゾ is solved → the background
+  /// plate floods grey→colour (the lean-Layton core verb).
+  bool get _sceneRestored => allNpcsSolved(widget.scene, _solved);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -221,7 +256,30 @@ class _SceneViewState extends State<SceneView> {
             clipBehavior: Clip.hardEdge,
             children: [
               // ── Background / parallax layers ──────────────────────────────
-              ..._buildParallaxLayers(w, h),
+              // The whole plate renders desaturated until the chapter's ナゾ are
+              // solved, then floods grey→colour over 2s (ART-DIRECTION §1.2 —
+              // "ことばで世界に色が戻る"). Runtime saturation of the colour plate;
+              // no separate _grey asset. Built inside the builder so parallax
+              // pan still updates each frame.
+              Positioned.fill(
+                child: TweenAnimationBuilder<double>(
+                  // Floor at a MUTED saturation, not dead grey (s=0): a fully
+                  // desaturated painting reads as a broken/missing image (the
+                  // very defect class the CEO flagged). A muted "under-the-spell"
+                  // grade is unmistakably intentional and the colour-flood payoff
+                  // still lands. Restored → full colour.
+                  tween: Tween<double>(
+                    begin: _kMutedSaturation,
+                    end: _sceneRestored ? 1.0 : _kMutedSaturation,
+                  ),
+                  duration: const Duration(milliseconds: 2000),
+                  curve: Curves.easeInOut,
+                  builder: (context, sat, _) => ColorFiltered(
+                    colorFilter: ColorFilter.matrix(saturationMatrix(sat)),
+                    child: Stack(children: _buildParallaxLayers(w, h)),
+                  ),
+                ),
+              ),
 
               // ── Dark vignette overlay for legibility ──────────────────────
               Positioned.fill(
