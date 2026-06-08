@@ -305,7 +305,8 @@ const List<String> kPreviewRouteNames = [
   'speakingconsent',
   'listening2', 'achievements', 'parent', 'parentlogin', 'wordorder',
   'conversation', 'conversation5', 'conversation4', 'reading', 'reading3',
-  'readingpre2', 'reading2', 'settings', 'listeningpp', 'listeningp1',
+  'readingpre2', 'reading2', 'readingpre1', 'settings', 'listeningpp',
+  'listeningp1',
 ];
 
 /// Test-visible wrapper for the private preview harness.
@@ -484,6 +485,21 @@ Widget _previewFor(String? name) {
           type: ExamSectionType.readingComprehension,
           questionCount: 10,
           timeLimitMinutes: 15,
+          description: 'Preview',
+        ),
+      );
+    case 'readingpre1':
+      // 英検準1級 (B2) 長文の内容一致選択 — render-proofs the 準1 解説 (#5/#101) on the
+      // marquee grade. Tap a choice → 💡かいせつ quotes the passage evidence.
+      return const ReadingPracticeScreen(
+        eikenGrade: 'pre1',
+        section: ExamSection(
+          id: 'p1_r3',
+          nameJa: '筆記3: 長文の内容一致選択',
+          nameEn: 'Reading Comprehension',
+          type: ExamSectionType.readingComprehension,
+          questionCount: 10,
+          timeLimitMinutes: 25,
           description: 'Preview',
         ),
       );

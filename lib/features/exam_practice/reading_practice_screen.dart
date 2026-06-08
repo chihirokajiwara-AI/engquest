@@ -1480,6 +1480,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'People prefer not to make choices at all',
           ],
           correctIdx: 1,
+          explanation:
+              '"having too many options can actually make people less happy rather than more so." とあるね。「選択肢が多すぎると、かえって人は幸せでなくなる」のが paradox of choice。',
         ),
         _ComprehensionQuestion(
           question: 'According to Schwartz, what characterizes "maximizers"?',
@@ -1490,6 +1492,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'They let others make decisions for them',
           ],
           correctIdx: 2,
+          explanation:
+              '"\\"maximizers,\\" who always seek the absolute best option" とあるよ。maximizer は常に「いちばん良い選択肢」を求めるタイプ。',
         ),
         _ComprehensionQuestion(
           question:
@@ -1501,6 +1505,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'Shoppers complained about the selection',
           ],
           correctIdx: 2,
+          explanation:
+              '"When 24 varieties of jam were displayed, only 3% of shoppers made a purchase." とあるね。24種類のときは購入したのはたった3%だった（6種類なら30%）。',
         ),
         _ComprehensionQuestion(
           question: 'What do critics say about Schwartz\'s theory?',
@@ -1511,6 +1517,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'More choice always leads to better satisfaction',
           ],
           correctIdx: 2,
+          explanation:
+              '"the relationship between choice and satisfaction is more nuanced than Schwartz suggests" とあるよ。批判する人たちは「選択と満足の関係は、Schwartz が言うほど単純ではない」と指摘している。',
         ),
         _ComprehensionQuestion(
           question:
@@ -1522,6 +1530,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'Making decisions based on false information',
           ],
           correctIdx: 1,
+          explanation:
+              '"imagining how other options might have turned out better" とあるね。counterfactual thinking とは「別の選択肢ならもっと良かったのでは」と想像すること。',
         ),
       ],
     ),
@@ -1562,6 +1572,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'Synthetic clothing fibers',
           ],
           correctIdx: 1,
+          explanation:
+              '"Microplastics — fragments of plastic smaller than five millimeters" とあるね。マイクロプラスチックは「5ミリ未満のプラスチックのかけら」と定義されている。',
         ),
         _ComprehensionQuestion(
           question:
@@ -1574,6 +1586,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'About 45%',
           ],
           correctIdx: 2,
+          explanation:
+              '"car tires shed microplastic particles ... a source that accounts for an estimated 28% of all microplastic pollution in oceans." とあるよ。タイヤ由来が海のマイクロプラスチックの約28%を占める。',
         ),
         _ComprehensionQuestion(
           question:
@@ -1586,6 +1600,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'Real-world microplastics are a different type',
           ],
           correctIdx: 1,
+          explanation:
+              '"laboratory exposures typically far exceed environmental concentrations." とあるね。実験室で与える量は実際の環境よりずっと多いので、結果をそのまま現実にあてはめにくい。',
         ),
         _ComprehensionQuestion(
           question: 'What limitation of wastewater treatment is mentioned?',
@@ -1596,6 +1612,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'It only works for larger plastic pieces',
           ],
           correctIdx: 2,
+          explanation:
+              '"the remaining 1% still represents billions of particles annually" とあるね。処理場が99%除去できても、残り1%が年間で数えきれないほど大量のかけらになる。',
         ),
         _ComprehensionQuestion(
           question:
@@ -1607,6 +1625,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'Using plastic shopping bags',
           ],
           correctIdx: 1,
+          explanation:
+              '"When synthetic clothing is washed, thousands of microscopic fibers are released into wastewater." とあるよ。合成素材の服を洗うと、無数の細かい糸が排水へ流れ出す（日常の行動が発生源）。',
         ),
       ],
     ),
