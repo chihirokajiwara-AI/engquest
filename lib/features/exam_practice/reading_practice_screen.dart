@@ -135,6 +135,10 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
   int _totalQuestions = 0;
   bool _sessionDone = false;
 
+  // Drives the question pane so the 解説 (which appears below the choices on
+  // answer) is scrolled into view — otherwise the teaching sits below the fold.
+  final ScrollController _qScroll = ScrollController();
+
   @override
   void initState() {
     super.initState();
@@ -143,6 +147,12 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
         .map((p) => _shufflePassageChoices(p, rng))
         .toList();
     _totalQuestions = _passages.fold(0, (sum, p) => sum + p.questions.length);
+  }
+
+  @override
+  void dispose() {
+    _qScroll.dispose();
+    super.dispose();
   }
 
   _ComprehensionQuestion get _currentQuestion =>
@@ -155,6 +165,18 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
       _answered = true;
       if (idx == _currentQuestion.correctIdx) _correctCount++;
     });
+    // After the 解説 lays out, bring it into view (it renders below the choices).
+    if (_currentQuestion.explanation != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (_qScroll.hasClients) {
+          _qScroll.animateTo(
+            _qScroll.position.maxScrollExtent,
+            duration: const Duration(milliseconds: 320),
+            curve: Curves.easeOut,
+          );
+        }
+      });
+    }
   }
 
   /// Records the completed session result into [SkillAccuracyStore].
@@ -175,6 +197,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
   }
 
   void _next() {
+    // New question scrolls back to the top (question + choices first).
+    if (_qScroll.hasClients) _qScroll.jumpTo(0);
     final passage = _passages[_passageIdx];
     if (_questionIdx < passage.questions.length - 1) {
       setState(() {
@@ -372,6 +396,7 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
               children: [
                 Expanded(
                   child: SingleChildScrollView(
+                    controller: _qScroll,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
