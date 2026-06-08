@@ -96,12 +96,33 @@ chapter's plate."**
 
 ### 2.1 The grey→colour mechanic IS the world animation
 We do not need character walk-cycles to make the world feel alive. The single most
-important motion in the game is **colour returning when a word returns**:
-- `SceneView` already cross-fades each NPC `grey→color` on solve (`AnimatedCrossFade`).
-- Extend it to the **whole plate**: on chapter clear, tween a `ColorFiltered` saturation
-  matrix `0.0 → 1.0` over ~2s on the background (`Painted2DGameArtDire.json` technique).
-  This is zero new art (reuse the colour plate) and is the core "ことばで世界に色が戻る"
-  beat made visible in the environment, not just in portraits.
+important motion in the game is **colour returning when a word returns**.
+
+**The restoration UNIT is the CHARACTER, not the scene plate (CEO msg 871, 2026-06-08
+— asset-scaling correction).** 英検 vocabulary is thousands of words across grades. If
+"restore colour" were keyed to *scene plates*, covering that vocabulary would demand a
+huge number of painted backgrounds — it does not scale. Instead:
+
+- **PRIMARY — per-character restoration (scales with the cast, not the vocab).** Each of
+  the small, deep cast (`CHARACTER-BIBLE.md`) owns a **task list** of many 英検 items
+  (vocab / phonics / a skill). The character starts greyed and speaking only "one lonely
+  sound / a broken at-level line"; **clearing their tasks gradually returns their colour
+  and their voice** (broken → full phrases). ONE character's two assets (`_grey`/`_color`)
+  are reused across *dozens–hundreds* of items, so the asset count is **≈ (#characters × 2)
+  + a few scene plates**, independent of vocabulary volume. `SceneView` already cross-fades
+  each NPC `grey→color` on solve (`AnimatedCrossFade`); extend it to **partial/progressive**
+  restoration as a character's task list is worked through.
+  - *Canonical 5級 example (CEO):* 灰守セル speaks a single phoneme (`/s/`); clearing each
+    of her phoneme tasks one-by-one returns her colour, and at the end she speaks normal
+    words. The character is the vessel; the many items ride on her.
+- **SECONDARY — whole-plate colour flood = the once-per-CASE 解決 ceremony only.** On
+  closing a 事件簿 (not on every chapter), tween a `ColorFiltered` saturation matrix
+  (muted floor `0.35 → 1.0`) over ~2s on the background (`Painted2DGameArtDire.json`;
+  implemented in `SceneView`, commit b8b26d5). Because it fires **once per case (7 total)**,
+  it adds **zero** per-vocab art cost. It is the emotional punctuation, not the workhorse.
+
+Net: the workhorse that carries 英検 volume is the **character** (cheap, reused); the
+scene-flood is a rare finale. This keeps production within a small-team budget.
 
 ---
 
