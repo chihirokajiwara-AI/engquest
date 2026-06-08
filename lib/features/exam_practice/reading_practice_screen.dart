@@ -1130,6 +1130,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'About 180 minutes',
           ],
           correctIdx: 1,
+          explanation:
+              '"the brain goes through several cycles, each lasting about 90 minutes." とあるね。睡眠の各サイクルは「約90分」続く。',
         ),
         _ComprehensionQuestion(
           question: 'What happens during deep sleep?',
@@ -1140,6 +1142,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'The brain processes emotions',
           ],
           correctIdx: 1,
+          explanation:
+              '"Deep sleep is crucial for physical recovery — the body repairs tissues and strengthens the immune system during this phase." とあるね。深い睡眠中に体は組織を修復し、免疫を強くする。',
         ),
         _ComprehensionQuestion(
           question:
@@ -1151,6 +1155,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'It is like driving with illegal blood alcohol levels',
           ],
           correctIdx: 3,
+          explanation:
+              '"driving after being awake for 24 hours is comparable to driving with a blood alcohol level above the legal limit." とあるよ。24時間起きたままの運転は、法律の基準を超えたアルコールでの運転と同じくらいあぶない、と比べている。',
         ),
         _ComprehensionQuestion(
           question: 'Which is NOT mentioned as a tip for better sleep?',
@@ -1161,6 +1167,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'Limiting afternoon caffeine',
           ],
           correctIdx: 1,
+          explanation:
+              '本文が挙げる工夫は「一定の睡眠スケジュール／就寝前のスクリーン回避／寝室を涼しく暗く／午後のカフェイン制限」。"Exercising vigorously before bed"（寝る前の激しい運動）は書かれていない。NOT問題は、本文にある工夫を消して、残った選択肢を選ぶ。',
         ),
       ],
     ),
@@ -1200,6 +1208,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'An area affected by drought',
           ],
           correctIdx: 1,
+          explanation:
+              '"\\"food deserts,\\" may have convenience stores and fast-food restaurants but lack grocery stores with affordable fruits and vegetables." とあるね。food desert は、コンビニやファストフードはあっても、手頃なくだものや野さいを売る店がない地域のこと。',
         ),
         _ComprehensionQuestion(
           question: 'How does urban farming help the environment?',
@@ -1210,6 +1220,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'It prevents all types of flooding',
           ],
           correctIdx: 1,
+          explanation:
+              '"Urban farming dramatically reduces this distance, cutting carbon emissions associated with transportation." とあるよ。都市農業は farm-to-table の輸送距離を縮め、輸送による炭素排出を減らす。',
         ),
         _ComprehensionQuestion(
           question: 'What criticism of urban farming is mentioned?',
@@ -1220,6 +1232,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'It takes away housing space',
           ],
           correctIdx: 2,
+          explanation:
+              '"Critics point out that urban farms cannot produce food at the same scale as traditional agriculture" とあるね。批判は「都市農業は従来の農業と同じ規模では食料を作れない」という点。',
         ),
         _ComprehensionQuestion(
           question:
@@ -1231,6 +1245,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'Creating jobs for unemployed people',
           ],
           correctIdx: 2,
+          explanation:
+              '"urban farming\'s greatest value lies not in replacing conventional farming but in supplementing it while building community connections and educating city dwellers" とあるよ。推進派は、最大の価値は従来農業を置き換えることではなく「補完」し、地域のつながりや食育を育む点だと考えている。',
         ),
       ],
     ),
@@ -1265,6 +1281,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'Increasing bus fares',
           ],
           correctIdx: 1,
+          explanation:
+              '"the city council\'s proposal to ban cars from the downtown area on weekends" とあるね。市議会の提案は「週末に中心街から車を締め出す」こと。',
         ),
         _ComprehensionQuestion(
           question:
@@ -1276,6 +1294,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             '40-50%',
           ],
           correctIdx: 2,
+          explanation:
+              '"A car ban could reduce foot traffic for these businesses by 30-40%, according to a survey conducted by the Chamber of Commerce." とあるよ。商工会議所の調査では、客足が「30〜40％」減りうる。',
         ),
         _ComprehensionQuestion(
           question:
@@ -1287,6 +1307,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'The bus stops are too far from homes',
           ],
           correctIdx: 2,
+          explanation:
+              '"Buses run only every 30 minutes on weekends" とあるね。筆者は週末のバスが「30分に1本」しかない点を、公共交通の不十分さとして挙げている。',
         ),
         _ComprehensionQuestion(
           question: 'What does the writer suggest as a compromise?',
@@ -1297,6 +1319,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'Build a large parking lot outside downtown',
           ],
           correctIdx: 2,
+          explanation:
+              '"instead of a complete ban, the council could create car-free zones on certain streets while maintaining access roads" とあるよ。筆者の折衷案は、全面禁止ではなく「一部の通りだけ歩行者専用にし、必要な人のためのアクセス道路は残す」こと。',
         ),
       ],
     ),
