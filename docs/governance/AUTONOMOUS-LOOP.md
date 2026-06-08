@@ -249,3 +249,35 @@ CEO approves spec-frozen changes) and **model-tiered** (Sonnet lenses, Opus dire
 Rule: do not mistake a single mechanic for the design. When a discipline is the iteration
 focus, run (or author) its studio loop and push to the world-class bar, then adversarial-audit
 (§6) against named masters.
+
+### H. Commercial Quality Audit — standing mechanism (CEO msg 913, 2026-06-08)
+CEO: per-change audits do NOT ratchet the *whole product* to a sellable, world-class bar —
+"there is no mechanism to raise image/page quality to a level fit for general sale." This is
+that mechanism. **Run it every ~5 iterations** (alongside the §6 completeness critic) and burn
+its findings into the backlog. First run: `docs/design/COMMERCIAL-QUALITY-AUDIT-2026-06-08.md`.
+
+Procedure:
+1. **Capture, don't imagine.** Screenshot the real live screens from the deployed demo via
+   `?preview=<route>` at phone size (390×844): at minimum title, onboarding, prologue, home
+   (kotobahome), a painted scene (explore), questmap, exam, passmeter. CanvasKit → wait on the
+   `flutter-first-frame` event.
+2. **Default-REJECT panel.** Spawn a perspective-diverse panel whose ONLY job is to refute
+   sellability: art-direction, product/UX commercial-readiness, subtract-skeptic (CEO 914 —
+   cut game-y features that don't serve 英検 passing), 英検-pedagogy. Opus for the judgment
+   lenses, Sonnet for pedagogy. Each reads the screenshots + a commercial rubric grounded in
+   **current dated sources** (LATEST-FIRST), and returns severity-ranked, file-actionable
+   defects. Bar = "world-class, commercially-sellable 2026 product a Japanese parent pays
+   ¥999/mo for, whose SOLE value is the child PASSING 英検."
+3. **Adversarially verify every factual claim BEFORE acting.** A convergent-looking panel can
+   be confidently WRONG (2026-06-08 run: a critic's #1 "blocker" — "5級 has no 語句整序" — was
+   FALSE per eiken.or.jp; acting on it would have removed a real section). Visual/UX
+   observations are reliable; 英検-spec claims must be checked against eiken.or.jp + the
+   codebase's own guards.
+4. **Output = state, not a memo.** Write `docs/design/COMMERCIAL-QUALITY-AUDIT-<date>.md`
+   (findings + verification outcomes) and create ranked backlog tasks. Ship the safe verified
+   quick-wins; **escalate big spec changes** (e.g. demoting the RPG front-door) to the CEO with
+   the screenshot evidence — do not unilaterally rip out CEO-approved specs.
+
+CEO 914 lens (subtract-before-add): the core value is 英検 PASSING. Treat game-y decoration on
+the critical path as a defect to SUBTRACT, never a feature to add. The pass-meter + grade-
+targeted practice are the product; the world is, at most, an optional reward.
