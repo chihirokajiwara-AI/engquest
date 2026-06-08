@@ -178,14 +178,23 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
   /// without a scene yet fall back to QuestMapScreen (level-select) — honest,
   /// and consistent with the current build-out where painted districts are
   /// shipping grade-by-grade.
+  /// Push a screen and RELOAD home state when the child returns. Every practice
+  /// surface writes streak / daily-goal / 合格率 progress, so the home must
+  /// re-read on pop — otherwise the「きょうの目標」ring, the due-count and the
+  /// 合格率 card all stay frozen at their mount-time values for the whole session
+  /// (the daily-return loop would be cosmetically present but behaviourally dead).
+  Future<void> _pushThenRefresh(Widget screen) async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => screen),
+    );
+    if (!mounted) return;
+    await _loadData();
+  }
+
   void _goToScene() {
     final scene = sceneForGrade(_eikenLevel);
     if (scene != null) {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (_) => SceneView(scene: scene, eikenLevel: _eikenLevel),
-        ),
-      );
+      _pushThenRefresh(SceneView(scene: scene, eikenLevel: _eikenLevel));
     } else {
       // Grades without a painted district yet — send to the map where the child
       // can pick their town. Further districts are shipping grade-by-grade.
@@ -195,11 +204,7 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
 
   /// Navigate to QuestMapScreen (secondary CTA / fallback).
   void _goToQuestMap() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => QuestMapScreen(startLevel: _eikenLevel),
-      ),
-    );
+    _pushThenRefresh(QuestMapScreen(startLevel: _eikenLevel));
   }
 
   /// Navigate to the 英検 practice hub (vocab/grammar 大問, listening, writing,
@@ -207,11 +212,7 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
   /// was previously reachable ONLY from the now-orphaned WorldMapScreen hub, so
   /// no live user could open it — this CTA restores access from the home.
   void _goToExamPractice() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => ExamPracticeScreen(eikenGrade: _eikenLevel),
-      ),
-    );
+    _pushThenRefresh(ExamPracticeScreen(eikenGrade: _eikenLevel));
   }
 
   /// Navigate to the FSRS vocabulary review (BattleScreen) — the daily
@@ -219,11 +220,8 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
   /// #66 this screen was only reachable via the orphaned WorldMapScreen, so the
   /// home told the child "N reviews are due" then stranded them.
   void _goToReview() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) =>
-            BattleScreen(childAge: _childAge, eikenGrade: _eikenLevel),
-      ),
+    _pushThenRefresh(
+      BattleScreen(childAge: _childAge, eikenGrade: _eikenLevel),
     );
   }
 

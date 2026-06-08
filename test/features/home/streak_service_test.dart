@@ -127,4 +127,27 @@ void main() {
     final state = await service.recordProgress(-5);
     expect(state.problemsToday, 0);
   });
+
+  test('goalMet never true on a zero/empty goal (honesty guard)', () {
+    const s = StreakState(
+      currentStreak: 0,
+      weeklyBits: 0,
+      todayCount: 0,
+      problemsToday: 0,
+      dailyGoal: 0,
+    );
+    // 0 >= 0 must NOT celebrate 達成.
+    expect(s.goalMet, isFalse);
+  });
+
+  test('recordStudySession returns a complete snapshot incl. daily fields',
+      () async {
+    final service = StreakService();
+    await service.recordProgress(3);
+    final state = await service.recordStudySession();
+    // The streak-session result must carry the already-recorded daily progress,
+    // not silently reset it to the field default.
+    expect(state.problemsToday, 3);
+    expect(state.dailyGoal, kDefaultDailyGoal);
+  });
 }

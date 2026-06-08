@@ -39,6 +39,22 @@ class _MockStreakService extends StreakService {
   Future<StreakState> load({DateTime? now}) async => _state;
 }
 
+/// A StreakService that returns a different [StreakState] on each load() call —
+/// used to prove the home RE-READS streak state when the child returns from a
+/// practice screen (the daily-goal ring must not stay frozen at mount value).
+class _SequenceStreakService extends StreakService {
+  final List<StreakState> _states;
+  int loadCount = 0;
+  _SequenceStreakService(this._states);
+
+  @override
+  Future<StreakState> load({DateTime? now}) async {
+    final s = _states[loadCount < _states.length ? loadCount : _states.length - 1];
+    loadCount++;
+    return s;
+  }
+}
+
 /// An [InMemoryFsrsCardRepository] pre-seeded with [dueCount] cards all due now.
 ///
 /// Returns a Future so callers can await seeding before pumping the widget.
@@ -343,6 +359,51 @@ void main() {
     await _settle(tester);
     // 10 - 4 = 6 remaining.
     expect(find.textContaining('あと 6問'), findsOneWidget);
+  });
+
+  testWidgets(
+      'KotobaHomeScreen: daily goal RELOADS after returning from practice (P0)',
+      (tester) async {
+    // Proves the daily-return loop actually loops: the home must re-read streak
+    // state when the child pops back from a practice screen, or the ring is a
+    // frozen mount-time snapshot (the adversarial-audit P0 this commit fixes).
+    final svc = _SequenceStreakService(const [
+      // Mount: nothing done yet.
+      StreakState(
+          currentStreak: 0,
+          weeklyBits: 0,
+          todayCount: 0,
+          problemsToday: 0,
+          dailyGoal: 10),
+      // After a session: 6 questions answered.
+      StreakState(
+          currentStreak: 1,
+          weeklyBits: 1,
+          todayCount: 1,
+          problemsToday: 6,
+          dailyGoal: 10),
+    ]);
+    await tester.pumpWidget(_wrap(
+      streakService: svc,
+      cardRepository: InMemoryFsrsCardRepository(),
+    ));
+    await _settle(tester);
+    expect(svc.loadCount, 1);
+    expect(find.textContaining('さあ はじめよう'), findsOneWidget);
+
+    // Open the map (uses _pushThenRefresh), then pop back as the child would.
+    final mapCta = find.textContaining('ちずを みる');
+    await tester.ensureVisible(mapCta);
+    await tester.tap(mapCta);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+    final nav = tester.state<NavigatorState>(find.byType(Navigator));
+    nav.pop();
+    await _settle(tester);
+
+    // Home re-read streak (load called again) and the ring now reflects 6/10.
+    expect(svc.loadCount, greaterThanOrEqualTo(2));
+    expect(find.textContaining('あと 4問'), findsOneWidget);
   });
 
   testWidgets('KotobaHomeScreen: met daily goal celebrates (達成)',

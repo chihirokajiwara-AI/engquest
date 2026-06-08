@@ -32,9 +32,12 @@ class StreakState {
   /// Number of sessions completed today.
   final int todayCount;
 
-  /// Number of practice questions answered today (resets at midnight).
-  /// Drives the「きょうの目標」daily-goal ring — the daily-return motivation
-  /// loop (Duolingo-style: a visible goal you fill each day).
+  /// Number of practice questions ATTEMPTED today (resets at midnight). This is
+  /// a deliberate practice-VOLUME signal, not a mastery one: spaced repetition
+  /// works through repeated exposure, so a card answered「もういちど」still counts
+  /// as practice and still earns daily-goal credit. Correctness is shown
+  /// honestly elsewhere — the 合格率 gauge weights accuracy. Drives the
+  ///「きょうの目標」ring (Duolingo-style: a visible goal you fill each day).
   final int problemsToday;
 
   /// The daily question target the child is working toward today.
@@ -58,8 +61,9 @@ class StreakState {
   /// Whether the given [weekdayIndex] (0=Mon, 6=Sun) was studied.
   bool studiedOn(int weekdayIndex) => (weeklyBits >> weekdayIndex) & 1 == 1;
 
-  /// Whether today's question goal has been reached.
-  bool get goalMet => problemsToday >= dailyGoal;
+  /// Whether today's question goal has been reached. Guards a corrupted/zero
+  /// goal so the ring never celebrates「達成」on zero work.
+  bool get goalMet => dailyGoal > 0 && problemsToday >= dailyGoal;
 
   /// Questions still needed to hit today's goal (never negative).
   int get remainingToGoal =>
@@ -206,10 +210,18 @@ class StreakService {
     await prefs.setInt(_kWeeklyBits, bits);
     await prefs.setInt(_kTodayCount, todayCount);
 
+    // Return a COMPLETE snapshot (incl. the daily-goal fields) so a caller that
+    // displays this result never sees problemsToday/dailyGoal default to 0.
+    final problemsDate = prefs.getString(_kProblemsTodayDate);
+    final problemsToday =
+        (problemsDate == todayKey) ? prefs.getInt(_kProblemsToday) : 0;
+    final storedGoal = prefs.getInt(_kDailyGoal);
     return StreakState(
       currentStreak: streak,
       weeklyBits: bits,
       todayCount: todayCount,
+      problemsToday: problemsToday,
+      dailyGoal: storedGoal > 0 ? storedGoal : kDefaultDailyGoal,
     );
   }
 }
