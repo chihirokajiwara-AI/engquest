@@ -105,5 +105,8 @@ void main() {
     expect(find.text('📝 本番（英検）の問い方'), findsOneWidget);
     expect(find.textContaining('2番目'), findsWidgets);
     expect(find.textContaining('4番目'), findsWidgets);
+    // The grammar-rule reveal (#106) must also render — teaches WHY the order is
+    // correct, not just the answer. Every 5/4級 item carries a whyExplanation.
+    expect(find.text('💡 ルール / なぜこの順番？'), findsOneWidget);
   });
 }
