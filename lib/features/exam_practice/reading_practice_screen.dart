@@ -1361,6 +1361,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'England stopped making vending machines soon after.',
           ],
           correctIdx: 1,
+          explanation:
+              '直前は「イギリスで最初の自販機（ハガキ用）」、直後はニューヨークなど他の国の例。空所には「その考えはすぐ他の国へ広まった」が入り、例への橋渡しになる。',
         ),
         _ComprehensionQuestion(
           question: 'Which phrase best fits in blank ( 2 )?',
@@ -1371,6 +1373,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'take photographs',
           ],
           correctIdx: 1,
+          explanation:
+              '直後の例が「年齢や性別に合わせて飲み物をすすめる」。だから空所は「商品をおすすめする(recommend products)」。顔認識で客に合った商品を提案する流れ。',
         ),
         _ComprehensionQuestion(
           question: 'Which phrase best fits in blank ( 3 )?',
@@ -1381,6 +1385,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'The police regularly check the machines.',
           ],
           correctIdx: 0,
+          explanation:
+              '直前は「犯罪が少なく、盗まれにくい」。空所は This means でその結果＝「持ち主は盗難を心配しなくてよい」とまとめる。次の文の also（〜も）が別の理由を足す合図。',
         ),
       ],
     ),
@@ -1415,6 +1421,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'attract tourists from other countries',
           ],
           correctIdx: 1,
+          explanation:
+              'この段落の主題は「色が心理にあたえる効果」。会社・病院・学校が色の知識で作る環境は「ねらった心理的な効果を生む(produce the desired psychological effect)」もの。',
         ),
         _ComprehensionQuestion(
           question: 'Which sentence best fits in blank ( 5 )?',
@@ -1425,6 +1433,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'Purple is considered a royal color in many countries.',
           ],
           correctIdx: 1,
+          explanation:
+              '直前は「赤が食欲を刺激する」、直後の結論は「だから赤と黄色を使う」。結論が"黄色"にも触れるので、空所は黄色の働き＝「黄色は素早い決断をうながすと言われる」が入る。',
         ),
         _ComprehensionQuestion(
           question: 'Which sentence best fits in blank ( 6 )?',
@@ -1435,6 +1445,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             'Most businesses use the same colors worldwide.',
           ],
           correctIdx: 2,
+          explanation:
+              '直後に「白は西洋では清らかさ・結婚式、東アジアではおそうしきの色」という例が続く。空所はその主題文＝「同じ色でも文化によって意味が大きく異なる」が入る。',
         ),
       ],
     ),
