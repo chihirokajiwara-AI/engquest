@@ -416,7 +416,9 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Text('📒', style: TextStyle(fontSize: 30)),
+              // Vector icon, not an emoji — consistent across browsers and with
+              // the rest of the home's gold iconography (#71).
+              const Icon(Icons.menu_book_rounded, color: dqGold, size: 30),
               const SizedBox(width: 10),
               Text(
                 '$streak',
@@ -515,7 +517,7 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text('🔍', style: TextStyle(fontSize: 28)),
+            const Icon(Icons.search_rounded, color: dqGold, size: 28),
             const SizedBox(width: 14),
             Expanded(
               child: Column(
