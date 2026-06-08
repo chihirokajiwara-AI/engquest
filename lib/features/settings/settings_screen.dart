@@ -16,6 +16,8 @@ import 'package:flutter/material.dart';
 import 'package:engquest/core/sound/sound_service.dart';
 import 'package:engquest/core/audio/audio_mute.dart';
 import 'package:engquest/features/quest/ui/dq_ui.dart';
+import 'package:engquest/features/parent_dashboard/parent_login_screen.dart';
+import 'package:engquest/features/achievements/achievements_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -108,6 +110,40 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     : Icons.volume_up,
                                 value: allMuted,
                                 onChanged: (muteAll) => _setAll(!muteAll),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 14),
+                        // Reachability fix (#41): the parent progress dashboard and
+                        // the achievements screen were built but unreachable from the
+                        // live home (only the orphaned WorldMapScreen linked parent;
+                        // achievements was linked nowhere). Surface both via the
+                        // already-reachable Settings gear, keeping the home uncluttered.
+                        DqPanel(
+                          title: 'メニュー / Menu',
+                          child: Column(
+                            children: [
+                              DqTile(
+                                jp: '保護者（ほごしゃ）の方（かた）へ',
+                                en: 'For Parents',
+                                icon: Icons.family_restroom,
+                                onTap: () => Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => const ParentLoginScreen(),
+                                  ),
+                                ),
+                              ),
+                              _divider(),
+                              DqTile(
+                                jp: 'じっせき',
+                                en: 'Achievements',
+                                icon: Icons.emoji_events,
+                                onTap: () => Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => const AchievementsScreen(),
+                                  ),
+                                ),
                               ),
                             ],
                           ),
