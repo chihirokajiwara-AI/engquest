@@ -1025,9 +1025,15 @@ const List<QuestTown> kQuestTowns = [
     name: '学（まな）びの都（みやこ）',
     tagline: '学校と旅の都',
     intro: '学（まな）びの都（みやこ）。学校（がっこう）や旅（たび）の物語（ものがたり）が語（かた）られる場所（ばしょ）。'
-        'けれど、思（おも）い出（で）を語（かた）る言葉（ことば）が、少（すこ）しずつ抜（ぬ）け落（お）ちている。',
-    cleared: '人々（ひとびと）が、また自分（じぶん）の物語（ものがたり）を語（かた）り出（だ）した。三（みっ）つ目（め）の〈声（こえ）の石（いし）〉。'
-        '吟遊詩人（ぎんゆうしじん）ハーモニーが、とりもどした言葉（ことば）を歌（うた）にして空（そら）へ放（はな）つ。',
+        'けれど、思（おも）い出（で）を語（かた）る言葉（ことば）が、少（すこ）しずつ抜（ぬ）け落（お）ちている。\n'
+        '書庫番（しょこばん）ミネは、だれにも開（ひら）けない一冊（いっさつ）の日記（にっき）を、'
+        '何年（なんねん）も守（まも）り続（つづ）けてきた。「完了（かんりょう）の言葉（ことば）」をとり戻（もど）せば、'
+        '封（ふう）じられた頁（ページ）がひらく――最後（さいご）の一行（いちぎょう）には、何（なに）が書（か）かれているのか？',
+    cleared: '封（ふう）じられた日記（にっき）の、最後（さいご）の一行（いちぎょう）がひらいた。'
+        '書庫番（しょこばん）ミネが しずかに読（よ）み上（あ）げる――'
+        '「わたしは、しずけさを まもっていた つもりだった」。\n'
+        '三（みっ）つ目（め）の〈声（こえ）の石（いし）〉を手（て）に。'
+        '人々（ひとびと）が、また自分（じぶん）の物語（ものがたり）を語（かた）り出（だ）した。',
     encounters: [
       // 1 — スラ再会。過去形での応答（4級の復習）。手がかり語 last night。(大問2 会話応答型)
       QuestEncounter(
@@ -1066,13 +1072,16 @@ const List<QuestTown> kQuestTowns = [
       ),
       // 4 — 現在完了〈継続〉for/since。(大問1 文法型)
       QuestEncounter(
-        npcName: "としょかんいん",
+        npcName: "書庫番（しょこばん）ミネ",
         npcEmoji: "📚",
         npcLine: "I have worked in this library ___ ten years, and I won't let its words die.",
         npcLineJa: "わたしはこの図書館（としょかん）で十年（じゅうねん）___ 働（はたら）いてきた。言葉（ことば）を消（き）えさせはしない。 ___ は？",
         choices: ["since", "from", "for", "during"],
         correctIndex: 2,
-        onCorrect: "'for ten years' — perfect. 'for' takes a length of time, 'since' takes a starting point. You learn fast.",
+        onCorrect:
+            "'for ten years' — yes. I have kept this diary safe all that time. "
+            "They say the Silence once WROTE DOWN every word it heard… a keeper, "
+            "before it became the swallower. Help me open its last page.",
       ),
       // 5 — 現在完了〈完了〉already/yet。否定文では yet。(大問1 文法型)
       QuestEncounter(
