@@ -304,7 +304,8 @@ const List<String> kPreviewRouteNames = [
   'kotobahome', 'passmeter', 'passmetermissing', 'passprogress', 'speaking',
   'speakingconsent',
   'listening2', 'achievements', 'parent', 'parentlogin', 'wordorder',
-  'conversation', 'reading', 'settings', 'listeningpp', 'listeningp1',
+  'conversation', 'conversation5', 'reading', 'settings', 'listeningpp',
+  'listeningp1',
 ];
 
 /// Test-visible wrapper for the private preview harness.
@@ -422,6 +423,21 @@ Widget _previewFor(String? name) {
           nameEn: 'Conversation Completion',
           type: ExamSectionType.conversationComplete,
           questionCount: 8,
+          timeLimitMinutes: 8,
+          description: 'Preview',
+        ),
+      );
+    case 'conversation5':
+      // 英検5級 大問2 — render-proofs the post-answer 解説 (#7). Tap a choice to
+      // reveal the 💡かいせつ panel (3級 'conversation' route has no 解説 yet).
+      return const ConversationPracticeScreen(
+        eikenGrade: '5',
+        section: ExamSection(
+          id: '5_p2',
+          nameJa: '筆記2: 会話文の文空所補充',
+          nameEn: 'Conversation Completion',
+          type: ExamSectionType.conversationComplete,
+          questionCount: 5,
           timeLimitMinutes: 8,
           description: 'Preview',
         ),
