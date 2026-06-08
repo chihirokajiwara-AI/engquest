@@ -38,6 +38,12 @@ void main() {
     test('rejects a compound substring leak (snow in snowman)', () {
       expect(hasCleanCloze('We built a snowman in the snow.', 'snow'), isFalse);
     });
+    test('rejects a hyphenated compound (E-commerce leaks "E-")', () {
+      expect(hasCleanCloze('E-commerce platforms changed retail.', 'commerce'),
+          isFalse);
+      expect(hasCleanCloze('It is water-soluble, so it dissolves.', 'soluble'),
+          isFalse);
+    });
     test('rejects a double whole-word occurrence', () {
       expect(hasCleanCloze('I see a dog and a dog.', 'dog'), isFalse);
     });

@@ -32,6 +32,12 @@ RegExpMatch? wholeWordMatch(String sentence, String word) =>
 bool hasCleanCloze(String sentence, String word) {
   final w = word.trim();
   if (w.isEmpty || w.contains('_') || w.contains(' ')) return false;
+  // Reject hyphenated compounds: \b fires at a hyphen, so "commerce" in
+  // "E-commerce" would otherwise pass yet leak the "E-" prefix in the cloze.
+  if (RegExp('-${RegExp.escape(w)}|${RegExp.escape(w)}-', caseSensitive: false)
+      .hasMatch(sentence)) {
+    return false;
+  }
   final whole =
       RegExp('\\b${RegExp.escape(w)}\\b', caseSensitive: false)
           .allMatches(sentence)
