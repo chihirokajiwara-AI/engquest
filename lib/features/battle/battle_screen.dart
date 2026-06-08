@@ -27,6 +27,7 @@
 //   - Animated star-burst on session complete (CustomPainter)
 //   - SoundService stubs + HapticFeedback
 
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -48,6 +49,8 @@ import '../../core/audio/word_audio_player_service.dart';
 import '../../core/sound/sound_service.dart';
 import '../../core/data/vocab_repository.dart';
 import '../../core/models/vocab_item.dart';
+import '../exam_practice/pass/cse_model.dart';
+import '../exam_practice/pass/skill_accuracy_store.dart';
 import '../quest/ui/dq_ui.dart';
 
 // ── Bilingual + interval labels for the Grade enum (DQ command-window tiles) ──
@@ -69,6 +72,31 @@ class _CardResult {
   final String word;
   final Grade grade;
   const _CardResult(this.word, this.grade);
+}
+
+/// Bounded reading-skill contribution from a daily vocab Battle session, so the
+/// daily practice loop actually moves the 合格率 (#35).
+///
+/// - Vocab Battle = 大問1-type vocabulary knowledge → [EikenSkill.reading] (the
+///   SAME mapping exam vocabGrammar practice already uses). It does not invent a
+///   new signal — it makes the daily loop consistent with exam practice.
+/// - Correct = Good|Easy (matches Battle's own `isCorrect`; CONSERVATIVE — a
+///   'Hard' recall is treated as not-yet-mastered, so 合格率 never inflates upward).
+/// - CAPPED per session ([cap]) so a long FSRS review binge of easy cards cannot
+///   swamp the reading bucket and overstate comprehension; one session contributes
+///   at most ~one 大問1's worth of evidence, accruing steadily like exam practice.
+({int correct, int total}) battleReadingContribution(
+  Iterable<Grade> grades, {
+  int cap = 10,
+}) {
+  final list = grades.toList();
+  final total = list.length;
+  if (total == 0) return (correct: 0, total: 0);
+  final correct =
+      list.where((g) => g == Grade.good || g == Grade.easy).length;
+  if (total <= cap) return (correct: correct, total: total);
+  final scaled = (correct * cap / total).round().clamp(0, cap);
+  return (correct: scaled, total: cap);
 }
 
 // ── XP floating label data ────────────────────────────────────────────────────
@@ -400,6 +428,7 @@ class _BattleScreenState extends State<BattleScreen>
       setState(() => _sessionDone = true);
       _starsCtrl.forward();
       _recordSessionToFirestore();
+      _recordSkillAccuracy();
       return;
     }
 
@@ -408,6 +437,25 @@ class _BattleScreenState extends State<BattleScreen>
   }
 
   // ── Session persistence ────────────────────────────────────────────────────
+
+  /// Bridges the daily vocab Battle into the 合格率 (#35): records this session's
+  /// vocab accuracy into [SkillAccuracyStore] as reading-skill evidence, so daily
+  /// practice actually moves the pass-probability (it previously did not). Bounded
+  /// + conservative — see [battleReadingContribution]. Fire-and-forget; storage
+  /// errors are swallowed by the store's guarded in-memory fallback.
+  void _recordSkillAccuracy() {
+    final c = battleReadingContribution(_sessionResults.map((r) => r.grade));
+    if (c.total <= 0) return;
+    unawaited(() async {
+      final store = await SkillAccuracyStore.getInstance();
+      await store.record(
+        grade: widget.eikenGrade,
+        skill: EikenSkill.reading,
+        correct: c.correct,
+        total: c.total,
+      );
+    }());
+  }
 
   /// Writes session stats to Firestore after session completes.
   /// Fire-and-forget — offline Firestore cache will sync when connection returns.
