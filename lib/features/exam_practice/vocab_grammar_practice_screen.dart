@@ -5,13 +5,15 @@
 // "He ( ) to school every day."
 // 1. goes  2. go  3. went  4. going
 //
-// Uses VocabRepository + distractors field for accurate 4-choice questions.
+// Uses VocabRepository + buildAntiLeakDistractors for accurate 4-choice questions
+// (the stored JSON distractors are discarded — see distractor_generator.dart, #76).
 
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import '../../core/data/vocab_repository.dart';
 import '../../core/models/vocab_item.dart';
+import 'distractor_generator.dart';
 import 'eiken_exam_config.dart';
 import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
@@ -94,43 +96,42 @@ class _VocabGrammarPracticeScreenState
       await _vocabRepo.initialize(eikenGrade: widget.eikenGrade);
       final allWords = _vocabRepo.getAll();
 
-      // Eligible = has 3 distractors AND a first example sentence that can be
-      // CLEANLY clozed (#78): the word appears as a whole word exactly once and
-      // not inside another word, so the blank never leaks a suffix/compound.
-      // 61–80% of items qualify per grade — far more than a session needs.
+      // Eligible base = has a first example sentence that can be CLEANLY clozed
+      // (#78): the word appears as a whole word exactly once and not inside
+      // another word, so the blank never leaks a suffix/compound.
       final eligible = allWords
           .where((w) =>
-              w.distractors.length >= 3 &&
               w.exampleSentences.isNotEmpty &&
               hasCleanCloze(w.exampleSentences.first, w.word))
           .toList()
         ..shuffle(_rng);
 
-      final count = widget.section.questionCount.clamp(0, eligible.length);
-      _questions = eligible.take(count).map((word) {
-        // Create a cloze from the example sentence
+      // Build questions, regenerating distractors per item (#76). The stored
+      // `distractors` are alphabetical-adjacency artifacts (~92% make the answer
+      // the trivial first-letter odd-one-out), so we DISCARD them and synthesise
+      // same-grade / same-POS / SAME-first-letter single-word distractors via
+      // buildAntiLeakDistractors — killing the orthographic leak by construction.
+      // Items whose grade bank can't yield three clean distractors are skipped.
+      final wanted = widget.section.questionCount;
+      final questions = <_Question>[];
+      for (final word in eligible) {
+        if (questions.length >= wanted) break;
         final sentence = word.exampleSentences.first;
+        final distractors =
+            buildAntiLeakDistractors(word, sentence, allWords, _rng);
+        if (distractors == null) continue; // not enough clean candidates
         final cloze = _makeCloze(sentence, word.word);
-
-        // Build choices: correct + 3 distractors, shuffled.
-        // NOTE (#76): 62–88% of stored distractor sets share one first letter ≠
-        // the answer, making the answer the trivial odd-one-out. A naive
-        // regenerate-from-pool fix was built + content-QA'd and BLOCKED (40% clean
-        // — random same-POS words cause semantic ambiguity / multi-word contamination
-        // / domain-mismatch triviality that pure sampling can't avoid). The correct
-        // fix is an LLM semantic-validator pass (#32), which needs the backend (#7).
-        final choices = [word.word, ...word.distractors.take(3)];
+        final choices = [word.word, ...distractors];
         choices.shuffle(_rng);
-        final newCorrectIdx = choices.indexOf(word.word);
-
-        return _Question(
+        questions.add(_Question(
           cloze: cloze,
           choices: choices,
-          correctIdx: newCorrectIdx,
+          correctIdx: choices.indexOf(word.word),
           word: word,
           originalSentence: sentence,
-        );
-      }).toList();
+        ));
+      }
+      _questions = questions;
 
       if (mounted) setState(() => _loading = false);
     } catch (e) {
