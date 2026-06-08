@@ -6,6 +6,7 @@ import 'package:engquest/features/battle/battle_screen.dart';
 import 'package:engquest/features/voice/voice_screen.dart';
 import 'package:engquest/features/dialog/dialog_screen.dart';
 import 'package:engquest/features/onboarding/onboarding_flow.dart';
+import 'package:engquest/core/fsrs/fsrs_card_repository.dart';
 import 'package:engquest/features/quest/quest_title_screen.dart';
 import 'package:engquest/features/quest/quest_screen.dart';
 import 'package:engquest/features/quest/quest_map_screen.dart';
@@ -388,7 +389,14 @@ Widget _previewFor(String? name) {
     case 'quest2':
       return QuestScreen(town: kQuestTowns[5], previewEncounterIndex: 12);
     case 'battle':
-      return const BattleScreen(childAge: 8);
+      // Inject an in-memory repo so the preview renders OFFLINE (R4). With the
+      // default FirestoreFsrsCardRepository the deck load never resolves without
+      // Firebase → a perpetual loading spinner (caught by the render-integrity
+      // test). #40.
+      return BattleScreen(
+        childAge: 8,
+        repository: InMemoryFsrsCardRepository(),
+      );
     case 'dialog':
       return const DialogScenariosScreen();
     case 'voice':

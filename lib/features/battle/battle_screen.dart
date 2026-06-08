@@ -293,10 +293,17 @@ class _BattleScreenState extends State<BattleScreen>
       }
     }
 
-    // 6. Compute due queue
+    // 6. Compute due queue. Guarded: a Firestore error here must not leave the
+    // child stuck on the loading spinner — fall back to "everything is due" so
+    // the deck still opens (#40 render integrity).
     if (!mounted) return;
     final now = DateTime.now();
-    final dueCards = await _repository.getDueCards(uid, now);
+    List<FSRSCard> dueCards;
+    try {
+      dueCards = await _repository.getDueCards(uid, now);
+    } catch (_) {
+      dueCards = const [];
+    }
     final dueIds = dueCards.map((c) => c.vocabId).toSet();
 
     final queue = <int>[];
