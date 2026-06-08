@@ -1406,23 +1406,24 @@ const List<QuestTown> kQuestTowns = [
         onCorrect:
             "Of course — 'when the festival begins.' Now I can answer my guests. Thank you!",
       ),
-      // 7 — 大問1 短文空所補充: past perfect (had + p.p.)
+      // 7 — 大問1 短文空所補充: used to (past habit). [準2 in-grade; was 過去完了
+      //     (2級, out of scope) — grade-map decontamination per world-depth audit]
       QuestEncounter(
         npcName: "おいたしょうにん",
         npcEmoji: "🧓",
         npcLine:
-            "When the silence reached us, what had the town been like before?",
+            "Before the silence came, this market ___ to be full of music and laughter.",
         npcLineJa:
-            "しずけさが来（き）たとき、その前（まえ）の町（まち）はどんなふうだった？",
+            "しずけさが来（く）る前（まえ）、この市場（いちば）は音楽（おんがく）と笑（わら）い声（ごえ）でいっぱい ___ 。 ___ は？",
         choices: [
-          "The town has been full of laughter before.",
-          "The town is loud before the silence comes.",
-          "The town had been full of music before the silence came.",
-          "The town will be quiet after the silence came.",
+          "use",
+          "used",
+          "using",
+          "is used",
         ],
-        correctIndex: 2,
+        correctIndex: 1,
         onCorrect:
-            "Yes... it had been full of music. You speak of the past as if you saw it.",
+            "Yes — \"used to be.\" You speak of the past as if you saw it. The market remembers.",
       ),
       // 8 — 大問2B 長文語句空所補充: logical connective however/therefore
       QuestEncounter(
@@ -1496,23 +1497,24 @@ const List<QuestTown> kQuestTowns = [
         onCorrect:
             "'For the dancers to stand on' — perfect. The festival will be safe, thanks to you.",
       ),
-      // 12 — 大問1 短文空所補充: subjunctive past (If I were…)
+      // 12 — 大問1 短文空所補充: gerund after a verb (enjoy + V-ing). [準2 in-grade;
+      //     was 仮定法過去 (2級, out of scope) — grade-map decontamination per audit]
       QuestEncounter(
         npcName: "ゆめみるこども",
         npcEmoji: "🧒",
         npcLine:
-            "If you could be anything, what would you be? I'd be a captain!",
+            "The open sea is my dream! Do you enjoy ___ about faraway places too?",
         npcLineJa:
-            "もし何（なに）にでもなれるなら、何（なに）になりたい？ ぼくは船長（せんちょう）！",
+            "ひろい海（うみ）が ぼくの夢（ゆめ）！ きみも、遠（とお）い国（くに）のことを ___ のは すき？ ___ は？",
         choices: [
-          "If I was a bird, I will fly over the sea.",
-          "If I am a bird, I would fly over the sea.",
-          "If I were a bird, I would fly over the whole sea.",
-          "If I were a bird, I will fly over the sea.",
+          "read",
+          "to read",
+          "reading",
+          "reads",
         ],
         correctIndex: 2,
         onCorrect:
-            "'If I were a bird'! Even grown-ups forget that one. You'd make a fine captain too.",
+            "\"Enjoy reading\" — a gerund after 'enjoy.' Dream big, traveller. The sea is wide.",
       ),
       // 13 — 面接 イラスト描写: present continuous (picture description)
       QuestEncounter(
