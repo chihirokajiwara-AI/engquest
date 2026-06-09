@@ -577,6 +577,135 @@ Widget _buildReadinessReport(WritingPrompt prompt, String text) {
   );
 }
 
+// ── 見直しチェック / self-check (#100 follow-through) ─────────────────────────
+//
+// Shown ONLY when the offline readiness engine reports formComplete. Decided by
+// a 3-lens expert panel (assessment-validity + pedagogy + product, 2026 evidence):
+//   • Framed as a REVISION checklist, never a self-grade. Self-graded *quality*
+//     is invalid for children (self-assessment r≈.30 for writing, Dunning-Kruger
+//     inflates the weakest writers most) → we use only OBJECTIVE binary facts the
+//     learner can verify against their own visible text.
+//   • It feeds the 合格率 NOTHING — no SkillAccuracyStore, no CseEstimator. Writing
+//     stays honestly 未測定 until AI grading. Inflation is impossible by
+//     construction (this widget has no store dependency at all).
+//   • The closure NAMES what was NOT checked (語彙・文法 quality → AI先生) to
+//     inoculate against over-confidence — the pedagogy panel's key safeguard.
+// Public so the honesty invariant (closure copy + no gauge feed) is unit-tested.
+class WritingSelfCheckCard extends StatefulWidget {
+  const WritingSelfCheckCard({super.key, required this.taskType});
+
+  final WritingTaskType taskType;
+
+  @override
+  State<WritingSelfCheckCard> createState() => _WritingSelfCheckCardState();
+}
+
+class _WritingSelfCheckCardState extends State<WritingSelfCheckCard> {
+  late final List<String> _items = _itemsFor(widget.taskType);
+  final Set<int> _checked = {};
+
+  static List<String> _itemsFor(WritingTaskType t) => switch (t) {
+        // Objective, countable, verifiable-against-own-text facts only — never a
+        // quality judgement ("理由はよかった？" is forbidden: it invites inflation).
+        WritingTaskType.email => const [
+            '下線の しつもんに、2つとも 答えた？',
+            '自分の 言葉で 書いた？',
+            '大文字で 始めて、ピリオド(.)を つけた？',
+          ],
+        WritingTaskType.opinion => const [
+            '自分の 意見を はっきり 書いた？',
+            '理由を 2つ 書いた？',
+            'さいごに まとめ(結論)を 書いた？',
+          ],
+        WritingTaskType.summary => const [
+            '本文の 大事なところを 入れた？',
+            '本文を 丸写し していない？',
+            '自分の 言葉で まとめた？',
+          ],
+      };
+
+  @override
+  Widget build(BuildContext context) {
+    final allDone = _checked.length == _items.length;
+    return DqPanel(
+      title: '見直しチェック / Self-check',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '出す前に 自分で たしかめよう。できていない ものは 直してから 出そう。',
+            style: dqText(size: 12, color: dqGoldDeep),
+          ),
+          const SizedBox(height: 10),
+          for (var i = 0; i < _items.length; i++) _checkRow(i, _items[i]),
+          const SizedBox(height: 8),
+          if (allDone)
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: _wrOk.withAlpha(28),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: _wrOk.withAlpha(120)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '提出準備 OK！（暫定・自己チェック）',
+                    style: dqText(size: 14, w: FontWeight.w800, color: _wrOk),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    '形(かたち)は ととのいました。語彙・文法などの 中身の 質は、'
+                    'AI先生が 採点します（接続後）。',
+                    style: dqText(size: 12, color: dqInk),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    '※これは 自己チェックです。合格率には まだ 反映しません。',
+                    style: dqText(size: 11, color: dqGoldDeep),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _checkRow(int i, String label) {
+    final on = _checked.contains(i);
+    return Semantics(
+      checked: on,
+      button: true,
+      label: label,
+      child: InkWell(
+        onTap: () => setState(() {
+          if (on) {
+            _checked.remove(i);
+          } else {
+            _checked.add(i);
+          }
+        }),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 6),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(on ? Icons.check_box : Icons.check_box_outline_blank,
+                  color: on ? _wrOk : dqGoldDeep, size: 22),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(label, style: dqText(size: 13, color: dqInk)),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 // ── Main screen ───────────────────────────────────────────────────────────────
 
 class WritingPracticeScreen extends StatefulWidget {
@@ -982,6 +1111,14 @@ class _WritingPracticeScreenState extends State<WritingPracticeScreen> {
         children: [
           if (!result.apiAvailable) ...[
             _buildReadinessReport(_prompt, _controller.text),
+            // Offer the learner-confirmed 見直しチェック ONLY when the objective
+            // machine checks all pass (no HARD violation, no advisory warn). It
+            // drives revision + closure; it records NOTHING to the 合格率 (#100).
+            if (evaluateWritingReadiness(_prompt, _controller.text)
+                .formComplete) ...[
+              const SizedBox(height: 12),
+              WritingSelfCheckCard(taskType: _prompt.type),
+            ],
           ] else ...[
             // Score summary
             DqPanel(
