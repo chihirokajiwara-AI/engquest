@@ -52,3 +52,10 @@ audio/listening/l3_p3_07.mp3 | 2026-06-09 | 3級 第3部 expansion; Kokoro gen p
 audio/listening/l3_p3_08.mp3 | 2026-06-09 | 3級 第3部 expansion; Kokoro gen pending
 audio/listening/l3_p3_09.mp3 | 2026-06-09 | 3級 第3部 expansion; Kokoro gen pending
 audio/listening/l3_p3_10.mp3 | 2026-06-09 | 3級 第3部 expansion; Kokoro gen pending
+# 6 英検4級 第1部 listening clips — #10 vol expansion, 応答選択 4→10.
+audio/listening/l4_p1_05.mp3 | 2026-06-09 | 4級 第1部 expansion; Kokoro gen pending
+audio/listening/l4_p1_06.mp3 | 2026-06-09 | 4級 第1部 expansion; Kokoro gen pending
+audio/listening/l4_p1_07.mp3 | 2026-06-09 | 4級 第1部 expansion; Kokoro gen pending
+audio/listening/l4_p1_08.mp3 | 2026-06-09 | 4級 第1部 expansion; Kokoro gen pending
+audio/listening/l4_p1_09.mp3 | 2026-06-09 | 4級 第1部 expansion; Kokoro gen pending
+audio/listening/l4_p1_10.mp3 | 2026-06-09 | 4級 第1部 expansion; Kokoro gen pending
