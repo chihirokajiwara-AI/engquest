@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 
 import 'package:engquest/core/sound/sound_service.dart';
 import 'package:engquest/core/audio/audio_mute.dart';
+import 'package:engquest/core/ui/readability_scale.dart';
 import 'package:engquest/features/quest/ui/dq_ui.dart';
 import 'package:engquest/features/parent_dashboard/parent_login_screen.dart';
 import 'package:engquest/features/achievements/achievements_screen.dart';
@@ -30,6 +31,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   final _sound = SoundService();
   bool _sfxOn = true;
   bool _voiceOn = true;
+  double _textScale = 1.0;
   bool _loaded = false;
 
   @override
@@ -45,8 +47,43 @@ class _SettingsScreenState extends State<SettingsScreen> {
     setState(() {
       _sfxOn = !_sound.muted;
       _voiceOn = !AudioMute.voiceMuted;
+      _textScale = ReadabilityScale.value;
       _loaded = true;
     });
+  }
+
+  Future<void> _setTextScale(double s) async {
+    await ReadabilityScale.set(s); // updates the global notifier → live resize
+    if (mounted) setState(() => _textScale = ReadabilityScale.value);
+  }
+
+  /// One selectable text-size chip; the active size is highlighted in gold.
+  Widget _sizeChip(double s) {
+    final selected = (_textScale - s).abs() < 0.001;
+    return GestureDetector(
+      onTap: () => _setTextScale(s),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: selected ? dqGold.withAlpha(40) : dqNight1,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: selected ? dqGold : dqGoldDeep.withAlpha(110),
+            width: selected ? 2 : 1,
+          ),
+        ),
+        child: Text(
+          ReadabilityScale.labelJa(s),
+          textAlign: TextAlign.center,
+          style: dqText(
+            size: 12,
+            w: selected ? FontWeight.w800 : FontWeight.w600,
+            color: selected ? dqGold : dqInk,
+          ),
+        ),
+      ),
+    );
   }
 
   Future<void> _setSfx(bool on) async {
@@ -110,6 +147,56 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     : Icons.volume_up,
                                 value: allMuted,
                                 onChanged: (muteAll) => _setAll(!muteAll),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 14),
+                        // Readability (#114): opt-in text size. 2026 a11y research
+                        // — size/spacing/adjustability help more than any "dyslexia
+                        // font" (which studies show doesn't help). Default ふつう.
+                        DqPanel(
+                          title: 'よみやすさ / Readability',
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  const Icon(Icons.format_size,
+                                      color: dqGold, size: 22),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text('もじの 大（おお）きさ',
+                                            style: dqText(
+                                                size: 15,
+                                                w: FontWeight.w700,
+                                                color: dqInk)),
+                                        Text('Text size',
+                                            style: dqText(
+                                                size: 11,
+                                                w: FontWeight.w500,
+                                                color: dqInk.withAlpha(160))),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 10),
+                              Row(
+                                children: [
+                                  for (final s in ReadabilityScale.steps)
+                                    Expanded(
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 8),
+                                        child: _sizeChip(s),
+                                      ),
+                                    ),
+                                ],
                               ),
                             ],
                           ),

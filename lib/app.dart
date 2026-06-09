@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:engquest/core/ui/app_fonts.dart';
+import 'package:engquest/core/ui/readability_scale.dart';
 import 'package:engquest/core/config/flavor_config.dart';
 import 'package:engquest/features/world_map/world_map_screen.dart';
 import 'package:engquest/features/battle/battle_screen.dart';
@@ -172,12 +173,28 @@ class EngQuestApp extends StatelessWidget {
       // rather than stretching the UI across a wide viewport. The flanks show
       // the dqNight0 backdrop so the framed game reads as one focused window.
       builder: (context, child) {
+        // Readability (#114): apply the opt-in text-size on TOP of any OS
+        // text-scaling, clamped so an enlarged size aids legibility without
+        // shattering layouts. Listens to the global notifier so the Settings
+        // control updates everything live. Default 1.0 = unchanged.
         return ColoredBox(
           color: dqNight0,
           child: Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 480),
-              child: child ?? const SizedBox.shrink(),
+              child: ValueListenableBuilder<double>(
+                valueListenable: ReadabilityScale.notifier,
+                builder: (ctx, appScale, inner) {
+                  final mq = MediaQuery.of(ctx);
+                  final osFactor = mq.textScaler.scale(10) / 10; // ~OS multiplier
+                  final combined = (osFactor * appScale).clamp(0.85, 1.6);
+                  return MediaQuery(
+                    data: mq.copyWith(textScaler: TextScaler.linear(combined)),
+                    child: inner ?? const SizedBox.shrink(),
+                  );
+                },
+                child: child ?? const SizedBox.shrink(),
+              ),
             ),
           ),
         );

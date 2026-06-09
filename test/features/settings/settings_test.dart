@@ -61,6 +61,12 @@ void main() {
 
   testWidgets('Settings screen renders the channels + how-to-play affordance',
       (tester) async {
+    // Tall surface so the whole scrollable settings list (sound + readability +
+    // menu + help) is laid out and the bottom 'あそびかた' tile is found.
+    tester.view.physicalSize = const Size(800, 2000);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+
     await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
     await tester.pump(); // initState load
     await tester.pump(const Duration(milliseconds: 50));
@@ -68,6 +74,7 @@ void main() {
     expect(tester.takeException(), isNull);
     expect(find.text('こうかおん'), findsOneWidget); // SFX channel
     expect(find.text('ことばの こえ'), findsOneWidget); // Voice channel
+    expect(find.text('もじの 大（おお）きさ'), findsOneWidget); // readability (#114)
     expect(find.text('あそびかた'), findsOneWidget); // how-to-play
     expect(find.byType(Switch), findsNWidgets(3)); // SFX, Voice, master
   });
