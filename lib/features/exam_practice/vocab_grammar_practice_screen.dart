@@ -21,6 +21,22 @@ import 'vocab_review_store.dart';
 import '../quest/ui/dq_ui.dart';
 import '../home/streak_service.dart';
 
+/// The CEFR band a 大問1 *graded answer* must stay within, per grade (#84).
+/// 英検 grades map to CEFR ceilings; the cloze TARGET (the word being tested)
+/// must not exceed it, or the child is measured on above-grade vocab. Above-grade
+/// words can still appear as distractors/exposure — they just can't be the answer.
+/// Only 準1's bank actually carries above-ceiling words today (289 C1 of 4500);
+/// every other grade is fully on-grade, so this is a no-op for them. The filter
+/// falls back to the full pool if a grade ever lacks enough on-grade items.
+const Map<String, CefrLevel> kGradeCefrCeiling = {
+  '5': CefrLevel.a1,
+  '4': CefrLevel.a2,
+  '3': CefrLevel.b1,
+  'pre2': CefrLevel.b1,
+  '2': CefrLevel.b2,
+  'pre1': CefrLevel.b2,
+};
+
 /// First WHOLE-WORD (\b-bounded), case-insensitive match of [word] in [sentence],
 /// or null. Boundary-anchored so an inflected form never matches a stem fragment
 /// ("ant" must NOT match inside "ants") — used to avoid highlighting a fragment
@@ -131,6 +147,25 @@ class _VocabGrammarPracticeScreenState
               hasCleanCloze(w.exampleSentences.first, w.word))
           .toList()
         ..shuffle(_rng);
+
+      // Keep an above-grade word from being the GRADED answer of a 大問1 cloze
+      // (#84). 準1's bank carries 289 C1-tagged words; testing a child on C1
+      // vocab as if it were 準1 mis-measures readiness on the marquee grade. We
+      // restrict the TARGET pool to on-grade words (above-grade words still
+      // surface as distractors via buildAntiLeakDistractors). Guarded so a grade
+      // that can't field enough on-grade items keeps the full pool rather than
+      // running empty.
+      final ceiling = kGradeCefrCeiling[widget.eikenGrade];
+      if (ceiling != null) {
+        final onGrade = eligible
+            .where((w) => w.cefrLevel.index <= ceiling.index)
+            .toList();
+        if (onGrade.length >= widget.section.questionCount) {
+          eligible
+            ..clear()
+            ..addAll(onGrade);
+        }
+      }
 
       // Spaced repetition (#119): surface words the child previously got WRONG
       // and that FSRS now schedules as DUE *first*, so a session actually

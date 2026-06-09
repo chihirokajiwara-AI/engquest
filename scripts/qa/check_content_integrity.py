@@ -103,6 +103,52 @@ def check_vocab_files():
     return failures
 
 
+# CEFR ceiling per 英検 grade — MUST stay in sync with kGradeCefrCeiling in
+# lib/features/exam_practice/vocab_grammar_practice_screen.dart (#84). A 大問1
+# GRADED ANSWER must not exceed its grade's CEFR band, or the child is measured
+# on above-grade vocab. The Dart screen restricts the cloze TARGET pool to
+# on-grade words, but FALLS BACK to the full (off-grade-inclusive) pool if a grade
+# can't field enough on-grade items — so this gate fails when that fallback would
+# silently re-admit off-grade answers.
+CEFR_ORDER = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
+GRADE_CEFR_CEILING = {
+    'eiken5_vocab.json': 'A1',
+    'eiken4_vocab.json': 'A2',
+    'eiken3_vocab.json': 'B1',
+    'eiken_pre2_vocab.json': 'B1',
+    'eiken2_vocab.json': 'B2',
+    'eiken_pre1_vocab.json': 'B2',
+}
+# Largest 大問1 question count across grades (準1=18). If a grade's on-grade
+# target pool drops below this, the Dart fallback re-admits off-grade words.
+MIN_ON_GRADE_TARGET_POOL = 18
+
+
+def check_grade_cefr_ceiling():
+    failures = []
+    for fname, ceiling in GRADE_CEFR_CEILING.items():
+        path = DATA_DIR / fname
+        if not path.exists():
+            continue  # already reported by check_vocab_files
+        with open(path, encoding='utf-8') as f:
+            words = json.load(f).get('words', [])
+        cap = CEFR_ORDER.index(ceiling)
+        on_grade = [w for w in words
+                    if CEFR_ORDER.index(w.get('cefrLevel', 'A1')) <= cap]
+        above = len(words) - len(on_grade)
+        ok = len(on_grade) >= MIN_ON_GRADE_TARGET_POOL
+        flag = 'PASS' if ok else 'FAIL'
+        note = f' ({above} above-grade excluded as 大問1 answers)' if above else ''
+        print(f'  {fname}: ceiling {ceiling}, on-grade target pool '
+              f'{len(on_grade)}/{len(words)} — {flag}{note}')
+        if not ok:
+            failures.append(
+                f'{fname}: only {len(on_grade)} on-grade target words '
+                f'(< {MIN_ON_GRADE_TARGET_POOL}); Dart fallback would re-admit '
+                f'off-grade answers')
+    return failures
+
+
 def main():
     print('=== R1 CONTENT INTEGRITY ===')
     print()
@@ -110,8 +156,13 @@ def main():
     vocab_failures = check_vocab_files()
 
     print()
-    if vocab_failures:
-        print(f'R1 FAILED: {len(vocab_failures)} violation(s) found.')
+    print('[ 大問1 graded-answer on-grade CEFR ceiling (#84) ]')
+    ceiling_failures = check_grade_cefr_ceiling()
+
+    failures = vocab_failures + ceiling_failures
+    print()
+    if failures:
+        print(f'R1 FAILED: {len(failures)} violation(s) found.')
         return 1
     else:
         print('R1 PASSED: All content integrity checks passed.')
