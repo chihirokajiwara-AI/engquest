@@ -130,8 +130,8 @@ class _SceneViewState extends State<SceneView> {
   void _onPanUpdate(DragUpdateDetails d) {
     setState(() {
       // Drag right → layers drift left (negative shift for near, less for far).
-      _parallaxOffset =
-          (_parallaxOffset + d.delta.dx * 0.0008).clamp(-_parallaxMaxShift, _parallaxMaxShift);
+      _parallaxOffset = (_parallaxOffset + d.delta.dx * 0.0008)
+          .clamp(-_parallaxMaxShift, _parallaxMaxShift);
     });
   }
 
@@ -263,7 +263,8 @@ class _SceneViewState extends State<SceneView> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text('✦', style: TextStyle(color: Color(0xFFFFD700), fontSize: 16)),
+                  const Text('✦',
+                      style: TextStyle(color: Color(0xFFFFD700), fontSize: 16)),
                   const SizedBox(width: 3),
                   Text('$_coinBalance', style: dqText(size: 14, color: dqGold)),
                 ],
@@ -331,6 +332,9 @@ class _SceneViewState extends State<SceneView> {
               // ── Hotspot overlay ───────────────────────────────────────────
               for (var i = 0; i < widget.scene.hotspots.length; i++)
                 _hotspotWidget(i, w, h),
+
+              // ── Active NPC speech bubble (scene-level so it is TAPPABLE) ────
+              if (_bubbleIndex != null) _bubbleOverlay(_bubbleIndex!, w, h),
             ],
           );
         },
@@ -400,26 +404,32 @@ class _SceneViewState extends State<SceneView> {
       height: size,
       child: GestureDetector(
         onTap: () => _onHotspotTap(idx),
-        child: Stack(
-          clipBehavior: Clip.none,
-          alignment: Alignment.center,
-          children: [
-            // The hotspot target itself
-            hotspot.kind == HotspotKind.coin
-                ? _coinTarget(size)
-                : _npcTarget(idx, hotspot, isSolved, size),
+        // Just the hotspot target. The speech bubble is rendered separately at
+        // SCENE level (see _bubbleOverlay) so it stays hit-testable — nesting it
+        // here overflowed this small GestureDetector's bounds and silently ate
+        // the tap (the 「ナゾをみる」-does-nothing bug, CEO 2026-06-09).
+        child: hotspot.kind == HotspotKind.coin
+            ? _coinTarget(size)
+            : _npcTarget(idx, hotspot, isSolved, size),
+      ),
+    );
+  }
 
-            // 「？」Speech bubble above the NPC (only when tapped)
-            if (hotspot.kind == HotspotKind.npc && _bubbleIndex == idx)
-              Positioned(
-                bottom: size + 4,
-                child: GestureDetector(
-                  onTap: () => _onBubbleTap(idx),
-                  child: _speechBubble(hotspot.clueLineJa),
-                ),
-              ),
-          ],
-        ),
+  /// The 「？」speech bubble for the active NPC, rendered at SCENE level (a direct
+  /// child of the scene Stack) so its 「ナゾをみる」 button is inside the hit-test
+  /// bounds. Positioned just above the NPC and clamped to stay on-screen.
+  Widget _bubbleOverlay(int idx, double w, double h) {
+    final hotspot = widget.scene.hotspots[idx];
+    final cx = (hotspot.pos.x + 1) / 2 * w;
+    final cy = (hotspot.pos.y + 1) / 2 * h;
+    final size = hotspot.size * w.clamp(100.0, 480.0);
+    const bubbleW = 220.0;
+    return Positioned(
+      left: (cx - bubbleW / 2).clamp(4.0, (w - bubbleW - 4).clamp(4.0, w)),
+      bottom: (h - (cy - size / 2) + 6).clamp(4.0, h - 48),
+      child: GestureDetector(
+        onTap: () => _onBubbleTap(idx),
+        child: _speechBubble(hotspot.clueLineJa),
       ),
     );
   }
@@ -447,7 +457,8 @@ class _SceneViewState extends State<SceneView> {
             ],
           ),
           child: const Center(
-            child: Text('✦', style: TextStyle(color: Color(0xFFFFD700), fontSize: 20)),
+            child: Text('✦',
+                style: TextStyle(color: Color(0xFFFFD700), fontSize: 20)),
           ),
         ),
       ),
@@ -489,7 +500,8 @@ class _SceneViewState extends State<SceneView> {
     // Grey→color cross-fade on solve
     return AnimatedCrossFade(
       duration: const Duration(milliseconds: 600),
-      crossFadeState: solved ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+      crossFadeState:
+          solved ? CrossFadeState.showSecond : CrossFadeState.showFirst,
       firstChild: _npcPortraitImage(grey ?? '', size),
       secondChild: _npcPortraitImage(color ?? '', size),
     );
@@ -510,7 +522,8 @@ class _SceneViewState extends State<SceneView> {
             color: dqBox.withAlpha(200),
             border: Border.all(color: dqGold, width: 2),
           ),
-          child: const Center(child: Text('👤', style: TextStyle(fontSize: 28))),
+          child:
+              const Center(child: Text('👤', style: TextStyle(fontSize: 28))),
         ),
       ),
     );
@@ -524,27 +537,35 @@ class _SceneViewState extends State<SceneView> {
         color: dqBox.withAlpha(245),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: dqGold, width: 2),
-        boxShadow: const [BoxShadow(color: Colors.black54, blurRadius: 10, offset: Offset(0, 3))],
+        boxShadow: const [
+          BoxShadow(color: Colors.black54, blurRadius: 10, offset: Offset(0, 3))
+        ],
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           if (clueLineJa != null) ...[
-            Text(clueLineJa, style: dqText(size: 12, w: FontWeight.w500, color: dqInk).copyWith(height: 1.5)),
+            Text(clueLineJa,
+                style: dqText(size: 12, w: FontWeight.w500, color: dqInk)
+                    .copyWith(height: 1.5)),
             const SizedBox(height: 6),
           ],
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(colors: [dqGold, dqGoldDeep]),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(
                   '「？」ナゾをみる',
-                  style: dqText(size: 12, w: FontWeight.w800, color: const Color(0xFF2A1C00)),
+                  style: dqText(
+                      size: 12,
+                      w: FontWeight.w800,
+                      color: const Color(0xFF2A1C00)),
                 ),
               ),
             ],
