@@ -58,6 +58,11 @@ class _MockExamScreenState extends State<MockExamScreen> {
   Timer? _timer;
   AudioCueService? _cue;
   bool _submitting = false;
+  // Set true only once the child has confirmed leaving a half-finished mock, so
+  // PopScope lets the pop through. Until then an in-progress mock (≥1 answer) is
+  // guarded — navigating away would silently discard the whole timed session,
+  // since results only persist at submit (#129). ADHD/interrupted-child lens.
+  bool _leaving = false;
 
   @override
   void initState() {
@@ -182,6 +187,35 @@ class _MockExamScreenState extends State<MockExamScreen> {
     return '$m:$sec';
   }
 
+  /// Confirm before abandoning a half-finished timed mock (#129). Returns true
+  /// if the child chose to leave.
+  Future<bool> _confirmLeave() async {
+    final leave = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: dqNight1,
+        title: Text('もどりますか？', style: TextStyle(color: dqInk)),
+        content: Text(
+          'いま とちゅうの 模試（もし）は きえてしまいます。\n'
+          'とちゅうの こたえは ほぞんされません。',
+          style: TextStyle(color: dqInk, height: 1.5),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text('つづける', style: TextStyle(color: dqGold)),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: const Text('やめて もどる',
+                style: TextStyle(color: Color(0xFFE89090))),
+          ),
+        ],
+      ),
+    );
+    return leave ?? false;
+  }
+
   @override
   Widget build(BuildContext context) {
     final label = gradeLabelJa(widget.eikenGrade);
@@ -211,97 +245,112 @@ class _MockExamScreenState extends State<MockExamScreen> {
     final progress = (_index + 1) / _items.length;
     final low = _secondsLeft <= 60;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('$label フル模試'),
-        actions: [
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.only(right: 14),
-              child: Text(
-                '⏱ ${_clock(_secondsLeft)}',
-                style: TextStyle(
-                  color: low ? Colors.redAccent : dqGold,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  fontFeatures: const [FontFeature.tabularFigures()],
+    return PopScope(
+      // Guard a half-finished timed mock: ≥1 answer means leaving would discard
+      // the whole session (results persist only at submit), so confirm first.
+      // No answers yet → nothing to lose, leave freely. (#129)
+      canPop: _leaving || _answers.isEmpty,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop || _leaving) return;
+        final navigator = Navigator.of(context);
+        final leave = await _confirmLeave();
+        if (leave && mounted) {
+          setState(() => _leaving = true);
+          navigator.pop();
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('$label フル模試'),
+          actions: [
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.only(right: 14),
+                child: Text(
+                  '⏱ ${_clock(_secondsLeft)}',
+                  style: TextStyle(
+                    color: low ? Colors.redAccent : dqGold,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    fontFeatures: const [FontFeature.tabularFigures()],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
-      ),
-      body: DqScene(
-        child: SafeArea(
-          child: Column(
-            children: [
-              LinearProgressIndicator(
-                value: progress,
-                backgroundColor: dqBox,
-                color: dqGold,
-                minHeight: 4,
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '${_index + 1} / ${_items.length}',
-                      style: const TextStyle(color: dqInk, fontSize: 14),
-                    ),
-                    Text(
-                      isListening ? '🎧 リスニング' : '📖 リーディング',
-                      style: const TextStyle(color: dqInk, fontSize: 14),
-                    ),
-                  ],
+          ],
+        ),
+        body: DqScene(
+          child: SafeArea(
+            child: Column(
+              children: [
+                LinearProgressIndicator(
+                  value: progress,
+                  backgroundColor: dqBox,
+                  color: dqGold,
+                  minHeight: 4,
                 ),
-              ),
-              Expanded(
-                child: ListView(
-                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-                  children: [
-                    // A muted Voice channel makes the listening items silent →
-                    // false wrong answers → understated 合格率. Warn + one-tap
-                    // unmute, same affordance as the listening-practice screen.
-                    if (isListening && AudioMute.voiceMuted)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child:
-                            MutedVoiceBanner(onUnmute: () => setState(() {})),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '${_index + 1} / ${_items.length}',
+                        style: const TextStyle(color: dqInk, fontSize: 14),
                       ),
-                    if (isListening)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 12),
-                        child: DqReplayButton(onTap: _playCurrentAudio),
+                      Text(
+                        isListening ? '🎧 リスニング' : '📖 リーディング',
+                        style: const TextStyle(color: dqInk, fontSize: 14),
                       ),
-                    DqDialogBox(child: Text(item.questionText)),
-                    const SizedBox(height: 14),
-                    ...List.generate(item.choices.length, (i) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: DqChoice(
-                          // No per-item correctness feedback in a timed mock —
-                          // selection is marked only by the cursor (▶), never
-                          // by a correct/wrong colour.
-                          label: item.choices[i],
-                          state: DqChoiceState.normal,
-                          showCursor: _selected == i,
-                          onTap: () => _select(i),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: ListView(
+                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+                    children: [
+                      // A muted Voice channel makes the listening items silent →
+                      // false wrong answers → understated 合格率. Warn + one-tap
+                      // unmute, same affordance as the listening-practice screen.
+                      if (isListening && AudioMute.voiceMuted)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child:
+                              MutedVoiceBanner(onUnmute: () => setState(() {})),
                         ),
-                      );
-                    }),
-                  ],
+                      if (isListening)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: DqReplayButton(onTap: _playCurrentAudio),
+                        ),
+                      DqDialogBox(child: Text(item.questionText)),
+                      const SizedBox(height: 14),
+                      ...List.generate(item.choices.length, (i) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: DqChoice(
+                            // No per-item correctness feedback in a timed mock —
+                            // selection is marked only by the cursor (▶), never
+                            // by a correct/wrong colour.
+                            label: item.choices[i],
+                            state: DqChoiceState.normal,
+                            showCursor: _selected == i,
+                            onTap: () => _select(i),
+                          ),
+                        );
+                      }),
+                    ],
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
-                child: DqButton(
-                  label: _isLast ? '採点（さいてん）する  /  Score' : 'つぎへ  /  Next',
-                  onTap: _selected == null ? null : _advance,
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
+                  child: DqButton(
+                    label: _isLast ? '採点（さいてん）する  /  Score' : 'つぎへ  /  Next',
+                    onTap: _selected == null ? null : _advance,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

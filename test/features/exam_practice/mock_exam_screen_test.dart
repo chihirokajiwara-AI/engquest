@@ -8,6 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:engquest/features/exam_practice/mock_exam_screen.dart';
 import 'package:engquest/features/exam_practice/pass/cse_model.dart';
 import 'package:engquest/features/exam_practice/pass/mock_exam.dart';
+import 'package:engquest/features/quest/ui/dq_ui.dart';
 
 void main() {
   group('MockExam engine', () {
@@ -123,6 +124,32 @@ void main() {
 
       // Dispose the screen to cancel the periodic timer (avoids pending-timer
       // failure in the test harness).
+      await tester.pumpWidget(const SizedBox());
+    });
+
+    testWidgets('back during an in-progress mock confirms before discarding '
+        'all progress (#129)', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(home: MockExamScreen(eikenGrade: '5', seed: 1)),
+      );
+      await tester.pump();
+
+      // Answer the first item + advance → _answers is non-empty (in progress).
+      await tester.tap(find.byType(DqChoice).first);
+      await tester.pump();
+      await tester.tap(find.textContaining('Next'));
+      await tester.pump();
+
+      // Simulate the system back button.
+      await tester.binding.handlePopRoute();
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      // The guard intercepts: a confirm dialog appears and the timed mock is
+      // NOT silently discarded.
+      expect(find.text('もどりますか？'), findsOneWidget);
+      expect(find.byType(MockExamScreen), findsOneWidget);
+
       await tester.pumpWidget(const SizedBox());
     });
   });
