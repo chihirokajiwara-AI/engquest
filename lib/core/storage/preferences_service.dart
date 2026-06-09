@@ -23,6 +23,11 @@ abstract class PrefKeys {
   static const String soundMuted = 'sound_muted'; // SFX channel (effects)
   static const String voiceMuted = 'voice_muted'; // Voice channel (word audio)
 
+  // Parental analytics consent (#120, COPPA privacy-by-default). Default FALSE
+  // → no analytics collection until a parent explicitly consents. Set true only
+  // when the parental consent gate is passed (gate-wiring is a separate task).
+  static const String analyticsConsentGranted = 'analytics_consent_granted';
+
   // Legacy keys kept for backward-compat with OnboardingStorage
   static const String onboardingAge = 'onboarding_age';
   static const String onboardingCefr = 'onboarding_cefr';

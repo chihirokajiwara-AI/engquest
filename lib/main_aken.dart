@@ -35,23 +35,31 @@ void main() async {
     if (kDebugMode) debugPrint('[Firebase] Init skipped: $e');
   }
 
-  // COPPA/child-safety: disable AAID collection and ad-related analytics.
-  // All users are children (ages 4-18); we never collect advertising IDs.
+  // COPPA/child-safety + privacy-by-default (#120): all users are children, so
+  // we never collect advertising IDs AND we collect NOTHING until a parent
+  // consents. Analytics stays OFF until [analyticsConsentGranted] is true (set
+  // only by the parental consent gate). Default = no consent = no collection.
+  final analyticsConsent = (await PreferencesService.getInstance())
+      .getBool(PrefKeys.analyticsConsentGranted);
   if (firebaseAvailable) {
     try {
-      await FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
+      await FirebaseAnalytics.instance
+          .setAnalyticsCollectionEnabled(analyticsConsent);
       await FirebaseAnalytics.instance.setConsent(
         adStorageConsentGranted: false,
         adPersonalizationSignalsConsentGranted: false,
         adUserDataConsentGranted: false,
-        analyticsStorageConsentGranted: true,
+        analyticsStorageConsentGranted: analyticsConsent,
       );
     } catch (e) {
       if (kDebugMode) debugPrint('[Analytics] Child config error: $e');
     }
   }
 
-  AnalyticsService.initialize(firebaseAvailable: firebaseAvailable);
+  AnalyticsService.initialize(
+    firebaseAvailable: firebaseAvailable,
+    analyticsConsentGranted: analyticsConsent,
+  );
 
   await NotificationService.instance.init(firebaseAvailable: firebaseAvailable);
   await NotificationService.instance.setupReminders();

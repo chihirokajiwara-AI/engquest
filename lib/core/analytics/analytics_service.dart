@@ -218,10 +218,22 @@ class AnalyticsService {
       _instance ??= AnalyticsService(sink: NoOpAnalytics());
 
   /// Creates the singleton with the appropriate sink based on Firebase
-  /// availability. Call once in main.dart after Firebase init.
-  static void initialize({required bool firebaseAvailable}) {
+  /// availability AND parental consent. Call once in main after Firebase init.
+  ///
+  /// PRIVACY-BY-DEFAULT (flaw-hunt #120, COPPA/APPI): a children's app must not
+  /// send ANY analytics until a parent consents. So the real Firebase sink is
+  /// used ONLY when Firebase is available AND [analyticsConsentGranted] is true;
+  /// otherwise we wire the NoOp sink so nothing leaves the device. The
+  /// app-startup paths additionally hold setAnalyticsCollectionEnabled OFF until
+  /// consent, so this is belt-and-suspenders. Consent defaults to FALSE.
+  static void initialize({
+    required bool firebaseAvailable,
+    bool analyticsConsentGranted = false,
+  }) {
     _instance = AnalyticsService(
-      sink: firebaseAvailable ? FirebaseAnalyticsAdapter() : NoOpAnalytics(),
+      sink: (firebaseAvailable && analyticsConsentGranted)
+          ? FirebaseAnalyticsAdapter()
+          : NoOpAnalytics(),
     );
   }
 
