@@ -147,10 +147,16 @@ class VoiceService {
           );
         }
       } else {
-        // ── Demo mode ──
-        // Simulate recording delay so the countdown stays in sync.
-        await Future<void>.delayed(recordingDuration);
-        recognised = _nextMockWord();
+        // ── Demo mode (no real speech recognition) ──
+        // We do NOT score in demo (the caller branches to honest shadowing
+        // practice — #124), so there is nothing to "recognise". Use a brief
+        // pause only (CAPPED, not the full ~60s recordingDuration) so tapping
+        // Done is never stuck waiting, and never feed a mock word into a fake
+        // score. Cap keeps tests (Duration.zero) instant.
+        const cap = Duration(milliseconds: 1200);
+        await Future<void>.delayed(
+            recordingDuration < cap ? recordingDuration : cap);
+        recognised = '';
       }
 
       // Evaluate match

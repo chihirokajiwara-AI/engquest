@@ -101,31 +101,28 @@ void main() {
       expect(service.isDemoMode, isTrue);
     });
 
-    test('evaluatePronunciation returns mock results in demo mode', () async {
+    test('demo mode does NOT fabricate a transcript (#124 honesty)', () async {
+      // With no real speech recognition we must not invent a word the child
+      // never said — the caller (#124) shows honest no-score shadowing practice.
       final service = VoiceService();
       final result = await service.evaluatePronunciation(
         targetWord: 'cat',
-        recordingDuration: Duration.zero, // no delay in tests
+        recordingDuration: Duration.zero, // capped → instant in tests
       );
-      // First mock word is 'cat' → correct
-      expect(result.result, VoiceResult.correct);
-      expect(result.transcribed, 'cat');
+      expect(result.transcribed, isEmpty,
+          reason: 'no ASR → no mock word fed into a fake score');
       expect(result.target, 'cat');
-      expect(result.confidence, 1.0);
     });
 
-    test('demo mode cycles through mock words', () async {
+    test('demo mode never cycles fabricated words — always empty (#124)', () async {
       final service = VoiceService();
-      final results = <String>[];
       for (int i = 0; i < 3; i++) {
         final r = await service.evaluatePronunciation(
           targetWord: 'cat',
           recordingDuration: Duration.zero,
         );
-        results.add(r.transcribed);
+        expect(r.transcribed, isEmpty);
       }
-      // Should cycle: cat, kat, dog
-      expect(results, ['cat', 'kat', 'dog']);
     });
   });
 

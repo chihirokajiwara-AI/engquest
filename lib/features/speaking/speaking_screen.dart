@@ -98,6 +98,10 @@ class _SpeakingScreenState extends State<SpeakingScreen>
   // ── Screen state ───────────────────────────────────────────────────────────
   _ScreenState _state = _ScreenState.idle;
   SpeakingScore? _lastScore;
+  // True when this device has NO real speech recognition (#124): we then show an
+  // HONEST shadowing-practice result with NO score, instead of fabricating a
+  // pronunciation score from a mock word the child never said.
+  bool _demoPractice = false;
   String _transcript = '';
 
   // ── Prep countdown ─────────────────────────────────────────────────────────
@@ -227,6 +231,20 @@ class _SpeakingScreenState extends State<SpeakingScreen>
   }
 
   Future<void> _evaluate() async {
+    // HONESTY (#124): with no real speech recognition we cannot judge the child's
+    // pronunciation — so we DON'T. Show an honest shadowing-practice result (no
+    // score) rather than scoring a mock word the child never said.
+    if (_voice.isDemoMode) {
+      if (!mounted) return;
+      setState(() {
+        _transcript = ''; // never surface a mock word as "what you said"
+        _lastScore = null;
+        _demoPractice = true;
+        _state = _ScreenState.result;
+      });
+      return;
+    }
+
     final scored = widget.scorer.score(
       referenceText: _current.referenceText,
       transcript: _transcript,
@@ -236,6 +254,7 @@ class _SpeakingScreenState extends State<SpeakingScreen>
     if (!mounted) return;
     setState(() {
       _lastScore = scored;
+      _demoPractice = false;
       _state = _ScreenState.result;
     });
 
@@ -260,6 +279,7 @@ class _SpeakingScreenState extends State<SpeakingScreen>
     setState(() {
       _state = _ScreenState.idle;
       _lastScore = null;
+      _demoPractice = false;
       _transcript = '';
     });
     _maybeStartPrep();
@@ -270,6 +290,7 @@ class _SpeakingScreenState extends State<SpeakingScreen>
     setState(() {
       _state = _ScreenState.idle;
       _lastScore = null;
+      _demoPractice = false;
       _transcript = '';
     });
     _maybeStartPrep();
@@ -367,7 +388,9 @@ class _SpeakingScreenState extends State<SpeakingScreen>
           // Honest practice-guide note, shown only WITH a score (result state),
           // so the child sees it in context and is never shown internal
           // engineering details (no "Azure", "/v1/...", "開発中").
-          if (_state == _ScreenState.result) ...[
+          // The "this score is a practice guide" note belongs only WITH a score;
+          // the demo no-score result carries its own honest copy (#124).
+          if (_state == _ScreenState.result && !_demoPractice) ...[
             const SizedBox(height: 10),
             _buildPracticeNote(),
           ],
@@ -626,6 +649,7 @@ class _SpeakingScreenState extends State<SpeakingScreen>
   // ── Result area ─────────────────────────────────────────────────────────────
 
   Widget _buildResultArea() {
+    if (_demoPractice) return _buildDemoPracticeResult();
     final s = _lastScore;
     if (s == null) return const SizedBox.shrink();
 
@@ -688,6 +712,54 @@ class _SpeakingScreenState extends State<SpeakingScreen>
           label: _session.currentIndex >= _session.totalSteps - 1
               ? 'けっかを見る / See Results'
               : '次へ / Next Question',
+          onTap: _advance,
+        ),
+      ],
+    );
+  }
+
+  /// Honest result when there is NO real speech recognition (#124): NO score,
+  /// no fake praise — just acknowledge the child spoke and steer them to
+  /// shadow the model aloud. The real 二次 is human-scored.
+  Widget _buildDemoPracticeResult() {
+    return Column(
+      children: [
+        DqPanel(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.record_voice_over_outlined,
+                      color: dqGold, size: 28),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      'こえに だして いえたかな？',
+                      style: dqText(size: 16, color: dqGold),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'この きしゅ（たんまつ）では はつおんの 点数（てんすう）は つけられません。'
+                'おてほんを もういちど きいて、こえに だして まねしてみよう。',
+                style: dqText(size: 13, color: dqInk).copyWith(height: 1.6),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                '本番（ほんばん）の二次（にじ）は、先生（せんせい）が じっさいに きいて 採点（さいてん）します。',
+                style: dqText(size: 11, color: dqGoldDeep, spacing: 0.3),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+        DqButton(
+          label: _session.currentIndex >= _session.totalSteps - 1
+              ? 'れんしゅう おわり / Done'
+              : '次へ / Next',
           onTap: _advance,
         ),
       ],
