@@ -79,28 +79,41 @@ void main() {
   });
 
   group('VocabGrammarPracticeScreen — smoke tests (R3)', () {
-    testWidgets('grade 5 (has vocab DB) — loads real questions, no exception',
-        (tester) async {
-      await tester.pumpWidget(MaterialApp(
-        home: VocabGrammarPracticeScreen(
-          eikenGrade: '5',
-          section: _vocabSection(),
-        ),
-      ));
-      // Skeleton-first (#52): _loadQuestions now starts in a post-frame
-      // callback, so pump once to fire it, then flush the REAL rootBundle I/O
-      // (which fake-time pump() can't) under runAsync, then rebuild and assert
-      // the loaded content (not the spinner).
-      await tester.pump();
-      await tester.runAsync(
-          () => Future<void>.delayed(const Duration(milliseconds: 400)));
-      await tester.pump();
-      expect(find.byType(VocabGrammarPracticeScreen), findsOneWidget);
-      // The DB-backed render path must actually run: spinner gone, real text up.
-      expect(find.byType(CircularProgressIndicator), findsNothing);
-      expect(find.byType(Text), findsWidgets);
-      expect(tester.takeException(), isNull);
-    });
+    // #40: assert REAL content, not just "no spinner + some Text". A weak
+    // assertion let pre2plus silently serve ZERO questions while the test passed
+    // (#34) — the same class of bug can hit any grade if its bank degrades or its
+    // distractor pool can't field a single clean item. So every grade with a
+    // vocab DB must prove its 大問1 actually builds questions (debugCorrectChoices
+    // non-empty), not merely that the spinner cleared.
+    for (final grade in ['5', '4', '3', 'pre2', 'pre2plus', '2', 'pre1']) {
+      testWidgets('grade $grade builds REAL 大問1 questions, not an empty '
+          'shell (#40)', (tester) async {
+        // Tall surface so the cloze + choices lay out (default 800x600 is short).
+        tester.view.physicalSize = const Size(800, 1600);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.reset);
+        await tester.pumpWidget(MaterialApp(
+          home: VocabGrammarPracticeScreen(
+            eikenGrade: grade,
+            section: _vocabSection(),
+          ),
+        ));
+        // Skeleton-first (#52): fire the post-frame _loadQuestions, then flush the
+        // REAL rootBundle I/O under runAsync (fake-time pump can't), then rebuild.
+        await tester.pump();
+        await tester.runAsync(
+            () => Future<void>.delayed(const Duration(milliseconds: 700)));
+        await tester.pump();
+        expect(find.byType(CircularProgressIndicator), findsNothing,
+            reason: 'grade $grade: load must finish (no stuck spinner)');
+        final state =
+            tester.state(find.byType(VocabGrammarPracticeScreen)) as dynamic;
+        expect((state.debugCorrectChoices as List), isNotEmpty,
+            reason: 'grade $grade: 大問1 must build real questions, not an '
+                'empty/準備中 shell');
+        expect(tester.takeException(), isNull);
+      });
+    }
 
     testWidgets('after answering, shows the word IN CONTEXT (れい:) — #77',
         (tester) async {
