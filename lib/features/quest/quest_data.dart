@@ -1790,7 +1790,7 @@ const List<QuestTown> kQuestTowns = [
         ],
         correctIndex: 2,
         onCorrect:
-            "...That was not the line you were told. You found your own words — and they will not leave my mind. This isn't over, traveller. We meet again at the King's City.",
+            "...That was not the line you were told. You found your own words — and they will not leave my mind. This isn't over, traveller. We meet again at the grey square — the centre, where the very first word was spoken.",
       ),
     ],
   ),
@@ -2316,9 +2316,9 @@ const List<QuestTown> kQuestTowns = [
         npcName: "れきしか",
         npcEmoji: "📜",
         npcLine:
-            "It was not the army ___ saved this city, but a single librarian who hid the books.",
+            "It was not force ___ saved this town, but a single librarian who hid the books.",
         npcLineJa:
-            "この町（まち）を救（すく）ったのは軍隊（ぐんたい）ではなく、本（ほん）を隠（かく）した一人（ひとり）の図書館員（としょかんいん）だったのです。",
+            "この町（まち）を救（すく）ったのは力（ちから）ではなく、本（ほん）を隠（かく）した一人（ひとり）の図書館員（としょかんいん）だったのです。",
         choices: ["which", "what", "who", "that"],
         correctIndex: 3,
         onCorrect:
