@@ -157,9 +157,12 @@ const Map<String, EikenExamDef> kEikenExams = {
         nameJa: '筆記4: 長文の内容一致選択',
         nameEn: 'Reading 4: Reading Comprehension',
         type: ExamSectionType.readingComprehension,
-        questionCount: 5,
+        // 4級 大問4 is 10問 (4A 掲示2 + 4B Eメール3 + 4C 説明文5), so 筆記 total =
+        // 15+5+5+10 = 35 — matching mock_exam/reading-pool targets. Was a stale 5
+        // (made the hub show 30, under-stating the exam). Verified eiken.or.jp.
+        questionCount: 10,
         timeLimitMinutes: 10,
-        description: 'パッセージを読んで質問に答える',
+        description: '掲示・Eメール・説明文の3つの長文を読んで質問に答える（計10問）',
       ),
       ExamSection(
         id: '4_l',

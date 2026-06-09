@@ -327,6 +327,7 @@ const List<String> kPreviewRouteNames = [
   'voice',
   'exam',
   'exam3',
+  'exam4',
   'exampre1',
   'vocab',
   'writing',
@@ -470,6 +471,9 @@ Widget _previewFor(String? name) {
       // 3級 = highest-enrollment grade; preview route for render-proofing its
       // section list (e.g. the 2-task writing section, #60).
       return const ExamPracticeScreen(eikenGrade: '3');
+    case 'exam4':
+      // 4級 hub — render-proof the 大問4 = 10問 reading structure (#60).
+      return const ExamPracticeScreen(eikenGrade: '4');
     case 'exampre1':
       // 準1 hub — verifies the listening tile is present (#75) for the flagship grade.
       return const ExamPracticeScreen(eikenGrade: 'pre1');

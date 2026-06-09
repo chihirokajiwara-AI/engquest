@@ -92,4 +92,32 @@ void main() {
               '(5/4級=なし; 3級〜準1級=2題). 3級 was a stale 1.');
     }
   });
+
+  // grade → official total 筆記 READING-skill question count (大問1〜4: 語句空所補充
+  // + 会話空所 + 語句整序 + 長文内容一致). Only the SETTLED grades 5/4/3 are locked
+  // here; 準2級〜準1級 reading sections still sum below official pending content
+  // re-author (#60/#108), so they are tracked by mock_exam/reading-pool targets,
+  // not pinned here. 4級 was a stale 30 (大問4=5) — this guard would have caught it.
+  // Verified eiken.or.jp: 5級=25, 4級=35, 3級=30 (post-2024). 2026-06-09.
+  const readingTotal = <String, int>{'5': 25, '4': 35, '3': 30};
+  const readingTypes = {
+    ExamSectionType.vocabGrammar,
+    ExamSectionType.conversationComplete,
+    ExamSectionType.wordOrdering,
+    ExamSectionType.readingComprehension,
+  };
+
+  test('筆記 reading-skill total matches official for the settled grades 5/4/3',
+      () {
+    for (final entry in readingTotal.entries) {
+      final def = kEikenExams[entry.key];
+      expect(def, isNotNull, reason: 'missing exam def for ${entry.key}');
+      final total = def!.sections
+          .where((s) => readingTypes.contains(s.type))
+          .fold<int>(0, (sum, s) => sum + s.questionCount);
+      expect(total, entry.value,
+          reason: '英検${entry.key} 筆記 reading total should be ${entry.value}問 '
+              '(大問1〜4). 4級 was a stale 30 (大問4 was 5, should be 10).');
+    }
+  });
 }
