@@ -59,3 +59,15 @@ audio/listening/l4_p1_07.mp3 | 2026-06-09 | 4級 第1部 expansion; Kokoro gen p
 audio/listening/l4_p1_08.mp3 | 2026-06-09 | 4級 第1部 expansion; Kokoro gen pending
 audio/listening/l4_p1_09.mp3 | 2026-06-09 | 4級 第1部 expansion; Kokoro gen pending
 audio/listening/l4_p1_10.mp3 | 2026-06-09 | 4級 第1部 expansion; Kokoro gen pending
+audio/listening/l4_p2_05.mp3 | 2026-06-09 | 4級 第2/3部 expansion to 10/part; Kokoro gen pending
+audio/listening/l4_p2_06.mp3 | 2026-06-09 | 4級 第2/3部 expansion to 10/part; Kokoro gen pending
+audio/listening/l4_p2_07.mp3 | 2026-06-09 | 4級 第2/3部 expansion to 10/part; Kokoro gen pending
+audio/listening/l4_p2_08.mp3 | 2026-06-09 | 4級 第2/3部 expansion to 10/part; Kokoro gen pending
+audio/listening/l4_p2_09.mp3 | 2026-06-09 | 4級 第2/3部 expansion to 10/part; Kokoro gen pending
+audio/listening/l4_p2_10.mp3 | 2026-06-09 | 4級 第2/3部 expansion to 10/part; Kokoro gen pending
+audio/listening/l4_p3_05.mp3 | 2026-06-09 | 4級 第2/3部 expansion to 10/part; Kokoro gen pending
+audio/listening/l4_p3_06.mp3 | 2026-06-09 | 4級 第2/3部 expansion to 10/part; Kokoro gen pending
+audio/listening/l4_p3_07.mp3 | 2026-06-09 | 4級 第2/3部 expansion to 10/part; Kokoro gen pending
+audio/listening/l4_p3_08.mp3 | 2026-06-09 | 4級 第2/3部 expansion to 10/part; Kokoro gen pending
+audio/listening/l4_p3_09.mp3 | 2026-06-09 | 4級 第2/3部 expansion to 10/part; Kokoro gen pending
+audio/listening/l4_p3_10.mp3 | 2026-06-09 | 4級 第2/3部 expansion to 10/part; Kokoro gen pending

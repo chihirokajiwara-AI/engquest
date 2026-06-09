@@ -32,7 +32,7 @@
 //
 // NOTE: 5級/4級 structure per verified spec (EIKEN-MASTERY-AND-GAPS-2026-06-06.json):
 //   5級: 第1部10 (応答選択) + 第2部5 (会話内容一致) + 第3部10 (文内容一致) = 25
-//   4級: same structure as 5級 (3部, 30問 total)
+//   4級: 第1部10 (応答選択) + 第2部10 (会話内容一致) + 第3部10 (文内容一致) = 30
 //   3級: 3部 = 30問
 //   準2級プラス/2級: 第1部15 (会話応答選択) + 第2部15 (文内容一致) = 30
 // Seed bank covers the VERIFIED per-grade 部 structure. Volume is being expanded
@@ -523,6 +523,114 @@ const _grade4Part2 = <ListeningItem>[
     ],
     correctIndex: 1,
   ),
+  ListeningItem(
+    part: 2,
+    grade: '4',
+    audioKey: 'l4_p2_05.mp3',
+    transcripts: [
+      'A: What time does the city library open?',
+      'B: It opens at nine in the morning.',
+    ],
+    questionType: ListeningQuestionType.dialogueContent,
+    question: 'When does the library open?',
+    choices: [
+      'At eight in the morning.',
+      'At nine in the morning.',
+      'At ten in the morning.',
+      'At noon.',
+    ],
+    correctIndex: 1,
+  ),
+  ListeningItem(
+    part: 2,
+    grade: '4',
+    audioKey: 'l4_p2_06.mp3',
+    transcripts: [
+      'A: Where did you buy that nice jacket?',
+      'B: I got it at the department store near the station.',
+    ],
+    questionType: ListeningQuestionType.dialogueContent,
+    question: 'Where did the girl buy her jacket?',
+    choices: [
+      'At a shop near her house.',
+      'On the internet.',
+      'At the department store near the station.',
+      'At the shopping mall.',
+    ],
+    correctIndex: 2,
+  ),
+  ListeningItem(
+    part: 2,
+    grade: '4',
+    audioKey: 'l4_p2_07.mp3',
+    transcripts: [
+      'A: How many pets do you have?',
+      'B: I have two dogs and a cat.',
+    ],
+    questionType: ListeningQuestionType.dialogueContent,
+    question: 'How many pets does the boy have?',
+    choices: [
+      'One.',
+      'Two.',
+      'Three.',
+      'Four.',
+    ],
+    correctIndex: 2,
+  ),
+  ListeningItem(
+    part: 2,
+    grade: '4',
+    audioKey: 'l4_p2_08.mp3',
+    transcripts: [
+      'A: Why didn\'t you come to practice yesterday?',
+      'B: I had a cold, so I stayed home.',
+    ],
+    questionType: ListeningQuestionType.dialogueContent,
+    question: 'Why did the girl miss practice?',
+    choices: [
+      'She had a lot of homework.',
+      'She had a cold.',
+      'She went on a trip.',
+      'She forgot about it.',
+    ],
+    correctIndex: 1,
+  ),
+  ListeningItem(
+    part: 2,
+    grade: '4',
+    audioKey: 'l4_p2_09.mp3',
+    transcripts: [
+      'A: What would you like to drink?',
+      'B: Orange juice, please.',
+    ],
+    questionType: ListeningQuestionType.dialogueContent,
+    question: 'What does the boy want to drink?',
+    choices: [
+      'Water.',
+      'Tea.',
+      'Milk.',
+      'Orange juice.',
+    ],
+    correctIndex: 3,
+  ),
+  ListeningItem(
+    part: 2,
+    grade: '4',
+    audioKey: 'l4_p2_10.mp3',
+    transcripts: [
+      'A: When is your sister coming back from London?',
+      'B: She will be back next month.',
+    ],
+    questionType: ListeningQuestionType.dialogueContent,
+    question: 'When will the sister return from London?',
+    choices: [
+      'Next week.',
+      'Next month.',
+      'Next year.',
+      'This weekend.',
+    ],
+    correctIndex: 1,
+  ),
 ];
 
 const _grade4Part3 = <ListeningItem>[
@@ -598,6 +706,114 @@ const _grade4Part3 = <ListeningItem>[
       'For six months.',
     ],
     correctIndex: 1,
+  ),
+  ListeningItem(
+    part: 3,
+    grade: '4',
+    audioKey: 'l4_p3_05.mp3',
+    transcripts: [
+      'Welcome to Green Mart. Today only, all fruit is twenty percent off. '
+          'The sale ends at six o\'clock this evening. Thank you for shopping with us.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'When does the fruit sale end?',
+    choices: [
+      'At three o\'clock.',
+      'At five o\'clock.',
+      'At six o\'clock this evening.',
+      'Tomorrow morning.',
+    ],
+    correctIndex: 2,
+  ),
+  ListeningItem(
+    part: 3,
+    grade: '4',
+    audioKey: 'l4_p3_06.mp3',
+    transcripts: [
+      'Last Sunday I went to the zoo with my family. We saw lions, elephants, '
+          'and pandas. The pandas were my favorite.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'What was the speaker\'s favorite animal?',
+    choices: [
+      'The lions.',
+      'The elephants.',
+      'The pandas.',
+      'The monkeys.',
+    ],
+    correctIndex: 2,
+  ),
+  ListeningItem(
+    part: 3,
+    grade: '4',
+    audioKey: 'l4_p3_07.mp3',
+    transcripts: [
+      'Don\'t forget that tomorrow we have a math test. Please bring two pencils '
+          'and an eraser. The test will start at nine o\'clock.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'What should the students bring tomorrow?',
+    choices: [
+      'A dictionary.',
+      'Two pencils and an eraser.',
+      'A calculator.',
+      'Their textbooks.',
+    ],
+    correctIndex: 1,
+  ),
+  ListeningItem(
+    part: 3,
+    grade: '4',
+    audioKey: 'l4_p3_08.mp3',
+    transcripts: [
+      'I joined the tennis club this spring. We practice every Tuesday and '
+          'Thursday after school. I want to play in a tournament next year.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'How often does the speaker practice tennis?',
+    choices: [
+      'Once a week.',
+      'Twice a week.',
+      'Every day.',
+      'Three times a week.',
+    ],
+    correctIndex: 1,
+  ),
+  ListeningItem(
+    part: 3,
+    grade: '4',
+    audioKey: 'l4_p3_09.mp3',
+    transcripts: [
+      'Good morning. Here is today\'s weather. It will be sunny in the morning, '
+          'but it will rain in the afternoon. Please take an umbrella.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'What will the weather be like in the afternoon?',
+    choices: [
+      'It will be sunny.',
+      'It will be cloudy.',
+      'It will rain.',
+      'It will snow.',
+    ],
+    correctIndex: 2,
+  ),
+  ListeningItem(
+    part: 3,
+    grade: '4',
+    audioKey: 'l4_p3_10.mp3',
+    transcripts: [
+      'During summer vacation, my family traveled to Hokkaido by plane. '
+          'We stayed there for five days and ate a lot of fresh seafood.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'How did the speaker\'s family travel to Hokkaido?',
+    choices: [
+      'By train.',
+      'By car.',
+      'By plane.',
+      'By ship.',
+    ],
+    correctIndex: 2,
   ),
 ];
 
@@ -1316,7 +1532,8 @@ const _gradePre2Part2 = <ListeningItem>[
           'poor sleep quality.',
     ],
     questionType: ListeningQuestionType.passageContent,
-    question: 'According to the study, how much time do teenagers spend on social media daily?',
+    question:
+        'According to the study, how much time do teenagers spend on social media daily?',
     choices: [
       'One hour.',
       'Two hours.',
@@ -1336,7 +1553,8 @@ const _gradePre2Part2 = <ListeningItem>[
           'and a sense of purpose called "ikigai."',
     ],
     questionType: ListeningQuestionType.passageContent,
-    question: 'What do researchers NOT mention as a reason for longevity in Okinawa?',
+    question:
+        'What do researchers NOT mention as a reason for longevity in Okinawa?',
     choices: [
       'A healthy plant-based diet.',
       'Strong social connections.',
@@ -1555,7 +1773,8 @@ const _grade2Part2 = <ListeningItem>[
           'in addressing this problem.',
     ],
     questionType: ListeningQuestionType.passageContent,
-    question: 'What do scientists consider a key step in addressing the microplastics problem?',
+    question:
+        'What do scientists consider a key step in addressing the microplastics problem?',
     choices: [
       'Developing better ocean filtration systems.',
       'Banning all forms of plastic packaging worldwide.',
