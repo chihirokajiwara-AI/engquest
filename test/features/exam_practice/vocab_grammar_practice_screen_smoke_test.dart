@@ -87,9 +87,11 @@ void main() {
           section: _vocabSection(),
         ),
       ));
-      // initState kicks an async rootBundle load of eiken5_vocab.json. That is
-      // a REAL I/O future that fake-time pump() can't flush — resolve it under
-      // runAsync, then rebuild and assert the loaded content (not the spinner).
+      // Skeleton-first (#52): _loadQuestions now starts in a post-frame
+      // callback, so pump once to fire it, then flush the REAL rootBundle I/O
+      // (which fake-time pump() can't) under runAsync, then rebuild and assert
+      // the loaded content (not the spinner).
+      await tester.pump();
       await tester.runAsync(
           () => Future<void>.delayed(const Duration(milliseconds: 400)));
       await tester.pump();
@@ -108,6 +110,7 @@ void main() {
           section: _vocabSection(),
         ),
       ));
+      await tester.pump(); // fire the post-frame _loadQuestions (#52)
       await tester.runAsync(
           () => Future<void>.delayed(const Duration(milliseconds: 400)));
       await tester.pump();

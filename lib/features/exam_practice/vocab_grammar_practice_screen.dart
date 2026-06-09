@@ -42,12 +42,12 @@ bool hasCleanCloze(String sentence, String word) {
       .hasMatch(sentence)) {
     return false;
   }
-  final whole =
-      RegExp('\\b${RegExp.escape(w)}\\b', caseSensitive: false)
-          .allMatches(sentence)
-          .length;
-  final anySub =
-      RegExp(RegExp.escape(w), caseSensitive: false).allMatches(sentence).length;
+  final whole = RegExp('\\b${RegExp.escape(w)}\\b', caseSensitive: false)
+      .allMatches(sentence)
+      .length;
+  final anySub = RegExp(RegExp.escape(w), caseSensitive: false)
+      .allMatches(sentence)
+      .length;
   return whole == 1 && anySub == 1;
 }
 
@@ -82,7 +82,17 @@ class _VocabGrammarPracticeScreenState
   @override
   void initState() {
     super.initState();
-    _loadQuestions();
+    // Skeleton-first (#52 "dead/slow tap"): the question build — vocab JSON
+    // decode (up to ~3.7 MB / ~1.4 s for 準1級) plus per-item anti-leak
+    // distractor synthesis (~0.2–0.5 s) — is heavy and CPU-bound, and Flutter
+    // web has no isolates (compute() runs on the main thread), so it CANNOT be
+    // moved off-thread. We instead paint the loading scaffold BEFORE starting
+    // it, so the tap shows this screen + spinner instantly instead of freezing
+    // the previous screen. Matches the post-frame pattern already used by the
+    // reading / listening / conversation practice screens.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _loadQuestions();
+    });
   }
 
   Future<void> _loadQuestions() async {
@@ -178,8 +188,7 @@ class _VocabGrammarPracticeScreenState
       TextSpan(text: sentence.substring(0, match.start)),
       TextSpan(
         text: sentence.substring(match.start, match.end),
-        style: const TextStyle(
-            color: dqGold, fontWeight: FontWeight.w800),
+        style: const TextStyle(color: dqGold, fontWeight: FontWeight.w800),
       ),
       TextSpan(text: sentence.substring(match.end)),
     ];
@@ -272,8 +281,7 @@ class _VocabGrammarPracticeScreenState
           ),
           Expanded(
             child: _loading
-                ? const Center(
-                    child: CircularProgressIndicator(color: dqGold))
+                ? const Center(child: CircularProgressIndicator(color: dqGold))
                 : _sessionDone
                     ? _buildResults()
                     : _questions.isEmpty
@@ -385,63 +393,63 @@ class _VocabGrammarPracticeScreenState
                 onTap: _answered ? null : () => _selectAnswer(i),
                 excludeSemantics: true,
                 child: Material(
-                color: bgColor,
-                borderRadius: BorderRadius.circular(12),
-                child: InkWell(
-                  key: ValueKey('vg_choice_$i'),
-                  onTap: () => _selectAnswer(i),
+                  color: bgColor,
                   borderRadius: BorderRadius.circular(12),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 14),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: borderColor, width: 1.5),
-                    ),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 28,
-                          height: 28,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: borderColor.withAlpha(30),
-                          ),
-                          child: Center(
-                            child: Text(
-                              '${i + 1}',
-                              style: TextStyle(
-                                color: textColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
+                  child: InkWell(
+                    key: ValueKey('vg_choice_$i'),
+                    onTap: () => _selectAnswer(i),
+                    borderRadius: BorderRadius.circular(12),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 14),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: borderColor, width: 1.5),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 28,
+                            height: 28,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: borderColor.withAlpha(30),
+                            ),
+                            child: Center(
+                              child: Text(
+                                '${i + 1}',
+                                style: TextStyle(
+                                  color: textColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Text(
-                            q.choices[i],
-                            style: TextStyle(
-                              color: textColor,
-                              fontSize: 16,
-                              fontWeight: isSelected
-                                  ? FontWeight.w600
-                                  : FontWeight.normal,
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Text(
+                              q.choices[i],
+                              style: TextStyle(
+                                color: textColor,
+                                fontSize: 16,
+                                fontWeight: isSelected
+                                    ? FontWeight.w600
+                                    : FontWeight.normal,
+                              ),
                             ),
                           ),
-                        ),
-                        if (_answered && isCorrect)
-                          const Icon(Icons.check_circle_rounded,
-                              color: Color(0xFF8BE08B), size: 22),
-                        if (_answered && isSelected && !isCorrect)
-                          const Icon(Icons.cancel_rounded,
-                              color: Color(0xFFE0853A), size: 22),
-                      ],
+                          if (_answered && isCorrect)
+                            const Icon(Icons.check_circle_rounded,
+                                color: Color(0xFF8BE08B), size: 22),
+                          if (_answered && isSelected && !isCorrect)
+                            const Icon(Icons.cancel_rounded,
+                                color: Color(0xFFE0853A), size: 22),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
               ),
             );
           }),
@@ -570,9 +578,7 @@ class _VocabGrammarPracticeScreenState
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
-              passed
-                  ? Icons.workspace_premium_rounded
-                  : Icons.refresh_rounded,
+              passed ? Icons.workspace_premium_rounded : Icons.refresh_rounded,
               size: 72,
               color: passed ? dqGold : dqInk.withAlpha(140),
             ),
