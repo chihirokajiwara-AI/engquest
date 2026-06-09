@@ -77,12 +77,20 @@ class PassProgressCard extends StatelessWidget {
   String _subtext() {
     final un = post.unmeasuredSkills;
     if (un.isEmpty) return 'れんしゅうした ぶんだけ 合格（ごうかく）に 近（ちか）づく。';
-    final names = [
-      if (un.contains(EikenSkill.writing)) 'ライティング',
+    // Writing is AI-graded (backend), so it is "AI採点で測る", not something the
+    // child measures by practising offline — say so honestly (#100 panel).
+    final hasWriting = un.contains(EikenSkill.writing);
+    final others = [
       if (un.contains(EikenSkill.listening)) 'リスニング',
       if (un.contains(EikenSkill.reading)) 'リーディング',
     ].join('・');
-    return '※ $names は これから 測（はか）るよ';
+    if (hasWriting && others.isEmpty) {
+      return '※ ライティングは AI採点で 測（はか）るよ';
+    }
+    if (hasWriting) {
+      return '※ ライティングは AI採点、$others は これから 測るよ';
+    }
+    return '※ $others は これから 測（はか）るよ';
   }
 
   Widget _buildConfident() {

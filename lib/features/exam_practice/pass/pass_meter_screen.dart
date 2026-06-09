@@ -210,11 +210,13 @@ class _PassHero extends StatelessWidget {
 
           // Provisional caption when a skill has no data yet — the headline %
           // counts that skill as 0, so it will rise once the child practices it.
+          // Writing is special: offline it can only be 未測定 because quality is
+          // AI-graded, so we say so honestly rather than "you haven't tried it"
+          // (which would be false — practicing writing offline records nothing).
           if (est.unmeasuredSkills.isNotEmpty) ...[
             const SizedBox(height: 6),
             Text(
-              '※ まだ れんしゅうしていない ぎじゅつが あるよ。\n'
-              'やってみると ごうかくりつは かわります（とちゅうけいさん）。',
+              _unmeasuredCaption(est.unmeasuredSkills),
               textAlign: TextAlign.center,
               style: dqText(size: 11, color: const Color(0xFF8A93B5)),
             ),
@@ -241,6 +243,24 @@ class _PassHero extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Honest caption for the unmeasured-skills disclosure. Writing offline is
+/// 未測定 because quality is AI-graded (backend), NOT because the learner hasn't
+/// tried — so its copy says "AI採点で測る（接続後）" instead of "やってみよう".
+String _unmeasuredCaption(Set<EikenSkill> unmeasured) {
+  final hasWriting = unmeasured.contains(EikenSkill.writing);
+  final others = unmeasured.where((s) => s != EikenSkill.writing).isNotEmpty;
+  if (hasWriting && !others) {
+    return '※ ライティングの 質は AI採点で 測ります（接続後）。\n'
+        'それまでは ライティングを のぞいた とちゅうけいさんです。';
+  }
+  if (hasWriting && others) {
+    return '※ ライティングは AI採点で 測ります（接続後）。\n'
+        'ほかの ぎじゅつは やってみると ごうかくりつが かわります。';
+  }
+  return '※ まだ れんしゅうしていない ぎじゅつが あるよ。\n'
+      'やってみると ごうかくりつは かわります（とちゅうけいさん）。';
 }
 
 // ── Per-skill bars ────────────────────────────────────────────────────────────
@@ -337,7 +357,12 @@ class _SkillBar extends StatelessWidget {
             Flexible(
               child: Text(
                 unmeasured
-                    ? 'まだ / not measured'
+                    // Writing quality is AI-graded (backend), so offline it is
+                    // "AI採点まち" — honestly distinct from a skill the learner
+                    // simply hasn't tried yet (#100 panel fast-follow).
+                    ? (skill == EikenSkill.writing
+                        ? 'AI採点まち / AI-graded'
+                        : 'まだ / not measured')
                     : '$score / $maxScore ($pctText)・$itemsAttemptedもん',
                 textAlign: TextAlign.right,
                 style: dqText(
@@ -384,11 +409,17 @@ class _WeakSkillCta extends StatelessWidget {
   Widget build(BuildContext context) {
     final labelJa = CseEstimator.skillLabelJa(skill);
     final labelEn = CseEstimator.skillLabelEn(skill);
+    // Writing offline is 未測定 because quality is AI-graded — not because it was
+    // never tried. Saying "ためしてみよう" would be false (offline writing records
+    // nothing). Instead point to the AI grade + the offline 見直しチェック (#100).
+    final writingUnmeasured = unmeasured && skill == EikenSkill.writing;
 
     return DqDialogBox(
-      speaker: unmeasured
-          ? 'まだの ぎじゅつ / Not tried yet'
-          : 'よわいぎじゅつ / Weak skill',
+      speaker: writingUnmeasured
+          ? 'AI採点まち / Graded by AI'
+          : unmeasured
+              ? 'まだの ぎじゅつ / Not tried yet'
+              : 'よわいぎじゅつ / Weak skill',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -398,7 +429,11 @@ class _WeakSkillCta extends StatelessWidget {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  unmeasured ? '$labelJaを ためしてみよう！' : '$labelJaを のばそう！',
+                  writingUnmeasured
+                      ? 'ライティングは AI先生が さいてん！'
+                      : unmeasured
+                          ? '$labelJaを ためしてみよう！'
+                          : '$labelJaを のばそう！',
                   style: dqText(size: 17, color: dqGold),
                 ),
               ),
@@ -406,11 +441,14 @@ class _WeakSkillCta extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            unmeasured
-                ? '$labelJa ($labelEn) は まだ いちども やっていないよ。'
-                    'いちど やってみると、ごうかくりつが もっと せいかくに なります。'
-                : '$labelJa ($labelEn) が $gradeLabel ごうかくの カギです。'
-                    'まいにち すこしずつ れんしゅうしよう！',
+            writingUnmeasured
+                ? 'ライティングの 中身の 質は AI先生が 採点します（接続後）。'
+                    '今は「見直しチェック」で 形（かたち）を たしかめられるよ。'
+                : unmeasured
+                    ? '$labelJa ($labelEn) は まだ いちども やっていないよ。'
+                        'いちど やってみると、ごうかくりつが もっと せいかくに なります。'
+                    : '$labelJa ($labelEn) が $gradeLabel ごうかくの カギです。'
+                        'まいにち すこしずつ れんしゅうしよう！',
             style: dqText(size: 14),
           ),
         ],
@@ -456,9 +494,9 @@ class _PassCelebration extends StatelessWidget {
 
 Color _meterColor(double pct) {
   if (pct >= 100) return const Color(0xFF8BE08B); // green — passing
-  if (pct >= 80) return const Color(0xFFF0D080);  // gold — close
-  if (pct >= 60) return const Color(0xFF6ABFEF);  // sky blue — building
-  return const Color(0xFFEDE3C8);                  // cream — early stage
+  if (pct >= 80) return const Color(0xFFF0D080); // gold — close
+  if (pct >= 60) return const Color(0xFF6ABFEF); // sky blue — building
+  return const Color(0xFFEDE3C8); // cream — early stage
 }
 
 String _gradeLabelJa(String grade) {
