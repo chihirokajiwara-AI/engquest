@@ -29,6 +29,7 @@ import 'package:engquest/features/exam_practice/listening_practice_screen.dart';
 import 'package:engquest/features/exam_practice/listening_data.dart';
 import 'package:engquest/features/exam_practice/vocab_grammar_practice_screen.dart';
 import 'package:engquest/features/quest/ui/dq_ui.dart';
+import 'package:engquest/core/audio/audio_assets.dart';
 
 ExamSection _section(ExamSectionType type) => ExamSection(
       id: 'x',
@@ -250,6 +251,51 @@ void main() {
     final reading = await _readingFor(grade);
     expect(reading.itemsAttempted, equals(0),
         reason: 'listening leaked into reading — the copy-paste miswire bug');
+  });
+
+  testWidgets('リスニング: items with NO bundled audio are EXCLUDED from 合格率 (#112)',
+      (tester) async {
+    // HONESTY: a listening item whose clip isn't bundled can only be guessed —
+    // it must NOT count as measured listening skill. Inject a manifest that has
+    // every 5級 clip EXCEPT the first item's, and assert only n-1 are recorded.
+    const grade = '5';
+    final items = kListeningItems[grade]!;
+    final n = items.length;
+    expect(n, greaterThanOrEqualTo(2));
+    AudioAssets.debugAssets = {
+      for (final it in items.skip(1)) 'assets/audio/listening/${it.audioKey}',
+    }; // item 0's key is deliberately absent
+    addTearDown(AudioAssets.resetForTest);
+
+    await tester.pumpWidget(MaterialApp(
+      home: ListeningPracticeScreen(
+        eikenGrade: grade,
+        section: _section(ExamSectionType.listening),
+      ),
+    ));
+    await tester.pump();
+    await tester.pump(); // let the async audio-existence probe resolve
+
+    for (var i = 0; i < n; i++) {
+      final start = find.text('はじめる / Start');
+      if (start.evaluate().isNotEmpty) {
+        await tester.tap(start);
+        await tester.pump();
+      }
+      await tester.tap(find.byType(DqChoice).at(items[i].correctIndex));
+      await tester.pump();
+      await tester.tap(
+          find.text(i < n - 1 ? 'つぎへ / Next' : 'けっか / Results'));
+      await tester.pump();
+    }
+    await tester.pump(const Duration(milliseconds: 300));
+    await tester.pump();
+
+    final listening = await _skillFor(grade, EikenSkill.listening);
+    expect(listening.itemsAttempted, equals(n - 1),
+        reason: 'the 1 no-audio item is excluded; only n-1 audible recorded');
+    expect(listening.accuracy, equals(1.0),
+        reason: 'every audible answer was correct → 100%');
   });
 
   // ── 大問1 vocab/grammar (#37) ──────────────────────────────────────────────

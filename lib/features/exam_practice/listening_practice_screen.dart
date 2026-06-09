@@ -23,6 +23,7 @@
 
 import 'package:flutter/material.dart';
 
+import '../../core/audio/audio_assets.dart';
 import '../../core/audio/audio_cue_service.dart';
 import '../../core/audio/audio_mute.dart';
 import '../quest/ui/dq_ui.dart';
@@ -59,6 +60,18 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
   bool _sessionDone = false;
   bool _partHeaderShown = false;
 
+  // HONESTY (CEO 2026-06-09 flaw-hunt #112): a listening item whose audio clip
+  // is not actually bundled (the 40 ALLOWED_MISSING l3/l4 part-2/3 clips) can be
+  // "answered" only by guessing from the question — recording that as listening
+  // skill would inflate the 合格率 with un-heard answers. We therefore (a) mark
+  // each item's audio availability, (b) show an honest 準備中 note instead of a
+  // dead 🔊, and (c) feed 合格率 ONLY the items the child could actually hear.
+  // [_audioOk] defaults true (AudioAssets.exists degrades to "present" if the
+  // manifest can't be read) so a real clip is never wrongly excluded.
+  List<bool> _audioOk = const [];
+  int _measuredTotal = 0; // items answered with real, audible audio
+  int _measuredCorrect = 0; // correct among those
+
   // Brings the post-answer スクリプト (transcript) into view — it renders below
   // the choices, so without this the listening 解説 sits below the fold.
   final ScrollController _scroll = ScrollController();
@@ -69,7 +82,25 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
     _cue = AudioCueService();
     _items = kListeningItems[widget.eikenGrade] ?? [];
     _partHeaderShown = _items.isEmpty;
+    // Probe each item's audio availability (manifest-based, no byte load). Starts
+    // optimistic (all true) so an item is never wrongly excluded before the check
+    // resolves; flips an item false only if its clip is genuinely not bundled.
+    _audioOk = List<bool>.filled(_items.length, true);
+    for (var i = 0; i < _items.length; i++) {
+      final idx = i;
+      AudioAssets.exists('audio/listening/${_items[i].audioKey}').then((ok) {
+        if (mounted && !ok) setState(() => _audioOk[idx] = false);
+      });
+    }
   }
+
+  /// Whether the CURRENT item can honestly count toward the listening 合格率:
+  /// its audio is bundled AND the Voice channel isn't muted (a muted child did
+  /// not actually hear it either). Index-guarded against an early build.
+  bool get _currentMeasurable =>
+      _currentIdx < _audioOk.length &&
+      _audioOk[_currentIdx] &&
+      !AudioMute.voiceMuted;
 
   @override
   void dispose() {
@@ -101,10 +132,17 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
     if (_answered) return;
     final item = _current;
     if (item == null) return;
+    final measurable = _currentMeasurable;
     setState(() {
       _selectedAnswer = idx;
       _answered = true;
-      if (idx == item.correctIndex) _correctCount++;
+      final correct = idx == item.correctIndex;
+      if (correct) _correctCount++;
+      // Only audible items feed the 合格率 (honest listening measurement).
+      if (measurable) {
+        _measuredTotal++;
+        if (correct) _measuredCorrect++;
+      }
     });
     // Reveal the スクリプト (what was said) so the child can read what they
     // misheard — the listening learning loop, using the authored transcript.
@@ -122,13 +160,17 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
   Future<void> _recordSessionResult() async {
     if (_items.isEmpty) return;
     recordExamHabit(_items.length); // streak + daily-goal, not just 合格率
+    // Honesty: feed 合格率 ONLY the items the child could actually hear. If none
+    // were audible (e.g. a grade whose clips aren't bundled), record nothing —
+    // listening stays honestly 未測定 rather than logging un-heard guesses.
+    if (_measuredTotal == 0) return;
     try {
       final store = await SkillAccuracyStore.getInstance();
       await store.record(
         grade: widget.eikenGrade,
         skill: EikenSkill.listening,
-        correct: _correctCount,
-        total: _items.length,
+        correct: _measuredCorrect,
+        total: _measuredTotal,
       );
     } catch (_) {
       // Store errors are non-fatal — never interrupt the learner.
@@ -329,12 +371,17 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
           ),
           const SizedBox(height: 16),
 
-          // 🔊 Large replay button — always visible (CEO directive + web autoplay)
+          // 🔊 Large replay button — OR, when this item's clip isn't bundled, an
+          // honest 準備中 note (no dead button) that also says it won't count
+          // toward 合格率 (#112). [_audioOk] starts true so the button is the
+          // default; the note only appears for a genuinely-missing clip.
           Center(
-            child: DqReplayButton(
-              label: '🔊 もう いちど きく',
-              onTap: _playAudio,
-            ),
+            child: (_currentIdx < _audioOk.length && !_audioOk[_currentIdx])
+                ? _missingAudioNote()
+                : DqReplayButton(
+                    label: '🔊 もう いちど きく',
+                    onTap: _playAudio,
+                  ),
           ),
           const SizedBox(height: 20),
 
@@ -389,6 +436,33 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
     );
   }
 
+  /// Honest stand-in when this item's listening clip isn't bundled (#112): no
+  /// dead 🔊, and a plain note that this question won't count toward 合格率.
+  Widget _missingAudioNote() => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          color: dqBox.withAlpha(220),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: dqGoldDeep.withAlpha(120)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              '🔇 この問題（もんだい）は 音声（おんせい）じゅんびちゅう',
+              textAlign: TextAlign.center,
+              style: dqText(size: 13, w: FontWeight.w700, color: dqInk),
+            ),
+            const SizedBox(height: 3),
+            Text(
+              '合格率（ごうかくりつ）には 入（い）れません',
+              textAlign: TextAlign.center,
+              style: dqText(size: 11, color: dqGold),
+            ),
+          ],
+        ),
+      );
+
   // ── Results ───────────────────────────────────────────────────────────────
 
   Widget _buildResults(BuildContext context) {
@@ -434,6 +508,15 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
                 ],
               ),
             ),
+            if (_items.length - _measuredTotal > 0) ...[
+              const SizedBox(height: 12),
+              Text(
+                '音声（おんせい）のない ${_items.length - _measuredTotal}問（もん）は、\n'
+                '合格率（ごうかくりつ）に 入（い）れていません。',
+                textAlign: TextAlign.center,
+                style: dqText(size: 12, color: dqInk.withAlpha(170)),
+              ),
+            ],
             const SizedBox(height: 32),
             DqButton(
               label: 'もどる / Back',
