@@ -529,6 +529,13 @@ String _motivationalNote(CseEstimate est) {
   final limitJa = est.limitingSkill != null
       ? CseEstimator.skillLabelJa(est.limitingSkill!)
       : 'れんしゅう';
+  // Writing is AI-graded — offline it cannot be "tried into" the gauge, so urge
+  // the AI grade + 見直しチェック, not "try it" (which would be false).
+  if (est.limitingSkill == EikenSkill.writing &&
+      est.unmeasuredSkills.contains(EikenSkill.writing)) {
+    return 'ライティングの 質は AI先生が 採点します（接続後）。'
+        'それまでは「見直しチェック」で 形（かたち）を ととのえておこう！';
+  }
   // If the weakest skill is simply untried, urge trying it (not "improve").
   if (est.limitingSkill != null &&
       est.unmeasuredSkills.contains(est.limitingSkill)) {
