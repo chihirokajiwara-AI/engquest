@@ -22,6 +22,7 @@ import '../exam_practice/pass/cse_model.dart';
 import '../exam_practice/pass/skill_accuracy_store.dart';
 import 'hotspot.dart';
 import 'nazo_screen.dart';
+import 'scene_solved_store.dart';
 
 export 'hotspot.dart'
     show
@@ -112,6 +113,19 @@ class _SceneViewState extends State<SceneView> {
     super.initState();
     _coins = HintCoinService();
     _loadCoinBalance();
+    _restoreSolved();
+  }
+
+  /// Restore which ナゾ were already solved so the world the child coloured in
+  /// STAYS coloured across sessions (#115) — no silent re-greying overnight.
+  Future<void> _restoreSolved() async {
+    final solved = await SceneSolvedStore.solvedIndices(widget.eikenLevel);
+    if (!mounted || solved.isEmpty) return;
+    setState(() {
+      for (final idx in solved) {
+        _solved[idx] = true;
+      }
+    });
   }
 
   Future<void> _loadCoinBalance() async {
@@ -182,8 +196,19 @@ class _SceneViewState extends State<SceneView> {
     );
     if (!mounted) return;
     if (result != null && result.solved) {
+      final wasRestored = _sceneRestored;
       setState(() => _solved[idx] = true);
+      // Persist so the restored colour survives the next session (#115).
+      SceneSolvedStore.markSolved(widget.eikenLevel, idx);
       _sound.playCorrect();
+      // Completion payoff: when THIS solve restores the whole scene (grey→colour
+      // flood), give a "case closed" beat so the world earns a return visit —
+      // not just a silent saturation tween (#115). Only on the live transition.
+      if (!wasRestored && _sceneRestored) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) _showSceneClearedPayoff();
+        });
+      }
       // Front-door 英検 puzzle solved → feed the home engagement spine (streak +
       // daily-goal), same as exam practice. Before this, scene play earned ZERO
       // streak/goal credit.
@@ -226,6 +251,61 @@ class _SceneViewState extends State<SceneView> {
   /// Whole-scene colour is "restored" once every ナゾ is solved → the background
   /// plate floods grey→colour (the lean-Layton core verb).
   bool get _sceneRestored => allNpcsSolved(widget.scene, _solved);
+
+  /// One-time "case closed" payoff shown the moment the last ナゾ floods the
+  /// scene back to colour (#115). A real beat — not just the silent saturation
+  /// tween — so clearing a town feels earned and worth coming back to.
+  void _showSceneClearedPayoff() {
+    showDialog<void>(
+      context: context,
+      barrierColor: Colors.black.withAlpha(160),
+      builder: (ctx) => Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 28),
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(20, 22, 20, 18),
+          decoration: BoxDecoration(
+            color: dqBox,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: dqGold, width: 2),
+            boxShadow: [BoxShadow(color: dqGold.withAlpha(70), blurRadius: 24)],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('🎉', style: TextStyle(fontSize: 48)),
+              const SizedBox(height: 8),
+              Text(
+                'この むらに、ことばと いろが もどった！',
+                textAlign: TextAlign.center,
+                style: dqText(size: 17, w: FontWeight.w800, color: dqGold),
+              ),
+              const SizedBox(height: 12),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: dqNight1,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: dqGoldDeep.withAlpha(120)),
+                ),
+                child: Text(
+                  'たんていメモ：さいしょの「こえの いし」を とりもどした。\n'
+                  'スラ：「きみと いっしょなら、つぎの まちも きっと いける！」',
+                  style: dqText(size: 13, color: dqInk).copyWith(height: 1.6),
+                ),
+              ),
+              const SizedBox(height: 16),
+              DqButton(
+                label: 'つづける',
+                onTap: () => Navigator.of(ctx).pop(),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
