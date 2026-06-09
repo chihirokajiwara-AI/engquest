@@ -122,8 +122,7 @@ class OnboardingStorage {
     await p.setString(_kAvatar, result.avatarId);
     await p.setInt(_kGoal, result.dailyGoalMinutes);
     // Persist θ̂ for T12 adaptive difficulty hook.
-    await p.setString(
-        _kPlacementTheta, result.placementTheta.toString());
+    await p.setString(_kPlacementTheta, result.placementTheta.toString());
   }
 
   static Future<OnboardingResult?> loadAsync() async {
@@ -294,20 +293,74 @@ ThemeData _dqTheme() {
 /// structural guard against the blank-grey-screen defect class (task #24).
 @visibleForTesting
 const List<String> kPreviewRouteNames = [
-  'title', 'onboarding', 'placement', 'worldmap', 'home', 'questmap',
-  'silentbattle', 'silentbattle4', 'prologue', 'prologue3', 'prologue4',
-  'prologue5', 'explore', 'explore4', 'explore3', 'explorepre2',
-  'explorepre2plus', 'explore2', 'explorepre1', 'mock', 'mockpre2plus',
-  'quest', 'quest5t', 'quest5', 'quest5q', 'quest5c', 'quest4', 'quest3',
-  'quest2', 'battle', 'dialog', 'voice', 'exam', 'exampre1', 'vocab', 'writing', 'writing2',
-  'writingp1', 'listening', 'listening4', 'listening3', 'listeningp2',
-  'kotobahome', 'passmeter', 'passmetermissing', 'passprogress', 'speaking',
+  'title',
+  'onboarding',
+  'placement',
+  'worldmap',
+  'home',
+  'questmap',
+  'silentbattle',
+  'silentbattle4',
+  'prologue',
+  'prologue3',
+  'prologue4',
+  'prologue5',
+  'explore',
+  'explore4',
+  'explore3',
+  'explorepre2',
+  'explorepre2plus',
+  'explore2',
+  'explorepre1',
+  'mock',
+  'mockpre2plus',
+  'quest',
+  'quest5t',
+  'quest5',
+  'quest5q',
+  'quest5c',
+  'quest4',
+  'quest3',
+  'quest2',
+  'battle',
+  'dialog',
+  'voice',
+  'exam',
+  'exam3',
+  'exampre1',
+  'vocab',
+  'writing',
+  'writing2',
+  'writingp1',
+  'listening',
+  'listening4',
+  'listening3',
+  'listeningp2',
+  'kotobahome',
+  'passmeter',
+  'passmetermissing',
+  'passprogress',
+  'speaking',
   'speakingconsent',
-  'listening2', 'achievements', 'parent', 'parentlogin', 'wordorder',
-  'conversation', 'conversation5', 'conversation4', 'conversationpre2',
-  'reading', 'reading3',
-  'readingpre2', 'reading2', 'reading2fill', 'readingpre1', 'readingpre1fill',
-  'settings', 'listeningpp', 'listeningp1',
+  'listening2',
+  'achievements',
+  'parent',
+  'parentlogin',
+  'wordorder',
+  'conversation',
+  'conversation5',
+  'conversation4',
+  'conversationpre2',
+  'reading',
+  'reading3',
+  'readingpre2',
+  'reading2',
+  'reading2fill',
+  'readingpre1',
+  'readingpre1fill',
+  'settings',
+  'listeningpp',
+  'listeningp1',
 ];
 
 /// Test-visible wrapper for the private preview harness.
@@ -333,9 +386,11 @@ Widget _previewFor(String? name) {
     case 'questmap':
       return const QuestMapScreen();
     case 'silentbattle': // Wave 1 — サイレント word-battle (skip intro, open in battle)
-      return QuestTownBattleFlow(town: kQuestTowns[0], previewStraightToBattle: true);
+      return QuestTownBattleFlow(
+          town: kQuestTowns[0], previewStraightToBattle: true);
     case 'silentbattle4':
-      return QuestTownBattleFlow(town: kQuestTowns[1], previewStraightToBattle: true);
+      return QuestTownBattleFlow(
+          town: kQuestTowns[1], previewStraightToBattle: true);
     case 'prologue':
       return PrologueScreen(onDone: () {});
     case 'prologue3':
@@ -380,14 +435,15 @@ Widget _previewFor(String? name) {
     case 'quest5q': // 英検5級 — first voiced 応答型 quiz (Phase C, 🔊 line audio)
       return QuestScreen(
         town: kQuestTowns[0],
-        previewEncounterIndex:
-            kQuestTowns[0].encounters.indexWhere((s) => s is QuestEncounter && s.autoPlayAudio != null),
+        previewEncounterIndex: kQuestTowns[0]
+            .encounters
+            .indexWhere((s) => s is QuestEncounter && s.autoPlayAudio != null),
       );
     case 'quest5c': // 英検5級 — a cloze (穴埋め) quiz: question 🔊 + self-voicing options
       return QuestScreen(
         town: kQuestTowns[0],
-        previewEncounterIndex:
-            kQuestTowns[0].encounters.indexWhere((s) => s is QuestEncounter && s.npcLine.contains('___')),
+        previewEncounterIndex: kQuestTowns[0].encounters.indexWhere(
+            (s) => s is QuestEncounter && s.npcLine.contains('___')),
       );
     case 'quest4':
       return QuestScreen(town: kQuestTowns[1], previewEncounterIndex: 9);
@@ -410,6 +466,10 @@ Widget _previewFor(String? name) {
       return const VoiceScreen();
     case 'exam':
       return const ExamPracticeScreen(eikenGrade: '5');
+    case 'exam3':
+      // 3級 = highest-enrollment grade; preview route for render-proofing its
+      // section list (e.g. the 2-task writing section, #60).
+      return const ExamPracticeScreen(eikenGrade: '3');
     case 'exampre1':
       // 準1 hub — verifies the listening tile is present (#75) for the flagship grade.
       return const ExamPracticeScreen(eikenGrade: 'pre1');
@@ -721,7 +781,9 @@ Widget _previewFor(String? name) {
             SkillAccuracy(
                 skill: EikenSkill.reading, accuracy: 0.72, itemsAttempted: 20),
             SkillAccuracy(
-                skill: EikenSkill.listening, accuracy: 0.61, itemsAttempted: 18),
+                skill: EikenSkill.listening,
+                accuracy: 0.61,
+                itemsAttempted: 18),
           ],
         ),
       );
@@ -896,7 +958,8 @@ class _AppEntryPointState extends State<_AppEntryPoint> {
                 children: [
                   const CircularProgressIndicator(color: dqGold),
                   const SizedBox(height: 16),
-                  Text(flavor.splashText, style: dqText(size: 14, color: dqInk)),
+                  Text(flavor.splashText,
+                      style: dqText(size: 14, color: dqInk)),
                 ],
               ),
             ),
