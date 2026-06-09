@@ -266,14 +266,30 @@ class _MockExamScreenState extends State<MockExamScreen> {
             Center(
               child: Padding(
                 padding: const EdgeInsets.only(right: 14),
-                child: Text(
-                  '⏱ ${_clock(_secondsLeft)}',
-                  style: TextStyle(
-                    color: low ? Colors.redAccent : dqGold,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    fontFeatures: const [FontFeature.tabularFigures()],
-                  ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Non-colour urgency cue (#127, WCAG 1.4.1): a colour-blind
+                    // child can't see the red shift, so a warning icon appears
+                    // when time is low — the SHAPE signals "hurry", not the hue.
+                    if (low)
+                      const Padding(
+                        padding: EdgeInsets.only(right: 4),
+                        child: Icon(Icons.warning_amber_rounded,
+                            color: Colors.redAccent,
+                            size: 20,
+                            semanticLabel: 'のこり時間 わずか'),
+                      ),
+                    Text(
+                      '⏱ ${_clock(_secondsLeft)}',
+                      style: TextStyle(
+                        color: low ? Colors.redAccent : dqGold,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        fontFeatures: const [FontFeature.tabularFigures()],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),

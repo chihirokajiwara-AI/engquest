@@ -163,6 +163,20 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
+    testWidgets('skill tiers carry a non-colour icon cue (#127 colour-blind)',
+        (tester) async {
+      // A strong skill and a weak skill must be distinguishable by SHAPE, not
+      // only the bar hue (8% of boys are red-green colour-blind, WCAG 1.4.1).
+      final est = _estimate(grade: '5', reading: 0.95, listening: 0.30);
+      await tester.pumpWidget(_wrap(PassMeterScreen(estimate: est)));
+      await tester.pump();
+      expect(find.byIcon(Icons.check_circle_outline), findsWidgets,
+          reason: 'strong skill → ✓ shape, independent of green');
+      expect(find.byIcon(Icons.priority_high), findsWidgets,
+          reason: 'weak skill → ! shape, independent of amber');
+      expect(tester.takeException(), isNull);
+    });
+
     testWidgets('skill bars section is present', (tester) async {
       await tester.pumpWidget(_wrap(const PassMeterScreen()));
       await tester.pump();

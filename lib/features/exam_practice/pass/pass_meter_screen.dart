@@ -300,6 +300,18 @@ class _SkillBars extends StatelessWidget {
   }
 }
 
+/// A shape-distinct icon for each performance tier, so the strong/building/
+/// needs-work state is NOT conveyed by bar colour alone (WCAG 2.2 SC 1.4.1 — 8%
+/// of boys are red-green colour-blind and the bar hues collapse for them). The
+/// icon shapes (✓ / ↗ / !) read regardless of colour. #127.
+({IconData icon, String labelJa}) _skillTier(double ratio) {
+  if (ratio >= 0.8) {
+    return (icon: Icons.check_circle_outline, labelJa: 'よくできている');
+  }
+  if (ratio >= 0.65) return (icon: Icons.trending_up, labelJa: 'あと少し');
+  return (icon: Icons.priority_high, labelJa: 'のばそう');
+}
+
 class _SkillBar extends StatelessWidget {
   final EikenSkill skill;
   final int score;
@@ -361,6 +373,15 @@ class _SkillBar extends StatelessWidget {
                 stacked: true,
               ),
             ),
+            if (!unmeasured) ...[
+              Icon(
+                _skillTier(ratio).icon,
+                color: barColor,
+                size: 16,
+                semanticLabel: _skillTier(ratio).labelJa,
+              ),
+              const SizedBox(width: 4),
+            ],
             const SizedBox(width: 8),
             Flexible(
               child: Text(
