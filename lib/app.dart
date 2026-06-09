@@ -26,7 +26,6 @@ import 'package:engquest/features/settings/settings_screen.dart';
 import 'package:engquest/features/achievements/achievements_screen.dart';
 import 'package:engquest/features/parent_dashboard/parent_dashboard_screen.dart';
 import 'package:engquest/features/parent_dashboard/parent_login_screen.dart';
-import 'package:engquest/features/home/daily_home_screen.dart';
 import 'package:engquest/core/storage/preferences_service.dart';
 import 'package:engquest/features/quest/ui/dq_ui.dart';
 import 'package:engquest/features/explore/scene_view.dart';
@@ -383,7 +382,10 @@ Widget _previewFor(String? name) {
     case 'worldmap':
       return const WorldMapScreen(childAge: 8);
     case 'home':
-      return const DailyHomeScreen(childAge: 8);
+      // 'home' now previews the LIVE home (KotobaHomeScreen), same as the
+      // running app — the old DailyHomeScreen was vestigial and made render
+      // -proofs of "home" misleading (#74).
+      return const KotobaHomeScreen();
     case 'questmap':
       return const QuestMapScreen();
     case 'silentbattle': // Wave 1 — サイレント word-battle (skip intro, open in battle)
