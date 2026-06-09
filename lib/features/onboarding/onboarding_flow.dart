@@ -374,10 +374,10 @@ class _StepAge extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: DqDialogBox(
-                  speaker: '賢者 / Sage',
+                  speaker: '賢者（けんじゃ） / Sage',
                   child: Text(
-                    'ようこそ、勇者よ。旅をはじめる前に、'
-                    'いくつか たずねたいことがある。\nそなたは 何才かな？',
+                    'ようこそ、勇者（ゆうしゃ）よ。旅（たび）をはじめる前（まえ）に、'
+                    'いくつか たずねたいことがある。\nそなたは 何才（なんさい）かな？',
                     style: dqText(size: 15, color: dqInk),
                   ),
                 ),
@@ -507,7 +507,7 @@ class _StepPlacement extends StatelessWidget {
           ),
           const SizedBox(height: 22),
           DqDialogBox(
-            speaker: '賢者 / Sage',
+            speaker: '賢者（けんじゃ） / Sage',
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -623,9 +623,9 @@ class _PlacementResult extends StatelessWidget {
           ),
           const SizedBox(height: 18),
           DqDialogBox(
-            speaker: '賢者 / Sage',
+            speaker: '賢者（けんじゃ） / Sage',
             child: Text(
-              'よし、そなたの ちからは わかった。\nさあ、旅の仲間を えらぼう。',
+              'よし、そなたの ちからは わかった。\nさあ、旅（たび）の仲間（なかま）を えらぼう。',
               style: dqText(size: 15, color: dqInk),
             ),
           ),
@@ -664,7 +664,7 @@ class _StepAvatar extends StatelessWidget {
           const SizedBox(height: 8),
           Center(
             child: dqBilingual(
-              '仲間を選ぼう',
+              '仲間（なかま）を選（えら）ぼう',
               'Choose Your Hero',
               jpSize: 22,
               jpColor: dqGold,
@@ -814,7 +814,7 @@ class _StepGoal extends StatelessWidget {
                   speaker:
                       '${avatar.name} / ${_avatarClassEn(avatar.jobTitle)}',
                   child: Text(
-                    '準備はいい？\n${_eikenLabel(outcome?.eikenLevel ?? '5')} から旅を はじめよう！',
+                    '準備（じゅんび）はいい？\n${_eikenLabel(outcome?.eikenLevel ?? '5')} から旅（たび）を はじめよう！',
                     style: dqText(size: 15, color: dqInk),
                   ),
                 ),
