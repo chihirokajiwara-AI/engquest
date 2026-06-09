@@ -33,6 +33,7 @@ const Map<String, CefrLevel> kGradeCefrCeiling = {
   '4': CefrLevel.a2,
   '3': CefrLevel.b1,
   'pre2': CefrLevel.b1,
+  'pre2plus': CefrLevel.b1,
   '2': CefrLevel.b2,
   'pre1': CefrLevel.b2,
 };

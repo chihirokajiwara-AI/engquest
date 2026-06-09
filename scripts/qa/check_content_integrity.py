@@ -26,6 +26,7 @@ VOCAB_FILES = [
     'eiken4_vocab.json',
     'eiken3_vocab.json',
     'eiken_pre2_vocab.json',
+    'eiken_pre2plus_vocab.json',
     'eiken2_vocab.json',
     'eiken_pre1_vocab.json',
 ]
@@ -116,6 +117,7 @@ GRADE_CEFR_CEILING = {
     'eiken4_vocab.json': 'A2',
     'eiken3_vocab.json': 'B1',
     'eiken_pre2_vocab.json': 'B1',
+    'eiken_pre2plus_vocab.json': 'B1',
     'eiken2_vocab.json': 'B2',
     'eiken_pre1_vocab.json': 'B2',
 }

@@ -130,17 +130,37 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('grade pre2plus (no vocab DB) — shows 準備中, no exception',
-        (tester) async {
+    testWidgets('grade pre2plus now has a vocab DB — builds real questions, '
+        'not 準備中 (#34)', (tester) async {
+      // Tall surface so the cloze + 4 choices lay out on-screen (default 800x600
+      // is too short), mirroring the record-path harness.
+      tester.view.physicalSize = const Size(800, 1600);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
       await tester.pumpWidget(MaterialApp(
         home: VocabGrammarPracticeScreen(
           eikenGrade: 'pre2plus',
           section: _vocabSection(),
         ),
       ));
+      // Skeleton-first (#52): fire the post-frame _loadQuestions, then flush the
+      // REAL rootBundle I/O under runAsync (fake-time pump can't), then rebuild.
       await tester.pump();
-      await tester.pump(const Duration(milliseconds: 100));
+      await tester.runAsync(
+          () => Future<void>.delayed(const Duration(milliseconds: 600)));
+      await tester.pump();
       expect(tester.takeException(), isNull);
+      // pre2plus is no longer a 準備中 grade — its derived B1 bank fills 大問1.
+      expect(find.textContaining('準備中'), findsNothing,
+          reason: 'pre2plus now serves a real 大問1 bank (#34)');
+      // Proof the questions actually built (layout-independent): the screen's
+      // correct-answer list is non-empty.
+      final state =
+          tester.state(find.byType(VocabGrammarPracticeScreen)) as dynamic;
+      expect((state.debugCorrectChoices as List), isNotEmpty,
+          reason: 'derived pre2plus bank must yield real 大問1 questions');
+      expect(find.byType(InkWell), findsWidgets,
+          reason: 'the question must render tappable answer choices');
     });
   });
 }

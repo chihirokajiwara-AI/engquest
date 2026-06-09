@@ -50,7 +50,9 @@ void main() {
   });
 
   test('prewarm for a grade with no DB is a safe no-op', () async {
-    await VocabRepository.prewarm('pre2plus'); // no asset path → nothing to warm
-    expect(VocabRepository.isGradeCached('pre2plus'), isFalse);
+    // '1' (英検1級) has no vocab DB; pre2plus now does (#34), so use an
+    // unsupported grade code to exercise the no-asset-path branch.
+    await VocabRepository.prewarm('1'); // no asset path → nothing to warm
+    expect(VocabRepository.isGradeCached('1'), isFalse);
   });
 }

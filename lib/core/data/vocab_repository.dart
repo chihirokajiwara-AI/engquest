@@ -71,6 +71,9 @@ class VocabRepository {
     '4': 'assets/data/eiken4_vocab.json',
     '3': 'assets/data/eiken3_vocab.json',
     'pre2': 'assets/data/eiken_pre2_vocab.json',
+    // 準2級プラス (#34): on-band B1 bank derived from QA'd 準2/2級 words
+    // (scripts/derive_pre2plus_vocab.py). Was missing → 大問1 fell to 準備中.
+    'pre2plus': 'assets/data/eiken_pre2plus_vocab.json',
     '2': 'assets/data/eiken2_vocab.json',
     'pre1': 'assets/data/eiken_pre1_vocab.json',
   };
