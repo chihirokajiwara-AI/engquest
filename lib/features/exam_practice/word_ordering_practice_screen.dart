@@ -80,6 +80,17 @@ class _WordOrderingPracticeScreenState
   int _correctCount = 0;
   bool _sessionDone = false;
 
+  // Teach-first scaffold (CEO 1132 cont. / #111): the Japanese meaning is already
+  // shown, but a child who can't yet arrange the English may be stuck. An opt-in
+  // 「ルールをみる」 reveals THIS item's grammar rule (the existing whyExplanation)
+  // BEFORE answering — teaching the skill instead of leaving the child to guess.
+  // Because the rule materially helps, a hinted problem is recorded as 学習 and
+  // EXCLUDED from the measured 合格率 (only unaided answers feed readiness).
+  bool _hintShown = false; // rule revealed for the CURRENT problem
+  int _assistedCount = 0; // problems answered with the rule up (session)
+  int _unaidedTotal = 0; // problems answered WITHOUT the rule
+  int _unaidedCorrect = 0; // correct among the unaided
+
   @override
   void initState() {
     super.initState();
@@ -93,6 +104,12 @@ class _WordOrderingPracticeScreenState
     _remainingWords = List.from(p.scrambled);
     _answered = false;
     _correct = false;
+    _hintShown = false; // each problem decides its own scaffold afresh
+  }
+
+  void _showRuleHint() {
+    if (_answered || _hintShown) return;
+    setState(() => _hintShown = true);
   }
 
   void _tapWord(String word) {
@@ -119,6 +136,13 @@ class _WordOrderingPracticeScreenState
       _answered = true;
       _correct = isCorrect;
       if (isCorrect) _correctCount++;
+      // Honest measurement: a rule-assisted problem is excluded from 合格率.
+      if (_hintShown) {
+        _assistedCount++;
+      } else {
+        _unaidedTotal++;
+        if (isCorrect) _unaidedCorrect++;
+      }
     });
   }
 
@@ -127,13 +151,16 @@ class _WordOrderingPracticeScreenState
   Future<void> _recordSessionResult() async {
     if (_problems.isEmpty) return;
     recordExamHabit(_problems.length); // streak + daily-goal, not just 合格率
+    // Honesty: feed 合格率 ONLY the unaided problems. If every one used the rule
+    // hint, nothing is recorded (the skill stays honestly 未測定).
+    if (_unaidedTotal == 0) return;
     try {
       final store = await SkillAccuracyStore.getInstance();
       await store.record(
         grade: widget.eikenGrade,
         skill: EikenSkill.reading,
-        correct: _correctCount,
-        total: _problems.length,
+        correct: _unaidedCorrect,
+        total: _unaidedTotal,
       );
     } catch (_) {
       // Store errors are non-fatal — never interrupt the learner.
@@ -383,7 +410,7 @@ class _WordOrderingPracticeScreenState
                   // correct, so reveal the rule (be動詞の文型 / want to do / 比較級+than …),
                   // not just the answer. (Panel uses the screen's current bright theme;
                   // the dark-dq migration is tracked separately as #67.)
-                  if (_answered && p.whyExplanation != null) ...[
+                  if ((_answered || _hintShown) && p.whyExplanation != null) ...[
                     const SizedBox(height: 10),
                     Container(
                       width: double.infinity,
@@ -415,6 +442,33 @@ class _WordOrderingPracticeScreenState
                           ),
                         ],
                       ),
+                    ),
+                  ],
+                  // Opt-in teach-first scaffold: reveal THIS item's grammar rule
+                  // before answering so a stuck beginner is taught, not left to
+                  // guess. Using it excludes the problem from 合格率.
+                  if (!_answered && !_hintShown && p.whyExplanation != null) ...[
+                    const SizedBox(height: 14),
+                    OutlinedButton.icon(
+                      key: const ValueKey('wo_hint'),
+                      onPressed: _showRuleHint,
+                      icon: const Icon(Icons.lightbulb_outline,
+                          color: Color(0xFFE65100), size: 18),
+                      label: const Text('ルールをみる（むずかしいとき）'),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: const Color(0xFFE65100),
+                        side: const BorderSide(color: Color(0xFFFFB300)),
+                        padding: const EdgeInsets.symmetric(vertical: 11),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      'ルールをみた問題（もんだい）は、合格率（ごうかくりつ）に 入（はい）れません。',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 11, color: Color(0xFF90A4AE)),
                     ),
                   ],
                   const SizedBox(height: 20),
@@ -544,6 +598,14 @@ class _WordOrderingPracticeScreenState
               '$_correctCount / ${_problems.length} 正解 ($pct%)',
               style: TextStyle(color: Colors.grey[700], fontSize: 18),
             ),
+            if (_assistedCount > 0) ...[
+              const SizedBox(height: 10),
+              Text(
+                'ルールをみた $_assistedCount問（もん）は、\n合格率（ごうかくりつ）に 入（い）れていません。',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.grey[600], fontSize: 12),
+              ),
+            ],
             const SizedBox(height: 32),
             SizedBox(
               width: double.infinity,

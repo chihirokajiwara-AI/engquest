@@ -162,6 +162,48 @@ void main() {
     expect(reading.accuracy, equals(1.0));
   });
 
+  testWidgets('語句整序: a RULE-HINTED problem is EXCLUDED from 合格率 (#111)',
+      (tester) async {
+    // CEO 1132 cont.: the opt-in 「ルールをみる」 teaches the grammar rule before
+    // answering; a rule-assisted problem must NOT count as unaided reading skill.
+    const grade = '5';
+    final chunkSets = wordOrderingChunksForTest(grade);
+    final n = chunkSets.length;
+    expect(n, greaterThanOrEqualTo(2));
+
+    await tester.pumpWidget(MaterialApp(
+      home: WordOrderingPracticeScreen(
+        eikenGrade: grade,
+        section: _section(ExamSectionType.wordOrdering),
+      ),
+    ));
+    await tester.pump();
+
+    for (var i = 0; i < n; i++) {
+      if (i == 0) {
+        // Reveal the rule on the FIRST problem → marks it assisted.
+        await tester.tap(find.byKey(const ValueKey('wo_hint')));
+        await tester.pump();
+      }
+      for (final chunk in chunkSets[i]) {
+        await tester.tap(find.text(chunk));
+        await tester.pump();
+      }
+      await tester.tap(find.text('答え合わせ'));
+      await tester.pump();
+      await tester.tap(find.text(i < n - 1 ? '次の問題へ' : '結果を見る'));
+      await tester.pump();
+    }
+    await tester.pump(const Duration(milliseconds: 300));
+    await tester.pump();
+
+    final reading = await _readingFor(grade);
+    expect(reading.itemsAttempted, equals(n - 1),
+        reason: 'the 1 rule-hinted problem is excluded; only n-1 recorded');
+    expect(reading.accuracy, equals(1.0),
+        reason: 'every unaided answer correct → 100%');
+  });
+
   testWidgets('リスニング records to the LISTENING skill (not reading) + counts',
       (tester) async {
     // The highest miswire risk (audit): listening must record EikenSkill.listening,
