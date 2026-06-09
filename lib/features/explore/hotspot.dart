@@ -18,6 +18,45 @@ enum HotspotKind {
   coin,
 }
 
+// ── TeachCard — the "teach BEFORE you ask" card ────────────────────────────────
+//
+// CEO 2026-06-09 (致命的欠陥): a true beginner was dropped straight into an
+// English multiple-choice ナゾ with NO teaching first ("何も学んでないのに、いきなり
+// これが出てきて、誰が答えられるのだ？"). The design assumed the player already
+// reads English. For an 英検-passing app that is fatal: the structure must
+// TEACH the words, then ASK. A [Hotspot.npc] whose ナゾ is a bare quiz now
+// carries a [TeachCard] that NazoScreen shows FIRST — the child reads the
+// meanings, taps 「わかった！」, and only THEN sees the quiz. Pure presentation
+// model (no audio dependency → works in the offline demo).
+
+/// One taught item: an English form + its Japanese meaning + when it is used.
+class TeachItem {
+  /// The English word/phrase exactly as it appears in the quiz (e.g. 'Hello!').
+  final String en;
+
+  /// The Japanese meaning in ひらがな (e.g. 'こんにちは').
+  final String ja;
+
+  /// Optional "when do I use this?" note in ひらがな (e.g. 'であった ときの あいさつ').
+  final String? whenJa;
+
+  const TeachItem(this.en, this.ja, [this.whenJa]);
+}
+
+/// A short lesson shown BEFORE the ナゾ quiz, so the question is never a surprise.
+class TeachCard {
+  /// Card title (e.g. 'まず、4つの あいさつを おぼえよう').
+  final String titleJa;
+
+  /// Optional intro line under the title.
+  final String? leadJa;
+
+  /// The 2–4 items the child must learn before the quiz is fair.
+  final List<TeachItem> items;
+
+  const TeachCard({required this.titleJa, this.leadJa, required this.items});
+}
+
 // ── Hotspot ───────────────────────────────────────────────────────────────────
 
 /// A single tappable element positioned in the scene.
@@ -46,6 +85,12 @@ class Hotspot {
   final String? npcGreyAsset;
   final String? npcColorAsset;
 
+  /// Optional lesson shown BEFORE the ナゾ quiz (CEO 2026-06-09 teach-first fix).
+  /// Set it on hotspots whose [step] is a bare [QuestEncounter] quiz — the child
+  /// is taught the words first, then asked. Null = the step already teaches
+  /// (TeachSound/BlendWord/Phrase carry their own teachJa) → no card needed.
+  final TeachCard? teachCard;
+
   // Coin fields
   final int coinValue;
 
@@ -57,6 +102,7 @@ class Hotspot {
     this.framingJa,
     this.npcGreyAsset,
     this.npcColorAsset,
+    this.teachCard,
     this.coinValue = 0,
   }) : kind = HotspotKind.npc;
 
@@ -69,7 +115,8 @@ class Hotspot {
     this.framingJa,
     this.npcGreyAsset,
     this.npcColorAsset,
-  }) : kind = HotspotKind.coin;
+  })  : teachCard = null,
+        kind = HotspotKind.coin;
 }
 
 // ── SceneDef ──────────────────────────────────────────────────────────────────
@@ -108,6 +155,33 @@ class SceneDef {
 /// Background + NPC art is generated separately via scripts/safe-job.sh.
 /// Image.asset in SceneView uses errorBuilder → dq night-gradient fallback
 /// so the scene renders gracefully before art exists.
+/// Teach-first lesson for スラ's greeting ナゾ (_kStep(12), choices Goodbye /
+/// Hello! / Thank you / I am sorry). A true beginner can't pick こんにちは out of
+/// four untaught English phrases — so we teach all four meanings first.
+const TeachCard kGreetingTeach = TeachCard(
+  titleJa: 'まず、4つの あいさつを おぼえよう',
+  leadJa: 'スラに ことばを かえす まえに、いみを たしかめよう。',
+  items: [
+    TeachItem('Hello!', 'こんにちは', 'ひとに であった ときの あいさつ'),
+    TeachItem('Goodbye.', 'さようなら', 'わかれる ときの あいさつ'),
+    TeachItem('Thank you.', 'ありがとう', 'おれいを いう ことば'),
+    TeachItem('I am sorry.', 'ごめんなさい', 'あやまる ときの ことば'),
+  ],
+);
+
+/// Teach-first lesson for the 門番's be動詞 ナゾ (_kStep(15), 'You ___ a
+/// traveller.', choices am / are / is / be). Teach how「〜です」changes with the
+/// subject BEFORE asking the child to fill the blank.
+const TeachCard kBeVerbTeach = TeachCard(
+  titleJa: 'まず、be どうし（is・are・am）を おぼえよう',
+  leadJa: '「…です」は、しゅご（だれの こと か）で かたちが かわる。',
+  items: [
+    TeachItem('I am ...', 'わたしは …です', 'しゅごが I のとき'),
+    TeachItem('You are ...', 'あなたは …です', 'しゅごが You のとき'),
+    TeachItem('He / She is ...', 'かれ／かのじょは …です', 'しゅごが かれ・かのじょ・それ の とき'),
+  ],
+);
+
 final SceneDef kTown5Scene = SceneDef(
   backgroundAsset: 'assets/art/scenes_layton/town5_lane.webp',
   // Single painted plate for now (parallax drifts the whole plate); sliced
@@ -139,6 +213,7 @@ final SceneDef kTown5Scene = SceneDef(
       pos: const Alignment(0.30, 0.30),
       size: 0.16,
       step: _kStep(12),
+      teachCard: kGreetingTeach,
       clueLineJa: 'ちいさなスライムが口（くち）をひらく… 「…ヘッ…ど…？」\n'
           'ことばが、もうすこしのところで 出（で）てこない。',
       framingJa: 'このスライムの名前（なまえ）は まだ ない。\n'
@@ -155,6 +230,7 @@ final SceneDef kTown5Scene = SceneDef(
       pos: const Alignment(0.68, -0.20),
       size: 0.17,
       step: _kStep(15),
+      teachCard: kBeVerbTeach,
       clueLineJa: '「ここを通（とお）りたいなら……正（ただ）しい言葉（ことば）で答（こた）えてみよ。」\n'
           '門（もん）の かたわらで、おじいさんが とまった 時計（とけい）を みつめている。',
       framingJa: '村（むら）の門（もん）。門番（もんばん）が 立（た）ちはだかる。\n'

@@ -90,11 +90,18 @@ class _NazoScreenState extends State<NazoScreen> {
   // honest "準備中" note instead of leaving the child with silence (#43).
   bool _audioMissing = false;
 
+  // Teach-first (CEO 2026-06-09 致命的欠陥): when this ナゾ carries a [TeachCard],
+  // the child is TAUGHT the words first and only sees the quiz after tapping
+  // 「わかった！」. Starts true iff a card is present; flips false on advance.
+  bool _teaching = false;
+
   QuestStep get _step => widget.hotspot.step!;
+  TeachCard? get _teachCard => widget.hotspot.teachCard;
 
   @override
   void initState() {
     super.initState();
+    _teaching = _teachCard != null;
     _picarat = PicaratController(
       maxValue: picaratMaxForGrade(widget.eikenLevel),
     );
@@ -196,6 +203,7 @@ class _NazoScreenState extends State<NazoScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_teaching) return _teachScaffold();
     return DqScene(
       child: SafeArea(
         child: SingleChildScrollView(
@@ -263,6 +271,103 @@ class _NazoScreenState extends State<NazoScreen> {
           '🔇 おとは じゅんびちゅう / Sound coming soon',
           textAlign: TextAlign.center,
           style: dqText(size: 12, w: FontWeight.w600, color: dqInk),
+        ),
+      );
+
+  // ── Teach-first view (shown BEFORE the quiz when a TeachCard is present) ─────
+
+  Widget _teachScaffold() {
+    final card = _teachCard!;
+    return DqScene(
+      child: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  IconButton(
+                    onPressed: _dismiss,
+                    icon: const Icon(Icons.close, color: dqInk),
+                  ),
+                  Expanded(
+                    child: Text(
+                      'まなびのとき',
+                      textAlign: TextAlign.center,
+                      style:
+                          dqText(size: 16, w: FontWeight.w800, color: dqGold),
+                    ),
+                  ),
+                  const SizedBox(width: 48), // balance the close button
+                ],
+              ),
+              const SizedBox(height: 8),
+              DqPanel(
+                title: card.titleJa,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (card.leadJa != null) ...[
+                      Text(
+                        card.leadJa!,
+                        style: dqText(size: 13, color: dqInk, w: FontWeight.w500)
+                            .copyWith(height: 1.6),
+                      ),
+                      const SizedBox(height: 12),
+                    ],
+                    for (final it in card.items) _teachItemTile(it),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              DqButton(
+                label: 'わかった！ こたえてみる ▶',
+                onTap: () => setState(() => _teaching = false),
+              ),
+              const SizedBox(height: 10),
+              Center(
+                child: Text(
+                  'おぼえてから、こたえよう。',
+                  style: dqText(size: 11, color: dqGold),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _teachItemTile(TeachItem it) => Container(
+        width: double.infinity,
+        margin: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        decoration: BoxDecoration(
+          color: dqBox.withAlpha(230),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: dqGoldDeep.withAlpha(120)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              it.en,
+              style: dqText(size: 22, w: FontWeight.w800, color: dqGold),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              it.ja,
+              style: dqText(size: 18, w: FontWeight.w700, color: dqInk),
+            ),
+            if (it.whenJa != null) ...[
+              const SizedBox(height: 4),
+              Text(
+                '・${it.whenJa!}',
+                style: dqText(size: 12, color: dqInk, w: FontWeight.w400),
+              ),
+            ],
+          ],
         ),
       );
 
