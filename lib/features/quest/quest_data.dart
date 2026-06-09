@@ -20,14 +20,17 @@ class QuestOption {
   /// Whether this option is the correct choice.
   final bool isCorrect;
 
-  const QuestOption({required this.label, this.audioAsset, this.isCorrect = false});
+  const QuestOption(
+      {required this.label, this.audioAsset, this.isCorrect = false});
 }
 
 /// The text a quiz line/option is SPOKEN as: stage directions in (parens) are
 /// dropped, the cloze blank `___` is kept as a marker (the audio renders it as a
 /// short gap so the question can be read without giving the answer away).
-String quizSpeakableText(String text) =>
-    text.replaceAll(RegExp(r'\([^)]*\)'), ' ').replaceAll(RegExp(r'\s+'), ' ').trim();
+String quizSpeakableText(String text) => text
+    .replaceAll(RegExp(r'\([^)]*\)'), ' ')
+    .replaceAll(RegExp(r'\s+'), ' ')
+    .trim();
 
 /// Deterministic asset slug under `assets/audio/quiz/` for a quiz line or option,
 /// shared by the runtime (to locate the clip) and the `tool/dump_quiz_audio.dart`
@@ -320,8 +323,7 @@ class QuestTown {
 }
 
 /// The hero's opening — revealed once, at the very start of the quest.
-const String kQuestPrologue =
-    'きみには、まだ おとが きこえる。そして、まだ こえに だせる。\n'
+const String kQuestPrologue = 'きみには、まだ おとが きこえる。そして、まだ こえに だせる。\n'
     '〈サイレント〉に つつまれ、いろと こえを うしなった せかい。\n'
     'きみの みみと こえで、ひとりずつ ことばを かえしていこう。\n'
     'ことばが もどれば、いろも、こえも、もどる。';
@@ -363,7 +365,10 @@ const List<QuestTown> kQuestTowns = [
         autoPlayAudio: 'audio/phonics/phoneme_s.mp3',
         practicePromptJa: '「ssss」の音（おと）は、どっち？ 🔊をおして えらぼう。',
         options: [
-          QuestOption(label: 's', audioAsset: 'audio/phonics/phoneme_s.mp3', isCorrect: true),
+          QuestOption(
+              label: 's',
+              audioAsset: 'audio/phonics/phoneme_s.mp3',
+              isCorrect: true),
           QuestOption(label: 'a', audioAsset: 'audio/phonics/phoneme_a.mp3'),
         ],
         onCorrect: 'sss…！ セルの目（め）に光（ひかり）がもどった。「これが…わたしの、さいしょの音（おと）…'
@@ -381,7 +386,10 @@ const List<QuestTown> kQuestTowns = [
         practicePromptJa: '「a」の音（おと）は、どっち？',
         options: [
           QuestOption(label: 's', audioAsset: 'audio/phonics/phoneme_s.mp3'),
-          QuestOption(label: 'a', audioAsset: 'audio/phonics/phoneme_a.mp3', isCorrect: true),
+          QuestOption(
+              label: 'a',
+              audioAsset: 'audio/phonics/phoneme_a.mp3',
+              isCorrect: true),
         ],
         onCorrect: 'a！ アンがにっこり わらった。「もう ひとつ、音（おと）が ふえたね！」',
       ),
@@ -395,7 +403,10 @@ const List<QuestTown> kQuestTowns = [
         autoPlayAudio: 'audio/phonics/phoneme_t.mp3',
         practicePromptJa: '「t」の音（おと）は、どっち？',
         options: [
-          QuestOption(label: 't', audioAsset: 'audio/phonics/phoneme_t.mp3', isCorrect: true),
+          QuestOption(
+              label: 't',
+              audioAsset: 'audio/phonics/phoneme_t.mp3',
+              isCorrect: true),
           QuestOption(label: 'a', audioAsset: 'audio/phonics/phoneme_a.mp3'),
         ],
         onCorrect: 't！ ぽんっ。「3つの音（おと）が そろった。…つなげたら、どうなる？」',
@@ -413,7 +424,10 @@ const List<QuestTown> kQuestTowns = [
         autoPlayAudio: 'audio/phonics/blend_sat.mp3',
         practicePromptJa: 's→a→t を つなげると？ 🔊をおして えらぼう。',
         options: [
-          QuestOption(label: 'sat', audioAsset: 'audio/phonics/blend_sat.mp3', isCorrect: true),
+          QuestOption(
+              label: 'sat',
+              audioAsset: 'audio/phonics/blend_sat.mp3',
+              isCorrect: true),
           QuestOption(label: 's', audioAsset: 'audio/phonics/phoneme_s.mp3'),
         ],
         onCorrect: '"sat"！ つながった！ スラが はねた。「…ぷる、"sat"！ きみが いえたから、ぼくも いえた！'
@@ -431,7 +445,10 @@ const List<QuestTown> kQuestTowns = [
         autoPlayAudio: 'audio/phonics/phoneme_c.mp3',
         practicePromptJa: '「c」の音（おと）は、どっち？',
         options: [
-          QuestOption(label: 'c', audioAsset: 'audio/phonics/phoneme_c.mp3', isCorrect: true),
+          QuestOption(
+              label: 'c',
+              audioAsset: 'audio/phonics/phoneme_c.mp3',
+              isCorrect: true),
           QuestOption(label: 't', audioAsset: 'audio/phonics/phoneme_t.mp3'),
         ],
         onCorrect: 'c！ 「この音（おと）が あれば…ほら、あの子（こ）の名前（なまえ）が よべる」',
@@ -447,7 +464,10 @@ const List<QuestTown> kQuestTowns = [
         autoPlayAudio: 'audio/phonics/blend_cat.mp3',
         practicePromptJa: 'c→a→t は、どの ことば？',
         options: [
-          QuestOption(label: 'cat', audioAsset: 'audio/phonics/blend_cat.mp3', isCorrect: true),
+          QuestOption(
+              label: 'cat',
+              audioAsset: 'audio/phonics/blend_cat.mp3',
+              isCorrect: true),
           QuestOption(label: 'cap', audioAsset: 'audio/phonics/blend_cap.mp3'),
         ],
         onCorrect: 'cat！ ミィが すりよってきた。「にゃあ＝cat。わたし、なまえを とりもどした！」',
@@ -462,7 +482,10 @@ const List<QuestTown> kQuestTowns = [
         autoPlayAudio: 'audio/phonics/phoneme_o.mp3',
         practicePromptJa: '「o」の音（おと）は、どっち？',
         options: [
-          QuestOption(label: 'o', audioAsset: 'audio/phonics/phoneme_o.mp3', isCorrect: true),
+          QuestOption(
+              label: 'o',
+              audioAsset: 'audio/phonics/phoneme_o.mp3',
+              isCorrect: true),
           QuestOption(label: 'a', audioAsset: 'audio/phonics/phoneme_a.mp3'),
         ],
         onCorrect: 'o！ 「ホー…これで、また ひとつ ことばが つくれる」',
@@ -477,7 +500,10 @@ const List<QuestTown> kQuestTowns = [
         autoPlayAudio: 'audio/phonics/phoneme_g.mp3',
         practicePromptJa: '「g」の音（おと）は、どっち？',
         options: [
-          QuestOption(label: 'g', audioAsset: 'audio/phonics/phoneme_g.mp3', isCorrect: true),
+          QuestOption(
+              label: 'g',
+              audioAsset: 'audio/phonics/phoneme_g.mp3',
+              isCorrect: true),
           QuestOption(label: 'c', audioAsset: 'audio/phonics/phoneme_c.mp3'),
         ],
         onCorrect: 'g！ 「これで、おともだちの 名前（なまえ）が よべるぞ」',
@@ -493,7 +519,10 @@ const List<QuestTown> kQuestTowns = [
         autoPlayAudio: 'audio/phonics/blend_dog.mp3',
         practicePromptJa: 'd→o→g は、どの ことば？',
         options: [
-          QuestOption(label: 'dog', audioAsset: 'audio/phonics/blend_dog.mp3', isCorrect: true),
+          QuestOption(
+              label: 'dog',
+              audioAsset: 'audio/phonics/blend_dog.mp3',
+              isCorrect: true),
           QuestOption(label: 'dig', audioAsset: 'audio/phonics/blend_dig.mp3'),
         ],
         onCorrect: 'dog！ ロブが しっぽを ふった。「ワン＝dog！ ともだちが ふえた！」',
@@ -509,7 +538,10 @@ const List<QuestTown> kQuestTowns = [
         autoPlayAudio: 'audio/phonics/blend_sun.mp3',
         practicePromptJa: 's→u→n は、どの ことば？',
         options: [
-          QuestOption(label: 'sun', audioAsset: 'audio/phonics/blend_sun.mp3', isCorrect: true),
+          QuestOption(
+              label: 'sun',
+              audioAsset: 'audio/phonics/blend_sun.mp3',
+              isCorrect: true),
           QuestOption(label: 'sit', audioAsset: 'audio/phonics/blend_sit.mp3'),
         ],
         onCorrect: 'sun！ 空（そら）が あかるくなった。「ひかりが…もどってきた！」',
@@ -525,7 +557,10 @@ const List<QuestTown> kQuestTowns = [
         autoPlayAudio: 'audio/phonics/phrase_a_red_cat.mp3',
         practicePromptJa: '「あかい ねこ」は、どれ？ 🔊で きいて えらぼう。',
         options: [
-          QuestOption(label: 'a red cat', audioAsset: 'audio/phonics/phrase_a_red_cat.mp3', isCorrect: true),
+          QuestOption(
+              label: 'a red cat',
+              audioAsset: 'audio/phonics/phrase_a_red_cat.mp3',
+              isCorrect: true),
           QuestOption(label: 'red', audioAsset: 'audio/phonics/blend_red.mp3'),
         ],
         onCorrect: 'a red cat！ ベラが えがおに。「ことばを つなげると、絵（え）が うかぶ！」',
@@ -540,7 +575,10 @@ const List<QuestTown> kQuestTowns = [
         autoPlayAudio: 'audio/phonics/phrase_hello.mp3',
         practicePromptJa: 'あいさつの ことばは、どっち？',
         options: [
-          QuestOption(label: 'Hello!', audioAsset: 'audio/phonics/phrase_hello.mp3', isCorrect: true),
+          QuestOption(
+              label: 'Hello!',
+              audioAsset: 'audio/phonics/phrase_hello.mp3',
+              isCorrect: true),
           QuestOption(label: 'cat', audioAsset: 'audio/phonics/blend_cat.mp3'),
         ],
         onCorrect: 'Hello！ スラが はじめて あいさつを いえた。あおい 光（ひかり）が、スラを やさしく つつんだ。'
@@ -555,7 +593,8 @@ const List<QuestTown> kQuestTowns = [
       QuestEncounter(
         npcName: 'スラ',
         npcEmoji: '🟢',
-        npcLine: '... ... (A small slime opens its mouth, but no word comes out.)',
+        npcLine:
+            '... ... (A small slime opens its mouth, but no word comes out.)',
         npcLineJa: 'ちいさなスライムが口（くち）をひらくけれど、ことばが出（で）てこない…',
         choices: ['Goodbye.', 'Hello!', 'Thank you.', 'I am sorry.'],
         correctIndex: 1,
@@ -570,7 +609,12 @@ const List<QuestTown> kQuestTowns = [
         npcEmoji: '🧑‍🌾',
         npcLine: 'How are you?',
         npcLineJa: 'お元気（げんき）ですか？',
-        choices: ["I'm a village.", 'I am Tuesday.', "I'm fine, thank you.", 'You are fine.'],
+        choices: [
+          "I'm a village.",
+          'I am Tuesday.',
+          "I'm fine, thank you.",
+          'You are fine.'
+        ],
         correctIndex: 2,
         onCorrect: 'Good! Welcome to our village, traveller.',
       ),
@@ -580,7 +624,12 @@ const List<QuestTown> kQuestTowns = [
         npcEmoji: '👧',
         npcLine: "What's your name?",
         npcLineJa: 'お名前（なまえ）は、なんですか？',
-        choices: ['My name is Leo.', 'Your name is Leo.', 'I name is Leo.', "It's three o'clock."],
+        choices: [
+          'My name is Leo.',
+          'Your name is Leo.',
+          'I name is Leo.',
+          "It's three o'clock."
+        ],
         correctIndex: 0,
         onCorrect: 'Leo! Nice to meet you, Leo. Sura likes you too!',
       ),
@@ -611,7 +660,12 @@ const List<QuestTown> kQuestTowns = [
         npcLine: '(pointing far away) What is that on the hill?',
         npcLineJa: '（遠（とお）くを指（ゆび）さして）あの丘（おか）の上（うえ）にあるのは、何（なん）ですか？'
             '「ちかくにあるものは this、遠（とお）くにあるものは…？」',
-        choices: ['This is a castle.', 'That is a castle.', 'That is castle.', 'These is a castle.'],
+        choices: [
+          'This is a castle.',
+          'That is a castle.',
+          'That is castle.',
+          'These is a castle.'
+        ],
         correctIndex: 1,
         onCorrect:
             "That is the old hall — where the first word was ever spoken, they say. "
@@ -628,7 +682,8 @@ const List<QuestTown> kQuestTowns = [
         npcLineJa: 'おなか、すいてる？ ほら、これは ___ りんごだよ。 ___ は？',
         choices: ['a', 'an', 'the', 'one'],
         correctIndex: 1,
-        onCorrect: "An apple! シャキッ — the apple blushed red in the baker's hand. "
+        onCorrect:
+            "An apple! シャキッ — the apple blushed red in the baker's hand. "
             "'apple starts with a vowel sound, so it's an — not a!' "
             "Here, take it. A growing traveller must eat.",
       ),
@@ -650,7 +705,8 @@ const List<QuestTown> kQuestTowns = [
         npcLineJa: 'ゲームは好（す）き？ ぼくは毎日（まいにち）サッカーを ___ よ！ ___ は？',
         choices: ['am play', 'play', 'plays', 'playing'],
         correctIndex: 1,
-        onCorrect: 'You play soccer too? Let’s play after you save our village!',
+        onCorrect:
+            'You play soccer too? Let’s play after you save our village!',
       ),
       // 10 — 3単現 s/es（頻出トラップ）. (大問1 文法型)
       QuestEncounter(
@@ -670,7 +726,8 @@ const List<QuestTown> kQuestTowns = [
         npcLineJa: '魚（さかな）は食（た）べる？ 旅人（たびびと）の中（なか）には、魚を食べ ___ 人（ひと）もいるよ。 ___ は？',
         choices: ['not', "doesn't", "don't", 'no'],
         correctIndex: 2,
-        onCorrect: "Right — some don't. But you'll eat anything, eh? Good. A traveller needs strength.",
+        onCorrect:
+            "Right — some don't. But you'll eat anything, eh? Good. A traveller needs strength.",
       ),
       // 12 — 助動詞 can. (大問1 文法型)
       QuestEncounter(
@@ -693,7 +750,8 @@ const List<QuestTown> kQuestTowns = [
         npcLineJa: '（スラがふしぎな果物（くだもの）を指（ゆび）さして）これは ___ ？ ___ は？',
         choices: ['Who', 'Where', 'What', 'How'],
         correctIndex: 2,
-        onCorrect: "What! It's a peach! Sura bounced: 'W-What? What is this? What is THAT?' "
+        onCorrect:
+            "What! It's a peach! Sura bounced: 'W-What? What is this? What is THAT?' "
             "It's asking about everything now — one step behind you, but catching up fast. "
             "Every word you teach it, it keeps.",
       ),
@@ -703,7 +761,12 @@ const List<QuestTown> kQuestTowns = [
         npcEmoji: '🧓',
         npcLine: 'A knight stands at the gate. Who is he?',
         npcLineJa: '門（もん）に騎士（きし）が立（た）っている。彼（かれ）は誰（だれ）ですか？',
-        choices: ['It is a gate.', 'He is my guard.', 'She is my guard.', 'Who is my guard.'],
+        choices: [
+          'It is a gate.',
+          'He is my guard.',
+          'She is my guard.',
+          'Who is my guard.'
+        ],
         correctIndex: 1,
         onCorrect:
             'He is my guard, yes. He has waited years for someone who could still speak to come back. '
@@ -719,7 +782,8 @@ const List<QuestTown> kQuestTowns = [
         npcLineJa: 'ボールがない！ どこ？ …あ、箱（はこ）「の中（なか）」に ___ あった。 ___ は？',
         choices: ['on', 'in', 'to', 'at'],
         correctIndex: 1,
-        onCorrect: 'In the box — meow, thank you! You found my words AND my ball!',
+        onCorrect:
+            'In the box — meow, thank you! You found my words AND my ball!',
       ),
       // 16 — how many + 複数形 → 数で答える. (大問2型)
       QuestEncounter(
@@ -727,9 +791,15 @@ const List<QuestTown> kQuestTowns = [
         npcEmoji: '🧺',
         npcLine: 'How many apples do you want?',
         npcLineJa: 'りんごは、いくつ ほしいですか？',
-        choices: ['I want three apples.', 'I am three.', "It's red.", 'Yes, I want.'],
+        choices: [
+          'I want three apples.',
+          'I am three.',
+          "It's red.",
+          'Yes, I want.'
+        ],
         correctIndex: 0,
-        onCorrect: 'Three apples! Here you are. A good traveller knows their numbers.',
+        onCorrect:
+            'Three apples! Here you are. A good traveller knows their numbers.',
       ),
       // 17 — 現在進行形 be + ~ing. (大問1 文法型)
       QuestEncounter(
@@ -739,7 +809,8 @@ const List<QuestTown> kQuestTowns = [
         npcLineJa: '見（み）て！ いま、お城（しろ）の絵（え）を ___ いるところ。 ___ は？',
         choices: ['paint', 'paints', 'painting', 'painted'],
         correctIndex: 2,
-        onCorrect: "I'm painting! Each word you return gives me another colour to work with. "
+        onCorrect:
+            "I'm painting! Each word you return gives me another colour to work with. "
             "...They say someone is on the road again — someone whose words still hold their colour. "
             "The old clockmaker told me: the silence started at the centre of the world "
             "and walked outward from there. Strange to think, isn't it?",
@@ -752,7 +823,8 @@ const List<QuestTown> kQuestTowns = [
         npcLineJa: 'みんなで遊（あそ）びたい！ なんて言（い）えばいい？',
         choices: ['We are play.', "Let's play!", 'You play me.', 'Do play?'],
         correctIndex: 1,
-        onCorrect: "Let's play! Hooray! The village sounds alive again — listen!",
+        onCorrect:
+            "Let's play! Hooray! The village sounds alive again — listen!",
       ),
       // 19 — 疑問文の語順（語句整序の感覚）. (大問3型)
       QuestEncounter(
@@ -760,15 +832,22 @@ const List<QuestTown> kQuestTowns = [
         npcEmoji: '🧳',
         npcLine: '「あなたは地図を持っていますか？」 Choose the correct order.',
         npcLineJa: '正（ただ）しい語順（ごじゅん）をえらぼう：「あなたは地図（ちず）を持（も）っていますか？」',
-        choices: ['You do have a map?', 'Do have you a map?', 'Do you have a map?', 'Have you a map do?'],
+        choices: [
+          'You do have a map?',
+          'Do have you a map?',
+          'Do you have a map?',
+          'Have you a map do?'
+        ],
         correctIndex: 2,
-        onCorrect: "Do you have a map? — perfect order! Here, take mine. The road ahead is dark.",
+        onCorrect:
+            "Do you have a map? — perfect order! Here, take mine. The road ahead is dark.",
       ),
       // 20 — Boss gate. 総合運用 + サイレント. (大問2 総合)
       QuestEncounter(
         npcName: 'サイレントの影（かげ）',
         npcEmoji: '🌑',
-        npcLine: "Silence... is peace. Why do you bring words back, little one who can still hear me?",
+        npcLine:
+            "Silence... is peace. Why do you bring words back, little one who can still hear me?",
         npcLineJa: 'しずけさ…こそ、へいわ。なぜ ことばを もどす、まだ わたしの こえが きこえる子（こ）よ？',
         choices: [
           'I am peace.',
@@ -777,8 +856,7 @@ const List<QuestTown> kQuestTowns = [
           'Silence is a box.',
         ],
         correctIndex: 2,
-        onCorrect:
-            "...You are not afraid of sound. "
+        onCorrect: "...You are not afraid of sound. "
             "I did not expect that. "
             "The first word is returned, traveller — this village is warm again. "
             "I am not your enemy. I am... tired. And very, very quiet. "
@@ -812,7 +890,8 @@ const List<QuestTown> kQuestTowns = [
         npcLineJa: "きのう、じゅぎょうにいませんでしたね。あなたは どこに ___ ？",
         choices: ["are", "was", "were", "did"],
         correctIndex: 2,
-        onCorrect: "Ah, you WERE sick. I hope you feel better now. Welcome back to the Wind Town.",
+        onCorrect:
+            "Ah, you WERE sick. I hope you feel better now. Welcome back to the Wind Town.",
       ),
       // 2 — 規則過去 -ed。現在→過去への一歩。(大問1 文法型)
       QuestEncounter(
@@ -820,9 +899,15 @@ const List<QuestTown> kQuestTowns = [
         npcEmoji: "👩",
         npcLine: "You look tired! What did you do last night?",
         npcLineJa: "つかれた かおね！ ゆうべ、なにを したの？",
-        choices: ["I study hard.", "I studied until late.", "I am studying.", "I will study."],
+        choices: [
+          "I study hard.",
+          "I studied until late.",
+          "I am studying.",
+          "I will study."
+        ],
         correctIndex: 1,
-        onCorrect: "You studied that hard? Good child. But sleep well tonight, my dear.",
+        onCorrect:
+            "You studied that hard? Good child. But sleep well tonight, my dear.",
       ),
       // 3 — 不規則過去 go→went（最頻出トラップ）。(大問1 文法型)
       QuestEncounter(
@@ -830,9 +915,15 @@ const List<QuestTown> kQuestTowns = [
         npcEmoji: "🧒",
         npcLine: "I didn't see you on Sunday. Where did you go?",
         npcLineJa: "にちようび、あなたを みなかったよ。どこへ いったの？",
-        choices: ["I goed to the zoo.", "I go to the zoo.", "I went to the zoo.", "I am go to the zoo."],
+        choices: [
+          "I goed to the zoo.",
+          "I go to the zoo.",
+          "I went to the zoo.",
+          "I am go to the zoo."
+        ],
         correctIndex: 2,
-        onCorrect: "You went to the zoo! Lucky you. I stayed home and the wind took my words away...",
+        onCorrect:
+            "You went to the zoo! Lucky you. I stayed home and the wind took my words away...",
       ),
       // 4 — 過去疑問 Did + 動詞の原形（応答の整合）。(大問2 会話応答型)
       QuestEncounter(
@@ -840,9 +931,15 @@ const List<QuestTown> kQuestTowns = [
         npcEmoji: "🛒",
         npcLine: "Did you buy the bread this morning?",
         npcLineJa: "けさ、パンは かいましたか？",
-        choices: ["Yes, I am.", "No, I don't.", "Yes, I do buy.", "No, I didn't. I forgot."],
+        choices: [
+          "Yes, I am.",
+          "No, I don't.",
+          "Yes, I do buy.",
+          "No, I didn't. I forgot."
+        ],
         correctIndex: 3,
-        onCorrect: "You forgot? Ha, no problem. Take this loaf — a traveller must not go hungry.",
+        onCorrect:
+            "You forgot? Ha, no problem. Take this loaf — a traveller must not go hungry.",
       ),
       // 5 — 未来 will。過去→未来へ時制を広げる。(大問1 文法型)
       QuestEncounter(
@@ -864,7 +961,8 @@ const List<QuestTown> kQuestTowns = [
         npcLineJa: "かばんと くつを もってるね。これから なにを ___ つもり？",
         choices: ["to", "for", "will", "going"],
         correctIndex: 0,
-        onCorrect: "Going TO climb the hill? Then go before the rain! I'll wait for you here.",
+        onCorrect:
+            "Going TO climb the hill? Then go before the rain! I'll wait for you here.",
       ),
       // 7 — 比較級 -er + than。(大問1 文法型)
       QuestEncounter(
@@ -874,17 +972,20 @@ const List<QuestTown> kQuestTowns = [
         npcLineJa: "ぼくの あには せが たかい。でも きみは あにより ___ ！",
         choices: ["tall", "taller", "more tall", "tallest"],
         correctIndex: 1,
-        onCorrect: "You ARE taller! When you grow up, will you give the whole world its voice back? When you talk, the grey gets a little brighter.",
+        onCorrect:
+            "You ARE taller! When you grow up, will you give the whole world its voice back? When you talk, the grey gets a little brighter.",
       ),
       // 8 — 比較級 more + 長い形容詞（-er との使い分けトラップ）。(大問1 文法型)
       QuestEncounter(
         npcName: "がか",
         npcEmoji: "🎨",
-        npcLine: "Two paintings here. Which is ___ beautiful, the sea or the sky?",
+        npcLine:
+            "Two paintings here. Which is ___ beautiful, the sea or the sky?",
         npcLineJa: "えが 2まい。うみと そら、どちらが ___ うつくしい？",
         choices: ["beautifuler", "beautiful", "more", "most"],
         correctIndex: 2,
-        onCorrect: "The sky is MORE beautiful, you say? A fine eye. Long words take 'more', remember that.",
+        onCorrect:
+            "The sky is MORE beautiful, you say? A fine eye. Long words take 'more', remember that.",
       ),
       // 9 — 最上級 the -est。(大問1 文法型)
       QuestEncounter(
@@ -894,7 +995,8 @@ const List<QuestTown> kQuestTowns = [
         npcLineJa: "これは まちで いちばん ___ とう。これより たかい とうは ない。",
         choices: ["high", "higher", "highest", "more high"],
         correctIndex: 2,
-        onCorrect: "The highest tower, yes. From the top, they say, you can see your true home.",
+        onCorrect:
+            "The highest tower, yes. From the top, they say, you can see your true home.",
       ),
       // 10 — to不定詞（副詞用法・目的）。(大問1 文法型)
       QuestEncounter(
@@ -904,7 +1006,8 @@ const List<QuestTown> kQuestTowns = [
         npcLineJa: "なぜ かわに いるの？ さかなを ___ ために きたの？",
         choices: ["catch", "to catch", "catching", "caught"],
         correctIndex: 1,
-        onCorrect: "You came TO catch fish! Sit with me. Patience, traveller — fish and words both take time.",
+        onCorrect:
+            "You came TO catch fish! Sit with me. Patience, traveller — fish and words both take time.",
       ),
       // 11 — 動名詞（enjoy ~ing。to との動詞別パターン・トラップ）。(大問1 文法型)
       QuestEncounter(
@@ -914,7 +1017,8 @@ const List<QuestTown> kQuestTowns = [
         npcLineJa: "おんがくが まちに もどった！ うたを きくのは すき？（enjoy の あとは？）",
         choices: ["listen", "to listen", "listening", "listened"],
         correctIndex: 2,
-        onCorrect: "You enjoy listening! 'Enjoy' always wants ~ing. Here, listen — the town hums again.",
+        onCorrect:
+            "You enjoy listening! 'Enjoy' always wants ~ing. Here, listen — the town hums again.",
       ),
       // 12 — 接続詞 because（因果の向きトラップ）。(大問2 会話空所型)
       QuestEncounter(
@@ -924,7 +1028,8 @@ const List<QuestTown> kQuestTowns = [
         npcLineJa: "ぬれてる！ なぜ？ —「おかの うえで あめが ふった ___ ぬれた。」",
         choices: ["so", "but", "because", "and"],
         correctIndex: 2,
-        onCorrect: "Wet BECAUSE it rained — yes, that's the reason. Come, dry by the fire, dear one.",
+        onCorrect:
+            "Wet BECAUSE it rained — yes, that's the reason. Come, dry by the fire, dear one.",
       ),
       // 13 — 接続詞 when / if。(大問1 文法型)
       QuestEncounter(
@@ -934,7 +1039,8 @@ const List<QuestTown> kQuestTowns = [
         npcLineJa: "もんは いま しまっている。たいようが のぼった ___、あける。",
         choices: ["When", "Because", "But", "So"],
         correctIndex: 0,
-        onCorrect: "When the sun rises — wait until then, friend. The road by night is full of silence.",
+        onCorrect:
+            "When the sun rises — wait until then, friend. The road by night is full of silence.",
       ),
       // 14 — 助動詞 must / should（義務・助言）。(大問2 会話応答型)
       QuestEncounter(
@@ -944,7 +1050,8 @@ const List<QuestTown> kQuestTowns = [
         npcLineJa: "せきが でてるね。きょうは たびを せず、いえで ___ 。",
         choices: ["can't", "should", "are", "were"],
         correctIndex: 1,
-        onCorrect: "You should rest — listen to me. One day's rest, then the road. Your quest can wait a day.",
+        onCorrect:
+            "You should rest — listen to me. One day's rest, then the road. Your quest can wait a day.",
       ),
       // 15 — 助動詞 may（許可をたずねる）。(大問2 会話応答型)
       QuestEncounter(
@@ -954,7 +1061,8 @@ const List<QuestTown> kQuestTowns = [
         npcLineJa: "としょかんへ ようこそ。ほんを さがすのを ___ ？（てつだっても いい？）",
         choices: ["Must", "Should", "May", "Do"],
         correctIndex: 2,
-        onCorrect: "Of course I may help! Here — an old book about a child who could still speak when no one else could. ...It sounds like you.",
+        onCorrect:
+            "Of course I may help! Here — an old book about a child who could still speak when no one else could. ...It sounds like you.",
       ),
       // 16 — There is / There are 単複一致。(大問1 文法型)
       QuestEncounter(
@@ -964,7 +1072,8 @@ const List<QuestTown> kQuestTowns = [
         npcLineJa: "みせを みて！ きょうは テーブルに たくさんの りんごが ___ 。",
         choices: ["There is", "There are", "It is", "They is"],
         correctIndex: 1,
-        onCorrect: "There ARE many apples — well counted! Many things need 'are'. Take three for the road.",
+        onCorrect:
+            "There ARE many apples — well counted! Many things need 'are'. Take three for the road.",
       ),
       // 17 — 5W1H 疑問文語順（how long）。(大問2 会話応答型)
       QuestEncounter(
@@ -972,9 +1081,15 @@ const List<QuestTown> kQuestTowns = [
         npcEmoji: "🧳",
         npcLine: "How long will you stay in our Wind Town?",
         npcLineJa: "この かぜの まちに、どのくらい たいざいしますか？",
-        choices: ["I stay here.", "By bus and train.", "Two cities away.", "For about three days."],
+        choices: [
+          "I stay here.",
+          "By bus and train.",
+          "Two cities away.",
+          "For about three days."
+        ],
         correctIndex: 3,
-        onCorrect: "Three days! Then let me sell you a good map. The next town lies beyond the mountains.",
+        onCorrect:
+            "Three days! Then let me sell you a good map. The next town lies beyond the mountains.",
       ),
       // 18 — 語句整序：疑問詞 + 助動詞の語順。(大問3 語句整序型)
       QuestEncounter(
@@ -989,23 +1104,33 @@ const List<QuestTown> kQuestTowns = [
           "Where will you catch the bus?",
         ],
         correctIndex: 3,
-        onCorrect: "\"Where will you catch the bus?\" — perfect! The stop is by the windmill. Hurry, it comes soon!",
+        onCorrect:
+            "\"Where will you catch the bus?\" — perfect! The stop is by the windmill. Hurry, it comes soon!",
       ),
       // 19 — 長文の代名詞参照・内容一致（4級で初登場の大問4）。(大問4 長文内容一致型)
       QuestEncounter(
         npcName: "ずしょかんのこ",
         npcEmoji: "📖",
-        npcLine: "Read this: \"Mika lost her dog. Her brother found it in the park. He was very happy.\" — Who was happy?",
-        npcLineJa: "よんでね：「ミカは いぬを なくした。おにいさんが こうえんで みつけた。かれは とても よろこんだ。」 だれが よろこんだ？",
-        choices: ["Mika was happy.", "The dog was happy.", "Her brother was happy.", "The park was happy."],
+        npcLine:
+            "Read this: \"Mika lost her dog. Her brother found it in the park. He was very happy.\" — Who was happy?",
+        npcLineJa:
+            "よんでね：「ミカは いぬを なくした。おにいさんが こうえんで みつけた。かれは とても よろこんだ。」 だれが よろこんだ？",
+        choices: [
+          "Mika was happy.",
+          "The dog was happy.",
+          "Her brother was happy.",
+          "The park was happy."
+        ],
         correctIndex: 2,
-        onCorrect: "Her brother — yes! 'He' means the brother. You read carefully. That is a rare gift here.",
+        onCorrect:
+            "Her brother — yes! 'He' means the brother. You read carefully. That is a rare gift here.",
       ),
       // 20 — Boss gate. 過去・未来・比較・接続詞の総合 + サイレント。(大問4＋総合)
       QuestEncounter(
         npcName: "サイレントの影（かげ）",
         npcEmoji: "🌑",
-        npcLine: "You woke this town with noise. But silence is stronger than words. Why do you keep bringing the words back?",
+        npcLine:
+            "You woke this town with noise. But silence is stronger than words. Why do you keep bringing the words back?",
         npcLineJa: "おまえは おとで まちを おこした。だが しずけさは ことばより つよい。なぜ ことばを もどしつづける？",
         choices: [
           "Yesterday I am quiet.",
@@ -1014,7 +1139,8 @@ const List<QuestTown> kQuestTowns = [
           "I will fought you tomorrow.",
         ],
         correctIndex: 2,
-        onCorrect: "\"Warmer than silence...\" Tch. Your grammar grows sharp, little voice that won't go quiet. The second word is returned — five silences remain, and I wait at the last.",
+        onCorrect:
+            "\"Warmer than silence...\" Tch. Your grammar grows sharp, little voice that won't go quiet. The second word is returned — five silences remain, and I wait at the last.",
       ),
     ],
   ),
@@ -1039,8 +1165,10 @@ const List<QuestTown> kQuestTowns = [
       QuestEncounter(
         npcName: "スラ",
         npcEmoji: "🟢",
-        npcLine: "We made it to the city! I practiced my words all night. Where did you sleep last night?",
-        npcLineJa: "都（みやこ）に着（つ）いたね！ ぼく、ひとばんじゅう言葉（ことば）を練習（れんしゅう）したよ。きのうの夜（よる）はどこで寝（ね）たの？",
+        npcLine:
+            "We made it to the city! I practiced my words all night. Where did you sleep last night?",
+        npcLineJa:
+            "都（みやこ）に着（つ）いたね！ ぼく、ひとばんじゅう言葉（ことば）を練習（れんしゅう）したよ。きのうの夜（よる）はどこで寝（ね）たの？",
         choices: [
           "I sleep at an inn every day.",
           "I slept at a small inn near the gate.",
@@ -1048,34 +1176,42 @@ const List<QuestTown> kQuestTowns = [
           "I am sleeping at the inn now.",
         ],
         correctIndex: 1,
-        onCorrect: "An inn by the gate — got it! This is the City of Learning. People here tell their stories... but the stories are fading.",
+        onCorrect:
+            "An inn by the gate — got it! This is the City of Learning. People here tell their stories... but the stories are fading.",
       ),
       // 2 — 現在完了〈経験〉ever。(大問1 文法型)
       QuestEncounter(
         npcName: "せんせい",
         npcEmoji: "👩‍🏫",
-        npcLine: "Welcome, young scholar. ___ you ever read an old legend of this city?",
-        npcLineJa: "ようこそ、若（わか）き学徒（がくと）よ。この都（みやこ）の古（ふる）い伝説（でんせつ）を、今（いま）までに読（よ）んだことが ___ ？",
+        npcLine:
+            "Welcome, young scholar. ___ you ever read an old legend of this city?",
+        npcLineJa:
+            "ようこそ、若（わか）き学徒（がくと）よ。この都（みやこ）の古（ふる）い伝説（でんせつ）を、今（いま）までに読（よ）んだことが ___ ？",
         choices: ["Did", "Have", "Were", "Do"],
         correctIndex: 1,
-        onCorrect: "'Have you ever read...' — yes! Experience needs the present perfect. The legend speaks of one whose voice never went silent, you know.",
+        onCorrect:
+            "'Have you ever read...' — yes! Experience needs the present perfect. The legend speaks of one whose voice never went silent, you know.",
       ),
       // 3 — 現在完了 vs 過去形。ago は過去形の手がかり（頻出トラップ）。(大問1 文法型)
       QuestEncounter(
         npcName: "れきしか",
         npcEmoji: "📜",
         npcLine: "The great library lost its books. It ___ three years ago.",
-        npcLineJa: "大（だい）図書館（としょかん）は本（ほん）を失（うしな）った。それは三年（さんねん）前（まえ）に ___ 。 ___ は？",
+        npcLineJa:
+            "大（だい）図書館（としょかん）は本（ほん）を失（うしな）った。それは三年（さんねん）前（まえ）に ___ 。 ___ は？",
         choices: ["has happened", "happened", "has been happening", "happens"],
         correctIndex: 1,
-        onCorrect: "'happened' — right! 'ago' points to a finished past, never the present perfect. A common trap, well avoided.",
+        onCorrect:
+            "'happened' — right! 'ago' points to a finished past, never the present perfect. A common trap, well avoided.",
       ),
       // 4 — 現在完了〈継続〉for/since。(大問1 文法型)
       QuestEncounter(
         npcName: "書庫番（しょこばん）ミネ",
         npcEmoji: "📚",
-        npcLine: "I have worked in this library ___ ten years, and I won't let its words die.",
-        npcLineJa: "わたしはこの図書館（としょかん）で十年（じゅうねん）___ 働（はたら）いてきた。言葉（ことば）を消（き）えさせはしない。 ___ は？",
+        npcLine:
+            "I have worked in this library ___ ten years, and I won't let its words die.",
+        npcLineJa:
+            "わたしはこの図書館（としょかん）で十年（じゅうねん）___ 働（はたら）いてきた。言葉（ことば）を消（き）えさせはしない。 ___ は？",
         choices: ["since", "from", "for", "during"],
         correctIndex: 2,
         onCorrect:
@@ -1091,54 +1227,68 @@ const List<QuestTown> kQuestTowns = [
         npcLineJa: "この本（ほん）を返（かえ）さなきゃ。でも、まだ読（よ）み終（お）えて ___ んだ。 ___ は？",
         choices: ["already", "yet", "ever", "soon"],
         correctIndex: 1,
-        onCorrect: "'haven't finished it yet' — exactly. 'yet' lives in questions and negatives; 'already' lives in positives.",
+        onCorrect:
+            "'haven't finished it yet' — exactly. 'yet' lives in questions and negatives; 'already' lives in positives.",
       ),
       // 6 — 受動態 be + 過去分詞。(大問1 文法型)
       QuestEncounter(
         npcName: "けんちくか",
         npcEmoji: "🏛️",
-        npcLine: "Look at this hall. It is very old. It ___ five hundred years ago.",
+        npcLine:
+            "Look at this hall. It is very old. It ___ five hundred years ago.",
         npcLineJa: "この広間（ひろま）を見（み）て。とても古（ふる）い。五百年（ごひゃくねん）前（まえ）に ___ んだ。 ___ は？",
         choices: ["built", "was built", "has built", "is building"],
         correctIndex: 1,
-        onCorrect: "'was built' — yes! The hall didn't build itself; it WAS built. That's the passive voice.",
+        onCorrect:
+            "'was built' — yes! The hall didn't build itself; it WAS built. That's the passive voice.",
       ),
       // 7 — 受動態 by + 動作主。動作主を表す前置詞。(大問1 文法型)
       QuestEncounter(
         npcName: "がか",
         npcEmoji: "🎨",
-        npcLine: "This portrait of the town's oldest family was painted ___ a famous artist long ago.",
-        npcLineJa: "この 町（まち）の いちばん 古（ふる）い 一家（いっか）の 肖像画（しょうぞうが）は、むかし 有名（ゆうめい）な 画家（がか）___ 描（か）かれたものだ。 ___ は？",
+        npcLine:
+            "This portrait of the town's oldest family was painted ___ a famous artist long ago.",
+        npcLineJa:
+            "この 町（まち）の いちばん 古（ふる）い 一家（いっか）の 肖像画（しょうぞうが）は、むかし 有名（ゆうめい）な 画家（がか）___ 描（か）かれたものだ。 ___ は？",
         choices: ["from", "with", "by", "of"],
         correctIndex: 2,
-        onCorrect: "'painted by a famous artist' — correct! 'by' marks who did the action. ...When you speak, the colours in this old painting look a little brighter.",
+        onCorrect:
+            "'painted by a famous artist' — correct! 'by' marks who did the action. ...When you speak, the colours in this old painting look a little brighter.",
       ),
       // 8 — 不定詞〈名詞用法〉decide / want to + 動詞の原形。(大問1 文法型)
       QuestEncounter(
         npcName: "りょこうしゃ",
         npcEmoji: "🧳",
-        npcLine: "I came a long way to study here. I decided ___ history in this city.",
-        npcLineJa: "わたしは遠（とお）くからここへ学（まな）びに来（き）た。この都（みやこ）で歴史（れきし）を ___ ことに決（き）めたの。 ___ は？",
+        npcLine:
+            "I came a long way to study here. I decided ___ history in this city.",
+        npcLineJa:
+            "わたしは遠（とお）くからここへ学（まな）びに来（き）た。この都（みやこ）で歴史（れきし）を ___ ことに決（き）めたの。 ___ は？",
         choices: ["studying", "to study", "studied", "study"],
         correctIndex: 1,
-        onCorrect: "'decided to study' — yes! 'decide', 'want', 'hope' all take the to-infinitive. Good instinct.",
+        onCorrect:
+            "'decided to study' — yes! 'decide', 'want', 'hope' all take the to-infinitive. Good instinct.",
       ),
       // 9 — 動名詞 vs 不定詞。enjoy は動名詞をとる（動詞別パターンのトラップ）。(大問1 文法型)
       QuestEncounter(
         npcName: "おんがくか",
         npcEmoji: "🎻",
-        npcLine: "Music fills these halls again. I really enjoy ___ for the students here.",
-        npcLineJa: "音楽（おんがく）がまた広間（ひろま）に満（み）ちる。わたしは学生（がくせい）たちのために ___ のが大好（だいす）きなの。 ___ は？",
+        npcLine:
+            "Music fills these halls again. I really enjoy ___ for the students here.",
+        npcLineJa:
+            "音楽（おんがく）がまた広間（ひろま）に満（み）ちる。わたしは学生（がくせい）たちのために ___ のが大好（だいす）きなの。 ___ は？",
         choices: ["to play", "play", "playing", "played"],
         correctIndex: 2,
-        onCorrect: "'enjoy playing' — exactly! 'enjoy', 'finish', 'stop' take the ~ing form, not 'to'. That trips up many.",
+        onCorrect:
+            "'enjoy playing' — exactly! 'enjoy', 'finish', 'stop' take the ~ing form, not 'to'. That trips up many.",
       ),
       // 10 — 接続詞 that（think (that)…）。(大問2 会話型)
       QuestEncounter(
         npcName: "ともだち",
         npcEmoji: "🧒",
-        npcLine: "The teacher gave us hard homework. Do you think we can finish it today?",
-        npcLineJa: "先生（せんせい）が難（むずか）しい宿題（しゅくだい）を出（だ）したね。今日中（きょうじゅう）に終（お）わると思（おも）う？",
+        npcLine:
+            "The teacher gave us hard homework. Do you think we can finish it today?",
+        npcLineJa:
+            "先生（せんせい）が難（むずか）しい宿題（しゅくだい）を出（だ）したね。今日中（きょうじゅう）に終（お）わると思（おも）う？",
         choices: [
           "I think that we can do it if we work together.",
           "I think can we do it today.",
@@ -1146,7 +1296,8 @@ const List<QuestTown> kQuestTowns = [
           "Yes, the homework is very long and hard.",
         ],
         correctIndex: 0,
-        onCorrect: "'I think that we can do it together' — well put! And you're right. Let's help each other.",
+        onCorrect:
+            "'I think that we can do it together' — well put! And you're right. Let's help each other.",
       ),
       // 11 — 間接疑問文の語順。I know where he is（疑問文の語順にしない頻出トラップ）。(大問1 文法型)
       QuestEncounter(
@@ -1161,54 +1312,67 @@ const List<QuestTown> kQuestTowns = [
           "the traveller where is",
         ],
         correctIndex: 1,
-        onCorrect: "'where the traveller is' — perfect! Inside a sentence, the question word order disappears. A real test favourite.",
+        onCorrect:
+            "'where the traveller is' — perfect! Inside a sentence, the question word order disappears. A real test favourite.",
       ),
       // 12 — 関係代名詞〈主格〉who（人を先行詞に）。(大問1 文法型)
       QuestEncounter(
         npcName: "ハーモニー",
         npcEmoji: "🎶",
-        npcLine: "I'm a bard who sings lost words. I'm looking for a hero ___ can bring stories back.",
-        npcLineJa: "わたしは失（うしな）われた言葉（ことば）を歌（うた）う吟遊詩人（ぎんゆうしじん）。物語（ものがたり）を取（と）りもどせる英雄（えいゆう）を探（さが）しているの。 ___ は？",
+        npcLine:
+            "I'm a bard who sings lost words. I'm looking for a hero ___ can bring stories back.",
+        npcLineJa:
+            "わたしは失（うしな）われた言葉（ことば）を歌（うた）う吟遊詩人（ぎんゆうしじん）。物語（ものがたり）を取（と）りもどせる英雄（えいゆう）を探（さが）しているの。 ___ は？",
         choices: ["which", "who", "where", "what"],
         correctIndex: 1,
-        onCorrect: "'a hero who can bring stories back' — yes! 'who' for people as the subject. ...And here you are, hero.",
+        onCorrect:
+            "'a hero who can bring stories back' — yes! 'who' for people as the subject. ...And here you are, hero.",
       ),
       // 13 — 関係代名詞〈目的格〉which/that（物を先行詞・目的格）。格選択のトラップ。(大問1 文法型)
       QuestEncounter(
         npcName: "としょかんいん",
         npcEmoji: "📚",
-        npcLine: "Here is the very book ___ the last person who could speak once read as a child.",
+        npcLine:
+            "Here is the very book ___ the last person who could speak once read as a child.",
         npcLineJa: "さいごに ことばを はなせた人（ひと）が、おさない ころに よんだ、あの本（ほん）です。 ___ は？",
         choices: ["who", "where", "which", "what"],
         correctIndex: 2,
-        onCorrect: "'the book which the speaker read' — correct! 'which' for things; here it's the object of 'read'. You chose the case well.",
+        onCorrect:
+            "'the book which the speaker read' — correct! 'which' for things; here it's the object of 'read'. You chose the case well.",
       ),
       // 14 — 比較 as ~ as（同等比較）。(大問1 文法型)
       QuestEncounter(
         npcName: "スポーツせんしゅ",
         npcEmoji: "⚽",
         npcLine: "You run well! But I can run as ___ as the wind, you know.",
-        npcLineJa: "きみ、走（はし）るのが上手（じょうず）だね！ でもぼくは風（かぜ）と同（おな）じくらい速（はや）く走（はし）れるんだ。 ___ は？",
+        npcLineJa:
+            "きみ、走（はし）るのが上手（じょうず）だね！ でもぼくは風（かぜ）と同（おな）じくらい速（はや）く走（はし）れるんだ。 ___ は？",
         choices: ["faster", "fast", "fastest", "more fast"],
         correctIndex: 1,
-        onCorrect: "'as fast as the wind' — right! Between 'as ... as' we keep the plain form, never the comparative.",
+        onCorrect:
+            "'as fast as the wind' — right! Between 'as ... as' we keep the plain form, never the comparative.",
       ),
       // 15 — 分詞の形容詞用法（過去分詞が名詞を修飾）。(大問1 文法型)
       QuestEncounter(
         npcName: "けんちくか",
         npcEmoji: "🏛️",
-        npcLine: "Be careful near that ___ window — the Silence's shadow passed through it.",
-        npcLineJa: "あの ___ 窓（まど）に近（ちか）づくな――サイレントの影（かげ）が通（とお）り抜（ぬ）けたのだ。「こわされた窓」。 ___ は？",
+        npcLine:
+            "Be careful near that ___ window — the Silence's shadow passed through it.",
+        npcLineJa:
+            "あの ___ 窓（まど）に近（ちか）づくな――サイレントの影（かげ）が通（とお）り抜（ぬ）けたのだ。「こわされた窓」。 ___ は？",
         choices: ["breaking", "broke", "broken", "breaks"],
         correctIndex: 2,
-        onCorrect: "'broken window' — exactly! A past participle can describe a noun: the window that was broken. Sharp eye.",
+        onCorrect:
+            "'broken window' — exactly! A past participle can describe a noun: the window that was broken. Sharp eye.",
       ),
       // 16 — 長文の内容一致。言い換え(paraphrase)が正解、本文語そのままは distractor。(大問3 長文型)
       QuestEncounter(
         npcName: "れきしか",
         npcEmoji: "📜",
-        npcLine: "The scroll reads: 'When the last voice fell silent in the castle, the city's words slowly disappeared.' What does this mean?",
-        npcLineJa: "巻物（まきもの）にはこうある――「城（しろ）の さいごの こえが しずかに なったとき、都（みやこ）の言葉（ことば）は少（すこ）しずつ消（き）えていった」。これはどういう意味（いみ）？",
+        npcLine:
+            "The scroll reads: 'When the last voice fell silent in the castle, the city's words slowly disappeared.' What does this mean?",
+        npcLineJa:
+            "巻物（まきもの）にはこうある――「城（しろ）の さいごの こえが しずかに なったとき、都（みやこ）の言葉（ことば）は少（すこ）しずつ消（き）えていった」。これはどういう意味（いみ）？",
         choices: [
           "The last voice vanished from the castle.",
           "After the last voice went silent, the city gradually began to lose its words.",
@@ -1216,14 +1380,17 @@ const List<QuestTown> kQuestTowns = [
           "The city's words appeared slowly in the castle.",
         ],
         correctIndex: 1,
-        onCorrect: "Correct — and you chose the paraphrase, not the words copied straight from the text. That's the real reading skill.",
+        onCorrect:
+            "Correct — and you chose the paraphrase, not the words copied straight from the text. That's the real reading skill.",
       ),
       // 17 — Eメール返信。相手の「2つの質問に必ず答える」要件。(Writing Eメール型, 2024新設)
       QuestEncounter(
         npcName: "ペンフレンド",
         npcEmoji: "✉️",
-        npcLine: "I got your letter! I have two questions: What club are you in, and how often do you practice?",
-        npcLineJa: "手紙（てがみ）ありがとう！ 質問（しつもん）が二（ふた）つあるの。何部（なにぶ）に入（はい）っている？ そして、どのくらいの頻度（ひんど）で練習（れんしゅう）するの？",
+        npcLine:
+            "I got your letter! I have two questions: What club are you in, and how often do you practice?",
+        npcLineJa:
+            "手紙（てがみ）ありがとう！ 質問（しつもん）が二（ふた）つあるの。何部（なにぶ）に入（はい）っている？ そして、どのくらいの頻度（ひんど）で練習（れんしゅう）するの？",
         choices: [
           "I'm in the art club. Thank you for writing to me!",
           "I'm in the art club, and I practice three times a week.",
@@ -1231,14 +1398,17 @@ const List<QuestTown> kQuestTowns = [
           "Yes, I have a club and I practice it.",
         ],
         correctIndex: 1,
-        onCorrect: "Both questions answered — the club AND how often! That's exactly what an email reply must do. Many forget the second one.",
+        onCorrect:
+            "Both questions answered — the club AND how often! That's exactly what an email reply must do. Many forget the second one.",
       ),
       // 18 — 意見論述。意見を述べ、理由を添える（理由が必須）。(Writing 意見論述型)
       QuestEncounter(
         npcName: "せんせい",
         npcEmoji: "👩‍🏫",
-        npcLine: "Here is today's question: 'Is it good for students to study abroad?' Give me your opinion with a reason.",
-        npcLineJa: "今日（きょう）の問題（もんだい）です――「学生（がくせい）が外国（がいこく）で学（まな）ぶのは良（よ）いことか？」 理由（りゆう）をそえて、あなたの意見（いけん）を。",
+        npcLine:
+            "Here is today's question: 'Is it good for students to study abroad?' Give me your opinion with a reason.",
+        npcLineJa:
+            "今日（きょう）の問題（もんだい）です――「学生（がくせい）が外国（がいこく）で学（まな）ぶのは良（よ）いことか？」 理由（りゆう）をそえて、あなたの意見（いけん）を。",
         choices: [
           "Studying abroad is when you study in another country.",
           "Yes, I think it is good.",
@@ -1246,13 +1416,15 @@ const List<QuestTown> kQuestTowns = [
           "Some students study abroad and some study at home.",
         ],
         correctIndex: 2,
-        onCorrect: "An opinion AND a clear reason — that's the heart of the essay task. Without a reason, an opinion scores nothing.",
+        onCorrect:
+            "An opinion AND a clear reason — that's the heart of the essay task. Without a reason, an opinion scores nothing.",
       ),
       // 19 — 二次面接 イラスト描写。今まさに起きている動作は現在進行形。(Speaking 二次・イラスト描写型)
       QuestEncounter(
         npcName: "めんせつかん",
         npcEmoji: "🎓",
-        npcLine: "Now, please look at the picture and tell me: what is the boy doing?",
+        npcLine:
+            "Now, please look at the picture and tell me: what is the boy doing?",
         npcLineJa: "では、絵（え）を見（み）て答（こた）えてください――男（おとこ）の子（こ）は何（なに）をしていますか？",
         choices: [
           "The boy is reading a book under a tree.",
@@ -1261,14 +1433,17 @@ const List<QuestTown> kQuestTowns = [
           "The boy will read a book under a tree.",
         ],
         correctIndex: 0,
-        onCorrect: "'The boy is reading' — perfect! In the interview, describe a picture with the present continuous: what's happening right now.",
+        onCorrect:
+            "'The boy is reading' — perfect! In the interview, describe a picture with the present continuous: what's happening right now.",
       ),
       // 20 — Boss gate。完了・関係詞・意見の総合運用 + サイレント。(大問総合)
       QuestEncounter(
         npcName: "サイレントの影（かげ）",
         npcEmoji: "🌑",
-        npcLine: "You have grown, little voice. Tell me — why do you fight for words that have only ever brought pain?",
-        npcLineJa: "大（おお）きくなったな、消（き）えない こえの子（こ）よ。言（い）え――ただ苦（くる）しみだけをもたらしてきた言葉（ことば）のために、なぜ戦（たたか）う？",
+        npcLine:
+            "You have grown, little voice. Tell me — why do you fight for words that have only ever brought pain?",
+        npcLineJa:
+            "大（おお）きくなったな、消（き）えない こえの子（こ）よ。言（い）え――ただ苦（くる）しみだけをもたらしてきた言葉（ことば）のために、なぜ戦（たたか）う？",
         choices: [
           "Words have brought pain since long ago.",
           "Because words, which we have shared since we were born, are how we understand each other.",
@@ -1276,7 +1451,8 @@ const List<QuestTown> kQuestTowns = [
           "Words are which people speak and write.",
         ],
         correctIndex: 1,
-        onCorrect: "...A relative clause, a present perfect, a reason — and a truth I cannot answer. The third word is yours, traveller. But the harder roads still lie ahead... and I will be waiting.",
+        onCorrect:
+            "...A relative clause, a present perfect, a reason — and a truth I cannot answer. The third word is yours, traveller. But the harder roads still lie ahead... and I will be waiting.",
       ),
     ],
   ),
@@ -1320,8 +1496,7 @@ const List<QuestTown> kQuestTowns = [
         npcEmoji: "⚓",
         npcLine:
             "I have lived by this harbour for thirty years. How long have you been a traveller?",
-        npcLineJa:
-            "わしはこの港（みなと）で三十年（さんじゅうねん）暮（く）らしてきた。おまえは、どれくらい旅（たび）をしているのだ？",
+        npcLineJa: "わしはこの港（みなと）で三十年（さんじゅうねん）暮（く）らしてきた。おまえは、どれくらい旅（たび）をしているのだ？",
         choices: [
           "I have travelled since I was a child.",
           "I travelled for many years ago.",
@@ -1340,8 +1515,7 @@ const List<QuestTown> kQuestTowns = [
         npcEmoji: "🛍️",
         npcLine:
             "These spices come from far away. Do you know where they are grown?",
-        npcLineJa:
-            "この香辛料（こうしんりょう）は遠（とお）くから来（く）る。どこで育（そだ）てられているか知（し）っているか？",
+        npcLineJa: "この香辛料（こうしんりょう）は遠（とお）くから来（く）る。どこで育（そだ）てられているか知（し）っているか？",
         choices: [
           "Yes, people grow them in the south.",
           "They are grown on islands in the warm south.",
@@ -1376,8 +1550,7 @@ const List<QuestTown> kQuestTowns = [
         npcEmoji: "🗼",
         npcLine:
             "This is the lighthouse. Can you describe the place ships feel safe again?",
-        npcLineJa:
-            "ここが灯台（とうだい）だ。船（ふね）がふたたび安心（あんしん）できる場所（ばしょ）を、言（い）い表（あらわ）せるか？",
+        npcLineJa: "ここが灯台（とうだい）だ。船（ふね）がふたたび安心（あんしん）できる場所（ばしょ）を、言（い）い表（あらわ）せるか？",
         choices: [
           "It is the harbour where the storms cannot reach them.",
           "It is the harbour which the storms cannot reach there.",
@@ -1394,8 +1567,7 @@ const List<QuestTown> kQuestTowns = [
         npcEmoji: "🛎️",
         npcLine:
             "A guest asked about the festival, but I couldn't answer. Do you know ( )?",
-        npcLineJa:
-            "お客（きゃく）さんがお祭（まつ）りのことを聞（き）いたが、答（こた）えられなかった。（　）を知（し）っているか？",
+        npcLineJa: "お客（きゃく）さんがお祭（まつ）りのことを聞（き）いたが、答（こた）えられなかった。（　）を知（し）っているか？",
         choices: [
           "when does the festival begin",
           "when the festival begins",
@@ -1485,8 +1657,7 @@ const List<QuestTown> kQuestTowns = [
         npcEmoji: "🪚",
         npcLine:
             "I'm building a stage for the festival. Is the wood strong enough?",
-        npcLineJa:
-            "お祭（まつ）りのために舞台（ぶたい）を作（つく）っている。この木（き）は十分（じゅうぶん）じょうぶか？",
+        npcLineJa: "お祭（まつ）りのために舞台（ぶたい）を作（つく）っている。この木（き）は十分（じゅうぶん）じょうぶか？",
         choices: [
           "Yes, it is strong enough for the dancers to stand on.",
           "Yes, it is strong enough for the dancers stand on.",
@@ -1504,8 +1675,7 @@ const List<QuestTown> kQuestTowns = [
         npcEmoji: "🧒",
         npcLine:
             "The open sea is my dream! Do you enjoy ___ about faraway places too?",
-        npcLineJa:
-            "ひろい海（うみ）が ぼくの夢（ゆめ）！ きみも、遠（とお）い国（くに）のことを ___ のは すき？ ___ は？",
+        npcLineJa: "ひろい海（うみ）が ぼくの夢（ゆめ）！ きみも、遠（とお）い国（くに）のことを ___ のは すき？ ___ は？",
         choices: [
           "read",
           "to read",
@@ -1522,8 +1692,7 @@ const List<QuestTown> kQuestTowns = [
         npcEmoji: "🎨",
         npcLine:
             "Look at my painting of the harbour. Tell me what the people are doing.",
-        npcLineJa:
-            "港（みなと）の絵（え）を見（み）て。人々（ひとびと）が何（なに）をしているか、言（い）ってみて。",
+        npcLineJa: "港（みなと）の絵（え）を見（み）て。人々（ひとびと）が何（なに）をしているか、言（い）ってみて。",
         choices: [
           "A woman sells fish, and a boy ran to the boat.",
           "A woman is selling fish, and a boy is running to the boat.",
@@ -1576,8 +1745,7 @@ const List<QuestTown> kQuestTowns = [
         npcEmoji: "📮",
         npcLine:
             "You've answered everything. How should you close the email politely?",
-        npcLineJa:
-            "ぜんぶ答（こた）えた。メールは、どうていねいに結（むす）ぶ？",
+        npcLineJa: "ぜんぶ答（こた）えた。メールは、どうていねいに結（むす）ぶ？",
         choices: [
           "That's all I have to say, the end.",
           "Please answer me right now, it's urgent.",
@@ -1647,8 +1815,10 @@ const List<QuestTown> kQuestTowns = [
       QuestEncounter(
         npcName: "橋守（はしもり）ロウ",
         npcEmoji: "🏮",
-        npcLine: "I ___ on this bridge since the new grade was added in 2025. Show me your purpose.",
-        npcLineJa: "2025年（ねん）に新（あら）しい級（きゅう）ができてから、ずっとこの橋（はし）にいます。 ___ に入（はい）るのは？",
+        npcLine:
+            "I ___ on this bridge since the new grade was added in 2025. Show me your purpose.",
+        npcLineJa:
+            "2025年（ねん）に新（あら）しい級（きゅう）ができてから、ずっとこの橋（はし）にいます。 ___ に入（はい）るのは？",
         choices: ["work", "have worked", "worked", "am working"],
         correctIndex: 1,
         onCorrect:
@@ -1660,191 +1830,280 @@ const List<QuestTown> kQuestTowns = [
       QuestEncounter(
         npcName: "渡し守",
         npcEmoji: "⛵",
-        npcLine: "This is the place ___ many travellers turn back. Will you go on?",
+        npcLine:
+            "This is the place ___ many travellers turn back. Will you go on?",
         npcLineJa: "ここは、多（おお）くの旅人（たびびと）が引（ひ）き返（かえ）す場所（ばしょ）です。 ___ に入（はい）るのは？",
         choices: ["which", "who", "where", "what"],
         correctIndex: 2,
-        onCorrect: "\"The place WHERE...\" — you chose the relative adverb, not the pronoun. Few get that right. Cross on.",
+        onCorrect:
+            "\"The place WHERE...\" — you chose the relative adverb, not the pronoun. Few get that right. Cross on.",
       ),
       // 3 — 使役動詞 make + 原形不定詞. (大問1 文法型)
       QuestEncounter(
         npcName: "橋守の弟子",
         npcEmoji: "🛠️",
-        npcLine: "The strong wind here can make a traveller ___ their balance. Stay alert.",
+        npcLine:
+            "The strong wind here can make a traveller ___ their balance. Stay alert.",
         npcLineJa: "ここの強風（きょうふう）は、旅人（たびびと）にバランスを ___ ことがあります。",
         choices: ["to lose", "lose", "lost", "losing"],
         correctIndex: 1,
-        onCorrect: "\"Make ... LOSE\" — a bare infinitive after make. Good. The wind won't fool you.",
+        onCorrect:
+            "\"Make ... LOSE\" — a bare infinitive after make. Good. The wind won't fool you.",
       ),
       // 4 — 句動詞 carry on (高頻度・社会語彙の入口). (大問1 語彙型)
       QuestEncounter(
         npcName: "旅の楽師",
         npcEmoji: "🎻",
-        npcLine: "Even when the road got hard, I decided to ___ and never quit. What kept me going was music.",
+        npcLine:
+            "Even when the road got hard, I decided to ___ and never quit. What kept me going was music.",
         npcLineJa: "道（みち）がつらくなっても、 ___ ことに決（き）めました。やめなかったのです。",
         choices: ["carry on", "carry out", "carry away", "carry off"],
         correctIndex: 0,
-        onCorrect: "\"Carry ON\" — to continue. The phrasal verbs are sneaky here, but you knew it. Play on, traveller!",
+        onCorrect:
+            "\"Carry ON\" — to continue. The phrasal verbs are sneaky here, but you knew it. Play on, traveller!",
       ),
       // 5 — 接続副詞 however (逆接の論理). (大問1 語彙/論理型)
       QuestEncounter(
         npcName: "学びの巡礼者",
         npcEmoji: "🧳",
-        npcLine: "I studied hard for years. ___, I still find this bridge difficult. Which word fits my meaning?",
-        npcLineJa: "何年（なんねん）も勉強（べんきょう）しました。 ___ 、それでもこの橋（はし）は難（むずか）しい。意味（いみ）に合（あ）う語（ご）は？",
+        npcLine:
+            "I studied hard for years. ___, I still find this bridge difficult. Which word fits my meaning?",
+        npcLineJa:
+            "何年（なんねん）も勉強（べんきょう）しました。 ___ 、それでもこの橋（はし）は難（むずか）しい。意味（いみ）に合（あ）う語（ご）は？",
         choices: ["Therefore", "However", "For example", "Because"],
         correctIndex: 1,
-        onCorrect: "\"However\" — you read the contrast, not just the words. That logic-sense is exactly what 2級 rewards.",
+        onCorrect:
+            "\"However\" — you read the contrast, not just the words. That logic-sense is exactly what 2級 rewards.",
       ),
       // 6 — 仮定法過去 If I were (人称無視の罠). (大問1 文法型)
       QuestEncounter(
         npcName: "迷いの精霊",
         npcEmoji: "🧚",
-        npcLine: "If I ___ you, I would cross before nightfall. The fog grows thicker after dark.",
+        npcLine:
+            "If I ___ you, I would cross before nightfall. The fog grows thicker after dark.",
         npcLineJa: "もし私（わたし）があなた ___ 、日（ひ）が暮（く）れる前（まえ）に渡（わた）るでしょう。",
         choices: ["am", "was", "were", "be"],
         correctIndex: 2,
-        onCorrect: "\"If I WERE you\" — subjunctive 'were' for every person. You didn't fall for 'was.' Hurry on!",
+        onCorrect:
+            "\"If I WERE you\" — subjunctive 'were' for every person. You didn't fall for 'was.' Hurry on!",
       ),
       // 7 — 仮定法過去完了 If I had + p.p. (帰結節 would have). (大問1 文法型)
       QuestEncounter(
         npcName: "老いた旅人",
         npcEmoji: "🧓",
-        npcLine: "If I had trained harder in my youth, I ___ this bridge years ago. Learn from my regret.",
+        npcLine:
+            "If I had trained harder in my youth, I ___ this bridge years ago. Learn from my regret.",
         npcLineJa: "若（わか）いころもっと鍛（きた）えていたら、何年（なんねん）も前（まえ）にこの橋（はし）を ___ のに。",
-        choices: ["would cross", "will have crossed", "would have crossed", "had crossed"],
+        choices: [
+          "would cross",
+          "will have crossed",
+          "would have crossed",
+          "had crossed"
+        ],
         correctIndex: 2,
-        onCorrect: "\"Would HAVE crossed\" — past unreal needs 'would have + p.p.' Wise. Don't repeat my mistake.",
+        onCorrect:
+            "\"Would HAVE crossed\" — past unreal needs 'would have + p.p.' Wise. Don't repeat my mistake.",
       ),
       // 8 — 分詞構文 (主語一致・態). (大問1 文法型)
       QuestEncounter(
         npcName: "見張りの兵",
         npcEmoji: "💂",
-        npcLine: "___ from the tower, the whole valley looks small. Come, see it with me.",
+        npcLine:
+            "___ from the tower, the whole valley looks small. Come, see it with me.",
         npcLineJa: "塔（とう）から ___ と、谷（たに）ぜんたいが小（ちい）さく見（み）えます。",
         choices: ["Seen", "Seeing", "To see", "See"],
         correctIndex: 1,
-        onCorrect: "\"Seeing ...\" — the participle shares the subject 'you' who looks. Clean. The view is yours.",
+        onCorrect:
+            "\"Seeing ...\" — the participle shares the subject 'you' who looks. Clean. The view is yours.",
       ),
       // 9 — 強調構文 It is ~ that (形式主語との区別). (大問1 文法型)
       QuestEncounter(
         npcName: "橋の詩人",
         npcEmoji: "📜",
-        npcLine: "It ___ courage, not speed, that carries a traveller across. Which word completes my verse?",
+        npcLine:
+            "It ___ courage, not speed, that carries a traveller across. Which word completes my verse?",
         npcLineJa: "旅人（たびびと）を渡（わた）らせるのは速（はや）さではなく、勇気（ゆうき） ___ のです。",
         choices: ["is", "has", "does", "was being"],
         correctIndex: 0,
-        onCorrect: "\"It IS courage ... that...\" — a cleft sentence for emphasis. Beautifully done. The bridge listens.",
+        onCorrect:
+            "\"It IS courage ... that...\" — a cleft sentence for emphasis. Beautifully done. The bridge listens.",
       ),
       // 10 — 関係詞 非制限用法 (, which). (大問1 文法型)
       QuestEncounter(
         npcName: "地図学者",
         npcEmoji: "🗺️",
-        npcLine: "This bridge, ___ was built in 2025, links two great grades. Note it on your map.",
-        npcLineJa: "この橋（はし）は、2025年（ねん）にかけられ、二（ふた）つの大（おお）きな級（きゅう）をつなぎます。 ___ に入（はい）るのは？",
+        npcLine:
+            "This bridge, ___ was built in 2025, links two great grades. Note it on your map.",
+        npcLineJa:
+            "この橋（はし）は、2025年（ねん）にかけられ、二（ふた）つの大（おお）きな級（きゅう）をつなぎます。 ___ に入（はい）るのは？",
         choices: ["that", "which", "where", "what"],
         correctIndex: 1,
-        onCorrect: "\"...,WHICH was built...\" — non-defining clauses take 'which,' never 'that.' Precise. Mapped!",
+        onCorrect:
+            "\"...,WHICH was built...\" — non-defining clauses take 'which,' never 'that.' Precise. Mapped!",
       ),
       // 11 — 長文の語句空所: nevertheless (逆接マーカー). (大問2 長文語句空所型)
       QuestEncounter(
         npcName: "記録係",
         npcEmoji: "✍️",
-        npcLine: "My notes read: 'The repairs cost a fortune. ___, the bridge still cracks.' Choose the linker.",
-        npcLineJa: "私（わたし）のメモ――「修理（しゅうり）は大金（たいきん）がかかった。 ___ 、橋（はし）はまだひび割（わ）れる。」",
+        npcLine:
+            "My notes read: 'The repairs cost a fortune. ___, the bridge still cracks.' Choose the linker.",
+        npcLineJa:
+            "私（わたし）のメモ――「修理（しゅうり）は大金（たいきん）がかかった。 ___ 、橋（はし）はまだひび割（わ）れる。」",
         choices: ["As a result", "Nevertheless", "In addition", "For instance"],
         correctIndex: 1,
-        onCorrect: "\"Nevertheless\" — money spent, yet still cracking: a contrast. Your discourse-sense is ready for 2級.",
+        onCorrect:
+            "\"Nevertheless\" — money spent, yet still cracking: a contrast. Your discourse-sense is ready for 2級.",
       ),
       // 12 — 長文の語句空所: as a result (因果 vs 追加). (大問2 長文語句空所型)
       QuestEncounter(
         npcName: "橋の技師",
         npcEmoji: "⚙️",
-        npcLine: "We added steel supports last spring. ___, the bridge has not shaken once since. Which fits?",
-        npcLineJa: "去年（きょねん）の春（はる）、鋼鉄（こうてつ）の支柱（しちゅう）を足（た）しました。 ___ 、それ以来（いらい）一度（いちど）も揺（ゆ）れていません。",
+        npcLine:
+            "We added steel supports last spring. ___, the bridge has not shaken once since. Which fits?",
+        npcLineJa:
+            "去年（きょねん）の春（はる）、鋼鉄（こうてつ）の支柱（しちゅう）を足（た）しました。 ___ 、それ以来（いらい）一度（いちど）も揺（ゆ）れていません。",
         choices: ["As a result", "However", "In addition", "On the other hand"],
         correctIndex: 0,
-        onCorrect: "\"As a result\" — support added, so it stopped shaking: cause and effect, not mere addition. Sharp!",
+        onCorrect:
+            "\"As a result\" — support added, so it stopped shaking: cause and effect, not mere addition. Sharp!",
       ),
       // 13 — 長文の語句空所: 社会的話題語彙 (environment). (大問2 語彙型)
       QuestEncounter(
         npcName: "自然観察員",
         npcEmoji: "🌿",
-        npcLine: "We built this bridge from local stone to protect the river ___. Pick the word my report needs.",
+        npcLine:
+            "We built this bridge from local stone to protect the river ___. Pick the word my report needs.",
         npcLineJa: "川（かわ）の ___ を守（まも）るため、地元（じもと）の石（いし）で橋（はし）を作（つく）りました。",
         choices: ["entrance", "environment", "experiment", "entertainment"],
         correctIndex: 1,
-        onCorrect: "\"Environment\" — the social-topic vocabulary 2級 leans on. You picked it from look-alikes. Well read!",
+        onCorrect:
+            "\"Environment\" — the social-topic vocabulary 2級 leans on. You picked it from look-alikes. Well read!",
       ),
       // 14 — 長文内容一致: 言い換え正解 vs 本文語そのまま distractor. (大問3 内容一致型)
       QuestEncounter(
         npcName: "案内人ハーモニー",
         npcEmoji: "🎼",
-        npcLine: "My sign says: 'The bridge is closed on rainy days because the stone becomes slippery.' What does it mean?",
-        npcLineJa: "看板（かんばん）――「石（いし）がすべりやすくなるので、雨（あめ）の日（ひ）は橋（はし）を閉（と）じます。」どういう意味（いみ）？",
-        choices: ["You cannot cross when it rains, for safety.", "The stone is slippery on every day.", "The bridge is closed because it is rainy and slippery and stone.", "The bridge becomes slippery so people like rainy days."],
+        npcLine:
+            "My sign says: 'The bridge is closed on rainy days because the stone becomes slippery.' What does it mean?",
+        npcLineJa:
+            "看板（かんばん）――「石（いし）がすべりやすくなるので、雨（あめ）の日（ひ）は橋（はし）を閉（と）じます。」どういう意味（いみ）？",
+        choices: [
+          "You cannot cross when it rains, for safety.",
+          "The stone is slippery on every day.",
+          "The bridge is closed because it is rainy and slippery and stone.",
+          "The bridge becomes slippery so people like rainy days."
+        ],
         correctIndex: 0,
-        onCorrect: "Right — the paraphrase, not the words copied straight from the sign. That's how 内容一致 traps work. Pass!",
+        onCorrect:
+            "Right — the paraphrase, not the words copied straight from the sign. That's how 内容一致 traps work. Pass!",
       ),
       // 15 — 長文内容一致: 推論 (明示されない結論). (大問3 内容一致型)
       QuestEncounter(
         npcName: "茶屋の主人",
         npcEmoji: "🍵",
-        npcLine: "My note: 'More travellers stop here than a year ago, yet I sell less tea.' What can we infer?",
-        npcLineJa: "メモ――「一年前（いちねんまえ）より立（た）ち寄（よ）る旅人（たびびと）は増（ふ）えたのに、お茶（ちゃ）は売（う）れない。」何（なに）が分（わ）かる？",
-        choices: ["Travellers now buy something other than tea here.", "Nobody stops at the tea house anymore.", "The owner sells more tea than last year.", "Travellers dislike the tea house this year."],
+        npcLine:
+            "My note: 'More travellers stop here than a year ago, yet I sell less tea.' What can we infer?",
+        npcLineJa:
+            "メモ――「一年前（いちねんまえ）より立（た）ち寄（よ）る旅人（たびびと）は増（ふ）えたのに、お茶（ちゃ）は売（う）れない。」何（なに）が分（わ）かる？",
+        choices: [
+          "Travellers now buy something other than tea here.",
+          "Nobody stops at the tea house anymore.",
+          "The owner sells more tea than last year.",
+          "Travellers dislike the tea house this year."
+        ],
         correctIndex: 0,
-        onCorrect: "Exactly — more visitors but less tea means they buy other things. You inferred what wasn't stated. Brilliant!",
+        onCorrect:
+            "Exactly — more visitors but less tea means they buy other things. You inferred what wasn't stated. Brilliant!",
       ),
       // 16 — Writing 要約: 本文情報のみ (意見・例を入れない). (要約型)
       QuestEncounter(
         npcName: "写本の魔導士",
         npcEmoji: "🪄",
-        npcLine: "Summarise this: 'The bridge was rebuilt in 2025. It is stronger, but the toll is higher.' Best summary?",
-        npcLineJa: "要約（ようやく）しなさい――「橋（はし）は2025年（ねん）に建（た）て直（なお）された。丈夫（じょうぶ）になったが、通行料（つうこうりょう）は高（たか）くなった。」最（もっと）も良（よ）い要約（ようやく）は？",
-        choices: ["The new 2025 bridge is stronger but costs more to cross.", "I think the bridge is too expensive and unfair.", "The bridge is great and everyone should visit it someday.", "Bridges in 2025 are the best bridges ever built by people."],
+        npcLine:
+            "Summarise this: 'The bridge was rebuilt in 2025. It is stronger, but the toll is higher.' Best summary?",
+        npcLineJa:
+            "要約（ようやく）しなさい――「橋（はし）は2025年（ねん）に建（た）て直（なお）された。丈夫（じょうぶ）になったが、通行料（つうこうりょう）は高（たか）くなった。」最（もっと）も良（よ）い要約（ようやく）は？",
+        choices: [
+          "The new 2025 bridge is stronger but costs more to cross.",
+          "I think the bridge is too expensive and unfair.",
+          "The bridge is great and everyone should visit it someday.",
+          "Bridges in 2025 are the best bridges ever built by people."
+        ],
         correctIndex: 0,
-        onCorrect: "Yes — only the text's facts, no opinion, no extra praise. That restraint is what 要約 demands. Inscribed!",
+        onCorrect:
+            "Yes — only the text's facts, no opinion, no extra praise. That restraint is what 要約 demands. Inscribed!",
       ),
       // 17 — Writing 要約: パラフレーズ (本文丸写しを避ける). (要約型)
       QuestEncounter(
         npcName: "言いかえの賢者",
         npcEmoji: "📖",
-        npcLine: "The text: 'Many people use the bridge daily to reach their jobs.' Summarise it in your OWN words.",
-        npcLineJa: "本文（ほんぶん）――「多（おお）くの人（ひと）が仕事（しごと）に行（い）くため、毎日（まいにち）この橋（はし）を使（つか）う。」自分（じぶん）のことばで言（い）いかえると？",
-        choices: ["Many people use the bridge daily to reach their jobs.", "The bridge is a daily route to work for many commuters.", "I love using this bridge to go to my own job every day.", "People reach their jobs and use the bridge daily many people."],
+        npcLine:
+            "The text: 'Many people use the bridge daily to reach their jobs.' Summarise it in your OWN words.",
+        npcLineJa:
+            "本文（ほんぶん）――「多（おお）くの人（ひと）が仕事（しごと）に行（い）くため、毎日（まいにち）この橋（はし）を使（つか）う。」自分（じぶん）のことばで言（い）いかえると？",
+        choices: [
+          "Many people use the bridge daily to reach their jobs.",
+          "The bridge is a daily route to work for many commuters.",
+          "I love using this bridge to go to my own job every day.",
+          "People reach their jobs and use the bridge daily many people."
+        ],
         correctIndex: 1,
-        onCorrect: "\"A daily route to work for commuters\" — same idea, fresh words. Paraphrase, not copy. That's 2級-level writing!",
+        onCorrect:
+            "\"A daily route to work for commuters\" — same idea, fresh words. Paraphrase, not copy. That's 2級-level writing!",
       ),
       // 18 — Writing 意見論述: 理由を2つ展開 (構成). (意見論述型)
       QuestEncounter(
         npcName: "問いかける守人",
         npcEmoji: "🗝️",
-        npcLine: "Should students learn a second language? Give the answer that states an opinion AND two reasons.",
-        npcLineJa: "生徒（せいと）は第二言語（だいにげんご）を学（まな）ぶべき？ 意見（いけん）と理由（りゆう）二（ふた）つを述（の）べた答（こた）えは？",
-        choices: ["Yes. It opens jobs abroad, and it helps people understand other cultures.", "Yes, because languages are good and also nice to learn.", "I think maybe yes or no, it depends on the person really.", "Languages are spoken in many countries around the whole world."],
+        npcLine:
+            "Should students learn a second language? Give the answer that states an opinion AND two reasons.",
+        npcLineJa:
+            "生徒（せいと）は第二言語（だいにげんご）を学（まな）ぶべき？ 意見（いけん）と理由（りゆう）二（ふた）つを述（の）べた答（こた）えは？",
+        choices: [
+          "Yes. It opens jobs abroad, and it helps people understand other cultures.",
+          "Yes, because languages are good and also nice to learn.",
+          "I think maybe yes or no, it depends on the person really.",
+          "Languages are spoken in many countries around the whole world."
+        ],
         correctIndex: 0,
-        onCorrect: "A clear opinion with TWO distinct reasons — jobs and culture. That structure scores on 意見論述. The gate opens!",
+        onCorrect:
+            "A clear opinion with TWO distinct reasons — jobs and culture. That structure scores on 意見論述. The gate opens!",
       ),
       // 19 — 面接 3コマ展開: 物語化・時制の一貫 (過去で語る). (二次 3コマ説明型)
       QuestEncounter(
         npcName: "絵巻の番人",
         npcEmoji: "🖼️",
-        npcLine: "Tell my three-panel tale in order: first a girl saw a broken plank, then... How does panel two go?",
-        npcLineJa: "三（み）コマの話（はなし）を順（じゅん）に語（かた）って。まず女（おんな）の子（こ）が壊（こわ）れた板（いた）を見（み）て、それから…二（ふた）コマ目（め）は？",
-        choices: ["She fixed it, so travellers could cross safely again.", "She is fixing it now and travellers cross safely.", "Fix the plank and then the people can cross it.", "A plank is a flat piece of wood used in bridges."],
+        npcLine:
+            "Tell my three-panel tale in order: first a girl saw a broken plank, then... How does panel two go?",
+        npcLineJa:
+            "三（み）コマの話（はなし）を順（じゅん）に語（かた）って。まず女（おんな）の子（こ）が壊（こわ）れた板（いた）を見（み）て、それから…二（ふた）コマ目（め）は？",
+        choices: [
+          "She fixed it, so travellers could cross safely again.",
+          "She is fixing it now and travellers cross safely.",
+          "Fix the plank and then the people can cross it.",
+          "A plank is a flat piece of wood used in bridges."
+        ],
         correctIndex: 0,
-        onCorrect: "\"She FIXED it, so...\" — past tense kept consistent, and the story moves forward. That's how 3コマ narration works!",
+        onCorrect:
+            "\"She FIXED it, so...\" — past tense kept consistent, and the story moves forward. That's how 3コマ narration works!",
       ),
       // 20 — ボス: 仮定法 + 逆接マーカー + 理由展開の統合 (サイレントの手先). (統合・意見論述型)
       QuestEncounter(
         npcName: "橋の影 (サイレントの手先)",
         npcEmoji: "🌑",
-        npcLine: "If words truly mattered, you would have crossed already. Nevertheless you hesitate — so WHY cross at all?",
-        npcLineJa: "ことばに本当（ほんとう）に意味（いみ）があるなら、もう渡（わた）り終（お）えていたはず。それでも迷（まよ）う――なぜ渡（わた）る？",
-        choices: ["Words DO matter; even if I stumble, I cross to bring the world's voice back, and to prove I belong.", "If words mattered, the bridge would be crossed by me already long.", "I hesitate because the bridge is high and the wind is very strong today.", "Nevertheless is a word that shows a contrast between two ideas."],
+        npcLine:
+            "If words truly mattered, you would have crossed already. Nevertheless you hesitate — so WHY cross at all?",
+        npcLineJa:
+            "ことばに本当（ほんとう）に意味（いみ）があるなら、もう渡（わた）り終（お）えていたはず。それでも迷（まよ）う――なぜ渡（わた）る？",
+        choices: [
+          "Words DO matter; even if I stumble, I cross to bring the world's voice back, and to prove I belong.",
+          "If words mattered, the bridge would be crossed by me already long.",
+          "I hesitate because the bridge is high and the wind is very strong today.",
+          "Nevertheless is a word that shows a contrast between two ideas."
+        ],
         correctIndex: 0,
-        onCorrect: "The shadow recoils — your reply held an opinion, two reasons, and never broke under its trap. The bridge's voice returns!",
+        onCorrect:
+            "The shadow recoils — your reply held an opinion, two reasons, and never broke under its trap. The bridge's voice returns!",
       ),
     ],
   ),
@@ -1867,201 +2126,288 @@ const List<QuestTown> kQuestTowns = [
       QuestEncounter(
         npcName: "せんせい",
         npcEmoji: "👩‍🏫",
-        npcLine: "I've been teaching here for ten years, though the number of students keeps declining.",
-        npcLineJa: "10年間（ねんかん）ここで教（おし）えています。でも生徒（せいと）の数（かず）はずっと減（へ）り続（つづ）けているのです。",
-        choices: ["Yes, I like cats very much.", "I don't have any money, sorry.", "That must be quite challenging for you.", "The weather is nice today, isn't it?"],
+        npcLine:
+            "I've been teaching here for ten years, though the number of students keeps declining.",
+        npcLineJa:
+            "10年間（ねんかん）ここで教（おし）えています。でも生徒（せいと）の数（かず）はずっと減（へ）り続（つづ）けているのです。",
+        choices: [
+          "Yes, I like cats very much.",
+          "I don't have any money, sorry.",
+          "That must be quite challenging for you.",
+          "The weather is nice today, isn't it?"
+        ],
         correctIndex: 2,
-        onCorrect: "Exactly — but I still love teaching. Thank you for understanding.",
+        onCorrect:
+            "Exactly — but I still love teaching. Thank you for understanding.",
       ),
       // 2 — 現在完了の継続用法 (since が手がかり; 過去形distractorが罠). (大問1 文法空所型)
       QuestEncounter(
         npcName: "しょうにん",
         npcEmoji: "🧑‍💼",
-        npcLine: "Trade in this town ___ slow ever since the new tax was introduced last spring.",
-        npcLineJa: "この町（まち）の商売（しょうばい）は、去年（きょねん）の春（はる）に新（あたら）しい税（ぜい）が導入（どうにゅう）されて以来（いらい）、ずっと不振（ふしん）です。",
+        npcLine:
+            "Trade in this town ___ slow ever since the new tax was introduced last spring.",
+        npcLineJa:
+            "この町（まち）の商売（しょうばい）は、去年（きょねん）の春（はる）に新（あたら）しい税（ぜい）が導入（どうにゅう）されて以来（いらい）、ずっと不振（ふしん）です。",
         choices: ["has been", "was", "is being", "will be"],
         correctIndex: 0,
-        onCorrect: "Right — 'has been', because 'ever since' means it continues to now. You know your grammar.",
+        onCorrect:
+            "Right — 'has been', because 'ever since' means it continues to now. You know your grammar.",
       ),
       // 3 — 受動態 (be + 過去分詞). (大問1 文法空所型)
       QuestEncounter(
         npcName: "やくにん",
         npcEmoji: "🧑‍⚖️",
-        npcLine: "The new library ___ by the city council two years ago and is now open to all.",
-        npcLineJa: "新（あたら）しい図書館（としょかん）は2年前（ねんまえ）に市議会（しぎかい）によって建（た）てられ、今（いま）はだれでも利用（りよう）できます。",
+        npcLine:
+            "The new library ___ by the city council two years ago and is now open to all.",
+        npcLineJa:
+            "新（あたら）しい図書館（としょかん）は2年前（ねんまえ）に市議会（しぎかい）によって建（た）てられ、今（いま）はだれでも利用（りよう）できます。",
         choices: ["built", "has built", "was building", "was built"],
         correctIndex: 3,
-        onCorrect: "Yes — 'was built'. The library received the action, so we need the passive. Well done.",
+        onCorrect:
+            "Yes — 'was built'. The library received the action, so we need the passive. Well done.",
       ),
       // 4 — 関係代名詞 主格 (人=who). (大問1 文法空所型)
       QuestEncounter(
         npcName: "がくせい",
         npcEmoji: "🧑‍🎓",
-        npcLine: "The professor ___ wrote this book is giving a lecture in the castle hall tonight.",
-        npcLineJa: "この本（ほん）を書（か）いた教授（きょうじゅ）が、今夜（こんや）お城（しろ）の大広間（おおひろま）で講義（こうぎ）をします。",
+        npcLine:
+            "The professor ___ wrote this book is giving a lecture in the castle hall tonight.",
+        npcLineJa:
+            "この本（ほん）を書（か）いた教授（きょうじゅ）が、今夜（こんや）お城（しろ）の大広間（おおひろま）で講義（こうぎ）をします。",
         choices: ["which", "who", "whose", "whom"],
         correctIndex: 1,
-        onCorrect: "Correct — 'who', a subject relative pronoun for a person. You'd enjoy that lecture.",
+        onCorrect:
+            "Correct — 'who', a subject relative pronoun for a person. You'd enjoy that lecture.",
       ),
       // 5 — 前置詞 + 関係代名詞 (in which). (大問1 文法空所型 — 高度関係詞)
       QuestEncounter(
         npcName: "けんきゅういん",
         npcEmoji: "🔬",
-        npcLine: "This is the laboratory ___ the cure for the grey sickness was discovered.",
+        npcLine:
+            "This is the laboratory ___ the cure for the grey sickness was discovered.",
         npcLineJa: "ここが、灰色病（はいいろびょう）の治療法（ちりょうほう）が発見（はっけん）された研究室（けんきゅうしつ）です。",
         choices: ["which", "that", "in which", "who"],
         correctIndex: 2,
-        onCorrect: "Precisely — 'in which', because the cure was discovered *in* this place. Sharp.",
+        onCorrect:
+            "Precisely — 'in which', because the cure was discovered *in* this place. Sharp.",
       ),
       // 6 — 分詞構文 (理由・付帯状況). (大問1 文法空所型)
       QuestEncounter(
         npcName: "がくしゃ",
         npcEmoji: "🧙‍♂️",
-        npcLine: "___ from a noble family, she had access to books most children never saw.",
-        npcLineJa: "貴族（きぞく）の家（いえ）に生（う）まれたので、彼女（かのじょ）はふつうの子（こ）が決（けっ）して目（め）にしない本（ほん）を読（よ）めたのです。",
+        npcLine:
+            "___ from a noble family, she had access to books most children never saw.",
+        npcLineJa:
+            "貴族（きぞく）の家（いえ）に生（う）まれたので、彼女（かのじょ）はふつうの子（こ）が決（けっ）して目（め）にしない本（ほん）を読（よ）めたのです。",
         choices: ["Coming", "Came", "To come", "Come"],
         correctIndex: 0,
-        onCorrect: "Yes — 'Coming from...' is a participle clause giving the reason. Elegant.",
+        onCorrect:
+            "Yes — 'Coming from...' is a participle clause giving the reason. Elegant.",
       ),
       // 7 — 仮定法過去 (If I were…, 人称無視の罠). (大問1 文法空所型)
       QuestEncounter(
         npcName: "せいじか",
         npcEmoji: "🗣️",
-        npcLine: "If I ___ the mayor, I would spend far more on schools than on walls.",
-        npcLineJa: "もし私（わたし）が町長（ちょうちょう）なら、城壁（じょうへき）よりも学校（がっこう）にずっと多（おお）くを使（つか）うでしょう。",
+        npcLine:
+            "If I ___ the mayor, I would spend far more on schools than on walls.",
+        npcLineJa:
+            "もし私（わたし）が町長（ちょうちょう）なら、城壁（じょうへき）よりも学校（がっこう）にずっと多（おお）くを使（つか）うでしょう。",
         choices: ["am", "was being", "will be", "were"],
         correctIndex: 3,
-        onCorrect: "Exactly — 'were', even with 'I'. That's the subjunctive. You'd make a fine advisor.",
+        onCorrect:
+            "Exactly — 'were', even with 'I'. That's the subjunctive. You'd make a fine advisor.",
       ),
       // 8 — 仮定法過去完了 (過去の事実に反する仮定). (大問1 文法空所型)
       QuestEncounter(
         npcName: "へいし",
         npcEmoji: "💂",
-        npcLine: "If the gate ___ locked that night, the thief would never have escaped.",
+        npcLine:
+            "If the gate ___ locked that night, the thief would never have escaped.",
         npcLineJa: "もしあの夜（よる）、門（もん）が閉（し）まっていたら、泥棒（どろぼう）は逃（に）げられなかったでしょうに。",
         choices: ["was", "had been", "is", "would be"],
         correctIndex: 1,
-        onCorrect: "Right — 'had been', for a past situation that didn't happen. A regret made grammar.",
+        onCorrect:
+            "Right — 'had been', for a past situation that didn't happen. A regret made grammar.",
       ),
       // 9 — 無生物主語 + allow O to do. (大問1 文法空所型)
       QuestEncounter(
         npcName: "はつめいか",
         npcEmoji: "⚙️",
-        npcLine: "This new printing machine ___ scholars to copy a whole book in a single day.",
-        npcLineJa: "この新（あたら）しい印刷機（いんさつき）のおかげで、学者（がくしゃ）は1日（にち）で本（ほん）を1冊（さつ）まるごと写（うつ）せるのです。",
+        npcLine:
+            "This new printing machine ___ scholars to copy a whole book in a single day.",
+        npcLineJa:
+            "この新（あたら）しい印刷機（いんさつき）のおかげで、学者（がくしゃ）は1日（にち）で本（ほん）を1冊（さつ）まるごと写（うつ）せるのです。",
         choices: ["lets to", "makes that", "allows", "wishes"],
         correctIndex: 2,
-        onCorrect: "Yes — 'allows scholars to copy...'. The machine is the subject. Brilliant phrasing.",
+        onCorrect:
+            "Yes — 'allows scholars to copy...'. The machine is the subject. Brilliant phrasing.",
       ),
       // 10 — コロケーション/派生語 (make a decision型). (大問1 語彙空所型)
       QuestEncounter(
         npcName: "しちょう",
         npcEmoji: "🎩",
-        npcLine: "The council must ___ a decision about the harbour tax before winter arrives.",
-        npcLineJa: "議会（ぎかい）は冬（ふゆ）が来（く）る前（まえ）に、港（みなと）の税（ぜい）についての決定（けってい）をしなければなりません。",
+        npcLine:
+            "The council must ___ a decision about the harbour tax before winter arrives.",
+        npcLineJa:
+            "議会（ぎかい）は冬（ふゆ）が来（く）る前（まえ）に、港（みなと）の税（ぜい）についての決定（けってい）をしなければなりません。",
         choices: ["make", "do", "take", "give"],
         correctIndex: 0,
-        onCorrect: "Correct — we 'make a decision', never 'do' one. Collocation matters at this level.",
+        onCorrect:
+            "Correct — we 'make a decision', never 'do' one. Collocation matters at this level.",
       ),
       // 11 — 句動詞 (carry out = 実行する). (大問1 語彙空所型)
       QuestEncounter(
         npcName: "けんきゅうせい",
         npcEmoji: "📐",
-        npcLine: "It took three years to ___ the experiment, but the results changed everything.",
+        npcLine:
+            "It took three years to ___ the experiment, but the results changed everything.",
         npcLineJa: "その実験（じっけん）を実行（じっこう）するのに3年（ねん）かかりましたが、結果（けっか）はすべてを変（か）えました。",
         choices: ["carry on", "carry away", "carry off", "carry out"],
         correctIndex: 3,
-        onCorrect: "Yes — 'carry out an experiment' means to conduct it. Phrasal verbs are tricky; you nailed it.",
+        onCorrect:
+            "Yes — 'carry out an experiment' means to conduct it. Phrasal verbs are tricky; you nailed it.",
       ),
       // 12 — ディスコースマーカー however (逆接). (大問2 長文空所型)
       QuestEncounter(
         npcName: "ひひょうか",
         npcEmoji: "✍️",
-        npcLine: "The plan looked perfect on paper. ___, it failed the moment it met the real world.",
-        npcLineJa: "その計画（けいかく）は紙（かみ）の上（うえ）では完璧（かんぺき）に見（み）えました。___、現実（げんじつ）に出会（であ）ったとたん失敗（しっぱい）したのです。",
+        npcLine:
+            "The plan looked perfect on paper. ___, it failed the moment it met the real world.",
+        npcLineJa:
+            "その計画（けいかく）は紙（かみ）の上（うえ）では完璧（かんぺき）に見（み）えました。___、現実（げんじつ）に出会（であ）ったとたん失敗（しっぱい）したのです。",
         choices: ["Therefore", "However", "For example", "In addition"],
         correctIndex: 1,
-        onCorrect: "Right — 'However' signals the contrast between the plan and the failure. Good logic.",
+        onCorrect:
+            "Right — 'However' signals the contrast between the plan and the failure. Good logic.",
       ),
       // 13 — ディスコースマーカー as a result (帰結). (大問2 長文空所型)
       QuestEncounter(
         npcName: "のうふ",
         npcEmoji: "🧑‍🌾",
-        npcLine: "The rains failed for two summers. ___, grain prices in the market doubled.",
-        npcLineJa: "2年（ねん）続（つづ）けて雨（あめ）が降（ふ）りませんでした。___、市場（いちば）の穀物（こくもつ）の値段（ねだん）は2倍（ばい）になりました。",
-        choices: ["Nevertheless", "On the other hand", "As a result", "By contrast"],
+        npcLine:
+            "The rains failed for two summers. ___, grain prices in the market doubled.",
+        npcLineJa:
+            "2年（ねん）続（つづ）けて雨（あめ）が降（ふ）りませんでした。___、市場（いちば）の穀物（こくもつ）の値段（ねだん）は2倍（ばい）になりました。",
+        choices: [
+          "Nevertheless",
+          "On the other hand",
+          "As a result",
+          "By contrast"
+        ],
         correctIndex: 2,
-        onCorrect: "Exactly — 'As a result' shows cause and effect. You read the logic well.",
+        onCorrect:
+            "Exactly — 'As a result' shows cause and effect. You read the logic well.",
       ),
       // 14 — ディスコースマーカー for instance (例示). (大問2 長文空所型)
       QuestEncounter(
         npcName: "としょかんいん",
         npcEmoji: "📚",
-        npcLine: "Reading widely builds the mind in many ways. ___, history teaches us how others solved problems.",
-        npcLineJa: "幅広（はばひろ）く読（よ）むことは、いろいろな形（かたち）で心（こころ）を育（そだ）てます。___、歴史（れきし）は、ほかの人々（ひとびと）がどう問題（もんだい）を解決（かいけつ）したかを教（おし）えてくれます。",
+        npcLine:
+            "Reading widely builds the mind in many ways. ___, history teaches us how others solved problems.",
+        npcLineJa:
+            "幅広（はばひろ）く読（よ）むことは、いろいろな形（かたち）で心（こころ）を育（そだ）てます。___、歴史（れきし）は、ほかの人々（ひとびと）がどう問題（もんだい）を解決（かいけつ）したかを教（おし）えてくれます。",
         choices: ["For instance", "In conclusion", "Otherwise", "Instead"],
         correctIndex: 0,
-        onCorrect: "Yes — 'For instance' introduces an example of those 'many ways'. Precisely placed.",
+        onCorrect:
+            "Yes — 'For instance' introduces an example of those 'many ways'. Precisely placed.",
       ),
       // 15 — 強調構文 It is ... that. (大問1 文法空所型)
       QuestEncounter(
         npcName: "れきしか",
         npcEmoji: "📜",
-        npcLine: "It was not the army ___ saved this city, but a single librarian who hid the books.",
-        npcLineJa: "この町（まち）を救（すく）ったのは軍隊（ぐんたい）ではなく、本（ほん）を隠（かく）した一人（ひとり）の図書館員（としょかんいん）だったのです。",
+        npcLine:
+            "It was not the army ___ saved this city, but a single librarian who hid the books.",
+        npcLineJa:
+            "この町（まち）を救（すく）ったのは軍隊（ぐんたい）ではなく、本（ほん）を隠（かく）した一人（ひとり）の図書館員（としょかんいん）だったのです。",
         choices: ["which", "what", "who", "that"],
         correctIndex: 3,
-        onCorrect: "Correct — the cleft 'It was ... that ...' uses 'that' to emphasise the subject. Masterful.",
+        onCorrect:
+            "Correct — the cleft 'It was ... that ...' uses 'that' to emphasise the subject. Masterful.",
       ),
       // 16 — 倒置 Not only ... but also (基礎). (大問1 文法空所型)
       QuestEncounter(
         npcName: "がくちょう",
         npcEmoji: "🎓",
-        npcLine: "Not only ___ she master five languages, but she also wrote the kingdom's first dictionary.",
-        npcLineJa: "彼女（かのじょ）は5つの言語（げんご）を習得（しゅうとく）しただけでなく、王国（おうこく）初（はじ）めての辞書（じしょ）まで書（か）いたのです。",
+        npcLine:
+            "Not only ___ she master five languages, but she also wrote the kingdom's first dictionary.",
+        npcLineJa:
+            "彼女（かのじょ）は5つの言語（げんご）を習得（しゅうとく）しただけでなく、王国（おうこく）初（はじ）めての辞書（じしょ）まで書（か）いたのです。",
         choices: ["she did", "did", "she had", "does"],
         correctIndex: 1,
-        onCorrect: "Yes — after 'Not only' at the front, we invert: 'did she master'. Few travellers know that.",
+        onCorrect:
+            "Yes — after 'Not only' at the front, we invert: 'did she master'. Few travellers know that.",
       ),
       // 17 — 内容一致: 言い換え正解 vs 本文語そのまま distractor. (大問3 内容一致型)
       QuestEncounter(
         npcName: "きょうじゅ",
         npcEmoji: "🧑‍🏫",
-        npcLine: "My lecture's point: cities that welcomed foreign traders grew rich, while those that shut their gates slowly declined. What did I argue?",
-        npcLineJa: "私（わたし）の講義（こうぎ）の要点（ようてん）です。外国（がいこく）の商人（しょうにん）を受（う）け入（い）れた都市（とし）は豊（ゆた）かになり、門（もん）を閉（と）ざした都市（とし）は少（すこ）しずつ衰（おとろ）えた、と。私（わたし）は何（なに）を論（ろん）じましたか？",
-        choices: ["That all cities shut their gates to foreign traders.", "That foreign traders made every city poor.", "That openness to outsiders helped cities prosper.", "That cities grew rich by welcoming foreign traders and never declined."],
+        npcLine:
+            "My lecture's point: cities that welcomed foreign traders grew rich, while those that shut their gates slowly declined. What did I argue?",
+        npcLineJa:
+            "私（わたし）の講義（こうぎ）の要点（ようてん）です。外国（がいこく）の商人（しょうにん）を受（う）け入（い）れた都市（とし）は豊（ゆた）かになり、門（もん）を閉（と）ざした都市（とし）は少（すこ）しずつ衰（おとろ）えた、と。私（わたし）は何（なに）を論（ろん）じましたか？",
+        choices: [
+          "That all cities shut their gates to foreign traders.",
+          "That foreign traders made every city poor.",
+          "That openness to outsiders helped cities prosper.",
+          "That cities grew rich by welcoming foreign traders and never declined."
+        ],
         correctIndex: 2,
-        onCorrect: "Exactly — 'openness helped them prosper' is the paraphrase, not the word-matching trap. You read for meaning.",
+        onCorrect:
+            "Exactly — 'openness helped them prosper' is the paraphrase, not the word-matching trap. You read for meaning.",
       ),
       // 18 — 内容一致: 明示されない結論の推論. (大問3 内容一致型 — 推論)
       QuestEncounter(
         npcName: "けんじゃ",
         npcEmoji: "🧙",
-        npcLine: "The records show the city's scholars all left in the same year the great library burned. What can we reasonably infer?",
-        npcLineJa: "記録（きろく）によれば、町（まち）の学者（がくしゃ）たちは、大（おお）きな図書館（としょかん）が焼（や）けたのと同（おな）じ年（とし）にみな去（さ）った、とあります。何（なに）が合理的（ごうりてき）に推測（すいそく）できますか？",
-        choices: ["The fire likely drove the scholars to leave.", "The scholars set fire to the library themselves.", "Libraries are dangerous places for scholars.", "The scholars left because the city had too many books."],
+        npcLine:
+            "The records show the city's scholars all left in the same year the great library burned. What can we reasonably infer?",
+        npcLineJa:
+            "記録（きろく）によれば、町（まち）の学者（がくしゃ）たちは、大（おお）きな図書館（としょかん）が焼（や）けたのと同（おな）じ年（とし）にみな去（さ）った、とあります。何（なに）が合理的（ごうりてき）に推測（すいそく）できますか？",
+        choices: [
+          "The fire likely drove the scholars to leave.",
+          "The scholars set fire to the library themselves.",
+          "Libraries are dangerous places for scholars.",
+          "The scholars left because the city had too many books."
+        ],
         correctIndex: 0,
-        onCorrect: "Yes — the text doesn't state the cause outright, but the timing makes that the soundest inference. A true scholar's mind.",
+        onCorrect:
+            "Yes — the text doesn't state the cause outright, but the timing makes that the soundest inference. A true scholar's mind.",
       ),
       // 19 — 要約タスク: 本文の要点のみ・意見/具体例/丸写しを排除. (Writing 要約型)
       QuestEncounter(
         npcName: "しょきかん",
         npcEmoji: "🖋️",
-        npcLine: "Summarise this passage: 'Many towns once feared books, thinking they spread dangerous ideas. Over time, however, people saw that books also spread knowledge that improved farming, medicine, and trade. Most towns came to value them.' Which is the best summary?",
-        npcLineJa: "この文章（ぶんしょう）を要約（ようやく）してください。『多（おお）くの町（まち）はかつて、本（ほん）が危険（きけん）な考（かんが）えを広（ひろ）めると恐（おそ）れていた。しかし時（とき）とともに、本（ほん）は農業（のうぎょう）・医療（いりょう）・商売（しょうばい）を良（よ）くする知識（ちしき）も広（ひろ）めると人々（ひとびと）は気（き）づき、ほとんどの町（まち）が本（ほん）を大切（たいせつ）にするようになった。』 最（もっと）も良（よ）い要約（ようやく）は？",
-        choices: ["Books are the most important thing in the world, and everyone should read them daily.", "One town feared a book about farming, but a wise doctor proved it was useful and safe.", "Books spread dangerous ideas, so towns were right to fear and ban them everywhere.", "Towns once feared books but later valued them for the useful knowledge they spread."],
+        npcLine:
+            "Summarise this passage: 'Many towns once feared books, thinking they spread dangerous ideas. Over time, however, people saw that books also spread knowledge that improved farming, medicine, and trade. Most towns came to value them.' Which is the best summary?",
+        npcLineJa:
+            "この文章（ぶんしょう）を要約（ようやく）してください。『多（おお）くの町（まち）はかつて、本（ほん）が危険（きけん）な考（かんが）えを広（ひろ）めると恐（おそ）れていた。しかし時（とき）とともに、本（ほん）は農業（のうぎょう）・医療（いりょう）・商売（しょうばい）を良（よ）くする知識（ちしき）も広（ひろ）めると人々（ひとびと）は気（き）づき、ほとんどの町（まち）が本（ほん）を大切（たいせつ）にするようになった。』 最（もっと）も良（よ）い要約（ようやく）は？",
+        choices: [
+          "Books are the most important thing in the world, and everyone should read them daily.",
+          "One town feared a book about farming, but a wise doctor proved it was useful and safe.",
+          "Books spread dangerous ideas, so towns were right to fear and ban them everywhere.",
+          "Towns once feared books but later valued them for the useful knowledge they spread."
+        ],
         correctIndex: 3,
-        onCorrect: "Perfect — you kept only the passage's main points, with no opinion, no invented example, and no copied sentence. That is a true summary.",
+        onCorrect:
+            "Perfect — you kept only the passage's main points, with no opinion, no invented example, and no copied sentence. That is a true summary.",
       ),
       // 20 — Mini-boss「論駁（ろんばく）の番人」: 要約の本質を見抜く. (要約タスク総合)
       QuestEncounter(
         npcName: "学士（がくし）オーレン",
         npcEmoji: "🎓",
-        npcLine: "(Scholar Oren bars the keep, robed and formal.) The Silence and I agreed: words are mere noise, and silence is safe. Yet you would speak. Then prove you hold MEANING, not noise — which choice truly summarises an argument, capturing its point without copying its words or adding your own?",
-        npcLineJa: "（学士（がくし）オーレンが、礼装（れいそう）で天守（てんしゅ）をふさいでいる。）「ことばは ただの雑音（ざつおん）、沈黙（ちんもく）こそ安全（あんぜん）」――サイレントと私（わたし）は、そう同意（どうい）した。それでも語（かた）るというなら、雑音（ざつおん）ではなく『意味（いみ）』を扱（あつか）える証（あかし）を見（み）せよ。本当（ほんとう）に論（ろん）を要約（ようやく）しているのは――言葉（ことば）を写（うつ）さず、自分（じぶん）の意見（いけん）も足（た）さず、要点（ようてん）をつかむのは、どれだ？",
-        choices: ["Repeating the author's strongest sentence word for word, exactly as written.", "Adding your own opinion about whether the author was right or wrong.", "Restating the author's main idea in fewer, different words, with nothing added.", "Listing every example the author gave, in the same order, leaving none out."],
+        npcLine:
+            "(Scholar Oren bars the keep, robed and formal.) The Silence and I agreed: words are mere noise, and silence is safe. Yet you would speak. Then prove you hold MEANING, not noise — which choice truly summarises an argument, capturing its point without copying its words or adding your own?",
+        npcLineJa:
+            "（学士（がくし）オーレンが、礼装（れいそう）で天守（てんしゅ）をふさいでいる。）「ことばは ただの雑音（ざつおん）、沈黙（ちんもく）こそ安全（あんぜん）」――サイレントと私（わたし）は、そう同意（どうい）した。それでも語（かた）るというなら、雑音（ざつおん）ではなく『意味（いみ）』を扱（あつか）える証（あかし）を見（み）せよ。本当（ほんとう）に論（ろん）を要約（ようやく）しているのは――言葉（ことば）を写（うつ）さず、自分（じぶん）の意見（いけん）も足（た）さず、要点（ようてん）をつかむのは、どれだ？",
+        choices: [
+          "Repeating the author's strongest sentence word for word, exactly as written.",
+          "Adding your own opinion about whether the author was right or wrong.",
+          "Restating the author's main idea in fewer, different words, with nothing added.",
+          "Listing every example the author gave, in the same order, leaving none out."
+        ],
         correctIndex: 2,
-        onCorrect: "(Oren lowers his gaze.) ...You hold meaning, not noise. We agreed silence was safer — and we let it swallow the rest. You have shown me another way. The sixth Stone of Voice is yours; the keep doors open.",
+        onCorrect:
+            "(Oren lowers his gaze.) ...You hold meaning, not noise. We agreed silence was safer — and we let it swallow the rest. You have shown me another way. The sixth Stone of Voice is yours; the keep doors open.",
       ),
     ],
   ),
@@ -2072,222 +2418,221 @@ const List<QuestTown> kQuestTowns = [
     name: '灰色（はいいろ）の ひろば / The Grey Square',
     tagline: 'ことばが はじまった 場所（ばしょ）',
     intro: 'すべての たびの はて、灰色（はいいろ）に しずんだ さいごの ひろば。'
-        'ここで、いちばん はじめの ことばが はなされた。いま、しずけさ〈サイレント〉が、こえもなく そこに ある。さいごに かえすのは、剣（けん）ではなく、ことば。',
-    cleared: 'あなたの言葉（ことば）が、サイレントの胸（むね）に届（とど）いた。彼（かれ）に「声（こえ）」が返（かえ）り、灰色（はいいろ）の世界（せかい）に色（いろ）がもどっていく。'
-        'ことばは、しずけさより強（つよ）い。勇者（ゆうしゃ）よ――あなたの旅（たび）が、世界（せかい）を救（すく）った。',
+        'ここで、いちばん はじめの ことばが はなされた。その まんなかに、しずけさ〈サイレント〉── ほんとうは アイラ という、ことばを なくした ひとりの 子（こ）が、こえもなく すわっている。さいごに かえすのは、たたかいでは なく、しずかな ひとこと。アイラの こえを、いっしょに かえしに いこう。',
+    cleared: 'あなたの言葉（ことば）が、アイラの胸（むね）に そっと とどいた。なくしていた「声（こえ）」が、アイラに もどってくる。'
+        '灰色（はいいろ）の ひろばに 色（いろ）が あふれ、その色（いろ）は はしを わたり、すべての まちへ ながれていく。だれも やっつけなかった。ただ、アイラは もう ひとりじゃない。あなたは 世界（せかい）に ──そして アイラに── ことばの かえしかたを、おもいださせたんだ。',
     encounters: [
       // 1 — Advanced collocation (verb+noun). 「決断を下す」= make, not do/take/give. (大問1型)
       QuestEncounter(
-        npcName: '門の守り手',
-        npcEmoji: '🛡️',
+        npcName: 'ひろばの 守り手',
+        npcEmoji: '🕯️',
         npcLine:
-            'Traveller, the capital is under siege. Before you enter, you must ___ a decision: fight, or flee.',
+            'Traveller, the square is hushed and grey, and the way inward is faint. Before you step toward アイラ, you must ___ a decision: walk in, or turn back.',
         npcLineJa:
-            '旅人（たびびと）よ、さいごの ひろばに しずけさが みちている。入（はい）る前（まえ）に、進（すす）むか引（ひ）くか、決断（けつだん）を ___ ねばならぬ。',
+            '旅人（たびびと）よ、さいごの ひろばは しずけさに しずんでいる。アイラの ところへ 歩（ある）きだす前（まえ）に、進（すす）むか もどるか、決断（けつだん）を ___ ねばならぬ。',
         choices: ['do', 'take', 'make', 'give'],
         correctIndex: 2,
         onCorrect:
-            'You "make" a decision — never "do" one. Spoken like one born to rule. The gate opens.',
+            'You "make" a decision — never "do" one. You choose to walk in. The mist parts a little, and the way ahead grows clear.',
       ),
       // 2 — Low-frequency synonym nuance (deliberate vs hasty/reluctant/accidental). (大問1型)
       QuestEncounter(
-        npcName: 'ひろばの書記',
+        npcName: 'ひろばの 書き手',
         npcEmoji: '📜',
         npcLine:
-            'The Silent King did not act by chance. His erasure of all words was slow and ___ — every page chosen on purpose.',
+            'アイラ did not fall silent by chance. The fading of every word was slow and ___ — each one set down gently, on purpose, to keep anyone from being hurt.',
         npcLineJa:
-            'サイレント王（おう）は偶然（ぐうぜん）に動（うご）いたのではない。言葉（ことば）の消去（しょうきょ）は緩（ゆる）やかで ___ ── 一頁（ひとぺーじ）ずつ意図（いと）して選（えら）ばれた。',
+            'アイラが だまったのは 偶然（ぐうぜん）ではない。言葉（ことば）が 消（き）えていったのは 緩（ゆる）やかで ___ ── だれも 傷（きず）つけまいと、一（ひと）つずつ そっと 手放（てばな）したのだ。',
         choices: ['accidental', 'deliberate', 'reluctant', 'hasty'],
         correctIndex: 1,
         onCorrect:
-            '"Deliberate" — done on purpose. The nuance escapes most; not you.',
+            '"Deliberate" — done on purpose, not by accident. So this quiet was a kind of mercy. The nuance escapes most; not you.',
       ),
       // 3 — Phrasal verb precision (carry out = execute). (大問1型)
       QuestEncounter(
-        npcName: '元・宰相',
+        npcName: 'もとの 語り手',
         npcEmoji: '🎩',
         npcLine:
-            'The plan to seal the King\'s library was sound. The trouble was, no one dared to ___ it ___.',
+            'There was a gentle plan to reach アイラ and open the sealed library of words. The trouble was, no one had the heart to ___ it ___.',
         npcLineJa:
-            '王（おう）の書庫（しょこ）を封（ふう）じる計画（けいかく）は健全（けんぜん）だった。問題（もんだい）は、それを ___ 者（もの）がいなかったことだ。',
+            'アイラの もとへ 行（い）き、封（ふう）じられた 言葉（ことば）の 書庫（しょこ）を ひらく ── そんな やさしい 計画（けいかく）は あった。問題（もんだい）は、それを ___ 者（もの）が いなかったことだ。',
         choices: ['carry / on', 'carry / out', 'put / off', 'take / after'],
         correctIndex: 1,
         onCorrect:
-            '"Carry it out" — to execute it. "Carry on" would mean continue. Precision wins wars.',
+            '"Carry it out" — to see it through. "Carry on" would mean merely continue. You have the heart the others lacked.',
       ),
       // 4 — Derivational / abstract noun (resilience). (大問1型)
       QuestEncounter(
-        npcName: '城の治癒師',
+        npcName: 'ひろばの 手当て人',
         npcEmoji: '⚕️',
         npcLine:
-            'The people lost their language, yet they endured. Such ___ in the face of ruin is rare.',
+            'The people lost their language, yet they waited and endured. Such ___ in the face of so much quiet is rare.',
         npcLineJa:
-            '民（たみ）は言葉（ことば）を失（うしな）っても耐（た）え抜（ぬ）いた。破滅（はめつ）を前（まえ）にしたその ___ は稀（まれ）だ。',
+            '人（ひと）びとは 言葉（ことば）を 失（うしな）っても、待（ま）ち、耐（た）えぬいた。これほどの しずけさを 前（まえ）にした その ___ は、めずらしい。',
         choices: ['resilient', 'resilience', 'resiliently', 'resile'],
         correctIndex: 1,
         onCorrect:
-            'The noun "resilience" — after "such" we need a noun, not the adjective. Grammar and meaning, both yours.',
+            'The noun "resilience" — after "such" we need a noun, not the adjective. They never gave up on アイラ either.',
       ),
       // 5 — Subjunctive present (insist (that) S (should) be). (大問1 文法型)
       QuestEncounter(
-        npcName: 'ひろばの将軍',
-        npcEmoji: '⚔️',
+        npcName: 'ひろばの 見守り人',
+        npcEmoji: '🕯️',
         npcLine:
-            'The council insists that every gate ___ guarded tonight. No exceptions — not even for the one whose voice still carries.',
+            'The square\'s gentle keepers ask only that every lamp ___ kept lit tonight — so that whoever can still speak may find the way in to アイラ.',
         npcLineJa:
-            '評議会（ひょうぎかい）は、今夜（こんや）すべての門（もん）が守（まも）られる「べきだ」と強（つよ）く求（もと）めている。どんな こえの もちぬしであっても、れいがいは ない。',
+            'ひろばの やさしい 番人（ばんにん）たちは、ただ 今夜（こんや）、すべての あかりが ともされた ___ ことを 願（ねが）っている ── まだ こえを だせる 者（もの）が、アイラの もとへ 進（すす）めるように。',
         choices: ['is', 'be', 'was', 'will be'],
         correctIndex: 1,
         onCorrect:
-            'Bare "be" — the subjunctive after "insist that." A demand, not a fact. You know the old grammar.',
+            'Bare "be" — the subjunctive after a verb of asking/insisting. A quiet wish, not a fact. You know the old grammar.',
       ),
       // 6 — Mixed conditional (past condition → present result). (大問1 文法型)
       QuestEncounter(
         npcName: 'スラ',
         npcEmoji: '🟢',
         npcLine:
-            'If the King had never eaten the words, the world ___ full of voices right now.',
-        npcLineJa:
-            'もしサイレント王（おう）が言葉（ことば）を食（た）べていなかったら、世界（せかい）は今（いま）ごろ声（こえ）に満（み）ちて ___ のに。',
+            'If アイラ had never gone silent, the world ___ full of voices right now.',
+        npcLineJa: 'もし アイラが だまっていなかったら、世界（せかい）は今（いま）ごろ 声（こえ）に 満（み）ちて ___ のに。',
         choices: ['would be', 'would have been', 'will be', 'had been'],
         correctIndex: 0,
         onCorrect:
-            '"would be" — past cause, present result. A mixed conditional. Even I, a slime, feel that sorrow.',
+            '"would be" — a past cause, a present result. A mixed conditional. Even I, a little slime, feel that sadness for アイラ.',
       ),
       // 7 — Inversion after negative adverbial (Hardly had…when). (大問1 文法型)
       QuestEncounter(
-        npcName: '見張りの兵',
-        npcEmoji: '🪖',
+        npcName: 'ひろばの 灯し守り',
+        npcEmoji: '🏮',
         npcLine:
-            'Hardly ___ we shut the inner gate when the silence struck the upper halls.',
+            'Hardly ___ we lit the inner lamps when the quiet drifted softly down the upper halls again.',
         npcLineJa:
-            '内門（ないもん）を閉（と）じるか閉（と）じないかのうちに、静寂（せいじゃく）が上層（じょうそう）の広間（ひろま）を襲（おそ）った。「___」に入（はい）るのは？',
+            '内（うち）の あかりを ともすか ともさないかの うちに、しずけさが ふたたび 上（うえ）の 広間（ひろま）へ そっと おりてきた。「___」に 入（はい）るのは？',
         choices: ['did', 'have', 'had', 'were'],
         correctIndex: 2,
         onCorrect:
-            '"Hardly HAD we shut..." — negative-adverbial inversion with the past perfect. Textbook B2.',
+            '"Hardly HAD we lit..." — negative-adverbial inversion with the past perfect. Textbook B2. The lamps hold; keep going.',
       ),
       // 8 — Inversion: Only after / focus fronting. (大問1 文法型)
       QuestEncounter(
-        npcName: '老騎士',
-        npcEmoji: '🐴',
+        npcName: 'ひろばの 古老',
+        npcEmoji: '🧓',
         npcLine:
             'Only after the last word vanished ___ the people understand what they had taken for granted.',
         npcLineJa:
-            '最後（さいご）の言葉（ことば）が消（き）えて初（はじ）めて、民（たみ）は当（あ）たり前（まえ）と思（おも）っていたものを理解（りかい）した。「___」に入（はい）るのは？',
+            '最後（さいご）の言葉（ことば）が消（き）えて初（はじ）めて、人（ひと）びとは 当（あ）たり前（まえ）と思（おも）っていたものを理解（りかい）した。「___」に入（はい）るのは？',
         choices: ['the people did', 'did the people', 'the people', 'they had'],
         correctIndex: 1,
         onCorrect:
-            'Front a "Only after…" clause and the subject and auxiliary invert: "did the people understand." Well drawn, knight.',
+            'Front an "Only after…" clause and the subject and auxiliary invert: "did the people understand." Beautifully read, elder.',
       ),
       // 9 — Cleft / emphatic (It was X that…). (大問1 文法型)
       QuestEncounter(
         npcName: '吟遊詩人',
         npcEmoji: '🎻',
         npcLine:
-            'It was not gold that the King hungered for — it ___ the silence between every word.',
+            'It was not power that アイラ longed for — it ___ the silence between every word, where no one could be hurt.',
         npcLineJa:
-            '王（おう）が渇望（かつぼう）したのは黄金（おうごん）ではなかった ── それは、すべての言葉（ことば）の間（あいだ）の静寂（せいじゃく）「だった」のだ。「___」に入（はい）るのは？',
+            'アイラが 望（のぞ）んだのは 力（ちから）ではなかった ── それは、すべての言葉（ことば）の間（あいだ）の、だれも 傷（きず）つかない 静寂（せいじゃく）「だった」のだ。「___」に入（はい）るのは？',
         choices: ['was', 'were', 'had', 'did'],
         correctIndex: 0,
         onCorrect:
-            'The cleft "It was … that" stays singular — "it was." You hear the music of emphasis.',
+            'The cleft "It was … that" stays singular — "it was." You hear the sad music of what アイラ truly wanted.',
       ),
       // 10 — Compound relative (whatever, concession). (大問1 文法型)
       QuestEncounter(
-        npcName: '城門の魔術師',
+        npcName: 'ひろばの ことばつかい',
         npcEmoji: '🪄',
         npcLine:
-            '___ you say to the Silent King, he will twist it into emptiness. Choose your words like blades.',
+            '___ you say to アイラ, say it gently — a tired heart hears softness before it hears words. Choose your words with care.',
         npcLineJa:
-            'サイレント王（おう）に「何（なに）を言（い）おうとも」、彼（かれ）はそれを虚無（きょむ）へとねじ曲（ま）げる。言葉（ことば）を刃（やいば）のように選（えら）べ。「___」に入（はい）るのは？',
+            'アイラに「何（なに）を言（い）おうとも」、やさしく 言（い）ってあげて ── つかれた こころは、言葉（ことば）より 先（さき）に やさしさを 聞（き）くから。言葉（ことば）を ていねいに えらんで。「___」に入（はい）るのは？',
         choices: ['However', 'Whatever', 'Whoever', 'Wherever'],
         correctIndex: 1,
         onCorrect:
-            '"Whatever you say" — the object of "say," so the -ever pronoun, not the adverb. Sharp.',
+            '"Whatever you say" — the object of "say," so the -ever pronoun, not the adverb. Gently chosen.',
       ),
       // 11 — Concession (No matter how + adjective). (大問1 文法型)
       QuestEncounter(
         npcName: 'ひろばの ふるい こえ',
         npcEmoji: '👗',
         npcLine:
-            'No matter ___ loud the Silence grows, one true voice is bound to no fear. Are you that voice?',
+            'No matter ___ deep the quiet grows, one true voice is bound to no fear. Will you be that voice for アイラ?',
         npcLineJa:
-            'どれほど しずけさが おおきくなろうとも、まことの こえ ひとつは おそれに しばられぬ。「どれほど ___ うとも」の「___」は？',
+            'どれほど しずけさが ふかくなろうとも、まことの こえ ひとつは おそれに しばられぬ。アイラの ために、その こえに なってくれる?「どれほど ___ うとも」の「___」は？',
         choices: ['how', 'what', 'that', 'than'],
         correctIndex: 0,
         onCorrect:
-            'No matter HOW loud — "how" before an adjective. The square listens; they hear you now.',
+            'No matter HOW deep — "how" before an adjective. The square listens; they can hear you now, and so, faintly, can アイラ.',
       ),
       // 12 — Inanimate subject + high-register verb (witnessed). (大問1 / 長文型)
       QuestEncounter(
-        npcName: 'ひろばの歴史家',
+        npcName: 'ひろばの 語りべ',
         npcEmoji: '🏛️',
         npcLine:
-            'These walls have ___ the rise and fall of three dynasties — and tonight, perhaps, a fourth.',
+            'These old stones have ___ the first word ever spoken, and every quiet year since — and tonight, perhaps, a voice returning.',
         npcLineJa:
-            'この城壁（じょうへき）は三（みっ）つの王朝（おうちょう）の興亡（こうぼう）を「見（み）てきた」── そして今夜（こんや）、おそらく四（よっ）つ目（め）を。「___」は？',
+            'この ふるい 石（いし）たちは、いちばん はじめの 言葉（ことば）と、それからの しずかな 年月（としつき）を「見（み）てきた」── そして今夜（こんや）、おそらく こえが もどる 瞬間（しゅんかん）を。「___」は？',
         choices: ['watched over by', 'witnessed', 'looked', 'seen to'],
         correctIndex: 1,
         onCorrect:
-            'Walls cannot "watch," but they can "witness" — the inanimate subject takes the higher verb. Eloquent.',
+            'Stones cannot "watch," but they can "witness" — the inanimate subject takes the higher verb. Eloquent. They have waited a long time for this.',
       ),
       // 13 — Discourse connective: contrast (Nevertheless). (長文の語句空所補充型)
       QuestEncounter(
-        npcName: '反乱軍の使者',
-        npcEmoji: '🗡️',
+        npcName: 'スラ',
+        npcEmoji: '🟢',
         npcLine:
-            'Our army is small and weary. ___, we will stand at the throne room tonight — retreat is not a word we keep.',
+            'We are small and tired, you and I. ___, we will walk all the way in to アイラ tonight — turning back is not a word we keep.',
         npcLineJa:
-            '我（わ）が軍（ぐん）は小（ちい）さく疲（つか）れている。___、今夜（こんや）我々（われわれ）は王座（おうざ）の間（ま）に立（た）つ ── 退却（たいきゃく）という語（ご）は持（も）たぬ。',
+            'ぼくらは 小（ちい）さくて、つかれてる。___、今夜（こんや）は アイラの ところまで ちゃんと 歩（ある）いていこう ── もどるなんて 言葉（ことば）、ぼくらは もってないよ。',
         choices: ['Therefore', 'Nevertheless', 'For example', 'Likewise'],
         correctIndex: 1,
         onCorrect:
-            '"Nevertheless" — concession against the weakness just stated. You read the logic, not the words.',
+            '"Nevertheless" — a soft "even though we\'re weary." You read the logic, not just the words.',
       ),
       // 14 — Discourse connective: addition (Moreover). (長文の語句空所補充型)
       QuestEncounter(
-        npcName: '城の参謀',
+        npcName: 'ひろばの 道しるべ',
         npcEmoji: '🧭',
         npcLine:
-            'The King\'s power feeds on spoken fear. ___, every word we still dare to say weakens him further.',
+            'Every word we gently return wakes a little colour. ___, each kind word we dare to say makes the square less lonely for アイラ.',
         npcLineJa:
-            '王（おう）の力（ちから）は口（くち）にされた恐怖（きょうふ）を糧（かて）とする。___、我々（われわれ）が今（いま）なお語（かた）る言葉（ことば）の一（ひと）つ一（ひと）つが、彼（かれ）をさらに弱（よわ）める。',
+            'ぼくらが そっと 返（かえ）す 言葉（ことば）の 一（ひと）つ一（ひと）つが、すこしずつ 色（いろ）を 目覚（めざ）めさせる。___、勇気（ゆうき）を だして かける やさしい 言葉（ことば）は、ひろばを アイラに とって すこし さびしくなくする。',
         choices: ['However', 'In contrast', 'Moreover', 'Otherwise'],
         correctIndex: 2,
         onCorrect:
-            '"Moreover" — a second supporting point added to the first. The strategist nods at your ear for logic.',
+            '"Moreover" — a second point added to the first. A good ear for how kindness adds up.',
       ),
       // 15 — Discourse connective: concessive result (Even so). (長文の語句空所補充型)
       QuestEncounter(
         npcName: 'スラ',
         npcEmoji: '🟢',
         npcLine:
-            'I know the throne room takes our voices the moment we step in. ___, I\'m going with you. I won\'t let you go silent alone.',
+            'I know the centre of the square is where the quiet is deepest, and my voice might go small. ___, I\'m coming with you. I won\'t let you face アイラ alone.',
         npcLineJa:
-            '王座（おうざ）の間（ま）は、踏（ふ）み入（い）れた瞬間（しゅんかん）に声（こえ）を奪（うば）うって知（し）ってる。___、ぼくは一緒（いっしょ）に行（い）く。きみひとりを静寂（せいじゃく）にはさせない。',
+            'ひろばの まんなかは いちばん しずけさが ふかくて、ぼくの こえも ちいさくなっちゃうかも。___、ぼくは 一緒（いっしょ）に 行（い）く。きみひとりで アイラに 会（あ）わせたりしないよ。',
         choices: ['Even so', 'As a result', 'In other words', 'For instance'],
         correctIndex: 0,
         onCorrect:
-            '"Even so" — acknowledging the danger, yet acting against it. ...Sura squeezes your hand.',
+            '"Even so" — knowing the quiet is deep, and going anyway. ...Sura squeezes your hand.',
       ),
       // 16 — Inference of an UNSTATED conclusion. (長文の内容一致選択型)
       QuestEncounter(
-        npcName: '幽閉された学者',
-        npcEmoji: '🔒',
+        npcName: 'ひろばに のこされた 学者',
+        npcEmoji: '📖',
         npcLine:
-            '"The King has not spoken in a hundred years, yet his decrees still arrive, sealed in fresh ink each dawn." What does this most strongly imply?',
+            '"アイラ has not spoken in a hundred years, yet the old written rules still arrive each dawn, freshly copied in someone\'s hand." What does this most strongly imply?',
         npcLineJa:
-            '「王（おう）は百年（ひゃくねん）口（くち）をきいていないのに、その勅令（ちょくれい）は毎朝（まいあさ）新（あたら）しい墨（すみ）で封（ふう）じられて届（とど）く。」これが最（もっと）も強（つよ）く示唆（しさ）するのは？',
+            '「アイラは 百年（ひゃくねん）こえを だしていないのに、むかしの 書（か）かれた きまりは、毎朝（まいあさ）だれかの 手（て）で 新（あたら）しく 写（うつ）されて 届（とど）く。」これが最（もっと）も強（つよ）く示唆（しさ）するのは？',
         choices: [
-          'The King writes his decrees by hand each morning.',
-          'Someone, or something, still acts in the silent King\'s name.',
-          'The King died exactly one hundred years ago.',
-          'The decrees are old letters found by chance.'
+          'アイラ copies out the old rules by hand every morning.',
+          'Someone, or something, still keeps the old words alive in アイラ\'s place.',
+          'アイラ fell silent exactly one hundred years ago.',
+          'The old rules are forgotten papers found by chance.'
         ],
         correctIndex: 1,
         onCorrect:
-            'Fresh ink + a silent King ⇒ another hand moves for him. You infer what the text never says outright.',
+            'Fresh copies + a silent アイラ ⇒ another, gentler hand keeps the old words alive while アイラ rests. You infer what the text never says outright.',
       ),
       // 17 — Paraphrase = answer; verbatim = trap. (長文の内容一致選択型)
       QuestEncounter(
@@ -2309,17 +2654,17 @@ const List<QuestTown> kQuestTowns = [
       ),
       // 18 — Summary: main idea ONLY, no opinion / no detail. (英文要約型)
       QuestEncounter(
-        npcName: '王の図書館の番人',
+        npcName: 'ひろばの 言葉の番人',
         npcEmoji: '📚',
         npcLine:
-            '"Long ago the capital thrived on open debate. When the King began erasing dissenting words, fear spread, scholars fled, and the city fell silent." Pick the best one-line summary.',
+            '"Long ago this square thrived on open, gentle talk. As words began to fade, fear grew, people drew apart, and the square fell silent." Pick the best one-line summary.',
         npcLineJa:
-            '「かつて この ひろばは 自由（じゆう）な 議論（ぎろん）で 栄（さか）えた。しずけさが 異論（いろん）の 言葉（ことば）を 消（け）し 始（はじ）めると、恐怖（きょうふ）が 広（ひろ）がり、学者（がくしゃ）は 逃（に）げ、ひろばは 沈黙（ちんもく）した。」最（もっと）も 良（よ）い 一文（いちぶん）の 要約（ようやく）は？',
+            '「むかし この ひろばは、ひらかれた やさしい 語（かた）りあいで 栄（さか）えた。言葉（ことば）が 消（き）えはじめると、不安（ふあん）が 広（ひろ）がり、人（ひと）びとは はなれ、ひろばは 静（しず）かになった。」最（もっと）も 良（よ）い 一文（いちぶん）の 要約（ようやく）は？',
         choices: [
-          'I think the King was wrong to erase words from the city.',
-          'Scholars fled the capital because they were afraid of fear.',
-          'Suppressing free speech turned a thriving capital into a silent one.',
-          'The capital had many open debates and famous scholars.'
+          'I think it was sad that the words faded from the square.',
+          'People drew apart because they were afraid of fear itself.',
+          'As open talk faded, a once-thriving square fell silent.',
+          'The square once had many open, lively conversations.'
         ],
         correctIndex: 2,
         onCorrect:
@@ -2330,13 +2675,13 @@ const List<QuestTown> kQuestTowns = [
         npcName: 'スラ',
         npcEmoji: '🟢',
         npcLine:
-            'Before the doors, you must declare your cause: "Words should be free." Which reason best SUPPORTS that claim in an essay?',
+            'Before you reach アイラ, say what you believe: "Words should be free." Which reason best SUPPORTS that claim in an essay?',
         npcLineJa:
-            '扉（とびら）の前（まえ）で、きみは主張（しゅちょう）を述（の）べねばならない ──「言葉（ことば）は自由（じゆう）であるべきだ」。小論文（しょうろんぶん）でその主張（しゅちょう）を最（もっと）もよく「支（ささ）える」理由（りゆう）は？',
+            'アイラの ところへ つく前（まえ）に、きみの しんじることを 言（い）おう ──「言葉（ことば）は 自由（じゆう）であるべきだ」。小論文（しょうろんぶん）でその主張（しゅちょう）を最（もっと）もよく「支（ささ）える」理由（りゆう）は？',
         choices: [
           'Free expression lets people share ideas that improve society.',
           'Some words are difficult to spell correctly.',
-          'The King is very powerful and lives in the capital.',
+          'Some of the old buildings in the square are very tall.',
           'Many people enjoy staying silent sometimes.'
         ],
         correctIndex: 0,
@@ -2348,9 +2693,9 @@ const List<QuestTown> kQuestTowns = [
         npcName: 'サイレント',
         npcEmoji: '🌫️',
         npcLine:
-            '(A faceless grey hush fills the square; it swallows every sound.) "...If silence is peace, then speech is mere noise. Why should I ever give the world its words back?" Your single reply must reach it.',
+            '(A faceless grey hush rests at the centre of the square — アイラ, the First Speaker, a tired child who long ago chose to stop.) "...If silence keeps everyone safe, then words only wound. Why should I ever give the world its words back?" Your single, gentle reply must reach them.',
         npcLineJa:
-            '（顔（かお）のない灰色（はいいろ）の しずけさが ひろばに みちる。空気（くうき）があらゆる音（おと）を呑（の）み込（こ）む。）「…静寂（せいじゃく）が平和（へいわ）だというなら、言葉（ことば）はただの雑音（ざつおん）だ。なぜ私（わたし）が世界（せかい）に言葉（ことば）を返（かえ）さねばならぬ？」きみのただ一言（ひとこと）が届（とど）く。',
+            '（ひろばの まんなかに、顔（かお）のない 灰色（はいいろ）の しずけさが すわっている ── アイラ、いちばん はじめに 話（はな）した 子（こ）。ずっと むかし、だまることを えらんだ、つかれた 子（こ）。）「…しずけさが みんなを 守（まも）るなら、言葉（ことば）は ただ 傷（きず）つけるだけ。なぜ 私（わたし）が、世界（せかい）に 言葉（ことば）を 返（かえ）さねばならぬ？」きみの やさしい ひとことが、アイラに とどく。',
         choices: [
           'Silence is quiet, and quiet is nice, so you are a little right.',
           'You are powerful, and powerful people should do whatever they want.',
@@ -2359,7 +2704,7 @@ const List<QuestTown> kQuestTowns = [
         ],
         correctIndex: 2,
         onCorrect:
-            '(The hush stills, then softens — as if it, too, is remembering.) "...A cage. You name it true. I had forgotten I once had a voice of my own." Colour floods the grey square, and a thousand voices return at once — and one more: サイレント\'s own. You did it, きみ. You gave the world — and the Silence itself — its words back. Words are warmer than silence.',
+            '(The hush stills, then softens — as if アイラ is remembering.) "...A cage. You name it true. I was so afraid of hurting anyone that I forgot I once had a voice of my own. ...Will you stay, while I find it again?" Colour floods the grey square and races outward along the bridge through every healed town — and a thousand voices return at once, and one more, smallest and oldest: アイラ\'s own. You didn\'t defeat anyone, きみ. You just sat down in the quiet beside アイラ — and reminded the world, and アイラ, how to give words back. アイラ isn\'t alone anymore.',
       ),
     ],
   ),
