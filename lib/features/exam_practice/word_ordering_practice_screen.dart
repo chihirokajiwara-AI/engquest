@@ -16,6 +16,7 @@ import 'eiken_exam_config.dart';
 import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
 import '../home/streak_service.dart';
+import '../quest/ui/dq_ui.dart';
 
 /// A 語句整序 (word-ordering) problem in the authentic 英検 大問3 form: a Japanese
 /// sentence plus exactly FIVE 語句 (chunks ①–⑤) that combine into one correct
@@ -181,32 +182,36 @@ class _WordOrderingPracticeScreenState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA),
-      appBar: AppBar(
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF4FC3F7), Color(0xFF29B6F6)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+    // Dark 本格 dq theme (#108 / CEO 2026-06-09): this was the last screen still
+    // on the old bright sky-blue theme, clashing with the navy+gold world. Now
+    // unified with the other 英検 screens (DqScene / dqBox / dqGold / dqInk).
+    return DqScene(
+      child: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(4, 4, 12, 4),
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.close, color: dqInk),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                  Expanded(
+                    child: Text(
+                      '語句（ごく）の並（なら）びかえ',
+                      style:
+                          dqText(size: 15, w: FontWeight.w800, color: dqGold),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
+            Expanded(
+              child: _sessionDone ? _buildResults() : _buildProblem(),
+            ),
+          ],
         ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.close, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        title: const Text(
-          '語句の並びかえ',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-      ),
-      body: SafeArea(
-        child: _sessionDone ? _buildResults() : _buildProblem(),
       ),
     );
   }
@@ -232,54 +237,52 @@ class _WordOrderingPracticeScreenState
                     children: [
                       Text(
                         '問${_currentIdx + 1} / ${_problems.length}',
-                        style: const TextStyle(
-                          color: Color(0xFF263238),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: dqText(
+                            size: 14, w: FontWeight.w700, color: dqInk),
                       ),
                       const Spacer(),
                       Text(
                         '正答: $_correctCount',
-                        style: TextStyle(
-                          color: Colors.green[700],
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: dqText(
+                            size: 14,
+                            w: FontWeight.w700,
+                            color: const Color(0xFF8BE08B)),
                       ),
                     ],
                   ),
                   const SizedBox(height: 8),
-                  LinearProgressIndicator(
-                    value: (_currentIdx + 1) / _problems.length,
-                    backgroundColor: Colors.grey[200],
-                    valueColor:
-                        const AlwaysStoppedAnimation<Color>(Color(0xFF4FC3F7)),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(4),
+                    child: LinearProgressIndicator(
+                      value: (_currentIdx + 1) / _problems.length,
+                      backgroundColor: dqNight1,
+                      valueColor:
+                          const AlwaysStoppedAnimation<Color>(dqGold),
+                    ),
                   ),
                   const SizedBox(height: 24),
                   // Japanese sentence
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: dqBox,
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                          color: const Color(0xFF4FC3F7).withAlpha(60)),
+                          color: dqGoldDeep.withAlpha(120), width: 1.5),
                     ),
                     child: Column(
                       children: [
-                        const Text(
-                          '日本文の意味になるように、語句を並べかえましょう：',
-                          style:
-                              TextStyle(color: Color(0xFF607D8B), fontSize: 12),
+                        Text(
+                          '日本文（にほんぶん）の意味（いみ）になるように、語句（ごく）を並（なら）べかえましょう：',
+                          style: dqText(size: 12, color: dqGold),
                         ),
                         const SizedBox(height: 8),
                         Text(
                           p.jpSentence,
-                          style: const TextStyle(
-                            color: Color(0xFF263238),
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
+                          style: dqText(
+                            size: 18,
+                            color: dqInk,
+                            w: FontWeight.w600,
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -294,24 +297,24 @@ class _WordOrderingPracticeScreenState
                     decoration: BoxDecoration(
                       color: _answered
                           ? (_correct
-                              ? const Color(0xFFE8F5E9)
-                              : const Color(0xFFFFEBEE))
-                          : Colors.white,
+                              ? const Color(0xFF14301B)
+                              : const Color(0xFF3A1A1A))
+                          : dqBox,
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
                         color: _answered
                             ? (_correct
-                                ? const Color(0xFF4CAF50)
-                                : const Color(0xFFF44336))
-                            : Colors.grey.shade300,
+                                ? const Color(0xFF8BE08B)
+                                : const Color(0xFFE0853A))
+                            : dqGoldDeep.withAlpha(120),
                       ),
                     ),
                     child: _selectedWords.isEmpty
                         ? Center(
                             child: Text(
-                              '下の単語をタップして並べましょう',
-                              style: TextStyle(
-                                  color: Colors.grey[400], fontSize: 14),
+                              '下（した）の単語（たんご）をタップして並（なら）べましょう',
+                              style: dqText(
+                                  color: dqInk.withAlpha(140), size: 14),
                             ),
                           )
                         : Wrap(
@@ -330,10 +333,10 @@ class _WordOrderingPracticeScreenState
                                       i < _kCircled.length
                                           ? _kCircled[i]
                                           : '${i + 1}',
-                                      style: const TextStyle(
-                                        fontSize: 11,
-                                        color: Color(0xFF0288D1),
-                                        fontWeight: FontWeight.bold,
+                                      style: dqText(
+                                        size: 11,
+                                        color: dqGold,
+                                        w: FontWeight.bold,
                                       ),
                                     ),
                                     _WordChip(
@@ -351,11 +354,11 @@ class _WordOrderingPracticeScreenState
                   if (_answered && !_correct) ...[
                     const SizedBox(height: 8),
                     Text(
-                      '正解: ${p.correctOrder.join(" ")}',
-                      style: const TextStyle(
-                        color: Color(0xFF4CAF50),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
+                      '正解（せいかい）: ${p.correctOrder.join(" ")}',
+                      style: dqText(
+                        color: const Color(0xFF8BE08B),
+                        size: 14,
+                        w: FontWeight.w600,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -369,27 +372,25 @@ class _WordOrderingPracticeScreenState
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFE1F5FE),
+                        color: dqBox,
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                            color: const Color(0xFF4FC3F7).withAlpha(110)),
+                        border: Border.all(color: dqGold.withAlpha(110)),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                          Text(
                             '📝 本番（英検）の問い方',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF0277BD),
+                            style: dqText(
+                              size: 12,
+                              w: FontWeight.bold,
+                              color: dqGold,
                             ),
                           ),
                           const SizedBox(height: 4),
-                          const Text(
-                            '2番目と4番目にくる語句の組み合わせを答えます。',
-                            style: TextStyle(
-                                fontSize: 12.5, color: Color(0xFF37474F)),
+                          Text(
+                            '2番目（ばんめ）と4番目（ばんめ）にくる語句（ごく）の組（く）み合（あ）わせを答（こた）えます。',
+                            style: dqText(size: 12.5, color: dqInk),
                           ),
                           const SizedBox(height: 8),
                           // Wrap (not Row) so long chunks ("to this party", "old
@@ -408,37 +409,33 @@ class _WordOrderingPracticeScreenState
                   ],
                   // Grammar-rule teach: the 語句整序 skill is knowing WHY the order is
                   // correct, so reveal the rule (be動詞の文型 / want to do / 比較級+than …),
-                  // not just the answer. (Panel uses the screen's current bright theme;
-                  // the dark-dq migration is tracked separately as #67.)
+                  // not just the answer. Dark dq theme (#108): gold-accented panel.
                   if ((_answered || _hintShown) && p.whyExplanation != null) ...[
                     const SizedBox(height: 10),
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFFFF8E1),
+                        color: dqBox,
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                            color: const Color(0xFFFFB300).withAlpha(110)),
+                        border: Border.all(color: dqGold.withAlpha(110)),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                          Text(
                             '💡 ルール / なぜこの順番？',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFFE65100),
+                            style: dqText(
+                              size: 12,
+                              w: FontWeight.bold,
+                              color: dqGold,
                             ),
                           ),
                           const SizedBox(height: 4),
                           Text(
                             p.whyExplanation!,
-                            style: const TextStyle(
-                                fontSize: 12.5,
-                                color: Color(0xFF37474F),
-                                height: 1.5),
+                            style: dqText(size: 12.5, color: dqInk)
+                                .copyWith(height: 1.5),
                           ),
                         ],
                       ),
@@ -453,11 +450,11 @@ class _WordOrderingPracticeScreenState
                       key: const ValueKey('wo_hint'),
                       onPressed: _showRuleHint,
                       icon: const Icon(Icons.lightbulb_outline,
-                          color: Color(0xFFE65100), size: 18),
+                          color: dqGold, size: 18),
                       label: const Text('ルールをみる（むずかしいとき）'),
                       style: OutlinedButton.styleFrom(
-                        foregroundColor: const Color(0xFFE65100),
-                        side: const BorderSide(color: Color(0xFFFFB300)),
+                        foregroundColor: dqGold,
+                        side: BorderSide(color: dqGold.withAlpha(160)),
                         padding: const EdgeInsets.symmetric(vertical: 11),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -465,10 +462,10 @@ class _WordOrderingPracticeScreenState
                       ),
                     ),
                     const SizedBox(height: 4),
-                    const Text(
+                    Text(
                       'ルールをみた問題（もんだい）は、合格率（ごうかくりつ）に 入（はい）れません。',
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 11, color: Color(0xFF90A4AE)),
+                      style: dqText(size: 11, color: dqInk.withAlpha(150)),
                     ),
                   ],
                   const SizedBox(height: 20),
@@ -491,43 +488,11 @@ class _WordOrderingPracticeScreenState
           const SizedBox(height: 12),
           // Check / Next button
           if (!_answered && _remainingWords.isEmpty)
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _checkAnswer,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF4FC3F7),
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: const Text(
-                  '答え合わせ',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
+            DqButton(label: '答え合わせ', onTap: _checkAnswer),
           if (_answered)
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _nextProblem,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF4FC3F7),
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: Text(
-                  _currentIdx < _problems.length - 1 ? '次の問題へ' : '結果を見る',
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ),
+            DqButton(
+              label: _currentIdx < _problems.length - 1 ? '次の問題へ' : '結果を見る',
+              onTap: _nextProblem,
             ),
         ],
       ),
@@ -538,27 +503,27 @@ class _WordOrderingPracticeScreenState
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: dqNight1,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: const Color(0xFF4FC3F7)),
+        border: Border.all(color: dqGold.withAlpha(140)),
       ),
       child: Text.rich(
         TextSpan(
           children: [
             TextSpan(
               text: '$label: ',
-              style: const TextStyle(
-                fontSize: 11.5,
-                color: Color(0xFF0288D1),
-                fontWeight: FontWeight.bold,
+              style: dqText(
+                size: 11.5,
+                color: dqGold,
+                w: FontWeight.bold,
               ),
             ),
             TextSpan(
               text: chunk,
-              style: const TextStyle(
-                fontSize: 13,
-                color: Color(0xFF263238),
-                fontWeight: FontWeight.w600,
+              style: dqText(
+                size: 13,
+                color: dqInk,
+                w: FontWeight.w600,
               ),
             ),
           ],
@@ -582,48 +547,30 @@ class _WordOrderingPracticeScreenState
             Icon(
               passed ? Icons.emoji_events : Icons.refresh,
               size: 72,
-              color: passed ? const Color(0xFFFFD700) : Colors.grey,
+              color: passed ? dqGold : dqInk.withAlpha(140),
             ),
             const SizedBox(height: 16),
             Text(
-              passed ? '合格ライン到達！' : 'もう少し！',
-              style: const TextStyle(
-                color: Color(0xFF263238),
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              passed ? '合格（ごうかく）ライン到達（とうたつ）！' : 'もう少（すこ）し！',
+              style: dqText(size: 24, w: FontWeight.bold, color: dqGold),
             ),
             const SizedBox(height: 12),
             Text(
-              '$_correctCount / ${_problems.length} 正解 ($pct%)',
-              style: TextStyle(color: Colors.grey[700], fontSize: 18),
+              '$_correctCount / ${_problems.length} 正解（せいかい）（$pct%）',
+              style: dqText(color: dqInk, size: 18),
             ),
             if (_assistedCount > 0) ...[
               const SizedBox(height: 10),
               Text(
                 'ルールをみた $_assistedCount問（もん）は、\n合格率（ごうかくりつ）に 入（い）れていません。',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                style: dqText(color: dqInk.withAlpha(160), size: 12),
               ),
             ],
             const SizedBox(height: 32),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () => Navigator.of(context).pop(),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF4FC3F7),
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: const Text(
-                  '戻る',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ),
+            DqButton(
+              label: '戻る',
+              onTap: () => Navigator.of(context).pop(),
             ),
           ],
         ),
@@ -811,35 +758,26 @@ class _WordChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
-        color: selected ? const Color(0xFFE1F5FE) : Colors.white,
+        color: selected ? dqNight1 : dqBox,
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color: selected ? const Color(0xFF4FC3F7) : Colors.grey.shade300,
+          color: selected ? dqGold : dqGoldDeep.withAlpha(120),
         ),
-        boxShadow: selected
-            ? null
-            : [
-                BoxShadow(
-                  color: Colors.black.withAlpha(8),
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
-                ),
-              ],
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             word,
-            style: TextStyle(
-              color: const Color(0xFF263238),
-              fontSize: 16,
-              fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
+            style: dqText(
+              color: dqInk,
+              size: 16,
+              w: selected ? FontWeight.w600 : FontWeight.normal,
             ),
           ),
           if (removable) ...[
             const SizedBox(width: 4),
-            Icon(Icons.close, size: 14, color: Colors.grey[500]),
+            Icon(Icons.close, size: 14, color: dqInk.withAlpha(150)),
           ],
         ],
       ),
