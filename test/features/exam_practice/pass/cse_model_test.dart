@@ -124,21 +124,19 @@ void main() {
       expect(est.totalScore, equals(850));
       expect(est.readinessPct, equals(100.0));
       expect(est.isPredictedPass, isTrue);
-      expect(est.pointsNeeded, equals(0));
     });
 
-    test('exact passing score (419/850) → readinessPct=100', () {
-      // Accuracy needed: 419/850 per skill equally → each skill at 419/850
-      // Since each skill max = 425:
-      //   reading accuracy to hit at least (419÷2) / 425 ≈ 0.493
-      //   listening accuracy same
-      // Test: give each skill exactly the target score
+    test('HONEST (#113): 49% raw (the old "CSE-passing") is BELOW the 60% 目安', () {
+      // The OLD model treated the CSE passing FRACTION (419/850 = 49.3%) as the
+      // raw target → showed 100% "passing" at 49% raw. That was the bug: 英検 CSE
+      // is IRT non-linear, and the empirical passing raw 目安 is ~60%. So 49% raw
+      // is honestly NOT at the 目安: readiness ≈ 49.3/60 ≈ 82%, not predicted pass.
       final est = CseEstimator.estimate(
         grade: '5',
         accuracies: [
           const SkillAccuracy(
               skill: EikenSkill.reading,
-              accuracy: 419 / 850,  // ~0.493
+              accuracy: 419 / 850, // ~0.493
               itemsAttempted: 25),
           const SkillAccuracy(
               skill: EikenSkill.listening,
@@ -146,8 +144,9 @@ void main() {
               itemsAttempted: 25),
         ],
       )!;
-      // total ≈ 419 → readinessPct ≈ 100 (419/419 * 100)
-      expect(est.readinessPct, closeTo(100.0, 2.0));
+      expect(est.readinessPct, closeTo(82.2, 1.5));
+      expect(est.isPredictedPass, isFalse);
+      expect(est.passTargetRaw, equals(0.60));
     });
 
     test('zero accuracy → readinessPct=0, totalScore=0', () {
@@ -161,7 +160,6 @@ void main() {
       expect(est.totalScore, equals(0));
       expect(est.readinessPct, equals(0.0));
       expect(est.isPredictedPass, isFalse);
-      expect(est.pointsNeeded, equals(419));
     });
 
     test('no data (itemsAttempted=0) → treated as zero', () {
@@ -231,7 +229,12 @@ void main() {
   // ── estimate: 2級 ──────────────────────────────────────────────────────────
 
   group('CseEstimator.estimate — 2級', () {
-    test('spec example: R=80% W=60% L=70% → ~90% readiness, NOT passing, Writing limiting', () {
+    test('HONEST (#113): R=80% W=60% L=70% — all ≥ 6割 目安 → REACHES 目安', () {
+      // This is the headline fix. The OLD linear model said this profile was
+      // "89.8%, NOT passing" — but every skill is at/above the published 2級 raw
+      // 目安 (6割), so a candidate here passes (1級/準1=7割, 2級以下=6割 — 協会).
+      // Honest model: each skill capped at 0.60 → all reach it → readiness 100,
+      // 目安 reached. Writing (0.60, the lowest) is still the limiting skill.
       final est = CseEstimator.estimate(
         grade: '2',
         accuracies: [
@@ -240,11 +243,24 @@ void main() {
           const SkillAccuracy(skill: EikenSkill.listening, accuracy: 0.70, itemsAttempted: 30),
         ],
       )!;
-      // maxScores: R=W=L=650. estimated: R=520, W=390, L=455 → total=1365.
-      // readinessPct = 1365/1520 * 100 ≈ 89.8% → NOT passing (the corrected max;
-      // the old inflated 2600 max wrongly showed this profile as 100%/passing).
-      expect(est.totalScore, equals(1365));
-      expect(est.readinessPct, closeTo(89.8, 0.3));
+      expect(est.totalScore, equals(1365)); // CSE bars unchanged
+      expect(est.readinessPct, equals(100.0));
+      expect(est.isPredictedPass, isTrue);
+      expect(est.limitingSkill, equals(EikenSkill.writing));
+    });
+
+    test('HONEST (#113): a below-目安 skill caps readiness (no over-banking)', () {
+      // R=100% L=100% but W=0% (measured): strong skills must NOT over-bank the
+      // failing one. Capped contribution = 0.6+0.6+0 = 1.2 / 1.8 = 66.7%.
+      final est = CseEstimator.estimate(
+        grade: '2',
+        accuracies: [
+          const SkillAccuracy(skill: EikenSkill.reading, accuracy: 1.0, itemsAttempted: 31),
+          const SkillAccuracy(skill: EikenSkill.writing, accuracy: 0.0, itemsAttempted: 2),
+          const SkillAccuracy(skill: EikenSkill.listening, accuracy: 1.0, itemsAttempted: 30),
+        ],
+      )!;
+      expect(est.readinessPct, closeTo(66.7, 0.5));
       expect(est.isPredictedPass, isFalse);
       expect(est.limitingSkill, equals(EikenSkill.writing));
     });
@@ -260,10 +276,10 @@ void main() {
       )!;
       expect(est.isPredictedPass, isFalse);
       expect(est.limitingSkill, equals(EikenSkill.writing));
-      expect(est.pointsNeeded, greaterThan(0));
+      expect(est.readinessPct, lessThan(100.0));
     });
 
-    test('passing score threshold: totalScore >= 1520 → predicted pass', () {
+    test('all skills at/above 目安 → predicted pass (目安 reached)', () {
       final est = CseEstimator.estimate(
         grade: '2',
         accuracies: [
@@ -273,8 +289,8 @@ void main() {
         ],
       )!;
       expect(est.totalScore, equals(1950));
+      expect(est.readinessPct, equals(100.0));
       expect(est.isPredictedPass, isTrue);
-      expect(est.pointsNeeded, equals(0));
     });
 
     test('unknown grade returns null', () {
@@ -413,11 +429,12 @@ void main() {
           SkillAccuracy(skill: EikenSkill.writing, accuracy: 0.0, itemsAttempted: 0),
         ],
       )!;
-      // Banked: 440+440 = 880 / 1103 = 79.8%. Writing is flagged 未測定 (the UI
-      // shows it as such, not a fail). The headline must NOT read 100% / predict
-      // a pass while a required skill is untested.
+      // Honest model (#113): R,L capped at the 0.60 目安 = 0.6+0.6; W 未測定 = 0;
+      // readiness = 1.2 / (3×0.6) = 66.7%. Writing is flagged 未測定 (the UI shows
+      // it as such, not a fail). The headline must NOT read 100% / predict a pass
+      // while a required skill is untested.
       expect(est.unmeasuredSkills, contains(EikenSkill.writing));
-      expect(est.readinessPct, closeTo(79.8, 0.5));
+      expect(est.readinessPct, closeTo(66.7, 0.5));
       expect(est.readinessPct, lessThan(100.0));
       expect(est.isPredictedPass, isFalse);
     });

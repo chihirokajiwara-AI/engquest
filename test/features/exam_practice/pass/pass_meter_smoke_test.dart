@@ -59,7 +59,7 @@ void main() {
     testWidgets('null estimate — shows pass prediction label', (tester) async {
       await tester.pumpWidget(_wrap(const PassMeterScreen()));
       await tester.pump();
-      expect(find.textContaining('よそくごうかくりつ'), findsOneWidget);
+      expect(find.textContaining('Readiness guide'), findsOneWidget);
       expect(tester.takeException(), isNull);
     });
 

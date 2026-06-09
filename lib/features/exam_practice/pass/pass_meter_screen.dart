@@ -181,7 +181,7 @@ class _PassHero extends StatelessWidget {
 
           const SizedBox(height: 2),
           Text(
-            'よそくごうかくりつ / Predicted readiness',
+            '合格（ごうかく）の目安（めやす） / Readiness guide',
             textAlign: TextAlign.center,
             style: dqText(size: 12, color: dqGold),
           ),
@@ -224,19 +224,27 @@ class _PassHero extends StatelessWidget {
 
           const SizedBox(height: 10),
 
-          // Points needed / pass message
-          if (est.isPredictedPass)
-            Text(
-              'ごうかくけん！ / In passing zone',
-              textAlign: TextAlign.center,
-              style: dqText(size: 16, color: const Color(0xFF8BE08B)),
-            )
-          else
-            Text(
-              'ごうかくまで あと ${est.pointsNeeded} ポイント',
-              textAlign: TextAlign.center,
-              style: dqText(size: 16, color: dqInk),
+          // Honest "how close" line — a 目安 band, never a fabricated CSE-point
+          // gap (#113). The raw→CSE conversion is non-public + per-administration.
+          Text(
+            CseEstimator.readinessMessageJa(est),
+            textAlign: TextAlign.center,
+            style: dqText(
+              size: 16,
+              color: est.reachedPassMeyasu
+                  ? const Color(0xFF8BE08B)
+                  : dqInk,
             ),
+          ),
+          const SizedBox(height: 8),
+          // Standing honesty disclaimer: this is a 目安, not a precise prediction.
+          Text(
+            '合格（ごうかく）の目安（めやす）は 正答率（せいとうりつ）'
+            '${(est.passTargetRaw * 100).round()}%（${est.grade == 'pre1' ? '７割' : '６割'}）。\n'
+            '${CseEstimator.meyasuDisclaimerJa}',
+            textAlign: TextAlign.center,
+            style: dqText(size: 10, color: const Color(0xFF8A93B5)),
+          ),
 
           const SizedBox(height: 4),
         ],
@@ -542,10 +550,8 @@ String _motivationalNote(CseEstimate est) {
     return '$limitJa を まだ ためしていないよ。いちど やってみると、'
         'ごうかくりつが もっと せいかくに わかります！';
   }
-  final needed = est.pointsNeeded;
-  return '$limitJa を のばすと ごうかくに ちかづきます。'
-      'あと $needed ポイント。まいにち すこしずつ れんしゅうすれば'
-      'かならず とどきます！';
+  return '$limitJa を のばすと 合格（ごうかく）の目安（めやす）に ちかづきます。'
+      'まいにち すこしずつ れんしゅうすれば、かならず とどきます！';
 }
 
 String _ctaLabel(CseEstimate est) {

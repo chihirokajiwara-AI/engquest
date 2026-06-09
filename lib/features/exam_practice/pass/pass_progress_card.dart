@@ -102,9 +102,11 @@ class PassProgressCard extends StatelessWidget {
 
     final String headline;
     if (post.isPredictedPass) {
-      headline = '合格圏（ごうかくけん）！ この調子（ちょうし）。';
+      headline = '合格圏（ごうかくけん）の目安（めやす）！ この調子（ちょうし）。';
+    } else if (pct >= 65) {
+      headline = '合格（ごうかく）の目安（めやす）まで あと少（すこ）し';
     } else {
-      headline = '合格（ごうかく）まで あと ${post.pointsNeeded}ポイント';
+      headline = 'コツコツ つづけて 目安（めやす）に ちかづこう';
     }
     // NOTE: 合格圏 only fires when isPredictedPass — which requires
     // unmeasuredSkills to be empty (cse_model) — so we never claim PASS while a

@@ -27,10 +27,27 @@
 // 技能満点 values are derived:  skillMax = floorToInt(一次満点 / skillCount)
 // (fractional remainders assigned to the last skill via [_residual]).
 //
-// 合格率 is a readiness estimate, not a probabilistic model.
-// Algorithm: sum estimated CSE scores across skills → compare to 合格基準スコア.
-// readinessPct = clamp(estimatedTotal / passingScore * 100, 0, 100).
-// This is appropriate for a child-facing "how close am I" meter.
+// 合格率 is a 目安 (rough readiness guide), NOT a probabilistic or precise model.
+//
+// HONEST READINESS MODEL (corrected 2026-06-09, flaw-hunt #113 — expert-with-
+// latest, 14 dated sources incl. eiken.or.jp/cse, ESLclub 2026-05-17, eigoful
+// 2025-11-30, samuraienglish 2025):
+//   The OLD model did `skillCSE = rawAccuracy × skillMaxCSE` then
+//   `readiness = totalCSE / passingCSE`. That is WRONG: 英検 CSE is IRT-equated
+//   and NON-LINEAR vs raw accuracy. The official 一次 passing CSE fraction
+//   (e.g. 準1 1792/2250 = 79.6%) is NOT a raw-accuracy requirement — empirically
+//   a 準1 candidate passes at ~65–70% RAW (協会: 1級/準1≈各技能7割, 2級以下≈6割;
+//   the IRT curve compresses raw→CSE in the mid-range). The linear model
+//   therefore told passing children "まだ合格圏外" and could pass under-prepared
+//   ones. FIX: readiness is the child's RAW accuracy relative to the published
+//   per-grade passing raw-accuracy 目安 (0.60 for 5級–2級, 0.70 for 準1級), with
+//   each skill's contribution CAPPED at the target (so one strong skill can't
+//   over-bank a missing one). Everything is labelled 目安; we never claim a
+//   precise pass probability or a "あと N CSEポイント" gap (raw→CSE tables are
+//   non-public and change every administration).
+//
+//   passTargetRaw — 目安 only (協会 2016 raw-rate note + 2025/26 塾 estimates):
+//     5級/4級/3級/準2級/準2級プラス/2級 → 0.60   準1級 → 0.70
 //
 // NO dart:io. No Firebase. No network. Pure-Dart computation only (R4).
 
@@ -81,19 +98,20 @@ class CseEstimate {
   /// The grade's 一次 満点 (maximum possible CSE).
   final int maxScore;
 
-  /// Readiness percentage: how close the learner is to passing (0–100).
-  /// Formula: clamp(totalScore / passingScore × 100, 0, 100).
-  /// When readinessPct >= 100 the learner is predicted to pass.
+  /// Readiness toward the passing raw-accuracy 目安 (0–100). Each applicable
+  /// skill contributes min(rawAccuracy, [passTargetRaw]); readinessPct =
+  /// Σcontributions / (skillCount × passTargetRaw) × 100. 100 means every
+  /// measured skill has reached the grade's 目安 line. This is a 目安, NOT a
+  /// precise pass probability.
   final double readinessPct;
 
-  /// The skill with the lowest estimated CSE score (relative to its max).
-  /// This is the "weakest skill" the UI highlights as the blocking factor.
+  /// The grade's passing raw-accuracy 目安 (e.g. 0.60 / 0.70) — the line each
+  /// skill's accuracy is measured against. Disclosed so the UI can show it.
+  final double passTargetRaw;
+
+  /// The skill with the lowest raw accuracy (the bottleneck the UI highlights).
   /// null when no skills have data.
   final EikenSkill? limitingSkill;
-
-  /// Number of CSE points still needed to reach the passing threshold.
-  /// 0 when already at or above the passing score.
-  final int pointsNeeded;
 
   /// Applicable skills the learner has NO data for (itemsAttempted == 0). These
   /// score 0 in [skillScores], but that 0 means "not yet measured", NOT "tested
@@ -115,8 +133,8 @@ class CseEstimate {
     required this.passingScore,
     required this.maxScore,
     required this.readinessPct,
+    required this.passTargetRaw,
     required this.limitingSkill,
-    required this.pointsNeeded,
     this.unmeasuredSkills = const {},
     this.itemsAttempted = const {},
   });
@@ -125,12 +143,16 @@ class CseEstimate {
   int get totalItemsAttempted =>
       itemsAttempted.values.fold(0, (s, v) => s + v);
 
-  /// True when readinessPct >= 100 AND every applicable skill has been measured.
-  /// We never predict a PASS while a required skill is 未測定 — readinessPct is
-  /// provisional over measured skills, so 100% with an untested skill means
-  /// "on track so far", not "will pass".
-  bool get isPredictedPass =>
+  /// True when every applicable skill has reached the passing raw-accuracy 目安
+  /// AND every applicable skill has been measured. Framed as 「合格圏の目安に到達」
+  /// — NOT a guaranteed pass (英検 scoring is IRT-equated + compensatory; this is
+  /// a guide). Capping each skill at the target means readinessPct can only reach
+  /// 100 when no skill is below the 目安 and none is 未測定.
+  bool get reachedPassMeyasu =>
       readinessPct >= 100.0 && unmeasuredSkills.isEmpty;
+
+  /// Back-compat alias for existing UI; reframed as 目安-reached, not a hard pass.
+  bool get isPredictedPass => reachedPassMeyasu;
 }
 
 // ── Grade spec table ──────────────────────────────────────────────────────────
@@ -218,6 +240,20 @@ const Map<String, _GradeSpec> _kGradeSpecs = {
   ),
 };
 
+/// Passing raw-accuracy 目安 per grade (flaw-hunt #113, expert-with-latest
+/// 2026-06-09). 協会: 1級/準1≈各技能7割, 2級以下≈各技能6割 (eiken.or.jp 合否判定,
+/// a 2016 statement — 目安 only); corroborated by 2025/26 塾 raw→CSE tables
+/// (準1 passes at ~65–70% raw, NOT the 79.6% CSE fraction). Default 0.60.
+const Map<String, double> _kPassTargetRaw = {
+  '5': 0.60,
+  '4': 0.60,
+  '3': 0.60,
+  'pre2': 0.60,
+  'pre2plus': 0.60,
+  '2': 0.60,
+  'pre1': 0.70,
+};
+
 // ── CseEstimator ─────────────────────────────────────────────────────────────
 
 /// Converts per-skill accuracy data into a CSE estimate + 合格率 prediction.
@@ -272,25 +308,28 @@ class CseEstimator {
 
     final totalScore = skillScores.values.fold(0, (s, v) => s + v);
 
-    // readinessPct = "BANKED progress" toward the full passing threshold:
-    // points earned so far / points needed. An unmeasured skill contributes 0
-    // here (you haven't banked it yet) — but it is also added to
-    // [unmeasuredSkills] so the UI shows it as 未測定 (NOT a failed 0). This is
-    // the honest headline: it can never falsely read 100% while a required skill
-    // is untested (for the 3-skill grades two skills alone cannot reach the
-    // 3-skill threshold), and it never implies a kid FAILED a skill they simply
-    // haven't practiced. (An earlier "provisional over measured skills" variant
-    // was reverted — it let a kid with only R+L practised show a green 100%,
-    // trading a downward lie for a worse upward one.)
+    // HONEST readiness (#113): the child's RAW accuracy vs the published passing
+    // raw-accuracy 目安 — NOT the CSE fraction. Each applicable skill contributes
+    // min(rawAccuracy, target); unmeasured skills contribute 0 (you haven't
+    // banked them). Capping at the target prevents one strong skill from
+    // over-banking a missing/weak one, so readinessPct can reach 100 ONLY when
+    // every measured skill is at the 目安 and none is 未測定. This bakes the
+    // raw→CSE non-linearity into the empirical target instead of a linear CSE sum.
+    final target = _kPassTargetRaw[grade] ?? 0.60;
+    double banked = 0.0;
+    for (final skill in spec.skills) {
+      final acc = accMap[skill];
+      if (acc != null && acc.attempted) {
+        banked += acc.accuracy.clamp(0.0, target);
+      }
+    }
+    final denom = spec.skills.length * target;
     final readinessPct =
-        (totalScore / spec.firstPassScore * 100.0).clamp(0.0, 100.0);
+        (denom == 0 ? 0.0 : banked / denom * 100.0).clamp(0.0, 100.0);
 
-    final pointsNeeded =
-        (spec.firstPassScore - totalScore).clamp(0, spec.firstMaxScore);
-
-    // Limiting skill = the skill with the LOWEST score relative to its own max
-    // (ratio = score / skillMax). This correctly identifies the bottleneck even
-    // when skill maxes differ slightly due to rounding.
+    // Limiting skill = the skill with the LOWEST raw accuracy (the bottleneck).
+    // Ratio = score / skillMax = rawAccuracy (skillMax is constant per skill), so
+    // this is equivalently the lowest-accuracy skill.
     EikenSkill? limiting;
     double worstRatio = double.infinity;
     for (final skill in spec.skills) {
@@ -310,9 +349,9 @@ class CseEstimator {
       passingScore: spec.firstPassScore,
       maxScore: spec.firstMaxScore,
       readinessPct: readinessPct,
+      passTargetRaw: target,
       limitingSkill: limiting,
       unmeasuredSkills: Set.unmodifiable(unmeasured),
-      pointsNeeded: pointsNeeded,
       itemsAttempted: Map.unmodifiable(attempted),
     );
   }
@@ -338,6 +377,22 @@ class CseEstimator {
         return 'リスニング';
     }
   }
+
+  /// Honest "how close am I" line for the meter (no fabricated CSE-point gap).
+  /// Bands per the expert design (#113): 未測定あり / 合格圏の目安 / あと少し / コツコツ.
+  static String readinessMessageJa(CseEstimate est) {
+    if (est.unmeasuredSkills.isNotEmpty) {
+      return 'まだ れんしゅうしていない ぎのうが あるよ';
+    }
+    if (est.reachedPassMeyasu) return '合格圏（ごうかくけん）の目安（めやす）に とどいた！';
+    if (est.readinessPct >= 65) return '合格（ごうかく）の目安（めやす）まで あと少（すこ）し！';
+    return 'コツコツ つづけよう';
+  }
+
+  /// Standing honesty disclaimer shown beside any readiness number (#113).
+  static const String meyasuDisclaimerJa =
+      '※これは目安（めやす）です。本番（ほんばん）のスコアは IRT という方法（ほうほう）で'
+      '計算（けいさん）され、回（かい）ごとに変（か）わります。';
 
   /// Short English label for a skill (bilingual UI per CEO directive).
   static String skillLabelEn(EikenSkill skill) {

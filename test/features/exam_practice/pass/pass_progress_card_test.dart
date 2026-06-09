@@ -12,7 +12,6 @@ import 'package:engquest/features/exam_practice/pass/pass_progress_card.dart';
 CseEstimate _est({
   required double readinessPct,
   required int totalItems,
-  int pointsNeeded = 120,
   Set<EikenSkill> unmeasured = const {},
 }) {
   return CseEstimate(
@@ -22,8 +21,8 @@ CseEstimate _est({
     passingScore: 419,
     maxScore: 850,
     readinessPct: readinessPct,
+    passTargetRaw: 0.60,
     limitingSkill: EikenSkill.reading,
-    pointsNeeded: pointsNeeded,
     unmeasuredSkills: unmeasured,
     // Spread items across reading so totalItemsAttempted == totalItems.
     itemsAttempted: {EikenSkill.reading: totalItems},

@@ -386,8 +386,10 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
                 thin
                     ? 'しんだんちゅう……'
                     : (est.isPredictedPass
-                        ? 'ごうかくけん！'
-                        : 'ごうかくまで あと ${est.pointsNeeded} ポイント'),
+                        ? 'ごうかくけんの 目安（めやす）！'
+                        : (est.readinessPct >= 65
+                            ? '合格（ごうかく）の目安（めやす）まで あと少（すこ）し'
+                            : 'コツコツ 目安（めやす）に ちかづこう')),
                 style: dqText(size: 13, w: FontWeight.w700, color: dqInk),
               ),
               const SizedBox(height: 3),
