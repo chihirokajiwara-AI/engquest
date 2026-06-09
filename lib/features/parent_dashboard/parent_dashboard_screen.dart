@@ -3,6 +3,8 @@ import 'package:engquest/core/models/progress_data.dart';
 import 'package:engquest/core/analytics/progress_service.dart';
 import 'package:engquest/core/analytics/firestore_progress_repository.dart';
 import 'package:engquest/core/firebase/auth_service.dart';
+import 'package:engquest/core/storage/preferences_service.dart';
+import 'package:engquest/core/notifications/notification_service.dart';
 import 'package:engquest/features/quest/ui/dq_ui.dart';
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -38,6 +40,32 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
     _service = ProgressService(repository: FirestoreProgressRepository());
     _tabController = TabController(length: 4, vsync: this);
     _loadProgress();
+    _loadReminderTime();
+  }
+
+  /// Restore the saved reminder time so the setting is remembered across
+  /// sessions (#122 — it used to be discarded on close: a setting that did
+  /// nothing). Persistence + the NotificationService seam are wired here; actual
+  /// firing needs the local-notification plugin (mobile), tracked separately.
+  Future<void> _loadReminderTime() async {
+    final prefs = await PreferencesService.getInstance();
+    if (prefs.getBool(PrefKeys.reminderConfigured) && mounted) {
+      setState(() => _notifTime = TimeOfDay(
+            hour: prefs.getInt(PrefKeys.reminderHour),
+            minute: prefs.getInt(PrefKeys.reminderMinute),
+          ));
+    }
+  }
+
+  Future<void> _setReminderTime(TimeOfDay v) async {
+    setState(() => _notifTime = v);
+    final prefs = await PreferencesService.getInstance();
+    await prefs.setInt(PrefKeys.reminderHour, v.hour);
+    await prefs.setInt(PrefKeys.reminderMinute, v.minute);
+    await prefs.setBool(PrefKeys.reminderConfigured, true);
+    // Pre-wire the integration seam (no-op until the notification impl lands).
+    await NotificationService.instance.setReminderTime(v);
+    await NotificationService.instance.scheduleDailyReminder(v);
   }
 
   void _loadProgress() {
@@ -128,7 +156,7 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
                       notifTime: _notifTime,
                       difficulty: _difficulty,
                       onGoalChanged: (v) => setState(() => _dailyGoal = v),
-                      onNotifChanged: (v) => setState(() => _notifTime = v),
+                      onNotifChanged: _setReminderTime,
                       onDifficultyChanged: (v) =>
                           setState(() => _difficulty = v),
                     ),
@@ -863,6 +891,17 @@ class _SettingsTab extends StatelessWidget {
                 const Icon(Icons.chevron_right, color: dqInk),
               ],
             ),
+          ),
+        ),
+        const SizedBox(height: 6),
+        // Honest disclosure (#122): the time is now SAVED, but push reminders
+        // arrive with the スマホアプリ — don't let a parent think the web version
+        // will ping them (it can't). No fake "we'll remind you" promise.
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: Text(
+            '※ 時刻（じこく）は保存（ほぞん）されます。通知（つうち）はスマホアプリ版（ばん）でお知（し）らせします。',
+            style: dqText(size: 11, color: dqInk.withAlpha(150)),
           ),
         ),
         const SizedBox(height: 14),

@@ -18,6 +18,9 @@ abstract class PrefKeys {
   static const String remindersOptedOut = 'reminders_opted_out';
   static const String reminderHour = 'reminder_hour';
   static const String reminderMinute = 'reminder_minute';
+  // True once a parent has explicitly chosen a reminder time (getInt can't
+  // distinguish "unset" from 0:00, so we gate restore on this flag). #122.
+  static const String reminderConfigured = 'reminder_configured';
 
   // Sound preferences
   static const String soundMuted = 'sound_muted'; // SFX channel (effects)
