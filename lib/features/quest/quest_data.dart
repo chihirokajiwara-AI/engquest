@@ -1317,7 +1317,7 @@ const List<QuestTown> kQuestTowns = [
       ),
       // 12 — 関係代名詞〈主格〉who（人を先行詞に）。(大問1 文法型)
       QuestEncounter(
-        npcName: "ハーモニー",
+        npcName: "たびの 吟遊詩人（ぎんゆうしじん）",
         npcEmoji: "🎶",
         npcLine:
             "I'm a bard who sings lost words. I'm looking for a hero ___ can bring stories back.",
@@ -1326,7 +1326,7 @@ const List<QuestTown> kQuestTowns = [
         choices: ["which", "who", "where", "what"],
         correctIndex: 1,
         onCorrect:
-            "'a hero who can bring stories back' — yes! 'who' for people as the subject. ...And here you are, hero.",
+            "'a hero who can bring stories back' — yes! 'who' for people as the subject. ...And here you are, hero. The bard bows once, and walks on down the road.",
       ),
       // 13 — 関係代名詞〈目的格〉which/that（物を先行詞・目的格）。格選択のトラップ。(大問1 文法型)
       QuestEncounter(
@@ -1463,18 +1463,20 @@ const List<QuestTown> kQuestTowns = [
     name: '社会（しゃかい）の港町（みなとまち）',
     tagline: '世の中を語る港町',
     intro: '社会（しゃかい）の港町（みなとまち）。世（よ）の中（なか）を語（かた）り合（あ）う場所（ばしょ）。'
-        'ここで、サイレントの手（て）の者（もの）クワイエトが、人々（ひとびと）から「意見（いけん）」そのものを奪（うば）おうとしている。\n'
+        'ここに、きみと同（おな）じくらいの子（こ）――クワイエがいる。むかし、自分（じぶん）の言葉（ことば）で'
+        '小（ちい）さな弟（おとうと）を傷（きず）つけてしまってから、わざと だまっているのだ。\n'
         '港（みなと）の案内人（あんないにん）ナギは、ずっと昔（むかし）、二人（ふたり）の人（ひと）が言葉（ことば）で'
         '傷（きず）つけ合（あ）った あの会話（かいわ）を、自分（じぶん）が通訳（つうやく）したのだと悔（く）やみ続（つづ）けている。'
         'その日（ひ）、何（なに）が語（かた）られたのか？　自分（じぶん）の「意見（いけん）」を言（い）えるようになれば、港（みなと）に声（こえ）がもどる。',
     cleared: '港（みなと）の案内人（あんないにん）ナギが、はじめて自分（じぶん）の言葉（ことば）で言（い）った――'
         '「わたしは、ちがうと思（おも）う」。\n'
         '港町（みなとまち）の人々（ひとびと）も、また「自分（じぶん）はこう思（おも）う」と言（い）えるようになった。四（よっ）つ目（め）の〈声（こえ）の石（いし）〉。'
-        'クワイエトは去（さ）りぎわ、ふり返（かえ）った――「…おまえの言葉（ことば）は、なぜ消（き）えない？」 遠（とお）くでサイレントの影（かげ）がうごめく。',
+        'クワイエは、ことばが二人（ふたり）を仲直（なかなお）りさせるのを見（み）て、ちいさくふるえた――'
+        '「…ことばで、きずを なおせるの…？」 そっと、きみのあとを ついてくる。',
     encounters: [
       // 1 — 大問1 短文空所補充: past tense + because (3級→準2級 bridge review)
       QuestEncounter(
-        npcName: "ハーモニー",
+        npcName: "たびの 吟遊詩人（ぎんゆうしじん）",
         npcEmoji: "🎶",
         npcLine:
             "I'm a bard. I came here last week because the town had lost its voice. Why did you come?",
@@ -1488,7 +1490,7 @@ const List<QuestTown> kQuestTowns = [
         ],
         correctIndex: 2,
         onCorrect:
-            "Then our songs share one purpose. I'll travel beside you, hero.",
+            "Then our songs share one purpose. Go well, hero — I'll sing of the harbour while you wake it.",
       ),
       // 2 — 大問1 短文空所補充: present perfect 継続 vs past (since/for cue)
       QuestEncounter(
@@ -1776,12 +1778,12 @@ const List<QuestTown> kQuestTowns = [
       ),
       // 18 — 大問3 長文内容一致 (BOSS): paraphrase-correct vs same-word trap
       QuestEncounter(
-        npcName: "クワイエト",
-        npcEmoji: "🌑",
+        npcName: "クワイエ",
+        npcEmoji: "🧥",
         npcLine:
-            "I serve the Silence. He believes a world without words has no lies and no quarrels — that silence is peace. After all you've heard in this town, what do you say to that?",
+            "I hurt someone with my words once. So I think a world without words has no lies and no quarrels — that silence is safe. ...After all you've heard in this town, what do you say to that?",
         npcLineJa:
-            "私（わたし）はサイレントに仕（つか）える者（もの）。彼（かれ）は、言葉（ことば）なき世界（せかい）には嘘（うそ）も争（あらそ）いもない――しずけさこそ平和（へいわ）だと信（しん）じる。この町（まち）で聞（き）いたすべてのあと、それに何（なに）と答（こた）える？",
+            "むかし、ぼくは ことばで、ひとを きずつけた。だから――言葉（ことば）なき世界（せかい）には嘘（うそ）も争（あらそ）いもない、しずけさのほうが あんぜんなんだ、って思（おも）う。…この町（まち）で聞（き）いたすべてのあと、きみは それに何（なに）と答（こた）える？",
         choices: [
           "A silent world has no lies and no quarrels at all.",
           "Yes, silence is peace, just as the Silence believes.",
@@ -1790,7 +1792,7 @@ const List<QuestTown> kQuestTowns = [
         ],
         correctIndex: 2,
         onCorrect:
-            "...That was not the line you were told. You found your own words — and they will not leave my mind. This isn't over, traveller. We meet again at the grey square — the centre, where the very first word was spoken.",
+            "...You didn't argue me down. You just... said something true, gently. I've never heard words used to mend before. I'll follow you a little — I want to see if it's real. (They draw their hood back, just a little.)",
       ),
     ],
   ),
@@ -1809,7 +1811,7 @@ const List<QuestTown> kQuestTowns = [
     cleared: '橋守（はしもり）ロウは、灯（あか）りを掲（かか）げたまま動（うご）かない――けれど、'
         '向（む）こう岸（ぎし）の声（こえ）が、たしかに届（とど）いた。「…ことばは、無事（ぶじ）に渡（わた）れるのか。知（し）らなかった」。\n'
         '橋（はし）の向（む）こうに、城（しろ）の灯（あか）りが見（み）えた。五（いつ）つ目（め）の〈声（こえ）の石（いし）〉を手（て）に。'
-        'ハーモニーが言（い）う――「のこる石（いし）はあと一（ひと）つ。さいごの ひろばに、しずけさ〈サイレント〉が いる」。',
+        '橋守（はしもり）ロウが、はじめて灯（あか）りを下（お）ろして言（い）う――「のこる石（いし）はあと一（ひと）つ。さいごの ひろばに、しずけさ〈サイレント〉が いる」。',
     encounters: [
       // 1 — 準2確実化: 現在完了 vs 過去 (since の手がかり). (大問1 文法型)
       QuestEncounter(
@@ -1981,8 +1983,8 @@ const List<QuestTown> kQuestTowns = [
       ),
       // 14 — 長文内容一致: 言い換え正解 vs 本文語そのまま distractor. (大問3 内容一致型)
       QuestEncounter(
-        npcName: "案内人ハーモニー",
-        npcEmoji: "🎼",
+        npcName: "立札（たてふだ）の番人（ばんにん）",
+        npcEmoji: "🪧",
         npcLine:
             "My sign says: 'The bridge is closed on rainy days because the stone becomes slippery.' What does it mean?",
         npcLineJa:
@@ -2087,10 +2089,10 @@ const List<QuestTown> kQuestTowns = [
         onCorrect:
             "\"She FIXED it, so...\" — past tense kept consistent, and the story moves forward. That's how 3コマ narration works!",
       ),
-      // 20 — ボス: 仮定法 + 逆接マーカー + 理由展開の統合 (サイレントの手先). (統合・意見論述型)
+      // 20 — ボス: 仮定法 + 逆接マーカー + 理由展開の統合 (the silence itself on the bridge — the phenomenon, NOT a henchman; canon = サイレント=アイラ alone). (統合・意見論述型)
       QuestEncounter(
-        npcName: "橋の影 (サイレントの手先)",
-        npcEmoji: "🌑",
+        npcName: "きりの中（なか）の しずけさ",
+        npcEmoji: "🌫️",
         npcLine:
             "If words truly mattered, you would have crossed already. Nevertheless you hesitate — so WHY cross at all?",
         npcLineJa:
@@ -2103,7 +2105,7 @@ const List<QuestTown> kQuestTowns = [
         ],
         correctIndex: 0,
         onCorrect:
-            "The shadow recoils — your reply held an opinion, two reasons, and never broke under its trap. The bridge's voice returns!",
+            "The mist thins — your reply held an opinion, two reasons, and never broke under its quiet trap. The bridge's voice returns!",
       ),
     ],
   ),
