@@ -45,12 +45,18 @@ class StreakState {
   /// The daily question target the child is working toward today.
   final int dailyGoal;
 
+  /// True when the child HAD a streak but it lapsed (last study ≥ 2 days ago),
+  /// so [currentStreak] now honestly reads 0. Lets the home greet a returner
+  /// gracefully (「おかえり！またはじめよう」) instead of silently zeroing the count.
+  final bool streakBroken;
+
   const StreakState({
     required this.currentStreak,
     required this.weeklyBits,
     required this.todayCount,
     this.problemsToday = 0,
     this.dailyGoal = kDefaultDailyGoal,
+    this.streakBroken = false,
   });
 
   const StreakState.zero()
@@ -58,7 +64,8 @@ class StreakState {
         weeklyBits = 0,
         todayCount = 0,
         problemsToday = 0,
-        dailyGoal = kDefaultDailyGoal;
+        dailyGoal = kDefaultDailyGoal,
+        streakBroken = false;
 
   /// Whether the given [weekdayIndex] (0=Mon, 6=Sun) was studied.
   bool studiedOn(int weekdayIndex) => (weeklyBits >> weekdayIndex) & 1 == 1;
@@ -111,11 +118,25 @@ class StreakService {
   /// the goal ring starts empty each morning without a write.
   Future<StreakState> load({DateTime? now}) async {
     final prefs = await PreferencesService.getInstance();
-    final streak = prefs.getInt(_kCurrent);
+    final nowDt = now ?? DateTime.now();
+    final storedStreak = prefs.getInt(_kCurrent);
     final bits = prefs.getInt(_kWeeklyBits);
     final today = prefs.getInt(_kTodayCount);
 
-    final todayKey = _dateKey(now ?? DateTime.now());
+    // HONESTY (#123): a streak is only ALIVE if the last study was today or
+    // yesterday (you can still continue it today). If the child lapsed (last
+    // study ≥ 2 days ago), the streak is BROKEN — show the true value (0), not a
+    // stale 「9にち れんぞく」 they no longer have. The persisted reset still happens
+    // in recordStudySession on the next session; this just stops the display from
+    // lying in between. [streakBroken] lets the home greet a returner gracefully.
+    final lastDateStr = prefs.getString(_kLastDate);
+    final lastDate =
+        lastDateStr != null ? DateTime.tryParse(lastDateStr) : null;
+    final alive = lastDate != null && _daysBetween(lastDate, nowDt) <= 1;
+    final streak = alive ? storedStreak : 0;
+    final streakBroken = !alive && storedStreak > 0;
+
+    final todayKey = _dateKey(nowDt);
     final problemsDate = prefs.getString(_kProblemsTodayDate);
     final problemsToday =
         (problemsDate == todayKey) ? prefs.getInt(_kProblemsToday) : 0;
@@ -128,6 +149,7 @@ class StreakService {
       todayCount: today,
       problemsToday: problemsToday,
       dailyGoal: dailyGoal,
+      streakBroken: streakBroken,
     );
   }
 

@@ -31,6 +31,46 @@ void main() {
     expect(state.todayCount, 2);
   });
 
+  // #123 — load() must show the TRUE streak, not a stale value, after a lapse.
+  String iso(DateTime d) => '${d.year.toString().padLeft(4, '0')}'
+      '-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
+
+  test('lapsed streak (last study 14 days ago) loads as 0 + streakBroken', () async {
+    final now = DateTime(2026, 6, 10);
+    SharedPreferences.setMockInitialValues({
+      'streak_current': 9,
+      'streak_last_study_date': iso(now.subtract(const Duration(days: 14))),
+    });
+    PreferencesService.resetInstance();
+    final state = await StreakService().load(now: now);
+    expect(state.currentStreak, 0, reason: 'a broken streak must not show stale 9');
+    expect(state.streakBroken, isTrue);
+  });
+
+  test('alive streak (studied yesterday) loads the real value, not broken', () async {
+    final now = DateTime(2026, 6, 10);
+    SharedPreferences.setMockInitialValues({
+      'streak_current': 9,
+      'streak_last_study_date': iso(now.subtract(const Duration(days: 1))),
+    });
+    PreferencesService.resetInstance();
+    final state = await StreakService().load(now: now);
+    expect(state.currentStreak, 9);
+    expect(state.streakBroken, isFalse);
+  });
+
+  test('studied today → streak alive', () async {
+    final now = DateTime(2026, 6, 10);
+    SharedPreferences.setMockInitialValues({
+      'streak_current': 3,
+      'streak_last_study_date': iso(now),
+    });
+    PreferencesService.resetInstance();
+    final state = await StreakService().load(now: now);
+    expect(state.currentStreak, 3);
+    expect(state.streakBroken, isFalse);
+  });
+
   test('StreakState.studiedOn returns false for unset bits', () {
     const state = StreakState(
       currentStreak: 1,

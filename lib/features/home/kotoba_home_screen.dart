@@ -414,8 +414,11 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
 
   Widget _buildStreakPanel() {
     final streak = _streak.currentStreak;
-    // Build a gentle, celebratory message — no guilt, no red countdown.
-    final String streakMessage = _streakMessage(streak);
+    // Build a gentle, celebratory message — no guilt, no red countdown. A
+    // lapsed returner (#123) gets a warm 「おかえり！」 instead of the first-time
+    // line, and the count honestly reads 0 (the broken streak), not a stale value.
+    final String streakMessage =
+        _streakMessage(streak, broken: _streak.streakBroken);
 
     return DqPanel(
       title: '探偵（たんてい）の捜査日誌（そうさにっし）',
@@ -509,7 +512,10 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
   }
 
   /// Returns a calm, diegetic streak message that never shames.
-  String _streakMessage(int n) {
+  String _streakMessage(int n, {bool broken = false}) {
+    if (n == 0 && broken) {
+      return 'おかえり！ また きょうから つづけよう。';
+    }
     if (n == 0) return 'はじめての じけん、はじまる……';
     if (n == 1) return 'さあ、最初（さいしょ）の ページを開（ひら）いた！';
     if (n < 5) return 'じっくり 記録（きろく）が 積（つ）みあがってきた。';
