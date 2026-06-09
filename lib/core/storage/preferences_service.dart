@@ -31,6 +31,11 @@ abstract class PrefKeys {
   // when the parental consent gate is passed (gate-wiring is a separate task).
   static const String analyticsConsentGranted = 'analytics_consent_granted';
 
+  // Listening "read the script" mode for Deaf/HoH learners (#125). Default FALSE.
+  // When ON, the listening スクリプト is shown BEFORE answering and those items are
+  // kept out of the by-ear 合格率 (honestly read, not heard).
+  static const String listeningCaptions = 'listening_captions';
+
   // Legacy keys kept for backward-compat with OnboardingStorage
   static const String onboardingAge = 'onboarding_age';
   static const String onboardingCefr = 'onboarding_cefr';

@@ -298,6 +298,50 @@ void main() {
         reason: 'every audible answer was correct → 100%');
   });
 
+  testWidgets('リスニング: caption "read the script" mode is EXCLUDED from 合格率 (#125)',
+      (tester) async {
+    // Deaf/HoH read-the-script mode: reading ≠ hearing, so a captioned session
+    // must NOT count toward the by-ear listening 合格率.
+    const grade = '5';
+    final items = kListeningItems[grade]!;
+    final n = items.length;
+    SharedPreferences.setMockInitialValues({'listening_captions': true});
+    PreferencesService.resetInstance();
+
+    await tester.pumpWidget(MaterialApp(
+      home: ListeningPracticeScreen(
+        eikenGrade: grade,
+        section: _section(ExamSectionType.listening),
+      ),
+    ));
+    await tester.pump();
+    await tester.pump(); // let _loadCaptionPref + audio probe resolve
+
+    for (var i = 0; i < n; i++) {
+      final start = find.text('はじめる / Start');
+      if (start.evaluate().isNotEmpty) {
+        await tester.tap(start);
+        await tester.pump();
+      }
+      await tester.tap(find.byType(DqChoice).at(items[i].correctIndex));
+      await tester.pump();
+      await tester.tap(
+          find.text(i < n - 1 ? 'つぎへ / Next' : 'けっか / Results'));
+      await tester.pump();
+    }
+    await tester.pump(const Duration(milliseconds: 300));
+    await tester.pump();
+
+    // Nothing should have been recorded to the listening skill (all-captioned).
+    final store = await SkillAccuracyStore.getInstance();
+    final listening = store
+        .readAccuracies(grade)
+        .where((a) => a.skill == EikenSkill.listening)
+        .fold<int>(0, (s, a) => s + a.itemsAttempted);
+    expect(listening, equals(0),
+        reason: 'caption (read) mode must not feed the by-ear listening 合格率');
+  });
+
   // ── 大問1 vocab/grammar (#37) ──────────────────────────────────────────────
   // The highest-VOLUME practice section (every grade's biggest part) and thus
   // the biggest lever on each learner's 合格率. Questions are randomised from the

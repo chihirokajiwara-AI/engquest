@@ -26,6 +26,7 @@ import 'package:flutter/material.dart';
 import '../../core/audio/audio_assets.dart';
 import '../../core/audio/audio_cue_service.dart';
 import '../../core/audio/audio_mute.dart';
+import '../../core/storage/preferences_service.dart';
 import '../quest/ui/dq_ui.dart';
 import '../home/streak_service.dart';
 import 'eiken_exam_config.dart';
@@ -92,15 +93,35 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
         if (mounted && !ok) setState(() => _audioOk[idx] = false);
       });
     }
+    _loadCaptionPref();
+  }
+
+  /// Deaf/HoH "read the script" mode (#125): when ON, the スクリプト is shown
+  /// BEFORE answering so a child who can't hear can still practise listening
+  /// comprehension. Persisted so the choice sticks.
+  bool _captionsOn = false;
+
+  Future<void> _loadCaptionPref() async {
+    final prefs = await PreferencesService.getInstance();
+    final on = prefs.getBool(PrefKeys.listeningCaptions);
+    if (mounted && on) setState(() => _captionsOn = true);
+  }
+
+  Future<void> _toggleCaptions() async {
+    setState(() => _captionsOn = !_captionsOn);
+    final prefs = await PreferencesService.getInstance();
+    await prefs.setBool(PrefKeys.listeningCaptions, _captionsOn);
   }
 
   /// Whether the CURRENT item can honestly count toward the listening 合格率:
-  /// its audio is bundled AND the Voice channel isn't muted (a muted child did
-  /// not actually hear it either). Index-guarded against an early build.
+  /// its audio is bundled, the Voice channel isn't muted, AND the child is not in
+  /// "read the script" caption mode (reading ≠ hearing). A muted/captioned child
+  /// did not actually HEAR it, so it stays out of the by-ear 合格率 (#112/#125).
   bool get _currentMeasurable =>
       _currentIdx < _audioOk.length &&
       _audioOk[_currentIdx] &&
-      !AudioMute.voiceMuted;
+      !AudioMute.voiceMuted &&
+      !_captionsOn;
 
   @override
   void dispose() {
@@ -383,6 +404,37 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
                     onTap: _playAudio,
                   ),
           ),
+          const SizedBox(height: 8),
+          // Deaf/HoH inclusion (#125): read the script instead of hearing it.
+          // The transcript already exists; in caption mode we show it BEFORE the
+          // choices so a child who can't hear can still practise comprehension.
+          Center(
+            child: TextButton.icon(
+              onPressed: _toggleCaptions,
+              icon: Icon(
+                _captionsOn ? Icons.volume_up_rounded : Icons.subtitles_rounded,
+                color: dqGold,
+                size: 18,
+              ),
+              label: Text(
+                _captionsOn
+                    ? '音（おと）で きくモードに もどす'
+                    : '🔤 文字（もじ）で よむ（音（おと）が きこえないとき）',
+                style: dqText(size: 12, color: dqGold),
+              ),
+            ),
+          ),
+          if (_captionsOn && !_answered) ...[
+            const SizedBox(height: 8),
+            _TranscriptPanel(item: item),
+            const SizedBox(height: 4),
+            Text(
+              '※ 文字（もじ）で よむモードは「聞（き）く力（ちから）」の'
+              '合格率（ごうかくりつ）には 入（い）れません。',
+              textAlign: TextAlign.center,
+              style: dqText(size: 11, color: dqInk.withAlpha(150)),
+            ),
+          ],
           const SizedBox(height: 20),
 
           // Question card (shown after play or after answer)
