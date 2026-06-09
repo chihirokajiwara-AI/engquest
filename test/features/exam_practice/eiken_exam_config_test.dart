@@ -63,4 +63,33 @@ void main() {
               '(post-2024 reform; 準1級 was a stale pre-reform 25)');
     }
   });
+
+  // grade → official number of WRITING tasks (筆記 ライティング). Post-2024 reform:
+  // 5級/4級 have NO writing; 3級/準2級 = Eメール + 意見論述 (2); 準2級プラス/2級/準1級
+  // = 要約 + 意見論述 (2). The exam hub shows this count and mock_exam/cse_model
+  // already weight writing as 2 for these grades, so a config saying 1 (as 3級 did)
+  // both misstates the exam and contradicts the app's own scoring. Verified
+  // eiken.or.jp + docs/design/EIKEN-MASTERY-AND-GAPS-2026-06-06.json, 2026-06-09.
+  const writingTasks = <String, int>{
+    '5': 0,
+    '4': 0,
+    '3': 2,
+    'pre2': 2,
+    'pre2plus': 2,
+    '2': 2,
+    'pre1': 2,
+  };
+
+  test('writing task count matches the official post-2024 spec per grade', () {
+    for (final entry in writingTasks.entries) {
+      final def = kEikenExams[entry.key];
+      expect(def, isNotNull, reason: 'missing exam def for ${entry.key}');
+      final writingCount = def!.sections
+          .where((s) => s.type == ExamSectionType.writing)
+          .fold<int>(0, (sum, s) => sum + s.questionCount);
+      expect(writingCount, entry.value,
+          reason: '英検${entry.key} writing should be ${entry.value}題 '
+              '(5/4級=なし; 3級〜準1級=2題). 3級 was a stale 1.');
+    }
+  });
 }

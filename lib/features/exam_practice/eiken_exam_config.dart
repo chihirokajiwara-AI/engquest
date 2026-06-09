@@ -209,12 +209,16 @@ const Map<String, EikenExamDef> kEikenExams = {
       ),
       ExamSection(
         id: '3_w1',
-        nameJa: '筆記4: ライティング（Eメール）',
-        nameEn: 'Writing: Email Reply',
+        nameJa: '筆記4: ライティング（Eメール＋意見論述）',
+        nameEn: 'Writing: Email + Opinion',
         type: ExamSectionType.writing,
-        questionCount: 1,
+        // 英検3級 writing is TWO tasks post-2024 (Eメール + 意見論述) — the app
+        // already ships both prompt types (3_email_*, 3_opinion_1) and mock_exam
+        // /cse_model already weight 3級 writing as 2. timeLimitMinutes left at 15
+        // so totalMinutes stays the official #96-locked value.
+        questionCount: 2,
         timeLimitMinutes: 15,
-        description: '外国人の友達からのEメールに対する返信を書く（2024年新形式）',
+        description: 'Eメール返信＋与えられたTOPICについて自分の意見を書く（2024年新形式・2題）',
       ),
       ExamSection(
         id: '3_l',
@@ -231,7 +235,8 @@ const Map<String, EikenExamDef> kEikenExams = {
     grade: 'pre2',
     labelJa: '英検準2級',
     cefrLevel: 'B1',
-    totalMinutes: 105, // 一次 = R/W 80分 + リスニング約25分 (2024改定後, eiken.or.jp 2026-06)
+    totalMinutes:
+        105, // 一次 = R/W 80分 + リスニング約25分 (2024改定後, eiken.or.jp 2026-06)
     passingScore: 1322,
     maxScore: 1800, // 一次満点 = 600×3 (corrected 2026-06-07; was inflated 1980)
     sections: [
