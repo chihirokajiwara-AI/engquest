@@ -17,6 +17,7 @@ import 'distractor_generator.dart';
 import 'eiken_exam_config.dart';
 import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
+import 'vocab_review_store.dart';
 import '../quest/ui/dq_ui.dart';
 import '../home/streak_service.dart';
 
@@ -69,6 +70,7 @@ class VocabGrammarPracticeScreen extends StatefulWidget {
 class _VocabGrammarPracticeScreenState
     extends State<VocabGrammarPracticeScreen> {
   final _vocabRepo = VocabRepository();
+  final _reviewStore = VocabReviewStore();
   final _rng = Random();
 
   List<_Question> _questions = [];
@@ -129,6 +131,24 @@ class _VocabGrammarPracticeScreenState
               hasCleanCloze(w.exampleSentences.first, w.word))
           .toList()
         ..shuffle(_rng);
+
+      // Spaced repetition (#119): surface words the child previously got WRONG
+      // and that FSRS now schedules as DUE *first*, so a session actually
+      // re-teaches what was forgotten instead of being fresh random recognition.
+      // New words fill the rest. Falls back to pure-random on a first-ever visit
+      // (no due cards) or any store error.
+      try {
+        final due = await _reviewStore.dueReviewKeys(widget.eikenGrade);
+        if (due.isNotEmpty) {
+          eligible.sort((a, b) {
+            final ad = due.contains(VocabReviewStore.keyFor(a.word)) ? 0 : 1;
+            final bd = due.contains(VocabReviewStore.keyFor(b.word)) ? 0 : 1;
+            return ad - bd; // due words first; stable within each tier
+          });
+        }
+      } catch (_) {
+        // Non-fatal — keep the shuffled order.
+      }
 
       // Build questions, regenerating distractors per item (#76). The stored
       // `distractors` are alphabetical-adjacency artifacts (~92% make the answer
@@ -210,10 +230,11 @@ class _VocabGrammarPracticeScreenState
 
   void _selectAnswer(int idx) {
     if (_answered) return;
+    final q = _questions[_currentIdx];
+    final correct = idx == q.correctIdx;
     setState(() {
       _selectedAnswer = idx;
       _answered = true;
-      final correct = idx == _questions[_currentIdx].correctIdx;
       if (correct) _correctCount++;
       // Honest measurement: only UNAIDED answers count toward 合格率. A hinted
       // question is recorded as assisted and excluded from the readiness signal.
@@ -224,6 +245,15 @@ class _VocabGrammarPracticeScreenState
         if (correct) _unaidedCorrect++;
       }
     });
+    // Spaced repetition (#119): schedule this word via FSRS so a missed word
+    // is re-surfaced in a future session (acquisition, not one-shot recognition).
+    // Fire-and-forget; a hinted-correct is scheduled as 'hard' (not mastered).
+    _reviewStore.recordAnswer(
+      grade: widget.eikenGrade,
+      word: q.word.word,
+      correct: correct,
+      hinted: _hintShown,
+    );
   }
 
   /// Reveal the choice meanings for the current question (opt-in scaffold).
