@@ -5,6 +5,8 @@ import 'package:engquest/core/analytics/firestore_progress_repository.dart';
 import 'package:engquest/core/firebase/auth_service.dart';
 import 'package:engquest/core/storage/preferences_service.dart';
 import 'package:engquest/core/notifications/notification_service.dart';
+import 'package:engquest/features/exam_practice/pass/cse_model.dart';
+import 'package:engquest/features/exam_practice/pass/skill_accuracy_store.dart';
 import 'package:engquest/features/quest/ui/dq_ui.dart';
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -323,40 +325,11 @@ class _HomeTab extends StatelessWidget {
         const SizedBox(height: 14),
 
         // ── Eiken readiness ───────────────────────────────────────────────
-        DqPanel(
-          title: '英検準備度 / Eiken Readiness',
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: dqBilingual('合格までの目安', 'Progress', jpSize: 13),
-                  ),
-                  Text(
-                    '${progress.eikenReadiness.toStringAsFixed(1)}%',
-                    style: dqText(
-                        size: 18, w: FontWeight.w800, color: dqGold),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              _DqBar(
-                value: progress.eikenReadiness / 100,
-                color: _readinessColor(progress.eikenReadiness),
-                height: 14,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                _readinessLabel(progress.eikenReadiness),
-                style: dqText(
-                    size: 12,
-                    w: FontWeight.w600,
-                    color: _readinessColor(progress.eikenReadiness)),
-              ),
-            ],
-          ),
-        ),
+        // HONEST 合格までの目安 from the real per-skill 合格率 (cse_model, #113) —
+        // the SAME model the in-app pass-meter uses. NOT vocabulary mastery: a
+        // child with high flashcard mastery but no listening/writing practice is
+        // NOT "on pace to pass", and a parent must not be told otherwise (#128).
+        const _HonestReadinessCard(),
         const SizedBox(height: 14),
 
         // ── Next review ───────────────────────────────────────────────────
@@ -420,16 +393,111 @@ class _HomeTab extends StatelessWidget {
     );
   }
 
-  Color _readinessColor(double r) {
-    if (r >= 80) return const Color(0xFF8BE08B);
-    if (r >= 50) return dqGold;
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+//  Honest 英検準備度 card (#128) — reads the SAME per-skill 合格率 model the in-app
+//  pass-meter uses (cse_model, #113), NOT vocabulary mastery. Self-contained so it
+//  loads independently of the Firestore vocab progress: target grade from prefs +
+//  SkillAccuracyStore → CseEstimator.estimate.
+// ══════════════════════════════════════════════════════════════════════════════
+
+class _HonestReadinessCard extends StatefulWidget {
+  const _HonestReadinessCard();
+
+  @override
+  State<_HonestReadinessCard> createState() => _HonestReadinessCardState();
+}
+
+/// Loads the HONEST 英検 readiness for the parent dashboard from the child's
+/// target grade (prefs) + per-skill 合格率 (SkillAccuracyStore) via the same
+/// cse_model the in-app pass-meter uses (#113/#128). Returns null when the grade
+/// has no CSE spec. Top-level + public so the wiring is unit-testable without
+/// pumping the Firebase-backed dashboard.
+Future<CseEstimate?> loadParentReadiness() async {
+  final prefs = await PreferencesService.getInstance();
+  final grade = prefs.getString('onboarding_start_level') ?? '5';
+  final store = await SkillAccuracyStore.getInstance();
+  return CseEstimator.estimate(
+      grade: grade, accuracies: store.readAccuracies(grade));
+}
+
+class _HonestReadinessCardState extends State<_HonestReadinessCard> {
+  late final Future<CseEstimate?> _future = loadParentReadiness();
+
+  Color _color(double pct) {
+    if (pct >= 100) return const Color(0xFF8BE08B);
+    if (pct >= 65) return dqGold;
     return const Color(0xFFE89090);
   }
 
-  String _readinessLabel(double r) {
-    if (r >= 80) return '英検5級合格ペースです';
-    if (r >= 50) return '順調に進んでいます';
-    return 'もう少し練習しましょう';
+  @override
+  Widget build(BuildContext context) {
+    return DqPanel(
+      title: '英検準備度 / Eiken Readiness',
+      child: FutureBuilder<CseEstimate?>(
+        future: _future,
+        builder: (context, snap) {
+          if (snap.connectionState != ConnectionState.done) {
+            return Text('読み込み中…', style: dqText(size: 12, color: dqInk));
+          }
+          final est = snap.data;
+          // No 英検 practice yet → say so honestly; do NOT imply a pass pace from
+          // flashcard vocab. (est null = unsupported grade; 0 items = nothing done.)
+          if (est == null || est.totalItemsAttempted == 0) {
+            return Text(
+              'まだ 英検（えいけん）モードの れんしゅうが ありません。\n'
+              '英検モードで もんだいを とくと、ここに「合格（ごうかく）までの目安（めやす）」が出ます。\n'
+              '※ 語彙（ごい）の習得（しゅうとく）だけでは 合格の目安には なりません。',
+              style: dqText(size: 12, color: dqInk),
+            );
+          }
+          final pct = est.readinessPct;
+          final color = _color(pct);
+          final unmeasured = est.unmeasuredSkills
+              .map(CseEstimator.skillLabelJa)
+              .toList();
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child:
+                        dqBilingual('合格までの目安', 'Pass guide', jpSize: 13),
+                  ),
+                  Text(
+                    '${pct.toStringAsFixed(0)}%',
+                    style:
+                        dqText(size: 18, w: FontWeight.w800, color: color),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              _DqBar(value: pct / 100, color: color, height: 14),
+              const SizedBox(height: 8),
+              Text(
+                CseEstimator.readinessMessageJa(est),
+                style: dqText(size: 12, w: FontWeight.w600, color: color),
+              ),
+              if (unmeasured.isNotEmpty) ...[
+                const SizedBox(height: 4),
+                Text(
+                  '※ ${unmeasured.join('・')} は まだ 未測定（みそくてい）です。',
+                  style: dqText(size: 11, color: dqInk.withAlpha(170)),
+                ),
+              ],
+              const SizedBox(height: 4),
+              Text(
+                '${est.totalItemsAttempted}問（もん）をもとに算出（さんしゅつ）。'
+                '${CseEstimator.meyasuDisclaimerJa}',
+                style: dqText(size: 11, color: dqInk.withAlpha(150)),
+              ),
+            ],
+          );
+        },
+      ),
+    );
   }
 }
 
