@@ -143,21 +143,10 @@ class _GradeGateScreenState extends State<GradeGateScreen> {
               ),
               const SizedBox(height: 8),
 
-              // ── Social proof ──────────────────────────────────────────────
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text('⭐', style: TextStyle(fontSize: 14)),
-                  const SizedBox(width: 4),
-                  Text(
-                    '3,000人以上が学習中',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: colorScheme.onSurface.withAlpha(153),
-                          fontWeight: FontWeight.w500,
-                        ),
-                  ),
-                ],
-              ),
+              // (Removed a fabricated "3,000人以上が学習中" social-proof line —
+              // flaw-hunt #118: a pre-launch product has no such count; a false
+              // user count is 景表法/優良誤認 exposure and violates the honesty
+              // spine. Real, verifiable social proof can return post-launch.)
 
               const SizedBox(height: 28),
 
@@ -273,7 +262,7 @@ class _TrialHeroBadge extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                '7日間無料トライアル',
+                '月額（つきがく）¥999',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 18,
@@ -281,8 +270,13 @@ class _TrialHeroBadge extends StatelessWidget {
                   letterSpacing: 0.3,
                 ),
               ),
+              // Honest disclosure (flaw-hunt #118): the impossible claim
+              // 「クレジットカード登録不要」 was removed (App Store / Google Play
+              // subscriptions ALWAYS require a payment method on file). Auto-renew
+              // + the 特商法 最終確認画面 + any real free-trial offer are a CEO/legal
+              // decision — escalated, not invented here.
               Text(
-                'クレジットカード登録不要',
+                '自動更新（じどうこうしん）・いつでも解約（かいやく）できます',
                 style: TextStyle(
                   color: Colors.white.withAlpha(220),
                   fontSize: 11,
@@ -609,9 +603,14 @@ class _GradientCTAButton extends StatelessWidget {
                   ),
                 )
               : const Text(
-                  '無料で始める  →',
+                  // Honest CTA (#118): the button charges ¥999/月 immediately
+                  // (no free trial is configured in billing_config). 「無料で始める」
+                  // on a button that takes money is the exact surprise-charge trap
+                  // to avoid. If a real 7-day trial is wanted, configure the store
+                  // intro offer + restore trial copy (CEO/legal decision).
+                  '月額（つきがく）¥999 ではじめる  →',
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 17,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 0.5,
                   ),
