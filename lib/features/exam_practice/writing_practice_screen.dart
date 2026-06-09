@@ -28,6 +28,7 @@ import '../home/streak_service.dart';
 import 'eiken_exam_config.dart';
 import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
+import 'writing_readiness.dart';
 
 // ── Data models ─────────────────────────────────────────────────────────────
 
@@ -94,8 +95,7 @@ const List<WritingPrompt> kWritingPrompts = [
     instructionEn:
         'Write a reply email in English. You must answer BOTH underlined questions.\n'
         'Use 15–25 words.',
-    stimulus:
-        'Hi! I heard you got a new pet. What kind of animal is it? '
+    stimulus: 'Hi! I heard you got a new pet. What kind of animal is it? '
         'What does it like to eat?',
     underlinedQuestions: [
       'What kind of animal is it?',
@@ -108,13 +108,11 @@ const List<WritingPrompt> kWritingPrompts = [
   WritingPrompt(
     id: '3_email_2',
     type: WritingTaskType.email,
-    instructionJa:
-        '英語で返信メールを書いてください。下線部の2つの質問に必ず答えてください。\n15語以上25語以内で書いてください。',
+    instructionJa: '英語で返信メールを書いてください。下線部の2つの質問に必ず答えてください。\n15語以上25語以内で書いてください。',
     instructionEn:
         'Write a reply email in English. Answer BOTH underlined questions.\n'
         'Use 15–25 words.',
-    stimulus:
-        'Hi! My family is planning to visit Japan next summer. '
+    stimulus: 'Hi! My family is planning to visit Japan next summer. '
         'What is a good place to visit there? '
         'What food should we try?',
     underlinedQuestions: [
@@ -130,13 +128,11 @@ const List<WritingPrompt> kWritingPrompts = [
   WritingPrompt(
     id: 'pre2_email_1',
     type: WritingTaskType.email,
-    instructionJa:
-        '英語で返信メールを書いてください。下線部の2つの質問に必ず答えてください。\n40語以上50語以内で書いてください。',
+    instructionJa: '英語で返信メールを書いてください。下線部の2つの質問に必ず答えてください。\n40語以上50語以内で書いてください。',
     instructionEn:
         'Write a reply email in English. Answer BOTH underlined questions.\n'
         'Use 40–50 words.',
-    stimulus:
-        'Hi! I am thinking of taking up a new hobby. '
+    stimulus: 'Hi! I am thinking of taking up a new hobby. '
         'I heard that you play a musical instrument. '
         'What instrument do you play? '
         'How long did it take you to learn it?',
@@ -151,13 +147,11 @@ const List<WritingPrompt> kWritingPrompts = [
   WritingPrompt(
     id: 'pre2_email_2',
     type: WritingTaskType.email,
-    instructionJa:
-        '英語で返信メールを書いてください。下線部の2つの質問に必ず答えてください。\n40語以上50語以内で書いてください。',
+    instructionJa: '英語で返信メールを書いてください。下線部の2つの質問に必ず答えてください。\n40語以上50語以内で書いてください。',
     instructionEn:
         'Write a reply email in English. Answer BOTH underlined questions.\n'
         'Use 40–50 words.',
-    stimulus:
-        'Hi! Our school is having an international food fair next month. '
+    stimulus: 'Hi! Our school is having an international food fair next month. '
         'What traditional dish from your country would you recommend? '
         'What are the main ingredients in it?',
     underlinedQuestions: [
@@ -175,8 +169,7 @@ const List<WritingPrompt> kWritingPrompts = [
     type: WritingTaskType.summary,
     instructionJa:
         '次の英文を読み、その内容を英語で要約してください。\n45語以上55語以内で書いてください。\n本文の言葉をそのまま書き写すことなく、自分の言葉でまとめてください。',
-    instructionEn:
-        'Read the following passage and summarize it in English.\n'
+    instructionEn: 'Read the following passage and summarize it in English.\n'
         'Use 45–55 words. Do NOT copy sentences verbatim — paraphrase.',
     stimulus:
         'Many cities around the world are facing a serious shortage of affordable housing. '
@@ -255,8 +248,7 @@ const List<WritingPrompt> kWritingPrompts = [
   WritingPrompt(
     id: 'pre1_summary_2',
     type: WritingTaskType.summary,
-    instructionJa:
-        '次の英文を読み、その内容を英語で要約してください。\n60語以上70語以内で書いてください。',
+    instructionJa: '次の英文を読み、その内容を英語で要約してください。\n60語以上70語以内で書いてください。',
     instructionEn:
         'Summarize the passage in English (60–70 words). Paraphrase — no verbatim copying.',
     stimulus:
@@ -288,8 +280,7 @@ const List<WritingPrompt> kWritingPrompts = [
     type: WritingTaskType.opinion,
     instructionJa:
         'あなたは「子どもはスポーツをすべきだ」という意見に賛成ですか。\n理由を2つ以上挙げて、あなたの意見を25語以上35語以内の英語で書いてください。',
-    instructionEn:
-        'Do you agree that children should play sports?\n'
+    instructionEn: 'Do you agree that children should play sports?\n'
         'Write your opinion in English (25–35 words) with at least 2 reasons.',
     stimulus: 'TOPIC: Do you agree that children should play sports?',
     underlinedQuestions: [],
@@ -306,7 +297,8 @@ const List<WritingPrompt> kWritingPrompts = [
         '以下のTOPICについて、あなたの意見とその理由を英語で書いてください。\n理由を2つ挙げ、50語以上60語以内で書いてください。',
     instructionEn:
         'Write your opinion on the TOPIC below with 2 reasons (50–60 words).',
-    stimulus: 'TOPIC: Do you think people should use public transportation more?',
+    stimulus:
+        'TOPIC: Do you think people should use public transportation more?',
     underlinedQuestions: [],
     wordCountMin: 50,
     wordCountMax: 60,
@@ -468,51 +460,119 @@ RESPONSE FORMAT (strict JSON, no markdown, no extra text):
 }''';
 }
 
-// ── Fallback self-check (offline / API error) ────────────────────────────────
+// ── Offline readiness report (live, honest — #100) ───────────────────────────
+//
+// Replaces the old static self-check. When AI grading is unavailable we run the
+// offline [evaluateWritingReadiness] engine over the learner's actual text and
+// show concrete, actionable results. CRITICAL honesty rule (see
+// writing_readiness.dart): this NEVER shows a quality score — only objective
+// HARD facts (語数 / 英語として成立) and advisory 目安 HINTs. The 語彙/文法 quality
+// stays honestly 未測定 until AI grading is connected.
 
-Widget _buildOfflineChecklist(WritingPrompt prompt) {
-  final checks = switch (prompt.type) {
-    WritingTaskType.email => [
-        '✅ 下線部の質問1に答えましたか？',
-        '✅ 下線部の質問2に答えましたか？',
-        '✅ あいさつ文（Dear ... / Hi ...）から始まりましたか？',
-        '✅ ${prompt.wordCountMin}〜${prompt.wordCountMax}語の範囲に収まっていますか？',
-        '✅ スペルミスを確認しましたか？',
-        '✅ 動詞の時制は正しいですか？',
-      ],
-    WritingTaskType.summary => [
-        '✅ 段落の主旨を捉えていますか？',
-        '✅ 本文をそのまま写していませんか？',
-        '✅ ${prompt.wordCountMin}〜${prompt.wordCountMax}語の範囲に収まっていますか？',
-        '✅ 自分の言葉で言い換えができていますか？',
-        '✅ 接続表現（however, also, therefore）を使いましたか？',
-      ],
-    WritingTaskType.opinion => [
-        '✅ 自分の意見を明確に述べましたか？',
-        '✅ 理由を2つ以上挙げましたか？',
-        '✅ 結論の文を書きましたか？',
-        '✅ ${prompt.wordCountMin}〜${prompt.wordCountMax}語の範囲に収まっていますか？',
-        '✅ 接続語（First, Second, Therefore）を使いましたか？',
-      ],
-  };
+const Color _wrOk = Color(0xFF8BE08B); // satisfied
+const Color _wrWarn = Color(0xFFE0A84A); // advisory — double-check
+const Color _wrFail = Color(0xFFE0853A); // must fix (exam-fatal)
+
+Widget _buildReadinessReport(WritingPrompt prompt, String text) {
+  final r = evaluateWritingReadiness(prompt, text);
+
+  ({IconData icon, Color color}) glyph(WritingCheckStatus s) => switch (s) {
+        WritingCheckStatus.ok => (icon: Icons.check_circle, color: _wrOk),
+        WritingCheckStatus.warn => (icon: Icons.error_outline, color: _wrWarn),
+        WritingCheckStatus.fail => (icon: Icons.cancel, color: _wrFail),
+      };
 
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(
-        'セルフチェック / Self-Check',
-        style: dqText(size: 14, w: FontWeight.w800, color: dqGold),
+      DqPanel(
+        title: '提出要件チェック（オフライン）',
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Honesty banner — never claim to grade quality offline.
+            Text(
+              'AIによる 採点（語彙・文法などの 質）は 接続後に 行います。\n'
+              'ここでは 自動で わかる 形式と 要素だけを 確認します。',
+              style: dqText(size: 12, color: dqGoldDeep, spacing: 0.2),
+            ),
+            const SizedBox(height: 12),
+            Text(r.headlineJa,
+                style: dqText(size: 15, w: FontWeight.w800, color: dqInk)),
+            const SizedBox(height: 6),
+            Text('必須 = 本番で 必ず 必要 ／ 目安 = AIが 確かめる 前の めやす',
+                style: dqText(size: 11, color: dqGoldDeep)),
+          ],
+        ),
       ),
-      const SizedBox(height: 8),
-      Text(
-        'AIが一時的に使えません。下のチェックリストで自分で確認しましょう。',
-        style: dqText(size: 12, color: dqInk),
+      const SizedBox(height: 12),
+      DqPanel(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            for (final c in r.checks) ...[
+              Semantics(
+                label: '${c.kind == WritingCheckKind.hard ? '必須' : '目安'} '
+                    '${c.labelJa}: '
+                    '${c.status == WritingCheckStatus.ok ? 'OK' : c.status == WritingCheckStatus.warn ? '要確認' : '要修正'}',
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(glyph(c.status).icon,
+                        color: glyph(c.status).color, size: 20),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 6, vertical: 1),
+                                decoration: BoxDecoration(
+                                  color: c.kind == WritingCheckKind.hard
+                                      ? _wrFail.withAlpha(40)
+                                      : dqGoldDeep.withAlpha(40),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Text(
+                                  c.kind == WritingCheckKind.hard ? '必須' : '目安',
+                                  style: dqText(
+                                      size: 10,
+                                      w: FontWeight.w700,
+                                      color: c.kind == WritingCheckKind.hard
+                                          ? _wrFail
+                                          : dqGoldDeep),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(c.labelJa,
+                                    style: dqText(
+                                        size: 13,
+                                        w: FontWeight.w700,
+                                        color: dqInk)),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 2),
+                          Text(c.detailJa,
+                              style: dqText(
+                                  size: 12,
+                                  color: dqInk.withAlpha(210),
+                                  spacing: 0.2)),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 12),
+            ],
+          ],
+        ),
       ),
-      const SizedBox(height: 10),
-      for (final c in checks) ...[
-        Text(c, style: dqText(size: 13, color: dqInk)),
-        const SizedBox(height: 5),
-      ],
     ],
   );
 }
@@ -602,8 +662,7 @@ class _WritingPracticeScreenState extends State<WritingPracticeScreen> {
 
     try {
       final systemPrompt = _buildGradingSystemPrompt(_prompt);
-      final userMessage =
-          'Please grade this submission.\n\n'
+      final userMessage = 'Please grade this submission.\n\n'
           'TASK STIMULUS:\n${_prompt.stimulus}\n\n'
           'LEARNER\'S ANSWER ($_wordCount words):\n${_controller.text.trim()}';
 
@@ -784,7 +843,8 @@ class _WritingPracticeScreenState extends State<WritingPracticeScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(_prompt.instructionJa, style: dqText(size: 13, color: dqInk)),
+                Text(_prompt.instructionJa,
+                    style: dqText(size: 13, color: dqInk)),
                 const SizedBox(height: 10),
                 Container(
                   padding: const EdgeInsets.all(12),
@@ -921,7 +981,7 @@ class _WritingPracticeScreenState extends State<WritingPracticeScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (!result.apiAvailable) ...[
-            DqPanel(child: _buildOfflineChecklist(_prompt)),
+            _buildReadinessReport(_prompt, _controller.text),
           ] else ...[
             // Score summary
             DqPanel(
@@ -993,7 +1053,8 @@ class _WritingPracticeScreenState extends State<WritingPracticeScreen> {
             title: 'あなたの回答 / Your submission',
             child: Text(
               _controller.text.trim(),
-              style: dqText(size: 13, color: dqInk.withAlpha(210), spacing: 0.2),
+              style:
+                  dqText(size: 13, color: dqInk.withAlpha(210), spacing: 0.2),
             ),
           ),
           const SizedBox(height: 16),
@@ -1024,9 +1085,12 @@ WritingRubricResult _parseGradingResponse(
     String response, WritingPrompt prompt) {
   try {
     // Claude sometimes wraps JSON in ```json ... ``` — strip it
-    final cleaned =
-        response.replaceAll(RegExp(r'```json\s*', multiLine: true), '').replaceAll('```', '').trim();
-    final Map<String, dynamic> parsed = jsonDecode(cleaned) as Map<String, dynamic>;
+    final cleaned = response
+        .replaceAll(RegExp(r'```json\s*', multiLine: true), '')
+        .replaceAll('```', '')
+        .trim();
+    final Map<String, dynamic> parsed =
+        jsonDecode(cleaned) as Map<String, dynamic>;
     final rawScores = parsed['scores'] as Map<String, dynamic>;
     final scores = <String, int>{};
     for (final rp in prompt.rubricPoints) {
@@ -1245,14 +1309,12 @@ class _RubricScoreRow extends StatelessWidget {
               margin: const EdgeInsets.only(left: 5),
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: score >= i
-                    ? _scoreColor(score)
-                    : dqNight1.withAlpha(200),
+                color:
+                    score >= i ? _scoreColor(score) : dqNight1.withAlpha(200),
                 borderRadius: BorderRadius.circular(6),
                 border: Border.all(
-                  color: score >= i
-                      ? _scoreColor(score)
-                      : dqBorder.withAlpha(80),
+                  color:
+                      score >= i ? _scoreColor(score) : dqBorder.withAlpha(80),
                   width: 1.5,
                 ),
               ),
