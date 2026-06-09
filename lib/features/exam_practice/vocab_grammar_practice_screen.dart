@@ -79,6 +79,20 @@ class _VocabGrammarPracticeScreenState
   bool _loading = true;
   bool _sessionDone = false;
 
+  // Teach-first scaffold (CEO 1132 cont. / flaw-hunt #111): a true beginner
+  // cannot read the English stimulus or choices, so the practice was pure
+  // guessing. An OPT-IN 「いみを みる」 hint reveals each choice's Japanese meaning
+  // BEFORE answering — comprehensible input that lets a pre-reader reason
+  // instead of guess. Because seeing all four meanings makes a vocab item
+  // answerable by meaning-matching, a hinted question is ASSISTED and is
+  // excluded from the measured 合格率 (only unaided answers feed readiness) —
+  // so the scaffold helps the child WITHOUT inflating the honesty of the
+  // pass-meter (the 英検-instructor's assessment-validity concern).
+  bool _hintShown = false; // hint revealed for the CURRENT question
+  int _assistedCount = 0; // questions answered with the hint up (session)
+  int _unaidedTotal = 0; // questions answered WITHOUT the hint
+  int _unaidedCorrect = 0; // correct among the unaided
+
   @override
   void initState() {
     super.initState();
@@ -199,10 +213,30 @@ class _VocabGrammarPracticeScreenState
     setState(() {
       _selectedAnswer = idx;
       _answered = true;
-      if (idx == _questions[_currentIdx].correctIdx) {
-        _correctCount++;
+      final correct = idx == _questions[_currentIdx].correctIdx;
+      if (correct) _correctCount++;
+      // Honest measurement: only UNAIDED answers count toward 合格率. A hinted
+      // question is recorded as assisted and excluded from the readiness signal.
+      if (_hintShown) {
+        _assistedCount++;
+      } else {
+        _unaidedTotal++;
+        if (correct) _unaidedCorrect++;
       }
     });
+  }
+
+  /// Reveal the choice meanings for the current question (opt-in scaffold).
+  void _showHint() {
+    if (_answered || _hintShown) return;
+    setState(() => _hintShown = true);
+  }
+
+  /// The Japanese meaning to show under choice [i] of question [q] when the
+  /// hint is up: the answer's own meaning, or a distractor's gloss.
+  String _glossForChoice(_Question q, int i) {
+    if (i == q.correctIdx) return q.word.jpTranslation;
+    return q.choiceGloss[q.choices[i]] ?? '';
   }
 
   /// Records the completed session result into [SkillAccuracyStore].
@@ -210,13 +244,17 @@ class _VocabGrammarPracticeScreenState
   Future<void> _recordSessionResult() async {
     if (_questions.isEmpty) return;
     recordExamHabit(_questions.length); // streak + daily-goal, not just 合格率
+    // Honesty: feed 合格率 ONLY the unaided answers. If every question used the
+    // hint, nothing is recorded (the skill stays honestly 未測定 rather than
+    // logging a meaning-matched guess as reading skill).
+    if (_unaidedTotal == 0) return;
     try {
       final store = await SkillAccuracyStore.getInstance();
       await store.record(
         grade: widget.eikenGrade,
         skill: EikenSkill.reading,
-        correct: _correctCount,
-        total: _questions.length,
+        correct: _unaidedCorrect,
+        total: _unaidedTotal,
       );
     } catch (_) {
       // Store errors are non-fatal — never interrupt the learner.
@@ -252,6 +290,7 @@ class _VocabGrammarPracticeScreenState
         _currentIdx++;
         _selectedAnswer = null;
         _answered = false;
+        _hintShown = false; // each question decides its own scaffold afresh
       });
     }
   }
@@ -428,15 +467,35 @@ class _VocabGrammarPracticeScreenState
                           ),
                           const SizedBox(width: 12),
                           Expanded(
-                            child: Text(
-                              q.choices[i],
-                              style: TextStyle(
-                                color: textColor,
-                                fontSize: 16,
-                                fontWeight: isSelected
-                                    ? FontWeight.w600
-                                    : FontWeight.normal,
-                              ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  q.choices[i].replaceAll('_', ' '),
+                                  style: TextStyle(
+                                    color: textColor,
+                                    fontSize: 16,
+                                    fontWeight: isSelected
+                                        ? FontWeight.w600
+                                        : FontWeight.normal,
+                                  ),
+                                ),
+                                // Opt-in scaffold: the Japanese meaning under each
+                                // choice so a pre-reader can reason (this question
+                                // is then excluded from 合格率).
+                                if (_hintShown &&
+                                    _glossForChoice(q, i).isNotEmpty) ...[
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    _glossForChoice(q, i),
+                                    style: dqText(
+                                        size: 12,
+                                        w: FontWeight.w600,
+                                        color: dqGold.withAlpha(220)),
+                                  ),
+                                ],
+                              ],
                             ),
                           ),
                           if (_answered && isCorrect)
@@ -453,6 +512,52 @@ class _VocabGrammarPracticeScreenState
               ),
             );
           }),
+          // Opt-in teach-first scaffold: reveal the choice meanings BEFORE
+          // answering so a child who can't yet read the English isn't reduced to
+          // guessing. Using it marks the question 学習 (excluded from 合格率).
+          if (!_answered && !_hintShown) ...[
+            const SizedBox(height: 4),
+            Semantics(
+              button: true,
+              label: 'いみを みる。ヒントを つかうと、この問題は 合格率に 入りません',
+              excludeSemantics: true,
+              child: InkWell(
+                key: const ValueKey('vg_hint'),
+                onTap: _showHint,
+                borderRadius: BorderRadius.circular(10),
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: dqGold.withAlpha(110)),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.translate_rounded,
+                          color: dqGold, size: 18),
+                      const SizedBox(width: 8),
+                      Flexible(
+                        child: Text(
+                          'いみを みる（読（よ）めないとき）',
+                          textAlign: TextAlign.center,
+                          style: dqText(
+                              size: 13, w: FontWeight.w700, color: dqGold),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              'ヒントを つかった問題（もんだい）は、合格率（ごうかくりつ）に 入（はい）れません。',
+              textAlign: TextAlign.center,
+              style: dqText(size: 11, color: dqInk.withAlpha(150)),
+            ),
+          ],
           const SizedBox(height: 24),
           // Explanation + Next button (shown after answering)
           if (_answered) ...[
@@ -592,6 +697,16 @@ class _VocabGrammarPracticeScreenState
               '$_correctCount / ${_questions.length} 正解 ($pct%)',
               style: dqText(size: 18, w: FontWeight.w600, color: dqInk),
             ),
+            // Honesty: tell the child/parent that hinted questions were kept out
+            // of the 合格率, so the pass-meter reflects unaided skill only.
+            if (_assistedCount > 0) ...[
+              const SizedBox(height: 10),
+              Text(
+                'ヒントを つかった $_assistedCount問（もん）は、\n合格率（ごうかくりつ）に 入（い）れていません。',
+                textAlign: TextAlign.center,
+                style: dqText(size: 12, color: dqInk.withAlpha(160)),
+              ),
+            ],
             const SizedBox(height: 32),
             DqButton(
               label: '戻る',

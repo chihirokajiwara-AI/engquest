@@ -305,6 +305,38 @@ void main() {
     expect(reading.accuracy, closeTo((n - 1) / n, 0.001),
         reason: 'one wrong → correct = N-1, faithfully recorded');
   });
+
+  testWidgets('大問1: a HINTED question is EXCLUDED from 合格率 (honest scaffold)',
+      (tester) async {
+    // CEO 1132 cont. / #111: the opt-in 「いみを みる」 hint helps a pre-reader, but
+    // a meaning-matched answer must NOT count as unaided reading skill. Using the
+    // hint on one question must drop it from the recorded (correct,total).
+    const grade = '5';
+    final v = await pumpVocab(tester, grade);
+    final n = v.corrects.length;
+    expect(n, greaterThanOrEqualTo(2),
+        reason: 'need ≥2 so one hinted + rest unaided is observable');
+
+    for (var i = 0; i < n; i++) {
+      if (i == 0) {
+        // Reveal the meanings on the FIRST question → marks it assisted.
+        await tester.tap(find.byKey(const ValueKey('vg_hint')));
+        await tester.pump();
+      }
+      await tester.tap(find.text(v.corrects[i]).first);
+      await tester.pump();
+      await tester.tap(find.text(i < n - 1 ? '次の問題へ' : '結果を見る'));
+      await tester.pump();
+    }
+    await tester.pump(const Duration(milliseconds: 300));
+    await tester.pump();
+
+    final reading = await _readingFor(grade);
+    expect(reading.itemsAttempted, equals(n - 1),
+        reason: 'the 1 hinted question is excluded; only n-1 unaided recorded');
+    expect(reading.accuracy, equals(1.0),
+        reason: 'every unaided answer was correct → 100% (no dilution)');
+  });
 }
 
 class _VocabState {
