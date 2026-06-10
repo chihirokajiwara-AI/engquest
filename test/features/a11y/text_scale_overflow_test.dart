@@ -21,6 +21,9 @@ import 'package:engquest/features/exam_practice/listening_practice_screen.dart';
 import 'package:engquest/features/exam_practice/word_ordering_practice_screen.dart';
 import 'package:engquest/features/exam_practice/conversation_practice_screen.dart';
 import 'package:engquest/features/exam_practice/mock_exam_screen.dart';
+import 'package:engquest/features/exam_practice/reading_practice_screen.dart';
+import 'package:engquest/features/battle/battle_screen.dart';
+import 'package:engquest/features/explore/scene_view.dart';
 import 'package:engquest/features/onboarding/onboarding_flow.dart';
 import 'package:engquest/core/fsrs/fsrs_card_repository.dart';
 
@@ -85,6 +88,10 @@ void main() {
     'conversation': ConversationPracticeScreen(
         eikenGrade: '5', section: _sec(ExamSectionType.conversationComplete)),
     'mock-exam': const MockExamScreen(eikenGrade: '5'),
+    'reading': ReadingPracticeScreen(
+        eikenGrade: '5', section: _sec(ExamSectionType.readingComprehension)),
+    'battle': const BattleScreen(),
+    'scene-view': SceneView(scene: kTown5Scene),
   };
   subScreens.forEach((name, w) {
     testWidgets('$name OK @ textScaler 2.0 (WCAG SC 1.4.4)', (tester) async {
@@ -92,7 +99,6 @@ void main() {
       expect(tester.takeException(), isNull);
     });
   });
-  // Remaining before the app.dart cap can rise 1.6→2.0 (#114): standalone
-  // ReadingPracticeScreen + the quest battle / scene-view screens. Add here as
-  // cleared, then raise the cap.
+  // All 12 high-traffic screens now pass at 2.0x → app.dart's cap is 2.0 (WCAG
+  // SC 1.4.4 met). Any new screen with dense Rows should be added here.
 }

@@ -193,17 +193,14 @@ class EngQuestApp extends StatelessWidget {
                 builder: (ctx, appScale, inner) {
                   final mq = MediaQuery.of(ctx);
                   final osFactor = mq.textScaler.scale(10) / 10; // ~OS multiplier
-                  // Text-scale ceiling. WCAG 2.2 SC 1.4.4 wants 200% (2.0x). MEASURED
-                  // (text_scale_overflow_test, 2026-06-11): the home lays out clean
-                  // up to ~1.4x, has a small clip (~3px) at 1.5–1.6x, and a large one
-                  // (~62px) at 2.0x, in an inner fixed-height region. Cap kept at 1.6
-                  // (not lowered — that would strip magnification from the low-vision
-                  // users who need it most for a cosmetic few-px clip). Reaching true
-                  // 2.0x — and fully clearing the 1.5–1.6 clip — is a per-region layout
-                  // hardening task (#114), NOT a one-line cap change. The flaw-hunt's
-                  // "just raise the cap" was refuted by measurement; do not raise this
-                  // until the skipped 2.0x target test in text_scale_overflow_test passes.
-                  final combined = (osFactor * appScale).clamp(0.85, 1.6);
+                  // Text-scale ceiling = WCAG 2.2 SC 1.4.4 (200% = 2.0x). Raised
+                  // 1.6→2.0 only AFTER measuring (text_scale_overflow_test, #114):
+                  // all 12 high-traffic screens — home, onboarding, pass-meter, exam-
+                  // practice + its 5 sub-screens, reading, battle, scene-view — now
+                  // lay out clean at textScaler 2.0 (layout fixes hardened the home
+                  // ring, exam chips, and mock/battle headers). The flaw-hunt's
+                  // "just raise the cap" assumption became real, measured, hardened.
+                  final combined = (osFactor * appScale).clamp(0.85, 2.0);
                   return MediaQuery(
                     data: mq.copyWith(textScaler: TextScaler.linear(combined)),
                     child: inner ?? const SizedBox.shrink(),

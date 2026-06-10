@@ -767,8 +767,12 @@ class _BattleScreenState extends State<BattleScreen>
           ),
           const Icon(Icons.style_rounded, color: dqGold, size: 22),
           const SizedBox(width: 8),
-          dqBilingual('たんごバトル', 'Word Battle',
-              jpSize: 17, jpColor: dqGold, stacked: true),
+          // #114/WCAG SC 1.4.4: Flexible so the title wraps/shrinks at large text
+          // scales instead of pushing the header Row into a ~57px overflow.
+          Flexible(
+            child: dqBilingual('たんごバトル', 'Word Battle',
+                jpSize: 17, jpColor: dqGold, stacked: true),
+          ),
           if (_streak >= 3) ...[
             const SizedBox(width: 10),
             _StreakBadge(streak: _streak),
