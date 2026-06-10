@@ -644,8 +644,11 @@ class _WordOrderingPracticeScreenState
           ),
         ];
       case '4':
-        // CEFR A2 — to-infinitive, comparative, have to, SVOC (make), gerund
-        // object, give/show double-object, ask O to do. The task's focus.
+        // CEFR A2 (英検4級 文法範囲, verified eiken.or.jp + grade_3 scope, #60):
+        // past/future(will), comparative, to-infinitive (名詞的・副詞的), gerund
+        // object, have to / can, 文型 SVC・SVOO. GRADE-SCOPE GUARD: 現在完了・受動態・
+        // 関係代名詞・SVOC・使役 are 3級+ (準2級 for 使役原形不定詞) → deliberately
+        // EXCLUDED here so 4級 only drills 4級 grammar.
         return [
           _OrderingProblem(
             jpSentence: '彼は私に古い写真を見せてくれた。',
@@ -670,9 +673,10 @@ class _WordOrderingPracticeScreenState
             whyExplanation: '「〜しなければならない」は have to＋動詞の原形。have to finish。',
           ),
           _OrderingProblem(
-            jpSentence: 'その映画は私を悲しい気持ちにさせました。',
-            correctOrder: ['The movie', 'made', 'me', 'feel', 'sad'],
-            whyExplanation: 'make＋人＋動詞の原形（使役）。「(人)を〜させる」= made me feel sad。',
+            jpSentence: '彼は写真をとるためにカメラを買いました。',
+            correctOrder: ['He', 'bought', 'a camera', 'to take', 'pictures'],
+            whyExplanation:
+                '「〜するために」は〈to＋動詞の原形〉（不定詞の副詞的用法）。「写真をとるために」= to take pictures は文の最後に置く。',
           ),
           _OrderingProblem(
             jpSentence: '私は音楽を聞くのが好きです。',
@@ -687,9 +691,10 @@ class _WordOrderingPracticeScreenState
                 '主語＋動詞(speaks)＋目的語(English)＋様子。「とても上手に」= very well は最後。',
           ),
           _OrderingProblem(
-            jpSentence: '彼は宿題を手伝ってくれるよう私に頼みました。',
-            correctOrder: ['He', 'asked', 'me', 'to help', 'him'],
-            whyExplanation: '「(人)に〜するよう頼む」は ask＋人＋to do。asked me to help him。',
+            jpSentence: '彼はおいしいケーキを作りました。',
+            correctOrder: ['He', 'made', 'a', 'delicious', 'cake'],
+            whyExplanation:
+                '過去形は動詞を過去の形にする。make→made。「おいしいケーキを作った」= made a delicious cake。',
           ),
           _OrderingProblem(
             jpSentence: 'あなたは何になりたいですか。',
@@ -697,16 +702,10 @@ class _WordOrderingPracticeScreenState
             whyExplanation: '疑問詞(What)＋do＋主語＋want to be。「何になりたいか」をたずねる語順。',
           ),
           _OrderingProblem(
-            jpSentence: '私の母はちょうど夕食を作り終えたところです。',
-            correctOrder: [
-              'My mother',
-              'has just',
-              'finished',
-              'cooking',
-              'dinner'
-            ],
+            jpSentence: '彼は試験に合格するでしょう。',
+            correctOrder: ['He', 'will', 'pass', 'the', 'exam'],
             whyExplanation:
-                '現在完了 have just＋過去分詞（〜したところ）。finish のあとは動名詞＝finished cooking。',
+                '未来をあらわす will のあとは動詞の原形。「合格するでしょう」= will pass the exam。',
           ),
         ];
       default:
