@@ -106,6 +106,41 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      # google-services.json is gitignored (per-developer Firebase config). For a
+      # COMPILE-only build check we generate a syntactically-valid placeholder
+      # with both flavor package names — it lets the google-services Gradle plugin
+      # run; it carries no real credentials. Real release builds inject the true
+      # file from a secret. (#143)
+      - name: Generate placeholder google-services.json (build-check only)
+        run: |
+          python3 - <<'PY'
+          import json
+          def client(pkg, suffix):
+              return {
+                  "client_info": {
+                      "mobilesdk_app_id": f"1:000000000000:android:{suffix}",
+                      "android_client_info": {"package_name": pkg},
+                  },
+                  "oauth_client": [],
+                  "api_key": [{"current_key": "AIzaSyCI00000000000000000000000000000000"}],
+                  "services": {"appinvite_service": {"other_platform_oauth_client": []}},
+              }
+          cfg = {
+              "project_info": {
+                  "project_number": "000000000000",
+                  "project_id": "engquest-ci-placeholder",
+                  "storage_bucket": "engquest-ci-placeholder.appspot.com",
+              },
+              "client": [
+                  client("jp.co.aesthetic.engquest.edilab", "0000000000000000000000"),
+                  client("jp.co.aesthetic.akenquest", "1111111111111111111111"),
+              ],
+              "configuration_version": "1",
+          }
+          open("android/app/google-services.json", "w").write(json.dumps(cfg, indent=2))
+          print("wrote placeholder android/app/google-services.json")
+          PY
+
       - name: Build Android appbundle (edilab, debug)
         run: flutter build appbundle --flavor edilab -t lib/main_edilab.dart --debug
 
