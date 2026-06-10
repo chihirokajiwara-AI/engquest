@@ -559,21 +559,30 @@ class _BattleScreenState extends State<BattleScreen>
 
   // ── Achievement check (T06) ───────────────────────────────────────────────
 
-  void _checkAchievements(String uid, int masteredCount, int totalPracticed) {
+  Future<void> _checkAchievements(
+      String uid, int masteredCount, int totalPracticed) async {
     final profile = _xpService.currentProfile(uid);
-    _achievementService
-        .checkAndUpdate(
-      uid: uid,
-      totalMastered: masteredCount,
-      currentStreak: 1, // streak is computed server-side; best-effort here
-      totalPracticed: totalPracticed,
-      level: profile?.level ?? 1,
-    )
-        .then((newlyUnlocked) {
+    // Load the REAL streak so the streak_3/7/10 milestones can actually unlock.
+    // Was hard-coded to 1 ("server-side best-effort"), but the server isn't
+    // deployed (#7) → those achievements never fired even for a genuine 7-day
+    // streak. A failed load falls back to 0 and never blocks the other unlocks.
+    int currentStreak = 0;
+    try {
+      currentStreak = (await StreakService().load()).currentStreak;
+    } catch (_) {}
+    if (!mounted) return;
+    try {
+      final newlyUnlocked = await _achievementService.checkAndUpdate(
+        uid: uid,
+        totalMastered: masteredCount,
+        currentStreak: currentStreak,
+        totalPracticed: totalPracticed,
+        level: profile?.level ?? 1,
+      );
       if (newlyUnlocked.isNotEmpty && mounted) {
         _showAchievementUnlocked(newlyUnlocked);
       }
-    }).catchError((_) {});
+    } catch (_) {}
   }
 
   void _showAchievementUnlocked(List<String> ids) {

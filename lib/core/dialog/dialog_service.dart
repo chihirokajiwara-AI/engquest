@@ -177,8 +177,11 @@ Never use complex grammar. Always stay in character as ${scenario.npcName}.''';
       return ContentFilter.filterResponse(raw);
     } on ClaudeOfflineException {
       return _nextOfflineResponse(scenario);
-    } on ClaudeApiException catch (e) {
-      return 'Sorry, I cannot talk right now. ($e)';
+    } on ClaudeApiException {
+      // Backend reachable but erroring — stay in character with the offline
+      // fallback instead of leaking a raw exception name ("ClaudeApiException:
+      // …") into the child's chat bubble (flaw-hunt R8).
+      return _nextOfflineResponse(scenario);
     } catch (e) {
       return _nextOfflineResponse(scenario);
     }
