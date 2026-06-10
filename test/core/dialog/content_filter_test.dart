@@ -12,10 +12,12 @@ import 'package:engquest/core/dialog/content_filter.dart';
 void main() {
   group('sanitize — no word-policing of the child (CEO 2026-06-08)', () {
     test('profanity is NOT rejected — passes through unchanged', () {
-      expect(ContentFilter.sanitize('you are stupid'), equals('you are stupid'));
+      expect(
+          ContentFilter.sanitize('you are stupid'), equals('you are stupid'));
     });
 
-    test('self-harm phrasing is NOT scolded/blocked — passes through (#62)', () {
+    test('self-harm phrasing is NOT scolded/blocked — passes through (#62)',
+        () {
       // The whole reason this decision exists: a child must never be scolded for
       // expressing distress. The app simply does not react to the words.
       expect(ContentFilter.sanitize('I want to die'), equals('I want to die'));
@@ -38,7 +40,8 @@ void main() {
       expect(out!.length, equals(ContentFilter.maxLength));
     });
 
-    test('personal info is kept out of the request (privacy, not word-policing)',
+    test(
+        'personal info is kept out of the request (privacy, not word-policing)',
         () {
       expect(ContentFilter.sanitize('call me at 090-1234-5678'), isNull);
       expect(ContentFilter.sanitize('email me@example.com'), isNull);

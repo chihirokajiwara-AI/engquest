@@ -30,7 +30,8 @@ void main() {
       expect(c.correct, 8);
     });
 
-    test('over the cap, contribution is bounded but preserves accuracy ratio', () {
+    test('over the cap, contribution is bounded but preserves accuracy ratio',
+        () {
       // 30 cards, 24 correct (80%) → capped to 10 total, 8 correct.
       final grades = [
         ...List.filled(24, Grade.good),
@@ -42,7 +43,8 @@ void main() {
     });
 
     test('a long binge of easy reviews cannot swamp the bucket', () {
-      final c = battleReadingContribution(List.filled(200, Grade.easy), cap: 10);
+      final c =
+          battleReadingContribution(List.filled(200, Grade.easy), cap: 10);
       expect(c.total, 10); // bounded — not 200
       expect(c.correct, 10);
     });

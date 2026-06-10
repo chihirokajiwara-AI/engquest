@@ -354,8 +354,7 @@ class TtsService {
   /// to the API/unavailable path for those grades, which is the existing live
   /// behaviour. When per-word pronunciation ships it should be served on demand
   /// (network/CDN), not re-bundled. a1 + quiz + phonics + listening remain.
-  Future<TtsAudioResult?> _loadBundledAsset(
-      String vocabId, String word) async {
+  Future<TtsAudioResult?> _loadBundledAsset(String vocabId, String word) async {
     final grade = _gradeFromVocabId(vocabId);
     if (grade == null) return null;
 

@@ -237,8 +237,8 @@ class _WordOrderingPracticeScreenState
                     children: [
                       Text(
                         '問${_currentIdx + 1} / ${_problems.length}',
-                        style: dqText(
-                            size: 14, w: FontWeight.w700, color: dqInk),
+                        style:
+                            dqText(size: 14, w: FontWeight.w700, color: dqInk),
                       ),
                       const Spacer(),
                       Text(
@@ -256,8 +256,7 @@ class _WordOrderingPracticeScreenState
                     child: LinearProgressIndicator(
                       value: (_currentIdx + 1) / _problems.length,
                       backgroundColor: dqNight1,
-                      valueColor:
-                          const AlwaysStoppedAnimation<Color>(dqGold),
+                      valueColor: const AlwaysStoppedAnimation<Color>(dqGold),
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -313,8 +312,8 @@ class _WordOrderingPracticeScreenState
                         ? Center(
                             child: Text(
                               '下（した）の単語（たんご）をタップして並（なら）べましょう',
-                              style: dqText(
-                                  color: dqInk.withAlpha(140), size: 14),
+                              style:
+                                  dqText(color: dqInk.withAlpha(140), size: 14),
                             ),
                           )
                         : Wrap(
@@ -410,7 +409,8 @@ class _WordOrderingPracticeScreenState
                   // Grammar-rule teach: the 語句整序 skill is knowing WHY the order is
                   // correct, so reveal the rule (be動詞の文型 / want to do / 比較級+than …),
                   // not just the answer. Dark dq theme (#108): gold-accented panel.
-                  if ((_answered || _hintShown) && p.whyExplanation != null) ...[
+                  if ((_answered || _hintShown) &&
+                      p.whyExplanation != null) ...[
                     const SizedBox(height: 10),
                     Container(
                       width: double.infinity,
@@ -444,7 +444,9 @@ class _WordOrderingPracticeScreenState
                   // Opt-in teach-first scaffold: reveal THIS item's grammar rule
                   // before answering so a stuck beginner is taught, not left to
                   // guess. Using it excludes the problem from 合格率.
-                  if (!_answered && !_hintShown && p.whyExplanation != null) ...[
+                  if (!_answered &&
+                      !_hintShown &&
+                      p.whyExplanation != null) ...[
                     const SizedBox(height: 14),
                     OutlinedButton.icon(
                       key: const ValueKey('wo_hint'),

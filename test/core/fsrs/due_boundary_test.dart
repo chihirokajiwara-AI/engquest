@@ -15,8 +15,7 @@ void main() {
   test('FSRSCard.isDue: due at/just-before real-now is due, future is not', () {
     // isDue reads wall-clock DateTime.now() (not injectable), so assert against
     // a dueDate a hair in the past (inclusive boundary) vs the clear future.
-    final justPast =
-        DateTime.now().subtract(const Duration(milliseconds: 1));
+    final justPast = DateTime.now().subtract(const Duration(milliseconds: 1));
     expect(FSRSCard(vocabId: 'w', dueDate: justPast).isDue, isTrue,
         reason: 'a card due now/just-now must be due (inclusive >=)');
     final future = DateTime.now().add(const Duration(days: 1));
@@ -34,7 +33,8 @@ void main() {
     expect(due.map((c) => c.vocabId), isNot(contains('future')));
   });
 
-  test('a just-missed word (Grade.again) is due immediately for re-teaching', () {
+  test('a just-missed word (Grade.again) is due immediately for re-teaching',
+      () {
     final now = DateTime(2026, 6, 11, 12, 0, 0);
     final fresh = FSRSCard(vocabId: 'missed');
     final after = algo.schedule(fresh, Grade.again, now);

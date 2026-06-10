@@ -51,12 +51,21 @@ enum _FlowPhase { intro, battle, cleared }
 
 class _QuestTownBattleFlowState extends State<QuestTownBattleFlow> {
   static const _stoneNames = [
-    'あいさつの石', 'くらしの石', 'まなびの石', 'しゃかいの石',
-    'しれんの石', 'がくもんの石', '王（おう）の石',
+    'あいさつの石',
+    'くらしの石',
+    'まなびの石',
+    'しゃかいの石',
+    'しれんの石',
+    'がくもんの石',
+    '王（おう）の石',
   ];
   static const _stoneColors = [
-    Color(0xFF6FC9FF), Color(0xFF7BE08B), Color(0xFFFFC857),
-    Color(0xFF4FD6E0), Color(0xFFC58BEA), Color(0xFFFF8A8A),
+    Color(0xFF6FC9FF),
+    Color(0xFF7BE08B),
+    Color(0xFFFFC857),
+    Color(0xFF4FD6E0),
+    Color(0xFFC58BEA),
+    Color(0xFFFF8A8A),
     Color(0xFFFFD86A),
   ];
 
@@ -92,16 +101,13 @@ class _QuestTownBattleFlowState extends State<QuestTownBattleFlow> {
     super.dispose();
   }
 
-  int get _townIdx =>
-      kQuestTowns.indexWhere((t) => t.id == widget.town.id);
-  String get _stoneName =>
-      _townIdx >= 0 && _townIdx < _stoneNames.length
-          ? _stoneNames[_townIdx]
-          : 'こえの石';
-  Color get _stoneColor =>
-      _townIdx >= 0 && _townIdx < _stoneColors.length
-          ? _stoneColors[_townIdx]
-          : dqGold;
+  int get _townIdx => kQuestTowns.indexWhere((t) => t.id == widget.town.id);
+  String get _stoneName => _townIdx >= 0 && _townIdx < _stoneNames.length
+      ? _stoneNames[_townIdx]
+      : 'こえの石';
+  Color get _stoneColor => _townIdx >= 0 && _townIdx < _stoneColors.length
+      ? _stoneColors[_townIdx]
+      : dqGold;
 
   // ─────────────────────────────────────────────────────────────────────────
   // Navigation helpers
@@ -147,8 +153,7 @@ class _QuestTownBattleFlowState extends State<QuestTownBattleFlow> {
 
   Widget _buildIntro() {
     return DqScene(
-      backgroundAsset:
-          'assets/art/scenes/town_${widget.town.eikenLevel}.png',
+      backgroundAsset: 'assets/art/scenes/town_${widget.town.eikenLevel}.png',
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 14),
         child: Column(
@@ -163,8 +168,7 @@ class _QuestTownBattleFlowState extends State<QuestTownBattleFlow> {
                   child: Text(
                     '${widget.town.name}（${gradeLabelJa(widget.town.eikenLevel)}）',
                     textAlign: TextAlign.center,
-                    style: dqText(
-                        size: 18, w: FontWeight.w800, color: dqGold),
+                    style: dqText(size: 18, w: FontWeight.w800, color: dqGold),
                   ),
                 ),
                 const SizedBox(width: 48),
@@ -205,8 +209,7 @@ class _QuestTownBattleFlowState extends State<QuestTownBattleFlow> {
 
   Widget _buildCleared() {
     return DqScene(
-      backgroundAsset:
-          'assets/art/scenes/town_${widget.town.eikenLevel}.png',
+      backgroundAsset: 'assets/art/scenes/town_${widget.town.eikenLevel}.png',
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 14),
         child: Column(
@@ -218,8 +221,7 @@ class _QuestTownBattleFlowState extends State<QuestTownBattleFlow> {
             Text(
               '〈$_stoneName〉を手（て）に入（い）れた！',
               textAlign: TextAlign.center,
-              style: dqText(
-                  size: 18, w: FontWeight.w800, color: _stoneColor),
+              style: dqText(size: 18, w: FontWeight.w800, color: _stoneColor),
             ),
             if (_totalShards > 0) ...[
               const SizedBox(height: 8),
@@ -231,8 +233,7 @@ class _QuestTownBattleFlowState extends State<QuestTownBattleFlow> {
             const SizedBox(height: 16),
             DqDialogBox(
               child: Text(
-                widget.town.cleared ??
-                    '街（まち）に「ことば」がもどった。つぎの街へ、旅（たび）はつづく。',
+                widget.town.cleared ?? '街（まち）に「ことば」がもどった。つぎの街へ、旅（たび）はつづく。',
                 style: dqText(size: 14),
               ),
             ),

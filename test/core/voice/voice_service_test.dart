@@ -120,7 +120,8 @@ void main() {
       expect(result.target, 'cat');
     });
 
-    test('demo mode never cycles fabricated words — always empty (#124)', () async {
+    test('demo mode never cycles fabricated words — always empty (#124)',
+        () async {
       final service = VoiceService();
       for (int i = 0; i < 3; i++) {
         final r = await service.evaluatePronunciation(

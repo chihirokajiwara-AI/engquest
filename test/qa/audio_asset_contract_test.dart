@@ -58,8 +58,8 @@ bool _alwaysExcluded(String key) =>
 bool _phonicsMaterialised() {
   final d = Directory('assets/audio/phonics');
   if (!d.existsSync()) return false;
-  return d.listSync().any((e) =>
-      e is File && (e.path.endsWith('.mp3') || e.path.endsWith('.wav')));
+  return d.listSync().any(
+      (e) => e is File && (e.path.endsWith('.mp3') || e.path.endsWith('.wav')));
 }
 
 void main() {

@@ -18,14 +18,16 @@ void main() {
     PreferencesService.resetInstance();
   });
 
-  test('first access seeds 10; spending to 0 stays 0 across new instances', () async {
+  test('first access seeds 10; spending to 0 stays 0 across new instances',
+      () async {
     final svc = HintCoinService();
     expect(await svc.balance(), 10, reason: 'first access seeds the wallet');
 
     final r = await svc.spend(10); // spend everything
     expect(r.ok, isTrue);
     expect(r.balance, 0);
-    expect(await svc.balance(), 0, reason: 'same instance must read the real 0');
+    expect(await svc.balance(), 0,
+        reason: 'same instance must read the real 0');
 
     // A fresh instance (e.g. navigating to a new screen) must NOT reseed to 10.
     final svc2 = HintCoinService();

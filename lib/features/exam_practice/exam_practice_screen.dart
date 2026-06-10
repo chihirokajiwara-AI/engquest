@@ -82,7 +82,8 @@ class _ExamPracticeScreenState extends State<ExamPracticeScreen> {
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
             child: _DqHeader(
-              title: dqBilingual('${exam.labelJa} 模擬試験', 'Mock Exam', jpSize: 19),
+              title:
+                  dqBilingual('${exam.labelJa} 模擬試験', 'Mock Exam', jpSize: 19),
               onBack: () => Navigator.of(context).pop(),
             ),
           ),
@@ -153,8 +154,7 @@ class _ExamPracticeScreenState extends State<ExamPracticeScreen> {
               onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) =>
-                      MockExamScreen(eikenGrade: widget.eikenGrade),
+                  builder: (_) => MockExamScreen(eikenGrade: widget.eikenGrade),
                 ),
               ),
             ),
@@ -389,7 +389,8 @@ class _DqInfoChip extends StatelessWidget {
         const SizedBox(height: 5),
         Text(label, style: dqText(size: 18, w: FontWeight.w800, color: dqInk)),
         const SizedBox(height: 2),
-        dqBilingual(jp, en, jpSize: 11, jpColor: dqInk, align: TextAlign.center, stacked: true),
+        dqBilingual(jp, en,
+            jpSize: 11, jpColor: dqInk, align: TextAlign.center, stacked: true),
       ],
     );
   }
@@ -441,7 +442,8 @@ class _SectionTile extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             border: Border.all(color: dqBorder, width: 2),
             boxShadow: const [
-              BoxShadow(color: Colors.black54, blurRadius: 8, offset: Offset(0, 3)),
+              BoxShadow(
+                  color: Colors.black54, blurRadius: 8, offset: Offset(0, 3)),
             ],
           ),
           child: Row(
@@ -454,7 +456,9 @@ class _SectionTile extends StatelessWidget {
                   shape: BoxShape.circle,
                   color: dqNight0,
                   border: Border.all(color: dqGold, width: 2),
-                  boxShadow: [BoxShadow(color: dqGold.withAlpha(70), blurRadius: 8)],
+                  boxShadow: [
+                    BoxShadow(color: dqGold.withAlpha(70), blurRadius: 8)
+                  ],
                 ),
                 child: Icon(_sectionIcon, color: dqGold, size: 24),
               ),
@@ -464,11 +468,16 @@ class _SectionTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    dqBilingual(section.nameJa, section.nameEn, jpSize: 14, stacked: true),
+                    dqBilingual(section.nameJa, section.nameEn,
+                        jpSize: 14, stacked: true),
                     const SizedBox(height: 4),
                     Text(
                       '${section.questionCount}問 • ${section.timeLimitMinutes}分',
-                      style: dqText(size: 12, w: FontWeight.w600, color: dqGoldDeep, spacing: 0.5),
+                      style: dqText(
+                          size: 12,
+                          w: FontWeight.w600,
+                          color: dqGoldDeep,
+                          spacing: 0.5),
                     ),
                   ],
                 ),

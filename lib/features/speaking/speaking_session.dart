@@ -92,8 +92,7 @@ List<SpeakingStep> _grade3Steps() => [
       const SpeakingStep(
         type: SpeakingStepType.ondo,
         label: '音読',
-        referenceText:
-            'Many schools in Japan now have English classes. '
+        referenceText: 'Many schools in Japan now have English classes. '
             'Students learn to speak and write in English. '
             'Some students also watch English videos to improve their skills.',
       ),
@@ -122,14 +121,12 @@ List<SpeakingStep> _grade3Steps() => [
       const SpeakingStep(
         type: SpeakingStepType.opinionQuestion,
         label: 'No. 4',
-        referenceText:
-            'Do you like studying English? Why or why not?',
+        referenceText: 'Do you like studying English? Why or why not?',
       ),
       const SpeakingStep(
         type: SpeakingStepType.opinionQuestion,
         label: 'No. 5',
-        referenceText:
-            'What do you usually do on weekends?',
+        referenceText: 'What do you usually do on weekends?',
       ),
     ];
 
@@ -204,8 +201,7 @@ List<SpeakingStep> _grade2Steps() => [
         label: 'No. 2',
         referenceText:
             'This card shows a situation. Please describe what is happening and predict what will happen next.',
-        illustrationPlaceholder:
-            '💻 [イラスト: 女性がカフェでノートパソコンを使って仕事している / '
+        illustrationPlaceholder: '💻 [イラスト: 女性がカフェでノートパソコンを使って仕事している / '
             'A woman working on a laptop in a café; a "Low Battery" warning appears]',
         prepSeconds: 20,
       ),
@@ -228,15 +224,13 @@ List<SpeakingStep> _gradePre1Steps() => [
       const SpeakingStep(
         type: SpeakingStepType.freeConversation,
         label: '自由会話',
-        referenceText:
-            'Let\'s start with some free conversation. '
+        referenceText: 'Let\'s start with some free conversation. '
             'Can you tell me about yourself — your hobbies or interests?',
       ),
       const SpeakingStep(
         type: SpeakingStepType.illustrationNarration,
         label: '4コマナレーション',
-        referenceText:
-            'Please look at the four pictures. They tell a story. '
+        referenceText: 'Please look at the four pictures. They tell a story. '
             'Please narrate the story. You have about two minutes.',
         illustrationPlaceholder:
             '🌧️ [コマ1: 男性が傘を忘れて雨の中を歩いている / Man walking in rain, no umbrella]\n'

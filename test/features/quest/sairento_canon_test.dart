@@ -7,9 +7,9 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('quest_data uses the canonical antagonist name (no invented "Silentus")', () {
-    final src =
-        File('lib/features/quest/quest_data.dart').readAsStringSync();
+  test('quest_data uses the canonical antagonist name (no invented "Silentus")',
+      () {
+    final src = File('lib/features/quest/quest_data.dart').readAsStringSync();
     expect(
       src.contains('Silentus'),
       isFalse,

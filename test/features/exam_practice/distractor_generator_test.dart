@@ -62,11 +62,12 @@ void main() {
         w('bright', pos: PartOfSpeech.adjective, jp: '明るい'),
         w('busy', pos: PartOfSpeech.adjective, jp: '忙しい'),
         w('brave', pos: PartOfSpeech.adjective, jp: '勇敢な'),
-        w('large', pos: PartOfSpeech.adjective, jp: '大きい'), // synonym (wrong init anyway)
+        w('large',
+            pos: PartOfSpeech.adjective,
+            jp: '大きい'), // synonym (wrong init anyway)
         w('big city', pos: PartOfSpeech.adjective, jp: '大都市'), // phrase
       ];
-      final d =
-          buildAntiLeakDistractors(answer, 'The dog is ___.', bank, rng);
+      final d = buildAntiLeakDistractors(answer, 'The dog is ___.', bank, rng);
       expect(d, isNotNull);
       expect(d!, isNot(contains('big')));
       expect(d.any((x) => x.contains(' ')), isFalse,
@@ -119,18 +120,20 @@ void main() {
         w('picture', jp: '絵'),
         w('plant', jp: '植物'),
       ];
-      final d =
-          buildAntiLeakDistractors(answer, 'The ___ repeated the word.', bank, rng);
+      final d = buildAntiLeakDistractors(
+          answer, 'The ___ repeated the word.', bank, rng);
       expect(d, isNotNull);
       expect(d!.any((x) => x.contains('_')), isFalse);
     });
 
-    test('excludes ultra-generic confusables (standard/today/there) as distractors',
+    test(
+        'excludes ultra-generic confusables (standard/today/there) as distractors',
         () {
       final answer = w('sequential', pos: PartOfSpeech.adjective, jp: '順序立てた');
       final bank = [
         answer,
-        w('standard', pos: PartOfSpeech.adjective, jp: '標準的な'), // generic → excluded
+        w('standard',
+            pos: PartOfSpeech.adjective, jp: '標準的な'), // generic → excluded
         w('suburban', pos: PartOfSpeech.adjective, jp: '郊外の'),
         w('symbolic', pos: PartOfSpeech.adjective, jp: '象徴的な'),
         w('synthetic', pos: PartOfSpeech.adjective, jp: '合成の'),
@@ -141,7 +144,8 @@ void main() {
       expect(d!, isNot(contains('standard')));
     });
 
-    test('a generic word is still allowed AS the answer (kept practiceable)', () {
+    test('a generic word is still allowed AS the answer (kept practiceable)',
+        () {
       // The stoplist only blocks generic words as DISTRACTORS, never the answer.
       final answer = w('standard', pos: PartOfSpeech.noun, jp: '基準');
       final bank = [

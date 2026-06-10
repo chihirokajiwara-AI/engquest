@@ -46,8 +46,12 @@ class QuestTitleScreen extends StatelessWidget {
             ),
             borderRadius: BorderRadius.circular(10),
             boxShadow: [
-              BoxShadow(color: _goldDeep.withAlpha(120), blurRadius: 26, spreadRadius: 2),
-              const BoxShadow(color: Colors.black, blurRadius: 14, offset: Offset(0, 6)),
+              BoxShadow(
+                  color: _goldDeep.withAlpha(120),
+                  blurRadius: 26,
+                  spreadRadius: 2),
+              const BoxShadow(
+                  color: Colors.black, blurRadius: 14, offset: Offset(0, 6)),
             ],
           ),
           padding: const EdgeInsets.all(7),
@@ -58,7 +62,8 @@ class QuestTitleScreen extends StatelessWidget {
               border: Border.all(color: _goldDark, width: 1),
             ),
             padding: const EdgeInsets.all(4),
-            child: ClipRRect(borderRadius: BorderRadius.circular(3), child: child),
+            child:
+                ClipRRect(borderRadius: BorderRadius.circular(3), child: child),
           ),
         ),
         // four corner ornaments
@@ -78,7 +83,8 @@ class QuestTitleScreen extends StatelessWidget {
         width: 18,
         height: 18,
         decoration: BoxDecoration(
-          gradient: const LinearGradient(colors: [Color(0xFFFFF0C0), _goldDeep]),
+          gradient:
+              const LinearGradient(colors: [Color(0xFFFFF0C0), _goldDeep]),
           shape: BoxShape.circle,
           border: Border.all(color: _goldDark, width: 1.5),
           boxShadow: [BoxShadow(color: _gold.withAlpha(160), blurRadius: 8)],
@@ -122,7 +128,11 @@ class QuestTitleScreen extends StatelessWidget {
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [Colors.black.withAlpha(150), Colors.black.withAlpha(70), Colors.black.withAlpha(190)],
+              colors: [
+                Colors.black.withAlpha(150),
+                Colors.black.withAlpha(70),
+                Colors.black.withAlpha(190)
+              ],
               stops: const [0.0, 0.5, 1.0],
             ),
           ),
@@ -141,7 +151,10 @@ class QuestTitleScreen extends StatelessWidget {
               _menu(),
               const Spacer(flex: 2),
               Text('© A-KEN QUEST  英検学習RPG',
-                  style: notoSerifJp(color: _ink.withAlpha(140), fontSize: 9, letterSpacing: 1)),
+                  style: notoSerifJp(
+                      color: _ink.withAlpha(140),
+                      fontSize: 9,
+                      letterSpacing: 1)),
               const SizedBox(height: 8),
             ],
           ),
@@ -159,7 +172,9 @@ class QuestTitleScreen extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Transform.flip(flipX: true, child: const Icon(Icons.eco, color: _gold, size: 26)),
+              Transform.flip(
+                  flipX: true,
+                  child: const Icon(Icons.eco, color: _gold, size: 26)),
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 2),
                 child: Icon(Icons.diamond, color: Color(0xFFBFE3FF), size: 22),
@@ -187,14 +202,22 @@ class QuestTitleScreen extends StatelessWidget {
                 ..style = PaintingStyle.stroke
                 ..strokeWidth = 6
                 ..color = const Color(0xFF12233F),
-              shadows: const [Shadow(color: Colors.black, blurRadius: 10, offset: Offset(0, 4))],
+              shadows: const [
+                Shadow(
+                    color: Colors.black, blurRadius: 10, offset: Offset(0, 4))
+              ],
             )),
         // blue→steel gradient fill with a white top highlight
         ShaderMask(
           shaderCallback: (r) => const LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Colors.white, Color(0xFF8FD0FF), Color(0xFF2E72C8), Color(0xFF1A4E97)],
+            colors: [
+              Colors.white,
+              Color(0xFF8FD0FF),
+              Color(0xFF2E72C8),
+              Color(0xFF1A4E97)
+            ],
             stops: [0.0, 0.32, 0.7, 1.0],
           ).createShader(r),
           child: Text('コトバ探偵', style: style.copyWith(color: Colors.white)),
@@ -206,13 +229,20 @@ class QuestTitleScreen extends StatelessWidget {
   Widget _subtitleBanner() => Container(
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 5),
         decoration: BoxDecoration(
-          gradient: const LinearGradient(colors: [Color(0xFF1A4E97), Color(0xFF2E72C8), Color(0xFF1A4E97)]),
+          gradient: const LinearGradient(colors: [
+            Color(0xFF1A4E97),
+            Color(0xFF2E72C8),
+            Color(0xFF1A4E97)
+          ]),
           borderRadius: BorderRadius.circular(4),
           border: Border.all(color: _gold, width: 1),
         ),
         child: Text('英検（えいけん）の ぼうけん',
             style: notoSerifJp(
-                color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700, letterSpacing: 2)),
+                color: Colors.white,
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 2)),
       );
 
   Widget _menu() => Column(
@@ -224,7 +254,8 @@ class QuestTitleScreen extends StatelessWidget {
       );
 
   // DQ-style command window: dark navy box, cream border, ▶ cursor when selected.
-  Widget _menuItem(String label, {required bool selected, required VoidCallback onTap}) {
+  Widget _menuItem(String label,
+      {required bool selected, required VoidCallback onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(

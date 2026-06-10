@@ -166,7 +166,8 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('unknown grade shows empty-state, no crash (no cross-grade fallback)',
+    testWidgets(
+        'unknown grade shows empty-state, no crash (no cross-grade fallback)',
         (tester) async {
       await tester.pumpWidget(wrap(
         const WritingPracticeScreen(
@@ -224,12 +225,14 @@ void main() {
   group('WritingPrompt data integrity', () {
     test('all prompts have non-empty stimulus', () {
       for (final p in kWritingPrompts) {
-        expect(p.stimulus.isNotEmpty, isTrue, reason: '${p.id} has empty stimulus');
+        expect(p.stimulus.isNotEmpty, isTrue,
+            reason: '${p.id} has empty stimulus');
       }
     });
 
     test('all email prompts have exactly 2 underlined questions', () {
-      for (final p in kWritingPrompts.where((p) => p.type == WritingTaskType.email)) {
+      for (final p
+          in kWritingPrompts.where((p) => p.type == WritingTaskType.email)) {
         expect(p.underlinedQuestions.length, equals(2),
             reason: '${p.id} must have 2 underlined questions');
       }
@@ -238,20 +241,22 @@ void main() {
     test('all prompts have wordCountMin < wordCountMax', () {
       for (final p in kWritingPrompts) {
         expect(p.wordCountMin < p.wordCountMax, isTrue,
-            reason: '${p.id}: min ${p.wordCountMin} must be < max ${p.wordCountMax}');
+            reason:
+                '${p.id}: min ${p.wordCountMin} must be < max ${p.wordCountMax}');
       }
     });
 
     test('email prompts have 3 rubric points', () {
-      for (final p in kWritingPrompts.where((p) => p.type == WritingTaskType.email)) {
+      for (final p
+          in kWritingPrompts.where((p) => p.type == WritingTaskType.email)) {
         expect(p.rubricPoints.length, equals(3),
             reason: '${p.id} must have 3 観点 (内容/語彙/文法)');
       }
     });
 
     test('summary and opinion prompts have 4 rubric points for pre2+', () {
-      for (final p in kWritingPrompts.where(
-          (p) => p.type != WritingTaskType.email && !p.id.startsWith('3_opinion'))) {
+      for (final p in kWritingPrompts.where((p) =>
+          p.type != WritingTaskType.email && !p.id.startsWith('3_opinion'))) {
         expect(p.rubricPoints.length, equals(4),
             reason: '${p.id} must have 4 観点 (内容/構成/語彙/文法)');
       }

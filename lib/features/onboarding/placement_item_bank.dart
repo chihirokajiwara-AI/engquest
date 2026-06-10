@@ -185,7 +185,8 @@ const List<PlacementItem> kPlacementBank = [
   PlacementItem(
     grade: 3,
     skill: 'grammar',
-    stemEn: 'A: You look tired. B: Yes, I ___ on this report since this morning.',
+    stemEn:
+        'A: You look tired. B: Yes, I ___ on this report since this morning.',
     stemJa: 'A: つかれてるね。 B: うん、けさからずっとこのレポートに___んだ。',
     choices: [
       'have been working',
@@ -206,7 +207,8 @@ const List<PlacementItem> kPlacementBank = [
   PlacementItem(
     grade: 3,
     skill: 'vocab',
-    stemEn: 'Our flight was ___ because of the storm, so we waited three more hours.',
+    stemEn:
+        'Our flight was ___ because of the storm, so we waited three more hours.',
     stemJa: 'あらしのせいで、わたしたちのフライトは___され、あと3時間まった。',
     choices: ['delayed', 'arrived', 'boarded', 'canceled'],
     correctIndex: 0,
@@ -279,7 +281,8 @@ const List<PlacementItem> kPlacementBank = [
   PlacementItem(
     grade: 4,
     skill: 'grammar',
-    stemEn: 'The volunteers worked hard all weekend ___ the heavy rain and the cold wind.',
+    stemEn:
+        'The volunteers worked hard all weekend ___ the heavy rain and the cold wind.',
     stemJa: 'ボランティアたちは、激しい雨と冷たい風にもかかわらず、'
         '週末ずっと一生けんめい働いた。（volunteers = ボランティア）',
     choices: ['despite', 'although', 'because of', 'instead of'],
@@ -288,7 +291,8 @@ const List<PlacementItem> kPlacementBank = [
   PlacementItem(
     grade: 4,
     skill: 'readingGist',
-    stemEn: 'NOTICE — Greenfield Library: Starting next month, the library will '
+    stemEn:
+        'NOTICE — Greenfield Library: Starting next month, the library will '
         'close two hours earlier on weekdays to save energy. Weekend hours will '
         'not change, and the study rooms can still be reserved online. '
         '___ What is the main point of this notice?',

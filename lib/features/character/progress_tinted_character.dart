@@ -19,10 +19,26 @@ List<double> progressSaturationMatrix(double progress) {
   double diag(double w) => (1 - s) * w + s;
   double off(double w) => (1 - s) * w;
   return <double>[
-    diag(lr), off(lg), off(lb), 0, 0,
-    off(lr), diag(lg), off(lb), 0, 0,
-    off(lr), off(lg), diag(lb), 0, 0,
-    0, 0, 0, 1, 0,
+    diag(lr),
+    off(lg),
+    off(lb),
+    0,
+    0,
+    off(lr),
+    diag(lg),
+    off(lb),
+    0,
+    0,
+    off(lr),
+    off(lg),
+    diag(lb),
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
   ];
 }
 

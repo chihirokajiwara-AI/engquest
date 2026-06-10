@@ -9,7 +9,8 @@ import 'package:engquest/core/analytics/analytics_service.dart';
 void main() {
   setUp(AnalyticsService.resetForTesting);
 
-  test('default (no consent arg) → NoOp sink, even if Firebase is available', () {
+  test('default (no consent arg) → NoOp sink, even if Firebase is available',
+      () {
     AnalyticsService.initialize(firebaseAvailable: true);
     expect(AnalyticsService.instance.sink, isA<NoOpAnalytics>(),
         reason: 'consent defaults to false → no real analytics sink');

@@ -39,8 +39,8 @@ class VocabReviewStore {
       final raw = prefs.getString(_prefsKey(grade));
       if (raw == null || raw.isEmpty) return {};
       final decoded = jsonDecode(raw) as Map<String, dynamic>;
-      return decoded.map((k, v) =>
-          MapEntry(k, FSRSCard.fromJson(v as Map<String, dynamic>)));
+      return decoded.map(
+          (k, v) => MapEntry(k, FSRSCard.fromJson(v as Map<String, dynamic>)));
     } catch (_) {
       return {};
     }
@@ -49,8 +49,7 @@ class VocabReviewStore {
   Future<void> _save(String grade, Map<String, FSRSCard> cards) async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final encoded =
-          jsonEncode(cards.map((k, c) => MapEntry(k, c.toJson())));
+      final encoded = jsonEncode(cards.map((k, c) => MapEntry(k, c.toJson())));
       await prefs.setString(_prefsKey(grade), encoded);
     } catch (_) {
       // Best-effort: a failed save just means this review isn't remembered.
@@ -69,9 +68,7 @@ class VocabReviewStore {
     final key = keyFor(word);
     final cards = await _load(grade);
     final card = cards[key] ?? FSRSCard(vocabId: key);
-    final grd = !correct
-        ? Grade.again
-        : (hinted ? Grade.hard : Grade.good);
+    final grd = !correct ? Grade.again : (hinted ? Grade.hard : Grade.good);
     cards[key] = _fsrs.schedule(card, grd, DateTime.now());
     await _save(grade, cards);
   }
@@ -83,7 +80,8 @@ class VocabReviewStore {
     final cards = await _load(grade);
     final now = DateTime.now();
     return cards.values
-        .where((c) => c.reps > 0 && (c.dueDate == null || !now.isBefore(c.dueDate!)))
+        .where((c) =>
+            c.reps > 0 && (c.dueDate == null || !now.isBefore(c.dueDate!)))
         .map((c) => c.vocabId)
         .toSet();
   }

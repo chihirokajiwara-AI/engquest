@@ -92,7 +92,8 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('grade 5 — part header Start button navigates to item', (tester) async {
+    testWidgets('grade 5 — part header Start button navigates to item',
+        (tester) async {
       await tester.pumpWidget(_wrap(
         ListeningPracticeScreen(
           eikenGrade: '5',
@@ -108,7 +109,8 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('grade 5 — shows 🔊 replay button in item view', (tester) async {
+    testWidgets('grade 5 — shows 🔊 replay button in item view',
+        (tester) async {
       await tester.pumpWidget(_wrap(
         ListeningPracticeScreen(
           eikenGrade: '5',
@@ -122,7 +124,8 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('grade 5 — shows progress counter after part header', (tester) async {
+    testWidgets('grade 5 — shows progress counter after part header',
+        (tester) async {
       await tester.pumpWidget(_wrap(
         ListeningPracticeScreen(
           eikenGrade: '5',
@@ -236,7 +239,8 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('unknown grade — shows empty state without exception', (tester) async {
+    testWidgets('unknown grade — shows empty state without exception',
+        (tester) async {
       await tester.pumpWidget(_wrap(
         ListeningPracticeScreen(
           eikenGrade: 'unknown',

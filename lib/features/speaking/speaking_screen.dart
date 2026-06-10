@@ -39,8 +39,7 @@ import 'speaking_session.dart';
 // without exposing internal implementation details. Kept as named constants so
 // a CI test can assert the copy stays jargon-free + honest. Furigana is applied
 // consistently to every non-trivial 漢字 for young (6+) readers.
-const String kSpeakingPracticeNoteJa =
-    'このスコアは れんしゅうの めやすだよ。本番（ほんばん）の 二次（にじ）'
+const String kSpeakingPracticeNoteJa = 'このスコアは れんしゅうの めやすだよ。本番（ほんばん）の 二次（にじ）'
     'しけんでは、しけんかんの 先生（せんせい）が きみの 話（はな）す えいごを '
     '聞（き）いて さいてんします。たくさん 声（こえ）に出（だ）して れんしゅうしよう！';
 const String kSpeakingPracticeNoteEn =

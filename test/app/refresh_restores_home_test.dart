@@ -28,7 +28,8 @@ Future<void> _boot(WidgetTester tester) async {
   await tester.pumpWidget(const EngQuestApp());
   await tester.pump(); // resolve _loadPrefs (mock prefs complete synchronously)
   await tester.pump(const Duration(milliseconds: 50));
-  await tester.pump(const Duration(milliseconds: 600)); // AnimatedSwitcher (450ms)
+  await tester
+      .pump(const Duration(milliseconds: 600)); // AnimatedSwitcher (450ms)
 }
 
 // Tolerate ONLY a layout overflow from the home hub at the test surface; any
@@ -57,8 +58,7 @@ void main() {
   // each test boots against its own setMockInitialValues.
   setUp(PreferencesService.resetInstance);
 
-  testWidgets('first-run player meets the title screen (はじめる)',
-      (tester) async {
+  testWidgets('first-run player meets the title screen (はじめる)', (tester) async {
     SharedPreferences.setMockInitialValues({});
     await _boot(tester);
     expect(find.text(_titleStart), findsOneWidget,

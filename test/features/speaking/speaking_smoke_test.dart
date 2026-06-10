@@ -59,7 +59,8 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('consent button disabled until checkbox ticked', (tester) async {
+    testWidgets('consent button disabled until checkbox ticked',
+        (tester) async {
       await tester.pumpWidget(wrap(
         SpeakingConsentNotice(
           eikenGrade: '3',
@@ -162,9 +163,17 @@ void main() {
     test('contains no engineering jargon', () {
       final copy = '$kSpeakingPracticeNoteJa $kSpeakingPracticeNoteEn';
       for (final jargon in const [
-        '開発中', 'Azure', '/v1', 'stub', 'Stub', '[Dev]', 'pronounce', 'TODO',
+        '開発中',
+        'Azure',
+        '/v1',
+        'stub',
+        'Stub',
+        '[Dev]',
+        'pronounce',
+        'TODO',
       ]) {
-        expect(copy.contains(jargon), isFalse, reason: 'jargon "$jargon" in note');
+        expect(copy.contains(jargon), isFalse,
+            reason: 'jargon "$jargon" in note');
       }
     });
 
@@ -172,7 +181,8 @@ void main() {
         () {
       // Must NOT imply the displayed score is an official/accurate assessment.
       expect(kSpeakingPracticeNoteJa, contains('めやす')); // "a guide"
-      expect(kSpeakingPracticeNoteJa, contains('先生')); // a teacher scores the real exam
+      expect(kSpeakingPracticeNoteJa,
+          contains('先生')); // a teacher scores the real exam
       expect(kSpeakingPracticeNoteEn.toLowerCase(), contains('practice guide'));
     });
   });
@@ -339,7 +349,11 @@ void main() {
     });
 
     test('feedbackEn is non-empty in all cases', () {
-      for (final transcript in ['', 'ok', 'I think it is good to study English']) {
+      for (final transcript in [
+        '',
+        'ok',
+        'I think it is good to study English'
+      ]) {
         final r = scorer.score(
           referenceText: 'According to the passage what do students do.',
           transcript: transcript,

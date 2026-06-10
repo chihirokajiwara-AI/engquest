@@ -140,8 +140,7 @@ class CseEstimate {
   });
 
   /// Total questions answered across all skills — the overall basis of the %.
-  int get totalItemsAttempted =>
-      itemsAttempted.values.fold(0, (s, v) => s + v);
+  int get totalItemsAttempted => itemsAttempted.values.fold(0, (s, v) => s + v);
 
   /// True when every applicable skill has reached the passing raw-accuracy 目安
   /// AND every applicable skill has been measured. Framed as 「合格圏の目安に到達」

@@ -15,7 +15,12 @@ class HintCoinService {
   static const _prefKey = 'hint_coin_balance';
   static const _seededKey = 'hint_coin_seeded';
   static const _seedBalance = 10;
-  static const _costByTier = [0, 1, 2, 3]; // index = tier (1-based: use index 1..3)
+  static const _costByTier = [
+    0,
+    1,
+    2,
+    3
+  ]; // index = tier (1-based: use index 1..3)
 
   HintCoinService({PreferencesService? prefs}) : _prefs = prefs;
 
@@ -106,20 +111,31 @@ List<NazoHint> defaultHintsForLevel(String eikenLevel) {
         ),
         NazoHint(
           tier: 2,
-          textJa: '【ヒント T2】「be動詞（どうし）」(am/are/is) と「一般動詞（いっぱんどうし）」(play/like など) は'
+          textJa:
+              '【ヒント T2】「be動詞（どうし）」(am/are/is) と「一般動詞（いっぱんどうし）」(play/like など) は'
               '一緒（いっしょ）には使（つか）えないよ。それを使っている選択肢（せんたくし）を外（はず）してみて。',
         ),
         NazoHint(
           tier: 3,
-          textJa: '【ヒント T3】例（たと）えば："I play soccer." → "He plays soccer."（三人称単数（さんにんしょうたんすう）のときは -s がつく）。'
+          textJa:
+              '【ヒント T3】例（たと）えば："I play soccer." → "He plays soccer."（三人称単数（さんにんしょうたんすう）のときは -s がつく）。'
               'この問題（もんだい）の主語（しゅご）はだれ？同（おな）じルールで考（かんが）えてみよう。',
         ),
       ];
     default:
       return const [
-        NazoHint(tier: 1, textJa: '【ヒント T1】もう一度（いちど）、問題（もんだい）の文（ぶん）をよく読（よ）もう。どんな文法（ぶんぽう）が使われているかな？'),
-        NazoHint(tier: 2, textJa: '【ヒント T2】日本語（にほんご）の意味（いみ）をヒントに、意味（いみ）の合（あ）わない選択肢（せんたくし）を外（はず）してみよう。'),
-        NazoHint(tier: 3, textJa: '【ヒント T3】似（に）た例文（れいぶん）を思（おも）い出（だ）して。パターンが同（おな）じなら、答（こた）えも見（み）えてくるよ。'),
+        NazoHint(
+            tier: 1,
+            textJa:
+                '【ヒント T1】もう一度（いちど）、問題（もんだい）の文（ぶん）をよく読（よ）もう。どんな文法（ぶんぽう）が使われているかな？'),
+        NazoHint(
+            tier: 2,
+            textJa:
+                '【ヒント T2】日本語（にほんご）の意味（いみ）をヒントに、意味（いみ）の合（あ）わない選択肢（せんたくし）を外（はず）してみよう。'),
+        NazoHint(
+            tier: 3,
+            textJa:
+                '【ヒント T3】似（に）た例文（れいぶん）を思（おも）い出（だ）して。パターンが同（おな）じなら、答（こた）えも見（み）えてくるよ。'),
       ];
   }
 }

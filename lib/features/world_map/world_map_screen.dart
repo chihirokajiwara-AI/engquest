@@ -365,8 +365,8 @@ class _PlayerStatsBar extends StatelessWidget {
                   children: [
                     Text(
                       'Lv.$level',
-                      style: dqText(
-                          size: 18, w: FontWeight.w800, color: dqGold),
+                      style:
+                          dqText(size: 18, w: FontWeight.w800, color: dqGold),
                     ),
                     const SizedBox(width: 10),
                     Text(
@@ -440,7 +440,8 @@ class _StreakBadge extends StatelessWidget {
           ),
           Text(
             'れんぞく',
-            style: dqText(size: 8, w: FontWeight.w600, color: dqInk, spacing: 1),
+            style:
+                dqText(size: 8, w: FontWeight.w600, color: dqInk, spacing: 1),
           ),
         ],
       ),
@@ -511,8 +512,7 @@ class _ZoneNodeState extends State<_ZoneNode>
               child: child,
             ),
             child: Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
                   colors: [dqBox, dqNight1],

@@ -111,8 +111,8 @@ class MockExam {
   });
 
   /// True when available items equal the target counts (a "full" mock).
-  bool get isFullMock =>
-      availableCounts.entries.every((e) => e.value >= (targetCounts[e.key] ?? 0));
+  bool get isFullMock => availableCounts.entries
+      .every((e) => e.value >= (targetCounts[e.key] ?? 0));
 }
 
 // ── Grade targets (大問 proportions) ─────────────────────────────────────────

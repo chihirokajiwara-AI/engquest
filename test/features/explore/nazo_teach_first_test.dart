@@ -50,11 +50,13 @@ void main() {
 
     // Now the quiz is shown (ピカラット meter + the greeting choices).
     expect(find.text('ピカラット'), findsOneWidget);
-    expect(find.text('Hello!'), findsWidgets); // the correct reply is selectable
+    expect(
+        find.text('Hello!'), findsWidgets); // the correct reply is selectable
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('a step that already teaches (no TeachCard) goes straight to quiz',
+  testWidgets(
+      'a step that already teaches (no TeachCard) goes straight to quiz',
       (tester) async {
     // セル's hotspot wraps a TeachSound step — it teaches inherently, so it must
     // NOT show a separate teach card; it goes straight to its quiz surface.

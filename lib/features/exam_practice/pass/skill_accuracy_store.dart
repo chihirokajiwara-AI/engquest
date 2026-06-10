@@ -153,7 +153,8 @@ class SkillAccuracyStore {
         return SkillAccuracy(skill: skill, accuracy: 0.0, itemsAttempted: 0);
       }
       final accuracy = (correct / total).clamp(0.0, 1.0);
-      return SkillAccuracy(skill: skill, accuracy: accuracy, itemsAttempted: total);
+      return SkillAccuracy(
+          skill: skill, accuracy: accuracy, itemsAttempted: total);
     } catch (e) {
       if (kDebugMode) {
         debugPrint('[SkillAccuracyStore] readSkill failed: $e');

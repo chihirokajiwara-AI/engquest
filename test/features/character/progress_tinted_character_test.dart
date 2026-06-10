@@ -9,7 +9,8 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   const lr = 0.2126, lg = 0.7152, lb = 0.0722;
 
-  test('readiness 0 → greyscale: every RGB row collapses to the luma weights', () {
+  test('readiness 0 → greyscale: every RGB row collapses to the luma weights',
+      () {
     final m = progressSaturationMatrix(0);
     // Rows R, G, B must all be [lr, lg, lb] → output channel = input luminance.
     for (final rowStart in [0, 5, 10]) {
@@ -27,7 +28,8 @@ void main() {
     expect(m[12], closeTo(1, 1e-9)); // B←B
   });
 
-  test('partial readiness is between grey and colour (monotonic toward colour)', () {
+  test('partial readiness is between grey and colour (monotonic toward colour)',
+      () {
     // The R←R diagonal grows from lr (grey) toward 1 (colour) as readiness rises.
     final r0 = progressSaturationMatrix(0.0)[0];
     final rHalf = progressSaturationMatrix(0.5)[0];

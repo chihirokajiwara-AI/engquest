@@ -80,15 +80,15 @@ void main() {
     });
     test('step on second answer (n=1) is 1.25', () {
       final e = PlacementEngine.fromAge(10); // θ=2.0
-      e.record(true, grade: 2);  // n=0 → step 1.5, θ=3.5
-      e.record(true, grade: 3);  // n=1 → step 1.25, θ=4.75
+      e.record(true, grade: 2); // n=0 → step 1.5, θ=3.5
+      e.record(true, grade: 3); // n=1 → step 1.25, θ=4.75
       expect(e.theta, closeTo(4.75, 0.001));
     });
     test('step on third answer (n=2) is 1.0', () {
       final e = PlacementEngine.fromAge(10); // θ=2.0
-      e.record(true, grade: 2);  // n=0, step 1.5 → 3.5
-      e.record(true, grade: 3);  // n=1, step 1.25 → 4.75
-      e.record(true, grade: 4);  // n=2, step 1.0 → 5.75
+      e.record(true, grade: 2); // n=0, step 1.5 → 3.5
+      e.record(true, grade: 3); // n=1, step 1.25 → 4.75
+      e.record(true, grade: 4); // n=2, step 1.0 → 5.75
       expect(e.theta, closeTo(5.75, 0.001));
     });
     test('step never drops below 0.5', () {
@@ -144,14 +144,15 @@ void main() {
     test('after a wrong answer, nextGrade uses floor(θ) not round(θ)', () {
       // θ=2.5 → round=3, floor=2
       final e = PlacementEngine.fromAge(10); // θ=2
-      e.record(true, grade: 2);  // step 1.5 → θ=3.5
+      e.record(true, grade: 2); // step 1.5 → θ=3.5
       // Manually record a wrong at grade 3 → θ = 3.5-1.25=2.25
       e.record(false, grade: 3); // step 1.25 → θ=2.25
       // nextGrade after wrong answer: floor(2.25)=2
       expect(e.nextGrade(), equals(2));
     });
 
-    test('after a correct answer, nextGrade climbs by the earned staircase', () {
+    test('after a correct answer, nextGrade climbs by the earned staircase',
+        () {
       final e = PlacementEngine.fromAge(10); // θ=2
       e.record(true, grade: 2); // step 1.5 → θ=3.5
       // round(3.5)=4, but the gentle staircase (CEO 721) caps the presented rung
@@ -164,8 +165,8 @@ void main() {
       // Feed the engine: correct at low, wrong at high, then check next grade
       // goes to floor(θ) which is at or below the failed rung.
       final e = PlacementEngine.fromAge(7); // θ=1
-      e.record(true, grade: 1);   // step 1.5 → θ=2.5
-      e.record(false, grade: 3);  // step 1.25 → θ=1.25; last=wrong
+      e.record(true, grade: 1); // step 1.5 → θ=2.5
+      e.record(false, grade: 3); // step 1.25 → θ=1.25; last=wrong
       final next = e.nextGrade(); // must be floor(1.25)=1, not round=1 (same)
       // Either way ≤ the grade that was just failed (3).
       expect(next, lessThan(3));
@@ -192,14 +193,15 @@ void main() {
       expect(e.done, isTrue);
     });
 
-    test('done does not become true at exactly 8 items due to ceiling if '
+    test(
+        'done does not become true at exactly 8 items due to ceiling if '
         'ceiling-stable was already met at 3 items', () {
       // Build a ceiling-stable pattern in 3 items:
       // items at grade 2 (pass), 2 (pass), 3 (fail) → stable ceiling at 2/3.
       final e = PlacementEngine.fromAge(10); // θ=2
-      e.record(true, grade: 2);   // answers=[T], grades=[2]
-      e.record(true, grade: 2);   // answers=[T,T], grades=[2,2]
-      e.record(false, grade: 3);  // answers=[T,T,F], grades=[2,2,3] → stable
+      e.record(true, grade: 2); // answers=[T], grades=[2]
+      e.record(true, grade: 2); // answers=[T,T], grades=[2,2]
+      e.record(false, grade: 3); // answers=[T,T,F], grades=[2,2,3] → stable
       expect(e.done, isTrue);
       expect(e.n, equals(3));
     });
@@ -208,7 +210,8 @@ void main() {
   // ── Ceiling early-stop ──────────────────────────────────────────────────
 
   group('ceiling early-stop', () {
-    test('stops at 3 items when last 3 pass lower rung and fail upper rung', () {
+    test('stops at 3 items when last 3 pass lower rung and fail upper rung',
+        () {
       final e = PlacementEngine.fromAge(10); // θ=2
       e.record(true, grade: 2);
       e.record(true, grade: 2);
@@ -228,7 +231,8 @@ void main() {
   // ── Barely-cleared → one rung down ──────────────────────────────────────
 
   group('barely-cleared → one rung down', () {
-    test('2/3 correct at rung r and 0/1 correct at rung r+1 → placed at r-1', () {
+    test('2/3 correct at rung r and 0/1 correct at rung r+1 → placed at r-1',
+        () {
       // Simulate: 2 correct at grade 3, 1 wrong at grade 3, 1 wrong at grade 4
       // → grade 3 pass rate = 2/3 (barely cleared) → placed at 2.
       final e = PlacementEngine.fromAge(13); // θ=3
@@ -253,7 +257,9 @@ void main() {
       e.record(true, grade: 3);
       e.record(true, grade: 3);
       // Drive to max
-      for (var i = 0; i < 5; i++) { e.record(false, grade: 4); }
+      for (var i = 0; i < 5; i++) {
+        e.record(false, grade: 4);
+      }
       expect(e.done, isTrue);
       final outcome = e.result();
       expect(outcome.grade, equals(3));
@@ -329,10 +335,13 @@ void main() {
       expect(usedIds, isNot(contains(bankIndexOf(item))));
     });
 
-    test('unusedItemForGrade falls back gracefully when all items are used', () {
+    test('unusedItemForGrade falls back gracefully when all items are used',
+        () {
       // Mark all items at grade 6 as used.
-      final usedIds =
-          kPlacementBank.indexed.where((r) => r.$2.grade == 6).map((r) => r.$1).toSet();
+      final usedIds = kPlacementBank.indexed
+          .where((r) => r.$2.grade == 6)
+          .map((r) => r.$1)
+          .toSet();
       // Should not throw — returns a fallback item.
       expect(() => unusedItemForGrade(6, usedIds), returnsNormally);
       final item = unusedItemForGrade(6, usedIds);
@@ -374,20 +383,30 @@ void main() {
 
         if (g < 6) {
           // 3 correct at g (pass rate 3/3 = not barely-cleared)
-          for (var i = 0; i < 3; i++) { e.record(true, grade: g); }
+          for (var i = 0; i < 3; i++) {
+            e.record(true, grade: g);
+          }
           // 3 wrong at g+1 to establish ceiling above g
-          for (var i = 0; i < 3; i++) { e.record(false, grade: g + 1); }
+          for (var i = 0; i < 3; i++) {
+            e.record(false, grade: g + 1);
+          }
           // Push to done without adding more items at grade g
-          while (!e.done) { e.record(false, grade: g + 1); }
+          while (!e.done) {
+            e.record(false, grade: g + 1);
+          }
         } else {
           // g=6 (準1級): 3 correct at g=6, then just pad with wrong at
           // grade 5 (lower) so the result loop still identifies rung 6 as
           // the top passing rung (3/3 = 100%, not barely-cleared).
-          for (var i = 0; i < 3; i++) { e.record(true, grade: 6); }
+          for (var i = 0; i < 3; i++) {
+            e.record(true, grade: 6);
+          }
           // Pad to min 3 done (already at 3 — may already be done if stable).
           // Do NOT add more wrongs at grade 6 — that would dilute the pass rate.
           // Add wrongs at a lower grade that the result loop won't confuse.
-          while (!e.done) { e.record(false, grade: 5); }
+          while (!e.done) {
+            e.record(false, grade: 5);
+          }
         }
 
         final outcome = e.result();

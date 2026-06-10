@@ -22,7 +22,8 @@ void main() {
     final raw = prefs.getString('vocab_fsrs_5');
     expect(raw, isNotNull);
     final map = jsonDecode(raw!) as Map<String, dynamic>;
-    expect(map.containsKey('apple'), isTrue, reason: 'keyed by normalised word');
+    expect(map.containsKey('apple'), isTrue,
+        reason: 'keyed by normalised word');
     final card = FSRSCard.fromJson(map['apple'] as Map<String, dynamic>);
     expect(card.reps, greaterThan(0));
   });
@@ -38,8 +39,7 @@ void main() {
       'fresh': FSRSCard(vocabId: 'fresh', reps: 1, dueDate: future).toJson(),
       'newword': FSRSCard(vocabId: 'newword', reps: 0).toJson(),
     };
-    SharedPreferences.setMockInitialValues(
-        {'vocab_fsrs_5': jsonEncode(seed)});
+    SharedPreferences.setMockInitialValues({'vocab_fsrs_5': jsonEncode(seed)});
 
     final due = await VocabReviewStore().dueReviewKeys('5');
     expect(due, contains('forgot'));
@@ -53,7 +53,8 @@ void main() {
     await store.recordAnswer(grade: '5', word: 'dog', correct: true);
     final due = await store.dueReviewKeys('5');
     expect(due, isNot(contains('dog')),
-        reason: 'a learned word should be scheduled into the future, not re-shown now');
+        reason:
+            'a learned word should be scheduled into the future, not re-shown now');
   });
 
   test('grades are namespaced — 5級 reviews do not leak into 4級', () async {

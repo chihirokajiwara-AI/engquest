@@ -34,7 +34,8 @@ bool _isAllowed(int o) {
 }
 
 void main() {
-  test('every vocab jpTranslation uses only Japanese/ASCII glyphs (#97 no-tofu)',
+  test(
+      'every vocab jpTranslation uses only Japanese/ASCII glyphs (#97 no-tofu)',
       () {
     final dir = Directory('assets/data');
     final files = dir

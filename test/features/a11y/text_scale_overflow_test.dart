@@ -38,13 +38,15 @@ ExamSection _sec(ExamSectionType t) => ExamSection(
 
 Future<void> _pumpAt2x(WidgetTester tester, double width, Widget child) async {
   SharedPreferences.setMockInitialValues({});
-  tester.view.physicalSize = Size(width, 2200); // tall: vertical content scrolls
+  tester.view.physicalSize =
+      Size(width, 2200); // tall: vertical content scrolls
   tester.view.devicePixelRatio = 1.0;
   addTearDown(tester.view.reset);
   await tester.pumpWidget(MaterialApp(
     home: Builder(
       builder: (ctx) => MediaQuery(
-        data: MediaQuery.of(ctx).copyWith(textScaler: const TextScaler.linear(2.0)),
+        data: MediaQuery.of(ctx)
+            .copyWith(textScaler: const TextScaler.linear(2.0)),
         child: child,
       ),
     ),
@@ -58,9 +60,12 @@ void main() {
   for (final width in <double>[320, 360, 390]) {
     testWidgets('home OK @ textScaler 2.0, ${width}px (WCAG SC 1.4.4)',
         (tester) async {
-      await _pumpAt2x(tester, width,
+      await _pumpAt2x(
+          tester,
+          width,
           KotobaHomeScreen(
-              cardRepository: InMemoryFsrsCardRepository(), initialEikenLevel: '5'));
+              cardRepository: InMemoryFsrsCardRepository(),
+              initialEikenLevel: '5'));
       expect(tester.takeException(), isNull,
           reason: 'home clipped @ 2.0x ${width}px — WCAG SC 1.4.4 regression');
     });

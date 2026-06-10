@@ -125,7 +125,8 @@ class OnboardingStorage {
     await p.setInt(_kGoal, result.dailyGoalMinutes);
     // Persist θ̂ for T12 adaptive difficulty hook.
     await p.setString(_kPlacementTheta, result.placementTheta.toString());
-    HeroChoice.fromAvatarId = result.avatarId; // #110 reflect the chosen main now
+    HeroChoice.fromAvatarId =
+        result.avatarId; // #110 reflect the chosen main now
   }
 
   static Future<OnboardingResult?> loadAsync() async {
@@ -193,7 +194,8 @@ class EngQuestApp extends StatelessWidget {
                 valueListenable: ReadabilityScale.notifier,
                 builder: (ctx, appScale, inner) {
                   final mq = MediaQuery.of(ctx);
-                  final osFactor = mq.textScaler.scale(10) / 10; // ~OS multiplier
+                  final osFactor =
+                      mq.textScaler.scale(10) / 10; // ~OS multiplier
                   // Text-scale ceiling = WCAG 2.2 SC 1.4.4 (200% = 2.0x). Raised
                   // 1.6→2.0 only AFTER measuring (text_scale_overflow_test, #114):
                   // all 12 high-traffic screens — home, onboarding, pass-meter, exam-

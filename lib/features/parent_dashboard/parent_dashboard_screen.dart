@@ -125,16 +125,16 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
                             'インターネットの せつぞくを かくにんして、'
                             'もう一度（いちど）おためしください。',
                             textAlign: TextAlign.center,
-                            style: dqText(size: 14, color: dqInk).copyWith(
-                                height: 1.6),
+                            style: dqText(size: 14, color: dqInk)
+                                .copyWith(height: 1.6),
                           ),
                           const SizedBox(height: 6),
                           Text(
                             "Couldn't load progress. Check your connection "
                             'and try again.',
                             textAlign: TextAlign.center,
-                            style: dqText(
-                                size: 11, color: dqInk.withAlpha(160)),
+                            style:
+                                dqText(size: 11, color: dqInk.withAlpha(160)),
                           ),
                           const SizedBox(height: 18),
                           DqButton(
@@ -236,7 +236,8 @@ class _DqTabBar extends StatelessWidget {
         labelColor: const Color(0xFF2A1C00),
         unselectedLabelColor: dqInk,
         labelStyle: dqText(size: 11, w: FontWeight.w800, color: Colors.black),
-        unselectedLabelStyle: dqText(size: 11, w: FontWeight.w600, color: dqInk),
+        unselectedLabelStyle:
+            dqText(size: 11, w: FontWeight.w600, color: dqInk),
         tabs: const [
           Tab(icon: Icon(Icons.home_rounded, size: 18), text: 'ホーム'),
           Tab(icon: Icon(Icons.bar_chart_rounded, size: 18), text: '記録'),
@@ -283,8 +284,8 @@ class _HomeTab extends StatelessWidget {
                   children: [
                     Text(
                       '${progress.currentStreak}日連続',
-                      style: dqText(
-                          size: 22, w: FontWeight.w800, color: dqGold),
+                      style:
+                          dqText(size: 22, w: FontWeight.w800, color: dqGold),
                     ),
                     const SizedBox(height: 2),
                     dqBilingual('この調子で', 'Keep the streak going', jpSize: 12),
@@ -314,9 +315,8 @@ class _HomeTab extends StatelessWidget {
               ),
               _StatPill(
                 label: '平均 / Score',
-                value: today != null
-                    ? today.averageScore.toStringAsFixed(1)
-                    : '—',
+                value:
+                    today != null ? today.averageScore.toStringAsFixed(1) : '—',
                 icon: Icons.star,
               ),
             ],
@@ -348,8 +348,8 @@ class _HomeTab extends StatelessWidget {
                       const SizedBox(height: 2),
                       Text(
                         nextHours <= 0 ? '今すぐ' : '$nextHours時間後',
-                        style: dqText(
-                            size: 18, w: FontWeight.w800, color: dqGold),
+                        style:
+                            dqText(size: 18, w: FontWeight.w800, color: dqGold),
                       ),
                     ],
                   ),
@@ -375,8 +375,7 @@ class _HomeTab extends StatelessWidget {
                   ),
                   Text(
                     '${(progress.masteryPercent * 100).toStringAsFixed(0)}%',
-                    style: dqText(
-                        size: 14, w: FontWeight.w800, color: dqGold),
+                    style: dqText(size: 14, w: FontWeight.w800, color: dqGold),
                   ),
                 ],
               ),
@@ -392,7 +391,6 @@ class _HomeTab extends StatelessWidget {
       ],
     );
   }
-
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -454,22 +452,19 @@ class _HonestReadinessCardState extends State<_HonestReadinessCard> {
           }
           final pct = est.readinessPct;
           final color = _color(pct);
-          final unmeasured = est.unmeasuredSkills
-              .map(CseEstimator.skillLabelJa)
-              .toList();
+          final unmeasured =
+              est.unmeasuredSkills.map(CseEstimator.skillLabelJa).toList();
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
                   Expanded(
-                    child:
-                        dqBilingual('合格までの目安', 'Pass guide', jpSize: 13),
+                    child: dqBilingual('合格までの目安', 'Pass guide', jpSize: 13),
                   ),
                   Text(
                     '${pct.toStringAsFixed(0)}%',
-                    style:
-                        dqText(size: 18, w: FontWeight.w800, color: color),
+                    style: dqText(size: 18, w: FontWeight.w800, color: color),
                   ),
                 ],
               ),
@@ -853,7 +848,8 @@ class _ReviewCard extends StatelessWidget {
             child: Icon(icon, color: color, size: 22),
           ),
           const SizedBox(width: 14),
-          Expanded(child: dqBilingual(period, periodEn, jpSize: 14, stacked: true)),
+          Expanded(
+              child: dqBilingual(period, periodEn, jpSize: 14, stacked: true)),
           Text(
             '$count 単語',
             style: dqText(size: 18, w: FontWeight.w800, color: dqGold),
@@ -901,8 +897,8 @@ class _SettingsTab extends StatelessWidget {
                 onTap: () => onGoalChanged(g),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 20, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   decoration: BoxDecoration(
                     gradient: selected
                         ? const LinearGradient(colors: [dqGold, dqGoldDeep])
@@ -952,7 +948,8 @@ class _SettingsTab extends StatelessWidget {
                   child: Builder(
                     builder: (context) => Text(
                       notifTime.format(context),
-                      style: dqText(size: 18, w: FontWeight.w700, color: dqGold),
+                      style:
+                          dqText(size: 18, w: FontWeight.w700, color: dqGold),
                     ),
                   ),
                 ),
@@ -1077,8 +1074,7 @@ class _StatPill extends StatelessWidget {
           style: dqText(size: 20, w: FontWeight.w800, color: dqGold),
         ),
         const SizedBox(height: 2),
-        Text(label,
-            style: dqText(size: 10, w: FontWeight.w600, color: dqInk)),
+        Text(label, style: dqText(size: 10, w: FontWeight.w600, color: dqInk)),
       ],
     );
   }

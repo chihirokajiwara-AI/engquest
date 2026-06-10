@@ -86,7 +86,8 @@ void main() {
     // vocab DB must prove its 大問1 actually builds questions (debugCorrectChoices
     // non-empty), not merely that the spinner cleared.
     for (final grade in ['5', '4', '3', 'pre2', 'pre2plus', '2', 'pre1']) {
-      testWidgets('grade $grade builds REAL 大問1 questions, not an empty '
+      testWidgets(
+          'grade $grade builds REAL 大問1 questions, not an empty '
           'shell (#40)', (tester) async {
         // Tall surface so the cloze + choices lay out (default 800x600 is short).
         tester.view.physicalSize = const Size(800, 1600);
@@ -143,7 +144,8 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('grade pre2plus now has a vocab DB — builds real questions, '
+    testWidgets(
+        'grade pre2plus now has a vocab DB — builds real questions, '
         'not 準備中 (#34)', (tester) async {
       // Tall surface so the cloze + 4 choices lay out on-screen (default 800x600
       // is too short), mirroring the record-path harness.

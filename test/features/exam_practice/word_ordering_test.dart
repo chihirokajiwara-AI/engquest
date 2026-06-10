@@ -43,8 +43,16 @@ void main() {
         // Excludes e.g. "so"/"not" which also serve as locked intensifiers
         // ("not so difficult").
         const movable = {
-          'now', 'usually', 'sometimes', 'often', 'always', 'today',
-          'yesterday', 'tomorrow', 'and', 'or',
+          'now',
+          'usually',
+          'sometimes',
+          'often',
+          'always',
+          'today',
+          'yesterday',
+          'tomorrow',
+          'and',
+          'or',
         };
         for (final c in chunks) {
           expect(movable.contains(c.toLowerCase()), isFalse,

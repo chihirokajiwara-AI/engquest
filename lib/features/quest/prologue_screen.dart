@@ -26,7 +26,8 @@ class _Panel {
   final String? audio; // best-effort cue key (graceful no-op if unrecorded)
   final bool interactive; // panel 5: the c·a·t blend demo
   final bool isLast;
-  const _Panel(this.jp, this.en, {this.audio, this.interactive = false, this.isLast = false});
+  const _Panel(this.jp, this.en,
+      {this.audio, this.interactive = false, this.isLast = false});
 }
 
 const _panels = <_Panel>[
@@ -162,7 +163,10 @@ class _PrologueScreenState extends State<PrologueScreen> {
                   children: [
                     Text(_p.jp, style: dqText(size: 15).copyWith(height: 1.7)),
                     const SizedBox(height: 8),
-                    Text(_p.en, style: dqText(size: 11, color: dqInk, w: FontWeight.w400).copyWith(height: 1.4)),
+                    Text(_p.en,
+                        style:
+                            dqText(size: 11, color: dqInk, w: FontWeight.w400)
+                                .copyWith(height: 1.4)),
                   ],
                 ),
               ),
@@ -198,7 +202,8 @@ class _PrologueScreenState extends State<PrologueScreen> {
     if (_p.interactive && !_blendDone) {
       return DqReplayButton(onTap: _playBlend, label: '🔊 おして、きいてみよう');
     }
-    return DqButton(label: _p.isLast ? '▶ はじめる / Begin' : '▶ つぎへ', onTap: _next);
+    return DqButton(
+        label: _p.isLast ? '▶ はじめる / Begin' : '▶ つぎへ', onTap: _next);
   }
 
   // ── Per-panel "stage" art (minimal-but-evocative within the dq dark palette).
@@ -236,7 +241,10 @@ class _PrologueScreenState extends State<PrologueScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Text(l,
                   style: TextStyle(
-                      color: color, fontSize: 64, fontWeight: FontWeight.w300, letterSpacing: 2)),
+                      color: color,
+                      fontSize: 64,
+                      fontWeight: FontWeight.w300,
+                      letterSpacing: 2)),
             ),
         ],
       );
@@ -250,8 +258,16 @@ class _PrologueScreenState extends State<PrologueScreen> {
             height: 110,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              gradient: RadialGradient(colors: [c.withAlpha(bright ? 235 : 90), c.withAlpha(0)]),
-              boxShadow: bright ? [BoxShadow(color: c.withAlpha(150), blurRadius: 40, spreadRadius: 6)] : null,
+              gradient: RadialGradient(
+                  colors: [c.withAlpha(bright ? 235 : 90), c.withAlpha(0)]),
+              boxShadow: bright
+                  ? [
+                      BoxShadow(
+                          color: c.withAlpha(150),
+                          blurRadius: 40,
+                          spreadRadius: 6)
+                    ]
+                  : null,
             ),
           ),
           const SizedBox(height: 14),
@@ -267,9 +283,17 @@ class _PrologueScreenState extends State<PrologueScreen> {
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              boxShadow: [BoxShadow(color: dqGold.withAlpha(120), blurRadius: 34, spreadRadius: 4)],
+              boxShadow: [
+                BoxShadow(
+                    color: dqGold.withAlpha(120),
+                    blurRadius: 34,
+                    spreadRadius: 4)
+              ],
             ),
-            child: DqPortrait(imageAsset: 'assets/art/masters/hero.png', emoji: '🧭', size: 96),
+            child: DqPortrait(
+                imageAsset: 'assets/art/masters/hero.png',
+                emoji: '🧭',
+                size: 96),
           ),
           const SizedBox(height: 12),
           Text('きみ', style: dqText(size: 13, color: dqGold)),
@@ -293,8 +317,15 @@ class _PrologueScreenState extends State<PrologueScreen> {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: i == 0 ? dqGold : dqBox,
-                    border: Border.all(color: i == 0 ? dqGold : dqGoldDeep.withAlpha(120), width: 2),
-                    boxShadow: i == 0 ? [BoxShadow(color: dqGold.withAlpha(150), blurRadius: 14)] : null,
+                    border: Border.all(
+                        color: i == 0 ? dqGold : dqGoldDeep.withAlpha(120),
+                        width: 2),
+                    boxShadow: i == 0
+                        ? [
+                            BoxShadow(
+                                color: dqGold.withAlpha(150), blurRadius: 14)
+                          ]
+                        : null,
                   ),
                 ),
             ],

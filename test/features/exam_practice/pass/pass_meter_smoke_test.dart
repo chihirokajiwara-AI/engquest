@@ -63,7 +63,8 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('below-passing estimate — shows weakest-skill CTA', (tester) async {
+    testWidgets('below-passing estimate — shows weakest-skill CTA',
+        (tester) async {
       final est = _estimate(
           grade: '3',
           reading: 0.4,
@@ -78,8 +79,7 @@ void main() {
     });
 
     testWidgets('passing estimate — shows celebration, no CTA', (tester) async {
-      final est = _estimate(
-          grade: '5', reading: 1.0, listening: 1.0);
+      final est = _estimate(grade: '5', reading: 1.0, listening: 1.0);
       await tester.pumpWidget(_wrap(PassMeterScreen(estimate: est)));
       await tester.pump();
       expect(find.textContaining('ごうかくけん'), findsWidgets);
@@ -112,7 +112,8 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('grade pre2 estimate — pumps without exception', (tester) async {
+    testWidgets('grade pre2 estimate — pumps without exception',
+        (tester) async {
       final est = _estimate(
           grade: 'pre2',
           reading: 0.8,
@@ -136,7 +137,8 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('grade pre1 estimate — pumps without exception', (tester) async {
+    testWidgets('grade pre1 estimate — pumps without exception',
+        (tester) async {
       final est = _estimate(
           grade: 'pre1',
           reading: 0.85,
@@ -148,9 +150,14 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('zero-accuracy estimate — pumps without exception', (tester) async {
-      final est = _estimate(grade: '3', reading: 0.0, listening: 0.0,
-          writing: 0.0, hasWriting: true);
+    testWidgets('zero-accuracy estimate — pumps without exception',
+        (tester) async {
+      final est = _estimate(
+          grade: '3',
+          reading: 0.0,
+          listening: 0.0,
+          writing: 0.0,
+          hasWriting: true);
       await tester.pumpWidget(_wrap(PassMeterScreen(estimate: est)));
       await tester.pump();
       expect(tester.takeException(), isNull);

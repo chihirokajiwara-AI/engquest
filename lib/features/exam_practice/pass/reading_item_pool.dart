@@ -45,20 +45,20 @@ class ReadingMockItem extends MockMcqItem {
 List<ReadingMockItem> rawReadingItemsFor(String grade) =>
     _kReadingPool[grade] ?? const <ReadingMockItem>[];
 
-List<MockMcqItem> readingItemsFor(String grade) =>
-    (_kReadingPool[grade] ?? const <ReadingMockItem>[])
-        // Compose the passage/cloze sentence ABOVE the instruction so the rendered
-        // MockMcqItem is self-contained. Without this the mock UI shows only
-        // "Choose the best word for the blank." with no sentence to answer.
-        .map((r) => MockMcqItem(
-              id: r.id,
-              questionText: '${r.passageText}\n\n${r.questionText}',
-              choices: r.choices,
-              correctIdx: r.correctIdx,
-              skill: EikenSkill.reading,
-              sectionId: r.sectionId,
-            ))
-        .toList();
+List<MockMcqItem> readingItemsFor(String grade) => (_kReadingPool[grade] ??
+        const <ReadingMockItem>[])
+    // Compose the passage/cloze sentence ABOVE the instruction so the rendered
+    // MockMcqItem is self-contained. Without this the mock UI shows only
+    // "Choose the best word for the blank." with no sentence to answer.
+    .map((r) => MockMcqItem(
+          id: r.id,
+          questionText: '${r.passageText}\n\n${r.questionText}',
+          choices: r.choices,
+          correctIdx: r.correctIdx,
+          skill: EikenSkill.reading,
+          sectionId: r.sectionId,
+        ))
+    .toList();
 
 const Map<String, List<ReadingMockItem>> _kReadingPool = {
   '5': _grade5Reading,
@@ -83,8 +83,7 @@ const _grade5Reading = [
   ReadingMockItem(
     id: '5_r_002',
     sectionId: '5_r2',
-    passageText:
-        'Anna: "Do you have a pen?" Bob: "Yes, here you are."',
+    passageText: 'Anna: "Do you have a pen?" Bob: "Yes, here you are."',
     questionText: 'What does Bob give Anna?',
     choices: ['A pen', 'A book', 'A ruler', 'An eraser'],
     correctIdx: 0,
@@ -287,8 +286,7 @@ const _grade4Reading = [
   ReadingMockItem(
     id: '4_r_001',
     sectionId: '4_r1',
-    passageText:
-        'Ken is ( ) in science. He reads many books about it.',
+    passageText: 'Ken is ( ) in science. He reads many books about it.',
     questionText: 'Choose the best word for the blank.',
     choices: ['interested', 'surprised', 'tired', 'worried'],
     correctIdx: 0,
@@ -296,8 +294,7 @@ const _grade4Reading = [
   ReadingMockItem(
     id: '4_r_002',
     sectionId: '4_r2',
-    passageText:
-        'Mom: "Did you clean your room?" Lisa: "( ) I forgot."',
+    passageText: 'Mom: "Did you clean your room?" Lisa: "( ) I forgot."',
     questionText: 'Choose the best response for the blank.',
     choices: ['Sorry,', 'Great,', 'Sure,', 'Hello,'],
     correctIdx: 0,
@@ -305,8 +302,7 @@ const _grade4Reading = [
   ReadingMockItem(
     id: '4_r_003',
     sectionId: '4_r4',
-    passageText:
-        'Notice: The library will be closed on Saturday for cleaning. '
+    passageText: 'Notice: The library will be closed on Saturday for cleaning. '
         'It will open again on Sunday at 10:00.',
     questionText: 'When will the library be closed?',
     choices: ['Saturday', 'Sunday', 'Monday', 'Friday'],
@@ -315,8 +311,7 @@ const _grade4Reading = [
   ReadingMockItem(
     id: '4_r_004',
     sectionId: '4_r1',
-    passageText:
-        'The train was late, so we ( ) to run to catch it.',
+    passageText: 'The train was late, so we ( ) to run to catch it.',
     questionText: 'Choose the best word for the blank.',
     choices: ['had', 'have', 'has', 'having'],
     correctIdx: 0,
@@ -332,11 +327,15 @@ const _grade4Reading = [
   ReadingMockItem(
     id: '4_r_006',
     sectionId: '4_r4',
-    passageText:
-        'From: Tom  To: Lucy\n'
+    passageText: 'From: Tom  To: Lucy\n'
         '"I am having a birthday party on June 10th. Can you come?"',
     questionText: 'What is the party for?',
-    choices: ["Tom's birthday", "Lucy's birthday", 'A holiday', 'A school event'],
+    choices: [
+      "Tom's birthday",
+      "Lucy's birthday",
+      'A holiday',
+      'A school event'
+    ],
     correctIdx: 0,
   ),
   // ── 大問1 語句空所補充 (grammar + vocabulary, CEFR A2) ────────────────────
@@ -470,8 +469,7 @@ const _grade4Reading = [
   ReadingMockItem(
     id: '4_r_022',
     sectionId: '4_r4',
-    passageText:
-        'From: Green Park School  To: All students\n'
+    passageText: 'From: Green Park School  To: All students\n'
         'Our school sports day is on October 5th. It will start at 9:00 in the '
         'morning. Please bring your hat and water bottle. Do not bring food, '
         'because lunch will be given to everyone at noon.',
@@ -491,8 +489,7 @@ const _grade3Reading = [
   ReadingMockItem(
     id: '3_r_001',
     sectionId: '3_r1',
-    passageText:
-        'Maria ( ) to study in Japan next year.',
+    passageText: 'Maria ( ) to study in Japan next year.',
     questionText: 'Choose the best word for the blank.',
     choices: ['plans', 'plan', 'planning', 'planned'],
     correctIdx: 0,
@@ -500,8 +497,7 @@ const _grade3Reading = [
   ReadingMockItem(
     id: '3_r_002',
     sectionId: '3_r1',
-    passageText:
-        'He ( ) his wallet at the station yesterday.',
+    passageText: 'He ( ) his wallet at the station yesterday.',
     questionText: 'Choose the best word for the blank.',
     choices: ['lost', 'lose', 'losing', 'loses'],
     correctIdx: 0,
@@ -509,11 +505,15 @@ const _grade3Reading = [
   ReadingMockItem(
     id: '3_r_003',
     sectionId: '3_r3',
-    passageText:
-        'Notice: "Our school festival will be held on November 3rd. '
+    passageText: 'Notice: "Our school festival will be held on November 3rd. '
         'Students must wear their uniforms. Food stalls will open at 10:00."',
     questionText: 'What must students wear at the festival?',
-    choices: ['Their uniforms', 'Casual clothes', 'Sports clothes', 'A costume'],
+    choices: [
+      'Their uniforms',
+      'Casual clothes',
+      'Sports clothes',
+      'A costume'
+    ],
     correctIdx: 0,
   ),
   ReadingMockItem(
@@ -523,14 +523,18 @@ const _grade3Reading = [
         'Dear Amy,\nThank you for the birthday present. I really liked '
         'the book you gave me. I have already read it twice!',
     questionText: 'What does the writer think about the book?',
-    choices: ['It is very good.', 'It is too short.', 'It is boring.', 'It is too hard.'],
+    choices: [
+      'It is very good.',
+      'It is too short.',
+      'It is boring.',
+      'It is too hard.'
+    ],
     correctIdx: 0,
   ),
   ReadingMockItem(
     id: '3_r_005',
     sectionId: '3_r1',
-    passageText:
-        'She has ( ) visited the new museum downtown.',
+    passageText: 'She has ( ) visited the new museum downtown.',
     questionText: 'Choose the best word for the blank.',
     choices: ['already', 'yet', 'still', 'never'],
     correctIdx: 0,
@@ -661,7 +665,8 @@ const _grade3Reading = [
   ReadingMockItem(
     id: '3_r_021',
     sectionId: '3_r2',
-    passageText: 'A: I failed my math test again.  B: ( ) You should study harder.',
+    passageText:
+        'A: I failed my math test again.  B: ( ) You should study harder.',
     questionText: 'Choose the best response.',
     choices: [
       'Congratulations!',
@@ -714,11 +719,11 @@ const _pre2Reading = [
   ReadingMockItem(
     id: 'p2_r_003',
     sectionId: 'p2_r3',
-    passageText:
-        'Online learning has become popular in recent years. '
+    passageText: 'Online learning has become popular in recent years. '
         'Many universities now offer courses that students can take from home. '
         'This trend started growing quickly after 2020.',
-    questionText: 'According to the passage, when did online learning grow quickly?',
+    questionText:
+        'According to the passage, when did online learning grow quickly?',
     choices: [
       'After 2020',
       'In the 1990s',
@@ -730,8 +735,7 @@ const _pre2Reading = [
   ReadingMockItem(
     id: 'p2_r_004',
     sectionId: 'p2_r2',
-    passageText:
-        'A: "I need to ( ) this project by Friday." '
+    passageText: 'A: "I need to ( ) this project by Friday." '
         'B: "Don\'t worry. I\'ll help you."',
     questionText: 'Choose the best phrase for the blank.',
     choices: ['beginning', 'gone', 'start again', 'finish'],
@@ -740,8 +744,7 @@ const _pre2Reading = [
   ReadingMockItem(
     id: 'p2_r_005',
     sectionId: 'p2_r3',
-    passageText:
-        'Recycling reduces the amount of waste sent to landfills. '
+    passageText: 'Recycling reduces the amount of waste sent to landfills. '
         'It also saves energy because manufacturing from recycled materials '
         'uses less power than making new products.',
     questionText: 'What is one benefit of recycling mentioned in the passage?',
@@ -857,8 +860,7 @@ const _pre2Reading = [
   ReadingMockItem(
     id: 'p2_r_018',
     sectionId: 'p2_r2',
-    passageText:
-        'A: Could you tell me how to get to the museum?  B: ( )',
+    passageText: 'A: Could you tell me how to get to the museum?  B: ( )',
     questionText: 'Choose the best response.',
     choices: [
       'Yes, I am a student.',
@@ -876,7 +878,8 @@ const _pre2Reading = [
         'Volunteering has many benefits. It helps people in need, and it also '
         'gives volunteers a chance to learn new skills and meet new people '
         'from different backgrounds.',
-    questionText: 'According to the passage, what is one benefit for volunteers?',
+    questionText:
+        'According to the passage, what is one benefit for volunteers?',
     choices: [
       'They earn high salaries.',
       'They get free food.',
@@ -911,8 +914,7 @@ const _grade2Reading = [
   ReadingMockItem(
     id: '2_r_003',
     sectionId: '2_r3',
-    passageText:
-        'The discovery of penicillin by Alexander Fleming in 1928 '
+    passageText: 'The discovery of penicillin by Alexander Fleming in 1928 '
         'transformed modern medicine. Before antibiotics, even minor '
         'infections could be life-threatening.',
     questionText: 'What was the significance of penicillin?',
@@ -938,8 +940,7 @@ const _grade2Reading = [
   ReadingMockItem(
     id: '2_r_005',
     sectionId: '2_r3',
-    passageText:
-        'Social media has changed how young people communicate. '
+    passageText: 'Social media has changed how young people communicate. '
         'Studies show that teens spend an average of three hours per day '
         'on social platforms, which raises concerns about mental health.',
     questionText: 'What concern does the passage raise about social media?',
@@ -955,7 +956,8 @@ const _grade2Reading = [
   ReadingMockItem(
     id: '2_r_006',
     sectionId: '2_r1',
-    passageText: 'We had to ( ) the meeting until next week because of the storm.',
+    passageText:
+        'We had to ( ) the meeting until next week because of the storm.',
     questionText: 'Choose the best phrase for the blank.',
     choices: ['put on', 'put off', 'put up', 'put out'],
     correctIdx: 1,
@@ -968,7 +970,8 @@ const _grade2Reading = [
     // deliberately excluded — both would create a true double-answer.)
     id: '2_r_007',
     sectionId: '2_r1',
-    passageText: 'The new tax policy had a significant ( ) on small businesses.',
+    passageText:
+        'The new tax policy had a significant ( ) on small businesses.',
     questionText: 'Choose the best word for the blank.',
     choices: ['result', 'response', 'outcome', 'impact'],
     correctIdx: 3,
@@ -1008,7 +1011,8 @@ const _grade2Reading = [
   ReadingMockItem(
     id: '2_r_012',
     sectionId: '2_r1',
-    passageText: 'Despite the difficulties, the team decided to ( ) with the plan.',
+    passageText:
+        'Despite the difficulties, the team decided to ( ) with the plan.',
     questionText: 'Choose the best phrase for the blank.',
     choices: ['go off', 'go out', 'go down', 'go ahead'],
     correctIdx: 3,
@@ -1101,8 +1105,7 @@ const _pre1Reading = [
   ReadingMockItem(
     id: 'p1_r_002',
     sectionId: 'p1_r1',
-    passageText:
-        'Her research was ( ) by a major international foundation.',
+    passageText: 'Her research was ( ) by a major international foundation.',
     questionText: 'Choose the best word for the blank.',
     choices: ['funded', 'found', 'formed', 'framed'],
     correctIdx: 0,
@@ -1110,8 +1113,7 @@ const _pre1Reading = [
   ReadingMockItem(
     id: 'p1_r_003',
     sectionId: 'p1_r3',
-    passageText:
-        'Climate change is altering precipitation patterns worldwide. '
+    passageText: 'Climate change is altering precipitation patterns worldwide. '
         'Regions that were once reliably wet are experiencing prolonged '
         'droughts, while traditionally arid areas face unprecedented floods. '
         'Scientists attribute these shifts primarily to rising global temperatures.',
@@ -1127,8 +1129,7 @@ const _pre1Reading = [
   ReadingMockItem(
     id: 'p1_r_004',
     sectionId: 'p1_r2',
-    passageText:
-        'The concept of circular economy aims to ( ) waste by keeping '
+    passageText: 'The concept of circular economy aims to ( ) waste by keeping '
         'materials in use for as long as possible through recycling and repair.',
     questionText: 'Choose the best phrase for the blank.',
     choices: ['create', 'ignore', 'transfer', 'eliminate'],
@@ -1141,7 +1142,8 @@ const _pre1Reading = [
         'Artificial intelligence is increasingly being used in medical diagnosis. '
         'Machine learning algorithms can analyze medical images with an accuracy '
         'that rivals or surpasses experienced physicians in some fields.',
-    questionText: 'How does AI compare to physicians in some diagnostic fields?',
+    questionText:
+        'How does AI compare to physicians in some diagnostic fields?',
     choices: [
       'It can be equally or more accurate.',
       'It is always less reliable.',
@@ -1223,7 +1225,8 @@ const _pre1Reading = [
   ReadingMockItem(
     id: 'p1_r_013',
     sectionId: 'p1_r1',
-    passageText: 'For best results, the medicine should be taken at regular ( ).',
+    passageText:
+        'For best results, the medicine should be taken at regular ( ).',
     questionText: 'Choose the best word for the blank.',
     choices: ['distances', 'amounts', 'intervals', 'degrees'],
     correctIdx: 2,
@@ -1289,7 +1292,8 @@ const _pre1Reading = [
         'communities can reduce the distance food must travel, lower '
         'transportation costs, and provide fresh produce to neighborhoods that '
         'lack access to grocery stores.',
-    questionText: 'According to the passage, what is one benefit of urban farming?',
+    questionText:
+        'According to the passage, what is one benefit of urban farming?',
     choices: [
       'It eliminates the need for farms.',
       'It shortens the distance food travels.',
@@ -1415,7 +1419,8 @@ const _pre2plusReading = [
   ReadingMockItem(
     id: 'p2p_r_014',
     sectionId: 'p2p_r1',
-    passageText: 'The novel, ( ) by millions of people worldwide, became a film.',
+    passageText:
+        'The novel, ( ) by millions of people worldwide, became a film.',
     questionText: 'Choose the best word for the blank.',
     choices: ['reading', 'reads', 'read', 'to read'],
     correctIdx: 2,

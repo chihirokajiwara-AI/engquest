@@ -41,7 +41,8 @@ const Set<String> _genericConfusables = {
   'later', 'again', 'always', 'never', 'often', 'sometimes', 'really', 'very',
   'too', 'also', 'just', 'only', 'even', 'still', 'well', 'together',
   // ultra-generic adjectives / determiners
-  'standard', 'normal', 'general', 'basic', 'common', 'main', 'usual', 'regular',
+  'standard', 'normal', 'general', 'basic', 'common', 'main', 'usual',
+  'regular',
   'good', 'bad', 'nice', 'fine', 'great', 'big', 'small', 'new', 'old', 'same',
   'other', 'many', 'much', 'more', 'most', 'some', 'any', 'such', 'own',
 };

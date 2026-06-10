@@ -97,12 +97,18 @@ void main() {
 
     test('3級 has Reading, Writing, and Listening', () {
       final s = CseEstimator.skillsForGrade('3')!;
-      expect(s, containsAll([EikenSkill.reading, EikenSkill.writing, EikenSkill.listening]));
+      expect(
+          s,
+          containsAll(
+              [EikenSkill.reading, EikenSkill.writing, EikenSkill.listening]));
     });
 
     test('2級 has Reading, Writing, and Listening', () {
       final s = CseEstimator.skillsForGrade('2')!;
-      expect(s, containsAll([EikenSkill.reading, EikenSkill.writing, EikenSkill.listening]));
+      expect(
+          s,
+          containsAll(
+              [EikenSkill.reading, EikenSkill.writing, EikenSkill.listening]));
     });
 
     test('unknown grade returns null', () {
@@ -117,8 +123,10 @@ void main() {
       final est = CseEstimator.estimate(
         grade: '5',
         accuracies: [
-          const SkillAccuracy(skill: EikenSkill.reading, accuracy: 1.0, itemsAttempted: 25),
-          const SkillAccuracy(skill: EikenSkill.listening, accuracy: 1.0, itemsAttempted: 25),
+          const SkillAccuracy(
+              skill: EikenSkill.reading, accuracy: 1.0, itemsAttempted: 25),
+          const SkillAccuracy(
+              skill: EikenSkill.listening, accuracy: 1.0, itemsAttempted: 25),
         ],
       )!;
       expect(est.totalScore, equals(850));
@@ -126,7 +134,8 @@ void main() {
       expect(est.isPredictedPass, isTrue);
     });
 
-    test('HONEST (#113): 49% raw (the old "CSE-passing") is BELOW the 60% 目安', () {
+    test('HONEST (#113): 49% raw (the old "CSE-passing") is BELOW the 60% 目安',
+        () {
       // The OLD model treated the CSE passing FRACTION (419/850 = 49.3%) as the
       // raw target → showed 100% "passing" at 49% raw. That was the bug: 英検 CSE
       // is IRT non-linear, and the empirical passing raw 目安 is ~60%. So 49% raw
@@ -153,8 +162,10 @@ void main() {
       final est = CseEstimator.estimate(
         grade: '5',
         accuracies: [
-          const SkillAccuracy(skill: EikenSkill.reading, accuracy: 0.0, itemsAttempted: 25),
-          const SkillAccuracy(skill: EikenSkill.listening, accuracy: 0.0, itemsAttempted: 25),
+          const SkillAccuracy(
+              skill: EikenSkill.reading, accuracy: 0.0, itemsAttempted: 25),
+          const SkillAccuracy(
+              skill: EikenSkill.listening, accuracy: 0.0, itemsAttempted: 25),
         ],
       )!;
       expect(est.totalScore, equals(0));
@@ -166,8 +177,10 @@ void main() {
       final est = CseEstimator.estimate(
         grade: '5',
         accuracies: [
-          const SkillAccuracy(skill: EikenSkill.reading, accuracy: 0.9, itemsAttempted: 0),
-          const SkillAccuracy(skill: EikenSkill.listening, accuracy: 0.9, itemsAttempted: 0),
+          const SkillAccuracy(
+              skill: EikenSkill.reading, accuracy: 0.9, itemsAttempted: 0),
+          const SkillAccuracy(
+              skill: EikenSkill.listening, accuracy: 0.9, itemsAttempted: 0),
         ],
       )!;
       expect(est.totalScore, equals(0));
@@ -187,9 +200,12 @@ void main() {
       final est = CseEstimator.estimate(
         grade: '3',
         accuracies: [
-          const SkillAccuracy(skill: EikenSkill.reading, accuracy: 0.8, itemsAttempted: 30),
-          const SkillAccuracy(skill: EikenSkill.writing, accuracy: 0.8, itemsAttempted: 1),
-          const SkillAccuracy(skill: EikenSkill.listening, accuracy: 0.8, itemsAttempted: 30),
+          const SkillAccuracy(
+              skill: EikenSkill.reading, accuracy: 0.8, itemsAttempted: 30),
+          const SkillAccuracy(
+              skill: EikenSkill.writing, accuracy: 0.8, itemsAttempted: 1),
+          const SkillAccuracy(
+              skill: EikenSkill.listening, accuracy: 0.8, itemsAttempted: 30),
         ],
       )!;
       // 0.8 × 550 = 440 per skill, total = 1320 > 1103
@@ -202,9 +218,12 @@ void main() {
       final est = CseEstimator.estimate(
         grade: '3',
         accuracies: [
-          const SkillAccuracy(skill: EikenSkill.reading, accuracy: 1.0, itemsAttempted: 30),
-          const SkillAccuracy(skill: EikenSkill.writing, accuracy: 0.0, itemsAttempted: 1),
-          const SkillAccuracy(skill: EikenSkill.listening, accuracy: 1.0, itemsAttempted: 30),
+          const SkillAccuracy(
+              skill: EikenSkill.reading, accuracy: 1.0, itemsAttempted: 30),
+          const SkillAccuracy(
+              skill: EikenSkill.writing, accuracy: 0.0, itemsAttempted: 1),
+          const SkillAccuracy(
+              skill: EikenSkill.listening, accuracy: 1.0, itemsAttempted: 30),
         ],
       )!;
       // R=550 + W=0 + L=550 = 1100 < 1103
@@ -217,9 +236,14 @@ void main() {
       final est = CseEstimator.estimate(
         grade: '3',
         accuracies: [
-          const SkillAccuracy(skill: EikenSkill.reading, accuracy: 0.9, itemsAttempted: 30),
-          const SkillAccuracy(skill: EikenSkill.writing, accuracy: 0.4, itemsAttempted: 1),  // worst
-          const SkillAccuracy(skill: EikenSkill.listening, accuracy: 0.8, itemsAttempted: 30),
+          const SkillAccuracy(
+              skill: EikenSkill.reading, accuracy: 0.9, itemsAttempted: 30),
+          const SkillAccuracy(
+              skill: EikenSkill.writing,
+              accuracy: 0.4,
+              itemsAttempted: 1), // worst
+          const SkillAccuracy(
+              skill: EikenSkill.listening, accuracy: 0.8, itemsAttempted: 30),
         ],
       )!;
       expect(est.limitingSkill, equals(EikenSkill.writing));
@@ -238,9 +262,12 @@ void main() {
       final est = CseEstimator.estimate(
         grade: '2',
         accuracies: [
-          const SkillAccuracy(skill: EikenSkill.reading, accuracy: 0.80, itemsAttempted: 31),
-          const SkillAccuracy(skill: EikenSkill.writing, accuracy: 0.60, itemsAttempted: 2),
-          const SkillAccuracy(skill: EikenSkill.listening, accuracy: 0.70, itemsAttempted: 30),
+          const SkillAccuracy(
+              skill: EikenSkill.reading, accuracy: 0.80, itemsAttempted: 31),
+          const SkillAccuracy(
+              skill: EikenSkill.writing, accuracy: 0.60, itemsAttempted: 2),
+          const SkillAccuracy(
+              skill: EikenSkill.listening, accuracy: 0.70, itemsAttempted: 30),
         ],
       )!;
       expect(est.totalScore, equals(1365)); // CSE bars unchanged
@@ -249,15 +276,19 @@ void main() {
       expect(est.limitingSkill, equals(EikenSkill.writing));
     });
 
-    test('HONEST (#113): a below-目安 skill caps readiness (no over-banking)', () {
+    test('HONEST (#113): a below-目安 skill caps readiness (no over-banking)',
+        () {
       // R=100% L=100% but W=0% (measured): strong skills must NOT over-bank the
       // failing one. Capped contribution = 0.6+0.6+0 = 1.2 / 1.8 = 66.7%.
       final est = CseEstimator.estimate(
         grade: '2',
         accuracies: [
-          const SkillAccuracy(skill: EikenSkill.reading, accuracy: 1.0, itemsAttempted: 31),
-          const SkillAccuracy(skill: EikenSkill.writing, accuracy: 0.0, itemsAttempted: 2),
-          const SkillAccuracy(skill: EikenSkill.listening, accuracy: 1.0, itemsAttempted: 30),
+          const SkillAccuracy(
+              skill: EikenSkill.reading, accuracy: 1.0, itemsAttempted: 31),
+          const SkillAccuracy(
+              skill: EikenSkill.writing, accuracy: 0.0, itemsAttempted: 2),
+          const SkillAccuracy(
+              skill: EikenSkill.listening, accuracy: 1.0, itemsAttempted: 30),
         ],
       )!;
       expect(est.readinessPct, closeTo(66.7, 0.5));
@@ -269,9 +300,12 @@ void main() {
       final est = CseEstimator.estimate(
         grade: '2',
         accuracies: [
-          const SkillAccuracy(skill: EikenSkill.reading, accuracy: 0.60, itemsAttempted: 31),
-          const SkillAccuracy(skill: EikenSkill.writing, accuracy: 0.30, itemsAttempted: 2),
-          const SkillAccuracy(skill: EikenSkill.listening, accuracy: 0.55, itemsAttempted: 30),
+          const SkillAccuracy(
+              skill: EikenSkill.reading, accuracy: 0.60, itemsAttempted: 31),
+          const SkillAccuracy(
+              skill: EikenSkill.writing, accuracy: 0.30, itemsAttempted: 2),
+          const SkillAccuracy(
+              skill: EikenSkill.listening, accuracy: 0.55, itemsAttempted: 30),
         ],
       )!;
       expect(est.isPredictedPass, isFalse);
@@ -283,9 +317,12 @@ void main() {
       final est = CseEstimator.estimate(
         grade: '2',
         accuracies: [
-          const SkillAccuracy(skill: EikenSkill.reading, accuracy: 1.0, itemsAttempted: 31),
-          const SkillAccuracy(skill: EikenSkill.writing, accuracy: 1.0, itemsAttempted: 2),
-          const SkillAccuracy(skill: EikenSkill.listening, accuracy: 1.0, itemsAttempted: 30),
+          const SkillAccuracy(
+              skill: EikenSkill.reading, accuracy: 1.0, itemsAttempted: 31),
+          const SkillAccuracy(
+              skill: EikenSkill.writing, accuracy: 1.0, itemsAttempted: 2),
+          const SkillAccuracy(
+              skill: EikenSkill.listening, accuracy: 1.0, itemsAttempted: 30),
         ],
       )!;
       expect(est.totalScore, equals(1950));
@@ -308,9 +345,12 @@ void main() {
       final est = CseEstimator.estimate(
         grade: 'pre1',
         accuracies: [
-          const SkillAccuracy(skill: EikenSkill.reading, accuracy: 1.0, itemsAttempted: 31),
-          const SkillAccuracy(skill: EikenSkill.writing, accuracy: 1.0, itemsAttempted: 2),
-          const SkillAccuracy(skill: EikenSkill.listening, accuracy: 1.0, itemsAttempted: 29),
+          const SkillAccuracy(
+              skill: EikenSkill.reading, accuracy: 1.0, itemsAttempted: 31),
+          const SkillAccuracy(
+              skill: EikenSkill.writing, accuracy: 1.0, itemsAttempted: 2),
+          const SkillAccuracy(
+              skill: EikenSkill.listening, accuracy: 1.0, itemsAttempted: 29),
         ],
       )!;
       expect(est.passingScore, equals(1792));
@@ -324,9 +364,12 @@ void main() {
       final est = CseEstimator.estimate(
         grade: 'pre1',
         accuracies: [
-          const SkillAccuracy(skill: EikenSkill.reading, accuracy: 0.80, itemsAttempted: 31),
-          const SkillAccuracy(skill: EikenSkill.writing, accuracy: 0.80, itemsAttempted: 2),
-          const SkillAccuracy(skill: EikenSkill.listening, accuracy: 0.0, itemsAttempted: 1),
+          const SkillAccuracy(
+              skill: EikenSkill.reading, accuracy: 0.80, itemsAttempted: 31),
+          const SkillAccuracy(
+              skill: EikenSkill.writing, accuracy: 0.80, itemsAttempted: 2),
+          const SkillAccuracy(
+              skill: EikenSkill.listening, accuracy: 0.0, itemsAttempted: 1),
         ],
       )!;
       // R=600, W=600, L=0 → total=1200 < 1792
@@ -343,9 +386,12 @@ void main() {
       final est = CseEstimator.estimate(
         grade: 'pre2plus',
         accuracies: [
-          const SkillAccuracy(skill: EikenSkill.reading, accuracy: 1.0, itemsAttempted: 31),
-          const SkillAccuracy(skill: EikenSkill.writing, accuracy: 1.0, itemsAttempted: 2),
-          const SkillAccuracy(skill: EikenSkill.listening, accuracy: 1.0, itemsAttempted: 30),
+          const SkillAccuracy(
+              skill: EikenSkill.reading, accuracy: 1.0, itemsAttempted: 31),
+          const SkillAccuracy(
+              skill: EikenSkill.writing, accuracy: 1.0, itemsAttempted: 2),
+          const SkillAccuracy(
+              skill: EikenSkill.listening, accuracy: 1.0, itemsAttempted: 30),
         ],
       )!;
       expect(est.passingScore, equals(1402));
@@ -357,11 +403,13 @@ void main() {
     test('no data → all skills 未測定, readiness 0', () {
       final est = CseEstimator.estimate(grade: 'pre2plus', accuracies: [])!;
       expect(est.readinessPct, equals(0.0));
-      expect(est.unmeasuredSkills, containsAll(<EikenSkill>[
-        EikenSkill.reading,
-        EikenSkill.writing,
-        EikenSkill.listening,
-      ]));
+      expect(
+          est.unmeasuredSkills,
+          containsAll(<EikenSkill>[
+            EikenSkill.reading,
+            EikenSkill.writing,
+            EikenSkill.listening,
+          ]));
     });
   });
 
@@ -373,9 +421,12 @@ void main() {
       final est = CseEstimator.estimate(
         grade: '3',
         accuracies: [
-          const SkillAccuracy(skill: EikenSkill.reading, accuracy: 1.0, itemsAttempted: 30),
-          const SkillAccuracy(skill: EikenSkill.writing, accuracy: 1.0, itemsAttempted: 1),
-          const SkillAccuracy(skill: EikenSkill.listening, accuracy: 1.0, itemsAttempted: 30),
+          const SkillAccuracy(
+              skill: EikenSkill.reading, accuracy: 1.0, itemsAttempted: 30),
+          const SkillAccuracy(
+              skill: EikenSkill.writing, accuracy: 1.0, itemsAttempted: 1),
+          const SkillAccuracy(
+              skill: EikenSkill.listening, accuracy: 1.0, itemsAttempted: 30),
         ],
       )!;
       expect(est.readinessPct, lessThanOrEqualTo(100.0));
@@ -393,7 +444,8 @@ void main() {
     test('skillLabelJa returns Japanese labels', () {
       expect(CseEstimator.skillLabelJa(EikenSkill.reading), contains('リーディング'));
       expect(CseEstimator.skillLabelJa(EikenSkill.writing), contains('ライティング'));
-      expect(CseEstimator.skillLabelJa(EikenSkill.listening), contains('リスニング'));
+      expect(
+          CseEstimator.skillLabelJa(EikenSkill.listening), contains('リスニング'));
     });
 
     test('skillLabelEn returns English labels', () {
@@ -407,12 +459,14 @@ void main() {
 
   group('SkillAccuracy.attempted', () {
     test('itemsAttempted=0 → attempted=false', () {
-      const a = SkillAccuracy(skill: EikenSkill.reading, accuracy: 0.9, itemsAttempted: 0);
+      const a = SkillAccuracy(
+          skill: EikenSkill.reading, accuracy: 0.9, itemsAttempted: 0);
       expect(a.attempted, isFalse);
     });
 
     test('itemsAttempted>0 → attempted=true', () {
-      const a = SkillAccuracy(skill: EikenSkill.reading, accuracy: 0.9, itemsAttempted: 1);
+      const a = SkillAccuracy(
+          skill: EikenSkill.reading, accuracy: 0.9, itemsAttempted: 1);
       expect(a.attempted, isTrue);
     });
   });
@@ -423,10 +477,13 @@ void main() {
       final est = CseEstimator.estimate(
         grade: '3',
         accuracies: const [
-          SkillAccuracy(skill: EikenSkill.reading, accuracy: 0.8, itemsAttempted: 30),
-          SkillAccuracy(skill: EikenSkill.listening, accuracy: 0.8, itemsAttempted: 30),
+          SkillAccuracy(
+              skill: EikenSkill.reading, accuracy: 0.8, itemsAttempted: 30),
+          SkillAccuracy(
+              skill: EikenSkill.listening, accuracy: 0.8, itemsAttempted: 30),
           // writing never practiced → itemsAttempted 0 → 未測定 (not a failed 0)
-          SkillAccuracy(skill: EikenSkill.writing, accuracy: 0.0, itemsAttempted: 0),
+          SkillAccuracy(
+              skill: EikenSkill.writing, accuracy: 0.0, itemsAttempted: 0),
         ],
       )!;
       // Honest model (#113): R,L capped at the 0.60 目安 = 0.6+0.6; W 未測定 = 0;
@@ -444,22 +501,29 @@ void main() {
       final unmeasured = CseEstimator.estimate(
         grade: '3',
         accuracies: const [
-          SkillAccuracy(skill: EikenSkill.reading, accuracy: 1.0, itemsAttempted: 30),
-          SkillAccuracy(skill: EikenSkill.listening, accuracy: 1.0, itemsAttempted: 30),
-          SkillAccuracy(skill: EikenSkill.writing, accuracy: 0.0, itemsAttempted: 0),
+          SkillAccuracy(
+              skill: EikenSkill.reading, accuracy: 1.0, itemsAttempted: 30),
+          SkillAccuracy(
+              skill: EikenSkill.listening, accuracy: 1.0, itemsAttempted: 30),
+          SkillAccuracy(
+              skill: EikenSkill.writing, accuracy: 0.0, itemsAttempted: 0),
         ],
       )!;
       final measuredZero = CseEstimator.estimate(
         grade: '3',
         accuracies: const [
-          SkillAccuracy(skill: EikenSkill.reading, accuracy: 1.0, itemsAttempted: 30),
-          SkillAccuracy(skill: EikenSkill.listening, accuracy: 1.0, itemsAttempted: 30),
-          SkillAccuracy(skill: EikenSkill.writing, accuracy: 0.0, itemsAttempted: 2),
+          SkillAccuracy(
+              skill: EikenSkill.reading, accuracy: 1.0, itemsAttempted: 30),
+          SkillAccuracy(
+              skill: EikenSkill.listening, accuracy: 1.0, itemsAttempted: 30),
+          SkillAccuracy(
+              skill: EikenSkill.writing, accuracy: 0.0, itemsAttempted: 2),
         ],
       )!;
       expect(unmeasured.readinessPct, equals(measuredZero.readinessPct));
       expect(unmeasured.unmeasuredSkills, contains(EikenSkill.writing));
-      expect(measuredZero.unmeasuredSkills, isNot(contains(EikenSkill.writing)));
+      expect(
+          measuredZero.unmeasuredSkills, isNot(contains(EikenSkill.writing)));
       // Neither predicts a pass (R+L=1100 < 1103); writing is the bottleneck.
       expect(unmeasured.isPredictedPass, isFalse);
       expect(measuredZero.isPredictedPass, isFalse);
@@ -469,9 +533,12 @@ void main() {
       final est = CseEstimator.estimate(
         grade: '3',
         accuracies: const [
-          SkillAccuracy(skill: EikenSkill.reading, accuracy: 0.9, itemsAttempted: 30),
-          SkillAccuracy(skill: EikenSkill.writing, accuracy: 0.9, itemsAttempted: 2),
-          SkillAccuracy(skill: EikenSkill.listening, accuracy: 0.9, itemsAttempted: 30),
+          SkillAccuracy(
+              skill: EikenSkill.reading, accuracy: 0.9, itemsAttempted: 30),
+          SkillAccuracy(
+              skill: EikenSkill.writing, accuracy: 0.9, itemsAttempted: 2),
+          SkillAccuracy(
+              skill: EikenSkill.listening, accuracy: 0.9, itemsAttempted: 30),
         ],
       )!;
       expect(est.unmeasuredSkills, isEmpty);

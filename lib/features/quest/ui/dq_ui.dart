@@ -16,14 +16,20 @@ const dqGold = Color(0xFFF0D080);
 const dqGoldDeep = Color(0xFFB8923C);
 const dqInk = Color(0xFFEDE3C8);
 
-TextStyle dqText({double size = 16, FontWeight w = FontWeight.w600, Color color = Colors.white, double spacing = 0.5}) =>
+TextStyle dqText(
+        {double size = 16,
+        FontWeight w = FontWeight.w600,
+        Color color = Colors.white,
+        double spacing = 0.5}) =>
     notoSerifJp(
       color: color,
       fontSize: size,
       fontWeight: w,
       letterSpacing: spacing,
       height: 1.5,
-      shadows: const [Shadow(color: Colors.black, blurRadius: 4, offset: Offset(0, 2))],
+      shadows: const [
+        Shadow(color: Colors.black, blurRadius: 4, offset: Offset(0, 2))
+      ],
     );
 
 /// Full-screen atmospheric scene: a background image (or a deep-night gradient
@@ -41,7 +47,8 @@ class DqScene extends StatelessWidget {
         fit: StackFit.expand,
         children: [
           if (backgroundAsset != null)
-            Image.asset(backgroundAsset!, fit: BoxFit.cover, errorBuilder: (_, __, ___) => _gradient())
+            Image.asset(backgroundAsset!,
+                fit: BoxFit.cover, errorBuilder: (_, __, ___) => _gradient())
           else
             _gradient(),
           DecoratedBox(
@@ -49,7 +56,11 @@ class DqScene extends StatelessWidget {
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [Colors.black.withAlpha(120), Colors.black.withAlpha(60), Colors.black.withAlpha(170)],
+                colors: [
+                  Colors.black.withAlpha(120),
+                  Colors.black.withAlpha(60),
+                  Colors.black.withAlpha(170)
+                ],
                 stops: const [0.0, 0.45, 1.0],
               ),
             ),
@@ -90,7 +101,10 @@ class DqDialogBox extends StatelessWidget {
             color: dqBox.withAlpha(238),
             borderRadius: BorderRadius.circular(10),
             border: Border.all(color: dqBorder, width: 2),
-            boxShadow: const [BoxShadow(color: Colors.black54, blurRadius: 12, offset: Offset(0, 4))],
+            boxShadow: const [
+              BoxShadow(
+                  color: Colors.black54, blurRadius: 12, offset: Offset(0, 4))
+            ],
           ),
           child: child,
         ),
@@ -107,7 +121,9 @@ class DqDialogBox extends StatelessWidget {
               ),
               child: Text(speaker!,
                   style: notoSerifJp(
-                      color: const Color(0xFF2A1C00), fontSize: 13, fontWeight: FontWeight.w800)),
+                      color: const Color(0xFF2A1C00),
+                      fontSize: 13,
+                      fontWeight: FontWeight.w800)),
             ),
           ),
       ],
@@ -171,7 +187,9 @@ class DqChoice extends StatelessWidget {
               children: [
                 SizedBox(
                   width: 22,
-                  child: showCursor ? const Icon(Icons.play_arrow, color: dqGold, size: 18) : null,
+                  child: showCursor
+                      ? const Icon(Icons.play_arrow, color: dqGold, size: 18)
+                      : null,
                 ),
                 Expanded(child: Text(label, style: dqText(size: 16))),
                 if (state == DqChoiceState.correct)
@@ -202,23 +220,29 @@ class DqButton extends StatelessWidget {
       onTap: onTap,
       excludeSemantics: true,
       child: GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: double.infinity,
-        alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(vertical: 15),
-        decoration: BoxDecoration(
-          gradient: onTap == null
-              ? const LinearGradient(colors: [Color(0xFF5A5448), Color(0xFF3E3A32)])
-              : const LinearGradient(colors: [dqGold, dqGoldDeep]),
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: dqBorder, width: 1.5),
-          boxShadow: onTap == null ? null : [BoxShadow(color: dqGoldDeep.withAlpha(120), blurRadius: 14)],
+        onTap: onTap,
+        child: Container(
+          width: double.infinity,
+          alignment: Alignment.center,
+          padding: const EdgeInsets.symmetric(vertical: 15),
+          decoration: BoxDecoration(
+            gradient: onTap == null
+                ? const LinearGradient(
+                    colors: [Color(0xFF5A5448), Color(0xFF3E3A32)])
+                : const LinearGradient(colors: [dqGold, dqGoldDeep]),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: dqBorder, width: 1.5),
+            boxShadow: onTap == null
+                ? null
+                : [BoxShadow(color: dqGoldDeep.withAlpha(120), blurRadius: 14)],
+          ),
+          child: Text(label,
+              style: notoSerifJp(
+                  color: const Color(0xFF2A1C00),
+                  fontSize: 17,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 2)),
         ),
-        child: Text(label,
-            style: notoSerifJp(
-                color: const Color(0xFF2A1C00), fontSize: 17, fontWeight: FontWeight.w800, letterSpacing: 2)),
-      ),
       ),
     );
   }
@@ -244,9 +268,14 @@ class DqPortrait extends StatelessWidget {
         boxShadow: [BoxShadow(color: dqGold.withAlpha(70), blurRadius: 8)],
       ),
       child: imageAsset != null
-          ? Image.asset(imageAsset!, fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => Center(child: Text(emoji ?? '👤', style: TextStyle(fontSize: size * 0.5))))
-          : Center(child: Text(emoji ?? '👤', style: TextStyle(fontSize: size * 0.5))),
+          ? Image.asset(imageAsset!,
+              fit: BoxFit.cover,
+              errorBuilder: (_, __, ___) => Center(
+                  child: Text(emoji ?? '👤',
+                      style: TextStyle(fontSize: size * 0.5))))
+          : Center(
+              child:
+                  Text(emoji ?? '👤', style: TextStyle(fontSize: size * 0.5))),
     );
   }
 }
@@ -267,22 +296,35 @@ Widget dqBilingual(
   final enSize = (jpSize * 0.7).clamp(10.0, 28.0).toDouble();
   if (stacked) {
     return Column(
-      crossAxisAlignment:
-          align == TextAlign.center ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+      crossAxisAlignment: align == TextAlign.center
+          ? CrossAxisAlignment.center
+          : CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(jp, textAlign: align, style: dqText(size: jpSize, w: FontWeight.w700, color: jpColor)),
+        Text(jp,
+            textAlign: align,
+            style: dqText(size: jpSize, w: FontWeight.w700, color: jpColor)),
         const SizedBox(height: 2),
-        Text(en, textAlign: align, style: dqText(size: enSize, w: FontWeight.w600, color: enColor, spacing: 1)),
+        Text(en,
+            textAlign: align,
+            style: dqText(
+                size: enSize, w: FontWeight.w600, color: enColor, spacing: 1)),
       ],
     );
   }
   return RichText(
     textAlign: align,
     text: TextSpan(children: [
-      TextSpan(text: jp, style: dqText(size: jpSize, w: FontWeight.w700, color: jpColor)),
-      TextSpan(text: '  /  ', style: dqText(size: enSize, w: FontWeight.w600, color: dqGoldDeep)),
-      TextSpan(text: en, style: dqText(size: enSize, w: FontWeight.w600, color: enColor, spacing: 1)),
+      TextSpan(
+          text: jp,
+          style: dqText(size: jpSize, w: FontWeight.w700, color: jpColor)),
+      TextSpan(
+          text: '  /  ',
+          style: dqText(size: enSize, w: FontWeight.w600, color: dqGoldDeep)),
+      TextSpan(
+          text: en,
+          style: dqText(
+              size: enSize, w: FontWeight.w600, color: enColor, spacing: 1)),
     ]),
   );
 }
@@ -310,7 +352,9 @@ class DqPanel extends StatelessWidget {
         color: dqBox.withAlpha(225),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: dqBorder, width: 2),
-        boxShadow: const [BoxShadow(color: Colors.black54, blurRadius: 10, offset: Offset(0, 3))],
+        boxShadow: const [
+          BoxShadow(color: Colors.black54, blurRadius: 10, offset: Offset(0, 3))
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -318,7 +362,8 @@ class DqPanel extends StatelessWidget {
         children: [
           if (title != null) ...[
             Text(title!.toUpperCase(),
-                style: dqText(size: 12, w: FontWeight.w800, color: dqGold, spacing: 2)),
+                style: dqText(
+                    size: 12, w: FontWeight.w800, color: dqGold, spacing: 2)),
             const Padding(
               padding: EdgeInsets.symmetric(vertical: 8),
               child: Divider(color: dqGoldDeep, height: 1, thickness: 1),
@@ -360,41 +405,46 @@ class DqTile extends StatelessWidget {
       onTap: onTap,
       excludeSemantics: true,
       child: Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [dqBox.withAlpha(235), dqNight1.withAlpha(235)],
-            ),
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: dqBorder, width: 2),
-            boxShadow: const [BoxShadow(color: Colors.black54, blurRadius: 8, offset: Offset(0, 3))],
-          ),
-          child: Row(
-            children: [
-              Container(
-                width: 44,
-                height: 44,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: dqNight0,
-                  border: Border.all(color: accent, width: 2),
-                  boxShadow: [BoxShadow(color: accent.withAlpha(70), blurRadius: 8)],
-                ),
-                child: Icon(icon, color: accent, size: 24),
+        padding: const EdgeInsets.only(bottom: 10),
+        child: GestureDetector(
+          onTap: onTap,
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [dqBox.withAlpha(235), dqNight1.withAlpha(235)],
               ),
-              const SizedBox(width: 14),
-              Expanded(child: dqBilingual(jp, en, jpSize: 16, stacked: true)),
-              const Icon(Icons.play_arrow, color: dqGold, size: 20),
-            ],
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: dqBorder, width: 2),
+              boxShadow: const [
+                BoxShadow(
+                    color: Colors.black54, blurRadius: 8, offset: Offset(0, 3))
+              ],
+            ),
+            child: Row(
+              children: [
+                Container(
+                  width: 44,
+                  height: 44,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: dqNight0,
+                    border: Border.all(color: accent, width: 2),
+                    boxShadow: [
+                      BoxShadow(color: accent.withAlpha(70), blurRadius: 8)
+                    ],
+                  ),
+                  child: Icon(icon, color: accent, size: 24),
+                ),
+                const SizedBox(width: 14),
+                Expanded(child: dqBilingual(jp, en, jpSize: 16, stacked: true)),
+                const Icon(Icons.play_arrow, color: dqGold, size: 20),
+              ],
+            ),
           ),
         ),
-      ),
       ),
     );
   }
@@ -421,30 +471,32 @@ class DqReplayButton extends StatelessWidget {
       onTap: onTap,
       excludeSemantics: true,
       child: GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(colors: [dqGold, dqGoldDeep]),
-          borderRadius: BorderRadius.circular(28),
-          border: Border.all(color: dqBorder, width: 2),
-          boxShadow: [BoxShadow(color: dqGoldDeep.withAlpha(120), blurRadius: 14)],
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(colors: [dqGold, dqGoldDeep]),
+            borderRadius: BorderRadius.circular(28),
+            border: Border.all(color: dqBorder, width: 2),
+            boxShadow: [
+              BoxShadow(color: dqGoldDeep.withAlpha(120), blurRadius: 14)
+            ],
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.volume_up_rounded,
+                  color: Color(0xFF2A1C00), size: 24),
+              const SizedBox(width: 10),
+              Text(label,
+                  style: notoSerifJp(
+                      color: const Color(0xFF2A1C00),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 1)),
+            ],
+          ),
         ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.volume_up_rounded,
-                color: Color(0xFF2A1C00), size: 24),
-            const SizedBox(width: 10),
-            Text(label,
-                style: notoSerifJp(
-                    color: const Color(0xFF2A1C00),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 1)),
-          ],
-        ),
-      ),
       ),
     );
   }
@@ -489,13 +541,16 @@ class PhonicsLetterCard extends StatelessWidget {
           ),
           child: Text(glyph,
               style: notoSerifJp(
-                  color: Colors.white, fontSize: 96, fontWeight: FontWeight.w800)),
+                  color: Colors.white,
+                  fontSize: 96,
+                  fontWeight: FontWeight.w800)),
         ),
         const SizedBox(height: 16),
         DqReplayButton(onTap: onReplay, label: '🔁 おとを きく・まねする'),
         if (teachJa != null) ...[
           const SizedBox(height: 16),
-          DqDialogBox(speaker: npcName, child: Text(teachJa!, style: dqText(size: 15))),
+          DqDialogBox(
+              speaker: npcName, child: Text(teachJa!, style: dqText(size: 15))),
         ],
       ],
     );
@@ -552,7 +607,8 @@ class BlendWordCard extends StatelessWidget {
         DqReplayButton(onTap: onReplay, label: '🔁 おとを つなげて きく'),
         if (teachJa != null) ...[
           const SizedBox(height: 16),
-          DqDialogBox(speaker: npcName, child: Text(teachJa!, style: dqText(size: 15))),
+          DqDialogBox(
+              speaker: npcName, child: Text(teachJa!, style: dqText(size: 15))),
         ],
       ],
     );
@@ -565,11 +621,19 @@ class BlendWordCard extends StatelessWidget {
       height: 76,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: active ? const Color(0xFF15351B).withAlpha(235) : dqBox.withAlpha(225),
+        color: active
+            ? const Color(0xFF15351B).withAlpha(235)
+            : dqBox.withAlpha(225),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: active ? const Color(0xFF8BE08B) : dqBorder, width: active ? 3 : 2),
+        border: Border.all(
+            color: active ? const Color(0xFF8BE08B) : dqBorder,
+            width: active ? 3 : 2),
         boxShadow: active
-            ? [BoxShadow(color: const Color(0xFF8BE08B).withAlpha(140), blurRadius: 16)]
+            ? [
+                BoxShadow(
+                    color: const Color(0xFF8BE08B).withAlpha(140),
+                    blurRadius: 16)
+              ]
             : null,
       ),
       child: Text(letter,
@@ -632,43 +696,44 @@ class AudioOptionButton extends StatelessWidget {
             },
       excludeSemantics: true,
       child: Padding(
-      padding: const EdgeInsets.only(bottom: 9),
-      child: GestureDetector(
-        onTap: (onAudio == null && onChoose == null)
-            ? null
-            : () {
-                onAudio?.call();
-                onChoose?.call();
-              },
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-          decoration: BoxDecoration(
-            color: fill,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: border, width: 2),
-          ),
-          child: Row(
-            children: [
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: onAudio,
-                child: const Padding(
-                  padding: EdgeInsets.only(right: 12),
-                  child: Icon(Icons.volume_up_rounded, color: dqGold, size: 22),
+        padding: const EdgeInsets.only(bottom: 9),
+        child: GestureDetector(
+          onTap: (onAudio == null && onChoose == null)
+              ? null
+              : () {
+                  onAudio?.call();
+                  onChoose?.call();
+                },
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+            decoration: BoxDecoration(
+              color: fill,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: border, width: 2),
+            ),
+            child: Row(
+              children: [
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: onAudio,
+                  child: const Padding(
+                    padding: EdgeInsets.only(right: 12),
+                    child:
+                        Icon(Icons.volume_up_rounded, color: dqGold, size: 22),
+                  ),
                 ),
-              ),
-              Expanded(
-                  child: Text(label,
-                      style: dqText(size: 20, w: FontWeight.w700))),
-              if (state == DqChoiceState.correct)
-                const Icon(Icons.check, color: Color(0xFF8BE08B), size: 22)
-              else if (state == DqChoiceState.wrong)
-                const Icon(Icons.close, color: Color(0xFFE89090), size: 22),
-            ],
+                Expanded(
+                    child: Text(label,
+                        style: dqText(size: 20, w: FontWeight.w700))),
+                if (state == DqChoiceState.correct)
+                  const Icon(Icons.check, color: Color(0xFF8BE08B), size: 22)
+                else if (state == DqChoiceState.wrong)
+                  const Icon(Icons.close, color: Color(0xFFE89090), size: 22),
+              ],
+            ),
           ),
         ),
-      ),
       ),
     );
   }

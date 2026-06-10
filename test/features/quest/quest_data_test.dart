@@ -42,7 +42,8 @@ void main() {
         for (final step in town.encounters) {
           expect(step.npcName.trim(), isNotEmpty, reason: town.id);
           expect(step.options.length, greaterThanOrEqualTo(2), reason: town.id);
-          expect(step.correctIndex, inInclusiveRange(0, step.options.length - 1),
+          expect(
+              step.correctIndex, inInclusiveRange(0, step.options.length - 1),
               reason: town.id);
           expect(step.options[step.correctIndex].label.trim(), isNotEmpty,
               reason: town.id);
@@ -63,7 +64,8 @@ void main() {
       expect(five.encounters.whereType<QuestEncounter>(), isNotEmpty);
       // First non-teach (Quiz) step appears AFTER the first teach step.
       final firstQuiz = five.encounters.indexWhere((s) => s is QuestEncounter);
-      final firstTeach = five.encounters.indexWhere((s) => s is! QuestEncounter);
+      final firstTeach =
+          five.encounters.indexWhere((s) => s is! QuestEncounter);
       expect(firstTeach, lessThan(firstQuiz));
     });
   });

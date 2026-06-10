@@ -40,8 +40,7 @@ void main() {
         grade: 'pre1', skill: EikenSkill.reading, correct: 8, total: 10);
 
     final accuracies = store.readAccuracies('pre1');
-    final reading =
-        accuracies.firstWhere((a) => a.skill == EikenSkill.reading);
+    final reading = accuracies.firstWhere((a) => a.skill == EikenSkill.reading);
 
     expect(reading.itemsAttempted, equals(20));
     // 15 correct / 20 total = 0.75
@@ -51,7 +50,8 @@ void main() {
 
   // ── 2. readAccuracies maps stored data correctly ─────────────────────────────
 
-  test('readAccuracies: returns correct SkillAccuracy for each skill', () async {
+  test('readAccuracies: returns correct SkillAccuracy for each skill',
+      () async {
     final store = await SkillAccuracyStore.getInstance();
 
     await store.record(
@@ -77,7 +77,8 @@ void main() {
 
   // ── 3. Empty / no-data paths — guarded, zero accuracy ────────────────────────
 
-  test('readAccuracies: returns zero accuracy for skills with no data', () async {
+  test('readAccuracies: returns zero accuracy for skills with no data',
+      () async {
     final store = await SkillAccuracyStore.getInstance();
 
     final accuracies = store.readAccuracies('3');
@@ -170,11 +171,13 @@ void main() {
 
     expect(accuracies.length, equals(3));
     final skills = accuracies.map((a) => a.skill).toSet();
-    expect(skills, containsAll([
-      EikenSkill.reading,
-      EikenSkill.writing,
-      EikenSkill.listening,
-    ]));
+    expect(
+        skills,
+        containsAll([
+          EikenSkill.reading,
+          EikenSkill.writing,
+          EikenSkill.listening,
+        ]));
 
     // Only writing has data
     final w = accuracies.firstWhere((a) => a.skill == EikenSkill.writing);
@@ -187,7 +190,8 @@ void main() {
 
   // ── 9. CseEstimator integration: store output feeds CseEstimator cleanly ─────
 
-  test('readAccuracies output is valid input for CseEstimator.estimate()', () async {
+  test('readAccuracies output is valid input for CseEstimator.estimate()',
+      () async {
     final store = await SkillAccuracyStore.getInstance();
 
     await store.record(

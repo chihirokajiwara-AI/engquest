@@ -39,7 +39,8 @@ void main(List<String> args) {
     }
   }
 
-  final list = byKey.entries.map((e) => {'key': e.key, 'text': e.value}).toList();
+  final list =
+      byKey.entries.map((e) => {'key': e.key, 'text': e.value}).toList();
   stdout.writeln(const JsonEncoder.withIndent('  ').convert(list));
   stderr.writeln('[dump_quiz_audio] ${list.length} clips for '
       '${towns.length} town(s)${all ? " (all)" : " (英検5級)"}');

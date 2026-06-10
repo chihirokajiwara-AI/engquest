@@ -94,8 +94,7 @@ class _CardResult {
   final list = grades.toList();
   final total = list.length;
   if (total == 0) return (correct: 0, total: 0);
-  final correct =
-      list.where((g) => g == Grade.good || g == Grade.easy).length;
+  final correct = list.where((g) => g == Grade.good || g == Grade.easy).length;
   if (total <= cap) return (correct: correct, total: total);
   final scaled = (correct * cap / total).round().clamp(0, cap);
   return (correct: scaled, total: cap);
@@ -707,7 +706,8 @@ class _BattleScreenState extends State<BattleScreen>
                   ),
                 ),
                 const SizedBox(height: 8),
-                Text('${newProfile.currentLevelXp} / ${newProfile.levelXpSpan} XP',
+                Text(
+                    '${newProfile.currentLevelXp} / ${newProfile.levelXpSpan} XP',
                     style: dqText(size: 12, color: dqGoldDeep)),
               ],
             ),
@@ -1009,7 +1009,8 @@ class _BattleScreenState extends State<BattleScreen>
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: dqBorder, width: 2),
         boxShadow: const [
-          BoxShadow(color: Colors.black54, blurRadius: 16, offset: Offset(0, 6)),
+          BoxShadow(
+              color: Colors.black54, blurRadius: 16, offset: Offset(0, 6)),
         ],
       ),
       padding: const EdgeInsets.all(28),
@@ -1101,10 +1102,12 @@ class _BattleScreenState extends State<BattleScreen>
                   decoration: BoxDecoration(
                     color: dqNight0.withAlpha(180),
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: dqGold.withAlpha(160), width: 1.5),
+                    border:
+                        Border.all(color: dqGold.withAlpha(160), width: 1.5),
                   ),
                   child: Text('✨ +$_totalXp XP 獲得！',
-                      style: dqText(size: 16, w: FontWeight.w800, color: dqGold)),
+                      style:
+                          dqText(size: 16, w: FontWeight.w800, color: dqGold)),
                 ),
                 // 合格率 progress moment — the in-context "I'm closer to 合格"
                 // signal at peak engagement (the daily-return spine, CEO 951).
@@ -1294,7 +1297,8 @@ class _GradeButtonState extends State<_GradeButton>
                   shape: BoxShape.circle,
                   border: Border.all(color: dqBorder, width: 1),
                   boxShadow: [
-                    BoxShadow(color: widget.accent.withAlpha(120), blurRadius: 6)
+                    BoxShadow(
+                        color: widget.accent.withAlpha(120), blurRadius: 6)
                   ],
                 ),
               ),
@@ -1306,7 +1310,8 @@ class _GradeButtonState extends State<_GradeButton>
               ),
               Text(
                 widget.grade.label,
-                style: dqText(size: 9, w: FontWeight.w600, color: dqGold, spacing: 0.8),
+                style: dqText(
+                    size: 9, w: FontWeight.w600, color: dqGold, spacing: 0.8),
               ),
               const SizedBox(height: 3),
               Text(

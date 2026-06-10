@@ -311,8 +311,9 @@ class _NazoScreenState extends State<NazoScreen> {
                     if (card.leadJa != null) ...[
                       Text(
                         card.leadJa!,
-                        style: dqText(size: 13, color: dqInk, w: FontWeight.w500)
-                            .copyWith(height: 1.6),
+                        style:
+                            dqText(size: 13, color: dqInk, w: FontWeight.w500)
+                                .copyWith(height: 1.6),
                       ),
                       const SizedBox(height: 12),
                     ],

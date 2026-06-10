@@ -49,7 +49,8 @@ class _SequenceStreakService extends StreakService {
 
   @override
   Future<StreakState> load({DateTime? now}) async {
-    final s = _states[loadCount < _states.length ? loadCount : _states.length - 1];
+    final s =
+        _states[loadCount < _states.length ? loadCount : _states.length - 1];
     loadCount++;
     return s;
   }
@@ -234,8 +235,7 @@ void main() {
     expect(find.byType(ExamPracticeScreen), findsOneWidget);
   });
 
-  testWidgets(
-      'KotobaHomeScreen: きょうの ナゾ panel navigates to FSRS review (#66)',
+  testWidgets('KotobaHomeScreen: きょうの ナゾ panel navigates to FSRS review (#66)',
       (tester) async {
     // #66: the due-count panel now opens the FSRS vocabulary review
     // (BattleScreen) instead of stranding the child. Before, BattleScreen was
@@ -251,7 +251,8 @@ void main() {
     await tester.ensureVisible(nazo);
     await tester.tap(nazo);
     await tester.pump(); // start the route push
-    await tester.pump(const Duration(milliseconds: 500)); // advance the transition
+    await tester
+        .pump(const Duration(milliseconds: 500)); // advance the transition
     expect(find.byType(BattleScreen), findsOneWidget);
     // Unmount so the pushed screen's post-frame async does not leak.
     await tester.pumpWidget(const SizedBox());

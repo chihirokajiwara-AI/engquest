@@ -43,13 +43,15 @@ void main() {
       handle.dispose();
     });
 
-    testWidgets('DqTile, DqReplayButton, AudioOptionButton are labelled buttons',
+    testWidgets(
+        'DqTile, DqReplayButton, AudioOptionButton are labelled buttons',
         (tester) async {
       final handle = tester.ensureSemantics();
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: Column(children: [
-            DqTile(jp: '単語バトル', en: 'Word Battle', icon: Icons.bolt, onTap: () {}),
+            DqTile(
+                jp: '単語バトル', en: 'Word Battle', icon: Icons.bolt, onTap: () {}),
             DqReplayButton(label: 'もう いちど きく', onTap: () {}),
             AudioOptionButton(label: 'cat', onChoose: () {}),
           ]),

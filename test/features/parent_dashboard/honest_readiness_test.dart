@@ -18,7 +18,8 @@ void main() {
     SkillAccuracyStore.resetInstance();
   });
 
-  test('readiness is 未測定 (0 items) with no 英検 practice — vocab mastery is '
+  test(
+      'readiness is 未測定 (0 items) with no 英検 practice — vocab mastery is '
       'NOT an input (#128)', () async {
     final est = await loadParentReadiness();
     expect(est, isNotNull, reason: '5級 has a CSE spec');

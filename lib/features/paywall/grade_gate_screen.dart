@@ -345,11 +345,10 @@ class _ComparisonCard extends StatelessWidget {
                       const SizedBox(width: 4),
                       Text(
                         'プレミアム',
-                        style:
-                            Theme.of(context).textTheme.labelLarge?.copyWith(
-                                  color: primaryColor,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                              color: primaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                     ],
                   ),
@@ -553,9 +552,8 @@ class _GradientCTAButton extends StatelessWidget {
   Widget build(BuildContext context) {
     // Derive a darker shade for the gradient end.
     final hsl = HSLColor.fromColor(primaryColor);
-    final darkerColor = hsl
-        .withLightness((hsl.lightness - 0.12).clamp(0.0, 1.0))
-        .toColor();
+    final darkerColor =
+        hsl.withLightness((hsl.lightness - 0.12).clamp(0.0, 1.0)).toColor();
 
     return SizedBox(
       width: double.infinity,
@@ -627,8 +625,7 @@ class _TrustSignalsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final subtleColor =
-        Theme.of(context).colorScheme.onSurface.withAlpha(100);
+    final subtleColor = Theme.of(context).colorScheme.onSurface.withAlpha(100);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,

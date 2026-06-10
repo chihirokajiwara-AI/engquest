@@ -107,7 +107,8 @@ class ParentAuthService {
       throw LinkCodeException('保護者アカウントでログインしてください');
     }
 
-    final doc = await _requireDb.collection('link_codes').doc(code.trim()).get();
+    final doc =
+        await _requireDb.collection('link_codes').doc(code.trim()).get();
     if (!doc.exists) {
       throw LinkCodeException('リンクコードが見つかりません');
     }

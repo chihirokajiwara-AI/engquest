@@ -16,8 +16,10 @@ void main() {
       expect(quizAudioKey("I'm fine, thank you."), 'i_m_fine_thank_you');
     });
 
-    test('cloze blank is dropped from the slug (audio renders it as a gap)', () {
-      expect(quizAudioKey('You ___ a traveller. Welcome.'), 'you_a_traveller_welcome');
+    test('cloze blank is dropped from the slug (audio renders it as a gap)',
+        () {
+      expect(quizAudioKey('You ___ a traveller. Welcome.'),
+          'you_a_traveller_welcome');
     });
 
     test('stage directions in (parens) are stripped', () {
@@ -26,7 +28,9 @@ void main() {
     });
 
     test('non-speakable lines resolve to null (stay silent)', () {
-      expect(quizAudioKey('... ... (A small slime opens its mouth, but no word comes out.)'),
+      expect(
+          quizAudioKey(
+              '... ... (A small slime opens its mouth, but no word comes out.)'),
           isNull);
       expect(quizAudioKey('   '), isNull);
     });
@@ -37,7 +41,8 @@ void main() {
     });
   });
 
-  testWidgets('grammar quiz renders self-voicing option buttons + question replay',
+  testWidgets(
+      'grammar quiz renders self-voicing option buttons + question replay',
       (tester) async {
     // The first voiced 応答型 quiz ("How are you?") in town_eiken5.
     final idx = kQuestTowns[0]

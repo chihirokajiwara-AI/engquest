@@ -162,8 +162,7 @@ class _BadgeCard extends StatelessWidget {
     final Color frame = isUnlocked ? dqGold : dqGoldDeep.withAlpha(90);
     final Color iconColor = isUnlocked ? dqGold : dqInk.withAlpha(90);
     final Color titleColor = isUnlocked ? Colors.white : dqInk.withAlpha(120);
-    final Color subColor =
-        isUnlocked ? dqGold : dqGoldDeep.withAlpha(120);
+    final Color subColor = isUnlocked ? dqGold : dqGoldDeep.withAlpha(120);
 
     return Container(
       decoration: BoxDecoration(
@@ -225,7 +224,8 @@ class _BadgeCard extends StatelessWidget {
               textAlign: TextAlign.center,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: dqText(size: 10, w: FontWeight.w600, color: subColor, spacing: 1),
+              style: dqText(
+                  size: 10, w: FontWeight.w600, color: subColor, spacing: 1),
             ),
             const SizedBox(height: 8),
             // Earned nameplate or progress bar

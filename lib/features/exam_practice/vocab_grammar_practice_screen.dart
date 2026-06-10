@@ -158,9 +158,8 @@ class _VocabGrammarPracticeScreenState
       // pool rather than running empty.
       final ceiling = kGradeCefrCeiling[widget.eikenGrade];
       if (ceiling != null) {
-        final onGrade = eligible
-            .where((w) => w.cefrLevel.index <= ceiling.index)
-            .toList();
+        final onGrade =
+            eligible.where((w) => w.cefrLevel.index <= ceiling.index).toList();
         if (onGrade.length >= widget.section.questionCount) {
           eligible
             ..clear()

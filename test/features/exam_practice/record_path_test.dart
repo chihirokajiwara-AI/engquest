@@ -94,7 +94,8 @@ void main() {
     expect(other.itemsAttempted, equals(0));
   });
 
-  testWidgets('会話: a WRONG answer is recorded as correct<total (not full marks)',
+  testWidgets(
+      '会話: a WRONG answer is recorded as correct<total (not full marks)',
       (tester) async {
     // Closes the all-correct tautology: an all-correct drive can't tell a real
     // counter from one that hard-codes correct=total. Answer exactly one wrong.
@@ -151,8 +152,7 @@ void main() {
       }
       await tester.tap(find.text('答え合わせ'));
       await tester.pump();
-      await tester.tap(
-          find.text(i < chunkSets.length - 1 ? '次の問題へ' : '結果を見る'));
+      await tester.tap(find.text(i < chunkSets.length - 1 ? '次の問題へ' : '結果を見る'));
       await tester.pump();
     }
     await tester.pump(const Duration(milliseconds: 300));
@@ -252,8 +252,7 @@ void main() {
       await tester.pump();
       await tester.tap(choiceFinder);
       await tester.pump();
-      await tester.tap(
-          find.text(i < n - 1 ? 'つぎへ / Next' : 'けっか / Results'));
+      await tester.tap(find.text(i < n - 1 ? 'つぎへ / Next' : 'けっか / Results'));
       await tester.pump();
     }
     await tester.pump(const Duration(milliseconds: 300));
@@ -315,8 +314,7 @@ void main() {
       await tester.pump();
       await tester.tap(lFinder);
       await tester.pump();
-      await tester.tap(
-          find.text(i < n - 1 ? 'つぎへ / Next' : 'けっか / Results'));
+      await tester.tap(find.text(i < n - 1 ? 'つぎへ / Next' : 'けっか / Results'));
       await tester.pump();
     }
     await tester.pump(const Duration(milliseconds: 300));
@@ -329,7 +327,8 @@ void main() {
         reason: 'every audible answer was correct → 100%');
   });
 
-  testWidgets('リスニング: caption "read the script" mode is EXCLUDED from 合格率 (#125)',
+  testWidgets(
+      'リスニング: caption "read the script" mode is EXCLUDED from 合格率 (#125)',
       (tester) async {
     // Deaf/HoH read-the-script mode: reading ≠ hearing, so a captioned session
     // must NOT count toward the by-ear listening 合格率.
@@ -363,8 +362,7 @@ void main() {
       await tester.pump();
       await tester.tap(lFinder);
       await tester.pump();
-      await tester.tap(
-          find.text(i < n - 1 ? 'つぎへ / Next' : 'けっか / Results'));
+      await tester.tap(find.text(i < n - 1 ? 'つぎへ / Next' : 'けっか / Results'));
       await tester.pump();
     }
     await tester.pump(const Duration(milliseconds: 300));
@@ -380,7 +378,8 @@ void main() {
         reason: 'caption (read) mode must not feed the by-ear listening 合格率');
   });
 
-  testWidgets('リスニング: answering WITHOUT playing the clip is EXCLUDED from '
+  testWidgets(
+      'リスニング: answering WITHOUT playing the clip is EXCLUDED from '
       '合格率 (#R5 anti-gaming)', (tester) async {
     // A child who rapid-guesses without pressing 🔊 never heard the audio, so it
     // is not a by-ear result and must not inflate the listening 合格率.
@@ -415,8 +414,7 @@ void main() {
       await tester.pump();
       await tester.tap(lFinder);
       await tester.pump();
-      await tester.tap(
-          find.text(i < n - 1 ? 'つぎへ / Next' : 'けっか / Results'));
+      await tester.tap(find.text(i < n - 1 ? 'つぎへ / Next' : 'けっか / Results'));
       await tester.pump();
     }
     await tester.pump(const Duration(milliseconds: 300));
@@ -498,7 +496,8 @@ void main() {
     expect(other.itemsAttempted, equals(0));
   });
 
-  testWidgets('大問1: a WRONG answer is recorded as correct<total (not full marks)',
+  testWidgets(
+      '大問1: a WRONG answer is recorded as correct<total (not full marks)',
       (tester) async {
     const grade = '5';
     final v = await pumpVocab(tester, grade);

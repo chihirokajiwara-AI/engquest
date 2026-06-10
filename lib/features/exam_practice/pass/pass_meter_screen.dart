@@ -170,7 +170,8 @@ class _PassHero extends StatelessWidget {
           // from 合格, full colour at the 目安 — the same % the gauge below shows,
           // felt as the protagonist coming to life. Default M5; gender-select #110.
           ProgressTintedCharacter(
-            asset: HeroChoice.asset, // the child's chosen main (#110), default M5
+            asset:
+                HeroChoice.asset, // the child's chosen main (#110), default M5
             readiness: pct / 100.0,
             width: 84,
             height: 120,
@@ -244,9 +245,7 @@ class _PassHero extends StatelessWidget {
             textAlign: TextAlign.center,
             style: dqText(
               size: 16,
-              color: est.reachedPassMeyasu
-                  ? const Color(0xFF8BE08B)
-                  : dqInk,
+              color: est.reachedPassMeyasu ? const Color(0xFF8BE08B) : dqInk,
             ),
           ),
           const SizedBox(height: 8),

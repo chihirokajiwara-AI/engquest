@@ -155,7 +155,8 @@ void main() {
       expect(find.text('次へ'), findsOneWidget);
     });
 
-    testWidgets('answered choice tiles expose せいかい/ふせいかい to screen readers (#92)',
+    testWidgets(
+        'answered choice tiles expose せいかい/ふせいかい to screen readers (#92)',
         (tester) async {
       final handle = tester.ensureSemantics();
       await pumpReading(tester, '5', grade5Section);
@@ -183,8 +184,8 @@ void main() {
 
       expect(find.byKey(const ValueKey('reading_explanation')), findsOneWidget);
       expect(find.text('かいせつ / Why'), findsOneWidget);
-      expect(find.textContaining('November 15', findRichText: true),
-          findsWidgets,
+      expect(
+          find.textContaining('November 15', findRichText: true), findsWidgets,
           reason: 'explanation should quote the passage evidence');
     });
 
@@ -204,7 +205,8 @@ void main() {
       expect(find.text('戻る'), findsOneWidget);
     });
 
-    testWidgets('answering faster than humanly readable is EXCLUDED from the '
+    testWidgets(
+        'answering faster than humanly readable is EXCLUDED from the '
         'reading 合格率 (#R5 anti-gaming)', (tester) async {
       SharedPreferences.setMockInitialValues({});
       PreferencesService.resetInstance();

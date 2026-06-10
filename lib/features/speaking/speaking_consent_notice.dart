@@ -150,24 +150,21 @@ class _SpeakingConsentNoticeState extends State<SpeakingConsentNotice> {
           _buildBullet(
             icon: Icons.cloud_outlined,
             ja: 'クラウドで処理後、音声データは即時削除します（保存しません）',
-            en:
-                'Audio is processed in the cloud (Microsoft Azure) and '
+            en: 'Audio is processed in the cloud (Microsoft Azure) and '
                 'deleted immediately after scoring. No audio is stored.',
           ),
           const SizedBox(height: 14),
           _buildBullet(
             icon: Icons.family_restroom_outlined,
             ja: '18歳未満のお子さまが使用する場合、保護者の方の同意が必要です',
-            en:
-                'Parental or guardian consent is required for children '
+            en: 'Parental or guardian consent is required for children '
                 'under 18 (COPPA / APPI compliance).',
           ),
           const SizedBox(height: 14),
           _buildBullet(
             icon: Icons.school_outlined,
             ja: 'スコアは合格・不合格の判定ではなく、練習のためのアドバイスとして表示されます',
-            en:
-                'Scores are formative coaching, not pass/fail verdicts. '
+            en: 'Scores are formative coaching, not pass/fail verdicts. '
                 'No published benchmark exists for Japanese child L2 English; '
                 'all feedback is encouragement-biased.',
           ),
@@ -182,7 +179,8 @@ class _SpeakingConsentNoticeState extends State<SpeakingConsentNotice> {
             ),
             child: Text(
               'プライバシーポリシーの詳細は アプリ内 → 設定 → プライバシーポリシー をご覧ください。',
-              style: dqText(size: 12, color: const Color(0xFF8BD4A8), spacing: 0.3),
+              style: dqText(
+                  size: 12, color: const Color(0xFF8BD4A8), spacing: 0.3),
             ),
           ),
         ],
@@ -229,9 +227,7 @@ class _SpeakingConsentNoticeState extends State<SpeakingConsentNotice> {
             width: 28,
             height: 28,
             decoration: BoxDecoration(
-              color: _agreed
-                  ? dqGold
-                  : dqBox,
+              color: _agreed ? dqGold : dqBox,
               borderRadius: BorderRadius.circular(6),
               border: Border.all(
                 color: _agreed ? dqGold : dqBorder,

@@ -99,8 +99,7 @@ class StreakService {
   static const _kDailyGoal = 'streak_daily_goal';
 
   // ISO-8601 date string for a given DateTime.
-  static String _dateKey(DateTime d) =>
-      '${d.year.toString().padLeft(4, '0')}'
+  static String _dateKey(DateTime d) => '${d.year.toString().padLeft(4, '0')}'
       '-${d.month.toString().padLeft(2, '0')}'
       '-${d.day.toString().padLeft(2, '0')}';
 

@@ -22,7 +22,8 @@ void main() {
     AudioMute.voiceMuted = false;
   });
 
-  test('Voice mute is REAL — Battle flashcard playWord plays nothing when muted',
+  test(
+      'Voice mute is REAL — Battle flashcard playWord plays nothing when muted',
       () async {
     AudioMute.voiceMuted = true;
     final svc = WordAudioPlayerService();
@@ -49,7 +50,8 @@ void main() {
     AudioMute.voiceMuted = false;
   });
 
-  test('setVoiceMuted persists and loadVoicePreference reads it back', () async {
+  test('setVoiceMuted persists and loadVoicePreference reads it back',
+      () async {
     await AudioMute.setVoiceMuted(true);
     expect(AudioMute.voiceMuted, isTrue);
 

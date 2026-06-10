@@ -111,10 +111,16 @@ class StubPronunciationScorer implements PronunciationScorer {
       );
     }
 
-    final transcriptWords =
-        trimmed.toLowerCase().split(RegExp(r'\s+')).where((w) => w.isNotEmpty).toList();
-    final referenceWords =
-        referenceText.toLowerCase().split(RegExp(r'\s+')).where((w) => w.isNotEmpty).toList();
+    final transcriptWords = trimmed
+        .toLowerCase()
+        .split(RegExp(r'\s+'))
+        .where((w) => w.isNotEmpty)
+        .toList();
+    final referenceWords = referenceText
+        .toLowerCase()
+        .split(RegExp(r'\s+'))
+        .where((w) => w.isNotEmpty)
+        .toList();
 
     // ── Very short response ────────────────────────────────────────────────────
     if (transcriptWords.length < 3) {
@@ -133,7 +139,8 @@ class StubPronunciationScorer implements PronunciationScorer {
     final refSet = referenceWords.toSet();
     final transcriptSet = transcriptWords.toSet();
     final overlap = refSet.intersection(transcriptSet).length;
-    final coverage = referenceWords.isEmpty ? 0.0 : overlap / referenceWords.length;
+    final coverage =
+        referenceWords.isEmpty ? 0.0 : overlap / referenceWords.length;
 
     if (coverage >= 0.5) {
       return SpeakingScore(

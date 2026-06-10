@@ -29,13 +29,13 @@ void main() {
       // the blank." with no sentence to answer. Every reading item must now
       // include its passage text (composed above the instruction).
       final exam = MockExamAssembler.assemble('5', seed: 1);
-      final reading =
-          exam.mcqItems.where((i) => i.skill == EikenSkill.reading);
+      final reading = exam.mcqItems.where((i) => i.skill == EikenSkill.reading);
       expect(reading, isNotEmpty);
       for (final item in reading) {
         expect(item.questionText.contains('\n'), isTrue,
             reason: 'reading item ${item.id} is missing its passage text');
-        expect(item.questionText.trim(), isNot('Choose the best word for the blank.'));
+        expect(item.questionText.trim(),
+            isNot('Choose the best word for the blank.'));
       }
     });
 
@@ -52,13 +52,18 @@ void main() {
       // When writing HAS been practiced (writingAttempted>0), a higher writing
       // score must raise readiness vs a measured 0.
       final zeroWriting = MockExamScorer.score(
-          exam: exam, answers: answers, writingAccuracy: 0.0, writingAttempted: 2);
+          exam: exam,
+          answers: answers,
+          writingAccuracy: 0.0,
+          writingAttempted: 2);
       final goodWriting = MockExamScorer.score(
-          exam: exam, answers: answers, writingAccuracy: 0.9, writingAttempted: 2);
+          exam: exam,
+          answers: answers,
+          writingAccuracy: 0.9,
+          writingAttempted: 2);
       expect(zeroWriting, isNotNull);
       expect(goodWriting, isNotNull);
-      expect(goodWriting!.readinessPct,
-          greaterThan(zeroWriting!.readinessPct));
+      expect(goodWriting!.readinessPct, greaterThan(zeroWriting!.readinessPct));
 
       // #36: UNATTEMPTED writing (writingAttempted==0) is flagged 未測定 (so the
       // PassMeter shows it as such, not a failed 0-bar), whereas a measured 0
@@ -66,7 +71,10 @@ void main() {
       // both cases — the honest difference is the 未測定 flag, and neither lets
       // the meter falsely read "ready".
       final unpracticedWriting = MockExamScorer.score(
-          exam: exam, answers: answers, writingAccuracy: 0.0, writingAttempted: 0)!;
+          exam: exam,
+          answers: answers,
+          writingAccuracy: 0.0,
+          writingAttempted: 0)!;
       expect(unpracticedWriting.unmeasuredSkills, contains(EikenSkill.writing));
       expect(zeroWriting.unmeasuredSkills, isNot(contains(EikenSkill.writing)));
       expect(unpracticedWriting.readinessPct, equals(zeroWriting.readinessPct));
@@ -127,7 +135,8 @@ void main() {
       await tester.pumpWidget(const SizedBox());
     });
 
-    testWidgets('back during an in-progress mock confirms before discarding '
+    testWidgets(
+        'back during an in-progress mock confirms before discarding '
         'all progress (#129)', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(home: MockExamScreen(eikenGrade: '5', seed: 1)),

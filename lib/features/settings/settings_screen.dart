@@ -298,7 +298,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   style: dqText(size: 15, w: FontWeight.w700, color: dqInk)),
               Text(en,
                   style: dqText(
-                      size: 11, w: FontWeight.w500, color: dqInk.withAlpha(160))),
+                      size: 11,
+                      w: FontWeight.w500,
+                      color: dqInk.withAlpha(160))),
             ],
           ),
         ),
@@ -336,7 +338,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 'Explore towns to restore lost words, learn vocab on cards, test '
                 'yourself with quizzes, and practise every day toward 英検!',
                 style: dqText(
-                        size: 11, w: FontWeight.w500, color: dqInk.withAlpha(170))
+                        size: 11,
+                        w: FontWeight.w500,
+                        color: dqInk.withAlpha(170))
                     .copyWith(height: 1.6),
               ),
               const SizedBox(height: 16),

@@ -43,12 +43,14 @@ void main() {
       (tester) async {
     await tapPassMeter(tester);
     expect(find.byType(PassMeterScreen), findsNothing,
-        reason: 'with zero data the meter must NOT open with fabricated numbers');
+        reason:
+            'with zero data the meter must NOT open with fabricated numbers');
     expect(find.textContaining('まずれんしゅう'), findsOneWidget,
         reason: 'honest empty state nudges practice instead of faking a 合格率');
   });
 
-  testWidgets('after a real practice result, the pass-meter shows the honest 合格率',
+  testWidgets(
+      'after a real practice result, the pass-meter shows the honest 合格率',
       (tester) async {
     // Simulate the child having practised reading (the record_path that real
     // practice screens write).
@@ -59,7 +61,8 @@ void main() {
     await tapPassMeter(tester);
 
     expect(find.byType(PassMeterScreen), findsOneWidget,
-        reason: 'practice exists → the live meter opens with the REAL estimate');
+        reason:
+            'practice exists → the live meter opens with the REAL estimate');
     expect(find.textContaining('%'), findsWidgets,
         reason: 'the readiness % must render');
     // The estimate the screen was built on reflects the practice: reading is

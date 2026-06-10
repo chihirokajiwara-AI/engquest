@@ -21,7 +21,8 @@ void main() {
         reason: 'a fresh user has not set a reminder');
   });
 
-  test('a chosen reminder time round-trips and is flagged configured', () async {
+  test('a chosen reminder time round-trips and is flagged configured',
+      () async {
     final prefs = await PreferencesService.getInstance();
     await prefs.setInt(PrefKeys.reminderHour, 7);
     await prefs.setInt(PrefKeys.reminderMinute, 30);

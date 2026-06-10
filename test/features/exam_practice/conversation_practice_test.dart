@@ -67,7 +67,8 @@ void main() {
         expect(item.choices.toSet().length, item.choices.length,
             reason: 'duplicate choice in grade $grade: ${item.choices}');
         for (final c in item.choices) {
-          expect(c.trim(), isNotEmpty, reason: 'empty choice in ${item.choices}');
+          expect(c.trim(), isNotEmpty,
+              reason: 'empty choice in ${item.choices}');
         }
       }
     });
@@ -109,7 +110,8 @@ void main() {
       () {
     // Regression guard for the defect fixed 2026-06-08: both upper grades used
     // to return the identical generic (too-hard-for-3級) bank.
-    final g3 = conversationItemsForTest('3').map((i) => i.choices.first).toList();
+    final g3 =
+        conversationItemsForTest('3').map((i) => i.choices.first).toList();
     final gpre2 =
         conversationItemsForTest('pre2').map((i) => i.choices.first).toList();
     expect(g3, isNot(equals(gpre2)));

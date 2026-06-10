@@ -742,82 +742,82 @@ class _AvatarCard extends StatelessWidget {
     // a screen-reader user (e.g. a blind parent helping a 4yo) hears no button
     // role and can't tell which hero is selected (flaw-hunt R6).
     return Semantics(
-      button: true,
-      selected: selected,
-      label: '${avatar.name}、${_avatarClassEn(avatar.jobTitle)}',
-      onTap: onTap,
-      excludeSemantics: true,
-      child: GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: selected
-                ? [dqNight1.withAlpha(245), dqBox.withAlpha(245)]
-                : [dqBox.withAlpha(220), dqNight0.withAlpha(220)],
-          ),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: selected ? dqGold : dqGoldDeep.withAlpha(110),
-            width: selected ? 2.5 : 1.5,
-          ),
-          boxShadow: selected
-              ? [BoxShadow(color: dqGold.withAlpha(110), blurRadius: 12)]
-              : const [
-                  BoxShadow(
-                      color: Colors.black54,
-                      blurRadius: 6,
-                      offset: Offset(0, 3))
-                ],
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (avatar.asset != null)
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.asset(
-                  avatar.asset!,
-                  height: selected ? 110 : 100,
-                  fit: BoxFit.contain,
-                  errorBuilder: (_, __, ___) =>
-                      DqPortrait(emoji: avatar.emoji, size: selected ? 46 : 42),
+        button: true,
+        selected: selected,
+        label: '${avatar.name}、${_avatarClassEn(avatar.jobTitle)}',
+        onTap: onTap,
+        excludeSemantics: true,
+        child: GestureDetector(
+          onTap: onTap,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: selected
+                    ? [dqNight1.withAlpha(245), dqBox.withAlpha(245)]
+                    : [dqBox.withAlpha(220), dqNight0.withAlpha(220)],
+              ),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: selected ? dqGold : dqGoldDeep.withAlpha(110),
+                width: selected ? 2.5 : 1.5,
+              ),
+              boxShadow: selected
+                  ? [BoxShadow(color: dqGold.withAlpha(110), blurRadius: 12)]
+                  : const [
+                      BoxShadow(
+                          color: Colors.black54,
+                          blurRadius: 6,
+                          offset: Offset(0, 3))
+                    ],
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (avatar.asset != null)
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.asset(
+                      avatar.asset!,
+                      height: selected ? 110 : 100,
+                      fit: BoxFit.contain,
+                      errorBuilder: (_, __, ___) => DqPortrait(
+                          emoji: avatar.emoji, size: selected ? 46 : 42),
+                    ),
+                  )
+                else
+                  DqPortrait(emoji: avatar.emoji, size: selected ? 46 : 42),
+                const SizedBox(height: 6),
+                Text(
+                  avatar.name,
+                  style: dqText(
+                    size: 12,
+                    w: FontWeight.w700,
+                    color: selected ? dqGold : dqInk,
+                  ),
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-              )
-            else
-              DqPortrait(emoji: avatar.emoji, size: selected ? 46 : 42),
-            const SizedBox(height: 6),
-            Text(
-              avatar.name,
-              style: dqText(
-                size: 12,
-                w: FontWeight.w700,
-                color: selected ? dqGold : dqInk,
-              ),
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+                Text(
+                  _avatarClassEn(avatar.jobTitle),
+                  style: dqText(
+                    size: 10,
+                    w: FontWeight.w600,
+                    color: dqGoldDeep,
+                    spacing: 1,
+                  ),
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
             ),
-            Text(
-              _avatarClassEn(avatar.jobTitle),
-              style: dqText(
-                size: 10,
-                w: FontWeight.w600,
-                color: dqGoldDeep,
-                spacing: 1,
-              ),
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
-        ),
-      ),
-    ));
+          ),
+        ));
   }
 }
 

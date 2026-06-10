@@ -306,11 +306,13 @@ void main() {
   // Legacy CefrPlacement enum still exists for backward compat — test it.
   group('CefrPlacement enum (legacy compat)', () {
     test('CefrPlacement values exist', () {
-      expect(CefrPlacement.values, containsAll([
-        CefrPlacement.beginner,
-        CefrPlacement.a1,
-        CefrPlacement.a2,
-      ]));
+      expect(
+          CefrPlacement.values,
+          containsAll([
+            CefrPlacement.beginner,
+            CefrPlacement.a1,
+            CefrPlacement.a2,
+          ]));
     });
     test('CefrPlacementLabel extensions work', () {
       expect(CefrPlacement.a1.label, isNotEmpty);

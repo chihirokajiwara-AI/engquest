@@ -360,8 +360,7 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
               readiness: readiness,
               width: 44,
               height: 64,
-              semanticLabel:
-                  'あなたの たんてい。れんしゅうするほど 色（いろ）がつくよ。',
+              semanticLabel: 'あなたの たんてい。れんしゅうするほど 色（いろ）がつくよ。',
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -379,7 +378,8 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
                                 .copyWith(height: 1.5),
                           ),
                         ),
-                        const Icon(Icons.chevron_right, color: dqGold, size: 22),
+                        const Icon(Icons.chevron_right,
+                            color: dqGold, size: 22),
                       ],
                     )
                   : _buildReadinessData(est),
@@ -409,7 +409,12 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
       children: [
         // Compact arc gauge — the same designed meter as the full PassMeter,
         // so the 合格率 reads as one thing everywhere (#68).
-        PassGauge(pct: est.readinessPct, color: color, size: 66, stroke: 7, fontSize: 18),
+        PassGauge(
+            pct: est.readinessPct,
+            color: color,
+            size: 66,
+            stroke: 7,
+            fontSize: 18),
         const SizedBox(width: 14),
         Expanded(
           child: Column(
@@ -537,8 +542,8 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
         const SizedBox(height: 2),
         Text(
           text,
-          style: dqText(
-              size: 12, w: FontWeight.w500, color: dqInk.withAlpha(200)),
+          style:
+              dqText(size: 12, w: FontWeight.w500, color: dqInk.withAlpha(200)),
         ),
       ],
     );
@@ -632,8 +637,8 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
                     const SizedBox(height: 4),
                     Text(
                       'タップして たんごを ふくしゅうしよう / Review',
-                      style: dqText(
-                          size: 12, w: FontWeight.w500, color: dqGold),
+                      style:
+                          dqText(size: 12, w: FontWeight.w500, color: dqGold),
                     ),
                   ] else ...[
                     Text(
@@ -643,8 +648,8 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
                     const SizedBox(height: 4),
                     Text(
                       'タップして たんごを ふくしゅうしよう / Review',
-                      style: dqText(
-                          size: 12, w: FontWeight.w500, color: dqGold),
+                      style:
+                          dqText(size: 12, w: FontWeight.w500, color: dqGold),
                     ),
                   ],
                 ],
@@ -772,7 +777,9 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
                   label,
                   maxLines: 1,
                   style: dqText(
-                      size: 13, w: FontWeight.w600, color: dqInk.withAlpha(210)),
+                      size: 13,
+                      w: FontWeight.w600,
+                      color: dqInk.withAlpha(210)),
                 ),
               ),
             ),
@@ -796,8 +803,7 @@ class _DailyGoalRing extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ratio =
-        goal <= 0 ? 0.0 : (done / goal).clamp(0.0, 1.0).toDouble();
+    final ratio = goal <= 0 ? 0.0 : (done / goal).clamp(0.0, 1.0).toDouble();
     final met = done >= goal && goal > 0;
     const size = 76.0;
     return SizedBox(
@@ -817,8 +823,8 @@ class _DailyGoalRing extends StatelessWidget {
                     children: [
                       Text(
                         '$done',
-                        style: dqText(
-                            size: 24, w: FontWeight.w900, color: dqGold),
+                        style:
+                            dqText(size: 24, w: FontWeight.w900, color: dqGold),
                       ),
                       Text(
                         '/$goal問',

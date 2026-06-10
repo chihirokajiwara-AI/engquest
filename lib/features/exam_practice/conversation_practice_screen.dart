@@ -318,49 +318,49 @@ class _ConversationPracticeScreenState
                         onTap: _answered ? null : () => _selectAnswer(i),
                         excludeSemantics: true,
                         child: Material(
-                        color: bgColor,
-                        borderRadius: BorderRadius.circular(10),
-                        child: InkWell(
-                          key: ValueKey('conv_choice_$i'),
-                          onTap: () => _selectAnswer(i),
+                          color: bgColor,
                           borderRadius: BorderRadius.circular(10),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 14, vertical: 12),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: borderColor),
-                            ),
-                            child: Row(
-                              children: [
-                                Text(
-                                  '${i + 1}',
-                                  style: TextStyle(
-                                    color: textColor,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: Text(
-                                    p.choices[i],
+                          child: InkWell(
+                            key: ValueKey('conv_choice_$i'),
+                            onTap: () => _selectAnswer(i),
+                            borderRadius: BorderRadius.circular(10),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 14, vertical: 12),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(color: borderColor),
+                              ),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    '${i + 1}',
                                     style: TextStyle(
                                       color: textColor,
-                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                ),
-                                if (_answered && isCorrect)
-                                  const Icon(Icons.check_circle_rounded,
-                                      color: Color(0xFF8BE08B), size: 20),
-                                if (_answered && isSelected && !isCorrect)
-                                  const Icon(Icons.cancel_rounded,
-                                      color: Color(0xFFE0853A), size: 20),
-                              ],
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: Text(
+                                      p.choices[i],
+                                      style: TextStyle(
+                                        color: textColor,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  ),
+                                  if (_answered && isCorrect)
+                                    const Icon(Icons.check_circle_rounded,
+                                        color: Color(0xFF8BE08B), size: 20),
+                                  if (_answered && isSelected && !isCorrect)
+                                    const Icon(Icons.cancel_rounded,
+                                        color: Color(0xFFE0853A), size: 20),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
                       );
                     },
                   ),

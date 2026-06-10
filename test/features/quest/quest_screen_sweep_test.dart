@@ -18,7 +18,8 @@ void main() {
     ));
     await tester.pump();
 
-    BlendWordCard card() => tester.widget<BlendWordCard>(find.byType(BlendWordCard));
+    BlendWordCard card() =>
+        tester.widget<BlendWordCard>(find.byType(BlendWordCard));
 
     expect(find.byType(BlendWordCard), findsOneWidget,
         reason: 'index 3 should render a blend card');

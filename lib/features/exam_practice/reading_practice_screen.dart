@@ -161,7 +161,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
         .map((p) => _shufflePassageChoices(p, rng))
         .toList();
     _totalQuestions = _passages.fold(0, (sum, p) => sum + p.questions.length);
-    _questionShownAt = DateTime.now(); // start the read-time clock for question 1
+    _questionShownAt =
+        DateTime.now(); // start the read-time clock for question 1
   }
 
   @override
@@ -489,45 +490,48 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
                             return Semantics(
                               button: true,
                               label: semLabel,
-                              onTap:
-                                  _answered ? null : () => _selectAnswer(i),
+                              onTap: _answered ? null : () => _selectAnswer(i),
                               excludeSemantics: true,
                               child: Material(
-                              color: bgColor,
-                              borderRadius: BorderRadius.circular(10),
-                              child: InkWell(
-                                key: ValueKey('reading_choice_$i'),
-                                onTap: () => _selectAnswer(i),
+                                color: bgColor,
                                 borderRadius: BorderRadius.circular(10),
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 14, vertical: 12),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(
-                                        color: borderColor, width: 2),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          '${i + 1}. ${question.choices[i]}',
-                                          style: dqText(
-                                              size: 15,
-                                              w: FontWeight.w600,
-                                              color: textColor),
+                                child: InkWell(
+                                  key: ValueKey('reading_choice_$i'),
+                                  onTap: () => _selectAnswer(i),
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 14, vertical: 12),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                          color: borderColor, width: 2),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            '${i + 1}. ${question.choices[i]}',
+                                            style: dqText(
+                                                size: 15,
+                                                w: FontWeight.w600,
+                                                color: textColor),
+                                          ),
                                         ),
-                                      ),
-                                      if (_answered && isCorrect)
-                                        const Icon(Icons.check_circle_rounded,
-                                            color: Color(0xFF8BE08B), size: 20),
-                                      if (_answered && isSelected && !isCorrect)
-                                        const Icon(Icons.cancel_rounded,
-                                            color: Color(0xFFE0853A), size: 20),
-                                    ],
+                                        if (_answered && isCorrect)
+                                          const Icon(Icons.check_circle_rounded,
+                                              color: Color(0xFF8BE08B),
+                                              size: 20),
+                                        if (_answered &&
+                                            isSelected &&
+                                            !isCorrect)
+                                          const Icon(Icons.cancel_rounded,
+                                              color: Color(0xFFE0853A),
+                                              size: 20),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
                               ),
                             );
                           },

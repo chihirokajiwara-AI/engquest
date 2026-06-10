@@ -100,8 +100,8 @@ class VocabRepository {
     // same path, both decode once (last write wins). Idempotent — same data —
     // so we keep the simple result-cache rather than a Future-cache that would
     // need rejection-eviction.
-    final json = jsonDecode(await rootBundle.loadString(path))
-        as Map<String, dynamic>;
+    final json =
+        jsonDecode(await rootBundle.loadString(path)) as Map<String, dynamic>;
     _decodedByPath[path] = json;
     return json;
   }
@@ -143,7 +143,8 @@ class VocabRepository {
     if (_initialized && _loadedGrade == eikenGrade) return;
 
     final path = _assetPaths[eikenGrade] ?? _assetPaths['5']!;
-    final json = await _decodedJson(path); // cached after first decode per session
+    final json =
+        await _decodedJson(path); // cached after first decode per session
 
     _meta = VocabDatabaseMeta.fromJson(json);
     _words = (json['words'] as List<dynamic>)

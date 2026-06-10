@@ -193,8 +193,7 @@ void main() {
     test('correct after wrong (teach no-scold) → Grade.hard', () {
       // Use a quiz step so wrong tap counts attempts correctly.
       // But for a quiz step, wrong costs a heart. Use 5 hearts to stay alive.
-      final ctrl =
-          _makeCtrl(steps: [_quizStep], offsets: [0], maxHearts: 5);
+      final ctrl = _makeCtrl(steps: [_quizStep], offsets: [0], maxHearts: 5);
       ctrl.startBattle();
       ctrl.castTap(1); // wrong → costs heart, phase=resolved
       ctrl.advance(); // back to prompt
@@ -222,8 +221,7 @@ void main() {
     });
 
     test('combo does not increment on second-try correct', () {
-      final ctrl =
-          _makeCtrl(steps: [_quizStep], offsets: [0], maxHearts: 5);
+      final ctrl = _makeCtrl(steps: [_quizStep], offsets: [0], maxHearts: 5);
       ctrl.startBattle();
       ctrl.castTap(1); // wrong
       ctrl.advance();
@@ -235,8 +233,10 @@ void main() {
   group('BattleRewards — XP > 0 on victory (bug fix proof)', () {
     test('victory with Grade.good steps awards XP > 0', () async {
       final results = [
-        StepResult(stepIndex: 0, grade: Grade.good, cardId: 'town_test__step_0'),
-        StepResult(stepIndex: 1, grade: Grade.good, cardId: 'town_test__step_1'),
+        StepResult(
+            stepIndex: 0, grade: Grade.good, cardId: 'town_test__step_0'),
+        StepResult(
+            stepIndex: 1, grade: Grade.good, cardId: 'town_test__step_1'),
       ];
 
       final totalXp = BattleRewards.totalXp(results);
@@ -248,8 +248,8 @@ void main() {
 
     test('victory with mixed grades awards correct XP', () {
       final results = [
-        StepResult(stepIndex: 0, grade: Grade.easy, cardId: 'id_0'),  // 15
-        StepResult(stepIndex: 1, grade: Grade.hard, cardId: 'id_1'),  // 5
+        StepResult(stepIndex: 0, grade: Grade.easy, cardId: 'id_0'), // 15
+        StepResult(stepIndex: 1, grade: Grade.hard, cardId: 'id_1'), // 5
         StepResult(stepIndex: 2, grade: Grade.again, cardId: 'id_2'), // 0
       ];
       expect(BattleRewards.totalXp(results), 20);
@@ -269,10 +269,8 @@ void main() {
       );
 
       final results = [
-        StepResult(
-            stepIndex: 0, grade: Grade.good, cardId: 'town_x__step_0'),
-        StepResult(
-            stepIndex: 1, grade: Grade.good, cardId: 'town_x__step_1'),
+        StepResult(stepIndex: 0, grade: Grade.good, cardId: 'town_x__step_0'),
+        StepResult(stepIndex: 1, grade: Grade.good, cardId: 'town_x__step_1'),
       ];
 
       await rewards.applyRewards(uid: 'test_uid', stepResults: results);

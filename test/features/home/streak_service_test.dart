@@ -35,7 +35,8 @@ void main() {
   String iso(DateTime d) => '${d.year.toString().padLeft(4, '0')}'
       '-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
 
-  test('lapsed streak (last study 14 days ago) loads as 0 + streakBroken', () async {
+  test('lapsed streak (last study 14 days ago) loads as 0 + streakBroken',
+      () async {
     final now = DateTime(2026, 6, 10);
     SharedPreferences.setMockInitialValues({
       'streak_current': 9,
@@ -43,11 +44,13 @@ void main() {
     });
     PreferencesService.resetInstance();
     final state = await StreakService().load(now: now);
-    expect(state.currentStreak, 0, reason: 'a broken streak must not show stale 9');
+    expect(state.currentStreak, 0,
+        reason: 'a broken streak must not show stale 9');
     expect(state.streakBroken, isTrue);
   });
 
-  test('alive streak (studied yesterday) loads the real value, not broken', () async {
+  test('alive streak (studied yesterday) loads the real value, not broken',
+      () async {
     final now = DateTime(2026, 6, 10);
     SharedPreferences.setMockInitialValues({
       'streak_current': 9,

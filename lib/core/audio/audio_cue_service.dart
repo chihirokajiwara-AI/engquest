@@ -26,7 +26,8 @@ class AudioCueService {
   // tests that only exercise the mute gate).
   final AudioPlayer? _injectedPlayer;
   AudioPlayer? _playerInstance;
-  AudioPlayer get _player => _playerInstance ??= (_injectedPlayer ?? AudioPlayer());
+  AudioPlayer get _player =>
+      _playerInstance ??= (_injectedPlayer ?? AudioPlayer());
 
   /// Test-only: true once a real player has been constructed. Lets a CI test
   /// prove the mute gate prevents playback (player never built → nothing
