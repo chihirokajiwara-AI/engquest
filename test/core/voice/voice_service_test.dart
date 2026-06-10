@@ -82,8 +82,14 @@ void main() {
     test('borderline match (distance == 3) returns close', () {
       // 'xyz' vs 'cat' → distance 3 → still "close"
       expect(service.evaluateMatch('xyz', 'cat'), VoiceResult.close);
-      // '' vs 'cat' → distance 3 → still "close"
-      expect(service.evaluateMatch('', 'cat'), VoiceResult.close);
+    });
+
+    test('empty recognition is timeout, NOT close (silence must not flatter)',
+        () {
+      // Levenshtein('', 'cat') == 3 ≤ 3 would wrongly read as "close" → an
+      // "Almost there!" for a child who said nothing. Honest: no speech. (R9)
+      expect(service.evaluateMatch('', 'cat'), VoiceResult.timeout);
+      expect(service.evaluateMatch('   ', 'go'), VoiceResult.timeout);
     });
   });
 

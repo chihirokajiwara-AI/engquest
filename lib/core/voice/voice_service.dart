@@ -219,6 +219,12 @@ class VoiceService {
     final r = recognized.trim().toLowerCase();
     final t = target.trim().toLowerCase();
 
+    // No speech captured → "no speech", never "close". Levenshtein('', short
+    // word) is ≤ 3, so without this guard silence would flatter a child with
+    // "Almost there!" (the demo path feeds an empty string). Honest: nothing
+    // was heard. (R9; same honesty principle as #124's no-score demo.)
+    if (r.isEmpty) return VoiceResult.timeout;
+
     if (r == t) return VoiceResult.correct;
 
     final dist = _levenshtein(r, t);
