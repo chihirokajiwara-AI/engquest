@@ -91,8 +91,12 @@ class _ExamPracticeScreenState extends State<ExamPracticeScreen> {
             padding: const EdgeInsets.fromLTRB(16, 6, 16, 6),
             child: DqPanel(
               title: '試験概要（しけんがいよう） / Exam Overview',
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+              // #114/WCAG SC 1.4.4: Wrap (not Row) so the three chips reflow onto
+              // extra lines at large text scales (2.0x) instead of clipping ~88px.
+              child: Wrap(
+                alignment: WrapAlignment.spaceAround,
+                spacing: 12,
+                runSpacing: 10,
                 children: [
                   _DqInfoChip(
                     icon: Icons.timer_outlined,

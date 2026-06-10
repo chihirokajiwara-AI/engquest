@@ -13,6 +13,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:engquest/features/home/kotoba_home_screen.dart';
+import 'package:engquest/features/exam_practice/exam_practice_screen.dart';
 import 'package:engquest/features/exam_practice/pass/pass_meter_screen.dart';
 import 'package:engquest/features/onboarding/onboarding_flow.dart';
 import 'package:engquest/core/fsrs/fsrs_card_repository.dart';
@@ -57,20 +58,12 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  // TODO(#114): un-skip once ExamPracticeScreen's ~88px horizontal overflow at
-  // 2.0x is hardened (and the reading/listening/mock screens verified) — then
-  // raise app.dart's clamp ceiling 1.6 → 2.0.
-  testWidgets('exam-practice OK @ textScaler 2.0 (WCAG SC 1.4.4 — TODO)',
-      (tester) async {
-    await _pumpAt2x(tester, 360, const ExamPracticeScreenStub());
+  // Exam hub — hardened (the overview chips Row → Wrap, d-commit).
+  testWidgets('exam-practice OK @ textScaler 2.0 (WCAG SC 1.4.4)', (tester) async {
+    await _pumpAt2x(tester, 360, const ExamPracticeScreen(eikenGrade: '5'));
     expect(tester.takeException(), isNull);
-  }, skip: true);
-}
-
-/// Placeholder so the skipped TODO test compiles without importing the
-/// not-yet-hardened screen. Replace with ExamPracticeScreen on un-skip.
-class ExamPracticeScreenStub extends StatelessWidget {
-  const ExamPracticeScreenStub({super.key});
-  @override
-  Widget build(BuildContext context) => const SizedBox.shrink();
+  });
+  // Remaining before the app.dart cap can rise 1.6→2.0 (#114): the reading /
+  // listening / mock / conversation / word-ordering screens still need 2.0x
+  // verification + hardening. Add them here as they are cleared.
 }
