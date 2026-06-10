@@ -29,6 +29,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:engquest/core/audio/nav_speak.dart';
 import 'package:engquest/features/character/progress_tinted_character.dart';
 import 'package:engquest/core/data/vocab_repository.dart';
+import 'package:engquest/core/firebase/auth_service.dart';
 import 'package:engquest/core/fsrs/fsrs_card_repository.dart';
 import 'package:engquest/core/storage/preferences_service.dart';
 import 'package:engquest/features/explore/scene_view.dart';
@@ -148,15 +149,22 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
     }
 
     // 3. FSRS due-count — guarded; repo may be empty or throw.
+    // #134: read under the child's REAL anonymous Firebase UID (the identity Battle
+    // writes FSRS under) so a returning child sees their actual due-count, not a
+    // false 0 from a fake shared key against an empty store. Falls back to 'local'
+    // only when Auth is unavailable (offline / tests) — InMemory repos key on that.
     int dueCount = 0;
+    String userId = 'local';
     try {
-      // Use a stable anonymous userId key consistent with the rest of the app.
-      // The InMemory repo will simply return [] for any unknown user.
-      const userId = 'local';
+      userId = await AuthService().getOrCreateUid();
+    } catch (_) {
+      // Auth/Firebase unavailable → keep the 'local' fallback.
+    }
+    try {
       final due = await _repo.getDueCards(userId, DateTime.now());
       dueCount = due.length;
     } catch (_) {
-      // Firebase/Firestore repo not available or prefs missing → show 0.
+      // Firestore repo not reachable → show 0 (no fake count).
       dueCount = 0;
     }
 

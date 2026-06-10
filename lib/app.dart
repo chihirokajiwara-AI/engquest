@@ -9,6 +9,7 @@ import 'package:engquest/features/voice/voice_screen.dart';
 import 'package:engquest/features/dialog/dialog_screen.dart';
 import 'package:engquest/features/onboarding/onboarding_flow.dart';
 import 'package:engquest/core/fsrs/fsrs_card_repository.dart';
+import 'package:engquest/core/fsrs/firestore_card_repository.dart';
 import 'package:engquest/features/quest/quest_title_screen.dart';
 import 'package:engquest/features/quest/quest_screen.dart';
 import 'package:engquest/features/quest/quest_map_screen.dart';
@@ -1021,9 +1022,14 @@ class _AppEntryPointState extends State<_AppEntryPoint> {
           child: PrologueScreen(onDone: _handlePrologueDone),
         );
       }
-      return const KeyedSubtree(
-        key: ValueKey('phase-home'),
-        child: KotobaHomeScreen(),
+      return KeyedSubtree(
+        key: const ValueKey('phase-home'),
+        // #134: the LIVE home reads the child's REAL FSRS due-count from Firestore
+        // (battle persists there) instead of an empty per-screen InMemory store, so
+        // a returning child sees their actual 「きょうの ナゾ」, not a false 0. Preview
+        // routes + tests keep InMemory (offline-safe). The home's getDueCards is
+        // already guarded (falls to 0 on offline/failure).
+        child: KotobaHomeScreen(cardRepository: FirestoreFsrsCardRepository()),
       );
     }
     return KeyedSubtree(
