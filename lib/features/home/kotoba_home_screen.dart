@@ -798,25 +798,30 @@ class _DailyGoalRing extends StatelessWidget {
       child: CustomPaint(
         painter: _GoalRingPainter(ratio: ratio, met: met),
         child: Center(
-          child: met
-              ? const Icon(Icons.check_rounded, color: dqGold, size: 34)
-              : Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      '$done',
-                      style: dqText(
-                          size: 24, w: FontWeight.w900, color: dqGold),
-                    ),
-                    Text(
-                      '/$goal問',
-                      style: dqText(
-                          size: 11,
-                          w: FontWeight.w600,
-                          color: dqInk.withAlpha(190)),
-                    ),
-                  ],
-                ),
+          // #114/WCAG SC 1.4.4: the ring is a fixed 76px visual; shrink the inner
+          // number to fit at large text scales (2.0x) instead of clipping.
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: met
+                ? const Icon(Icons.check_rounded, color: dqGold, size: 34)
+                : Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        '$done',
+                        style: dqText(
+                            size: 24, w: FontWeight.w900, color: dqGold),
+                      ),
+                      Text(
+                        '/$goal問',
+                        style: dqText(
+                            size: 11,
+                            w: FontWeight.w600,
+                            color: dqInk.withAlpha(190)),
+                      ),
+                    ],
+                  ),
+          ),
         ),
       ),
     );
