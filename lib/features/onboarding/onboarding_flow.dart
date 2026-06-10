@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/audio/nav_speak.dart';
 import '../../core/config/flavor_config.dart';
 import '../quest/ui/dq_ui.dart';
 import 'placement_engine.dart';
@@ -698,7 +699,12 @@ class _StepAvatar extends StatelessWidget {
                 return _AvatarCard(
                   avatar: av,
                   selected: selected,
-                  onTap: () => onSelected(av.id),
+                  // #133: a non-reading 4–7yo hears the detective's name spoken
+                  // as they tap to choose (m5/m6 clips); selection still happens.
+                  onTap: () {
+                    NavSpeak.speak(av.id);
+                    onSelected(av.id);
+                  },
                 );
               }).toList(),
             ),

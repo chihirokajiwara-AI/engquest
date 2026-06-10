@@ -29,6 +29,8 @@ class NavSpeak {
     'settings',
     'hint',
     'back',
+    'm5', // gender-select detective labels (#110 picker)
+    'm6',
   };
 
   /// Fire-and-forget; muting / a missing clip degrades to silence (errors are
