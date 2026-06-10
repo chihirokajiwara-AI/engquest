@@ -81,7 +81,7 @@ class PassMeterScreen extends StatelessWidget {
                 ),
                 Expanded(
                   child: dqBilingual(
-                    '$gradeLabel 合格メーター',
+                    '$gradeLabel 合格（ごうかく）メーター',
                     'Pass Prediction',
                     jpSize: 18,
                     stacked: false,
@@ -321,7 +321,7 @@ class _SkillBars extends StatelessWidget {
   if (ratio >= 0.8) {
     return (icon: Icons.check_circle_outline, labelJa: 'よくできている');
   }
-  if (ratio >= 0.65) return (icon: Icons.trending_up, labelJa: 'あと少し');
+  if (ratio >= 0.65) return (icon: Icons.trending_up, labelJa: 'あと少（すこ）し');
   return (icon: Icons.priority_high, labelJa: 'のばそう');
 }
 
@@ -403,7 +403,7 @@ class _SkillBar extends StatelessWidget {
                     // "AI採点まち" — honestly distinct from a skill the learner
                     // simply hasn't tried yet (#100 panel fast-follow).
                     ? (skill == EikenSkill.writing
-                        ? 'AI採点まち / AI-graded'
+                        ? 'AI採点（さいてん）まち / AI-graded'
                         : 'まだ / not measured')
                     : '$score / $maxScore ($pctText)・$itemsAttemptedもん',
                 textAlign: TextAlign.right,
@@ -458,7 +458,7 @@ class _WeakSkillCta extends StatelessWidget {
 
     return DqDialogBox(
       speaker: writingUnmeasured
-          ? 'AI採点まち / Graded by AI'
+          ? 'AI採点（さいてん）まち / Graded by AI'
           : unmeasured
               ? 'まだの ぎじゅつ / Not tried yet'
               : 'よわいぎじゅつ / Weak skill',
