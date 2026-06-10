@@ -16,6 +16,15 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
+    // AGP 9 disables resValues by default; the edilab/aken flavors set a custom
+    // app_name via resValue(...), so the feature must be explicitly enabled (the
+    // old android.defaults.buildfeatures.resvalues flag is deprecated in AGP 9).
+    // Without this: "Product Flavor edilab contains custom resource values, but
+    // the feature is disabled" → Android build fails (#143).
+    buildFeatures {
+        resValues = true
+    }
+
     signingConfigs {
         create("release") {
             keyAlias = System.getenv("KEY_ALIAS") ?: "akenquest"
