@@ -249,7 +249,14 @@ class _OnboardingFlowState extends State<OnboardingFlow>
     return DqScene(
       child: Column(
         children: [
-          _ProgressBar(step: _step, total: _totalSteps),
+          // #133: an always-visible speaker teaches the non-reading 4–7yo the
+          // tap-to-speak gesture from the first screen («タップ すると こえが でるよ»).
+          Row(
+            children: [
+              Expanded(child: _ProgressBar(step: _step, total: _totalSteps)),
+              const SpeakerButton('hint', color: dqGold, size: 22),
+            ],
+          ),
           Expanded(
             child: FadeTransition(
               opacity: _fadeAnim,
