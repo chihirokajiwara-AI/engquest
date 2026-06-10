@@ -26,6 +26,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
+import 'package:engquest/core/audio/nav_speak.dart';
 import 'package:engquest/core/data/vocab_repository.dart';
 import 'package:engquest/core/fsrs/fsrs_card_repository.dart';
 import 'package:engquest/core/storage/preferences_service.dart';
@@ -671,6 +672,10 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
                 ),
               ),
             ),
+            // #133 pre-literacy: a non-reader taps this speaker to HEAR the label.
+            // Additive — tapping the button itself still navigates to practice.
+            const SizedBox(width: 4),
+            const SpeakerButton('exam', color: Color(0xFF2A1C00), size: 22),
           ],
         ),
       ),

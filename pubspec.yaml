@@ -57,6 +57,10 @@ flutter:
     - assets/audio/phonics/
     - assets/audio/quiz/
     - assets/audio/listening/
+    # #133 pre-literacy tap-to-speak JP nav-label clips (~84KB total, macOS say -v
+    # Kyoko; assets/audio/ui_ja/). Bundled (negligible vs the #48 925MB word-audio
+    # problem) so AudioCueService.play(AssetSource) serves them offline.
+    - assets/audio/ui_ja/
     # NOTE: per-word 英検 vocab MP3s (eiken5..eiken_pre1, ~21k files) are
     # deliberately NOT bundled. They added ~21,184 of the AssetManifest's 23,266
     # entries (a 1.3MB manifest fetched+parsed on EVERY cold start) and ~925MB to

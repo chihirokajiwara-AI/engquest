@@ -1,0 +1,9 @@
+{
+  "_doc": "#133 pre-literacy tap-to-speak nav-label audio. key -> child-hiragana READING spoken by macOS 'say -v Kyoko' (ja_JP) then transcoded to assets/audio/ui_ja/<key>.mp3 by generate_nav_audio_say.sh. ¥0, on-device, no torch/venv. These are NAVIGATION labels (not 英検 learning content); they never feed 合格率. Avatar (m5/m6) clips are added with the #110 gender-select picker.",
+  "exam": "えいけんの れんしゅう",
+  "passrate": "ごうかくりつ",
+  "map": "ちずを みる",
+  "settings": "せってい",
+  "hint": "タップ すると こえが でるよ",
+  "back": "もどる"
+}
