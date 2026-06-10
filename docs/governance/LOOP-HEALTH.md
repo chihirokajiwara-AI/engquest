@@ -67,7 +67,29 @@ improves.
 - 2026-06-10 (CEO 1185): initial audit above. Headline gap = no real-outcome
   signal (launch-blocked). Verifier caught 2 false-positives only via manual
   re-check. Test-locking 7/7. Action: this ledger + scheduled meta-audit.
-- 2026-06-10 (~7 ticks later): meta-audit. SHIPPED this run: #60 grade-scope
+- 2026-06-10 (CEO 1197 — "stop halting; decide via expert agents, don't make me
+  decide"): the correction caught TWO loop failures — (a) standby while awaiting
+  decisions, (b) escalating decidable items to the CEO. RESPONSE: convened a
+  14-agent expert panel (propose→harsh cross-critique→adjudicate, full context +
+  latest-first to every agent) that DECIDED both punted items — #133 audio path
+  (macOS `say -v Kyoko` file clips; flutter_tts/browser-TTS rejected on 2026
+  honesty evidence) and the character home placement/gender-select — then
+  EXECUTED across 8 commits (no halting): #133 tap-to-speak minimal
+  (onboarding-hint/practice-CTA/gender-select), full CHARACTER (M5/M6 picker +
+  grey→colour on pass-meter & home, hardcode fixed), brand-title コトバ探偵 fix,
+  accurate #59 rescope. VERIFIED the whole arc in a real browser (fresh
+  `flutter build web` via safe-job → interact_audit on title/onboarding/home/
+  vocab = render+interact, ZERO regressions; #49 green). Verify-before-acting
+  caught 5+ stale-state traps this session (WORLD-DEPTH-AUDIT claimed headliners
+  absent — actually built; 準2 grammar mis-classified as 2級 — actually 準2;
+  'Lord Silentus' canon break — already fixed; 3 'pending' tasks already done).
+  HEALTH NOTE: standing rule reaffirmed — the loop must DECIDE decidable items
+  via expert agents (not escalate, not standby), reserving CEO escalation for
+  genuine money/prod/legal/secrets ONLY. Frontier honesty: after this session the
+  non-gated clean frontier is exhausted+verified; the remaining is
+  backend-deploy-gated (#7/#63/#64), legal-escalated (#117/#30/#55), or
+  judgment-heavy narrative (#59 remainder) — none self-unblockable.
+- 2026-06-10 (~7 ticks earlier): meta-audit. SHIPPED this run: #60 grade-scope
   decontamination (4級 語句整序 removed 現在完了/SVOC/使役=3級+; 大問1 grammar cloze
   swept all 6 grade sections via content-qa, 1 off-grade item fixed; total only 2
   contaminations, both 現在完了-in-4級), #84 distractor ceiling-cap (準1 大問1 now
