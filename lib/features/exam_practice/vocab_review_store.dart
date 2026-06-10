@@ -83,7 +83,7 @@ class VocabReviewStore {
     final cards = await _load(grade);
     final now = DateTime.now();
     return cards.values
-        .where((c) => c.reps > 0 && (c.dueDate == null || now.isAfter(c.dueDate!)))
+        .where((c) => c.reps > 0 && (c.dueDate == null || !now.isBefore(c.dueDate!)))
         .map((c) => c.vocabId)
         .toSet();
   }

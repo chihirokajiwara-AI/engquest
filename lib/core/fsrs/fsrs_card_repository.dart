@@ -85,7 +85,7 @@ class InMemoryFsrsCardRepository implements FsrsCardRepository {
     final all = await loadDeck(userId);
     // FSRSCard.isDue uses DateTime.now() internally; we compare dueDate directly
     return all
-        .where((c) => c.dueDate == null || now.isAfter(c.dueDate!))
+        .where((c) => c.dueDate == null || !now.isBefore(c.dueDate!))
         .toList();
   }
 

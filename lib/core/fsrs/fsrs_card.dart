@@ -95,8 +95,11 @@ class FSRSCard {
     this.lastReview,
   });
 
-  /// True when card should appear in today's session
-  bool get isDue => dueDate == null || DateTime.now().isAfter(dueDate!);
+  /// True when card should appear in today's session. INCLUSIVE of the exact due
+  /// instant (>=): an interval=0 card (a just-missed word, scheduled dueDate=now
+  /// for "re-show within same session") must count as due — `isAfter` (>) would
+  /// hide it because now is not strictly after now. Matches firestore_card_repo.
+  bool get isDue => dueDate == null || !DateTime.now().isBefore(dueDate!);
 
   /// Current retrievability R(t, S) using FSRS-4.5 formula.
   /// Returns 0 if card has never been reviewed.

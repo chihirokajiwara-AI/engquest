@@ -212,7 +212,7 @@ class FSRSAlgorithm {
   /// All cards where [FSRSCard.isDue] is true at [now].
   List<FSRSCard> getDueCards(List<FSRSCard> deck, DateTime now) {
     return deck
-        .where((c) => c.dueDate == null || now.isAfter(c.dueDate!))
+        .where((c) => c.dueDate == null || !now.isBefore(c.dueDate!))
         .toList();
   }
 
