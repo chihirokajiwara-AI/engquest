@@ -38,6 +38,8 @@ class ProgressTintedCharacter extends StatelessWidget {
     required this.asset,
     required this.readiness,
     this.size = 120,
+    this.width,
+    this.height,
     this.semanticLabel,
   });
 
@@ -45,21 +47,28 @@ class ProgressTintedCharacter extends StatelessWidget {
 
   /// 0–1 honest readiness. Clamped; values outside [0,1] are tolerated.
   final double readiness;
+
+  /// Square fallback used when [width]/[height] are not given. The mains are
+  /// portrait, so callers usually pass an explicit [width]/[height].
   final double size;
+  final double? width;
+  final double? height;
   final String? semanticLabel;
 
   @override
   Widget build(BuildContext context) {
+    final w = width ?? size;
+    final h = height ?? size;
     return ColorFiltered(
       colorFilter: progressSaturationFilter(readiness),
       child: Image.asset(
         asset,
-        width: size,
-        height: size,
+        width: w,
+        height: h,
         fit: BoxFit.contain,
         semanticLabel: semanticLabel,
         // A missing art asset must never crash the screen — degrade to nothing.
-        errorBuilder: (_, __, ___) => SizedBox(width: size, height: size),
+        errorBuilder: (_, __, ___) => SizedBox(width: w, height: h),
       ),
     );
   }

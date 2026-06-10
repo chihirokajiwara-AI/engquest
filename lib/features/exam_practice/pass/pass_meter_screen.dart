@@ -28,6 +28,7 @@
 
 import 'package:flutter/material.dart';
 
+import '../../character/progress_tinted_character.dart';
 import '../../quest/ui/dq_ui.dart';
 import 'cse_model.dart';
 import 'pass_gauge.dart';
@@ -163,6 +164,18 @@ class _PassHero extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          const SizedBox(height: 4),
+
+          // Hero colours in with the HONEST readiness (CEO 3758 ①): grey when far
+          // from 合格, full colour at the 目安 — the same % the gauge below shows,
+          // felt as the protagonist coming to life. Default M5; gender-select #110.
+          ProgressTintedCharacter(
+            asset: 'assets/art/characters/m5_hero.webp',
+            readiness: pct / 100.0,
+            width: 84,
+            height: 120,
+            semanticLabel: '探偵（たんてい）。れんしゅうするほど 色（いろ）がつきます。',
+          ),
           const SizedBox(height: 4),
 
           // Grade label
