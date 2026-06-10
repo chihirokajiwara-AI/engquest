@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:engquest/core/ui/app_fonts.dart';
 import 'package:engquest/core/ui/readability_scale.dart';
 import 'package:engquest/core/config/flavor_config.dart';
+import 'package:engquest/features/character/progress_tinted_character.dart';
 import 'package:engquest/features/world_map/world_map_screen.dart';
 import 'package:engquest/features/battle/battle_screen.dart';
 import 'package:engquest/features/voice/voice_screen.dart';
@@ -123,6 +124,7 @@ class OnboardingStorage {
     await p.setInt(_kGoal, result.dailyGoalMinutes);
     // Persist θ̂ for T12 adaptive difficulty hook.
     await p.setString(_kPlacementTheta, result.placementTheta.toString());
+    HeroChoice.fromAvatarId = result.avatarId; // #110 reflect the chosen main now
   }
 
   static Future<OnboardingResult?> loadAsync() async {
@@ -130,12 +132,16 @@ class OnboardingStorage {
     if (!p.getBool(_kComplete)) return null;
     final thetaStr = p.getString(_kPlacementTheta);
     final theta = thetaStr != null ? (double.tryParse(thetaStr) ?? 0.0) : 0.0;
+    // Legacy saves carry old fantasy avatarIds (knight/mage/…); heroAssetForChoice
+    // maps those to the default M5, so no migration is needed.
+    final avatarId = p.getString(_kAvatar) ?? 'm5';
+    HeroChoice.fromAvatarId = avatarId; // #110 restore chosen main at startup
     return OnboardingResult(
       ageYears: p.getInt(_kAge),
       startEikenLevel: p.getString(_kStartLevel) ?? '5',
       placementGrade: 0, // not stored separately; theta is the T12 signal
       placementTheta: theta,
-      avatarId: p.getString(_kAvatar) ?? 'knight',
+      avatarId: avatarId,
       dailyGoalMinutes: p.getInt(_kGoal),
     );
   }

@@ -29,6 +29,30 @@ List<double> progressSaturationMatrix(double progress) {
 ColorFilter progressSaturationFilter(double progress) =>
     ColorFilter.matrix(progressSaturationMatrix(progress));
 
+/// Maps a stored protagonist choice id to its bundled portrait asset. The two
+/// LOCKED mains are M5「ストリート」(default male) and M6「クラシック」(female) —
+/// see docs/character/CHARACTER_BIBLE.md. Unknown/legacy ids (e.g. the old
+/// fantasy avatarIds) fall back to M5, the default protagonist.
+String heroAssetForChoice(String? id) => id == 'm6'
+    ? 'assets/art/characters/m6_hero.webp'
+    : 'assets/art/characters/m5_hero.webp';
+
+/// The child's chosen protagonist (#110 gender-select). A tiny synchronous holder
+/// — like AudioMute — so Stateless screens (e.g. the pass-meter) can render the
+/// chosen hero without threading an async pref read through the widget tree. Set
+/// once at startup from the saved avatarId and again on onboarding completion.
+class HeroChoice {
+  HeroChoice._();
+
+  /// 'm5' (default male) or 'm6' (female). Defaults to M5.
+  static String id = 'm5';
+
+  static set fromAvatarId(String? avatarId) =>
+      id = (avatarId == 'm6') ? 'm6' : 'm5';
+
+  static String get asset => heroAssetForChoice(id);
+}
+
 /// Shows [asset] tinted by [readiness] (0–1): grey when far from 合格, full colour
 /// at the 目安. Drive [readiness] from the HONEST cse_model readinessPct/100 — never
 /// a fabricated value (the colour must mean real progress).

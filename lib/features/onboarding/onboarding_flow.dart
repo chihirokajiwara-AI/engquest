@@ -83,21 +83,33 @@ class AvatarOption {
   final String emoji;
   final String name;
   final String jobTitle; // RPG class
+  final String? asset; // bundled portrait (M5/M6); null → render the emoji
 
   const AvatarOption({
     required this.id,
     required this.emoji,
     required this.name,
     required this.jobTitle,
+    this.asset,
   });
 }
 
+// #110 gender-select: the child picks one of the two LOCKED protagonist mains
+// (M5「ストリート」/ M6「クラシック」, docs/character/CHARACTER_BIBLE.md). The choice
+// is stored as avatarId and drives the grey→colour hero everywhere via HeroChoice.
 const List<AvatarOption> _avatars = [
-  AvatarOption(id: 'knight', emoji: '⚔️', name: 'アレックス', jobTitle: 'ナイト'),
-  AvatarOption(id: 'mage', emoji: '🧙', name: 'ルーナ', jobTitle: 'マジシャン'),
-  AvatarOption(id: 'archer', emoji: '🏹', name: 'カイ', jobTitle: 'アーチャー'),
-  AvatarOption(id: 'healer', emoji: '✨', name: 'ソフィー', jobTitle: 'ヒーラー'),
-  AvatarOption(id: 'rogue', emoji: '🗡️', name: 'ゼン', jobTitle: 'ローグ'),
+  AvatarOption(
+      id: 'm5',
+      emoji: '🕵️',
+      name: 'ストリート',
+      jobTitle: 'たんてい',
+      asset: 'assets/art/characters/m5_hero.webp'),
+  AvatarOption(
+      id: 'm6',
+      emoji: '🕵️‍♀️',
+      name: 'クラシック',
+      jobTitle: 'たんてい',
+      asset: 'assets/art/characters/m6_hero.webp'),
 ];
 
 // English class names for the bilingual avatar labels (cosmetic only — does not
@@ -114,6 +126,8 @@ String _avatarClassEn(String jobTitle) {
       return 'Healer';
     case 'ローグ':
       return 'Rogue';
+    case 'たんてい':
+      return 'Detective';
     default:
       return jobTitle;
   }
@@ -675,7 +689,7 @@ class _StepAvatar extends StatelessWidget {
           const SizedBox(height: 20),
           Expanded(
             child: GridView.count(
-              crossAxisCount: 3,
+              crossAxisCount: 2, // two locked mains, M5 / M6 (#110)
               mainAxisSpacing: 12,
               crossAxisSpacing: 12,
               childAspectRatio: 0.82,
@@ -740,7 +754,19 @@ class _AvatarCard extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            DqPortrait(emoji: avatar.emoji, size: selected ? 46 : 42),
+            if (avatar.asset != null)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.asset(
+                  avatar.asset!,
+                  height: selected ? 110 : 100,
+                  fit: BoxFit.contain,
+                  errorBuilder: (_, __, ___) =>
+                      DqPortrait(emoji: avatar.emoji, size: selected ? 46 : 42),
+                ),
+              )
+            else
+              DqPortrait(emoji: avatar.emoji, size: selected ? 46 : 42),
             const SizedBox(height: 6),
             Text(
               avatar.name,
