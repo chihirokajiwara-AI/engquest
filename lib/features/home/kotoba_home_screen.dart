@@ -27,6 +27,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 import 'package:engquest/core/audio/nav_speak.dart';
+import 'package:engquest/features/character/progress_tinted_character.dart';
 import 'package:engquest/core/data/vocab_repository.dart';
 import 'package:engquest/core/fsrs/fsrs_card_repository.dart';
 import 'package:engquest/core/storage/preferences_service.dart';
@@ -334,26 +335,49 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
 
   Widget _buildReadinessCard() {
     final est = _estimate;
+    // #58/#110 home hero (CEO-1197 character decision): the child's chosen
+    // detective greys→colours with the HONEST readiness — a "bring my detective
+    // to life by getting closer to 合格" hook on the front door. Colour == real
+    // progress only (0 when there is no practice data yet).
+    final readiness = (est?.readinessPct ?? 0) / 100.0;
     return GestureDetector(
       onTap: _goToPassMeter,
       child: DqPanel(
         title: '合格率（ごうかくりつ） / Pass readiness',
-        child: est == null
-            ? Row(
-                children: [
-                  const Icon(Icons.insights_outlined, color: dqGold, size: 28),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      'れんしゅうすると、合格（ごうかく）まで あと どれくらいか'
-                      ' わかるよ。タップして はじめよう！',
-                      style: dqText(size: 13, color: dqInk).copyWith(height: 1.5),
-                    ),
-                  ),
-                  const Icon(Icons.chevron_right, color: dqGold, size: 22),
-                ],
-              )
-            : _buildReadinessData(est),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ProgressTintedCharacter(
+              asset: HeroChoice.asset,
+              readiness: readiness,
+              width: 44,
+              height: 64,
+              semanticLabel:
+                  'あなたの たんてい。れんしゅうするほど 色（いろ）がつくよ。',
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: est == null
+                  ? Row(
+                      children: [
+                        const Icon(Icons.insights_outlined,
+                            color: dqGold, size: 28),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            'れんしゅうすると、合格（ごうかく）まで あと どれくらいか'
+                            ' わかるよ。タップして はじめよう！',
+                            style: dqText(size: 13, color: dqInk)
+                                .copyWith(height: 1.5),
+                          ),
+                        ),
+                        const Icon(Icons.chevron_right, color: dqGold, size: 22),
+                      ],
+                    )
+                  : _buildReadinessData(est),
+            ),
+          ],
+        ),
       ),
     );
   }
