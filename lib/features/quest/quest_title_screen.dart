@@ -181,7 +181,7 @@ class QuestTitleScreen extends StatelessWidget {
       alignment: Alignment.center,
       children: [
         // dark outline / extrude
-        Text('ことばの勇者',
+        Text('コトバ探偵',
             style: style.copyWith(
               foreground: Paint()
                 ..style = PaintingStyle.stroke
@@ -197,7 +197,7 @@ class QuestTitleScreen extends StatelessWidget {
             colors: [Colors.white, Color(0xFF8FD0FF), Color(0xFF2E72C8), Color(0xFF1A4E97)],
             stops: [0.0, 0.32, 0.7, 1.0],
           ).createShader(r),
-          child: Text('ことばの勇者', style: style.copyWith(color: Colors.white)),
+          child: Text('コトバ探偵', style: style.copyWith(color: Colors.white)),
         ),
       ],
     );
