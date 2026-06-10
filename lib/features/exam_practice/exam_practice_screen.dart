@@ -90,7 +90,7 @@ class _ExamPracticeScreenState extends State<ExamPracticeScreen> {
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 6, 16, 6),
             child: DqPanel(
-              title: '試験概要 / Exam Overview',
+              title: '試験概要（しけんがいよう） / Exam Overview',
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [

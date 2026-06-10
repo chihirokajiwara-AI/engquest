@@ -264,7 +264,7 @@ void main() {
       await answer(tester, "On Yuki's bed");
 
       // Should show pass result
-      expect(find.text('合格ライン到達！'), findsOneWidget);
+      expect(find.text('合格（ごうかく）ライン到達（とうたつ）！'), findsOneWidget);
       expect(find.text('4 / 4 正解 (100%)'), findsOneWidget);
     });
   });

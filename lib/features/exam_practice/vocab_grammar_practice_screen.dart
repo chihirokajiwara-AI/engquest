@@ -755,7 +755,7 @@ class _VocabGrammarPracticeScreenState
             ),
             const SizedBox(height: 16),
             Text(
-              passed ? '合格ライン到達！' : 'もう少し！',
+              passed ? '合格（ごうかく）ライン到達（とうたつ）！' : 'もう少（すこ）し！',
               style: dqText(size: 24, w: FontWeight.w900, color: dqGold),
             ),
             const SizedBox(height: 12),

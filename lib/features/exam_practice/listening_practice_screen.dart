@@ -534,7 +534,7 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
             ),
             const SizedBox(height: 12),
             Text(
-              passed ? '合格ライン到達！' : 'もう少し！',
+              passed ? '合格（ごうかく）ライン到達（とうたつ）！' : 'もう少（すこ）し！',
               style: dqText(size: 22, color: dqGold),
             ),
             const SizedBox(height: 16),
