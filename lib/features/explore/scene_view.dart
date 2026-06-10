@@ -596,6 +596,12 @@ class _SceneViewState extends State<SceneView> {
       child: Image.asset(
         asset,
         fit: BoxFit.cover,
+        // Decode at ~3× the display size (covers high-DPR) instead of the WebP's
+        // native 525×768 — the portrait renders in a 52–96px circle, so the full
+        // decode wasted ~5-10× GPU/heap per NPC over a long explore session
+        // (flaw-hunt R7; sibling of #131).
+        cacheWidth: (size * 3).round().clamp(1, 1600),
+        cacheHeight: (size * 3).round().clamp(1, 1600),
         errorBuilder: (_, __, ___) => Container(
           decoration: BoxDecoration(
             shape: BoxShape.circle,
