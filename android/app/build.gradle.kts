@@ -1,5 +1,10 @@
 plugins {
     id("com.android.application")
+    // KGP (Kotlin Gradle Plugin). gradle.properties sets android.builtInKotlin=false
+    // (opt out of AGP 9's built-in Kotlin), so the app MUST apply kotlin-android —
+    // otherwise no Kotlin is compiled and KGP-based plugins (e.g. firebase_analytics)
+    // produce no classes → "cannot find symbol FlutterFirebaseAnalyticsPlugin" (#143).
+    id("org.jetbrains.kotlin.android")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
     // Firebase: Google Services plugin (processes google-services.json)
