@@ -197,3 +197,43 @@ learner-mirror (narrative byte-identical regardless of avatar), while CEO msgs
 gender-select at start**. This is the CEO reconciling his own two directions, not
 a team-decidable design choice — surface it; build only the gender-agnostic
 narrative/cast/world (valid under either) until reconciled.
+
+---
+
+## VII. Durability invariants — never assume, only measure (CEO 1203 / 1205 / 1206, 2026-06-11)
+
+**Post-mortem.** The loop silently regressed from the super-advanced flaw-hunt
+engine down to small fixes → a heartbeat. ROOT CAUSE: a per-tick **judgment** ("the
+clean non-gated frontier is exhausted") made **without measurement (推定)**. It was
+false — the diverse-persona flaw-hunt never runs dry (R1–R5 and #117–122 prove it).
+The failure was *an unmeasured assumption presented as a conclusion.*
+
+**CEO 1206 is the binding fix: 「検証なし推定では行わず、必ず完璧な実測で裁定」 —
+never adjudicate by assumption; only by actual measurement.** Structural, not
+willpower; a future / context-compacted instance MUST obey:
+
+1. **"Done / complete / passing / exhausted / nothing-to-do" is a FORBIDDEN
+   conclusion absent 実測.** Every such claim requires ACTUAL MEASUREMENT — run the
+   real code / real browser / real test and cite what was run. 推定 is not
+   adjudication; only 実測 is. This binds BOTH directions: do not declare something
+   broken OR fixed without measuring it.
+2. **The flaw-hunt runs UNCONDITIONALLY every cycle** — never gated on a judgment of
+   "is there work?" (that judgment is the single point of failure). Winding down to
+   a heartbeat because the frontier "feels" thin is the regression, now forbidden.
+3. **"Completed" is not trusted.** Items marked done are re-audited by 実測 on a
+   rotating basis — assume nothing is finished until measured.
+4. **Verify the flaw-hunt's OWN findings by 実測 before acting** — they are
+   candidates, not verdicts. (Proof, 2026-06-11: flaw-hunt R3 reported a "critical
+   COPPA bypass / child data sent without consent." 実測 REFUTED it: AnalyticsService
+   defaults to NoOpAnalytics and only builds the Firebase sink when
+   `firebaseAvailable && analyticsConsentGranted`, consent defaulting FALSE — so no
+   data leaves the device. Acting on the unmeasured claim would have been a false
+   fix. Equally, a paywall-bypass finding is moot because billing is non-functional
+   live; gating it now would lock the demo. Only 実測 separated real from overstated.)
+5. **No 永続的-success claim.** No honest system is "perfect" or "permanently
+   successful," and claiming so would itself violate the product's HONESTY
+   non-negotiable. Residual risks stay VISIBLE: main-loop judgment fallibility,
+   verifier/flaw-hunt fallibility, shared persona blind-spots, CEO/backend-gated
+   launch-blockers, and the headline gap — NO real-user outcome signal pre-launch.
+   The commitment is the *discipline* (continuous hunt + verify-by-real-measurement
+   + never-assume), not a guarantee of the outcome.
