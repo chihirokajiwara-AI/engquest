@@ -21,8 +21,11 @@
 //   - The 🔊 large replay button always visible above the question (CEO directive).
 //   - Part header shown between parts; individual items shown one at a time.
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
+import 'choice_shuffle.dart';
 import '../../core/audio/audio_assets.dart';
 import '../../core/audio/audio_cue_service.dart';
 import '../../core/audio/audio_mute.dart';
@@ -81,7 +84,16 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
   void initState() {
     super.initState();
     _cue = AudioCueService();
-    _items = kListeningItems[widget.eikenGrade] ?? [];
+    // Shuffle each item's choices at load — the authored listening keys cluster
+    // at position 2 (40%, position 4 nearly unused), so an always-tap-1 child
+    // would score ~40% with no comprehension, inflating the listening 合格率.
+    // Choices are on-screen text (not spoken in the audio), so moving them is
+    // safe. Mirrors reading/conversation (#79). See [shuffledChoiceSet].
+    final rng = Random();
+    _items = (kListeningItems[widget.eikenGrade] ?? []).map((it) {
+      final s = shuffledChoiceSet(it.choices, it.correctIndex, rng);
+      return it.copyWith(choices: s.choices, correctIndex: s.correctIdx);
+    }).toList();
     _partHeaderShown = _items.isEmpty;
     // Probe each item's audio availability (manifest-based, no byte load). Starts
     // optimistic (all true) so an item is never wrongly excluded before the check

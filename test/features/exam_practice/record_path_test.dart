@@ -236,11 +236,21 @@ void main() {
         await tester.tap(play);
         await tester.pump();
       }
-      // Answer: problem 0 deliberately wrong, the rest correct (count guard).
-      final correctIdx = items[i].correctIndex;
-      final pickIdx =
-          i == 0 ? (correctIdx + 1) % items[i].choices.length : correctIdx;
-      await tester.tap(find.byType(DqChoice).at(pickIdx));
+      // Answer by the correct TEXT (shuffle-proof): choices are randomised at
+      // load (#79), so position no longer maps to the authored key.
+      // Problem 0 deliberately wrong, the rest correct (count guard).
+      final choices = items[i].choices;
+      final answerText = i == 0
+          ? choices[(items[i].correctIndex + 1) % choices.length]
+          : choices[items[i].correctIndex];
+      final choiceFinder = find
+          .ancestor(
+              of: find.textContaining(answerText),
+              matching: find.byType(DqChoice))
+          .first;
+      await tester.ensureVisible(choiceFinder);
+      await tester.pump();
+      await tester.tap(choiceFinder);
       await tester.pump();
       await tester.tap(
           find.text(i < n - 1 ? 'つぎへ / Next' : 'けっか / Results'));
@@ -296,7 +306,14 @@ void main() {
         await tester.tap(play);
         await tester.pump();
       }
-      await tester.tap(find.byType(DqChoice).at(items[i].correctIndex));
+      final lFinder = find
+          .ancestor(
+              of: find.textContaining(items[i].choices[items[i].correctIndex]),
+              matching: find.byType(DqChoice))
+          .first;
+      await tester.ensureVisible(lFinder);
+      await tester.pump();
+      await tester.tap(lFinder);
       await tester.pump();
       await tester.tap(
           find.text(i < n - 1 ? 'つぎへ / Next' : 'けっか / Results'));
@@ -337,7 +354,14 @@ void main() {
         await tester.tap(start);
         await tester.pump();
       }
-      await tester.tap(find.byType(DqChoice).at(items[i].correctIndex));
+      final lFinder = find
+          .ancestor(
+              of: find.textContaining(items[i].choices[items[i].correctIndex]),
+              matching: find.byType(DqChoice))
+          .first;
+      await tester.ensureVisible(lFinder);
+      await tester.pump();
+      await tester.tap(lFinder);
       await tester.pump();
       await tester.tap(
           find.text(i < n - 1 ? 'つぎへ / Next' : 'けっか / Results'));
@@ -382,7 +406,14 @@ void main() {
         await tester.pump();
       }
       // Deliberately do NOT tap 🔊 — answer blind.
-      await tester.tap(find.byType(DqChoice).at(items[i].correctIndex));
+      final lFinder = find
+          .ancestor(
+              of: find.textContaining(items[i].choices[items[i].correctIndex]),
+              matching: find.byType(DqChoice))
+          .first;
+      await tester.ensureVisible(lFinder);
+      await tester.pump();
+      await tester.tap(lFinder);
       await tester.pump();
       await tester.tap(
           find.text(i < n - 1 ? 'つぎへ / Next' : 'けっか / Results'));

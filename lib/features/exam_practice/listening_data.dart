@@ -63,6 +63,19 @@ class ListeningItem {
     required this.correctIndex,
     this.imageHint,
   });
+
+  ListeningItem copyWith({List<String>? choices, int? correctIndex}) =>
+      ListeningItem(
+        part: part,
+        grade: grade,
+        audioKey: audioKey,
+        transcripts: transcripts,
+        questionType: questionType,
+        question: question,
+        choices: choices ?? this.choices,
+        correctIndex: correctIndex ?? this.correctIndex,
+        imageHint: imageHint,
+      );
 }
 
 enum ListeningQuestionType {

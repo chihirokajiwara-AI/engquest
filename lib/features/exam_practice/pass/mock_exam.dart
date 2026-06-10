@@ -34,6 +34,7 @@
 import 'dart:math';
 
 import 'cse_model.dart';
+import '../choice_shuffle.dart';
 import '../listening_data.dart';
 import '../writing_practice_screen.dart';
 import 'reading_item_pool.dart';
@@ -193,7 +194,7 @@ class MockExamAssembler {
     // ── Listening ─────────────────────────────────────────────────────────────
     final listeningTarget = targets[EikenSkill.listening] ?? 0;
     if (listeningTarget > 0) {
-      final rawItems = _listeningMcqItems(grade);
+      final rawItems = _listeningMcqItems(grade, rng);
       final drawn = _drawItems(rawItems, listeningTarget, rng);
       mcqItems.addAll(drawn);
       available[EikenSkill.listening] = drawn.length;
@@ -228,19 +229,24 @@ class MockExamAssembler {
 
   /// Pull all listening items for a grade from [kListeningItems] and convert
   /// to [MockMcqItem].
-  static List<MockMcqItem> _listeningMcqItems(String grade) {
+  static List<MockMcqItem> _listeningMcqItems(String grade, Random rng) {
     final items = kListeningItems[grade] ?? [];
-    return items
-        .where((it) => it.choices.length == 4)
-        .map((it) => MockMcqItem(
-              id: it.audioKey,
-              questionText: it.question,
-              choices: it.choices,
-              correctIdx: it.correctIndex,
-              skill: EikenSkill.listening,
-              sectionId: '${grade}_l',
-            ))
-        .toList();
+    return items.where((it) => it.choices.length == 4).map((it) {
+      // Shuffle each item's choices — the authored listening keys cluster at
+      // position 2 (40%) with position 4 almost unused (3%), so an always-tap-1
+      // child scores ~40% on listening with no comprehension, inflating the CSE
+      // 合格率. Choices are on-screen text (not spoken in the audio), so moving
+      // them is safe. Mirrors reading/conversation (#79). See [shuffledChoiceSet].
+      final s = shuffledChoiceSet(it.choices, it.correctIndex, rng);
+      return MockMcqItem(
+        id: it.audioKey,
+        questionText: it.question,
+        choices: s.choices,
+        correctIdx: s.correctIdx,
+        skill: EikenSkill.listening,
+        sectionId: '${grade}_l',
+      );
+    }).toList();
   }
 
   /// Pull reading comprehension items from [readingItemsFor] and convert.
