@@ -29,12 +29,20 @@ improves.
   (runtime-fetched audio per #48, town art) remain.
 
 ## The gaps that make the answer "not 100%" (prioritised)
-1. **No real-outcome signal (the #1 gap).** The loop optimises PROXIES (honesty,
-   a11y, gate-green, persona-simulated flaws) because the app is NOT launched with
-   real children — the SOLE metric, "does a kid actually pass 英検", is unmeasured.
-   The improvement loop has no ground truth. **BLOCKED on launch (#7 backend deploy
-   + real users + post-launch telemetry).** Until then the loop is improving a
-   simulation, not measured reality.
+1. **Real-OUTCOME signal (pass-rate) only comes post-launch — but that is NOT an
+   excuse to stop (CEO 1187).** Real-user 合格率 needs web telemetry on real
+   users, which is genuinely pre-launch-impossible. The correction: do NOT frame
+   this as a blocker — extract every bit of real signal OBTAINABLE NOW by digging
+   in. Concretely: (a) DONE — drive the real app's core value chain end-to-end
+   (test/integration/exam_value_chain_test.dart): a real practice result →
+   SkillAccuracyStore → the pass-meter the child opens shows the honest 合格率, or
+   an honest "do practice first" with no data. This verifies the value works for a
+   real user, not a persona. (b) NEXT — real-browser INTERACTION (#49): the
+   render-proof checks paint only; add chromedriver + flutter integration_test on
+   web (or Playwright via enabled Flutter semantics) to drive real flows in a real
+   browser. (c) post-launch — wire the web 合格率/retention telemetry so the loop
+   finally learns from real children. The loop is NOT idle waiting for (c); it
+   maximises (a)/(b) now.
 2. **Auto-verifier fallibility (evidenced above)** — not systematized; depends on
    main-loop discipline. Mitigation: the standing rule "verify every finding
    against real code before acting" is now load-bearing, not optional.
