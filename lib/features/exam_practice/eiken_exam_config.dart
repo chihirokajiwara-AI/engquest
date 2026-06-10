@@ -426,7 +426,7 @@ const Map<String, EikenExamDef> kEikenExams = {
         // 41→31. The hub tile shows this count AND the vocab screen generates
         // exactly this many items, so the stale 25 over-served + misstated the
         // flagship grade's exam. Verified eiken.or.jp/obunsha 2024renewal,
-        // 2026-06. (大問3 10→7 still pending — bank is 2×5, needs a re-author.)
+        // 2026-06.
         questionCount: 18,
         timeLimitMinutes: 15,
         description: '短い文の空所に入る適切な語句を4つの選択肢から選ぶ（単語14・熟語4）',
@@ -445,7 +445,14 @@ const Map<String, EikenExamDef> kEikenExams = {
         nameJa: '筆記3: 長文の内容一致選択',
         nameEn: 'Reading 3: Reading Comprehension',
         type: ExamSectionType.readingComprehension,
-        questionCount: 10,
+        // 2024 reform: 準1級 大問3 cut 10→7 (long-passage 内容一致). This makes the
+        // 準1 筆記 reading total 18+6+7 = 31, matching the official post-2024 count.
+        // Verified eiken.or.jp / obunsha・eslclub 2024renewal, 2026-06. Note: the
+        // mock 合格率 weighting already used the correct 31 (_kTargetCounts in
+        // mock_exam.dart), and the practice screen serves its 2-passage bank (×5 =
+        // 10) as BONUS drilling regardless of this count — so this is the hub-tile
+        // spec made honest, not a content re-author.
+        questionCount: 7,
         timeLimitMinutes: 25,
         description: '長文を読んで質問に答える',
       ),

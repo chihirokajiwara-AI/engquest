@@ -94,12 +94,14 @@ void main() {
   });
 
   // grade → official total 筆記 READING-skill question count (大問1〜4: 語句空所補充
-  // + 会話空所 + 語句整序 + 長文内容一致). Only the SETTLED grades 5/4/3 are locked
-  // here; 準2級〜準1級 reading sections still sum below official pending content
-  // re-author (#60/#108), so they are tracked by mock_exam/reading-pool targets,
-  // not pinned here. 4級 was a stale 30 (大問4=5) — this guard would have caught it.
-  // Verified eiken.or.jp: 5級=25, 4級=35, 3級=30 (post-2024). 2026-06-09.
-  const readingTotal = <String, int>{'5': 25, '4': 35, '3': 30};
+  // + 会話空所 + 語句整序 + 長文内容一致). SETTLED grades 5/4/3 are locked here, plus
+  // 準1級 (#137): 大問1=18 + 大問2=6 + 大問3=7 = 31, matching the official post-2024
+  // count — 大問3 was a stale 10 (over-stating the section); fixing it to 7 settled
+  // the pre1 total. 準2級〜2級 reading sections still sum off official pending content
+  // re-author (#60/#108), tracked by mock_exam/reading-pool targets, not pinned here.
+  // 4級 was a stale 30 (大問4=5) — this guard would have caught it.
+  // Verified eiken.or.jp: 5級=25, 4級=35, 3級=30, 準1級=31 (post-2024). 2026-06-11.
+  const readingTotal = <String, int>{'5': 25, '4': 35, '3': 30, 'pre1': 31};
   const readingTypes = {
     ExamSectionType.vocabGrammar,
     ExamSectionType.conversationComplete,
