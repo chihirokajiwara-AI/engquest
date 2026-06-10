@@ -737,7 +737,17 @@ class _AvatarCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    // a11y: announce the card as a selectable button with its name + class +
+    // selected state (matches the exam choice-tile idiom, #92/#95). Without this
+    // a screen-reader user (e.g. a blind parent helping a 4yo) hears no button
+    // role and can't tell which hero is selected (flaw-hunt R6).
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: '${avatar.name}、${_avatarClassEn(avatar.jobTitle)}',
+      onTap: onTap,
+      excludeSemantics: true,
+      child: GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
@@ -807,7 +817,7 @@ class _AvatarCard extends StatelessWidget {
           ],
         ),
       ),
-    );
+    ));
   }
 }
 
