@@ -101,6 +101,13 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
   /// comprehension. Persisted so the choice sticks.
   bool _captionsOn = false;
 
+  // Whether the child actually PLAYED the current item's audio before answering
+  // (#R5 metric-gamer): the screen does not (and on web cannot reliably) auto-play,
+  // so a child could rapid-guess without ever hearing the clip and still feed the
+  // by-ear 合格率. Reset per item; an un-played item is not honest listening
+  // measurement and is excluded — same principle as muted/captioned (#112/#125).
+  bool _playedCurrent = false;
+
   Future<void> _loadCaptionPref() async {
     final prefs = await PreferencesService.getInstance();
     final on = prefs.getBool(PrefKeys.listeningCaptions);
@@ -114,14 +121,17 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
   }
 
   /// Whether the CURRENT item can honestly count toward the listening 合格率:
-  /// its audio is bundled, the Voice channel isn't muted, AND the child is not in
-  /// "read the script" caption mode (reading ≠ hearing). A muted/captioned child
-  /// did not actually HEAR it, so it stays out of the by-ear 合格率 (#112/#125).
+  /// its audio is bundled, the Voice channel isn't muted, the child is not in
+  /// "read the script" caption mode (reading ≠ hearing), AND the child actually
+  /// PLAYED the clip (answering blind without listening is not a by-ear result).
+  /// A muted/captioned/un-played child did not actually HEAR it, so it stays out
+  /// of the by-ear 合格率 (#112/#125/#R5).
   bool get _currentMeasurable =>
       _currentIdx < _audioOk.length &&
       _audioOk[_currentIdx] &&
       !AudioMute.voiceMuted &&
-      !_captionsOn;
+      !_captionsOn &&
+      _playedCurrent;
 
   @override
   void dispose() {
@@ -146,6 +156,7 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
   void _playAudio() {
     final item = _current;
     if (item == null) return;
+    _playedCurrent = true; // heard it → this item may count toward 合格率
     _cue.play('audio/listening/${item.audioKey}');
   }
 
@@ -209,6 +220,7 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
         _selectedAnswer = null;
         _answered = false;
         _partHeaderShown = false;
+        _playedCurrent = false; // new item: must hear it again to count (#R5)
       });
     }
   }

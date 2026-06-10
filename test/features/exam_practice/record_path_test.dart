@@ -229,6 +229,13 @@ void main() {
         await tester.tap(start);
         await tester.pump();
       }
+      // Play the clip first — un-played items don't count toward the by-ear
+      // 合格率 (#R5). The button is absent on a no-audio item (correctly skipped).
+      final play = find.text('🔊 もう いちど きく');
+      if (play.evaluate().isNotEmpty) {
+        await tester.tap(play);
+        await tester.pump();
+      }
       // Answer: problem 0 deliberately wrong, the rest correct (count guard).
       final correctIdx = items[i].correctIndex;
       final pickIdx =
@@ -280,6 +287,13 @@ void main() {
       final start = find.text('はじめる / Start');
       if (start.evaluate().isNotEmpty) {
         await tester.tap(start);
+        await tester.pump();
+      }
+      // Play before answering so the audible items count (#R5); the no-audio
+      // item has no play button and stays excluded.
+      final play = find.text('🔊 もう いちど きく');
+      if (play.evaluate().isNotEmpty) {
+        await tester.tap(play);
         await tester.pump();
       }
       await tester.tap(find.byType(DqChoice).at(items[i].correctIndex));
@@ -340,6 +354,50 @@ void main() {
         .fold<int>(0, (s, a) => s + a.itemsAttempted);
     expect(listening, equals(0),
         reason: 'caption (read) mode must not feed the by-ear listening 合格率');
+  });
+
+  testWidgets('リスニング: answering WITHOUT playing the clip is EXCLUDED from '
+      '合格率 (#R5 anti-gaming)', (tester) async {
+    // A child who rapid-guesses without pressing 🔊 never heard the audio, so it
+    // is not a by-ear result and must not inflate the listening 合格率.
+    const grade = '5';
+    final items = kListeningItems[grade]!;
+    final n = items.length;
+    SharedPreferences.setMockInitialValues({});
+    PreferencesService.resetInstance();
+
+    await tester.pumpWidget(MaterialApp(
+      home: ListeningPracticeScreen(
+        eikenGrade: grade,
+        section: _section(ExamSectionType.listening),
+      ),
+    ));
+    await tester.pump();
+    await tester.pump();
+
+    for (var i = 0; i < n; i++) {
+      final start = find.text('はじめる / Start');
+      if (start.evaluate().isNotEmpty) {
+        await tester.tap(start);
+        await tester.pump();
+      }
+      // Deliberately do NOT tap 🔊 — answer blind.
+      await tester.tap(find.byType(DqChoice).at(items[i].correctIndex));
+      await tester.pump();
+      await tester.tap(
+          find.text(i < n - 1 ? 'つぎへ / Next' : 'けっか / Results'));
+      await tester.pump();
+    }
+    await tester.pump(const Duration(milliseconds: 300));
+    await tester.pump();
+
+    final store = await SkillAccuracyStore.getInstance();
+    final listening = store
+        .readAccuracies(grade)
+        .where((a) => a.skill == EikenSkill.listening)
+        .fold<int>(0, (s, a) => s + a.itemsAttempted);
+    expect(listening, equals(0),
+        reason: 'un-played (un-heard) items must not feed the listening 合格率');
   });
 
   // ── 大問1 vocab/grammar (#37) ──────────────────────────────────────────────
