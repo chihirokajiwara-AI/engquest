@@ -152,10 +152,10 @@ class _VocabGrammarPracticeScreenState
       // Keep an above-grade word from being the GRADED answer of a 大問1 cloze
       // (#84). 準1's bank carries 289 C1-tagged words; testing a child on C1
       // vocab as if it were 準1 mis-measures readiness on the marquee grade. We
-      // restrict the TARGET pool to on-grade words (above-grade words still
-      // surface as distractors via buildAntiLeakDistractors). Guarded so a grade
-      // that can't field enough on-grade items keeps the full pool rather than
-      // running empty.
+      // restrict the TARGET pool to on-grade words (distractors are capped at the
+      // same ceiling below via distractorBank, so the whole item is grade-pure).
+      // Guarded so a grade that can't field enough on-grade items keeps the full
+      // pool rather than running empty.
       final ceiling = kGradeCefrCeiling[widget.eikenGrade];
       if (ceiling != null) {
         final onGrade = eligible
@@ -197,13 +197,27 @@ class _VocabGrammarPracticeScreenState
         for (final w in allWords) w.word.toLowerCase(): w.jpTranslation,
       };
 
+      // #84: keep DISTRACTORS on-grade too. The TARGET is already ceiling-capped
+      // above, but distractors were drawn from the full bank — so a 準1 item
+      // (target ≤B2) could still slip a C1 jargon word in as an option. Cap the
+      // distractor candidate pool at the same ceiling; fall back to the full bank
+      // only if the on-grade pool is too thin to ever field three candidates.
+      final distractorBank = ceiling == null
+          ? allWords
+          : (() {
+              final onGrade = allWords
+                  .where((w) => w.cefrLevel.index <= ceiling.index)
+                  .toList();
+              return onGrade.length >= 4 ? onGrade : allWords;
+            })();
+
       final wanted = widget.section.questionCount;
       final questions = <_Question>[];
       for (final word in eligible) {
         if (questions.length >= wanted) break;
         final sentence = word.exampleSentences.first;
         final distractors =
-            buildAntiLeakDistractors(word, sentence, allWords, _rng);
+            buildAntiLeakDistractors(word, sentence, distractorBank, _rng);
         if (distractors == null) continue; // not enough clean candidates
         final cloze = _makeCloze(sentence, word.word);
         final choices = [word.word, ...distractors];
