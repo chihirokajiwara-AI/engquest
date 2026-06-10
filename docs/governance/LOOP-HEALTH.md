@@ -67,3 +67,27 @@ improves.
 - 2026-06-10 (CEO 1185): initial audit above. Headline gap = no real-outcome
   signal (launch-blocked). Verifier caught 2 false-positives only via manual
   re-check. Test-locking 7/7. Action: this ledger + scheduled meta-audit.
+- 2026-06-10 (~7 ticks later): meta-audit. SHIPPED this run: #60 grade-scope
+  decontamination (4級 語句整序 removed 現在完了/SVOC/使役=3級+; 大問1 grammar cloze
+  swept all 6 grade sections via content-qa, 1 off-grade item fixed; total only 2
+  contaminations, both 現在完了-in-4級), #84 distractor ceiling-cap (準1 大問1 now
+  grade-pure), #49 standing real-browser audit RAN green (vocab interaction
+  confirmed in Chromium). **Served the SOLE metric** (honest 英検 prep = correct
+  级-appropriate content), NOT busywork — but the vein is now largely harvested.
+  • Verify-before-acting earned its keep again: caught 3 STALE "pending" tasks
+    actually already done (#92 textScaler, #108 reskin, #43-core) before
+    re-doing them; confirmed content-qa's flagged line numbers against real code
+    before editing. 0 false fixes shipped.
+  • Test-locking HONEST GAP: the grade-scope/distractor-purity fixes are
+    content-qa-gated, NOT unit-test-locked — a regression re-introducing
+    off-grade grammar would NOT fail CI. This is structural: grade-scope needs
+    grammar understanding (infeasible in a unit test), so content-qa IS the
+    correct gate per governance. Accepted, not a defect; flagged for awareness.
+  • Loop correctly SELF-LIMITED at the gated boundary: declined a risky 77-file
+    `dart format` sweep (#36; local 3.44.0 vs CI 3.44.1 patch mismatch + mobile
+    builds stay red → CI wouldn't go green anyway), and held CEO pings (5
+    unanswered, no decision needed) to avoid noise. Health signal: the loop
+    avoided manufacturing marginal work when the clean frontier ran out.
+  • STANDING BLOCKER unchanged: the highest-value remaining work is CEO-gated
+    (#133 audio A/B, character home placement) or backend-gated (#6/#7/#63/#64)
+    — the loop has surfaced these and cannot self-unblock.
