@@ -307,16 +307,26 @@ class _MockExamScreenState extends State<MockExamScreen> {
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+                  // #114/WCAG SC 1.4.4: Flexible so the progress + section label
+                  // share width and shrink (not clip ~68px) at large text scales.
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        '${_index + 1} / ${_items.length}',
-                        style: const TextStyle(color: dqInk, fontSize: 14),
+                      Flexible(
+                        child: Text(
+                          '${_index + 1} / ${_items.length}',
+                          style: const TextStyle(color: dqInk, fontSize: 14),
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
-                      Text(
-                        isListening ? '🎧 リスニング' : '📖 リーディング',
-                        style: const TextStyle(color: dqInk, fontSize: 14),
+                      const SizedBox(width: 8),
+                      Flexible(
+                        child: Text(
+                          isListening ? '🎧 リスニング' : '📖 リーディング',
+                          style: const TextStyle(color: dqInk, fontSize: 14),
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.end,
+                        ),
                       ),
                     ],
                   ),

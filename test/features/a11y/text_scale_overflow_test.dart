@@ -15,8 +15,23 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:engquest/features/home/kotoba_home_screen.dart';
 import 'package:engquest/features/exam_practice/exam_practice_screen.dart';
 import 'package:engquest/features/exam_practice/pass/pass_meter_screen.dart';
+import 'package:engquest/features/exam_practice/eiken_exam_config.dart';
+import 'package:engquest/features/exam_practice/vocab_grammar_practice_screen.dart';
+import 'package:engquest/features/exam_practice/listening_practice_screen.dart';
+import 'package:engquest/features/exam_practice/word_ordering_practice_screen.dart';
+import 'package:engquest/features/exam_practice/conversation_practice_screen.dart';
+import 'package:engquest/features/exam_practice/mock_exam_screen.dart';
 import 'package:engquest/features/onboarding/onboarding_flow.dart';
 import 'package:engquest/core/fsrs/fsrs_card_repository.dart';
+
+ExamSection _sec(ExamSectionType t) => ExamSection(
+    id: '5_x',
+    nameJa: 'テスト 大問',
+    nameEn: 'Section',
+    type: t,
+    questionCount: 5,
+    timeLimitMinutes: 10,
+    description: 'd');
 
 Future<void> _pumpAt2x(WidgetTester tester, double width, Widget child) async {
   SharedPreferences.setMockInitialValues({});
@@ -58,12 +73,26 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  // Exam hub — hardened (the overview chips Row → Wrap, d-commit).
-  testWidgets('exam-practice OK @ textScaler 2.0 (WCAG SC 1.4.4)', (tester) async {
-    await _pumpAt2x(tester, 360, const ExamPracticeScreen(eikenGrade: '5'));
-    expect(tester.takeException(), isNull);
+  // Exam hub + sub-screens — all hardened + verified at 2.0x.
+  final subScreens = <String, Widget>{
+    'exam-practice': const ExamPracticeScreen(eikenGrade: '5'),
+    'vocab-grammar': VocabGrammarPracticeScreen(
+        eikenGrade: '5', section: _sec(ExamSectionType.vocabGrammar)),
+    'listening': ListeningPracticeScreen(
+        eikenGrade: '5', section: _sec(ExamSectionType.listening)),
+    'word-ordering': WordOrderingPracticeScreen(
+        eikenGrade: '5', section: _sec(ExamSectionType.wordOrdering)),
+    'conversation': ConversationPracticeScreen(
+        eikenGrade: '5', section: _sec(ExamSectionType.conversationComplete)),
+    'mock-exam': const MockExamScreen(eikenGrade: '5'),
+  };
+  subScreens.forEach((name, w) {
+    testWidgets('$name OK @ textScaler 2.0 (WCAG SC 1.4.4)', (tester) async {
+      await _pumpAt2x(tester, 360, w);
+      expect(tester.takeException(), isNull);
+    });
   });
-  // Remaining before the app.dart cap can rise 1.6→2.0 (#114): the reading /
-  // listening / mock / conversation / word-ordering screens still need 2.0x
-  // verification + hardening. Add them here as they are cleared.
+  // Remaining before the app.dart cap can rise 1.6→2.0 (#114): standalone
+  // ReadingPracticeScreen + the quest battle / scene-view screens. Add here as
+  // cleared, then raise the cap.
 }
