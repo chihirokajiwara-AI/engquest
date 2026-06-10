@@ -13,6 +13,7 @@ import '../../core/storage/preferences_service.dart';
 
 class HintCoinService {
   static const _prefKey = 'hint_coin_balance';
+  static const _seededKey = 'hint_coin_seeded';
   static const _seedBalance = 10;
   static const _costByTier = [0, 1, 2, 3]; // index = tier (1-based: use index 1..3)
 
@@ -31,18 +32,18 @@ class HintCoinService {
   /// Returns the current coin balance (async first call, sync after).
   Future<int> balance() async {
     await _ensurePrefs();
-    final stored = _prefs!.getInt(_prefKey);
-    // 0 means never set — initialise to seed value.
-    if (stored == 0 && !_seedWritten) {
+    // getInt returns 0 for BOTH "never initialised" and "spent down to 0", so a
+    // separate PERSISTED flag marks the one-time seed. The old code returned the
+    // seed (10) whenever the balance read 0 — so a child who spent all their
+    // coins, navigated away, and returned got 10 back every time → infinite hint
+    // coins (the hint scaffold became free/unlimited). R9.
+    if (!_prefs!.getBool(_seededKey)) {
       await _prefs!.setInt(_prefKey, _seedBalance);
-      _seedWritten = true;
+      await _prefs!.setBool(_seededKey, true);
       return _seedBalance;
     }
-    _seedWritten = true;
-    return stored == 0 ? _seedBalance : stored;
+    return _prefs!.getInt(_prefKey); // real balance, including a legitimate 0
   }
-
-  bool _seedWritten = false;
 
   // ── Add coin ──────────────────────────────────────────────────────────────
 
