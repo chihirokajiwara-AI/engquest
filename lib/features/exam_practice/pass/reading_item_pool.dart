@@ -408,12 +408,14 @@ const _grade4Reading = [
     correctIdx: 3,
   ),
   ReadingMockItem(
+    // #60 grade-scope: was a 現在完了 (have+pp+already) cloze = 3級 grammar in the
+    // 4級 section. Re-framed to 過去形 (last night) — same vocab, 4級-legal point.
     id: '4_r_015',
     sectionId: '4_r1',
-    passageText: 'I have ( ) my homework already.',
+    passageText: 'I ( ) my homework last night.',
     questionText: 'Choose the best word for the blank.',
-    choices: ['finishing', 'finish', 'finishes', 'finished'],
-    correctIdx: 3,
+    choices: ['finish', 'finishes', 'finished', 'finishing'],
+    correctIdx: 2,
   ),
   ReadingMockItem(
     id: '4_r_016',
