@@ -122,6 +122,12 @@ class ReadingPracticeScreen extends StatefulWidget {
   final String eikenGrade;
   final ExamSection section;
 
+  /// Minimum time a question must be on screen before an answer counts toward the
+  /// by-comprehension reading 合格率 (#R5 anti-gaming). An answer faster than a
+  /// human can read+comprehend is excluded (not blocked). Overridable in tests.
+  @visibleForTesting
+  static Duration minReadTime = const Duration(seconds: 2);
+
   @override
   State<ReadingPracticeScreen> createState() => _ReadingPracticeScreenState();
 }
@@ -136,6 +142,13 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
   int _totalQuestions = 0;
   bool _sessionDone = false;
 
+  // #R5 anti-gaming: only questions the child plausibly had time to READ feed the
+  // by-comprehension reading 合格率. Tracked separately from the visible
+  // _correctCount/_totalQuestions (which still count every answer for progress).
+  DateTime? _questionShownAt;
+  int _measuredCorrect = 0;
+  int _measuredTotal = 0;
+
   // Drives the question pane so the 解説 (which appears below the choices on
   // answer) is scrolled into view — otherwise the teaching sits below the fold.
   final ScrollController _qScroll = ScrollController();
@@ -148,6 +161,7 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
         .map((p) => _shufflePassageChoices(p, rng))
         .toList();
     _totalQuestions = _passages.fold(0, (sum, p) => sum + p.questions.length);
+    _questionShownAt = DateTime.now(); // start the read-time clock for question 1
   }
 
   @override
@@ -161,10 +175,23 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
 
   void _selectAnswer(int idx) {
     if (_answered) return;
+    // Only count this question toward the by-comprehension reading 合格率 if the
+    // child plausibly had time to READ it (#R5). An answer faster than a human can
+    // read+comprehend is not a real reading result — excluded, NOT blocked (the
+    // child still answers + sees the 解説). Same honesty principle as un-played
+    // listening (#112/#R5): un-read ≠ a measured comprehension result.
+    final shown = _questionShownAt;
+    final measured = shown != null &&
+        DateTime.now().difference(shown) >= ReadingPracticeScreen.minReadTime;
+    final correct = idx == _currentQuestion.correctIdx;
     setState(() {
       _selectedAnswer = idx;
       _answered = true;
-      if (idx == _currentQuestion.correctIdx) _correctCount++;
+      if (correct) _correctCount++;
+      if (measured) {
+        _measuredTotal++;
+        if (correct) _measuredCorrect++;
+      }
     });
     // After the 解説 lays out, bring it into view (it renders below the choices).
     if (_currentQuestion.explanation != null) {
@@ -184,15 +211,19 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
   /// readingComprehension + passage fill-in → EikenSkill.reading.
   Future<void> _recordSessionResult() async {
     if (_totalQuestions <= 0) return;
-    // Feed the home engagement spine (streak + daily-goal), not just 合格率.
+    // Feed the home engagement spine (streak + daily-goal) for any attempt.
     recordExamHabit(_totalQuestions);
+    // Only plausibly-read answers feed the by-comprehension 合格率 (#R5). If every
+    // answer was too fast to be real reading, record nothing — reading stays
+    // honestly 未測定 rather than logging un-read guesses.
+    if (_measuredTotal <= 0) return;
     try {
       final store = await SkillAccuracyStore.getInstance();
       await store.record(
         grade: widget.eikenGrade,
         skill: EikenSkill.reading,
-        correct: _correctCount,
-        total: _totalQuestions,
+        correct: _measuredCorrect,
+        total: _measuredTotal,
       );
     } catch (_) {
       // Store errors are non-fatal — never interrupt the learner.
@@ -208,6 +239,7 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
         _questionIdx++;
         _selectedAnswer = null;
         _answered = false;
+        _questionShownAt = DateTime.now(); // restart read-time clock (#R5)
       });
     } else if (_passageIdx < _passages.length - 1) {
       setState(() {
@@ -215,6 +247,7 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
         _questionIdx = 0;
         _selectedAnswer = null;
         _answered = false;
+        _questionShownAt = DateTime.now(); // restart read-time clock (#R5)
       });
     } else {
       _recordSessionResult(); // fire-and-forget; UI does not wait

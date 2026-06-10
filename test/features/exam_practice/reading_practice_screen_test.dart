@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:engquest/features/exam_practice/reading_practice_screen.dart';
 import 'package:engquest/features/exam_practice/eiken_exam_config.dart';
+import 'package:engquest/features/exam_practice/pass/cse_model.dart';
+import 'package:engquest/features/exam_practice/pass/skill_accuracy_store.dart';
+import 'package:engquest/core/storage/preferences_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   const grade5Section = ExamSection(
@@ -198,6 +202,34 @@ void main() {
 
       // Should show results
       expect(find.text('戻る'), findsOneWidget);
+    });
+
+    testWidgets('answering faster than humanly readable is EXCLUDED from the '
+        'reading 合格率 (#R5 anti-gaming)', (tester) async {
+      SharedPreferences.setMockInitialValues({});
+      PreferencesService.resetInstance();
+      SkillAccuracyStore.resetInstance();
+      // Force every instant test-tap to be "too fast to have read".
+      ReadingPracticeScreen.minReadTime = const Duration(hours: 1);
+      addTearDown(
+          () => ReadingPracticeScreen.minReadTime = const Duration(seconds: 2));
+
+      await pumpReading(tester, '5', grade5Section);
+      for (int i = 0; i < 4; i++) {
+        await tester.tap(find.byKey(const ValueKey('reading_choice_0')));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('次へ'));
+        await tester.pumpAndSettle();
+      }
+      expect(find.text('戻る'), findsOneWidget, reason: 'reached results');
+
+      final store = await SkillAccuracyStore.getInstance();
+      final reading = store
+          .readAccuracies('5')
+          .where((a) => a.skill == EikenSkill.reading)
+          .fold<int>(0, (s, a) => s + a.itemsAttempted);
+      expect(reading, equals(0),
+          reason: 'un-read (too-fast) answers must not feed the reading 合格率');
     });
 
     testWidgets('grade 4 shows correct number of passages', (tester) async {
