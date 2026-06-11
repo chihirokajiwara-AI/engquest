@@ -61,6 +61,13 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
   int? _selectedAnswer;
   bool _answered = false;
   int _correctCount = 0;
+
+  // Struggling-child support (CEO 1135 / no-scold spine): mirror the 大問1 cold-
+  // streak encouragement — a child who mishears several in a row gets a gentle,
+  // 探偵-framed nudge to replay / turn on captions, never a scold. Resets to 0
+  // on any correct answer.
+  int _consecutiveWrong = 0;
+  static const int _kStruggleThreshold = 3;
   bool _sessionDone = false;
   bool _partHeaderShown = false;
 
@@ -182,6 +189,7 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
       _answered = true;
       final correct = idx == item.correctIndex;
       if (correct) _correctCount++;
+      _consecutiveWrong = correct ? 0 : _consecutiveWrong + 1;
       // Only audible items feed the 合格率 (honest listening measurement).
       if (measurable) {
         _measuredTotal++;
@@ -494,6 +502,16 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
           // 解説 after answer: show the スクリプト (what was said) so a child who
           // misheard can read it — the listening learning loop. Replay (🔊 above)
           // stays available to hear it again.
+          // Struggling-child support: after a cold streak of misheard items, a
+          // gentle 探偵 encouragement that points to replay/captions — never a
+          // scold. Only on a wrong answer past the threshold. (CEO 1135)
+          if (_answered &&
+              _selectedAnswer != item.correctIndex &&
+              _consecutiveWrong >= _kStruggleThreshold) ...[
+            const SizedBox(height: 14),
+            const _ListeningEncouragement(),
+          ],
+
           if (_answered) ...[
             const SizedBox(height: 14),
             _TranscriptPanel(item: item),
@@ -681,6 +699,41 @@ class _TranscriptPanel extends StatelessWidget {
                     .copyWith(height: 1.5),
               ),
             ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Gentle, 探偵-framed encouragement shown after a cold streak of misheard
+/// listening items (CEO 1135 / no-scold spine). It never scolds — it normalises
+/// mistakes and points the child to the always-available 🔊 replay and the
+/// captions toggle, turning a discouraging streak into a "listen again" nudge.
+class _ListeningEncouragement extends StatelessWidget {
+  const _ListeningEncouragement();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: dqGold.withAlpha(28),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: dqGold.withAlpha(110)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('🕵️', style: TextStyle(fontSize: 20)),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              'なんども まちがえても へいき！ もう一度（いちど） 🔊 きいたり、'
+              '字幕（じまく）を ONに すると わかりやすいよ。\n'
+              'めいたんていも、くりかえし きいて 事件（じけん）を とくんだ。',
+              style: dqText(size: 13).copyWith(height: 1.5),
+            ),
+          ),
         ],
       ),
     );
