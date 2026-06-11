@@ -8,6 +8,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'eiken_exam_config.dart';
+import 'practice_encouragement.dart';
 import 'choice_shuffle.dart';
 import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
@@ -74,6 +75,11 @@ class _ConversationPracticeScreenState
   int? _selectedAnswer;
   bool _answered = false;
   int _correctCount = 0;
+
+  // Struggling-child support (CEO 1135 / no-scold spine): a cold streak triggers
+  // a gentle 探偵 encouragement (shared PracticeEncouragementBanner). Resets to 0
+  // on any correct answer.
+  int _consecutiveWrong = 0;
   bool _sessionDone = false;
   final Random _rng = Random();
 
@@ -99,9 +105,9 @@ class _ConversationPracticeScreenState
     setState(() {
       _selectedAnswer = idx;
       _answered = true;
-      if (idx == _problems[_currentIdx].correctIdx) {
-        _correctCount++;
-      }
+      final correct = idx == _problems[_currentIdx].correctIdx;
+      if (correct) _correctCount++;
+      _consecutiveWrong = correct ? 0 : _consecutiveWrong + 1;
     });
     if (_problems[_currentIdx].explanation != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -366,6 +372,16 @@ class _ConversationPracticeScreenState
                       );
                     },
                   ),
+                  // Struggling-child support: a cold streak shows a gentle,
+                  // non-scolding 探偵 encouragement above the 解説. (CEO 1135)
+                  if (_answered &&
+                      _selectedAnswer != p.correctIdx &&
+                      _consecutiveWrong >= kStruggleThreshold)
+                    const Padding(
+                      padding: EdgeInsets.only(top: 12),
+                      child: PracticeEncouragementBanner(
+                          message: kConversationEncourageMsg),
+                    ),
                   if (_answered && p.explanation != null)
                     Padding(
                       padding: const EdgeInsets.only(top: 12),

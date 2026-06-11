@@ -34,6 +34,7 @@ import '../quest/ui/dq_ui.dart';
 import '../home/streak_service.dart';
 import 'eiken_exam_config.dart';
 import 'listening_data.dart';
+import 'practice_encouragement.dart';
 import '../quest/ui/muted_voice_banner.dart';
 import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
@@ -67,7 +68,6 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
   // 探偵-framed nudge to replay / turn on captions, never a scold. Resets to 0
   // on any correct answer.
   int _consecutiveWrong = 0;
-  static const int _kStruggleThreshold = 3;
   bool _sessionDone = false;
   bool _partHeaderShown = false;
 
@@ -507,9 +507,9 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
           // scold. Only on a wrong answer past the threshold. (CEO 1135)
           if (_answered &&
               _selectedAnswer != item.correctIndex &&
-              _consecutiveWrong >= _kStruggleThreshold) ...[
+              _consecutiveWrong >= kStruggleThreshold) ...[
             const SizedBox(height: 14),
-            const _ListeningEncouragement(),
+            const PracticeEncouragementBanner(message: kListeningEncourageMsg),
           ],
 
           if (_answered) ...[
@@ -705,37 +705,3 @@ class _TranscriptPanel extends StatelessWidget {
   }
 }
 
-/// Gentle, 探偵-framed encouragement shown after a cold streak of misheard
-/// listening items (CEO 1135 / no-scold spine). It never scolds — it normalises
-/// mistakes and points the child to the always-available 🔊 replay and the
-/// captions toggle, turning a discouraging streak into a "listen again" nudge.
-class _ListeningEncouragement extends StatelessWidget {
-  const _ListeningEncouragement();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: dqGold.withAlpha(28),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: dqGold.withAlpha(110)),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text('🕵️', style: TextStyle(fontSize: 20)),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text(
-              'なんども まちがえても へいき！ もう一度（いちど） 🔊 きいたり、'
-              '字幕（じまく）を ONに すると わかりやすいよ。\n'
-              'めいたんていも、くりかえし きいて 事件（じけん）を とくんだ。',
-              style: dqText(size: 13).copyWith(height: 1.5),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}

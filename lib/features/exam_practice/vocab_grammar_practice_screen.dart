@@ -16,6 +16,7 @@ import '../../core/data/vocab_repository.dart';
 import '../../core/models/vocab_item.dart';
 import 'distractor_generator.dart';
 import 'eiken_exam_config.dart';
+import 'practice_encouragement.dart';
 import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
 import 'vocab_review_store.dart';
@@ -125,7 +126,6 @@ class _VocabGrammarPracticeScreenState
   // a nudge toward the opt-in 「いみを みる」 hint — so a cold streak builds
   // resilience instead of shame. Resets to 0 on any correct answer.
   int _consecutiveWrong = 0;
-  static const int _kStruggleThreshold = 3;
 
   @override
   void initState() {
@@ -669,8 +669,8 @@ class _VocabGrammarPracticeScreenState
             // scold) and point to the hint. Only on a WRONG answer that extends
             // the streak past the threshold. (CEO 1135 / no-scold spine)
             if (_selectedAnswer != q.correctIdx &&
-                _consecutiveWrong >= _kStruggleThreshold) ...[
-              const _EncouragementBanner(),
+                _consecutiveWrong >= kStruggleThreshold) ...[
+              const PracticeEncouragementBanner(message: kVocabEncourageMsg),
               const SizedBox(height: 10),
             ],
             Container(
@@ -910,37 +910,3 @@ class _HearWordButton extends StatelessWidget {
   }
 }
 
-/// A gentle, 探偵-framed encouragement shown after a cold streak (several wrong
-/// in a row). It NEVER scolds (no-scold spine, CEO 1135) — it normalises mistakes
-/// as part of detective work and points the child to the opt-in 「いみを みる」
-/// hint, turning a discouraging streak into a resilience + comprehension nudge.
-class _EncouragementBanner extends StatelessWidget {
-  const _EncouragementBanner();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: dqGold.withAlpha(28),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: dqGold.withAlpha(110)),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text('🕵️', style: TextStyle(fontSize: 20)),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text(
-              'なんども まちがえても へいき！ めいたんていも、'
-              'しっぱいを ヒントに して 事件（じけん）を とくんだ。\n'
-              '「いみを みる」を つかうと、もっと わかるよ。',
-              style: dqText(size: 13).copyWith(height: 1.5),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
