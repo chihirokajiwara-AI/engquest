@@ -141,7 +141,7 @@ The 62 items above MISSED these. Added so the loop drives them too. Severity for
 |73|privacy/support URL 公開ホスト|5|GATE:prod|BLOCKER|edilab.co/engquest/{privacy,support} are "(to be hosted)"; stores need live URLs|
 |74|第三者SDK Kids適合監査|10|GATE:legal|BLOCKER|certify Firebase/RevenueCat vs Apple Kids 1.3 / Play DFF|
 |75|データ保持期限ポリシー|10|GATE:legal|MAJOR|COPPA2026 new retention-limit req; define+enforce Firestore retention (none)|
-|76|reduced-motion / a11y OS信号|30|BUILD|MINOR|respect disableAnimations/reduceMotion (none); dyslexia/tap-target audit|
+|76|reduced-motion / a11y OS信号|55|BUILD|MINOR|respect disableAnimations/reduceMotion (none); dyslexia/tap-target audit|
 |77|i18n/localization 枠組み|20|BUILD|MINOR|no intl/l10n; strings hardcoded (T15)|
 
 ### Honest re-score of OVERSTATED existing items (audit-corrected)
