@@ -81,9 +81,9 @@ needs CEO go (spend / secret / prod / legal / art-gen).
 ## H. GAME COMPOSITION (TOP PRIORITY — CEO 1244, ~5%, mostly BUILD)
 |48|世界/物語実装|22|BUILD|implement STORY-BIBLE 7-case arc into quest_data (currently 英検+thin skin)|
 |49|キャラ in-game|12|BUILD|cast dialogue, arcs, presence (bible→code); art-gen separate|
-|50|探索の深さ|34|BUILD|scene/nazo/hotspot depth → Layton/Minecraft-grade|
+|50|探索の深さ|40|BUILD|scene/nazo/hotspot depth → Layton/Minecraft-grade|
 |51|ゲームフィール/演出|18|BUILD|juice, transitions, feedback, reward moments|
-|52|事件→英検の有機結合|25|BUILD|each case's puzzles ARE the 英検 skills, diegetic|
+|52|事件→英検の有機結合|32|BUILD|each case's puzzles ARE the 英検 skills, diegetic|
 |53|手がかりドリップ|10|BUILD|one clue/case edge→centre per WORLD-BIBLE|
 |54|視覚の本格バー|30|GATE:art-gen|dark-navy/gold look; cast+scene art (heavy job)|
 |55|オープニング/掴み|20|BUILD|implement OPENING-NARRATIVE-BIBLE as playable|
