@@ -74,7 +74,8 @@ abstract class PrefKeys {
 
   /// Policy version in force when voice consent was collected.
   /// If this does not equal [kVoiceConsentPolicyVersion], re-prompt.
-  static const String voiceConsentPolicyVersion = 'voice_consent_policy_version';
+  static const String voiceConsentPolicyVersion =
+      'voice_consent_policy_version';
 
   // Parental-gate consent keys.
   /// ISO-8601 UTC timestamp of the moment the parent passed the math gate.

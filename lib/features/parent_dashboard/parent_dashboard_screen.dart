@@ -1109,13 +1109,12 @@ class _SettingsTab extends StatelessWidget {
                 onTap: () => _confirmRevokeVoiceConsent(context),
                 child: Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16, vertical: 13),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
                   decoration: BoxDecoration(
                     color: const Color(0xFF1A1A2E).withAlpha(220),
                     borderRadius: BorderRadius.circular(8),
-                    border:
-                        Border.all(color: dqGoldDeep, width: 1.5),
+                    border: Border.all(color: dqGoldDeep, width: 1.5),
                   ),
                   child: Row(
                     children: [
@@ -1130,9 +1129,7 @@ class _SettingsTab extends StatelessWidget {
                               // ふりがな: おんせい・どうい・りせっと
                               'おんせい同意（どうい）をリセット',
                               style: dqText(
-                                  size: 14,
-                                  w: FontWeight.w700,
-                                  color: dqInk),
+                                  size: 14, w: FontWeight.w700, color: dqInk),
                             ),
                             Text(
                               'Reset voice consent — re-show the consent '
@@ -1262,8 +1259,7 @@ class _SettingsTab extends StatelessWidget {
                       onTap: () => Navigator.of(ctx).pop(),
                       child: Container(
                         alignment: Alignment.center,
-                        padding:
-                            const EdgeInsets.symmetric(vertical: 13),
+                        padding: const EdgeInsets.symmetric(vertical: 13),
                         decoration: BoxDecoration(
                           color: dqBox.withAlpha(235),
                           borderRadius: BorderRadius.circular(10),
@@ -1286,20 +1282,16 @@ class _SettingsTab extends StatelessWidget {
                       },
                       child: Container(
                         alignment: Alignment.center,
-                        padding:
-                            const EdgeInsets.symmetric(vertical: 13),
+                        padding: const EdgeInsets.symmetric(vertical: 13),
                         decoration: BoxDecoration(
                           color: const Color(0xFF1A2B1A),
                           borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                              color: dqGold, width: 1.5),
+                          border: Border.all(color: dqGold, width: 1.5),
                         ),
                         child: Text(
                           'リセット',
                           style: dqText(
-                              size: 14,
-                              w: FontWeight.w700,
-                              color: dqGold),
+                              size: 14, w: FontWeight.w700, color: dqGold),
                         ),
                       ),
                     ),

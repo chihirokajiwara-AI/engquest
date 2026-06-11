@@ -66,8 +66,7 @@ void main() {
     test('stored version absent → does NOT equal current policy version',
         () async {
       final prefs = await freshPrefs();
-      final stored =
-          prefs.getString(PrefKeys.voiceConsentPolicyVersion);
+      final stored = prefs.getString(PrefKeys.voiceConsentPolicyVersion);
       expect(stored, isNot(equals(PrefKeys.kVoiceConsentPolicyVersion)));
     });
   });
@@ -83,8 +82,7 @@ void main() {
       // Simulate what _grantConsent does.
       final now = DateTime.now().toUtc().toIso8601String();
       await prefs.setString(PrefKeys.voiceConsentGrantedAt, now);
-      await prefs.setString(
-          PrefKeys.voiceConsentPolicyVersion,
+      await prefs.setString(PrefKeys.voiceConsentPolicyVersion,
           PrefKeys.kVoiceConsentPolicyVersion);
 
       final ts = prefs.getString(PrefKeys.voiceConsentGrantedAt);
@@ -92,14 +90,13 @@ void main() {
       expect(ts, isNotEmpty);
       // Timestamp should be parseable and not in the future.
       final parsed = DateTime.parse(ts!);
-      expect(parsed.isAfter(before.subtract(const Duration(seconds: 1))),
-          isTrue);
+      expect(
+          parsed.isAfter(before.subtract(const Duration(seconds: 1))), isTrue);
     });
 
     test('after grant: voiceConsentPolicyVersion matches current', () async {
       final prefs = await freshPrefs();
-      await prefs.setString(
-          PrefKeys.voiceConsentPolicyVersion,
+      await prefs.setString(PrefKeys.voiceConsentPolicyVersion,
           PrefKeys.kVoiceConsentPolicyVersion);
 
       expect(prefs.getString(PrefKeys.voiceConsentPolicyVersion),
@@ -111,17 +108,15 @@ void main() {
       // Seed the store as if consent was already granted.
       final prefs = await freshPrefs({
         PrefKeys.voiceConsentGrantedAt: '2026-06-11T10:00:00.000Z',
-        PrefKeys.voiceConsentPolicyVersion:
-            PrefKeys.kVoiceConsentPolicyVersion,
+        PrefKeys.voiceConsentPolicyVersion: PrefKeys.kVoiceConsentPolicyVersion,
       });
-      final stored =
-          prefs.getString(PrefKeys.voiceConsentPolicyVersion);
+      final stored = prefs.getString(PrefKeys.voiceConsentPolicyVersion);
       final ts = prefs.getString(PrefKeys.voiceConsentGrantedAt);
       expect(stored, equals(PrefKeys.kVoiceConsentPolicyVersion));
       expect(ts, isNotNull);
       // The guard logic: both conditions true → skip consent UI.
-      final shouldSkip = stored == PrefKeys.kVoiceConsentPolicyVersion &&
-          ts != null;
+      final shouldSkip =
+          stored == PrefKeys.kVoiceConsentPolicyVersion && ts != null;
       expect(shouldSkip, isTrue);
     });
   });
@@ -129,17 +124,17 @@ void main() {
   group('(C) changed policy version — must re-prompt', () {
     tearDown(() => PreferencesService.resetInstance());
 
-    test('stored version "v0-old" does NOT match current → re-prompt', () async {
+    test('stored version "v0-old" does NOT match current → re-prompt',
+        () async {
       final prefs = await freshPrefs({
         PrefKeys.voiceConsentGrantedAt: '2025-01-01T00:00:00.000Z',
         PrefKeys.voiceConsentPolicyVersion: 'v0-old',
       });
-      final stored =
-          prefs.getString(PrefKeys.voiceConsentPolicyVersion);
+      final stored = prefs.getString(PrefKeys.voiceConsentPolicyVersion);
       final ts = prefs.getString(PrefKeys.voiceConsentGrantedAt);
       // Guard: version mismatch → show the consent UI.
-      final shouldSkip = stored == PrefKeys.kVoiceConsentPolicyVersion &&
-          ts != null;
+      final shouldSkip =
+          stored == PrefKeys.kVoiceConsentPolicyVersion && ts != null;
       expect(shouldSkip, isFalse);
     });
 
@@ -147,11 +142,10 @@ void main() {
       final prefs = await freshPrefs({
         PrefKeys.voiceConsentGrantedAt: '2026-06-11T10:00:00.000Z',
       });
-      final stored =
-          prefs.getString(PrefKeys.voiceConsentPolicyVersion);
+      final stored = prefs.getString(PrefKeys.voiceConsentPolicyVersion);
       final ts = prefs.getString(PrefKeys.voiceConsentGrantedAt);
-      final shouldSkip = stored == PrefKeys.kVoiceConsentPolicyVersion &&
-          ts != null;
+      final shouldSkip =
+          stored == PrefKeys.kVoiceConsentPolicyVersion && ts != null;
       expect(shouldSkip, isFalse);
     });
   });
@@ -162,8 +156,7 @@ void main() {
     test('removing both keys clears voice consent', () async {
       final prefs = await freshPrefs({
         PrefKeys.voiceConsentGrantedAt: '2026-06-11T10:00:00.000Z',
-        PrefKeys.voiceConsentPolicyVersion:
-            PrefKeys.kVoiceConsentPolicyVersion,
+        PrefKeys.voiceConsentPolicyVersion: PrefKeys.kVoiceConsentPolicyVersion,
       });
       // Simulate _revokeVoiceConsent.
       await prefs.remove(PrefKeys.voiceConsentGrantedAt);
@@ -176,8 +169,7 @@ void main() {
     test('other prefs survive a targeted revoke', () async {
       final prefs = await freshPrefs({
         PrefKeys.voiceConsentGrantedAt: '2026-06-11T10:00:00.000Z',
-        PrefKeys.voiceConsentPolicyVersion:
-            PrefKeys.kVoiceConsentPolicyVersion,
+        PrefKeys.voiceConsentPolicyVersion: PrefKeys.kVoiceConsentPolicyVersion,
         PrefKeys.uid: 'user-abc',
       });
       await prefs.remove(PrefKeys.voiceConsentGrantedAt);
@@ -199,8 +191,7 @@ void main() {
       // Seed SharedPreferences with a valid stored consent.
       SharedPreferences.setMockInitialValues({
         PrefKeys.voiceConsentGrantedAt: '2026-06-11T10:00:00.000Z',
-        PrefKeys.voiceConsentPolicyVersion:
-            PrefKeys.kVoiceConsentPolicyVersion,
+        PrefKeys.voiceConsentPolicyVersion: PrefKeys.kVoiceConsentPolicyVersion,
       });
       PreferencesService.resetInstance();
 
@@ -309,8 +300,7 @@ void main() {
         PrefKeys.parentalConsentGrantedAt: '2025-01-01T00:00:00.000Z',
         PrefKeys.parentalConsentPolicyVersion: 'v0-old',
       });
-      final stored =
-          prefs.getString(PrefKeys.parentalConsentPolicyVersion);
+      final stored = prefs.getString(PrefKeys.parentalConsentPolicyVersion);
       final ts = prefs.getString(PrefKeys.parentalConsentGrantedAt);
       final shouldSkip =
           stored == PrefKeys.kParentalConsentPolicyVersion && ts != null;

@@ -59,8 +59,7 @@ class _ParentalConsentGateState extends State<ParentalConsentGate> {
     final storedVersion =
         prefs.getString(PrefKeys.parentalConsentPolicyVersion);
     final ts = prefs.getString(PrefKeys.parentalConsentGrantedAt);
-    if (storedVersion == PrefKeys.kParentalConsentPolicyVersion &&
-        ts != null) {
+    if (storedVersion == PrefKeys.kParentalConsentPolicyVersion && ts != null) {
       if (!mounted) return;
       widget.onConsented();
     }
