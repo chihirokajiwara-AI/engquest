@@ -26,9 +26,15 @@ async function snapshot(page) {
   return page.locator('flt-semantics[role="button"]').evaluateAll((els) =>
     els.map((e) => ({
       label: (e.getAttribute('aria-label') || '').trim(),
-      box: e.getBoundingClientRect ? null : null,
+      // aria-selected/checked so cursor-selection screens (e.g. the timed mock,
+      // which marks a chosen answer with a ▶ cursor rather than a reveal) are
+      // detected as a real state change, not a false-negative.
+      selected: e.getAttribute('aria-selected') || e.getAttribute('aria-checked') || '',
     })));
 }
+
+/// A stable string of the semantics state used to detect change after a click.
+const stateOf = (snap) => snap.map((b) => `${b.label}#${b.selected}`).join('|');
 
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 900, height: 1400 } });
@@ -41,7 +47,7 @@ try {
   await page.waitForTimeout(2500);
 
   const before = await page.locator('flt-semantics[role="button"]').count();
-  const beforeLabels = (await snapshot(page)).map((b) => b.label).join('|');
+  const beforeLabels = stateOf(await snapshot(page));
   console.log(`[interact] route=${ROUTE} buttons-before=${before}`);
 
   // Click each button that has a visible box until the app state changes (a new
@@ -56,7 +62,7 @@ try {
     } catch { continue; }
     await page.waitForTimeout(1200);
     const after = await page.locator('flt-semantics[role="button"]').count();
-    const afterLabels = (await snapshot(page)).map((b) => b.label).join('|');
+    const afterLabels = stateOf(await snapshot(page));
     if (after !== before || afterLabels !== beforeLabels) {
       console.log(`[interact] CLICK i=${i} ("${lbl.slice(0, 24)}") → state changed `
         + `(buttons ${before}→${after}). Real interaction CONFIRMED.`);

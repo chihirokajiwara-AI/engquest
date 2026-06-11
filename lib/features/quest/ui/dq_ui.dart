@@ -187,6 +187,10 @@ class DqChoice extends StatelessWidget {
     return Semantics(
       button: true,
       label: semanticsLabel,
+      // Expose the cursor-selected state (e.g. a chosen mock answer marked by ▶)
+      // so a screen-reader user hears WHICH choice is selected — without this the
+      // selection was visual-only (a11y gap surfaced by the 2026-06-12 playtest).
+      selected: showCursor,
       onTap: onTap,
       excludeSemantics: true,
       child: Padding(
