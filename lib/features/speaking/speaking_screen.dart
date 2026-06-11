@@ -136,6 +136,18 @@ class _SpeakingScreenState extends State<SpeakingScreen>
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Respect OS reduce-motion: stop the repeating mic pulse (continuous motion
+    // is worst for vestibular/seizure sensitivity). The mic still records — it
+    // simply sits steady instead of pulsing. (#76)
+    if (prefersReducedMotion(context) && _pulseCtrl.isAnimating) {
+      _pulseCtrl.stop();
+      _pulseCtrl.value = 0.5; // settle at the neutral (scale ≈1.0) state
+    }
+  }
+
+  @override
   void dispose() {
     _prepTimer?.cancel();
     _recordTimer?.cancel();
