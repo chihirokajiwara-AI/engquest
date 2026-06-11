@@ -179,11 +179,17 @@ class DqChoice extends StatelessWidget {
     }
     // Screen-reader label: the choice text + its answered state, so a child
     // using VoiceOver/TalkBack hears "<choice>, せいかい/ふせいかい, ボタン".
+    // The cursor-selected (▶) choice — e.g. a chosen mock answer before the
+    // reveal — announces 「、せんたくちゅう」 IN THE LABEL so a screen-reader user
+    // hears WHICH choice is selected (aria-selected alone was not reliably
+    // surfaced by the Flutter-web button node — verified 2026-06-12).
     final semanticsLabel = state == DqChoiceState.correct
         ? '$label、せいかい'
         : state == DqChoiceState.wrong
             ? '$label、ふせいかい'
-            : label;
+            : showCursor
+                ? '$label、せんたくちゅう'
+                : label;
     return Semantics(
       button: true,
       label: semanticsLabel,
