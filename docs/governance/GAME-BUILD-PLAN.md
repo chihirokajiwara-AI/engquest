@@ -25,3 +25,4 @@ _Coordinated, measured plan from game-composition-foundation. The loop builds th
 
 ### Gated (CEO go — surface, never self-build)
 - art-generation (cast/scene .webp), BGM/SE, anything needing spend/secret/prod.
+- [x] teach-cards 4級 (irregular-past/will/to-infinitive) DONE 2026-06-11. content-qa CAUGHT a leak (card 2 listed "rain"=stem word) → fixed→PASS. 5級 already covered. item 50→34. Next: 3級+ teach-cards.
