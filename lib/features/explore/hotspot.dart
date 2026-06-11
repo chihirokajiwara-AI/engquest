@@ -146,6 +146,10 @@ class Hotspot {
 /// [titleJa] — displayed in the scene header bar (JP town name).
 /// [cleared] — story payoff shown when the last ナゾ is solved (sourced from the
 ///   matching [QuestTown.cleared] in kQuestTowns). Null → generic fallback text.
+/// [companionArrivalJa] — optional short スラ line (1–2 sentences) shown as a
+///   brief dismissible banner when the player ENTERS this scene.  Null → no banner.
+///   Purpose: gives each case a small in-media-res hook and makes スラ a recurring
+///   companion rather than a passive hotspot.  Canon-consistent; no アイラ name.
 class SceneDef {
   final String backgroundAsset;
   final List<String> parallaxLayers;
@@ -153,12 +157,17 @@ class SceneDef {
   final String titleJa;
   final String? cleared;
 
+  /// Optional スラ arrival line — shown once on scene entry, skippable via tap
+  /// or auto-dismissed after a short delay.  Null → no arrival banner.
+  final String? companionArrivalJa;
+
   const SceneDef({
     required this.backgroundAsset,
     this.parallaxLayers = const [],
     required this.hotspots,
     required this.titleJa,
     this.cleared,
+    this.companionArrivalJa,
   });
 }
 
@@ -710,6 +719,9 @@ final SceneDef kTown5Scene = SceneDef(
   // far/mid/near bands are a later generation pass.
   parallaxLayers: const [],
   titleJa: 'ことばを失（うしな）った村（むら）',
+  // スラ arrival line — 5級, case 1: bright/curious newcomer, one word just won.
+  companionArrivalJa: 'ぷる…！ この村（むら）、いろが うすいね。\n'
+      'なにかが、ことばを とっていった みたい……',
   // Sourced from kQuestTowns[0].cleared (英検5級 — ことばを失った村).
   cleared: '村（むら）に声（こえ）がもどった！ 最初（さいしょ）の〈声（こえ）の石（いし）〉が、あたたかく ひかる。\n'
       'スラが「Hello！」と、はじめて言（い）えた。あおい 光（ひかり）が、スラの からだを つつんだ。\n'
@@ -805,6 +817,9 @@ final SceneDef kTown4Scene = SceneDef(
   backgroundAsset: 'assets/art/scenes_layton/town4_harbor.webp',
   parallaxLayers: const [],
   titleJa: '風（かぜ）の街（まち）',
+  // スラ arrival line — 4級, case 2: notices time is wrong, still eager.
+  companionArrivalJa: 'かぜが つめたい…！ でも とけいが ぜんぶ、とまってる。\n'
+      '「きのう」も「あした」も、この街（まち）から きえちゃったのかな？',
   // Sourced from kQuestTowns[1].cleared (英検4級 — 風の街).
   cleared: 'トックの時計（とけい）が、コチコチと動（うご）き出（だ）した――'
       '「きのう、ありがとう。あした、また会（あ）おう」。\n'
@@ -894,6 +909,9 @@ final SceneDef kTown3Scene = SceneDef(
   backgroundAsset: 'assets/art/scenes_layton/town3_academy.webp',
   parallaxLayers: const [],
   titleJa: '学（まな）びの都（みやこ）',
+  // スラ arrival line — 3級, case 3: archives silent, スラ notices memory fading.
+  companionArrivalJa: 'としょかんの たなが、ぜんぶ しずか……\n'
+      'ここの ひとたち、「ずっと まえから」を つたえる ことばを なくしたのかも。',
   // Sourced from kQuestTowns[2].cleared (英検3級 — 学びの都).
   cleared: '封（ふう）じられた日記（にっき）の、最後（さいご）の一行（いちぎょう）がひらいた。'
       '書庫番（しょこばん）ミネが しずかに読（よ）み上（あ）げる――'
@@ -978,6 +996,10 @@ final SceneDef kTownPre2Scene = SceneDef(
   backgroundAsset: 'assets/art/scenes_layton/town_pre2_port.webp',
   parallaxLayers: const [],
   titleJa: '社会（しゃかい）の港町（みなとまち）',
+  // スラ arrival line — 準2, case 4: big port but two guilds won't talk to each
+  // other; スラ is bolder now, frames the social problem.
+  companionArrivalJa: 'でっかい 港（みなと）だ… でも あっちと こっちで、'
+      'みんな そっぽを むいてる。「じぶんはこう思（おも）う」が、きえちゃったのかな。',
   // Sourced from kQuestTowns[3].cleared (英検準2級 — 社会の港町).
   cleared: '港（みなと）の案内人（あんないにん）ナギが、はじめて自分（じぶん）の言葉（ことば）で言（い）った――'
       '「わたしは、ちがうと思（おも）う」。\n'
@@ -1062,6 +1084,10 @@ final SceneDef kTownPre2PlusScene = SceneDef(
   backgroundAsset: 'assets/art/scenes_layton/town_pre2plus_bridge.webp',
   parallaxLayers: const [],
   titleJa: '試練（しれん）の橋（はし）',
+  // スラ arrival line — 準2プラス, case 5: fog on the bridge, スラ steadier now,
+  // understands meaning must carry across.
+  companionArrivalJa: 'むこう岸（ぎし）が… みえない。きりが ぜんぶ おおってる。\n'
+      'ことばを ちゃんと わたせたら、きりも はれると おもう。',
   // Sourced from kQuestTowns[4].cleared (英検準2級プラス — 試練の橋).
   cleared: '橋守（はしもり）ロウは、灯（あか）りを掲（かか）げたまま動（うご）かない――けれど、'
       '向（む）こう岸（ぎし）の声（こえ）が、たしかに届（とど）いた。「…ことばは、無事（ぶじ）に渡（わた）れるのか。知（し）らなかった」。\n'
@@ -1122,6 +1148,10 @@ final SceneDef kTown2Scene = SceneDef(
   backgroundAsset: 'assets/art/scenes_layton/town_2_castle.webp',
   parallaxLayers: const [],
   titleJa: '学者（がくしゃ）の城下町（じょうかまち）',
+  // スラ arrival line — 2級, case 6: formal castle gates, スラ senses power
+  // behind the silence, speaks for the first time about speaking FOR someone.
+  companionArrivalJa: 'たかい 門（もん）…。なんか、しずかすぎて こわい。\n'
+      'ここの ひとたち、「だまっていれば あんぜん」と おもって いるのかも。',
   // Sourced from kQuestTowns[5].cleared (英検2級 — 学者の城下町).
   cleared: '学士（がくし）オーレンは、静（しず）かに門（もん）をひらいた――'
       '「私（わたし）は まちがっていた。沈黙（ちんもく）は、安全（あんぜん）などではなかった」。\n'
@@ -1201,6 +1231,10 @@ final SceneDef kTownPre1Scene = SceneDef(
   backgroundAsset: 'assets/art/scenes_layton/town_pre1_grey_square.webp',
   parallaxLayers: const [],
   titleJa: '灰色（はいいろ）の ひろば',
+  // スラ arrival line — 準1, case 7: the grey heart of the world; スラ is steady
+  // and brave, acknowledges what's at stake, stands beside きみ.
+  companionArrivalJa: 'ここが… まんなか。いろが、ぜんぶ きえてる。\n'
+      'ぼく、こわいけど── きみの となりに いる。',
   // Sourced from kQuestTowns[6].cleared (英検準1級 — 灰色のひろば).
   cleared: 'あなたの言葉（ことば）が、アイラの胸（むね）に そっと とどいた。なくしていた「声（こえ）」が、アイラに もどってくる。'
       '灰色（はいいろ）の ひろばに 色（いろ）が あふれ、その色（いろ）は はしを わたり、すべての まちへ ながれていく。だれも やっつけなかった。ただ、アイラは もう ひとりじゃない。あなたは 世界（せかい）に ──そして アイラに── ことばの かえしかたを、おもいださせたんだ。',

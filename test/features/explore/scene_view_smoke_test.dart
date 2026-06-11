@@ -66,6 +66,67 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  // スラ companion arrival banner: #49 character presence / light #55 arrival hook.
+  // A scene whose SceneDef.companionArrivalJa is set should show スラ's line on
+  // entry, and the scene must still be reachable (title visible) after the banner
+  // is dismissed.
+  testWidgets('arrival banner shows スラ line; scene reachable after dismiss',
+      (tester) async {
+    // kTown5Scene has companionArrivalJa set.
+    await tester.pumpWidget(
+      MaterialApp(home: SceneView(scene: kTown5Scene, eikenLevel: '5')),
+    );
+    // First pump runs initState; the postFrameCallback fires on the next pump.
+    await tester.pump();
+    await tester.pump();
+
+    // The banner must be present and show part of スラ's arrival line.
+    expect(
+      find.textContaining('スラ'),
+      findsAtLeastNWidgets(1),
+      reason: 'arrival banner should show the スラ speaker label',
+    );
+    expect(
+      find.textContaining('いろが'),
+      findsOneWidget,
+      reason: 'arrival banner text should contain スラ\'s line for kTown5Scene',
+    );
+
+    // Tap the banner to dismiss.
+    await tester.tap(find.textContaining('いろが'));
+    await tester.pump();
+
+    // Banner gone — scene title still visible.
+    expect(
+      find.textContaining('ことばを失'),
+      findsAtLeastNWidgets(1),
+      reason: 'scene title should remain after banner dismiss',
+    );
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('scene with no companionArrivalJa shows no arrival banner',
+      (tester) async {
+    const sceneNoArrival = SceneDef(
+      backgroundAsset: 'x.webp',
+      titleJa: 'テスト',
+      hotspots: [],
+    );
+    await tester.pumpWidget(
+      MaterialApp(home: SceneView(scene: sceneNoArrival, eikenLevel: '5')),
+    );
+    await tester.pump();
+    await tester.pump();
+
+    // No banner label; 'スラ' speaker tag should not appear.
+    expect(
+      find.textContaining('タップで とばす'),
+      findsNothing,
+      reason: 'no arrival banner when companionArrivalJa is null',
+    );
+    expect(tester.takeException(), isNull);
+  });
+
   // REGRESSION (CEO 2026-06-09, live demo): tapping 「？」ナゾをみる did NOTHING
   // because the speech bubble was nested inside the hotspot's small
   // GestureDetector and overflowed its bounds (Clip.none) — Flutter renders such

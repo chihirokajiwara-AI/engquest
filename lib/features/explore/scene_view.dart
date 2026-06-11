@@ -11,6 +11,8 @@
 // NO dart:io. NO Firebase. Image.asset always has errorBuilder → dq gradient.
 // Firebase uid must NOT be used here (see test constraint).
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../core/audio/audio_cue_service.dart';
@@ -103,6 +105,19 @@ class _SceneViewState extends State<SceneView> {
   /// NOT dead grey (s=0 reads as a broken image). Floods to 1.0 on chapter clear.
   static const _kMutedSaturation = 0.35;
 
+  /// Whether the スラ companion arrival banner is currently visible.
+  /// True on entry when [SceneDef.companionArrivalJa] is present; set to false
+  /// immediately on tap or after [_kArrivalAutoDismissMs] milliseconds.
+  bool _showArrival = false;
+
+  /// Auto-dismiss delay for the arrival banner.  Long enough to read 2 lines
+  /// of ひらがな at a child's pace; short enough not to block exploration.
+  static const _kArrivalAutoDismissMs = 4500;
+
+  /// Timer handle for the arrival banner auto-dismiss.  Cancelled in dispose
+  /// so no pending-timer leaks occur (important for widget tests).
+  Timer? _arrivalTimer;
+
   // Services
   final _cue = AudioCueService();
   final _sound = SoundService();
@@ -114,6 +129,29 @@ class _SceneViewState extends State<SceneView> {
     _coins = HintCoinService();
     _loadCoinBalance();
     _restoreSolved();
+    // Show the スラ arrival banner after the first frame so the scene itself
+    // renders fully before the overlay appears.
+    if (widget.scene.companionArrivalJa != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          setState(() => _showArrival = true);
+          // Schedule auto-dismiss; tap dismissal is instant via _dismissArrival.
+          // Store the timer so dispose() can cancel it and avoid pending-timer
+          // leaks in widget tests.
+          _arrivalTimer = Timer(
+            const Duration(milliseconds: _kArrivalAutoDismissMs),
+            () {
+              if (mounted) setState(() => _showArrival = false);
+            },
+          );
+        }
+      });
+    }
+  }
+
+  /// Dismiss the スラ arrival banner immediately (tap handler).
+  void _dismissArrival() {
+    if (_showArrival) setState(() => _showArrival = false);
   }
 
   /// Restore which ナゾ were already solved so the world the child coloured in
@@ -135,6 +173,7 @@ class _SceneViewState extends State<SceneView> {
 
   @override
   void dispose() {
+    _arrivalTimer?.cancel();
     _cue.dispose();
     super.dispose();
   }
@@ -440,6 +479,16 @@ class _SceneViewState extends State<SceneView> {
 
               // ── Active NPC speech bubble (scene-level so it is TAPPABLE) ────
               if (_bubbleIndex != null) _bubbleOverlay(_bubbleIndex!, w, h),
+
+              // ── スラ companion arrival banner ─────────────────────────────
+              // Shown on first entry when SceneDef.companionArrivalJa is set.
+              // Tap anywhere on the banner to dismiss; auto-dismissed after
+              // _kArrivalAutoDismissMs.  Must not block the scene: it is
+              // positioned at the bottom edge and the rest of the scene remains
+              // interactive.
+              if (_showArrival &&
+                  widget.scene.companionArrivalJa != null)
+                _arrivalBanner(widget.scene.companionArrivalJa!, w, h),
             ],
           );
         },
@@ -535,6 +584,81 @@ class _SceneViewState extends State<SceneView> {
       child: GestureDetector(
         onTap: () => _onBubbleTap(idx),
         child: _speechBubble(hotspot.clueLineJa),
+      ),
+    );
+  }
+
+  /// Companion arrival banner: スラ speaks a short in-character line on scene
+  /// entry.  Positioned at the bottom of the scene, full-width but short, with
+  /// a teal accent border matching スラ's dominant hue (CHARACTER-BIBLE §3 —
+  /// dusty teal #5DA9E9).  Tap anywhere to dismiss.
+  Widget _arrivalBanner(String text, double w, double h) {
+    return Positioned(
+      left: 12,
+      right: 12,
+      bottom: 16,
+      child: GestureDetector(
+        onTap: _dismissArrival,
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+          decoration: BoxDecoration(
+            color: dqBox.withAlpha(235),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              // スラ's canonical dusty-teal #5DA9E9 (CHARACTER-BIBLE dominant hue)
+              color: const Color(0xFF5DA9E9),
+              width: 2,
+            ),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black54,
+                blurRadius: 10,
+                offset: Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // スラ slime icon
+              const Text('🟢', style: TextStyle(fontSize: 22)),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'スラ',
+                      style: dqText(
+                        size: 11,
+                        w: FontWeight.w700,
+                        color: const Color(0xFF5DA9E9),
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      text,
+                      style: dqText(size: 13, color: dqInk)
+                          .copyWith(height: 1.55),
+                    ),
+                  ],
+                ),
+              ),
+              // Dismiss hint
+              const Padding(
+                padding: EdgeInsets.only(left: 4, top: 2),
+                child: Text(
+                  'タップで とばす',
+                  style: TextStyle(
+                    fontSize: 9,
+                    color: Color(0xFF8899AA),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
