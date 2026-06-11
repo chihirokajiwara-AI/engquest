@@ -766,3 +766,9 @@ class AudioOptionButton extends StatelessWidget {
     );
   }
 }
+
+/// True when the OS "reduce motion" accessibility setting is on. Gate animation
+/// durations with this (→ Duration.zero) so vestibular/seizure-sensitive children
+/// get the END state instantly instead of a transition. (#76 a11y, 2026-06-12)
+bool prefersReducedMotion(BuildContext context) =>
+    MediaQuery.maybeOf(context)?.disableAnimations ?? false;
