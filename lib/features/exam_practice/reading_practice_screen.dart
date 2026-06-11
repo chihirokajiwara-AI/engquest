@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:engquest/features/quest/ui/dq_ui.dart';
 import 'package:engquest/features/home/streak_service.dart';
 import 'eiken_exam_config.dart';
+import 'practice_encouragement.dart';
 import 'choice_shuffle.dart';
 import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
@@ -139,6 +140,11 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
   int? _selectedAnswer;
   bool _answered = false;
   int _correctCount = 0;
+
+  // Struggling-child support (CEO 1135 / no-scold spine): a cold streak triggers
+  // a gentle 探偵 encouragement (shared PracticeEncouragementBanner). Resets to 0
+  // on any correct answer.
+  int _consecutiveWrong = 0;
   int _totalQuestions = 0;
   bool _sessionDone = false;
 
@@ -189,6 +195,7 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
       _selectedAnswer = idx;
       _answered = true;
       if (correct) _correctCount++;
+      _consecutiveWrong = correct ? 0 : _consecutiveWrong + 1;
       if (measured) {
         _measuredTotal++;
         if (correct) _measuredCorrect++;
@@ -538,6 +545,16 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
                             );
                           },
                         ),
+                        // Struggling-child support: a cold streak shows a gentle,
+                        // non-scolding 探偵 encouragement above the 解説. (CEO 1135)
+                        if (_answered &&
+                            _selectedAnswer != question.correctIdx &&
+                            _consecutiveWrong >= kStruggleThreshold)
+                          const Padding(
+                            padding: EdgeInsets.only(top: 12),
+                            child: PracticeEncouragementBanner(
+                                message: kReadingEncourageMsg),
+                          ),
                         if (_answered && question.explanation != null)
                           Padding(
                             padding: const EdgeInsets.only(top: 12),

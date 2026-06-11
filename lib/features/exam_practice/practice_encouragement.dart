@@ -64,3 +64,8 @@ const String kListeningEncourageMsg =
 const String kConversationEncourageMsg =
     'なんども まちがえても へいき！ 会話（かいわ）の ながれを よむのは'
     'むずかしいよね。めいたんていも、ヒントを あつめて すこしずつ とくんだ。';
+
+const String kReadingEncourageMsg =
+    'なんども まちがえても へいき！ 本文（ほんぶん）を もう一度（いちど）'
+    'よむと、答（こた）えの てがかりが みつかるよ。\n'
+    'めいたんていも、てがかりを さがして 事件（じけん）を とくんだ。';
