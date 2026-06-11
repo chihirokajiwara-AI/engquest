@@ -145,7 +145,7 @@ The 62 items above MISSED these. Added so the loop drives them too. Severity for
 |77|i18n/localization 枠組み|20|BUILD|MINOR|no intl/l10n; strings hardcoded (T15)|
 
 ### Honest re-score of OVERSTATED existing items (audit-corrected)
-|60|a11y|73|BUILD|—|was 88; no reduced-motion, unverified tap-target, no dyslexia/cognitive test|
+|60|a11y|76|BUILD|—|was 88; no reduced-motion, unverified tap-target, no dyslexia/cognitive test|
 |41|privacy/ToS|50|GATE:legal|—|was 70; missing 特商法 screen + hosted URLs + COPPA2026 consent + retention|
 
 **Buildable-now omissions the loop can take (no GO): 65,66,67,68,70,71,76,77.** Gated (legal/prod/art): 63,64,69,72,73,74,75 + the corp/legal details for 41.
