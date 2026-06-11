@@ -87,76 +87,72 @@ class _ExamPracticeScreenState extends State<ExamPracticeScreen> {
               onBack: () => Navigator.of(context).pop(),
             ),
           ),
-          // Exam info panel (試験時間 / 合格ライン / CEFR).
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 6, 16, 6),
-            child: DqPanel(
-              title: '試験概要（しけんがいよう） / Exam Overview',
-              // #114/WCAG SC 1.4.4: Wrap (not Row) so the three chips reflow onto
-              // extra lines at large text scales (2.0x) instead of clipping ~88px.
-              child: Wrap(
-                alignment: WrapAlignment.spaceAround,
-                spacing: 12,
-                runSpacing: 10,
-                children: [
-                  _DqInfoChip(
-                    icon: Icons.timer_outlined,
-                    label: '${exam.totalMinutes}分',
-                    jp: '試験時間',
-                    en: 'Time',
-                  ),
-                  _DqInfoChip(
-                    icon: Icons.check_circle_outline,
-                    label: '${exam.passingScore}',
-                    jp: '合格ライン',
-                    en: 'Pass',
-                  ),
-                  _DqInfoChip(
-                    icon: Icons.stars_outlined,
-                    label: exam.cefrLevel,
-                    jp: 'CEFRレベル',
-                    en: 'CEFR',
-                  ),
-                ],
-              ),
-            ),
-          ),
-          // Section list — each part as a DQ command tile.
+          // Below the pinned header, the exam-info panel + section tiles + footer
+          // buttons all scroll together in one list so nothing overflows on a
+          // short (phone-landscape) viewport (#144); on a tall screen the content
+          // simply sits at the top with the dark scene below.
           Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-              itemCount: exam.sections.length,
-              itemBuilder: (context, i) {
-                final section = exam.sections[i];
-                return _SectionTile(
-                  section: section,
-                  onTap: () => _navigateToSection(context, section),
-                );
-              },
-            ),
-          ),
-          // ── 合格メーター (LIVE — reads real SkillAccuracyStore data) ──────────
-          // NOTE: This button sources REAL practice results via SkillAccuracyStore.
-          //       The const PassMeterScreen() demo path (no estimate argument) is
-          //       used ONLY by the ?preview=passmeter design-audit route in app.dart.
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
-            child: DqButton(
-              label: '合格率をみる  /  Check Pass Meter',
-              onTap: () => _openLivePassMeter(context),
-            ),
-          ),
-          // Full practice test button.
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
-            child: DqButton(
-              label: 'フル模試を開始  /  Start Full Mock',
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => MockExamScreen(eikenGrade: widget.eikenGrade),
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(16, 6, 16, 16),
+              children: [
+                // Exam info panel (試験時間 / 合格ライン / CEFR).
+                DqPanel(
+                  title: '試験概要（しけんがいよう） / Exam Overview',
+                  // #114/WCAG SC 1.4.4: Wrap (not Row) so the three chips reflow
+                  // onto extra lines at 2.0x text instead of clipping ~88px.
+                  child: Wrap(
+                    alignment: WrapAlignment.spaceAround,
+                    spacing: 12,
+                    runSpacing: 10,
+                    children: [
+                      _DqInfoChip(
+                        icon: Icons.timer_outlined,
+                        label: '${exam.totalMinutes}分',
+                        jp: '試験時間',
+                        en: 'Time',
+                      ),
+                      _DqInfoChip(
+                        icon: Icons.check_circle_outline,
+                        label: '${exam.passingScore}',
+                        jp: '合格ライン',
+                        en: 'Pass',
+                      ),
+                      _DqInfoChip(
+                        icon: Icons.stars_outlined,
+                        label: exam.cefrLevel,
+                        jp: 'CEFRレベル',
+                        en: 'CEFR',
+                      ),
+                    ],
+                  ),
                 ),
-              ),
+                const SizedBox(height: 8),
+                // Section list — each part as a DQ command tile.
+                for (final section in exam.sections)
+                  _SectionTile(
+                    section: section,
+                    onTap: () => _navigateToSection(context, section),
+                  ),
+                const SizedBox(height: 8),
+                // ── 合格メーター (LIVE — reads real SkillAccuracyStore data) ──
+                // Sources REAL practice results; the const PassMeterScreen() demo
+                // path is used ONLY by the ?preview=passmeter route in app.dart.
+                DqButton(
+                  label: '合格率をみる  /  Check Pass Meter',
+                  onTap: () => _openLivePassMeter(context),
+                ),
+                const SizedBox(height: 8),
+                DqButton(
+                  label: 'フル模試を開始  /  Start Full Mock',
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          MockExamScreen(eikenGrade: widget.eikenGrade),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],

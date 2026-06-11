@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/audio/nav_speak.dart';
 import '../../core/config/flavor_config.dart';
+import '../../core/ui/responsive.dart';
 import '../quest/ui/dq_ui.dart';
 import 'placement_engine.dart';
 import 'placement_item_bank.dart';
@@ -260,7 +261,9 @@ class _OnboardingFlowState extends State<OnboardingFlow>
           Expanded(
             child: FadeTransition(
               opacity: _fadeAnim,
-              child: _buildCurrentStep(),
+              // Scroll the step instead of overflowing on a short viewport
+              // (phone landscape). Fills normally when tall enough. (#144)
+              child: ScrollSafe(child: _buildCurrentStep()),
             ),
           ),
         ],

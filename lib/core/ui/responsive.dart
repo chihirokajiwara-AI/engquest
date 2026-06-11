@@ -78,3 +78,29 @@ class ResponsiveCenter extends StatelessWidget {
     return Align(alignment: Alignment.topCenter, child: content);
   }
 }
+
+/// Makes a fill-style [child] (a Column using Expanded/Spacer to fill the
+/// viewport) SCROLL when the viewport is too short (e.g. phone landscape, 360px
+/// tall) instead of overflowing. Appearance-identical when there's enough height
+/// (minHeight = viewport forces the column to exactly fill, like before); only
+/// scrolls past that. The canonical Flutter fill-or-scroll pattern. (#144)
+class ScrollSafe extends StatelessWidget {
+  final Widget child;
+  final ScrollController? controller;
+  const ScrollSafe({super.key, required this.child, this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          controller: controller,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+            child: IntrinsicHeight(child: child),
+          ),
+        );
+      },
+    );
+  }
+}
