@@ -1100,18 +1100,17 @@ class _SettingsTab extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               GestureDetector(
-                onTap: onDeleteData == null
-                    ? null
-                    : () => _confirmDelete(context),
+                onTap:
+                    onDeleteData == null ? null : () => _confirmDelete(context),
                 child: Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16, vertical: 13),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
                   decoration: BoxDecoration(
                     color: const Color(0xFF3A1414).withAlpha(220),
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                        color: const Color(0xFFE89090), width: 1.5),
+                    border:
+                        Border.all(color: const Color(0xFFE89090), width: 1.5),
                   ),
                   child: Row(
                     children: [
@@ -1134,8 +1133,8 @@ class _SettingsTab extends StatelessWidget {
                               style: dqText(
                                   size: 10,
                                   w: FontWeight.w500,
-                                  color: const Color(0xFFE89090)
-                                      .withAlpha(180)),
+                                  color:
+                                      const Color(0xFFE89090).withAlpha(180)),
                             ),
                           ],
                         ),
@@ -1226,8 +1225,7 @@ class _SettingsTab extends StatelessWidget {
                         alignment: Alignment.center,
                         padding: const EdgeInsets.symmetric(vertical: 13),
                         decoration: BoxDecoration(
-                          color:
-                              const Color(0xFF3A1414).withAlpha(235),
+                          color: const Color(0xFF3A1414).withAlpha(235),
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
                               color: const Color(0xFFE89090), width: 1.5),

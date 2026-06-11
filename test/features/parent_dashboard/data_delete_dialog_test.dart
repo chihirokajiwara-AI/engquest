@@ -48,8 +48,7 @@ class _DeleteTestHarnessState extends State<_DeleteTestHarness> {
               Text(
                 'もとに もどせません。\n'
                 'すべての がくしゅうきろく（たんご・レベル・ストリーク）が きえます。',
-                style:
-                    dqText(size: 13, w: FontWeight.w600, color: dqInk),
+                style: dqText(size: 13, w: FontWeight.w600, color: dqInk),
               ),
               const SizedBox(height: 18),
               Row(
@@ -93,8 +92,7 @@ class _DeleteTestHarnessState extends State<_DeleteTestHarness> {
 
 // ---------------------------------------------------------------------------
 void main() {
-  testWidgets(
-      '#67 data-delete confirm dialog appears when triggered',
+  testWidgets('#67 data-delete confirm dialog appears when triggered',
       (tester) async {
     bool deleted = false;
     await tester.pumpWidget(
