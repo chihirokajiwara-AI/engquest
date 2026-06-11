@@ -330,6 +330,10 @@ class _BattleScreenState extends State<BattleScreen>
     }
     queue.shuffle(math.Random());
 
+    // Re-check: getDueCards above is an await AFTER the line-317 mounted check,
+    // so a child navigating away mid-load could otherwise setState on a disposed
+    // State (a "setState after dispose" crash). Guard right before the mutation.
+    if (!mounted) return;
     setState(() {
       _deck = deck;
       _queue = queue.isNotEmpty ? queue : List.generate(deck.length, (i) => i)
