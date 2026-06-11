@@ -81,14 +81,14 @@ needs CEO go (spend / secret / prod / legal / art-gen).
 ## H. GAME COMPOSITION (TOP PRIORITY — CEO 1244, ~5%, mostly BUILD)
 |48|世界/物語実装|15|BUILD|implement STORY-BIBLE 7-case arc into quest_data (currently 英検+thin skin)|
 |49|キャラ in-game|12|BUILD|cast dialogue, arcs, presence (bible→code); art-gen separate|
-|50|探索の深さ|20|BUILD|scene/nazo/hotspot depth → Layton/Minecraft-grade|
+|50|探索の深さ|26|BUILD|scene/nazo/hotspot depth → Layton/Minecraft-grade|
 |51|ゲームフィール/演出|18|BUILD|juice, transitions, feedback, reward moments|
 |52|事件→英検の有機結合|25|BUILD|each case's puzzles ARE the 英検 skills, diegetic|
 |53|手がかりドリップ|10|BUILD|one clue/case edge→centre per WORLD-BIBLE|
 |54|視覚の本格バー|30|GATE:art-gen|dark-navy/gold look; cast+scene art (heavy job)|
 |55|オープニング/掴み|20|BUILD|implement OPENING-NARRATIVE-BIBLE as playable|
 |56|サウンド/音楽|35|GATE:audio|BGM/SE design+wiring (founder/paid gen escalates)|
-|57|nav到達性/ハブ|60|BUILD|kill orphaned WorldMap hub remnants; clean flow|
+|57|nav到達性/ハブ|72|BUILD|kill orphaned WorldMap hub remnants; clean flow|
 |58|onboarding没入|72|BUILD|make CAT placement diegetic (探偵の入所試験)|
 
 ## I. perf / a11y / QA
@@ -106,3 +106,20 @@ needs CEO go (spend / secret / prod / legal / art-gen).
 - **GATE items never self-advance** past their gate — surface to CEO with the
   decision material (what / done / GO-needs / cost / risk / recommendation).
 - The score is HONEST: it rises only on verified shipped work, never on intent.
+
+## Loop protocol v2 (CEO 1249 全て組込 / 1250 超厳格・100超)
+EVERYTHING is now the autonomous loop — audits, the game-build plan, parallel
+agent teams, scorecard growth — one self-sustaining engine. Each tick:
+1. ORIENT: read this scorecard + GAME-BUILD-PLAN.md; pick the lowest BUILD item(s),
+   **biased hard to §H GAME** (CEO 1244 all-in). GATE items → surface to CEO, never self-build.
+2. RESEARCH (latest-first) where a design decision needs it; front-load agents.
+3. BUILD via §III 8-phase. Independent units → fan out a Workflow (model-tiered:
+   haiku=status/extract, sonnet=code/content, opus=judgment); coordination-bound
+   units → sequence (wait where it yields higher quality, CEO 1247).
+4. **SUPER-STRICT re-audit (CEO 1250, stricter than the drill bar)**: measure the
+   real shipped result (never assume); an item's score rises ONLY on verified,
+   gated, adversarially-audited, committed work. Default-REJECT the increment.
+5. Re-score here with the measured value. Surface real outcomes to CEO.
+6. **Aim BEYOND 100 (CEO 1250)**: 100 = "world-class sellable bar reached"; then
+   keep deepening (a 100 item can still be out-classed next month → re-audit
+   latest-first and push past it). Growth never stops; no "done".
