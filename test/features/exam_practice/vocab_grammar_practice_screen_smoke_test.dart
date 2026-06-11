@@ -116,6 +116,43 @@ void main() {
       });
     }
 
+    testWidgets('after 3 wrong in a row, a gentle 探偵 encouragement appears (no-scold)',
+        (tester) async {
+      addTearDown(tester.view.reset);
+      await tester.pumpWidget(MaterialApp(
+        home: VocabGrammarPracticeScreen(
+          eikenGrade: '5',
+          section: _vocabSection(),
+        ),
+      ));
+      await tester.pump();
+      await tester.runAsync(
+          () => Future<void>.delayed(const Duration(milliseconds: 700)));
+      await tester.pump();
+      final state =
+          tester.state(find.byType(VocabGrammarPracticeScreen)) as dynamic;
+      expect((state.debugCorrectChoices as List).length,
+          greaterThanOrEqualTo(3),
+          reason: 'need ≥3 questions to exercise a 3-wrong streak');
+
+      // First two wrong → streak 1,2: encouragement must NOT show yet.
+      for (var i = 0; i < 2; i++) {
+        await tester.tap(find.text(state.debugWrongChoiceFor(i) as String).first);
+        await tester.pump();
+        expect(find.textContaining('なんども まちがえても'), findsNothing,
+            reason: 'no encouragement before the 3-miss threshold');
+        await tester.ensureVisible(find.text('次の問題へ'));
+        await tester.tap(find.text('次の問題へ'));
+        await tester.pump();
+      }
+      // Third wrong in a row → the gentle, non-scolding encouragement appears.
+      await tester.tap(find.text(state.debugWrongChoiceFor(2) as String).first);
+      await tester.pump();
+      expect(find.textContaining('なんども まちがえても'), findsOneWidget,
+          reason: 'a cold streak (3 wrong) must trigger gentle encouragement');
+      expect(tester.takeException(), isNull);
+    });
+
     testWidgets('after answering, shows the word IN CONTEXT (れい:) — #77',
         (tester) async {
       await tester.pumpWidget(MaterialApp(

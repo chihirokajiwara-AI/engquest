@@ -120,6 +120,13 @@ class _VocabGrammarPracticeScreenState
   int _unaidedTotal = 0; // questions answered WITHOUT the hint
   int _unaidedCorrect = 0; // correct among the unaided
 
+  // Struggling-child support (CEO 1135 / no-scold spine): a child who misses
+  // several in a row gets a gentle, 探偵-framed encouragement (never a scold) and
+  // a nudge toward the opt-in 「いみを みる」 hint — so a cold streak builds
+  // resilience instead of shame. Resets to 0 on any correct answer.
+  int _consecutiveWrong = 0;
+  static const int _kStruggleThreshold = 3;
+
   @override
   void initState() {
     super.initState();
@@ -299,6 +306,8 @@ class _VocabGrammarPracticeScreenState
       _selectedAnswer = idx;
       _answered = true;
       if (correct) _correctCount++;
+      // Track a cold streak to trigger gentle encouragement (no-scold spine).
+      _consecutiveWrong = correct ? 0 : _consecutiveWrong + 1;
       // Honest measurement: only UNAIDED answers count toward 合格率. A hinted
       // question is recorded as assisted and excluded from the readiness signal.
       if (_hintShown) {
@@ -656,6 +665,14 @@ class _VocabGrammarPracticeScreenState
           const SizedBox(height: 24),
           // Explanation + Next button (shown after answering)
           if (_answered) ...[
+            // Struggling-child support: after a cold streak, encourage (never
+            // scold) and point to the hint. Only on a WRONG answer that extends
+            // the streak past the threshold. (CEO 1135 / no-scold spine)
+            if (_selectedAnswer != q.correctIdx &&
+                _consecutiveWrong >= _kStruggleThreshold) ...[
+              const _EncouragementBanner(),
+              const SizedBox(height: 10),
+            ],
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
@@ -889,6 +906,41 @@ class _HearWordButton extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+/// A gentle, 探偵-framed encouragement shown after a cold streak (several wrong
+/// in a row). It NEVER scolds (no-scold spine, CEO 1135) — it normalises mistakes
+/// as part of detective work and points the child to the opt-in 「いみを みる」
+/// hint, turning a discouraging streak into a resilience + comprehension nudge.
+class _EncouragementBanner extends StatelessWidget {
+  const _EncouragementBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: dqGold.withAlpha(28),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: dqGold.withAlpha(110)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('🕵️', style: TextStyle(fontSize: 20)),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              'なんども まちがえても へいき！ めいたんていも、'
+              'しっぱいを ヒントに して 事件（じけん）を とくんだ。\n'
+              '「いみを みる」を つかうと、もっと わかるよ。',
+              style: dqText(size: 13).copyWith(height: 1.5),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
