@@ -56,7 +56,13 @@ class PassMeterScreen extends StatelessWidget {
   /// so the screen is always renderable (R3/R4: no null crash, no Firebase).
   final CseEstimate? estimate;
 
-  const PassMeterScreen({super.key, this.estimate});
+  /// When non-null, a 「答え合わせ（見直し）」 button is shown that pushes the widget
+  /// this builds (the post-mock review). Decoupled: PassMeterScreen does not
+  /// import the review screen — the mock caller supplies the builder. Null for
+  /// non-mock uses (the live 合格メーター), which have nothing to review.
+  final WidgetBuilder? onReviewBuilder;
+
+  const PassMeterScreen({super.key, this.estimate, this.onReviewBuilder});
 
   @override
   Widget build(BuildContext context) {
@@ -132,6 +138,20 @@ class PassMeterScreen extends StatelessWidget {
             ),
 
             const SizedBox(height: 20),
+
+            // ── Review answers (post-mock only) ──────────────────────────────
+            // The highest-learning moment after a timed mock: step through the
+            // items and see what was missed. Shown only when a review builder is
+            // supplied (i.e. coming from フル模試), above the practice CTA.
+            if (onReviewBuilder != null) ...[
+              DqButton(
+                label: '答（こた）え合（あ）わせを する / Review',
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: onReviewBuilder!),
+                ),
+              ),
+              const SizedBox(height: 12),
+            ],
 
             // ── Action button (placeholder — wired by CEO) ───────────────────
             DqButton(

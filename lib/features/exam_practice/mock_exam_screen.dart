@@ -31,6 +31,7 @@ import 'eiken_exam_config.dart';
 import '../quest/ui/muted_voice_banner.dart';
 import 'pass/cse_model.dart';
 import 'pass/mock_exam.dart';
+import 'pass/mock_review_screen.dart';
 import 'pass/pass_meter_screen.dart';
 import 'pass/skill_accuracy_store.dart';
 import '../home/streak_service.dart';
@@ -176,8 +177,24 @@ class _MockExamScreenState extends State<MockExamScreen> {
       Navigator.of(context).pop();
       return;
     }
+    // Capture items + answers for the post-mock 答え合わせ (review). Copied by
+    // value so they survive this screen's disposal under pushReplacement.
+    final reviewItems = List<MockMcqItem>.from(_items);
+    final reviewAnswers = Map<String, int>.from(_answers);
+    final reviewLabel = gradeLabelJa(widget.eikenGrade);
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => PassMeterScreen(estimate: estimate)),
+      MaterialPageRoute(
+        builder: (_) => PassMeterScreen(
+          estimate: estimate,
+          onReviewBuilder: reviewItems.isEmpty
+              ? null
+              : (_) => MockReviewScreen(
+                    items: reviewItems,
+                    answers: reviewAnswers,
+                    gradeLabel: reviewLabel,
+                  ),
+        ),
+      ),
     );
   }
 
