@@ -45,4 +45,14 @@ class AuthService {
 
   /// Current user (null if not signed in or Firebase is unavailable)
   User? get currentUser => _auth?.currentUser;
+
+  /// Signs out the current user. No-op if Firebase is unavailable or no user
+  /// is signed in. Used by the data-deletion flow (#67) — always safe to call.
+  Future<void> signOut() async {
+    try {
+      await _auth?.signOut();
+    } catch (_) {
+      // Ignore: Firebase offline or not initialized.
+    }
+  }
 }

@@ -239,11 +239,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         const SizedBox(height: 14),
                         DqPanel(
                           title: 'ヘルプ / Help',
-                          child: DqTile(
-                            jp: 'あそびかた',
-                            en: 'How to play',
-                            icon: Icons.help_outline,
-                            onTap: () => _showHowToPlay(context),
+                          child: Column(
+                            children: [
+                              DqTile(
+                                jp: 'あそびかた',
+                                en: 'How to play',
+                                icon: Icons.help_outline,
+                                onTap: () => _showHowToPlay(context),
+                              ),
+                              _divider(),
+                              // #66 — Store-required reachable support contact for
+                              // a paid app (Apple + Google Play mandate this).
+                              DqTile(
+                                jp: 'お問い合わせ（といあわせ）/ サポート',
+                                en: 'Contact Support',
+                                icon: Icons.support_agent,
+                                onTap: () => _showSupport(context),
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -312,6 +325,108 @@ class _SettingsScreenState extends State<SettingsScreen> {
           activeTrackColor: dqGoldDeep,
         ),
       ],
+    );
+  }
+
+  // #66 — お問い合わせダイアログ: support surface required by Apple + Google Play
+  // for paid apps. Uses SelectableText so a parent can copy the email address
+  // without url_launcher (not available). Child-safe wording with furigana.
+  void _showSupport(BuildContext context) {
+    showDialog<void>(
+      context: context,
+      builder: (ctx) => Dialog(
+        backgroundColor: Colors.transparent,
+        child: DqDialogBox(
+          speaker: 'サポート / Support',
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'お困（こま）りのことは、下（した）の メールにご連絡（れんらく）ください。',
+                style: dqText(size: 13, w: FontWeight.w600, color: dqInk)
+                    .copyWith(height: 1.7),
+              ),
+              const SizedBox(height: 14),
+              // 不具合（ふぐあい）報告
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Icon(Icons.bug_report, color: dqGold, size: 20),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '不具合（ふぐあい）・ご要望（ようぼう）',
+                          style: dqText(
+                              size: 12, w: FontWeight.w700, color: dqGold),
+                        ),
+                        Text(
+                          '不具合（ふぐあい）は このメールへ',
+                          style: dqText(
+                                  size: 11,
+                                  w: FontWeight.w500,
+                                  color: dqInk.withAlpha(170))
+                              .copyWith(height: 1.5),
+                        ),
+                        const SizedBox(height: 4),
+                        // SelectableText lets a parent copy the address without
+                        // url_launcher.
+                        SelectableText(
+                          'support@edilab.co',
+                          style: dqText(
+                              size: 13,
+                              w: FontWeight.w800,
+                              color: const Color(0xFF8BE0FF)),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 14),
+              // プライバシー連絡先
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Icon(Icons.lock_outline, color: dqGold, size: 20),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'プライバシーに関（かん）するお問い合わせ（といあわせ）',
+                          style: dqText(
+                              size: 12, w: FontWeight.w700, color: dqGold),
+                        ),
+                        const SizedBox(height: 4),
+                        SelectableText(
+                          'privacy@edilab.co',
+                          style: dqText(
+                              size: 13,
+                              w: FontWeight.w800,
+                              color: const Color(0xFF8BE0FF)),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Align(
+                alignment: Alignment.centerRight,
+                child: DqButton(
+                  label: 'とじる / Close',
+                  onTap: () => Navigator.of(ctx).pop(),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 

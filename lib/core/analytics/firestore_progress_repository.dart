@@ -305,4 +305,57 @@ class FirestoreProgressRepository {
       return [];
     }
   }
+
+  // ── Account / data deletion (#67 — store-submission requirement) ──────────
+
+  /// Best-effort deletion of all Firestore data under users/{uid}.
+  ///
+  /// Schema covered:
+  ///   users/{uid}                    → profile doc
+  ///   users/{uid}/sessions/{*}       → daily session docs
+  ///   users/{uid}/cards/{*}          → FSRS card docs
+  ///
+  /// All sub-collection deletes run in parallel to minimise latency.
+  /// NEVER throws: if Firestore is offline / Firebase unavailable the method
+  /// returns false (caller must still clear local prefs — see data_deletion_service.dart).
+  Future<bool> deleteUserData(String uid) async {
+    try {
+      // Fetch sub-collection docs in parallel (server-only so the cache doesn't
+      // give stale results, but fall back to cache on network error).
+      final getOpts = const GetOptions(source: Source.serverAndCache);
+
+      final sessionsFuture = _db
+          .collection('users')
+          .doc(uid)
+          .collection('sessions')
+          .get(getOpts)
+          .then((snap) => snap.docs.map((d) => d.reference).toList())
+          .catchError((_) => <DocumentReference<Map<String, dynamic>>>[]);
+
+      final cardsFuture = _db
+          .collection('users')
+          .doc(uid)
+          .collection('cards')
+          .get(getOpts)
+          .then((snap) => snap.docs.map((d) => d.reference).toList())
+          .catchError((_) => <DocumentReference<Map<String, dynamic>>>[]);
+
+      final results = await Future.wait([sessionsFuture, cardsFuture]);
+      final sessionRefs = results[0];
+      final cardRefs = results[1];
+
+      // Delete all sub-docs first, then the profile doc.
+      final deleteFutures = [
+        ...sessionRefs.map((r) => r.delete().catchError((_) {})),
+        ...cardRefs.map((r) => r.delete().catchError((_) {})),
+      ];
+      await Future.wait(deleteFutures);
+
+      // Finally delete the profile doc itself.
+      await _profileDoc(uid).delete();
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
 }

@@ -80,4 +80,35 @@ void main() {
     expect(find.text('あそびかた'), findsOneWidget); // how-to-play
     expect(find.byType(Switch), findsNWidgets(3)); // SFX, Voice, master
   });
+
+  // ── #66 — Support contact dialog ─────────────────────────────────────────
+
+  testWidgets('#66 support tile is present and dialog opens with email addrs',
+      (tester) async {
+    // Extra-tall surface so the entire Settings list (including the Help panel
+    // at the bottom) is laid out and the support tile is found.
+    tester.view.physicalSize = const Size(800, 2400);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
+
+    // Tile must be visible.
+    expect(find.text('Contact Support'), findsOneWidget);
+
+    // Tap the support tile — dialog should appear.
+    await tester.tap(find.text('Contact Support'));
+    await tester.pumpAndSettle();
+
+    // Dialog must contain both email addresses as SelectableText.
+    expect(find.text('support@edilab.co'), findsOneWidget);
+    expect(find.text('privacy@edilab.co'), findsOneWidget);
+
+    // Dismiss dialog via the close button.
+    await tester.tap(find.textContaining('とじる'));
+    await tester.pumpAndSettle();
+    expect(find.text('support@edilab.co'), findsNothing);
+  });
 }
