@@ -280,6 +280,417 @@ const TeachCard kToInfinitiveTeach = TeachCard(
   ],
 );
 
+// ── 英検3級 teach-cards ───────────────────────────────────────────────────────
+
+/// Teach-first lesson for としょかんいん's 現在完了 for/since ナゾ (_kStep3(3),
+/// 「I have worked in this library ___ ten years.」, choices since/from/for/during).
+/// Teaches the for vs since distinction (span vs point-in-time) WITHOUT
+/// naming "for" as the answer. Example durations use "school", "town", "music"
+/// — none of the stem's words (library, years, worked).
+const TeachCard kPresentPerfectForSinceTeach = TeachCard(
+  titleJa: '「ずっと〜してきた」― for と since のちがい',
+  leadJa: '現在完了（げんざいかんりょう）で「いままで どのくらい つづいているか」を いうとき、\n'
+      '「どのくらいの時間（じかん）か」なら for、「いつから か」なら since を つかうよ。',
+  items: [
+    TeachItem(
+      'for + 時間（じかん）の長（なが）さ',
+      'どのくらい → 期間（きかん）の長さ',
+      'for three days・for two months・for a long time',
+    ),
+    TeachItem(
+      'since + 時点（じてん）',
+      'いつから → 起点（きてん）',
+      'since Monday・since 2020・since I was a child',
+    ),
+    TeachItem(
+      'I have studied music for six months.',
+      'わたしは 六（む）ヶ月（かげつ） 音楽（おんがく）を 勉強（べんきょう）してきた',
+      '「六ヶ月という長さ」だから for',
+    ),
+    TeachItem(
+      'She has lived in that town since spring.',
+      'かのじょは はるから あの まちに すんでいる',
+      '「はるという時点」だから since',
+    ),
+  ],
+);
+
+/// Teach-first lesson for がくせい's 現在完了 yet ナゾ (_kStep3(4),
+/// 「I haven't finished it ___.」, choices already/yet/ever/soon).
+/// Teaches that yet lives in negatives/questions and already lives in
+/// positive statements, WITHOUT naming "yet" as the quiz answer.
+/// Examples use "homework", "dinner", "film" — no overlap with
+/// the stem words (return, book, finished).
+const TeachCard kPerfectYetAlreadyTeach = TeachCard(
+  titleJa: '「まだ〜していない」「もう〜した」― yet と already',
+  leadJa: 'already は「もう〜した」というとき（ふつう文）に つかい、\n'
+      'yet は「まだ〜していない」や「もう〜した？」に つかうよ。',
+  items: [
+    TeachItem(
+      'already（ふつう文・肯定文（こうていぶん））',
+      'もう〜した',
+      'I have already done my homework. ／ もう しゅくだいを やった。',
+    ),
+    TeachItem(
+      'yet（否定文（ひていぶん）・疑問文（ぎもんぶん））',
+      'まだ〜していない ／ もう〜した？',
+      'I haven\'t eaten dinner yet. ／ まだ ゆうしょくを たべていない。',
+    ),
+    TeachItem(
+      'Have you seen that film yet?',
+      'もう あの えいがを みた？',
+      'ぎもんぶんでも yet を つかう',
+    ),
+  ],
+);
+
+/// Teach-first lesson for スラ's past-tense reunion ナゾ (_kStep3(0),
+/// 「Where did you sleep last night?」, choices including "I slept…").
+/// Teaches that "last night / yesterday" is the cue to use the simple past,
+/// NOT the present perfect or present tense. Uses verbs eat/walk/read
+/// — none of the stem's key words (sleep, city, practiced, night).
+const TeachCard kSimplePastCuedTeach = TeachCard(
+  titleJa: '「きのう〜した」― last night は かこけい（過去形）の サイン',
+  leadJa: '「last night（ゆうべ）」「yesterday（きのう）」「ago（まえ）」が あったら、\n'
+      'かこけい（simple past）を つかうよ。'
+      '現在完了（げんざいかんりょう）は つかわない！',
+  items: [
+    TeachItem(
+      'last night → simple past',
+      'ゆうべ → かこけい',
+      'I ate pizza last night. ／ ゆうべ ピザを たべた。',
+    ),
+    TeachItem(
+      'yesterday → simple past',
+      'きのう → かこけい',
+      'He walked to school yesterday. ／ かれは きのう がっこうへ あるいた。',
+    ),
+    TeachItem(
+      'I read that book last week.',
+      'わたしは せんしゅう あの ほんを よんだ',
+      '「last week（せんしゅう）」も かこけいの サイン',
+    ),
+  ],
+);
+
+// ── 英検準2級 teach-cards ─────────────────────────────────────────────────────
+
+/// Teach-first lesson for しょうにん's passive-voice ナゾ (_kStepPre2(2),
+/// 「Do you know where they are grown?」, answer "They are grown on islands…").
+/// Teaches that be＋過去分詞 = 受動態（〜される/〜されている）, WITHOUT using
+/// "grow/grown" as an example — uses "make/build/teach" instead.
+const TeachCard kPassiveVoiceTeach = TeachCard(
+  titleJa: '「〜される」「〜されている」― 受動態（じゅどうたい）',
+  leadJa: '「だれかに よって〜される」というとき、えいごでは\n'
+      '「be どうし ＋ 過去分詞（かこぶんし）」の かたちを つかうよ。',
+  items: [
+    TeachItem(
+      'be どうし ＋ 過去分詞',
+      '〜される・〜されている',
+      '能動（のうどう）: They make cars here. → 受動（じゅどう）: Cars are made here.',
+    ),
+    TeachItem(
+      'The bridge was built fifty years ago.',
+      'その はしは 五十年（ごじゅうねん）まえに つくられた',
+      'was built = be のかこけい ＋ build の かこぶんし',
+    ),
+    TeachItem(
+      'English is taught in many schools.',
+      'えいごは たくさんの がっこうで おしえられている',
+      'is taught = be の現在形（げんざいけい） ＋ teach の かこぶんし',
+    ),
+  ],
+);
+
+/// Teach-first lesson for せんちょう's relative-pronoun-who ナゾ (_kStepPre2(3),
+/// answer "A sailor who never gives up in a storm.").
+/// Teaches that who connects a clause to a PERSON noun, and the rule for
+/// who vs which vs where, WITHOUT using "give up / storm / sailor" as examples.
+const TeachCard kRelativePronounWhoTeach = TeachCard(
+  titleJa: '「〜な 人（ひと）」をつなぐ ― 関係代名詞（かんけいだいめいし）who',
+  leadJa: '「〜する 人（ひと）」「〜した 人（ひと）」のように、「人（ひと）」を くわしく するとき\n'
+      '「who（フー）」を つかうよ。もの・ことには which を つかう。',
+  items: [
+    TeachItem(
+      'who → 人（ひと）を さす',
+      'a teacher who ／ a friend who',
+      'a teacher who speaks kindly ／ やさしく はなす せんせい',
+    ),
+    TeachItem(
+      'which → もの・こと を さす',
+      'a book which ／ a song which',
+      'a book which changed my life ／ わたしの じんせいを かえた ほん',
+    ),
+    TeachItem(
+      'She is a doctor who helps children every day.',
+      'かのじょは まいにち こどもを たすける いしゃです',
+      'who の あとに 動詞（どうし）が くる（主格（しゅかく））',
+    ),
+  ],
+);
+
+/// Teach-first lesson for とうだいもり's relative-adverb-where ナゾ (_kStepPre2(4),
+/// answer "the harbour where the storms cannot reach them").
+/// Teaches the where/which distinction: where REPLACES "in/at which" for
+/// places. Example place: café, market. NO use of "harbour/storm/ship/reach".
+const TeachCard kRelativeAdverbWhereTeach = TeachCard(
+  titleJa: '「〜する 場所（ばしょ）」をつなぐ ― 関係副詞（かんけいふくし）where',
+  leadJa: '「〜する 場所（ばしょ）」と いいたいとき、場所（ばしょ）の 名詞（めいし）の あとに\n'
+      '「where（フェア）」を つかうよ。「in which」の かわりになる かたちだよ。',
+  items: [
+    TeachItem(
+      'where → ばしょの 名詞（めいし）に つく',
+      'the town where ／ the park where',
+      'the town where I was born ／ わたしが うまれた まち',
+    ),
+    TeachItem(
+      'This is the café where we always meet.',
+      'ここが わたしたちが いつも あう カフェです',
+      'café（場所）＋ where … always meet',
+    ),
+    TeachItem(
+      'She found a market where fresh fruit is sold every morning.',
+      'かのじょは まいあさ しんせんな くだものが うられる いちばを みつけた',
+      'where の あとは かんぜんな 文（ぶん）',
+    ),
+  ],
+);
+
+// ── 英検準2級プラス teach-cards ──────────────────────────────────────────────
+
+/// Teach-first lesson for はしの番人's present-perfect-have-worked ナゾ
+/// (_kStepPre2Plus(0), 「I ___ on this bridge since 2025.」,
+/// choices work/have worked/worked/am working).
+/// Teaches that since ＋ point-in-time triggers the present perfect
+/// (have/has ＋ p.p.), not simple past. Examples use "live/study/serve"
+/// — NO use of "bridge/work/2025".
+const TeachCard kPresentPerfectSinceTeach = TeachCard(
+  titleJa: '「since（〜から ずっと）」= 現在完了（げんざいかんりょう）のサイン',
+  leadJa: '「since ＋ 時点（じてん）」の ある 文（ぶん）では、「have ／ has ＋ 過去分詞（かこぶんし）」\n'
+      'を つかうよ。ふつうの かこけい（worked, lived）は まちがい！',
+  items: [
+    TeachItem(
+      'have / has ＋ p.p. ＋ since',
+      '〜から ずっと〜している',
+      'She has lived here since last spring. ／ かのじょは きょねんの はるから ここに すんでいる。',
+    ),
+    TeachItem(
+      'I have studied French since I was twelve.',
+      'わたしは じゅうにさいの ときから フランスごを べんきょうしてきた',
+      'since ＋ 過去の時点 → 現在完了',
+    ),
+    TeachItem(
+      'He has served on the council since the new rules were set.',
+      'かれは あたらしい きまりが できてから ずっと ぎかいに つとめている',
+      'was/were は かこけい。has ＋ p.p. が 現在完了',
+    ),
+  ],
+);
+
+/// Teach-first lesson for 渡し守's relative-adverb-where ナゾ
+/// (_kStepPre2Plus(1), 「This is the place ___ many travellers turn back.」,
+/// choices which/who/where/what).
+/// Revisits where vs which at B1 level — emphasises that which needs an
+/// antecedent WITHIN the clause while where stands in for "at/in which" for
+/// place nouns. Examples: school, valley. NO use of "place/traveller/turn/back".
+const TeachCard kRelativeWhereVsWhichTeach = TeachCard(
+  titleJa: '「場所（ばしょ）の 名詞（めいし）＋ where」― which との ちがいを おさえよう',
+  leadJa: '関係副詞（かんけいふくし）where と 関係代名詞（かんけいだいめいし）which は、\n'
+      'どちらも「それが さっき 言（い）った ___」と つなぐけど、つかいかたが ちがう。',
+  items: [
+    TeachItem(
+      'place-noun ＋ where ＋ 完全（かんぜん）な 文',
+      '場所の名詞に つくとき',
+      'the school where she teaches every morning ／ かのじょが まいあさ おしえる がっこう',
+    ),
+    TeachItem(
+      'thing-noun ＋ which ＋ 不完全（ふかんぜん）な 文',
+      'ものの名詞に つくとき',
+      'the letter which arrived yesterday ／ きのう とどいた てがみ',
+    ),
+    TeachItem(
+      'This is the valley where the old stories were first told.',
+      'ここが むかしばなしが はじめて かたられた たにだ',
+      'valley（場所）＋ where … first told',
+    ),
+  ],
+);
+
+// ── 英検2級 teach-cards ───────────────────────────────────────────────────────
+
+/// Teach-first lesson for せんせい's academic-empathy response ナゾ (_kStep2(0),
+/// 「I've been teaching here for ten years, though the number of students keeps
+/// declining.」, correct: "That must be quite challenging for you.").
+/// Teaches the register of acknowledging someone's difficulty with empathic
+/// language. Examples use "long commute" and "heavy workload"
+/// — NO use of "teach / students / declining / ten / years".
+const TeachCard kEmpathyResponseTeach = TeachCard(
+  titleJa: '相手（あいて）の 苦労（くろう）に 共感（きょうかん）する ― 英語（えいご）の ていねいな こたえ方（かた）',
+  leadJa: '英語（えいご）で 大人（おとな）どうし 話（はな）すとき、「それは たいへんですね」と\n'
+      '共感（きょうかん）するには、ていねいな かたちを つかうよ。',
+  items: [
+    TeachItem(
+      'That must be really exhausting for you.',
+      'それは ほんとうに くたびれますね',
+      '「must be ＋ 形容詞（けいようし）」= きっと〜にちがいない。共感（きょうかん）のていねいな いいかた',
+    ),
+    TeachItem(
+      'That sounds really difficult.',
+      'それは ほんとうに むずかしそうですね',
+      '「sounds ＋ 形容詞（けいようし）」で やわらかく 共感（きょうかん）',
+    ),
+    TeachItem(
+      'A: I have a really long commute every day. — B: That must be exhausting.',
+      'A：まいにち とても とおい かよいで。 B：それは つかれますね。',
+      '話題（わだい）に あった 形容詞（けいようし）を えらぶ',
+    ),
+  ],
+);
+
+/// Teach-first lesson for やくにん's passive-voice (was built) ナゾ (_kStep2(2),
+/// 「The new library ___ by the city council two years ago.」,
+/// choices built/has built/was building/was built).
+/// Re-teaches passive at 2級 level: past passive = was/were ＋ p.p.,
+/// and the by-phrase marks the agent. NO use of "library/build/council/ago".
+const TeachCard kPastPassiveTeach = TeachCard(
+  titleJa: '「〜された」― かこの 受動態（じゅどうたい）was ／ were ＋ 過去分詞（かこぶんし）',
+  leadJa: '「（だれかに よって）〜された」というとき、かこの 受動態（じゅどうたい）を つかうよ。\n'
+      'かたちは「was ／ were ＋ 過去分詞（かこぶんし）」。行為者（こういしゃ）は by で しめす。',
+  items: [
+    TeachItem(
+      'was ／ were ＋ 過去分詞',
+      '〜された（かこ）',
+      'This road was repaired last month. ／ この みちは せんげつ しゅうりされた。',
+    ),
+    TeachItem(
+      'by ＋ 行為者（こういしゃ）',
+      '〜によって',
+      'The painting was made by a local artist. ／ その えは ちいきの がかに よって かかれた。',
+    ),
+    TeachItem(
+      'The old clock tower was designed by a famous engineer.',
+      'その ふるい とけいとうは ゆうめいな こうがくしゃに よって せっけいされた',
+      '行為者（こういしゃ）＋ by が ポイント',
+    ),
+  ],
+);
+
+/// Teach-first lesson for がくせい's relative-pronoun-who ナゾ (_kStep2(3),
+/// 「The professor ___ wrote this book is giving a lecture tonight.」,
+/// choices which/who/whose/whom).
+/// Teaches who (subject) vs whose (possessive) vs whom (object) at 2級 level.
+/// Examples use "doctor/musician/colleague" — NO use of "professor/lecture/book/wrote/tonight".
+const TeachCard kRelativeWhoSubjectTeach = TeachCard(
+  titleJa: '「〜した 人（ひと）が…」― 関係代名詞（かんけいだいめいし）who の つかいかた',
+  leadJa: '関係代名詞（かんけいだいめいし）who は「人（ひと）」を くわしくするとき つかう。\n'
+      '主格（しゅかく）＝ who、所有格（しょゆうかく）＝ whose、目的格（もくてきかく）＝ whom だよ。',
+  items: [
+    TeachItem(
+      'who ＋ 動詞（どうし） → 主格（しゅかく）',
+      '〜する 人（ひと）が',
+      'the doctor who treated many patients ／ おおくの かんじゃを みた いしゃ',
+    ),
+    TeachItem(
+      'whose ＋ 名詞（めいし） → 所有格（しょゆうかく）',
+      '〜の 人（ひと）',
+      'a musician whose songs I love ／ わたしが すきな うたを うたう おんがくか',
+    ),
+    TeachItem(
+      'The colleague who leads the morning meeting is very organised.',
+      'あさのかいぎを しきる どうりょうは とても せいりされている',
+      'leads が どうし → 主格（しゅかく）who',
+    ),
+  ],
+);
+
+// ── 英検準1級 teach-cards ─────────────────────────────────────────────────────
+
+/// Teach-first lesson for 門の守り手's collocation ナゾ (_kStepPre1(0),
+/// 「you must ___ a decision」, choices do/take/make/give).
+/// Teaches that "make" collocates with decision/choice/effort/mistake,
+/// while "do" collocates with homework/work/damage.
+/// NO use of "decision" as a worked example (that would leak the answer);
+/// uses "mistake/effort/promise" instead.
+const TeachCard kCollocationMakeDoTeach = TeachCard(
+  titleJa: '「make」と「do」― コロケーション（よく いっしょに つかう ことば）',
+  leadJa: '英語（えいご）では 決（き）まった 名詞（めいし）と いっしょに つかう 動詞（どうし）が ある。\n'
+      '「make」は「何（なに）かを 生（う）みだす・おこなう」ものに、\n'
+      '「do」は「作業（さぎょう）・やること」に つきやすい。',
+  items: [
+    TeachItem(
+      'make ＋ mistake / effort / choice / promise',
+      'あやまちをおかす・努力（どりょく）する・えらぶ・やくそくする',
+      'She made a great effort to finish on time. ／ かのじょは じかんどおりに おわらせようと ずいぶん 努力（どりょく）した。',
+    ),
+    TeachItem(
+      'do ＋ homework / research / work / damage',
+      'しゅくだいをする・研究（けんきゅう）をする・しごとをする・ダメージをあたえる',
+      'He did his research carefully. ／ かれは ていねいに 研究（けんきゅう）をした。',
+    ),
+    TeachItem(
+      'They made a promise to keep in touch.',
+      'かれらは れんらくを とりつづける やくそくをした',
+      '「promise」は make とともに つかう',
+    ),
+  ],
+);
+
+/// Teach-first lesson for 元・宰相's phrasal-verb (carry out) ナゾ (_kStepPre1(2),
+/// answer "carry / out"). Teaches the meaning distinction among
+/// carry on/out/away/off at B2-C1 level. NO examples that use
+/// "plan/heart/library" (stem words); uses "experiment/order/task/speech" instead.
+const TeachCard kPhrasalVerbCarryTeach = TeachCard(
+  titleJa: '「carry ＋ ___」― 句動詞（くどうし）の いみを くらべよう',
+  leadJa: '「carry」に つく ことばで いみが がらっと かわる。\n'
+      '英検（えいけん）準1級（きゅう）では いみの ちがいを えらぶ 問題（もんだい）が よく でる。',
+  items: [
+    TeachItem(
+      'carry out ＋ task / experiment / order',
+      '〜を やりとげる・実行（じっこう）する',
+      'The team carried out the experiment over two months. ／ チームは 二（ふた）ヶ月（かげつ）かけて その じっけんを じっこうした。',
+    ),
+    TeachItem(
+      'carry on ＋ (with) activity',
+      '〜を つづける',
+      'Carry on with your speech — do not stop. ／ スピーチを つづけて ― とまらないで。',
+    ),
+    TeachItem(
+      'carry away → be carried away by',
+      '（感情（かんじょう）に）ながされる',
+      'Don\'t be carried away by your excitement. ／ こうふんに ながされないで。',
+    ),
+  ],
+);
+
+/// Teach-first lesson for 城の治癒師's derivational-noun (resilience) ナゾ
+/// (_kStepPre1(3), 「Such ___ in the face of so much quiet is rare.」,
+/// choices resilient/resilience/resiliently/resile).
+/// Teaches word-family awareness: after "such" we need a NOUN.
+/// Uses "persist→persistence/patient→patience" as worked examples
+/// — NO use of "resilience/resilient/quiet/rare/endure/wait" (stem words).
+const TeachCard kDerivationalNounTeach = TeachCard(
+  titleJa: '「such ＋ 名詞（めいし）」― はたらきから 品詞（ひんし）を えらぶ',
+  leadJa: '「such ＋ ___」の かたちでは、___には 名詞（めいし）が はいる。\n'
+      '形容詞（けいようし）や 副詞（ふくし）ではない。語尾（ごび）で 品詞（ひんし）を みわけよう。',
+  items: [
+    TeachItem(
+      '-ence / -ance → 名詞（めいし）',
+      'ことば の はたらき を あらわす',
+      'persist（動詞）→ persistence（名詞）: such persistence ／ patient（形容詞）→ patience（名詞）: such patience',
+    ),
+    TeachItem(
+      '-ent / -ant → 形容詞（けいようし）',
+      'ものごとの ようすを あらわす',
+      'persistent（かんじょうし） → does NOT follow "such ___" as the head noun',
+    ),
+    TeachItem(
+      'Such patience in a difficult situation is admirable.',
+      'むずかしい じょうきょうで そのような にんたいりょくは りっぱだ',
+      '「such」のあとは 名詞（めいし）patience ← 形容詞（けいようし）patient ではない',
+    ),
+  ],
+);
+
 /// Teach-first lesson for the 門番's be動詞 ナゾ (_kStep(15), 'You ___ a
 /// traveller.', choices am / are / is / be). Teach how「〜です」changes with the
 /// subject BEFORE asking the child to fill the blank.
@@ -496,6 +907,7 @@ final SceneDef kTown3Scene = SceneDef(
       pos: const Alignment(-0.48, -0.05),
       size: 0.19,
       step: _kStep3(3),
+      teachCard: kPresentPerfectForSinceTeach,
       clueLineJa: '「この としょかんで、わたしは ずっと はたらいてきた。'
           'ことばが しんでも、わたしだけは のこす。」',
       framingJa: '学（まな）びの都（みやこ）の 大（だい）としょかん。'
@@ -512,6 +924,7 @@ final SceneDef kTown3Scene = SceneDef(
       pos: const Alignment(0.52, 0.10),
       size: 0.17,
       step: _kStep3(4),
+      teachCard: kPerfectYetAlreadyTeach,
       clueLineJa: '「この ほんを かえさなきゃ。でも… まだ よみおわっていないんだ。」',
       framingJa: '中庭（なかにわ）の ベンチ。学生（がくせい）が ほんを かかえて'
           'こまっている。\n'
@@ -526,6 +939,7 @@ final SceneDef kTown3Scene = SceneDef(
       pos: const Alignment(0.02, 0.40),
       size: 0.15,
       step: _kStep3(0),
+      teachCard: kSimplePastCuedTeach,
       clueLineJa: 'スラ：「やっと 都（みやこ）に ついた！ ぼく、ひとばんじゅう '
           'ことばの れんしゅうを したんだ。きみは どこで ねた？」',
       framingJa: 'スラは 風（かぜ）の街（まち）から きみを おいかけて、'
@@ -580,7 +994,8 @@ final SceneDef kTownPre2Scene = SceneDef(
       pos: const Alignment(-0.50, 0.12),
       size: 0.18,
       step: _kStepPre2(2),
-      clueLineJa: '「この香辛料（こうしんりょう）が どこで“育（そだ）てられて”いるか… '
+      teachCard: kPassiveVoiceTeach,
+      clueLineJa: '「この香辛料（こうしんりょう）が どこで”育（そだ）てられて”いるか… '
           'それを いう ことばが、波（なみ）に さらわれた。」',
       framingJa: '社会（しゃかい）の港町（みなとまち）。世界中（せかいじゅう）の '
           'しなものが あつまる 大（おお）きな 波止場（はとば）。\n'
@@ -596,6 +1011,7 @@ final SceneDef kTownPre2Scene = SceneDef(
       pos: const Alignment(0.50, -0.08),
       size: 0.18,
       step: _kStepPre2(3),
+      teachCard: kRelativePronounWhoTeach,
       clueLineJa: '「信（しん）じられる 仲間（なかま）を いい表（あらわ）す ことばが、'
           'もう 出（で）てこないんだ。」',
       framingJa: '埠頭（ふとう）に つながれた 大船（おおぶね）。'
@@ -612,7 +1028,8 @@ final SceneDef kTownPre2Scene = SceneDef(
       pos: const Alignment(0.78, -0.42),
       size: 0.16,
       step: _kStepPre2(4),
-      clueLineJa: '「船（ふね）が やすらぐ“場所（ばしょ）”を いい表（あらわ）す ことば… '
+      teachCard: kRelativeAdverbWhereTeach,
+      clueLineJa: '「船（ふね）が やすらぐ”場所（ばしょ）”を いい表（あらわ）す ことば… '
           'それが きえると、灯台（とうだい）の あかりも にぶる。」',
       framingJa: '港（みなと）の はずれの 灯台（とうだい）。'
           'ふるい 灯（あか）り守（もり）が 海（うみ）を みつめている。\n'
@@ -656,6 +1073,7 @@ final SceneDef kTownPre2PlusScene = SceneDef(
       pos: const Alignment(-0.48, -0.02),
       size: 0.18,
       step: _kStepPre2Plus(0),
+      teachCard: kPresentPerfectSinceTeach,
       clueLineJa: '「2025年（ねん）、この橋（はし）が あらたに かけられて から、'
           'わたしは ずっと ここに 立（た）ってきた。」',
       framingJa: '準2級（きゅう）と 2級（きゅう）の あいだに かかる、'
@@ -671,7 +1089,8 @@ final SceneDef kTownPre2PlusScene = SceneDef(
       pos: const Alignment(0.50, 0.16),
       size: 0.17,
       step: _kStepPre2Plus(1),
-      clueLineJa: '「ここは、おおくの 旅人（たびびと）が ひきかえす“場所（ばしょ）”…'
+      teachCard: kRelativeWhereVsWhichTeach,
+      clueLineJa: '「ここは、おおくの 旅人（たびびと）が ひきかえす”場所（ばしょ）”…'
           'それを いい表（あらわ）す ことばを、きみは もっているか？」',
       framingJa: '橋（はし）の なかほど。渡（わた）し守（もり）が ふかい きりの '
           'たにを 見下（みお）ろしている。\n'
@@ -720,6 +1139,7 @@ final SceneDef kTown2Scene = SceneDef(
       pos: const Alignment(-0.50, -0.05),
       size: 0.18,
       step: _kStep2(0),
+      teachCard: kEmpathyResponseTeach,
       clueLineJa: '「もう 十年（じゅうねん）、ここで おしえている… '
           'こういう 話（はなし）に、なんと こたえるのが ふさわしい？」',
       framingJa: '城（しろ）を のぞむ 学者（がくしゃ）の 城下町（じょうかまち）。\n'
@@ -734,6 +1154,7 @@ final SceneDef kTown2Scene = SceneDef(
       pos: const Alignment(0.50, -0.10),
       size: 0.17,
       step: _kStep2(2),
+      teachCard: kPastPassiveTeach,
       clueLineJa: '「あたらしい 図書館（としょかん）は、市（し）の 議会（ぎかい）に'
           'よって どう されたか… その ことばが 出（で）てこない。」',
       framingJa: '城下町（じょうかまち）の 役所（やくしょ）。\n'
@@ -747,9 +1168,10 @@ final SceneDef kTown2Scene = SceneDef(
       pos: const Alignment(0.06, 0.40),
       size: 0.15,
       step: _kStep2(3),
+      teachCard: kRelativeWhoSubjectTeach,
       clueLineJa: '「この本（ほん）を かいた 教授（きょうじゅ）が、'
           'こんや 城（しろ）の ホールで 講演（こうえん）する… のに、'
-          'その“人（ひと）”を つなぐ ことばが…」',
+          'その”人（ひと）”を つなぐ ことばが…」',
       framingJa: '人（ひと）を つなぐ ことば — 関係代名詞（かんけいだいめいし）'
           'who — が ためされる。\n'
           '「The professor ___ wrote this book is giving a lecture tonight.」',
@@ -788,8 +1210,9 @@ final SceneDef kTownPre1Scene = SceneDef(
       pos: const Alignment(-0.52, 0.02),
       size: 0.18,
       step: _kStepPre1(0),
+      teachCard: kCollocationMakeDoTeach,
       clueLineJa: '「ここから さきは、サイレントの こころの まんなか。'
-          'はいる“決断（けつだん）”を、きみは くだせるか？」',
+          'はいる”決断（けつだん）”を、きみは くだせるか？」',
       framingJa: 'すべての 色（いろ）が きえた、しずかな ひろば。'
           'ここが サイレントの こころの まんなか。\n'
           '英検準1級（きゅう）の こなれた 言（い）い回（まわ）し — '
@@ -803,6 +1226,7 @@ final SceneDef kTownPre1Scene = SceneDef(
       pos: const Alignment(0.48, -0.12),
       size: 0.19,
       step: _kStepPre1(2),
+      teachCard: kPhrasalVerbCarryTeach,
       clueLineJa: '「わたしは かつて、この くにの すべてを “carry out” してきた…'
           'いまは、その ことばさえ おもいだせない。」',
       framingJa: 'ひろばの 中央（ちゅうおう）、ひびわれた 石（いし）の 円卓（えんたく）の そばに、'
@@ -818,6 +1242,7 @@ final SceneDef kTownPre1Scene = SceneDef(
       pos: const Alignment(0.04, 0.40),
       size: 0.16,
       step: _kStepPre1(3),
+      teachCard: kDerivationalNounTeach,
       clueLineJa: '「おれた こころが、また 立（た）ちあがる ちから… '
           'その ことばを とりもどせば、この くにも たちなおれる。」',
       framingJa: 'ひろばの すみ、こわれた ふんすいの そばに 治癒師（ちゆし）が いる。\n'
