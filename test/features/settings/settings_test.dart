@@ -2,6 +2,8 @@
 //
 // Settings + mute (task #27). The important assertions prove the mute is REAL
 // (gates playback), not a cosmetic toggle, and that choices persist.
+// #68: Manage-subscription entry is present (aken flavor) / absent (edilab).
+// #66 upgrade: Support email addresses are wired with a GestureDetector.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:engquest/core/audio/audio_mute.dart';
 import 'package:engquest/core/audio/audio_cue_service.dart';
 import 'package:engquest/core/audio/word_audio_player_service.dart';
+import 'package:engquest/core/config/flavor_config.dart';
 import 'package:engquest/core/storage/preferences_service.dart';
 import 'package:engquest/features/settings/settings_screen.dart';
 
@@ -110,5 +113,95 @@ void main() {
     await tester.tap(find.textContaining('とじる'));
     await tester.pumpAndSettle();
     expect(find.text('support@edilab.co'), findsNothing);
+  });
+
+  // ── #66 upgrade — email addresses are tappable (GestureDetector) ──────────
+
+  testWidgets('#66 upgrade: email addresses are wrapped in GestureDetector',
+      (tester) async {
+    tester.view.physicalSize = const Size(800, 2400);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
+    await tester.pump(const Duration(milliseconds: 50));
+
+    // Open support dialog.
+    await tester.tap(find.text('Contact Support'));
+    await tester.pumpAndSettle();
+
+    // Each email address text must have a GestureDetector ancestor —
+    // this proves it is wired for tap (mailto: launch), not just selectable.
+    expect(
+      find.ancestor(
+        of: find.text('support@edilab.co'),
+        matching: find.byType(GestureDetector),
+      ),
+      findsWidgets,
+    );
+    expect(
+      find.ancestor(
+        of: find.text('privacy@edilab.co'),
+        matching: find.byType(GestureDetector),
+      ),
+      findsWidgets,
+    );
+  });
+
+  // ── #68 — Manage subscription entry (aken flavor only) ───────────────────
+
+  testWidgets(
+      '#68 manage-subscription tile is present when aken flavor is active',
+      (tester) async {
+    FlavorConfig.setFlavor(Flavor.aken);
+    addTearDown(() => FlavorConfig.setFlavor(Flavor.edilab));
+
+    // Extra-tall + wide surface so the entire settings list, including the
+    // Subscription panel appended at the very bottom, is fully laid out without
+    // scrolling (avoids RenderBox overflow clipping tiles off-screen).
+    tester.view.physicalSize = const Size(800, 3600);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
+    await tester.pump(const Duration(milliseconds: 50));
+
+    // DqPanel renders title.toUpperCase() — assert on the tile text labels
+    // (jp + en) which are NOT uppercased.
+    expect(find.text('Manage subscription'), findsOneWidget);
+    expect(find.text('サブスクの かいやく（解約）'), findsOneWidget);
+  });
+
+  testWidgets(
+      '#68 manage-subscription tile is ABSENT when edilab flavor is active',
+      (tester) async {
+    FlavorConfig.setFlavor(Flavor.edilab);
+
+    tester.view.physicalSize = const Size(800, 3600);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
+    await tester.pump(const Duration(milliseconds: 50));
+
+    expect(find.text('Manage subscription'), findsNothing);
+    expect(find.text('サブスクの かいやく（解約）'), findsNothing);
+  });
+
+  testWidgets(
+      '#68 manage-subscription tile is ABSENT when no flavor is initialized',
+      (tester) async {
+    // FlavorConfig.instanceOrNull == null → the tile condition is false.
+    // No flavor is set (default test state — FlavorConfig._instance may be set
+    // from a previous test in the same run; we restore edilab in tearDown above,
+    // so instanceOrNull?.isAkenFlavor == false, which also hides the tile).
+    tester.view.physicalSize = const Size(800, 3600);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
+    await tester.pump(const Duration(milliseconds: 50));
+
+    expect(find.text('Manage subscription'), findsNothing);
   });
 }

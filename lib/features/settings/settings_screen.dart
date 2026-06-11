@@ -8,17 +8,75 @@
 //     BOTH WordAudioPlayerService (flashcards) and AudioCueService (everything else)
 // plus a master mute and a child-friendly あそびかた (how-to-play) sheet.
 //
+// #68: In-app subscription cancellation surface (aken flavor only).
+//   Apple App Review requires apps to surface a way to manage/cancel subscriptions.
+//   We launch the OS-native management URL via url_launcher.
+//
+// #66 upgrade: support email addresses are now tappable (mailto:) in addition to
+//   being selectable. url_launcher handles mailto: on all supported platforms
+//   (opens mail client on iOS/Android/macOS; new mailto tab on web).
+//
 // (Music/BGM channel is intentionally NOT shown yet — there is no BGM to mute;
 // a dead toggle would be theatre. It is added when BGM ships.)
 
+import 'package:flutter/foundation.dart' show kIsWeb, defaultTargetPlatform, TargetPlatform;
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import 'package:engquest/core/config/flavor_config.dart';
 import 'package:engquest/core/sound/sound_service.dart';
 import 'package:engquest/core/audio/audio_mute.dart';
 import 'package:engquest/core/ui/readability_scale.dart';
 import 'package:engquest/features/quest/ui/dq_ui.dart';
 import 'package:engquest/features/parent_dashboard/parent_login_screen.dart';
 import 'package:engquest/features/achievements/achievements_screen.dart';
+
+// ── Platform URL helpers ──────────────────────────────────────────────────────
+
+/// Returns the OS-native subscription management URL for the current platform.
+///
+/// iOS/macOS → App Store subscriptions page.
+/// Android → Google Play subscriptions page.
+/// Web (and any other platform) → App Store subscriptions page as a fallback;
+/// if a Stripe billing-portal URL is ever configured it should replace this.
+String _subscriptionManagementUrl() {
+  if (kIsWeb) return 'https://apps.apple.com/account/subscriptions';
+  switch (defaultTargetPlatform) {
+    case TargetPlatform.iOS:
+    case TargetPlatform.macOS:
+      return 'https://apps.apple.com/account/subscriptions';
+    case TargetPlatform.android:
+      return 'https://play.google.com/store/account/subscriptions';
+    default:
+      return 'https://apps.apple.com/account/subscriptions';
+  }
+}
+
+/// Launches [url] via url_launcher.  On failure shows a [SnackBar] with the
+/// raw URL so the user can copy it as a fallback.
+Future<void> _launchOrFallback(BuildContext context, String url) async {
+  final uri = Uri.parse(url);
+  try {
+    final ok = await launchUrl(uri, mode: LaunchMode.externalApplication);
+    if (!ok && context.mounted) {
+      _showFallbackSnackBar(context, url);
+    }
+  } catch (_) {
+    if (context.mounted) _showFallbackSnackBar(context, url);
+  }
+}
+
+void _showFallbackSnackBar(BuildContext context, String url) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: SelectableText(
+        url,
+        style: const TextStyle(color: Colors.white),
+      ),
+      duration: const Duration(seconds: 8),
+    ),
+  );
+}
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -259,6 +317,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             ],
                           ),
                         ),
+                        // #68 — Subscription management (aken flavor only).
+                        // Apple App Review mandates a reachable cancellation
+                        // surface for apps with in-app subscriptions.
+                        if (FlavorConfig.instanceOrNull?.isAkenFlavor == true) ...[
+                          const SizedBox(height: 14),
+                          DqPanel(
+                            title: 'サブスクリプション / Subscription',
+                            child: DqTile(
+                              jp: 'サブスクの かいやく（解約）',
+                              en: 'Manage subscription',
+                              icon: Icons.credit_card_outlined,
+                              onTap: () => _launchOrFallback(
+                                context,
+                                _subscriptionManagementUrl(),
+                              ),
+                            ),
+                          ),
+                        ],
                       ],
                     ),
             ),
@@ -328,9 +404,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  // #66 — お問い合わせダイアログ: support surface required by Apple + Google Play
-  // for paid apps. Uses SelectableText so a parent can copy the email address
-  // without url_launcher (not available). Child-safe wording with furigana.
+  // #66 (upgraded) — お問い合わせダイアログ: support surface required by Apple +
+  // Google Play for paid apps. Each email address is BOTH tappable (mailto: via
+  // url_launcher → opens mail client) AND selectable (copy fallback).
+  // Child-safe wording with furigana.
   void _showSupport(BuildContext context) {
     showDialog<void>(
       context: context,
@@ -372,14 +449,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               .copyWith(height: 1.5),
                         ),
                         const SizedBox(height: 4),
-                        // SelectableText lets a parent copy the address without
-                        // url_launcher.
-                        SelectableText(
-                          'support@edilab.co',
-                          style: dqText(
-                              size: 13,
-                              w: FontWeight.w800,
-                              color: const Color(0xFF8BE0FF)),
+                        // Tappable mailto: row — opens mail client.
+                        // SelectableText underneath keeps copy-as-fallback.
+                        _EmailTile(
+                          address: 'support@edilab.co',
+                          onTap: () => _launchOrFallback(
+                            ctx,
+                            'mailto:support@edilab.co',
+                          ),
                         ),
                       ],
                     ),
@@ -403,12 +480,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               size: 12, w: FontWeight.w700, color: dqGold),
                         ),
                         const SizedBox(height: 4),
-                        SelectableText(
-                          'privacy@edilab.co',
-                          style: dqText(
-                              size: 13,
-                              w: FontWeight.w800,
-                              color: const Color(0xFF8BE0FF)),
+                        _EmailTile(
+                          address: 'privacy@edilab.co',
+                          onTap: () => _launchOrFallback(
+                            ctx,
+                            'mailto:privacy@edilab.co',
+                          ),
                         ),
                       ],
                     ),
@@ -470,6 +547,41 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+// ── _EmailTile ────────────────────────────────────────────────────────────────
+// Tappable email row: GestureDetector wraps a SelectableText so the address
+// is both launchable (tap → mailto:) AND copyable (long-press → text select).
+
+class _EmailTile extends StatelessWidget {
+  final String address;
+  final VoidCallback onTap;
+
+  const _EmailTile({required this.address, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Row(
+        children: [
+          const Icon(Icons.open_in_new, size: 14, color: Color(0xFF8BE0FF)),
+          const SizedBox(width: 4),
+          Flexible(
+            child: SelectableText(
+              address,
+              style: dqText(
+                size: 13,
+                w: FontWeight.w800,
+                color: const Color(0xFF8BE0FF),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

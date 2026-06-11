@@ -37,6 +37,8 @@ dependencies:
   speech_to_text: ^7.0.0
   # In-app purchases (RevenueCat — unified iOS StoreKit 2 / Android GPBL / Web)
   purchases_flutter: ^8.11.0
+  # URL launching (mailto + subscription-management URLs)
+  url_launcher: ^6.3.2
   # UI
   cupertino_icons: ^1.0.6
   # Fonts
