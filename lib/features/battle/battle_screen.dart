@@ -240,6 +240,18 @@ class _BattleScreenState extends State<BattleScreen>
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Respect OS reduce-motion: make the card flip + stars instant (they still
+    // happen — the answer reveals, stars appear — just without the transition).
+    // Vestibular/seizure-safe. (#76)
+    if (prefersReducedMotion(context)) {
+      _flipCtrl.duration = Duration.zero;
+      _starsCtrl.duration = Duration.zero;
+    }
+  }
+
+  @override
   void dispose() {
     _flipCtrl.dispose();
     _starsCtrl.dispose();
