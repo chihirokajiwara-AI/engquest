@@ -76,16 +76,20 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
 
   Future<void> _openTown(int i) async {
     final town = kQuestTowns[i];
-    // Wave 1: route 英検5級 town to the SceneView (Layton-style explorable
-    // scene). All other towns keep the existing QuestTownBattleFlow.
-    if (town.eikenLevel == '5') {
+    // Every grade with an authored painted SceneView (all 7 are registered in
+    // kScenesByGrade) opens the Layton-style explorable scene; grades without a
+    // scene fall back to QuestTownBattleFlow. (G1: kill the grade-5-only
+    // hardcode — 6 of 7 scenes were built but unreachable from the map.)
+    final scene = sceneForGrade(town.eikenLevel);
+    if (scene != null) {
       await Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (_) => SceneView(scene: kTown5Scene, eikenLevel: '5'),
+          builder: (_) =>
+              SceneView(scene: scene, eikenLevel: town.eikenLevel),
         ),
       );
-      // SceneView does not return a cleared bool; leave _unlocked unchanged
-      // until Wave 3 wires ナゾーバ completion tracking.
+      // SceneView does not return a cleared bool yet; leave _unlocked unchanged
+      // until the scene-clear → map-advance wiring (G2) lands.
       return;
     }
     final cleared = await Navigator.of(context).push<bool>(
