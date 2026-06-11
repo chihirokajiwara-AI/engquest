@@ -123,3 +123,29 @@ agent teams, scorecard growth — one self-sustaining engine. Each tick:
 6. **Aim BEYOND 100 (CEO 1250)**: 100 = "world-class sellable bar reached"; then
    keep deepening (a 100 item can still be out-classed next month → re-audit
    latest-first and push past it). Growth never stops; no "done".
+
+## J. Launch / legal / compliance — omissions audit (CEO 1257/1259, 2026-06-12, latest-first sourced)
+The 62 items above MISSED these. Added so the loop drives them too. Severity for a PAID kids launch. Sources: Apple Kids 2026 / COPPA amendment (eff. 2026-04-22) / Japan APPI 2026 / 特商法 検討会 2026-01.
+| # | item | now | type | sev | action |
+|---|------|----|------|-----|--------|
+|63|特定商取引法 最終確認画面|5|GATE:legal|BLOCKER|dedicated 最終確認 screen pre-purchase (seller id/price/cycle/cancel) — needs corp details(legal)|
+|64|COPPA2026 第三者提供の分離同意|8|GATE:legal|BLOCKER|unbundled opt-in consent for Firebase/RevenueCat third-party data (eff 2026-04-22)|
+|65|同意の永続化+監査ログ|15|BUILD|MAJOR|persist voice/parental consent (PrefKeys + timestamp + policy version); stop re-prompting每session|
+|66|アプリ内サポート/問い合わせ導線|10|BUILD|BLOCKER|in-app お問い合わせ/不具合報告 button (store requires working support); none today|
+|67|アプリ内データ削除/消去権|8|BUILD|BLOCKER|in-app "データ削除" path (Apple/Play require account deletion in-app); only email today|
+|68|アプリ内サブスク解約導線|15|BUILD|MAJOR|surface manage-subscription URL button in settings/parent (none wired)|
+|69|年齢レーティング質問票(2026新制度)|10|GATE:prod|BLOCKER|complete Apple(由 2026-01-31)/Play new age-rating questionnaire|
+|70|実機/E2Eプレイテスト|20|BUILD|MAJOR|integration_test/Patrol real-flow; today only pure-Dart/widget smoke (#49 unstarted)|
+|71|クラッシュレポート|0|BUILD|MAJOR|wire Firebase Crashlytics (¥0, in tree) + FlutterError.onError; none today|
+|72|ストアSS/宣材作成|10|GATE:prod+art|BLOCKER|actual screenshots + feature graphic (none exist; metadata text only)|
+|73|privacy/support URL 公開ホスト|5|GATE:prod|BLOCKER|edilab.co/engquest/{privacy,support} are "(to be hosted)"; stores need live URLs|
+|74|第三者SDK Kids適合監査|10|GATE:legal|BLOCKER|certify Firebase/RevenueCat vs Apple Kids 1.3 / Play DFF|
+|75|データ保持期限ポリシー|10|GATE:legal|MAJOR|COPPA2026 new retention-limit req; define+enforce Firestore retention (none)|
+|76|reduced-motion / a11y OS信号|30|BUILD|MINOR|respect disableAnimations/reduceMotion (none); dyslexia/tap-target audit|
+|77|i18n/localization 枠組み|20|BUILD|MINOR|no intl/l10n; strings hardcoded (T15)|
+
+### Honest re-score of OVERSTATED existing items (audit-corrected)
+|60|a11y|73|BUILD|—|was 88; no reduced-motion, unverified tap-target, no dyslexia/cognitive test|
+|41|privacy/ToS|50|GATE:legal|—|was 70; missing 特商法 screen + hosted URLs + COPPA2026 consent + retention|
+
+**Buildable-now omissions the loop can take (no GO): 65,66,67,68,70,71,76,77.** Gated (legal/prod/art): 63,64,69,72,73,74,75 + the corp/legal details for 41.
