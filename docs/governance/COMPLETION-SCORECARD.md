@@ -49,7 +49,7 @@ needs CEO go (spend / secret / prod / legal / art-gen).
 |25|Writing採点|35|GATE:backend|AI rubric design done; needs backend|
 |26|Speaking採点|35|BUILD|on-device scorer depth (pronunciation_scorer)|
 |27|未測定honest|88|BUILD|hold|
-|28|gaming耐性|70|BUILD|more shuffle/anti-pattern locks|
+|28|gaming耐性|72|BUILD|more shuffle/anti-pattern locks|
 
 ## D. AI (mostly GATE:backend/secret)
 |29|NPC対話|25|GATE:backend+secret|client done; api.akenquest.jp HTTP000|
