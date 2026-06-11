@@ -16,6 +16,7 @@ class DialogScenariosScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DqScene(
+      contentMaxWidth: 600, // #144: centre on tablet, full-width on phone
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
@@ -237,6 +238,7 @@ class _DialogScreenState extends State<DialogScreen> {
   @override
   Widget build(BuildContext context) {
     return DqScene(
+      contentMaxWidth: 600, // #144: centre on tablet, full-width on phone
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12),
         child: Column(

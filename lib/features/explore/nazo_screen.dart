@@ -205,6 +205,7 @@ class _NazoScreenState extends State<NazoScreen> {
   Widget build(BuildContext context) {
     if (_teaching) return _teachScaffold();
     return DqScene(
+      contentMaxWidth: 600, // #144: centre on tablet, full-width on phone
       child: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 20),
@@ -279,6 +280,7 @@ class _NazoScreenState extends State<NazoScreen> {
   Widget _teachScaffold() {
     final card = _teachCard!;
     return DqScene(
+      contentMaxWidth: 600, // #144: centre on tablet, full-width on phone
       child: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
