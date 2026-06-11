@@ -186,7 +186,8 @@ class _WordOrderingPracticeScreenState
     // on the old bright sky-blue theme, clashing with the navy+gold world. Now
     // unified with the other 英検 screens (DqScene / dqBox / dqGold / dqInk).
     return DqScene(
-      contentMaxWidth: 600, // #144: centre the column on tablet, full-width on phone
+      contentMaxWidth:
+          600, // #144: centre the column on tablet, full-width on phone
       child: SafeArea(
         child: Column(
           children: [

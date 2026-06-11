@@ -52,7 +52,8 @@ Future<void> _pumpAt(WidgetTester tester, Size size, Widget child) async {
 void main() {
   Map<String, Widget> screens() => {
         'home': KotobaHomeScreen(
-            cardRepository: InMemoryFsrsCardRepository(), initialEikenLevel: '5'),
+            cardRepository: InMemoryFsrsCardRepository(),
+            initialEikenLevel: '5'),
         'pass-meter': const PassMeterScreen(),
         'onboarding': OnboardingFlow(onComplete: (_) {}),
         'exam-practice': const ExamPracticeScreen(eikenGrade: '5'),
@@ -63,16 +64,19 @@ void main() {
         'word-ordering': WordOrderingPracticeScreen(
             eikenGrade: '5', section: _sec(ExamSectionType.wordOrdering)),
         'conversation': ConversationPracticeScreen(
-            eikenGrade: '5', section: _sec(ExamSectionType.conversationComplete)),
+            eikenGrade: '5',
+            section: _sec(ExamSectionType.conversationComplete)),
         'mock-exam': const MockExamScreen(eikenGrade: '5'),
         'reading': ReadingPracticeScreen(
-            eikenGrade: '5', section: _sec(ExamSectionType.readingComprehension)),
+            eikenGrade: '5',
+            section: _sec(ExamSectionType.readingComprehension)),
         'battle': const BattleScreen(),
       };
 
   for (final (label, size) in _sizes) {
     screens().forEach((name, _) {
-      testWidgets('$name OK @ $label (${size.width.toInt()}x${size.height.toInt()})',
+      testWidgets(
+          '$name OK @ $label (${size.width.toInt()}x${size.height.toInt()})',
           (tester) async {
         await _pumpAt(tester, size, screens()[name]!);
         expect(tester.takeException(), isNull,

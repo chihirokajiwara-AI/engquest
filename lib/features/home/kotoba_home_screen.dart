@@ -273,7 +273,8 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
     }
 
     return DqScene(
-      contentMaxWidth: 600, // #144: centre the hub column on tablet, full-width on phone
+      contentMaxWidth:
+          600, // #144: centre the hub column on tablet, full-width on phone
       child: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
         child: Column(
