@@ -23,6 +23,37 @@ NEG = ("photo, 3d, 3dcg, flat vector, grey background, plain background, textbox
        "watermark, signature, sterile, modern anime gloss, glossy, harsh black outlines, cel shading, "
        "neon, lowres, blurry, jpeg artifacts, bad anatomy, extra limbs")
 
+# NPC sprites render as a tiny (52–96px) circle-cropped hotspot, so each MUST be
+# ONE centered character on a SIMPLE background. The storybook POS + the base
+# NEG's "plain background"/"grey background" terms pushed the model toward busy
+# multi-character town plates (visual audit 2026-06-11: gatekeeper=crowd poster,
+# slime=4×4 sheet, chancellor=ensemble plate). For npc_* we PREPEND solo-portrait
+# terms and use a NEG that drops the plain-background ban and adds crowd/sheet/
+# frame negatives.
+NPC_POS = ("solo, 1character, single character, upper body portrait bust, centered, "
+           "facing viewer, modest wholesome storybook character for a children's book, "
+           "fully clothed, simple soft uncluttered background, ")
+# Child-safety negatives are NON-NEGOTIABLE for a kids' 英検 app: the anime base
+# model (Animagine XL) defaults to young sexualized female figures and ignores
+# "elderly/old man" age cues, so we hard-negative sexualization AND the default
+# young-woman bias (per-character subjects still carry the intended age/sex).
+NPC_NEG = ("photo, 3d, 3dcg, flat vector, textbox, ui, hud, text, watermark, signature, "
+           "sterile, modern anime gloss, glossy, harsh black outlines, cel shading, neon, "
+           "lowres, blurry, jpeg artifacts, bad anatomy, extra limbs, "
+           "multiple people, crowd, group, 2girls, 2boys, multiple views, character sheet, "
+           "reference sheet, model sheet, grid, collage, montage, border, frame, ornate frame, "
+           "many faces, busy background, town full of people, "
+           "cleavage, large breasts, breasts, sexualized, sexy, fanservice, revealing clothing, "
+           "bare skin, midriff, suggestive, swimsuit, lingerie, gravure")
+
+# Optional overrides (used for verified test runs before touching committed art):
+#   ART_FILTER  — only generate jobs whose filename contains this substring
+#   ART_OUTDIR  — write to this dir instead of assets/art/scenes_layton
+#   ART_FORCE   — regenerate even if the output file already exists
+FILTER = os.environ.get("ART_FILTER", "")
+OUTDIR = Path(os.environ["ART_OUTDIR"]) if os.environ.get("ART_OUTDIR") else OUT
+FORCE = os.environ.get("ART_FORCE", "") not in ("", "0", "false")
+
 DISTRICT_SEED = 5050
 CLOCKMAKER = "an elderly kind clockmaker, round spectacles, leather apron, white moustache, gentle"
 
@@ -193,21 +224,26 @@ def main():
     pipe.to("mps")
     pipe.set_progress_bar_config(disable=True)
 
+    OUTDIR.mkdir(parents=True, exist_ok=True)
     for fn, subject, w, h, seed in JOBS:
+        if FILTER and FILTER not in fn:
+            continue
         # The app bundles WebP, not PNG: full-size painted PNGs were 54MB (a
         # heavy web/app payload). We emit .webp (RGB; sprites are circle-masked
         # in-app so no alpha is needed) at ~93% smaller. NPC sprites display at
         # most ~0.20*480px (a small hotspot), so 768px max-dim is still
         # oversized-safe — town plates keep native size.
         webp = fn[:-4] + ".webp" if fn.endswith(".png") else fn
-        out = OUT / webp
-        if out.exists():
+        out = OUTDIR / webp
+        if out.exists() and not FORCE:
             print(f"  skip {webp} (exists)")
             continue
-        prompt = f"{subject}, {POS}"
+        is_npc = fn.startswith("npc_")
+        prompt = f"{NPC_POS if is_npc else ''}{subject}, {POS}"
+        neg = NPC_NEG if is_npc else NEG
         g = torch.Generator(device="mps").manual_seed(seed)
         print(f"  generating {webp} ({w}x{h}, seed {seed})…")
-        img = pipe(prompt=prompt, negative_prompt=NEG, width=w, height=h,
+        img = pipe(prompt=prompt, negative_prompt=neg, width=w, height=h,
                    num_inference_steps=28, guidance_scale=6.5, generator=g).images[0]
         if fn.startswith("npc_"):
             from PIL import Image
