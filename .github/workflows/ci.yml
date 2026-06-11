@@ -171,8 +171,14 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Build iOS (edilab, no-codesign)
-        run: flutter build ios --flavor edilab -t lib/main_edilab.dart --no-codesign
+      # NOTE: no --flavor. iOS flavor schemes (edilab/aken) don't exist in the
+      # Xcode project yet (Android uses Gradle productFlavors; iOS needs Xcode
+      # schemes + build configs — tracked separately for release). This build
+      # CHECK verifies the iOS app COMPILES via the edilab entrypoint on the
+      # default Runner scheme; flavor bundle-id/app-name config is a release
+      # concern, not a compilation one. (#143 → iOS-flavor-schemes follow-up)
+      - name: Build iOS (edilab entrypoint, no-codesign)
+        run: flutter build ios -t lib/main_edilab.dart --no-codesign
 
   # ── Summary job (required status check) ────────────────────────────────────
   ci-pass:
