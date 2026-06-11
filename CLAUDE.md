@@ -138,13 +138,16 @@ All core components C01-C19 are implemented. See docs/spec/mvp.md for details.
   437 green; `flutter analyze --fatal-infos --fatal-warnings` fully clean.
 - [x] T34: Commit wired-in files left untracked (content_filter, terms_of_service)
   that committed code referenced — a clean checkout previously failed to compile.
-- [ ] T35: Resolve audio asset contract. `verify_audio_assets.py` requires 300 A1
-  MP3s in web/audio/a1 + web/audio (flat); both are empty (were tracked, dropped),
-  so CI is red on audio. Playback path (TtsService.getAudioForWord → Google TTS
-  API/memory → BytesSource) does not use web/audio, and possibly not bundled
-  assets/audio/a1 either. DECIDE: (a) restore web MP3s, (b) retire the stale web
-  check post-T00e, and/or (c) wire offline bundled-audio loading. Blocks tracking
-  the 英検4/5/準2 vocab JSONs (kept untracked in working tree until resolved).
+- [x] T35: Audio asset contract — RESOLVED (verified 2026-06-11, this note was stale).
+  `assets/audio/a1` AND `web/audio/a1` each contain 300 `eiken5_*` MP3s;
+  `verify_audio_assets.py` PASSES (300/300 ready, a1 pair byte-identical,
+  manifest-consistent). Playback DOES use bundled assets: `tts_service.dart:243,365`
+  tries `_loadBundledAsset` → `rootBundle.load('assets/audio/a1/…')` FIRST, before the
+  Google-TTS fallback — so the a1 batch is the live 英検5級 offline source. The dirs
+  are no longer empty and CI is green on audio. (Optional micro-cleanup: drop the
+  vestigial flat `web/audio` presence check in the verifier — guards the removed
+  standalone demo — not urgent since the gate is green.) Decided autonomously via
+  agent research + empirical re-verification.
 - [x] T36: Align CI Flutter to 3.44.x (currently 3.22.x, vs project requirement
   3.44+); resolve the 3.44↔3.22 formatter drift (59 files) so CI format is green.
 - [ ] T37: Re-enable autonomous loop ONLY behind a hard gate (analyze 0 + test 0

@@ -325,37 +325,60 @@ Do not do these under "refactoring":
 
 ---
 
-## 実装前に確認すべき質問 (answer before the dependent PROPOSE-ONLY items)
+## 決定事項 — autonomously resolved (agent-researched + code-verified, 2026-06-11)
 
-Only items genuinely undecidable from code are listed.
+These were the open questions; per CEO directive they were **decided** via a
+principal-engineer agent (latest-2026 research + code evidence), not escalated.
+Each was re-verified against the live tree. **No item required CEO sign-off** (no
+secret / billing key / legal sign-off / prod-data migration). Findings:
 
-- **Q-A (Audio contract / T35).** `verify_audio_assets.py` demands byte-identical A1
-  MP3 pairs, but the live playback path (`TtsService` → API/memory → BytesSource)
-  doesn't read them, and CLAUDE.md T35 says the dirs were dropped. Decision needed:
-  (a) restore web MP3s, (b) retire the stale web check, or (c) wire offline bundled
-  audio? This blocks tracking some content JSONs. **Product/infra decision — not
-  inferable from code.**
-- **Q-B (WorldMapScreen).** Comments in `kotoba_home_screen`/`settings_screen` call
-  `WorldMapScreen` "orphaned," yet it's still imported/routed from onboarding. Is it
-  dead code to delete, an intended fallback, or a dormant hub? Do not delete until
-  confirmed.
-- **Q-C (JSON `distractors` field, E2).** Never read at runtime (regenerated). Safe to
-  remove from schema + `fromJson`, or reserved for a future/other consumer?
-- **Q-D (Skipped listening tests, A3).** pre2plus/pre1 listening pools are empty and
-  the tests skip to surface the gap. Confirm these are intentional gap-markers (not
-  regressions to silence) and that authoring is a separate content task.
-- **Q-E (Consent timestamps).** Are `voiceConsentGrantedAt`/`parentalConsentGrantedAt`
-  read anywhere beyond gating re-display (e.g. compliance/audit)? If gating-only they
-  could simplify; if compliance, preserve ISO-8601 UTC exactly. (No downstream reader
-  found, but confirm before simplifying.)
-- **Q-F (VocabItem source stability, E1).** Are vocab items ever loaded from Firestore
-  (vs only bundled JSON)? Determines whether hardening `fromJson` is defensive-only
-  or contract-affecting.
-- **Q-G (CSE→core move, D1).** Approved to relocate `cse_model.dart` +
-  `skill_accuracy_store.dart` to `lib/core/`? It's a multi-import + saved-data surface.
+- **Q-A (Audio contract / T35) → RESOLVED; T35 is STALE.** Premise was wrong:
+  `assets/audio/a1` AND `web/audio/a1` each hold 300 MP3s, `verify_audio_assets.py`
+  **passes** (300/300 byte-identical, manifest-consistent), and `tts_service.dart:243,
+  365` reads the bundled asset **first** (`_loadBundledAsset` → `rootBundle.load`) as
+  the live 英検5級 offline source. No "empty dirs / red CI" as T35 described. Decision:
+  mark T35 done; (optional cleanup) drop the vestigial flat `web/audio` presence check
+  in `verify_audio_assets.py` (it guards the removed standalone demo) — not urgent
+  since the gate is green.
+- **Q-B (WorldMapScreen) → KEEP.** Orphaned from production nav (no live
+  `pushNamed('/world')`; reachable only via the `?preview=worldmap` audit harness +
+  the `/world` route declaration). It compiles, serves screenshot audits, and is a
+  re-link point for the world-exploration pillar. Re-surfacing it as a hub is a
+  spec/UX decision (spec-freeze) — not a refactor action. Do **not** delete.
+- **Q-C (JSON `distractors` field) → KEEP as inert.** Confirmed zero runtime readers
+  (the `.distractors` at `vocab_grammar_practice_screen.dart:243` is the *local
+  generated* list, not the model field). Safe to remove, but removal touches the model
+  + 300 `vocab_a1.dart` literals for zero benefit → leave as-is; never revert the
+  runtime generator.
+- **Q-D (skipped listening tests) → LEAVE (intentional gap-markers).** The 2 skips are
+  the deliberate "shortfall-visible" mechanism (`skip: have>=want ? false : 'SHORTFALL…'`);
+  structural + count-floor groups stay green for all grades. Trigger: when pre2plus/pre1
+  listening pools are authored (content-qa gated), the skips auto-flip to green — no
+  test change needed.
+- **Q-E (consent timestamps) → KEEP timestamp + policy-version (do NOT simplify).**
+  They are load-bearing (`ts != null` is part of both consent-skip conditions;
+  version-bump forces re-consent). Per COPPA amended Rule (eff. 2025-06-23, compliance
+  2026-04-22; new §312.10 data-retention policy) and Japan APPI 2026 (under-16
+  guardian-consent), a dated, versioned consent record is the conservative, defensible
+  shape for a children's app; a bare bool would be a compliance regression.
+- **Q-F (VocabItem source) → bundled-only; hardening is DEFENSIVE-ONLY.** `fromJson`
+  is fed solely by `rootBundle` JSON (`vocab_repository.dart:104,151`); Firestore holds
+  only per-user FSRS progress, never VocabItems. Hardening is safe anytime but low-value
+  now (CI + content-qa already catch malformed bundled JSON). Add a comment; revisit
+  only if vocab ever goes remote.
+- **Q-G (CSE→core move) → DEFER-WITH-TRIGGER.** Architecturally correct but ~30-file
+  import churn for zero functional gain; `skill_accuracy_store` persists to
+  SharedPreferences with a **key schema that must not change** (data-loss risk).
+  Fold into the next deliberate exam_practice/core-extraction refactor; when done,
+  preserve `_correctKey`/`_totalKey` strings byte-identically + add a key-stability test.
+
+**Remaining true escalations (these alone need CEO/secret/legal): none in this set.**
+Genuine product-level escalations live elsewhere (billing keys, backend deploy GO,
+store/art spend) and are out of scope for this refactor.
 
 ---
 
-_End. Posture: subtract evidenced debt, preserve behavior, propose the big moves,
-ask when unsure. Most value here is the test safety-nets (Phase 2) and the questions
-above — not large rewrites._
+_End. Posture: subtract evidenced debt, preserve behavior, decide autonomously with
+research + evidence (escalate only secrets/billing/legal/prod), propose the big
+structural moves. Highest value here: the Phase-2 safety nets + the resolved
+decisions above — not large rewrites._
