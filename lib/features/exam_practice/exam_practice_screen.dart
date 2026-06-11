@@ -76,6 +76,7 @@ class _ExamPracticeScreenState extends State<ExamPracticeScreen> {
     }
 
     return DqScene(
+      contentMaxWidth: 600, // #144: centre the column on tablet, full-width on phone
       child: Column(
         children: [
           // Dark DQ header replaces the bright app bar.

@@ -6,6 +6,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:engquest/core/ui/app_fonts.dart';
+import 'package:engquest/core/ui/responsive.dart';
 
 // ── Palette ──
 const dqNight0 = Color(0xFF0A0E24);
@@ -37,7 +38,20 @@ TextStyle dqText(
 class DqScene extends StatelessWidget {
   final String? backgroundAsset;
   final Widget child;
-  const DqScene({super.key, this.backgroundAsset, required this.child});
+
+  /// When set, the content [child] is capped to this width and centred on wide
+  /// screens (tablet / phone-landscape) so it doesn't stretch edge-to-edge — the
+  /// dark scene fills the side margins. Null = full-width (the default; required
+  /// for full-bleed screens like the world map whose layout uses the whole width).
+  /// (#144 responsive — opt in on content screens.)
+  final double? contentMaxWidth;
+
+  const DqScene({
+    super.key,
+    this.backgroundAsset,
+    required this.child,
+    this.contentMaxWidth,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +79,11 @@ class DqScene extends StatelessWidget {
               ),
             ),
           ),
-          SafeArea(child: child),
+          SafeArea(
+            child: contentMaxWidth != null
+                ? ResponsiveCenter(maxWidth: contentMaxWidth!, child: child)
+                : child,
+          ),
         ],
       ),
     );

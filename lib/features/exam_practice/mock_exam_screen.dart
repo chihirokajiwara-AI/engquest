@@ -296,6 +296,7 @@ class _MockExamScreenState extends State<MockExamScreen> {
           ],
         ),
         body: DqScene(
+          contentMaxWidth: 600, // #144: centre on tablet, full-width on phone
           child: SafeArea(
             child: Column(
               children: [

@@ -377,6 +377,7 @@ class _VocabGrammarPracticeScreenState
   @override
   Widget build(BuildContext context) {
     return DqScene(
+      contentMaxWidth: 600, // #144: centre the column on tablet, full-width on phone
       child: Column(
         children: [
           // Dark header (matches the home / quest / exam hub — #67 cohesion).

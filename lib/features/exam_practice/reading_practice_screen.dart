@@ -288,6 +288,7 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
       );
     }
     return DqScene(
+      contentMaxWidth: 600, // #144: centre the column on tablet, full-width on phone
       child: Column(
         children: [
           _header(title),

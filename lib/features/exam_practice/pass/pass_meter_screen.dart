@@ -64,6 +64,7 @@ class PassMeterScreen extends StatelessWidget {
     final gradeLabel = _gradeLabelJa(est.grade);
 
     return DqScene(
+      contentMaxWidth: 600, // #144: centre the column on tablet, full-width on phone
       child: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
         child: Column(

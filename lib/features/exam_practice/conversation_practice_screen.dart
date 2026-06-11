@@ -151,6 +151,7 @@ class _ConversationPracticeScreenState
   @override
   Widget build(BuildContext context) {
     return DqScene(
+      contentMaxWidth: 600, // #144: centre the column on tablet, full-width on phone
       child: Column(
         children: [
           Padding(
