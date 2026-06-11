@@ -237,3 +237,39 @@ willpower; a future / context-compacted instance MUST obey:
    launch-blockers, and the headline gap — NO real-user outcome signal pre-launch.
    The commitment is the *discipline* (continuous hunt + verify-by-real-measurement
    + never-assume), not a guarantee of the outcome.
+
+## VIII. Loop advancement v2 — non-blocking, event-driven, coherence-gated (CEO 1293 / 1294, 2026-06-11)
+
+Grounded in the current-2026 agentic-loop SOTA (event-driven non-blocking loops;
+orchestrator-worker parallelism; state-machine workflow control — Atlan/Microsoft
+Azure AI agent design patterns, 2026) and in a measured failure THIS session: while
+a heavy detached art-gen job ran, ~8 consecutive ticks were spent idle-polling
+("staged N/22, light tick") instead of advancing other work — a direct §VII-rule-1
+violation (静穏 is forbidden without measurement). The fix is structural, not just a
+reminder:
+
+1. **Background-job awareness (every tick).** Begin each tick by scanning
+   `logs/jobs/*.status`. A `RUNNING` job is NOT a reason to spend the tick watching
+   it. Detached safe-jobs run on the GPU / a separate process and do **not** contend
+   with repo work.
+2. **Non-blocking parallelism (orchestrator-worker).** While any detached job runs,
+   the tick MUST advance a *different* unblocked pillar in the repo (lowest-score
+   scorecard item / flaw-hunt finding). "Wait" is the last resort; a detached job in
+   flight is parallel capacity, not a stop signal.
+3. **Event-driven completion.** When a job's status flips since the last tick
+   (`OK`/`TIMEOUT`/`FAILED`), that tick's action is its follow-up (QA / swap /
+   analysis). To avoid up-to-floor latency, a `Monitor` may be armed on the status
+   file (persistent) to wake the loop on completion.
+4. **Heavy-job safety unchanged.** `FAILED`/`TIMEOUT` → stop per §IV (never re-loop a
+   broken job); a *known time-boxed* completion may be continued as a bounded resume
+   after QA, not a blind retry.
+5. **Asset coherence ship-gate (CEO 1294).** Generated assets (characters, NPCs,
+   scenes) MUST be matched — by real image inspection — against the LOCKED mains
+   (M5/M6, `scripts/generate_expressions.py`: "refined detailed anime, cinematic
+   light", dusty-teal/brass コトバ探偵 world) BEFORE ship. Watercolour/storybook/chibi
+   clashes with the mains; characters use the mains' crisp-anime style, backgrounds
+   may stay painterly. Presence + quality is not enough — **world/style coherence is
+   a QA dimension**.
+
+Principle: the loop never stalls on a detached job — it always produces value in
+parallel, reacts to completion events, and ships only style-coherent, verified work.
