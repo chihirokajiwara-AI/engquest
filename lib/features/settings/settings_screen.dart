@@ -19,7 +19,8 @@
 // (Music/BGM channel is intentionally NOT shown yet — there is no BGM to mute;
 // a dead toggle would be theatre. It is added when BGM ships.)
 
-import 'package:flutter/foundation.dart' show kIsWeb, defaultTargetPlatform, TargetPlatform;
+import 'package:flutter/foundation.dart'
+    show kIsWeb, defaultTargetPlatform, TargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -320,7 +321,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         // #68 — Subscription management (aken flavor only).
                         // Apple App Review mandates a reachable cancellation
                         // surface for apps with in-app subscriptions.
-                        if (FlavorConfig.instanceOrNull?.isAkenFlavor == true) ...[
+                        if (FlavorConfig.instanceOrNull?.isAkenFlavor ==
+                            true) ...[
                           const SizedBox(height: 14),
                           DqPanel(
                             title: 'サブスクリプション / Subscription',
