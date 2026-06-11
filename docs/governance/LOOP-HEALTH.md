@@ -113,3 +113,33 @@ improves.
   • STANDING BLOCKER unchanged: the highest-value remaining work is CEO-gated
     (#133 audio A/B, character home placement) or backend-gated (#6/#7/#63/#64)
     — the loop has surfaced these and cannot self-unblock.
+
+- 2026-06-11 (flaw-hunt engine session — velocity restored per CEO 1218-1222).
+  The loop had degraded to no-op heartbeats; CEO re-armed the §IV/§V engine.
+  Result this session: **4 substantive feature commits** via diverse-persona
+  value-system rotation (charter §V working as intended), each through the §III
+  8-phase with full HARD GATE (analyze 0 / R1R2R3 / tests) + adversarial audit:
+  • mock-exam 答え合わせ review screen (wrong-only focus) — closed the "60-Q mock
+    teaches nothing" gap.
+  • listening transcript reveal in review — read what you misheard.
+  • 大問1 tap-to-hear 🔊 the answer word (true-beginner/non-reader lens, CEO 1132).
+  • cold-streak gentle encouragement (struggling-child lens, CEO 1135 / no-scold).
+  Plus 3 hygiene/doc-contract fixes (gitignore, cse_model + mock writingAccuracy
+  contracts). 7 commits, all verified green (1105 tests + strict analyze clean),
+  awaiting CEO push GO.
+  • Pillars VERIFIED-SOLID by reading real code (so future ticks need not re-audit):
+    assessment-validity (MockExamScorer writing path AI-rubric-honest + 未測定
+    tested), engagement spine (streakBroken おかえり #123, daily-goal ring),
+    colorblind/SR a11y (every correct/wrong mark = icon-shape + Semantics via
+    DqChoice, NOT colour-only). These came up CLEAN — honest verification, not
+    false-exhaustion (§VII): measured, no flaw to build.
+  • Top safety flaw SCOPED + escalated (launch-blocker #64): app has ZERO crisis
+    resources; designed a backend-independent client-side crisis intercept +
+    verified current 2026 JP helplines (24時間子供SOS 0120-0-78310 / チャイルド
+    ライン 0120-99-7777 / よりそい 0120-279-338, mext/mhlw sources). Held for CEO
+    sign-off (legal/safety carve-out, charter §II.5) — correct self-limit.
+  • Loop-infra hardened: cadence regression fixed (10min cron restored, durable
+    crons proven UNSUPPORTED in gateway env → recreate-on-recovery + establisher
+    re-arm in ctx-restore.sh); CEO liveness-heartbeat rule (≥3h) operationalised.
+  • STANDING BLOCKERS (loop surfaced, cannot self-unblock): push GO (#1229),
+    safety-net build GO (#1230). Both fresh; CEO unresponsive ~several ticks.
