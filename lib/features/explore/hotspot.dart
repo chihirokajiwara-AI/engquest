@@ -5,6 +5,7 @@
 // so SceneDef literals live entirely in this file's initialiser.
 
 import 'package:flutter/material.dart';
+import '../../core/gamification/hint_coin_service.dart';
 import '../quest/quest_data.dart';
 
 // ── Hotspot kind ──────────────────────────────────────────────────────────────
@@ -91,6 +92,18 @@ class Hotspot {
   /// (TeachSound/BlendWord/Phrase carry their own teachJa) → no card needed.
   final TeachCard? teachCard;
 
+  /// Optional per-hotspot authored hint ladder (H1 model).
+  ///
+  /// When non-null and non-empty, [NazoScreen._hintLadder] uses these hints
+  /// (sorted by [NazoHint.tier]) instead of [defaultHintsForLevel]. When null,
+  /// the generic fallback is used — so all existing hotspots (null) behave
+  /// identically to before.
+  ///
+  /// All authored hints MUST pass [hintViolatesAnswerRail] == false before
+  /// commit; the rail function guards against any hint that names the answer
+  /// or eliminates a distractor by text.
+  final List<NazoHint>? hints;
+
   // Coin fields
   final int coinValue;
 
@@ -103,6 +116,7 @@ class Hotspot {
     this.npcGreyAsset,
     this.npcColorAsset,
     this.teachCard,
+    this.hints,
     this.coinValue = 0,
   }) : kind = HotspotKind.npc;
 
@@ -116,6 +130,7 @@ class Hotspot {
     this.npcGreyAsset,
     this.npcColorAsset,
   })  : teachCard = null,
+        hints = null,
         kind = HotspotKind.coin;
 }
 

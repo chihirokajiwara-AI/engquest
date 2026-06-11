@@ -578,7 +578,15 @@ class _NazoScreenState extends State<NazoScreen> {
   // ── Hint ladder ───────────────────────────────────────────────────────────
 
   Widget _hintLadder() {
-    final hints = defaultHintsForLevel(widget.eikenLevel);
+    // Use per-hotspot authored hints when present (sorted by tier so authoring
+    // order doesn't matter); fall back to the generic level hints otherwise.
+    // All existing hotspots have hints == null → identical fallback behaviour.
+    final authoredHints = widget.hotspot.hints;
+    final hints = (authoredHints != null && authoredHints.isNotEmpty)
+        ? (List<NazoHint>.from(authoredHints)
+          ..sort((a, b) => a.tier.compareTo(b.tier)))
+        : defaultHintsForLevel(widget.eikenLevel);
+
     return DqPanel(
       title: 'ひらめきコイン ヒント',
       child: Column(

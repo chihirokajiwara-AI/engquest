@@ -98,6 +98,45 @@ class NazoHint {
   const NazoHint({required this.tier, required this.textJa});
 }
 
+// ── Anti-cheat rail ──────────────────────────────────────────────────────────
+
+/// Returns true if [hintTextJa] is ILLEGAL because it leaks the answer.
+///
+/// A hint violates the rail when its text contains [answer] (the correct
+/// option label) OR any label in [distractors] — revealing the answer
+/// directly or eliminating a distractor by naming it both spoil the quiz.
+/// Matching is case-insensitive; leading/trailing whitespace is stripped.
+/// This is a pure function so it can be unit-tested without any widget
+/// setup. It is the gate that validates per-case authored hints before
+/// they are committed.
+///
+/// Example usage:
+/// ```dart
+/// assert(!hintViolatesAnswerRail('文の おわりを よく みて', 'are', ['am', 'is', 'be']));
+/// assert(hintViolatesAnswerRail('答えは are だよ', 'are', ['am', 'is', 'be']));
+/// ```
+bool hintViolatesAnswerRail(
+  String hintTextJa,
+  String answer,
+  List<String> distractors,
+) {
+  // Normalise to lower-case for case-insensitive comparison.
+  final lowerHint = hintTextJa.toLowerCase();
+  final lowerAnswer = answer.trim().toLowerCase();
+
+  // A non-empty answer token found verbatim inside the hint text → violation.
+  if (lowerAnswer.isNotEmpty && lowerHint.contains(lowerAnswer)) return true;
+
+  // Any distractor label found verbatim in the hint → eliminates a wrong
+  // choice by naming it, which is also illegal.
+  for (final d in distractors) {
+    final lowerD = d.trim().toLowerCase();
+    if (lowerD.isNotEmpty && lowerHint.contains(lowerD)) return true;
+  }
+
+  return false;
+}
+
 /// Built-in fallback hints generated from the step's eikenLevel + penalizeWrong.
 /// Used when no authored hints are supplied in the Hotspot.
 List<NazoHint> defaultHintsForLevel(String eikenLevel) {
