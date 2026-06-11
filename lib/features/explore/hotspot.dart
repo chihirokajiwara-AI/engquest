@@ -188,6 +188,98 @@ const TeachCard kGreetingTeach = TeachCard(
   ],
 );
 
+// ── 英検4級 teach-cards ───────────────────────────────────────────────────────
+
+/// Teach-first lesson for スラ's irregular-past ナゾ (_kStep4(2),
+/// 「Where did you go?」 → 「I ___ to the zoo.」, choices goed / go / went /
+/// am go). Teaches the concept that some verbs change shape completely in the
+/// past — WITHOUT naming "went" as the answer. The child learns the rule
+/// (go は きのうになると ちがうかたち), sees worked examples with OTHER verbs,
+/// and can then reason to the right choice.
+const TeachCard kIrregularPastTeach = TeachCard(
+  titleJa: 'きのうの ことを いう とき — むかしのかたち（かこけい）',
+  leadJa: 'えいごの どうしは「きのう〜した」と いうとき、かたちが かわる。'
+      'なかには ぜんぜん ちがう かたちに なる ことばも あるよ！',
+  items: [
+    TeachItem(
+      'play → played',
+      'あそぶ → あそんだ',
+      'おわりに「-ed」を つける ふつうの かたち',
+    ),
+    TeachItem(
+      'eat → ate',
+      'たべる → たべた',
+      'かたちが がらっと かわる ことばの れいその１',
+    ),
+    TeachItem(
+      'see → saw',
+      'みる → みた',
+      'かたちが がらっと かわる ことばの れいその２',
+    ),
+    TeachItem(
+      'come → came',
+      'くる → きた',
+      'かたちが がらっと かわる ことばの れいその３',
+    ),
+  ],
+);
+
+/// Teach-first lesson for the 灯台守's future-will ナゾ (_kStep4(4),
+/// 「I think it ___ rain soon.」, choices rained / will / is / rains).
+/// Teaches that "will + どうしのもとのかたち" = これから おきること, WITHOUT
+/// naming "will" as the answer to the specific slot. The child learns the
+/// pattern, sees examples, and reasons which word fits a blank meaning "soon".
+const TeachCard kFutureWillTeach = TeachCard(
+  titleJa: 'これから おきる こと — will（ウィル）を つかおう',
+  leadJa: '「これから〜する」「きっと〜になる」というとき、えいごでは will を つかうよ。\n'
+      '「will」の あとは、どうしの もとのかたち（げんけい）。',
+  items: [
+    TeachItem(
+      'It will snow.',
+      'ゆきが ふるでしょう',
+      'これからのことを いうとき',
+    ),
+    TeachItem(
+      'I will help you.',
+      'てつだいます',
+      '「will」のあとは もとのかたち（snow, help, eat…）',
+    ),
+    TeachItem(
+      'She will be here soon.',
+      'かのじょは もうすぐ くる',
+      'じんぶつにも つかえる',
+    ),
+  ],
+);
+
+/// Teach-first lesson for the りょうし's to-infinitive ナゾ (_kStep4(9),
+/// 「Did you come here ___ fish?」, choices catch / to catch / catching /
+/// caught). Teaches that "to + どうし" answers "なんのために？（もくてき）",
+/// WITHOUT naming the phrase "to catch". Examples use other verbs so the
+/// child learns the rule and can apply it.
+const TeachCard kToInfinitiveTeach = TeachCard(
+  titleJa: '「なんのために？」を いう — to＋どうし',
+  leadJa: '「〜するために」「〜しに」というとき、えいごでは「to ＋ どうしの もとのかたち」を つかう。\n'
+      'もくてき（目的）を あらわす つかいかた だよ。',
+  items: [
+    TeachItem(
+      'I came here to learn.',
+      'まなぶために ここへ きた',
+      'to のあとは もとのかたち（learn, play, buy…）',
+    ),
+    TeachItem(
+      'She went to the shop to buy bread.',
+      'パンを かいに みせへ いった',
+      'なぜ いったか ＝ to ＋ どうし',
+    ),
+    TeachItem(
+      'He runs every day to stay healthy.',
+      'けんこうで いるために まいにち はしる',
+      'もくてきが あとに つく',
+    ),
+  ],
+);
+
 /// Teach-first lesson for the 門番's be動詞 ナゾ (_kStep(15), 'You ___ a
 /// traveller.', choices am / are / is / be). Teach how「〜です」changes with the
 /// subject BEFORE asking the child to fill the blank.
@@ -315,6 +407,7 @@ final SceneDef kTown4Scene = SceneDef(
       pos: const Alignment(-0.50, 0.18),
       size: 0.19,
       step: _kStep4(9),
+      teachCard: kToInfinitiveTeach,
       clueLineJa: '「なぜ ここに いるか、だって…？ '
           'それを いう ことばが、かぜに さらわれて しまったんだ。」',
       framingJa: '風（かぜ）の街（まち）の 港（みなと）。あみは からっぽ、ふねは とまったまま。\n'
@@ -333,6 +426,7 @@ final SceneDef kTown4Scene = SceneDef(
       pos: const Alignment(0.55, -0.28),
       size: 0.18,
       step: _kStep4(4),
+      teachCard: kFutureWillTeach,
       clueLineJa: '「そらが くらい。なにかが おきる…と わかるのに、'
           'それを いう ことばが でてこない。」',
       framingJa: '灯台（とうだい）の うえ。おじいさんが くろい そらを みあげている。\n'
@@ -350,6 +444,7 @@ final SceneDef kTown4Scene = SceneDef(
       pos: const Alignment(0.05, 0.34),
       size: 0.15,
       step: _kStep4(2),
+      teachCard: kIrregularPastTeach,
       clueLineJa: 'スラ：「…きのう、ぼく、どこかへ いった。'
           'でも それを いう ことばが… きみ、おしえて？」',
       framingJa: 'スラは 5級（きゅう）の村（むら）から ずっと きみと あるいてきた。\n'
