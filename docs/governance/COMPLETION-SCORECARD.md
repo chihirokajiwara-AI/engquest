@@ -130,7 +130,7 @@ The 62 items above MISSED these. Added so the loop drives them too. Severity for
 |---|------|----|------|-----|--------|
 |63|特定商取引法 最終確認画面|5|GATE:legal|BLOCKER|dedicated 最終確認 screen pre-purchase (seller id/price/cycle/cancel) — needs corp details(legal)|
 |64|COPPA2026 第三者提供の分離同意|8|GATE:legal|BLOCKER|unbundled opt-in consent for Firebase/RevenueCat third-party data (eff 2026-04-22)|
-|65|同意の永続化+監査ログ|15|BUILD|MAJOR|persist voice/parental consent (PrefKeys + timestamp + policy version); stop re-prompting每session|
+|65|同意の永続化+監査ログ|75|BUILD|MAJOR✓|persist voice/parental consent (PrefKeys + timestamp + policy version); stop re-prompting每session|
 |66|アプリ内サポート/問い合わせ導線|70|BUILD|BLOCKER✓|in-app お問い合わせ/不具合報告 button (store requires working support); none today|
 |67|アプリ内データ削除/消去権|65|BUILD|BLOCKER✓|in-app "データ削除" path (Apple/Play require account deletion in-app); only email today|
 |68|アプリ内サブスク解約導線|15|BUILD|MAJOR|surface manage-subscription URL button in settings/parent (none wired)|
