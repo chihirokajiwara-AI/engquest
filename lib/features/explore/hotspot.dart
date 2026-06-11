@@ -1252,6 +1252,27 @@ final SceneDef kTownPre1Scene = SceneDef(
           '英検準1級（きゅう）の こなれた 言（い）い回（まわ）し — '
           '「決断（けつだん）を くだす」は make — が ためされる。\n'
           '正（ただ）しい ことばが、灰色（はいいろ）に 最初（さいしょ）の 色（いろ）を もどす。',
+      // Authored 3-tier ladder — concept-only, names neither answer nor any
+      // distractor (anti-leak rail: hintViolatesAnswerRail).
+      hints: const [
+        NazoHint(
+          tier: 1,
+          textJa: '【ヒント T1】「決断（けつだん）を くだす」のような〈動詞（どうし）＋名詞（めいし）〉の '
+              '言（い）い回（まわ）しは、英語（えいご）では 決（き）まった ペアが あるよ。'
+              '意味（いみ）だけで えらぶと ひっかかる。',
+        ),
+        NazoHint(
+          tier: 2,
+          textJa: '【ヒント T2】ここでの 動詞（どうし）は「(決断や 計画を) あたらしく つくり出（だ）す」'
+              'イメージ。「すでに ある ことを おこなう」系（けい）の 動詞（どうし）とは ちがうよ。',
+        ),
+        NazoHint(
+          tier: 3,
+          textJa: '【ヒント T3】"a decision / a plan / a promise" の まえに おく 動詞（どうし）は、'
+              '4つの 中（なか）で いちばん「ゼロから うみ出（だ）す」感（かん）じの もの。'
+              '手（て）に とる・あたえる では ないよ。',
+        ),
+      ],
       npcGreyAsset: 'assets/art/scenes_layton/npc_gatekeeper_grey.webp',
       npcColorAsset: 'assets/art/scenes_layton/npc_gatekeeper_color.webp',
     ),
@@ -1268,6 +1289,25 @@ final SceneDef kTownPre1Scene = SceneDef(
           'かれは サイレントが くる まえ、この くにを うごかしていた 人（ひと）。\n'
           '句動詞（くどうし）の せいかくな いみ ──「やりとげる・実行（じっこう）する」── '
           'を とりもどせ。',
+      hints: const [
+        NazoHint(
+          tier: 1,
+          textJa: '【ヒント T1】句動詞（くどうし）は〈動詞（どうし）＋小（ちい）さな語（ご）〉の セット。'
+              'うしろの 小（ちい）さな語（ご）で 意味（いみ）が 大（おお）きく かわるよ。',
+        ),
+        NazoHint(
+          tier: 2,
+          textJa: '【ヒント T2】ここでの 意味（いみ）は「(計画や 命令を) やりとげる・実行（じっこう）する」。'
+              '「つづける」「あとまわしに する」「(人に) にる」では ない ものを えらぼう。',
+        ),
+        NazoHint(
+          tier: 3,
+          textJa:
+              '【ヒント T3】"an experiment / an order / a plan" を「実行（じっこう）する」ときの '
+              '句動詞（くどうし）。うしろの 語（ご）は「外（そと）へ・さいごまで 出（だ）しきる」 むきの もの。'
+              '「つづける」むきでは ないよ。',
+        ),
+      ],
       npcGreyAsset: 'assets/art/scenes_layton/npc_chancellor_grey.webp',
       npcColorAsset: 'assets/art/scenes_layton/npc_chancellor_color.webp',
     ),
@@ -1283,6 +1323,24 @@ final SceneDef kTownPre1Scene = SceneDef(
           '英検準1級（きゅう）の ぬきだし語（ご） — '
           '「立（た）ちなおる ちから」を あらわす ちゅうしょう名詞（めいし） — を えらべ。\n'
           'この ことばが もどれば、ひろばに ひかりが さしはじめる。',
+      hints: const [
+        NazoHint(
+          tier: 1,
+          textJa: '【ヒント T1】"such ___" の ___ に 入（はい）るのは 名詞（めいし）。'
+              '形容詞（けいようし）や 副詞（ふくし）は ここには 入（はい）らないよ。',
+        ),
+        NazoHint(
+          tier: 2,
+          textJa: '【ヒント T2】4つは おなじ もとの 語（ご）の 仲間（なかま）。語尾（ごび）で 品詞（ひんし）が きまる。'
+              '「〜さ・〜性（せい）」と いう 意味（いみ）の 名詞（めいし）の 形（かたち）を さがそう。',
+        ),
+        NazoHint(
+          tier: 3,
+          textJa: '【ヒント T3】語尾（ごび）「-ent」は 形容詞（けいようし）、「-ently」は 副詞（ふくし）、'
+              '短（みじか）い もとの 形（かたち）は 動詞（どうし）。のこる 名詞（めいし）── '
+              '「立（た）ちなおる ちから」を あらわす 語（ご）が 答（こた）え。',
+        ),
+      ],
       npcGreyAsset: 'assets/art/scenes_layton/npc_healer_grey.webp',
       npcColorAsset: 'assets/art/scenes_layton/npc_healer_color.webp',
     ),

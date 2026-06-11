@@ -230,4 +230,39 @@ void main() {
       }
     });
   });
+
+  // ── Authored-hint anti-leak coverage (REAL scenes) ──────────────────────────
+  // Durable guard: EVERY authored per-hotspot hint, across all scenes, must pass
+  // the rail against its own quiz's answer + distractors. Catches a future author
+  // accidentally naming a choice (the silent-distractor-corruption class of bug).
+  group('authored scene hints — anti-leak coverage', () {
+    test('no authored hint names its answer or any distractor', () {
+      var checkedHints = 0;
+      kScenesByGrade.forEach((grade, scene) {
+        for (final hs in scene.hotspots) {
+          final hints = hs.hints;
+          if (hints == null || hints.isEmpty) continue;
+          final step = hs.step;
+          if (step is! QuestEncounter) continue;
+          final answer = step.choices[step.correctIndex];
+          final distractors = [
+            for (var i = 0; i < step.choices.length; i++)
+              if (i != step.correctIndex) step.choices[i],
+          ];
+          for (final h in hints) {
+            checkedHints++;
+            expect(
+              hintViolatesAnswerRail(h.textJa, answer, distractors),
+              isFalse,
+              reason: 'grade $grade hint (T${h.tier}) "${h.textJa}" '
+                  'leaks answer "$answer" or a distractor',
+            );
+          }
+        }
+      });
+      // Guard must actually exercise authored hints (not silently pass on none).
+      expect(checkedHints, greaterThan(0),
+          reason: 'expected authored-hint hotspots to exist and be checked');
+    });
+  });
 }
