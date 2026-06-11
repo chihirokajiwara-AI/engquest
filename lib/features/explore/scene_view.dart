@@ -486,8 +486,7 @@ class _SceneViewState extends State<SceneView> {
               // _kArrivalAutoDismissMs.  Must not block the scene: it is
               // positioned at the bottom edge and the rest of the scene remains
               // interactive.
-              if (_showArrival &&
-                  widget.scene.companionArrivalJa != null)
+              if (_showArrival && widget.scene.companionArrivalJa != null)
                 _arrivalBanner(widget.scene.companionArrivalJa!, w, h),
             ],
           );
@@ -639,8 +638,8 @@ class _SceneViewState extends State<SceneView> {
                     const SizedBox(height: 2),
                     Text(
                       text,
-                      style: dqText(size: 13, color: dqInk)
-                          .copyWith(height: 1.55),
+                      style:
+                          dqText(size: 13, color: dqInk).copyWith(height: 1.55),
                     ),
                   ],
                 ),
