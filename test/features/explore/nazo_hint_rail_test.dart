@@ -131,9 +131,8 @@ void main() {
 
   group('Hotspot.hints — authored hint branching (H1)', () {
     // Use the first NPC step from kTown5Scene as a minimal real QuestStep.
-    QuestStep npcStep() => kTown5Scene.hotspots
-        .firstWhere((h) => h.kind == HotspotKind.npc)
-        .step!;
+    QuestStep npcStep() =>
+        kTown5Scene.hotspots.firstWhere((h) => h.kind == HotspotKind.npc).step!;
 
     test('hints == null → null (fallback branch in _hintLadder)', () {
       final hotspot = Hotspot.npc(
@@ -141,7 +140,8 @@ void main() {
         step: npcStep(),
       );
       expect(hotspot.hints, isNull,
-          reason: 'no hints supplied → null → fallback to defaultHintsForLevel');
+          reason:
+              'no hints supplied → null → fallback to defaultHintsForLevel');
     });
 
     test('authored hints are stored and sortable by tier', () {
@@ -224,7 +224,8 @@ void main() {
         expect(
           hintViolatesAnswerRail(h.textJa, answer, distractors),
           isFalse,
-          reason: 'authored hint "${h.textJa}" must not name answer or distractors',
+          reason:
+              'authored hint "${h.textJa}" must not name answer or distractors',
         );
       }
     });

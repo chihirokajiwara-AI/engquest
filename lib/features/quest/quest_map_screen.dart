@@ -87,8 +87,7 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
       // next index is beyond the current high-water mark.
       final cleared = await Navigator.of(context).push<bool>(
         MaterialPageRoute(
-          builder: (_) =>
-              SceneView(scene: scene, eikenLevel: town.eikenLevel),
+          builder: (_) => SceneView(scene: scene, eikenLevel: town.eikenLevel),
         ),
       );
       if (cleared == true && i + 1 > _unlocked) {

@@ -302,8 +302,7 @@ class _SceneViewState extends State<SceneView> {
                 child: SingleChildScrollView(
                   child: Text(
                     storyBeat,
-                    style:
-                        dqText(size: 13, color: dqInk).copyWith(height: 1.6),
+                    style: dqText(size: 13, color: dqInk).copyWith(height: 1.6),
                   ),
                 ),
               ),
