@@ -59,6 +59,15 @@ jobs:
       - name: Verify native audio manifest
         run: python3 scripts/test_audio_manifest.py
 
+      # ── Bundled JP font coverage ───────────────────────────────────────────
+      # Asserts the committed assets/fonts/NotoSerifJP.ttf subset covers every
+      # Japanese source character, so new JP text added without re-running
+      # subset_jp_font.py is caught here instead of shipping silent tofu (□).
+      - name: Verify JP font coverage
+        run: |
+          pip install --quiet fonttools
+          python3 scripts/verify_font_coverage.py
+
       # ── Analyze ───────────────────────────────────────────────────────────
       - name: Flutter analyze
         run: flutter analyze --fatal-infos --fatal-warnings

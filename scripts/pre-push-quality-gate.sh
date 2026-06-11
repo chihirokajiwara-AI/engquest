@@ -286,7 +286,7 @@ while read -r local_ref local_oid remote_ref remote_oid; do
     if ! command -v python3 >/dev/null 2>&1; then
       do_block "$local_oid" "python3-missing" "Range touches assets/scripts but python3 not found — cannot verify audio contract. Install python3 or bypass deliberately."
     fi
-    for script in verify_audio_assets test_audio_manifest; do
+    for script in verify_audio_assets test_audio_manifest verify_font_coverage; do
       if [ -f "$WT/scripts/${script}.py" ]; then
         run_bounded "$T_PYTHON" python3 "$WT/scripts/${script}.py"
         rc=$?

@@ -193,14 +193,18 @@ behind the Phase order, each with its own commit + verification. All file:line r
 were grounded in the tree; re-confirm before editing.
 
 ### A. Safety-net gaps (add tests first — highest leverage, behavior-preserving)
-- **A1 — `buildAntiLeakDistractors` has no unit test.** SAFE-NOW. Critical anti-leak
-  logic (`distractor_generator.dart`) is only covered indirectly. Add
-  `test/features/exam_practice/distractor_generator_test.dart`: same-first-letter
-  enforced, no-synonym, generic-word blocked, exactly-3 or `null`. Verify: `flutter test`.
-- **A2 — No automated font-coverage test.** SAFE-NOW (additive). Tofu is a recurring
-  risk (item Behaviors §7). Add a test that scans displayed JP source strings and
-  asserts each char is in the bundled subset's cmap (mirror `subset_jp_font.py`'s
-  scan + `fontTools`). Verify: `flutter test`.
+- **A1 — `buildAntiLeakDistractors` unit coverage.** ✅ ALREADY DONE — a thorough
+  test exists (`test/features/exam_practice/distractor_generator_test.dart`, 176 lines)
+  covering first-letter, synonym, phrase, POS, underscore, generic-confusable,
+  generic-as-answer, sentence-echo, and null-when-<3. No action. (An initial analysis
+  pass wrongly flagged this as missing; re-verification against the tree corrected it
+  — a reminder to always confirm "no test exists" claims before acting.)
+- **A2 — Automated font-coverage CI gate.** ✅ DONE (commit on the same branch).
+  `test/qa/vocab_gloss_charset_test.dart` (#97) is only a foreign-script tripwire and
+  explicitly deferred true subset coverage to CI follow-up. Added
+  `scripts/verify_font_coverage.py` (asserts the committed subset's cmap covers every
+  in-scope JP source char; gracefully skips if fontTools absent), wired into `ci.yml`
+  (with `pip install fonttools`) and the pre-push gate. Currently green (1997/1997).
 - **A3 — 2 skipped tests** in `reading_pool_integrity_test.dart` (pre2plus/pre1
   listening pools = 0 items). These intentionally surface a CONTENT gap, not a code
   bug — see Stop-And-Ask Q-D before "fixing". Do not delete the skips; do not author
