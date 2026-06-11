@@ -394,9 +394,7 @@ class _MockExamScreenState extends State<MockExamScreen> {
                               size: 20,
                             ),
                             label: Text(
-                              _captionsOn
-                                  ? '字幕（じまく）を かくす'
-                                  : '字幕（じまく）を よむ',
+                              _captionsOn ? '字幕（じまく）を かくす' : '字幕（じまく）を よむ',
                               style: dqText(size: 13, color: dqGold),
                             ),
                           ),

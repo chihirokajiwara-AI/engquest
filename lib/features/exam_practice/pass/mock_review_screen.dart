@@ -98,7 +98,8 @@ class _MockReviewScreenState extends State<MockReviewScreen> {
                   Expanded(
                     child: Text(
                       '正解（せいかい） $correct / $total',
-                      style: dqText(size: 15, w: FontWeight.w800, color: dqGold),
+                      style:
+                          dqText(size: 15, w: FontWeight.w800, color: dqGold),
                     ),
                   ),
                   if (missed.isNotEmpty)
@@ -340,8 +341,8 @@ class _ReviewCard extends StatelessWidget {
                     ] else if (isChosen) ...[
                       const SizedBox(width: 6),
                       Text('あなた',
-                          style: dqText(
-                              size: 11, w: FontWeight.w800, color: red)),
+                          style:
+                              dqText(size: 11, w: FontWeight.w800, color: red)),
                     ],
                   ],
                 ),

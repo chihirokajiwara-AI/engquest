@@ -49,7 +49,8 @@ void main() {
     expect(find.text('正解（せいかい） 1 / 3'), findsOneWidget);
   });
 
-  testWidgets('defaults to wrong-only: shows the 2 missed items, not the correct one',
+  testWidgets(
+      'defaults to wrong-only: shows the 2 missed items, not the correct one',
       (tester) async {
     await tester.pumpWidget(harness());
     await tester.pumpAndSettle();
@@ -62,7 +63,8 @@ void main() {
     expect(find.text('みかいとう'), findsOneWidget);
   });
 
-  testWidgets('toggling off wrong-only reveals every item including the correct',
+  testWidgets(
+      'toggling off wrong-only reveals every item including the correct',
       (tester) async {
     await tester.pumpWidget(harness());
     await tester.pumpAndSettle();
@@ -73,10 +75,12 @@ void main() {
     expect(find.text('Question q3?'), findsOneWidget);
   });
 
-  testWidgets('a missed LISTENING item reveals its transcript (read what you misheard)',
+  testWidgets(
+      'a missed LISTENING item reveals its transcript (read what you misheard)',
       (tester) async {
     // Pull a real listening item so the transcript lookup (by audioKey) resolves.
-    final listening = kListeningItems['5']!.firstWhere((it) => it.choices.length == 4);
+    final listening =
+        kListeningItems['5']!.firstWhere((it) => it.choices.length == 4);
     final mcq = MockMcqItem(
       id: listening.audioKey,
       questionText: listening.question,

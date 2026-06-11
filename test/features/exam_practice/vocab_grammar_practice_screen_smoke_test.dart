@@ -116,7 +116,8 @@ void main() {
       });
     }
 
-    testWidgets('after 3 wrong in a row, a gentle 探偵 encouragement appears (no-scold)',
+    testWidgets(
+        'after 3 wrong in a row, a gentle 探偵 encouragement appears (no-scold)',
         (tester) async {
       addTearDown(tester.view.reset);
       await tester.pumpWidget(MaterialApp(
@@ -131,13 +132,14 @@ void main() {
       await tester.pump();
       final state =
           tester.state(find.byType(VocabGrammarPracticeScreen)) as dynamic;
-      expect((state.debugCorrectChoices as List).length,
-          greaterThanOrEqualTo(3),
+      expect(
+          (state.debugCorrectChoices as List).length, greaterThanOrEqualTo(3),
           reason: 'need ≥3 questions to exercise a 3-wrong streak');
 
       // First two wrong → streak 1,2: encouragement must NOT show yet.
       for (var i = 0; i < 2; i++) {
-        await tester.tap(find.text(state.debugWrongChoiceFor(i) as String).first);
+        await tester
+            .tap(find.text(state.debugWrongChoiceFor(i) as String).first);
         await tester.pump();
         expect(find.textContaining('なんども まちがえても'), findsNothing,
             reason: 'no encouragement before the 3-miss threshold');

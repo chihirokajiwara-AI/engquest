@@ -51,21 +51,17 @@ class PracticeEncouragementBanner extends StatelessWidget {
 
 /// Screen-specific encouragement copy. Kept here so all practice screens share
 /// the same warm voice while nudging to their own scaffold.
-const String kVocabEncourageMsg =
-    'なんども まちがえても へいき！ めいたんていも、'
+const String kVocabEncourageMsg = 'なんども まちがえても へいき！ めいたんていも、'
     'しっぱいを ヒントに して 事件（じけん）を とくんだ。\n'
     '「いみを みる」を つかうと、もっと わかるよ。';
 
-const String kListeningEncourageMsg =
-    'なんども まちがえても へいき！ もう一度（いちど） 🔊 きいたり、'
+const String kListeningEncourageMsg = 'なんども まちがえても へいき！ もう一度（いちど） 🔊 きいたり、'
     '字幕（じまく）を ONに すると わかりやすいよ。\n'
     'めいたんていも、くりかえし きいて 事件（じけん）を とくんだ。';
 
-const String kConversationEncourageMsg =
-    'なんども まちがえても へいき！ 会話（かいわ）の ながれを よむのは'
+const String kConversationEncourageMsg = 'なんども まちがえても へいき！ 会話（かいわ）の ながれを よむのは'
     'むずかしいよね。めいたんていも、ヒントを あつめて すこしずつ とくんだ。';
 
-const String kReadingEncourageMsg =
-    'なんども まちがえても へいき！ 本文（ほんぶん）を もう一度（いちど）'
+const String kReadingEncourageMsg = 'なんども まちがえても へいき！ 本文（ほんぶん）を もう一度（いちど）'
     'よむと、答（こた）えの てがかりが みつかるよ。\n'
     'めいたんていも、てがかりを さがして 事件（じけん）を とくんだ。';

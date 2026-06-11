@@ -704,4 +704,3 @@ class _TranscriptPanel extends StatelessWidget {
     );
   }
 }
-
