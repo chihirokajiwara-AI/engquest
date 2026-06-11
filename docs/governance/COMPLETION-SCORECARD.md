@@ -1,0 +1,108 @@
+# Completion Scorecard — drive every item to 100 (CEO 1245, 2026-06-11)
+
+The autonomous loop's measurable target. Each cycle: advance the lowest **BUILD**
+items toward 100, re-audit super-strictly (measure, never assume), update the
+score here, and surface **GATE** items to the CEO with decision material. Honesty
+is non-negotiable: a score only rises on verified, gated, shipped work.
+
+**Headline reframe (CEO 1244):** as a *game* the product is ~5%. The 英検 drill
+core is decent but the 本格 コトバ探偵 RPG — the reason a child pays ¥999 — is
+barely built. The loop's TOP priority is the GAME layer (items 48–60), almost all
+self-BUILDABLE; only art *generation* is gated.
+
+Legend — **type**: `BUILD` = self-buildable now (loop does it) · `GATE:<what>` =
+needs CEO go (spend / secret / prod / legal / art-gen).
+
+## A. 英検 content
+| # | item | now | type | next action |
+|---|------|----|------|-------------|
+|1|5級語彙|88|BUILD|polish glosses/IPA coverage|
+|2|4級語彙|86|BUILD|same|
+|3|3級語彙|85|BUILD|same|
+|4|準2/準2+語彙|84|BUILD|same|
+|5|2級語彙|84|BUILD|same|
+|6|準1語彙|80|BUILD|C1 review, collocations|
+|7|Reading項目量|45|BUILD|author passages to ~30/grade (thin: ~140 total)|
+|8|Listening項目量|40|BUILD|author items + fill missing audio (110 total)|
+|9|Writing課題量|50|BUILD|expand prompt bank per grade|
+|10|distractor意味品質|65|GATE:backend|runtime same-POS now; semantic uniqueness = LLM|
+|11|例文品質|72|BUILD|tighten cloze-clean sentences|
+|12|大問構造再現|86|BUILD|準1大問3=7 etc. residual fixes|
+
+## B. ペダゴジー
+| # | item | now | type | next action |
+|---|------|----|------|-------------|
+|13|FSRS|75|BUILD|tune params|
+|14|適応難易度|20|BUILD|per-child difficulty (T12) — SELF-BUILDABLE|
+|15|teach-why|78|BUILD|reading in mock-review, grammar 解説|
+|16|hint scaffold|82|BUILD|extend to all screens|
+|17|音声強化|65|GATE:backend|TTS coverage needs backend/static gen|
+|18|連続ミス励まし|85|BUILD|done 4 screens; tune copy|
+|19|メタ認知/calibration|25|BUILD|"how sure are you?" + calibration — SELF-BUILDABLE|
+|20|合格率誠実性|90|BUILD|hold; keep honest|
+|21|mastery追跡|70|BUILD|surface per-skill mastery|
+|22|再来訪/通知|58|BUILD|web push / streak reminders|
+
+## C. アセスメント
+|23|模試組立採点|82|BUILD|residual fidelity|
+|24|模試review|80|BUILD|reading explanation in review|
+|25|Writing採点|35|GATE:backend|AI rubric design done; needs backend|
+|26|Speaking採点|35|BUILD|on-device scorer depth (pronunciation_scorer)|
+|27|未測定honest|88|BUILD|hold|
+|28|gaming耐性|70|BUILD|more shuffle/anti-pattern locks|
+
+## D. AI (mostly GATE:backend/secret)
+|29|NPC対話|25|GATE:backend+secret|client done; api.akenquest.jp HTTP000|
+|30|jailbreak耐性|30|GATE:backend|prompt-prefix only; needs server guard + tests|
+|31|offline fallback|55|BUILD|richer canned variety|
+|32|Writing AI採点|30|GATE:backend|same as 25|
+|33|動的生成|15|GATE:backend|all dynamic AI needs the proxy|
+
+## E. 収益化 (GATE)
+|34|課金実装|15|GATE:secret+prod|RevenueCat SDK wired; needs real keys + store products|
+|35|paywall UI|60|BUILD|polish gating UX|
+|36|サブスク管理|15|GATE:secret|RevenueCat entitlement flow needs keys|
+|37|IAP receipt検証|10|GATE:secret|server validation via RevenueCat dashboard|
+|38|flavor分離|65|BUILD|edilab/aken split refinement|
+
+## F. 安全/法務
+|39|危機対応|10|GATE:legal-signoff|client crisis net DESIGNED (#1230); verified JP resources; needs CEO content GO|
+|40|COPPA匿名auth|80|BUILD|hold|
+|41|privacy/ToS|70|GATE:legal|review final copy|
+|42|AI出力filter|65|BUILD|extend block lists / tests|
+|43|PII非収集|80|BUILD|audit any leak paths|
+
+## G. 基盤 (GATE)
+|44|backend proxy deploy|10|GATE:spend+secret+prod|backend/server.js EXISTS (29KB) + Dockerfile; needs host + Anthropic key + deploy|
+|45|Firebase設定|55|GATE:secret|placeholder keys → real project|
+|46|offline永続|70|BUILD|hold|
+|47|error耐性|58|BUILD|error states, retries, empty states|
+
+## H. GAME COMPOSITION (TOP PRIORITY — CEO 1244, ~5%, mostly BUILD)
+|48|世界/物語実装|15|BUILD|implement STORY-BIBLE 7-case arc into quest_data (currently 英検+thin skin)|
+|49|キャラ in-game|12|BUILD|cast dialogue, arcs, presence (bible→code); art-gen separate|
+|50|探索の深さ|20|BUILD|scene/nazo/hotspot depth → Layton/Minecraft-grade|
+|51|ゲームフィール/演出|18|BUILD|juice, transitions, feedback, reward moments|
+|52|事件→英検の有機結合|25|BUILD|each case's puzzles ARE the 英検 skills, diegetic|
+|53|手がかりドリップ|10|BUILD|one clue/case edge→centre per WORLD-BIBLE|
+|54|視覚の本格バー|30|GATE:art-gen|dark-navy/gold look; cast+scene art (heavy job)|
+|55|オープニング/掴み|20|BUILD|implement OPENING-NARRATIVE-BIBLE as playable|
+|56|サウンド/音楽|35|GATE:audio|BGM/SE design+wiring (founder/paid gen escalates)|
+|57|nav到達性/ハブ|60|BUILD|kill orphaned WorldMap hub remnants; clean flow|
+|58|onboarding没入|72|BUILD|make CAT placement diegetic (探偵の入所試験)|
+
+## I. perf / a11y / QA
+|59|perf|55|BUILD|cold-boot 6.6s engine-bound; audio bundle #48|
+|60|a11y|88|BUILD|hold; extend|
+|61|test/CI/governance|85|BUILD|hold green; expand coverage|
+|62|mobile store|30|GATE:prod|store listings, review, publish|
+
+## Loop protocol (CEO 1245)
+- Each tick: pick the lowest 1–2 **BUILD** items (bias to GAME §H), advance toward
+  100 via §III 8-phase (BUILD→verify_quality 0→content-QA→adversarial audit→commit),
+  then **re-score the touched items here** with the measured new value.
+- Parallelism: when a tick's work spans independent dimensions, fan out via a
+  Workflow (CEO 1245 opted into multi-agent). Otherwise rotate dimensions.
+- **GATE items never self-advance** past their gate — surface to CEO with the
+  decision material (what / done / GO-needs / cost / risk / recommendation).
+- The score is HONEST: it rises only on verified shipped work, never on intent.
