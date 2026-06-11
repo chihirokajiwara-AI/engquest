@@ -11,6 +11,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import '../../core/audio/word_audio_player_service.dart';
 import '../../core/data/vocab_repository.dart';
 import '../../core/models/vocab_item.dart';
 import 'distractor_generator.dart';
@@ -90,6 +91,13 @@ class _VocabGrammarPracticeScreenState
   final _reviewStore = VocabReviewStore();
   final _rng = Random();
 
+  // Tap-to-hear the answer word in feedback (CEO 1132 non-reader lens): a true
+  // beginner who can't yet READ the word or example sentence can still HEAR the
+  // correct word — the same proven WordAudioPlayerService the battle flashcards
+  // use. Graceful when audio is unavailable (no crash; button just no-ops) and
+  // respects the Settings voice-mute.
+  final _wordAudio = WordAudioPlayerService();
+
   List<_Question> _questions = [];
   int _currentIdx = 0;
   int? _selectedAnswer;
@@ -126,6 +134,12 @@ class _VocabGrammarPracticeScreenState
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) _loadQuestions();
     });
+  }
+
+  @override
+  void dispose() {
+    _wordAudio.dispose();
+    super.dispose();
   }
 
   Future<void> _loadQuestions() async {
@@ -669,6 +683,13 @@ class _VocabGrammarPracticeScreenState
                               size: 14, w: FontWeight.w800, color: dqGold),
                         ),
                       ),
+                      const SizedBox(width: 8),
+                      // Hear the correct word — non-reader support (CEO 1132).
+                      _HearWordButton(
+                        audio: _wordAudio,
+                        vocabId: q.word.id,
+                        word: q.word.word,
+                      ),
                     ],
                   ),
                   // The word IN CONTEXT — for a cloze item this is the real
@@ -822,4 +843,52 @@ class _Question {
     required this.originalSentence,
     this.choiceGloss = const {},
   });
+}
+
+/// A small 🔊 tap-to-hear button for the answer word, driven by
+/// [WordAudioPlayerService] (the same engine as the Battle flashcards). Reflects
+/// the loading state for THIS word and otherwise shows a speaker icon. It exists
+/// for the non-reader (CEO 1132): a beginner who can't read the word/example can
+/// still HEAR the correct answer. Playback no-ops gracefully when audio is
+/// unavailable or voice is muted, so the button is always safe to tap.
+class _HearWordButton extends StatelessWidget {
+  final WordAudioPlayerService audio;
+  final String vocabId;
+  final String word;
+
+  const _HearWordButton({
+    required this.audio,
+    required this.vocabId,
+    required this.word,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListenableBuilder(
+      listenable: audio,
+      builder: (context, _) {
+        final loadingThis = audio.isLoading && audio.currentVocabId == vocabId;
+        return Semantics(
+          button: true,
+          label: '$word を きく',
+          child: InkWell(
+            onTap: () => audio.playWord(vocabId: vocabId, word: word),
+            borderRadius: BorderRadius.circular(20),
+            child: Padding(
+              padding: const EdgeInsets.all(4),
+              child: loadingThis
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                          strokeWidth: 2, color: dqGold),
+                    )
+                  : const Icon(Icons.volume_up_rounded,
+                      color: dqGold, size: 22),
+            ),
+          ),
+        );
+      },
+    );
+  }
 }

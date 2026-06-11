@@ -141,6 +141,10 @@ void main() {
       // real same-grade word with a meaning, so the panel lists them.
       expect(find.text('ほかの言葉 / Other choices'), findsOneWidget,
           reason: 'reveal must gloss the other choices as a vocab lesson');
+      // Non-reader support (CEO 1132): the reveal offers a tap-to-hear button so
+      // a child who can't yet READ the word can HEAR it.
+      expect(find.byIcon(Icons.volume_up_rounded), findsOneWidget,
+          reason: 'reveal must offer tap-to-hear the correct word');
       expect(tester.takeException(), isNull);
     });
 
