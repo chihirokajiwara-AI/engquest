@@ -284,6 +284,7 @@ class MockExamScorer {
     required Map<String, int> answers,
     double writingAccuracy = 0.0,
     int writingAttempted = 0,
+    bool listeningCaptioned = false,
   }) {
     // Tally correct/attempted per skill for MCQ items.
     final correct = <EikenSkill, int>{};
@@ -301,8 +302,14 @@ class MockExamScorer {
     final accuracies = <SkillAccuracy>[];
 
     for (final skill in [EikenSkill.reading, EikenSkill.listening]) {
-      final att = attempted[skill] ?? 0;
-      final cor = correct[skill] ?? 0;
+      // A deaf/HoH child who turned CAPTIONS on READ the transcript instead of
+      // hearing it (#125 parity): that measures reading-of-script, not by-ear
+      // listening, so captioned listening is honestly 未測定 — excluded from the
+      // 合格率 exactly as the live listening screen excludes it. The child still
+      // completes the mock; their readiness reflects the skills actually measured.
+      final captioned = skill == EikenSkill.listening && listeningCaptioned;
+      final att = captioned ? 0 : (attempted[skill] ?? 0);
+      final cor = captioned ? 0 : (correct[skill] ?? 0);
       accuracies.add(SkillAccuracy(
         skill: skill,
         accuracy: att > 0 ? cor / att : 0.0,

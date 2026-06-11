@@ -80,6 +80,26 @@ void main() {
       expect(unpracticedWriting.readinessPct, equals(zeroWriting.readinessPct));
     });
 
+    test('captioned listening (deaf/HoH) is honestly 未測定, not by-ear measured',
+        () {
+      // #125 parity: a child who READ the transcript (captions ON) did not HEAR
+      // the audio, so by-ear listening must be 未測定 — excluded from the 合格率 —
+      // even though they answered every listening item correctly.
+      final exam = MockExamAssembler.assemble('5', seed: 1);
+      final answers = <String, int>{
+        for (final it in exam.mcqItems) it.id: it.correctIdx,
+      };
+      expect(exam.mcqItems.any((i) => i.skill == EikenSkill.listening), isTrue,
+          reason: '5級 mock must include listening items');
+      final heard = MockExamScorer.score(exam: exam, answers: answers)!;
+      final captioned = MockExamScorer.score(
+          exam: exam, answers: answers, listeningCaptioned: true)!;
+      expect(heard.unmeasuredSkills, isNot(contains(EikenSkill.listening)),
+          reason: 'by-ear listening is measured');
+      expect(captioned.unmeasuredSkills, contains(EikenSkill.listening),
+          reason: 'captioned listening is read-not-heard → 未測定');
+    });
+
     test('CseEstimator marks skills with no data as unmeasured (not failed)',
         () {
       // 3級 tests reading + writing + listening. Give only reading data.

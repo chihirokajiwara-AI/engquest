@@ -30,6 +30,7 @@ import '../quest/ui/dq_ui.dart';
 import 'eiken_exam_config.dart';
 import '../quest/ui/muted_voice_banner.dart';
 import 'pass/cse_model.dart';
+import 'listening_data.dart';
 import 'pass/mock_exam.dart';
 import 'pass/mock_review_screen.dart';
 import 'pass/pass_meter_screen.dart';
@@ -52,6 +53,13 @@ class _MockExamScreenState extends State<MockExamScreen> {
   late final MockExam _exam;
   late final List<MockMcqItem> _items;
   final Map<String, int> _answers = {};
+
+  // Deaf/HoH accessibility (#125 parity): captions let a child READ the listening
+  // transcript instead of hearing it. [_captionsUsed] is sticky — if captions are
+  // ever turned on, listening is honestly excluded from the 合格率 (read ≠ heard),
+  // mirroring the live listening screen. [_captionsOn] is the current toggle.
+  bool _captionsOn = false;
+  bool _captionsUsed = false;
 
   int _index = 0;
   int? _selected;
@@ -171,6 +179,7 @@ class _MockExamScreenState extends State<MockExamScreen> {
       answers: _answers,
       writingAccuracy: writingAccuracy,
       writingAttempted: writingAttempted,
+      listeningCaptioned: _captionsUsed,
     );
     if (!mounted) return;
     if (estimate == null) {
@@ -362,11 +371,54 @@ class _MockExamScreenState extends State<MockExamScreen> {
                           child:
                               MutedVoiceBanner(onUnmute: () => setState(() {})),
                         ),
-                      if (isListening)
+                      if (isListening) ...[
                         Padding(
                           padding: const EdgeInsets.only(bottom: 12),
                           child: DqReplayButton(onTap: _playCurrentAudio),
                         ),
+                        // Deaf/HoH accessibility (#125 parity): read the script
+                        // instead of hearing it. Using captions honestly excludes
+                        // listening from the 合格率 (read ≠ heard) — see _submit.
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: TextButton.icon(
+                            onPressed: () => setState(() {
+                              _captionsOn = !_captionsOn;
+                              if (_captionsOn) _captionsUsed = true;
+                            }),
+                            icon: Icon(
+                              _captionsOn
+                                  ? Icons.subtitles_rounded
+                                  : Icons.subtitles_outlined,
+                              color: dqGold,
+                              size: 20,
+                            ),
+                            label: Text(
+                              _captionsOn
+                                  ? '字幕（じまく）を かくす'
+                                  : '字幕（じまく）を よむ',
+                              style: dqText(size: 13, color: dqGold),
+                            ),
+                          ),
+                        ),
+                        if (_captionsOn &&
+                            transcriptForAudioKey(item.id) != null)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 12),
+                            child: Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: dqNight1,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                transcriptForAudioKey(item.id)!,
+                                style: dqText(size: 14).copyWith(height: 1.45),
+                              ),
+                            ),
+                          ),
+                      ],
                       DqDialogBox(child: Text(item.questionText)),
                       const SizedBox(height: 14),
                       ...List.generate(item.choices.length, (i) {
