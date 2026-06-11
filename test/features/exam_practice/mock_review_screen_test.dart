@@ -6,6 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:engquest/features/exam_practice/listening_data.dart';
 import 'package:engquest/features/exam_practice/pass/cse_model.dart';
 import 'package:engquest/features/exam_practice/pass/mock_exam.dart';
 import 'package:engquest/features/exam_practice/pass/mock_review_screen.dart';
@@ -70,6 +71,36 @@ void main() {
     expect(find.text('Question q1?'), findsOneWidget);
     expect(find.text('Question q2?'), findsOneWidget);
     expect(find.text('Question q3?'), findsOneWidget);
+  });
+
+  testWidgets('a missed LISTENING item reveals its transcript (read what you misheard)',
+      (tester) async {
+    // Pull a real listening item so the transcript lookup (by audioKey) resolves.
+    final listening = kListeningItems['5']!.firstWhere((it) => it.choices.length == 4);
+    final mcq = MockMcqItem(
+      id: listening.audioKey,
+      questionText: listening.question,
+      choices: listening.choices,
+      correctIdx: listening.correctIndex,
+      skill: EikenSkill.listening,
+      sectionId: '5_l',
+    );
+    // Answer it wrong so it shows in the default wrong-only review.
+    final wrong = (listening.correctIndex + 1) % listening.choices.length;
+    await tester.pumpWidget(MaterialApp(
+      home: MockReviewScreen(
+        items: [mcq],
+        answers: {mcq.id: wrong},
+        gradeLabel: '英検5級',
+      ),
+    ));
+    await tester.pumpAndSettle();
+    expect(find.text('🔊 スクリプト / Script'), findsOneWidget);
+    // The first transcript line should be visible somewhere in the card.
+    expect(
+      find.textContaining(listening.transcripts.first.split('\n').first),
+      findsWidgets,
+    );
   });
 
   testWidgets('all-correct shows a celebratory empty-review message',

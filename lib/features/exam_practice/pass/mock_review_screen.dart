@@ -18,6 +18,7 @@
 import 'package:flutter/material.dart';
 
 import '../../quest/ui/dq_ui.dart';
+import '../listening_data.dart';
 import 'cse_model.dart';
 import 'mock_exam.dart';
 
@@ -220,6 +221,11 @@ class _ReviewCard extends StatelessWidget {
     const green = Color(0xFF6FBF73);
     const red = Color(0xFFE08A8A);
     final accent = correct ? green : red;
+    // For a missed listening item, reveal the authored transcript so the child
+    // can READ what they misheard — the listening-learning loop in review.
+    final transcript = item.skill == EikenSkill.listening
+        ? transcriptForAudioKey(item.id)
+        : null;
 
     return Container(
       padding: const EdgeInsets.all(12),
@@ -262,6 +268,34 @@ class _ReviewCard extends StatelessWidget {
             Text(
               item.questionText.trim(),
               style: dqText(size: 14).copyWith(height: 1.5),
+            ),
+          ],
+          if (transcript != null) ...[
+            const SizedBox(height: 8),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: dqNight1,
+                borderRadius: BorderRadius.circular(7),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '🔊 スクリプト / Script',
+                    style: dqText(
+                        size: 10,
+                        w: FontWeight.w700,
+                        color: dqInk.withAlpha(150)),
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    transcript,
+                    style: dqText(size: 13).copyWith(height: 1.45),
+                  ),
+                ],
+              ),
             ),
           ],
           const SizedBox(height: 8),

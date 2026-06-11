@@ -2252,3 +2252,21 @@ const Map<String, List<ListeningItem>> kListeningItems = {
 /// Convenience: get items for a specific grade and part number.
 List<ListeningItem> listeningItemsFor(String grade, int part) =>
     (kListeningItems[grade] ?? []).where((it) => it.part == part).toList();
+
+/// The authored transcript (what is spoken) for a listening item, keyed by its
+/// [audioKey]. Used by the post-mock 答え合わせ review so a child who missed a
+/// listening item can READ what was said — the listening-learning loop, using
+/// the same authored transcript the live listening screen reveals. Returns null
+/// when the key isn't a listening item (e.g. a reading id). Multi-line dialogues
+/// are joined with newlines.
+String? transcriptForAudioKey(String audioKey) {
+  for (final items in kListeningItems.values) {
+    for (final it in items) {
+      if (it.audioKey == audioKey) {
+        final joined = it.transcripts.join('\n').trim();
+        return joined.isEmpty ? null : joined;
+      }
+    }
+  }
+  return null;
+}
