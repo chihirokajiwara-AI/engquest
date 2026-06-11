@@ -24,10 +24,13 @@
 // Scoring: each section yields a (correct, total) pair → per-skill accuracy →
 // fed into CseEstimator.estimate() → CseEstimate.
 //
-// Writing accuracy = prompt count attempted / writing quota (1 or 2).
-// Writing quality is not auto-graded here (Claude grades writing in the writing
-// engine). A [MockExamResult.writingAccuracy] override lets the writing screen
-// inject a rubric score after AI grading without re-running the full mock.
+// Writing accuracy is NOT computed in the mock (the mock has no writing UI). The
+// caller passes the learner's accumulated writing accuracy — sourced from
+// WritingPracticeScreen's AI-rubric grades via SkillAccuracyStore — into
+// [MockExamScorer.score] as [writingAccuracy] + [writingAttempted]. It is an
+// HONEST AI-graded signal, never a completion ratio: ungraded/never-practiced
+// writing arrives as writingAttempted == 0 → the skill is 未測定 (excluded from
+// the provisional 合格率), never counted as a measured 0%.
 //
 // NO dart:io. No Firebase. No network. Pure-Dart. (R4)
 
