@@ -1261,12 +1261,12 @@ final SceneDef kTownPre1Scene = SceneDef(
       size: 0.19,
       step: _kStepPre1(2),
       teachCard: kPhrasalVerbCarryTeach,
-      clueLineJa: '「わたしは かつて、この くにの すべてを “carry out” してきた…'
-          'いまは、その ことばさえ おもいだせない。」',
+      clueLineJa: '「わたしは かつて、この くにの すべてを とりしきって きた…'
+          'いまは、その「やりとげる」という ことばさえ おもいだせない。」',
       framingJa: 'ひろばの 中央（ちゅうおう）、ひびわれた 石（いし）の 円卓（えんたく）の そばに、'
           '元（もと）・宰相（さいしょう）が ひとり すわっている。\n'
           'かれは サイレントが くる まえ、この くにを うごかしていた 人（ひと）。\n'
-          '句動詞（くどうし）の せいかくな いみ — carry out =「やりとげる」 — '
+          '句動詞（くどうし）の せいかくな いみ ──「やりとげる・実行（じっこう）する」── '
           'を とりもどせ。',
       npcGreyAsset: 'assets/art/scenes_layton/npc_chancellor_grey.webp',
       npcColorAsset: 'assets/art/scenes_layton/npc_chancellor_color.webp',
@@ -1281,7 +1281,7 @@ final SceneDef kTownPre1Scene = SceneDef(
           'その ことばを とりもどせば、この くにも たちなおれる。」',
       framingJa: 'ひろばの すみ、こわれた ふんすいの そばに 治癒師（ちゆし）が いる。\n'
           '英検準1級（きゅう）の ぬきだし語（ご） — '
-          '「立（た）ちなおる ちから」= resilience（ちゅうしょう名詞） — を えらべ。\n'
+          '「立（た）ちなおる ちから」を あらわす ちゅうしょう名詞（めいし） — を えらべ。\n'
           'この ことばが もどれば、ひろばに ひかりが さしはじめる。',
       npcGreyAsset: 'assets/art/scenes_layton/npc_healer_grey.webp',
       npcColorAsset: 'assets/art/scenes_layton/npc_healer_color.webp',
