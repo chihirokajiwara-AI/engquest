@@ -149,3 +149,7 @@ The 62 items above MISSED these. Added so the loop drives them too. Severity for
 |41|privacy/ToS|50|GATE:legal|—|was 70; missing 特商法 screen + hosted URLs + COPPA2026 consent + retention|
 
 **Buildable-now omissions the loop can take (no GO): 65,66,67,68,70,71,76,77.** Gated (legal/prod/art): 63,64,69,72,73,74,75 + the corp/legal details for 41.
+
+## Playtest-sweep findings (real-browser interact_audit, 2026-06-12)
+- VALIDATED interactive on live :8088: explore(5/3/準1), questmap, vocab — all "Real interaction CONFIRMED".
+- FINDING (a11y, real): the **mock + any DqChoice-with-cursor screen do NOT expose the *selected* state to the semantics tree** — choosing a mock answer marks only a visual ▶ cursor; a screen-reader user gets no "selected" feedback. (The audit false-negatived the mock route, which surfaced this.) Mock is visually/functionally fine (tests green). FIX (loop, buildable): add `Semantics(selected:)` to DqChoice's selected/cursor state. Tracks under item 60 a11y (which is why 60 was audit-corrected to 73). Also improve interact_audit to detect aria-selected so future sweeps don't false-negative cursor screens.
