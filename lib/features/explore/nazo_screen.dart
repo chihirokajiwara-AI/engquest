@@ -239,6 +239,35 @@ class _NazoScreenState extends State<NazoScreen> {
               ..._optionTiles(),
               if (_revealed) ...[
                 const SizedBox(height: 12),
+                // Solve-moment reward (game-feel #51): a detective-register
+                // "the word resonated" stamp acknowledges the win BEFORE the
+                // restoration dialog — so solving feels like a victory, not just
+                // a correct/next. Static (no animation → reduced-motion-safe).
+                Container(
+                  width: double.infinity,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: dqGold.withAlpha(34),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: dqGold.withAlpha(140)),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text('✦', style: TextStyle(fontSize: 18)),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          'ことばが ひびいた！ ―― 色（いろ）が もどる。',
+                          style: dqText(
+                              size: 14, w: FontWeight.w800, color: dqGold),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12),
                 DqDialogBox(
                   speaker: _step.npcName,
                   child: Text(_step.onCorrect, style: dqText(size: 15)),
