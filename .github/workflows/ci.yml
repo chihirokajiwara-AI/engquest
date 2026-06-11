@@ -161,6 +161,13 @@ jobs:
           cache: true
           cache-key: 'flutter-${{ runner.os }}-3.44.x'
 
+      # Flutter now enables Swift Package Manager by default, but key plugins
+      # (purchases_flutter, audioplayers_darwin) don't support SPM, and SPM
+      # resolution fails fetching a transitive test dep (CwlCatchException). The
+      # project ships a Podfile, so force the stable CocoaPods path. (#143)
+      - name: Use CocoaPods (disable Swift Package Manager)
+        run: flutter config --no-enable-swift-package-manager
+
       - name: Install dependencies
         run: flutter pub get
 
