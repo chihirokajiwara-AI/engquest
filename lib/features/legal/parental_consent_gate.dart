@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/storage/preferences_service.dart';
 import 'privacy_policy_screen.dart';
 import 'terms_of_service_screen.dart';
 
@@ -11,6 +12,15 @@ import 'terms_of_service_screen.dart';
 ///
 /// Apple App Store Review Guidelines 1.3 and Google Play Families policy
 /// both require a parental gate for apps targeting children under 13.
+///
+/// Persistence (#65 — COPPA-2026 consent audit trail):
+/// - On pass: stores an ISO-8601 UTC timestamp ([PrefKeys.parentalConsentGrantedAt])
+///   and the current policy version ([PrefKeys.kParentalConsentPolicyVersion]).
+/// - On subsequent app launches: if stored policy version matches the current
+///   version, [onConsented] is called immediately (gate skipped).
+/// - Policy change: bumping [PrefKeys.kParentalConsentPolicyVersion] forces
+///   re-collection of consent.
+/// - Revoke: PreferencesService.clear() (data deletion, #67) clears these keys.
 class ParentalConsentGate extends StatefulWidget {
   final VoidCallback onConsented;
 
@@ -35,6 +45,46 @@ class _ParentalConsentGateState extends State<ParentalConsentGate> {
   void initState() {
     super.initState();
     _generateChallenge();
+    // Check stored consent after the first frame so the widget is fully mounted
+    // and the caller's onConsented can be safely invoked.
+    WidgetsBinding.instance.addPostFrameCallback((_) => _checkStoredConsent());
+  }
+
+  /// If a valid stored parental consent exists for the current policy version,
+  /// invoke [onConsented] immediately so the gate is transparent to the user.
+  /// A policy-version mismatch falls through and shows the gate UI normally.
+  Future<void> _checkStoredConsent() async {
+    if (!mounted) return;
+    final prefs = await PreferencesService.getInstance();
+    final storedVersion =
+        prefs.getString(PrefKeys.parentalConsentPolicyVersion);
+    final ts = prefs.getString(PrefKeys.parentalConsentGrantedAt);
+    if (storedVersion == PrefKeys.kParentalConsentPolicyVersion &&
+        ts != null) {
+      if (!mounted) return;
+      widget.onConsented();
+    }
+    // Otherwise: render the gate UI normally.
+  }
+
+  /// Fires [onConsented] immediately, then persists the audit record
+  /// (timestamp + policy version) in the background.  Calling the callback
+  /// first keeps the UX instant and preserves existing test expectations
+  /// (which do not await the storage write).
+  void _grantConsent() {
+    widget.onConsented();
+    _persistConsentRecord();
+  }
+
+  /// Background write: ISO-8601 UTC timestamp + current policy version.
+  /// Called after [onConsented] so the route transition is not delayed.
+  Future<void> _persistConsentRecord() async {
+    if (!mounted) return;
+    final prefs = await PreferencesService.getInstance();
+    final now = DateTime.now().toUtc().toIso8601String();
+    await prefs.setString(PrefKeys.parentalConsentGrantedAt, now);
+    await prefs.setString(PrefKeys.parentalConsentPolicyVersion,
+        PrefKeys.kParentalConsentPolicyVersion);
   }
 
   void _generateChallenge() {
@@ -59,7 +109,8 @@ class _ParentalConsentGateState extends State<ParentalConsentGate> {
   void _onSubmitAnswer() {
     final input = int.tryParse(_answerController.text.trim());
     if (input == _correctAnswer) {
-      widget.onConsented();
+      // Fire the callback synchronously (audit write is fire-and-forget).
+      _grantConsent();
     } else {
       setState(() => _errorText = 'こたえがちがいます。もう一度やってみてね。');
       _answerController.clear();

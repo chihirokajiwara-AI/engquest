@@ -1,20 +1,31 @@
 // lib/features/speaking/speaking_consent_notice.dart
 // A-KEN Quest — 英検 二次 保護者同意 (Parental Consent) Notice
 //
-// COPPA-2025 / APPI-2026 COMPLIANCE:
+// COPPA-2026 / APPI-2026 COMPLIANCE (#65 — consent persistence + audit trail):
 //   Child voice is biometric under both regimes (COPPA 2025 effective date
 //   2026-04-22; APPI 2026 under-16 guardian consent).  This screen is a
 //   MANDATORY launch gate — audio capture must not start until the parent
 //   (not the child) has actively ticked the checkbox.
+//
+//   Persistence behaviour (added #65):
+//   - On GRANT: stores an ISO-8601 UTC timestamp (voiceConsentGrantedAt) and
+//     the current policy version (voiceConsentPolicyVersion = kVoiceConsentPolicyVersion)
+//     to SharedPreferences via PreferencesService.
+//   - On NEXT SESSION: initState loads the stored consent.  If the stored
+//     policy version matches kVoiceConsentPolicyVersion the screen skips itself —
+//     onConsent is fired immediately and the route is popped so the parent never
+//     sees the consent wall again for the same policy version.
+//   - If the policy version CHANGES (new terms): stored version no longer matches
+//     → the screen is shown again and fresh consent is re-collected (audit-trail).
+//   - REVOKE: a parent can clear the voice-consent keys via the parent dashboard
+//     settings tab.  PreferencesService.clear() (data deletion, #67) also clears
+//     them naturally.
 //
 // Design brief (from ASR-SPEAKING-RESEARCH.json §buildApproach):
 //   - Lightweight, calm — not a scary legal wall.
 //   - Parent-readable Japanese.
 //   - Three bullet points covering recording, processing, and deletion.
 //   - A checkbox the parent checks, then a "同意して はじめる" gold button.
-//   - Consent is NOT persisted here — the caller receives it via [onConsent]
-//     and decides where/how to store it (PreferencesService, Firestore, etc.).
-//     This keeps the widget R4-clean (no storage calls in build/init).
 //
 // Usage:
 //   Navigator.push(context, MaterialPageRoute(
@@ -26,6 +37,7 @@
 
 import 'package:flutter/material.dart';
 
+import '../../core/storage/preferences_service.dart';
 import '../quest/ui/dq_ui.dart';
 
 class SpeakingConsentNotice extends StatefulWidget {
@@ -48,6 +60,51 @@ class SpeakingConsentNotice extends StatefulWidget {
 
 class _SpeakingConsentNoticeState extends State<SpeakingConsentNotice> {
   bool _agreed = false;
+
+  // ── Consent persistence (#65) ──────────────────────────────────────────────
+
+  @override
+  void initState() {
+    super.initState();
+    // Check stored consent immediately after the first frame so the route is
+    // already on the Navigator stack and can be popped cleanly.
+    WidgetsBinding.instance.addPostFrameCallback((_) => _checkStoredConsent());
+  }
+
+  /// If a valid stored consent exists for the CURRENT policy version, skip the
+  /// prompt: fire onConsent and pop this route so the parent never sees the wall
+  /// again for the same policy.  A changed policy version falls through to the
+  /// normal prompt path.
+  Future<void> _checkStoredConsent() async {
+    if (!mounted) return;
+    final prefs = await PreferencesService.getInstance();
+    final stored = prefs.getString(PrefKeys.voiceConsentPolicyVersion);
+    final ts = prefs.getString(PrefKeys.voiceConsentGrantedAt);
+    if (stored == PrefKeys.kVoiceConsentPolicyVersion && ts != null) {
+      // Valid persisted consent — skip the wall.
+      if (!mounted) return;
+      widget.onConsent();
+      Navigator.maybePop(context);
+    }
+    // Otherwise: render the consent UI as normal.
+  }
+
+  /// Fires [onConsent] immediately (so the route transition is instant), then
+  /// persists the audit record (timestamp + policy version) in the background.
+  void _grantConsent() {
+    widget.onConsent();
+    _persistConsentRecord();
+  }
+
+  /// Background write: ISO-8601 UTC timestamp + current policy version.
+  Future<void> _persistConsentRecord() async {
+    if (!mounted) return;
+    final prefs = await PreferencesService.getInstance();
+    final now = DateTime.now().toUtc().toIso8601String();
+    await prefs.setString(PrefKeys.voiceConsentGrantedAt, now);
+    await prefs.setString(PrefKeys.voiceConsentPolicyVersion,
+        PrefKeys.kVoiceConsentPolicyVersion);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -256,7 +313,8 @@ class _SpeakingConsentNoticeState extends State<SpeakingConsentNotice> {
   Widget _buildConsentButton() {
     return DqButton(
       label: '同意して はじめる  /  Agree & Start',
-      onTap: _agreed ? widget.onConsent : null,
+      // _grantConsent persists the audit record then fires widget.onConsent.
+      onTap: _agreed ? _grantConsent : null,
     );
   }
 

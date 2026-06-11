@@ -1084,10 +1084,10 @@ class _SettingsTab extends StatelessWidget {
         ),
         const SizedBox(height: 24),
 
-        // #67 — データ削除 / Account deletion (store-submission requirement).
+        // #65 / #67 — データ / Consent & account data panel.
         // Parent-gated: only reachable inside the parent dashboard (requires
         // parent login). A child on the child-facing settings screen cannot
-        // reach this. Double-confirmed with a destructive-action dialog.
+        // reach this.
         DqPanel(
           title: 'データ / Data',
           child: Column(
@@ -1097,6 +1097,57 @@ class _SettingsTab extends StatelessWidget {
                 'がくしゅうきろくと アカウントを けすことが できます。',
                 style: dqText(size: 12, w: FontWeight.w600, color: dqInk)
                     .copyWith(height: 1.7),
+              ),
+              const SizedBox(height: 10),
+
+              // ── #65 — 音声同意リセット / Voice-consent revoke ─────────────
+              // Clears the stored voice/biometric consent so the consent
+              // screen is shown again the next time speaking practice is
+              // accessed.  Cheaper than full data-deletion when a parent
+              // simply wants to update their consent decision.
+              GestureDetector(
+                onTap: () => _confirmRevokeVoiceConsent(context),
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16, vertical: 13),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF1A1A2E).withAlpha(220),
+                    borderRadius: BorderRadius.circular(8),
+                    border:
+                        Border.all(color: dqGoldDeep, width: 1.5),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.mic_off_outlined,
+                          color: dqGold, size: 22),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              // ふりがな: おんせい・どうい・りせっと
+                              'おんせい同意（どうい）をリセット',
+                              style: dqText(
+                                  size: 14,
+                                  w: FontWeight.w700,
+                                  color: dqInk),
+                            ),
+                            Text(
+                              'Reset voice consent — re-show the consent '
+                              'screen before the next speaking session.',
+                              style: dqText(
+                                  size: 10,
+                                  w: FontWeight.w500,
+                                  color: dqInk.withAlpha(160)),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
               const SizedBox(height: 10),
               GestureDetector(
@@ -1156,6 +1207,109 @@ class _SettingsTab extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  // #65 — Revoke voice / biometric consent (targeted, non-destructive).
+  //
+  // Removes only the two voice-consent SharedPreferences keys so the consent
+  // wall is shown again on the next speaking session.  Unlike full data
+  // deletion (#67) this does NOT wipe learning progress or the account.
+  Future<void> _revokeVoiceConsent() async {
+    final prefs = await PreferencesService.getInstance();
+    await prefs.remove(PrefKeys.voiceConsentGrantedAt);
+    await prefs.remove(PrefKeys.voiceConsentPolicyVersion);
+  }
+
+  void _confirmRevokeVoiceConsent(BuildContext context) {
+    showDialog<void>(
+      context: context,
+      builder: (ctx) => Dialog(
+        backgroundColor: Colors.transparent,
+        child: DqDialogBox(
+          speaker: 'おんせい同意（どうい）をリセット',
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'スピーキング練習（れんしゅう）の\n音声（おんせい）同意（どうい）をリセットします。',
+                style: dqText(size: 15, w: FontWeight.w800, color: dqGold),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'つぎに スピーキング練習（れんしゅう）を はじめるとき、\n'
+                'もう一度（いちど）同意（どうい）画面（がめん）が ひょうじされます。',
+                style: dqText(size: 13, w: FontWeight.w600, color: dqInk)
+                    .copyWith(height: 1.7),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                'The voice-recording consent will be cleared. '
+                'You will be asked to agree again before the next speaking session. '
+                'Learning progress is not affected.',
+                style: dqText(
+                        size: 11,
+                        w: FontWeight.w500,
+                        color: dqInk.withAlpha(160))
+                    .copyWith(height: 1.5),
+              ),
+              const SizedBox(height: 18),
+              Row(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => Navigator.of(ctx).pop(),
+                      child: Container(
+                        alignment: Alignment.center,
+                        padding:
+                            const EdgeInsets.symmetric(vertical: 13),
+                        decoration: BoxDecoration(
+                          color: dqBox.withAlpha(235),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: dqBorder, width: 1.5),
+                        ),
+                        child: Text(
+                          'キャンセル',
+                          style: dqText(
+                              size: 14, w: FontWeight.w700, color: dqInk),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () async {
+                        Navigator.of(ctx).pop();
+                        await _revokeVoiceConsent();
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        padding:
+                            const EdgeInsets.symmetric(vertical: 13),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF1A2B1A),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                              color: dqGold, width: 1.5),
+                        ),
+                        child: Text(
+                          'リセット',
+                          style: dqText(
+                              size: 14,
+                              w: FontWeight.w700,
+                              color: dqGold),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 

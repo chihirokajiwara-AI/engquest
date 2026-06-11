@@ -36,6 +36,56 @@ abstract class PrefKeys {
   // kept out of the by-ear 合格率 (honestly read, not heard).
   static const String listeningCaptions = 'listening_captions';
 
+  // ── Consent audit trail (#65, COPPA-2026) ────────────────────────────────
+  //
+  // COPPA-2026 (eff. 2026-04-22) treats child voice as biometric data and
+  // requires durable, documented parental consent with a policy-version anchor.
+  // Two consent surfaces are tracked:
+  //
+  //  (a) Voice / biometric consent — shown before every speaking session.
+  //      Stored as an ISO-8601 UTC timestamp + the policy version string that
+  //      was current when the parent agreed.  If either key is absent, or the
+  //      stored version does not match [kVoiceConsentPolicyVersion], the
+  //      consent screen is re-shown and fresh consent is collected.
+  //
+  //  (b) Parental gate consent — shown once at first-run before onboarding.
+  //      Same shape: timestamp + policy version.  Re-shown if the policy
+  //      version advances (e.g. a new set of terms ships).
+  //
+  // Revoke: both surfaces check for null / version mismatch on every entry.
+  // Calling PreferencesService.clear() (data-deletion, #67) naturally clears
+  // these keys too.  A targeted revoke (voice only) is exposed in the parent
+  // dashboard settings tab — it removes the two voice keys without wiping the
+  // entire profile.
+
+  /// Current voice/biometric consent policy identifier.
+  /// Bump this string whenever the privacy policy text covering voice
+  /// recording changes (e.g. new processor, new retention period).
+  static const String kVoiceConsentPolicyVersion = 'v1-2026-06';
+
+  /// Current parental-gate (app-wide) consent policy identifier.
+  /// Bump whenever ToS / Privacy Policy changes materially.
+  static const String kParentalConsentPolicyVersion = 'v1-2026-06';
+
+  // Voice / biometric consent keys.
+  /// ISO-8601 UTC timestamp of the moment the parent tapped 「同意して はじめる」.
+  /// Null → consent never given (or revoked).
+  static const String voiceConsentGrantedAt = 'voice_consent_granted_at';
+
+  /// Policy version in force when voice consent was collected.
+  /// If this does not equal [kVoiceConsentPolicyVersion], re-prompt.
+  static const String voiceConsentPolicyVersion = 'voice_consent_policy_version';
+
+  // Parental-gate consent keys.
+  /// ISO-8601 UTC timestamp of the moment the parent passed the math gate.
+  /// Null → consent never given (or cleared by data-deletion).
+  static const String parentalConsentGrantedAt = 'parental_consent_granted_at';
+
+  /// Policy version in force when parental consent was collected.
+  /// If this does not equal [kParentalConsentPolicyVersion], re-prompt.
+  static const String parentalConsentPolicyVersion =
+      'parental_consent_policy_version';
+
   // Legacy keys kept for backward-compat with OnboardingStorage
   static const String onboardingAge = 'onboarding_age';
   static const String onboardingCefr = 'onboarding_cefr';

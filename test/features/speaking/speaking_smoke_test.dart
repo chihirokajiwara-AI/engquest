@@ -6,7 +6,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:engquest/core/storage/preferences_service.dart';
 import 'package:engquest/features/speaking/speaking_consent_notice.dart';
 import 'package:engquest/features/speaking/speaking_screen.dart';
 import 'package:engquest/features/speaking/speaking_session.dart';
@@ -22,6 +24,14 @@ void main() {
   // ────────────────────────────────────────────────────────────────────────────
 
   group('SpeakingConsentNotice — smoke tests (R3)', () {
+    // Reset SharedPreferences and the PreferencesService singleton before each
+    // test so stored consent from other test files does not auto-skip the
+    // consent notice (#65: _checkStoredConsent fires in initState).
+    setUp(() {
+      SharedPreferences.setMockInitialValues({});
+      PreferencesService.resetInstance();
+    });
+    tearDown(() => PreferencesService.resetInstance());
     testWidgets('grade 3 — pumps without exception', (tester) async {
       await tester.pumpWidget(wrap(
         SpeakingConsentNotice(
