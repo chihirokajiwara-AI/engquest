@@ -255,7 +255,17 @@ class _SceneViewState extends State<SceneView> {
   /// One-time "case closed" payoff shown the moment the last ナゾ floods the
   /// scene back to colour (#115). A real beat — not just the silent saturation
   /// tween — so clearing a town feels earned and worth coming back to.
+  ///
+  /// When [widget.scene.cleared] is non-null, the authored story beat from
+  /// kQuestTowns is shown verbatim (G2). A generic fallback covers scenes
+  /// whose SceneDef has no authored cleared text.
   void _showSceneClearedPayoff() {
+    // Authored story beat sourced from kQuestTowns[n].cleared via SceneDef.
+    // Generic fallback for any scene that has no authored cleared text yet.
+    final storyBeat = widget.scene.cleared ??
+        'たんていメモ：さいしょの「こえの いし」を とりもどした。\n'
+            'スラ：「きみと いっしょなら、つぎの まちも きっと いける！」';
+
     showDialog<void>(
       context: context,
       barrierColor: Colors.black.withAlpha(160),
@@ -276,7 +286,7 @@ class _SceneViewState extends State<SceneView> {
               const Text('🎉', style: TextStyle(fontSize: 48)),
               const SizedBox(height: 8),
               Text(
-                'この むらに、ことばと いろが もどった！',
+                'この まちに、ことばと いろが もどった！',
                 textAlign: TextAlign.center,
                 style: dqText(size: 17, w: FontWeight.w800, color: dqGold),
               ),
@@ -289,10 +299,12 @@ class _SceneViewState extends State<SceneView> {
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(color: dqGoldDeep.withAlpha(120)),
                 ),
-                child: Text(
-                  'たんていメモ：さいしょの「こえの いし」を とりもどした。\n'
-                  'スラ：「きみと いっしょなら、つぎの まちも きっと いける！」',
-                  style: dqText(size: 13, color: dqInk).copyWith(height: 1.6),
+                child: SingleChildScrollView(
+                  child: Text(
+                    storyBeat,
+                    style:
+                        dqText(size: 13, color: dqInk).copyWith(height: 1.6),
+                  ),
                 ),
               ),
               const SizedBox(height: 16),
@@ -307,16 +319,30 @@ class _SceneViewState extends State<SceneView> {
     );
   }
 
+  /// Pop the scene, passing whether it was fully cleared so callers (map, home)
+  /// can advance the quest node without polling Firestore (G2).
+  void _popScene() {
+    Navigator.of(context).pop(_sceneRestored);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: dqNight0,
-      body: SafeArea(
-        child: Column(
-          children: [
-            _header(),
-            Expanded(child: _sceneStack()),
-          ],
+    return PopScope<bool>(
+      // Always allow the pop; we intercept only to attach the cleared payload.
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (didPop) return;
+        _popScene();
+      },
+      child: Scaffold(
+        backgroundColor: dqNight0,
+        body: SafeArea(
+          child: Column(
+            children: [
+              _header(),
+              Expanded(child: _sceneStack()),
+            ],
+          ),
         ),
       ),
     );
@@ -327,7 +353,7 @@ class _SceneViewState extends State<SceneView> {
         child: Row(
           children: [
             IconButton(
-              onPressed: () => Navigator.of(context).maybePop(),
+              onPressed: _popScene,
               icon: const Icon(Icons.arrow_back, color: dqInk),
             ),
             Expanded(

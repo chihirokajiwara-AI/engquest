@@ -201,15 +201,46 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
     await _loadData();
   }
 
-  void _goToScene() {
+  Future<void> _goToScene() async {
     final scene = sceneForGrade(_eikenLevel);
     if (scene != null) {
-      _pushThenRefresh(SceneView(scene: scene, eikenLevel: _eikenLevel));
+      // SceneView pops true when all NPCs are solved (G2: scene-clear → map
+      // advance). On clear, advance the shared quest_unlocked_index pref so
+      // QuestMapScreen shows the next node unlocked on the next visit.
+      final cleared = await Navigator.of(context).push<bool>(
+        MaterialPageRoute(
+          builder: (_) => SceneView(scene: scene, eikenLevel: _eikenLevel),
+        ),
+      );
+      if (!mounted) return;
+      if (cleared == true) {
+        try {
+          final prefs = await PreferencesService.getInstance();
+          final startIdx = _startingIndexForLevel(_eikenLevel);
+          final stored = prefs.getInt('quest_unlocked_index');
+          // Only advance if the next node is beyond the current high-water mark.
+          if (startIdx + 1 > stored) {
+            await prefs.setInt('quest_unlocked_index', startIdx + 1);
+          }
+        } catch (_) {
+          // Prefs unavailable — the map will just re-derive on next open.
+        }
+      }
+      // Always reload home state so streak/due-count/合格率 reflect the session.
+      await _loadData();
     } else {
       // Grades without a painted district yet — send to the map where the child
       // can pick their town. Further districts are shipping grade-by-grade.
       _goToQuestMap();
     }
+  }
+
+  /// Returns the quest town index for [level], mirroring [startingTownIndex]
+  /// from quest_data.dart without importing it into the home layer.
+  int _startingIndexForLevel(String level) {
+    const order = ['5', '4', '3', 'pre2', 'pre2plus', '2', 'pre1'];
+    final i = order.indexOf(level);
+    return i < 0 ? 0 : i;
   }
 
   /// Navigate to QuestMapScreen (secondary CTA / fallback).

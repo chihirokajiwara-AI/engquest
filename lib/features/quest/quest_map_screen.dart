@@ -82,14 +82,19 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
     // hardcode — 6 of 7 scenes were built but unreachable from the map.)
     final scene = sceneForGrade(town.eikenLevel);
     if (scene != null) {
-      await Navigator.of(context).push(
+      // SceneView pops true when all NPCs are solved (G2: scene-clear → map
+      // advance). Advance _unlocked only when the returned bool is true and the
+      // next index is beyond the current high-water mark.
+      final cleared = await Navigator.of(context).push<bool>(
         MaterialPageRoute(
           builder: (_) =>
               SceneView(scene: scene, eikenLevel: town.eikenLevel),
         ),
       );
-      // SceneView does not return a cleared bool yet; leave _unlocked unchanged
-      // until the scene-clear → map-advance wiring (G2) lands.
+      if (cleared == true && i + 1 > _unlocked) {
+        setState(() => _unlocked = i + 1);
+        _saveUnlocked(i + 1);
+      }
       return;
     }
     final cleared = await Navigator.of(context).push<bool>(

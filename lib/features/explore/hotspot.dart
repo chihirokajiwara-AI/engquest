@@ -129,17 +129,21 @@ class Hotspot {
 ///   May be empty; SceneView falls back to [backgroundAsset] as a single layer.
 /// [hotspots] — all tap-targets for this scene.
 /// [titleJa] — displayed in the scene header bar (JP town name).
+/// [cleared] — story payoff shown when the last ナゾ is solved (sourced from the
+///   matching [QuestTown.cleared] in kQuestTowns). Null → generic fallback text.
 class SceneDef {
   final String backgroundAsset;
   final List<String> parallaxLayers;
   final List<Hotspot> hotspots;
   final String titleJa;
+  final String? cleared;
 
   const SceneDef({
     required this.backgroundAsset,
     this.parallaxLayers = const [],
     required this.hotspots,
     required this.titleJa,
+    this.cleared,
   });
 }
 
@@ -188,6 +192,14 @@ final SceneDef kTown5Scene = SceneDef(
   // far/mid/near bands are a later generation pass.
   parallaxLayers: const [],
   titleJa: 'ことばを失（うしな）った村（むら）',
+  // Sourced from kQuestTowns[0].cleared (英検5級 — ことばを失った村).
+  cleared: '村（むら）に声（こえ）がもどった！ 最初（さいしょ）の〈声（こえ）の石（いし）〉が、あたたかく ひかる。\n'
+      'スラが「Hello！」と、はじめて言（い）えた。あおい 光（ひかり）が、スラの からだを つつんだ。\n'
+      '灰守（はいもり）セルが、きみの てに 小（ちい）さな しおりを おしつけた。'
+      '「これは…むかし、やさしい ひとが かいた おはなしの さいしょの 1ページ。'
+      '〈サイレント〉は、ずっと まえは やさしい ひとだった。'
+      'しずけさは、そとから きたんじゃない。まんなかから、あるいて きたんだよ。」\n'
+      'しおりには、ほんの すこしだけ、ことばが のこっていた――「Once, I」',
   hotspots: [
     // ── NPC 1: 灰守（はいもり）セル — the Ember-Keeper / first phonics step ──
     // Encounter index 0 from kQuestTowns[0].encounters (TeachSound /s/).
@@ -275,6 +287,11 @@ final SceneDef kTown4Scene = SceneDef(
   backgroundAsset: 'assets/art/scenes_layton/town4_harbor.webp',
   parallaxLayers: const [],
   titleJa: '風（かぜ）の街（まち）',
+  // Sourced from kQuestTowns[1].cleared (英検4級 — 風の街).
+  cleared: 'トックの時計（とけい）が、コチコチと動（うご）き出（だ）した――'
+      '「きのう、ありがとう。あした、また会（あ）おう」。\n'
+      '街（まち）に毎日（まいにち）のおしゃべりがもどった。二（ふた）つ目（め）の〈声（こえ）の石（いし）〉を手（て）に。'
+      '「サイレントは、しずけさを"へいわ"だと思（おも）っているらしい」とスラがつぶやく。',
   hotspots: [
     // ── NPC 1: りょうし — 川（かわ）べりの漁師（りょうし） / to不定詞 ──────────
     // Encounter index 9: 「Did you come here ___ fish?」(to catch).
@@ -356,6 +373,12 @@ final SceneDef kTown3Scene = SceneDef(
   backgroundAsset: 'assets/art/scenes_layton/town3_academy.webp',
   parallaxLayers: const [],
   titleJa: '学（まな）びの都（みやこ）',
+  // Sourced from kQuestTowns[2].cleared (英検3級 — 学びの都).
+  cleared: '封（ふう）じられた日記（にっき）の、最後（さいご）の一行（いちぎょう）がひらいた。'
+      '書庫番（しょこばん）ミネが しずかに読（よ）み上（あ）げる――'
+      '「わたしは、しずけさを まもっていた つもりだった」。\n'
+      '三（みっ）つ目（め）の〈声（こえ）の石（いし）〉を手（て）に。'
+      '人々（ひとびと）が、また自分（じぶん）の物語（ものがたり）を語（かた）り出（だ）した。',
   hotspots: [
     // ── NPC 1: としょかんいん — 言葉（ことば）を まもる 司書 / 現在完了 for ──────
     // Encounter index 3: 「I have worked in this library ___ ten years…」(for).
@@ -431,6 +454,15 @@ final SceneDef kTownPre2Scene = SceneDef(
   backgroundAsset: 'assets/art/scenes_layton/town_pre2_port.webp',
   parallaxLayers: const [],
   titleJa: '社会（しゃかい）の港町（みなとまち）',
+  // Sourced from kQuestTowns[3].cleared (英検準2級 — 社会の港町).
+  cleared: '港（みなと）の案内人（あんないにん）ナギが、はじめて自分（じぶん）の言葉（ことば）で言（い）った――'
+      '「わたしは、ちがうと思（おも）う」。\n'
+      '港町（みなとまち）の人々（ひとびと）も、また「自分（じぶん）はこう思（おも）う」と言（い）えるようになった。四（よっ）つ目（め）の〈声（こえ）の石（いし）〉。'
+      'クワイエは、ことばが二人（ふたり）を仲直（なかなお）りさせるのを見（み）て、ちいさくふるえた――'
+      '「…ことばで、きずを なおせるの…？」 そっと、きみのあとを ついてくる。\n'
+      'スラが しずかに つぶやいた――「サイレントも、むかし ことばで だれかを '
+      'きずつけて しまって、もう だれも きずつけたくなくて、だまる ことを '
+      'えらんだのかな…」。〈サイレント〉の なぞが、また ひとつ ふかくなった。',
   hotspots: [
     // ── NPC 1: しょうにん — 波止場（はとば）の商人 / 受動態 ───────────────────
     // Encounter index 2: 「Do you know where they are grown?」(passive voice).
@@ -503,6 +535,11 @@ final SceneDef kTownPre2PlusScene = SceneDef(
   backgroundAsset: 'assets/art/scenes_layton/town_pre2plus_bridge.webp',
   parallaxLayers: const [],
   titleJa: '試練（しれん）の橋（はし）',
+  // Sourced from kQuestTowns[4].cleared (英検準2級プラス — 試練の橋).
+  cleared: '橋守（はしもり）ロウは、灯（あか）りを掲（かか）げたまま動（うご）かない――けれど、'
+      '向（む）こう岸（ぎし）の声（こえ）が、たしかに届（とど）いた。「…ことばは、無事（ぶじ）に渡（わた）れるのか。知（し）らなかった」。\n'
+      '橋（はし）の向（む）こうに、城（しろ）の灯（あか）りが見（み）えた。五（いつ）つ目（め）の〈声（こえ）の石（いし）〉を手（て）に。'
+      '橋守（はしもり）ロウが、はじめて灯（あか）りを下（お）ろして言（い）う――「のこる石（いし）はあと一（ひと）つ。さいごの ひろばに、しずけさ〈サイレント〉が いる」。',
   hotspots: [
     // はしの番人 — 現在完了 (idx 0): "I ___ on this bridge since 2025."
     Hotspot.npc(
@@ -556,6 +593,17 @@ final SceneDef kTown2Scene = SceneDef(
   backgroundAsset: 'assets/art/scenes_layton/town_2_castle.webp',
   parallaxLayers: const [],
   titleJa: '学者（がくしゃ）の城下町（じょうかまち）',
+  // Sourced from kQuestTowns[5].cleared (英検2級 — 学者の城下町).
+  cleared: '学士（がくし）オーレンは、静（しず）かに門（もん）をひらいた――'
+      '「私（わたし）は まちがっていた。沈黙（ちんもく）は、安全（あんぜん）などではなかった」。\n'
+      '六（むっ）つ目（め）――最後（さいご）の〈声（こえ）の石（いし）〉がそろった！ むねの石（いし）と合（あ）わせ、〈ことばの紋章（もんしょう）〉が かんせいする。'
+      'それは、きみが すべての こえを かえしてきた、たしかな あかし。\n'
+      'そのとき、ひろばの すみで ちいさな こえがした――クワイエの おとうとが、ずっと さがしていたのだ。'
+      'クワイエは、きみが おしえてくれた ことばで、はじめて じぶんから あやまった――'
+      '「あのとき、ひどいこと いって ごめん。…また、きみと はなしたい」。'
+      'おとうとは ないて うなずき、クワイエの フードが するりと おちた。'
+      '「ことばは、きずつけるだけじゃ なかったんだね。さいごまで、きみと いくよ」。クワイエが、なかまに なった。\n'
+      'さいごの ひろばへの みちが、ひとりでに ひらいた。',
   hotspots: [
     // せんせい — academic-register response (idx 0)
     Hotspot.npc(
@@ -621,6 +669,9 @@ final SceneDef kTownPre1Scene = SceneDef(
   backgroundAsset: 'assets/art/scenes_layton/town_pre1_grey_square.webp',
   parallaxLayers: const [],
   titleJa: '灰色（はいいろ）の ひろば',
+  // Sourced from kQuestTowns[6].cleared (英検準1級 — 灰色のひろば).
+  cleared: 'あなたの言葉（ことば）が、アイラの胸（むね）に そっと とどいた。なくしていた「声（こえ）」が、アイラに もどってくる。'
+      '灰色（はいいろ）の ひろばに 色（いろ）が あふれ、その色（いろ）は はしを わたり、すべての まちへ ながれていく。だれも やっつけなかった。ただ、アイラは もう ひとりじゃない。あなたは 世界（せかい）に ──そして アイラに── ことばの かえしかたを、おもいださせたんだ。',
   hotspots: [
     // 門の守り手 — advanced collocation make a decision (idx 0)
     Hotspot.npc(
