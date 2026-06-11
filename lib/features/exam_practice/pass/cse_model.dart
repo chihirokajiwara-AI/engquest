@@ -110,7 +110,11 @@ class CseEstimate {
   final double passTargetRaw;
 
   /// The skill with the lowest raw accuracy (the bottleneck the UI highlights).
-  /// null when no skills have data.
+  /// Unmeasured skills score 0, so they ARE eligible to be the limiting skill;
+  /// the UI surfaces such a pick as 未測定 (a neutral "practice this", not a
+  /// measured weakness — see pass_meter_screen). Non-null for any valid grade
+  /// (every spec has ≥1 skill); null only when [CseEstimator.estimate] itself
+  /// returns null for an unknown grade.
   final EikenSkill? limitingSkill;
 
   /// Applicable skills the learner has NO data for (itemsAttempted == 0). These
