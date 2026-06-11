@@ -52,6 +52,7 @@ class _SpeakingConsentNoticeState extends State<SpeakingConsentNotice> {
   @override
   Widget build(BuildContext context) {
     return DqScene(
+      contentMaxWidth: 600, // #144: centre on tablet, full-width on phone
       child: Column(
         children: [
           _buildHeader(context),

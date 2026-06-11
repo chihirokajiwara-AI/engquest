@@ -931,6 +931,7 @@ class _WritingPracticeScreenState extends State<WritingPracticeScreen> {
       );
     }
     return DqScene(
+      contentMaxWidth: 600, // #144: centre on tablet, full-width on phone
       child: Column(
         children: [
           // Header

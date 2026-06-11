@@ -108,6 +108,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     // state it reads OFF (because everything is NOT muted).
     final allMuted = !_sfxOn && !_voiceOn;
     return DqScene(
+      contentMaxWidth: 600, // #144: centre on tablet, full-width on phone
       child: SafeArea(
         child: Column(
           children: [
