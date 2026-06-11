@@ -641,7 +641,8 @@ const List<QuestTown> kQuestTowns = [
         npcLineJa: 'あなた「は」旅人（たびびと）ですね。 ___ に入（はい）るのは？',
         choices: ['am', 'are', 'is', 'be'],
         correctIndex: 1,
-        onCorrect: 'Yes — you ARE a traveller. Pass through, friend.',
+        onCorrect: 'Yes — you ARE a traveller. Pass through, friend.'
+            '\n探偵（たんてい）メモ：サイレントが この村（むら）に きた夜（よる）、まんなかの ほうから かすかな 声（こえ）が した。「I…」と。だれの こえか、だれも しらない。',
       ),
       // 5 — be動詞 3人称 + 代名詞 he/she. (大問1 文法型)
       QuestEncounter(
@@ -923,7 +924,8 @@ const List<QuestTown> kQuestTowns = [
         ],
         correctIndex: 2,
         onCorrect:
-            "You went to the zoo! Lucky you. I stayed home and the wind took my words away...",
+            "You went to the zoo! Lucky you. I stayed home and the wind took my words away..."
+            "\n探偵メモ：トックがいってた。サイレントが とおった日（ひ）、かれの時計（とけい）が ぴたりと とまった。あの とき、どこからか こえが もれた――「once, I used to…」と。むかし なにかを して いた ひとが いる。",
       ),
       // 4 — 過去疑問 Did + 動詞の原形（応答の整合）。(大問2 会話応答型)
       QuestEncounter(
@@ -1177,7 +1179,8 @@ const List<QuestTown> kQuestTowns = [
         ],
         correctIndex: 1,
         onCorrect:
-            "An inn by the gate — got it! This is the City of Learning. People here tell their stories... but the stories are fading.",
+            "An inn by the gate — got it! This is the City of Learning. People here tell their stories... but the stories are fading."
+            "\n探偵メモ：ミネ司書（ししょ）に きいた。むかし だれかが、きこえた ことば を ぜんぶ 書（か）き留（と）めた 日記（にっき）が ある って。声（こえ）を うしなう まえから ――そのひとは ことばを だいじに して いた。",
       ),
       // 2 — 現在完了〈経験〉ever。(大問1 文法型)
       QuestEncounter(
@@ -1564,7 +1567,8 @@ const List<QuestTown> kQuestTowns = [
         ],
         correctIndex: 0,
         onCorrect:
-            "Beautifully said. My light and your words guide the lost the same way.",
+            "Beautifully said. My light and your words guide the lost the same way."
+            "\n探偵メモ：この港（みなと）の古老（ころう）が いった。むかし ふたりが ことばで きずつけ合（あ）った あの夜（よる）から、サイレントは ことばを はなすのを やめた、と。ことばは きずを うむ ―― そう 信（しん）じた ひとが いる。",
       ),
       // 6 — 大問2A 会話文空所補充: indirect question word order
       QuestEncounter(
@@ -1841,7 +1845,8 @@ const List<QuestTown> kQuestTowns = [
         choices: ["which", "who", "where", "what"],
         correctIndex: 2,
         onCorrect:
-            "\"The place WHERE...\" — you chose the relative adverb, not the pronoun. Few get that right. Cross on.",
+            "\"The place WHERE...\" — you chose the relative adverb, not the pronoun. Few get that right. Cross on."
+            "\n探偵メモ：橋守（はしもり）ロウが こっそり 話（はな）して くれた。むかし だれかが こう 信（しん）じた ―― だれも しゃべらなければ、だれも きずつかない、と。その ひとは こえを のんで、まんなかの ひろばへ むかった。",
       ),
       // 3 — 使役動詞 make + 原形不定詞. (大問1 文法型)
       QuestEncounter(
@@ -2188,7 +2193,8 @@ const List<QuestTown> kQuestTowns = [
         choices: ["which", "who", "whose", "whom"],
         correctIndex: 1,
         onCorrect:
-            "Correct — 'who', a subject relative pronoun for a person. You'd enjoy that lecture.",
+            "Correct — 'who', a subject relative pronoun for a person. You'd enjoy that lecture."
+            "\n探偵メモ：この城（しろ）の学者（がくしゃ）たちも かつて 沈黙（ちんもく）を えらんだ。「黙（だま）っていれば、安全（あんぜん）だ」と。そして ことばを のみこませた ―― 名前（なまえ）ごと、声（こえ）ごと。「だれか」は その まんなかで、いちばん ながく だまって いる。",
       ),
       // 5 — 前置詞 + 関係代名詞 (in which). (大問1 文法空所型 — 高度関係詞)
       QuestEncounter(
