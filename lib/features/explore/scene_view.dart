@@ -446,7 +446,9 @@ class _SceneViewState extends State<SceneView> {
                     begin: _kMutedSaturation,
                     end: _sceneRestored ? 1.0 : _kMutedSaturation,
                   ),
-                  duration: prefersReducedMotion(context) ? Duration.zero : const Duration(milliseconds: 2000),
+                  duration: prefersReducedMotion(context)
+                      ? Duration.zero
+                      : const Duration(milliseconds: 2000),
                   curve: Curves.easeInOut,
                   builder: (context, sat, _) => ColorFiltered(
                     colorFilter: ColorFilter.matrix(saturationMatrix(sat)),
@@ -665,7 +667,9 @@ class _SceneViewState extends State<SceneView> {
   Widget _coinTarget(double size) {
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0.8, end: 1.0),
-      duration: prefersReducedMotion(context) ? Duration.zero : const Duration(milliseconds: 900),
+      duration: prefersReducedMotion(context)
+          ? Duration.zero
+          : const Duration(milliseconds: 900),
       curve: Curves.easeInOut,
       builder: (_, t, __) => Transform.scale(
         scale: t,
@@ -727,7 +731,9 @@ class _SceneViewState extends State<SceneView> {
 
     // Grey→color cross-fade on solve
     return AnimatedCrossFade(
-      duration: prefersReducedMotion(context) ? Duration.zero : const Duration(milliseconds: 600),
+      duration: prefersReducedMotion(context)
+          ? Duration.zero
+          : const Duration(milliseconds: 600),
       crossFadeState:
           solved ? CrossFadeState.showSecond : CrossFadeState.showFirst,
       firstChild: _npcPortraitImage(grey ?? '', size),
