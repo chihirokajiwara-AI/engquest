@@ -1,12 +1,13 @@
 // lib/features/quest/prologue_screen.dart
 // A-KEN Quest — the opening PROLOGUE (『ことばを失った世界』).
 //
-// Six tap-through panels that establish the world WITHOUT the old "you are
-// secretly a prince" trope (see docs/design/OPENING-NARRATIVE-BIBLE.md): a quiet
-// called サイレント drained the world's words and colour; きみ is special only
-// because きみ can still HEAR the sounds and VOICE them — the exact skill the
-// child is learning. Panel 5 is INTERACTIVE: the child taps 🔊 and blends c·a·t
-// into "cat" and wins — a guaranteed win, so the no-scold contract is FELT.
+// Full-bleed cinematic opening — 5 kishōtenketsu (起承転結) beats with ONE
+// protagonist, ランプ the lampkeeper (diverse-team redesign, CEO 1372/1375; the
+// 英検5級 phonics story, CEO 1385): 起 his lamp won't catch ("す…") → 承 his memory
+// blooms the grey square to colour → 転 the サイレント drains it back, but きみ can
+// still hear → the BLEND beat: the child taps 🔊, joins c·a·t, and the lampkeeper
+// is restored grey→colour → 結 his lamp lights, "…ありがとう", a quiet road ahead.
+// The blend is a guaranteed win (no-scold). The win is restoration, not conquest.
 //
 // Plays once-ever (the caller persists that); skippable from panel 1. Built to
 // stand WITHOUT the not-yet-recorded phoneme audio: the one real audio moment is
@@ -30,33 +31,37 @@ class _Panel {
       {this.audio, this.interactive = false, this.isLast = false});
 }
 
+// The opening as 5 kishōtenketsu (起承転結) beats — one protagonist: ランプ the
+// lampkeeper. The child rescues ONE man's voice, not "the world" (diverse-team
+// redesign, CEO 1372/1375; scoped to the 英検5級 phonics story, CEO 1385).
 const _panels = <_Panel>[
+  // 起 — one mute man, reaching for a lamp that won't catch
   _Panel(
-    '（くらやみ。ちいさな おとだけが きこえる）\ns … a … t …',
-    'In the dark, only small sounds remain. s... a... t...',
+    'ランプばんの ランプが、\nつかない。\n「す…」',
+    "The lamplighter's lamp won't catch. \"s…\"",
     audio: 'audio/phonics/phoneme_s.mp3',
   ),
+  // 承 — his memory: the square once overflowed with colour
   _Panel(
-    'むかし、この くに〈ソネア〉では、\nこえに だした ことばが、\nそのまま「いろ」に なった。',
-    'Long ago, in Sonea, a spoken word turned into colour.',
+    'むかし、この ひろばは\nいろで あふれてた。',
+    'Once, this square overflowed with colour.',
   ),
+  // 転 — the Silence eats it back, but きみ can still hear
   _Panel(
-    'でも、あるひから ──\n「しずけさ」が、ひろがりはじめた。\nことばが きえると、\nいろも、こえも、しずかに なる。',
-    'But one day, the Silence began to spread. When a word is forgotten, its colour and its voice grow quiet too.',
+    'でも、サイレントが\nことばを たべてしまう。\nきみの こえは、まだ きこえる。',
+    'But the Silence eats the words. Your voice can still be heard.',
   ),
+  // the turn, made playable — tap to join the sounds and give him a voice
   _Panel(
-    '……けれど、きみは ちがった。\nきみには、まだ おとが きこえる。\nそして、まだ こえに だせる。',
-    "...but you are different. You can still hear the sounds. And you can still say them.",
-  ),
-  _Panel(
-    '🔊を おして、おとを きいて、まねしてみよう。\nおとを つなげば、ことばが よみがえる。',
-    'Tap 🔊, hear a sound, and try it. Join the sounds, and a word comes back to life.',
+    'タップして、\nおとを つなげてみよう。',
+    'Tap, and join the sounds.',
     audio: 'audio/phonics/blend_cat.mp3',
     interactive: true,
   ),
+  // 結 — his lamp catches, his thanks, a quiet road ahead
   _Panel(
-    'これは、たたかいの たびじゃない。\nきえた ことばを、ひとつずつ かえしていく たび。\nきみの こえで、せかいに ことばを かえそう。',
-    'This is not a journey of battle. It is a journey to give the lost words back, one by one. With your voice, give the world its words back.',
+    'ランプに、ひが ともった。\n「…ありがとう。」\nさあ、ことばを とりもどしに いこう。',
+    'The lamp is lit. "…thank you." Let\'s go and bring the words back.',
     isLast: true,
   ),
 ];
@@ -142,12 +147,14 @@ class _PrologueScreenState extends State<PrologueScreen> {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          // 0 — full-bleed background (the grey square for scene beats; dark else)
+          // 0 — full-bleed background (the canonical grey square, every beat)
           AnimatedSwitcher(
             duration: const Duration(milliseconds: 450),
             child:
                 KeyedSubtree(key: ValueKey('bg$_index'), child: _background()),
           ),
+          // 0b — ランプ the lampkeeper, the one face the child rescues
+          _lampkeeper(),
           // 1 — bottom scrim so captions stay legible over the art
           const IgnorePointer(
             child: DecoratedBox(
@@ -239,33 +246,39 @@ class _PrologueScreenState extends State<PrologueScreen> {
     );
   }
 
-  /// Full-bleed background. Scene beats (1,2) = the canonical 灰色のひろば under the
-  /// saturation filter + a slow Ken Burns push-in; other beats = a dark gradient
-  /// (their foreground element carries the moment). Reduced-motion jumps to end.
-  Widget _background() {
-    final isScene = _index == 1 || _index == 2;
-    if (!isScene) {
-      return const DecoratedBox(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFF0A0E24), Color(0xFF05060F)],
-          ),
-        ),
-      );
+  static const _squareAsset =
+      'assets/art/scenes_layton/town_pre1_grey_square.webp';
+
+  /// Target colour saturation for the current beat (0 = grey/silenced, 1 = full
+  /// colour): 起 grey → 承 his memory blooms → 転 the Silence drains it → blend
+  /// grey until the child restores it → 結 restored.
+  double get _beatSaturation {
+    switch (_index) {
+      case 1: // 承 — memory blooms
+        return 1.0;
+      case 3: // the blend — colour returns only when the child completes it
+        return _blendDone ? 1.0 : 0.0;
+      case 4: // 結 — restored
+        return 1.0;
+      default: // 起 (0), 転 (2) — grey
+        return 0.0;
     }
-    const asset = 'assets/art/scenes_layton/town_pre1_grey_square.webp';
-    final drain =
-        _index == 2; // panel 2 = colour drains; panel 1 = colour blooms
-    final from = drain ? 1.0 : 0.0;
-    final to = drain ? 0.0 : 1.0;
+  }
+
+  /// Whether ランプ is restored to colour (after the blend, and at 結).
+  bool get _lampRestored => _index == 4 || (_index == 3 && _blendDone);
+
+  /// Full-bleed background: the canonical 灰色のひろば across every beat, under an
+  /// animated saturation filter + a slow Ken Burns push-in. Reduced-motion jumps
+  /// to the end state.
+  Widget _background() {
+    final to = _beatSaturation;
     Widget plate(double sat, double scale) => ClipRect(
           child: Transform.scale(
             scale: scale,
             child: ColorFiltered(
               colorFilter: ColorFilter.matrix(_saturationMatrix(sat)),
-              child: Image.asset(asset,
+              child: Image.asset(_squareAsset,
                   fit: BoxFit.cover,
                   width: double.infinity,
                   height: double.infinity),
@@ -274,11 +287,39 @@ class _PrologueScreenState extends State<PrologueScreen> {
         );
     if (prefersReducedMotion(context)) return plate(to, 1.06);
     return TweenAnimationBuilder<double>(
-      key: ValueKey('bgtween$_index'),
+      // Re-keyed on beat AND blend state so the tween re-runs to the new target.
+      key: ValueKey('bg$_index$_blendDone'),
       tween: Tween<double>(begin: 0.0, end: 1.0),
-      duration: const Duration(milliseconds: 2600),
+      duration: const Duration(milliseconds: 2400),
       curve: Curves.easeInOut,
-      builder: (_, t, __) => plate(from + (to - from) * t, 1.04 + 0.06 * t),
+      builder: (_, t, __) => plate(to * t, 1.04 + 0.06 * t),
+    );
+  }
+
+  /// ランプ — the lampkeeper, composited over the square: a grey (silenced) and a
+  /// colour (restored) sprite cross-fading on restoration. He is the one face the
+  /// child rescues. Reused npc_lampkeeper art (no new asset).
+  Widget _lampkeeper() {
+    return IgnorePointer(
+      child: Align(
+        alignment: const Alignment(0, 0.34),
+        child: FractionallySizedBox(
+          widthFactor: 0.52,
+          child: AspectRatio(
+            aspectRatio: 0.8,
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 900),
+              child: Image.asset(
+                _lampRestored
+                    ? 'assets/art/scenes_layton/npc_lampkeeper_color.webp'
+                    : 'assets/art/scenes_layton/npc_lampkeeper_grey.webp',
+                key: ValueKey(_lampRestored),
+                fit: BoxFit.contain,
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -292,51 +333,24 @@ class _PrologueScreenState extends State<PrologueScreen> {
         label: _p.isLast ? '▶ はじめる / Begin' : '▶ つぎへ', onTap: _next);
   }
 
-  // ── Foreground element over the full-bleed background. Scene beats (1,2) put
-  //    the painted square in the background, so they have no foreground element.
+  // ── Foreground element over the full-bleed background. Only the blend beat has
+  //    one (the c·a·t card the child taps); every other beat lets the grey square
+  //    + the lampkeeper carry the moment.
   Widget _foregroundElement() {
     if (_p.interactive) {
       return BlendWordCard(
         letters: const ['c', 'a', 't'],
         word: 'cat',
-        npcName: 'きみ',
-        npcEmoji: '🧭',
-        npcImage: 'assets/art/masters/hero.png',
+        npcName: 'ランプ',
+        npcEmoji: '🪔',
+        npcImage: 'assets/art/scenes_layton/npc_lampkeeper_grey.webp',
         activeLetter: _activeLetter,
         onReplay: _playBlend,
       );
     }
-    switch (_index) {
-      case 0:
-        return _glyphRow(['s', 'a', 't'], const Color(0xFFEDE3C8));
-      case 1:
-      case 2:
-        return const SizedBox
-            .shrink(); // the square is the full-bleed background
-      case 3:
-        return _heroSpark();
-      default: // last
-        return _mapHint();
-    }
+    return const SizedBox.shrink();
   }
 
-  Widget _glyphRow(List<String> letters, Color color) => Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          for (final l in letters)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Text(l,
-                  style: TextStyle(
-                      color: color,
-                      fontSize: 64,
-                      fontWeight: FontWeight.w300,
-                      letterSpacing: 2)),
-            ),
-        ],
-      );
-
-  /// A real painted ソネア scene whose COLOUR animates in or out — the bible's
   /// 5x4 colour matrix that scales saturation: [s]=1 → identity (full colour),
   /// [s]=0 → fully desaturated (luminance grey). Rec.709 luma weights.
   List<double> _saturationMatrix(double s) {
@@ -349,64 +363,4 @@ class _PrologueScreenState extends State<PrologueScreen> {
       0, 0, 0, 1, 0,
     ];
   }
-
-  /// きみ as the last surviving spark of voice.
-  Widget _heroSpark() => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                    color: dqGold.withAlpha(120),
-                    blurRadius: 34,
-                    spreadRadius: 4)
-              ],
-            ),
-            child: DqPortrait(
-                imageAsset: 'assets/art/masters/hero.png',
-                emoji: '🧭',
-                size: 96),
-          ),
-          const SizedBox(height: 12),
-          Text('きみ', style: dqText(size: 13, color: dqGold)),
-        ],
-      );
-
-  /// A hint of the road ahead — the first 声の石 lighting.
-  Widget _mapHint() => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Text('✦', style: TextStyle(color: dqGold, fontSize: 60)),
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              for (var i = 0; i < 7; i++)
-                Container(
-                  width: 12,
-                  height: 12,
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: i == 0 ? dqGold : dqBox,
-                    border: Border.all(
-                        color: i == 0 ? dqGold : dqGoldDeep.withAlpha(120),
-                        width: 2),
-                    boxShadow: i == 0
-                        ? [
-                            BoxShadow(
-                                color: dqGold.withAlpha(150), blurRadius: 14)
-                          ]
-                        : null,
-                  ),
-                ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Text('ことばを 失（うしな）った 村（むら）へ', style: dqText(size: 12, color: dqInk)),
-        ],
-      );
 }
