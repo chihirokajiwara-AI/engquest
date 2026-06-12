@@ -264,31 +264,46 @@ class _PrologueScreenState extends State<PrologueScreen> {
   Widget _sceneStage(String asset, {required bool drain}) {
     final from = drain ? 1.0 : 0.0;
     final to = drain ? 0.0 : 1.0;
-    Widget frame(double s) => Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: dqGoldDeep.withAlpha(140), width: 1.5),
-            boxShadow: const [BoxShadow(color: Colors.black54, blurRadius: 18)],
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(13),
-            child: SizedBox(
-              width: 300,
-              height: 184,
-              child: ColorFiltered(
-                colorFilter: ColorFilter.matrix(_saturationMatrix(s)),
-                child: Image.asset(asset, fit: BoxFit.cover),
+    return LayoutBuilder(
+      builder: (context, c) {
+        // Fill the panel as a DOMINANT hero image (the scene is the moment), not
+        // a small card marooned in dead space (super-strict re-audit, CEO 1366).
+        final maxW = c.maxWidth.isFinite ? c.maxWidth : 360.0;
+        final maxH = c.maxHeight.isFinite ? c.maxHeight : 360.0;
+        var w = maxW;
+        var h = w * 0.72; // tall, cinematic presence
+        if (h > maxH) {
+          h = maxH;
+          w = h / 0.72;
+        }
+        Widget frame(double s) => Container(
+              width: w,
+              height: h,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: dqGoldDeep.withAlpha(150), width: 2),
+                boxShadow: const [
+                  BoxShadow(
+                      color: Colors.black87, blurRadius: 28, spreadRadius: 2)
+                ],
               ),
-            ),
-          ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(14),
+                child: ColorFiltered(
+                  colorFilter: ColorFilter.matrix(_saturationMatrix(s)),
+                  child: Image.asset(asset, fit: BoxFit.cover),
+                ),
+              ),
+            );
+        if (prefersReducedMotion(context)) return frame(to);
+        return TweenAnimationBuilder<double>(
+          key: ValueKey('scenesat-$_index'),
+          tween: Tween<double>(begin: from, end: to),
+          duration: const Duration(milliseconds: 2200),
+          curve: Curves.easeInOut,
+          builder: (_, s, __) => frame(s),
         );
-    if (prefersReducedMotion(context)) return frame(to);
-    return TweenAnimationBuilder<double>(
-      key: ValueKey('scenesat-$_index'),
-      tween: Tween<double>(begin: from, end: to),
-      duration: const Duration(milliseconds: 2200),
-      curve: Curves.easeInOut,
-      builder: (_, s, __) => frame(s),
+      },
     );
   }
 
