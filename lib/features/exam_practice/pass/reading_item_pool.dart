@@ -401,6 +401,30 @@ const Map<String, String> _kReadingExplanations = {
       '正解は enhance「高める」。二言語を学ぶことが認知の柔軟性を「高める」という流れに合います。reduce（減らす）や prevent（防ぐ）では好ましい内容と矛盾します。',
   'p1_r_019':
       '本文に reduce the distance food must travel「食料が運ばれる距離を減らせる」とあります。これが都市農業の利点。idx1（食料の移動距離を縮める）が正解です。',
+  'p1_r_020':
+      '本文に the duration of the waggle signals how far away the food lies「ダンスの長さが食料までの距離を示す」とあります。よって idx0（食料までの距離）が正解です。',
+  'p1_r_021':
+      '本文で全員が同じ井戸の水をくんでいたとわかり、ポンプを外すと流行が収まりました。水が原因という証拠です。idx0（汚れた水が運んだ）が正解です。',
+  'p1_r_022':
+      '本文の最後に strike a careful balance between flexibility and connection「柔軟さとつながりの均衡を取る」とあります。idx0（柔軟さと人のつながりの両立）が正解です。',
+  'p1_r_023':
+      '本文に corals expel the algae … and may eventually starve「藻を失い、やがて飢える」とあります。藻が食料の大半を供給するためです。idx0 が正解です。',
+  'p1_r_024':
+      '本文に compare it against a placebo to be sure that any benefit comes from the drug itself「効果が薬そのものから来ると確かめるため」とあります。idx0 が正解です。',
+  'p1_r_025':
+      '本文の最後に combine several of these cues rather than depending on any single one「複数の手がかりを組み合わせる」とあります。idx0 が正解です。',
+  'p1_r_026':
+      '正解は mitigate「やわらげる」。水路で洪水の被害をやわらげる、という文意に合います。aggravate（悪化させる）は逆の意味なので注意しましょう。',
+  'p1_r_027':
+      '正解は plausible「もっともらしい」。「一見もっともらしいが後で誤りとわかった」という流れに合います。ambiguous（あいまいな）や arbitrary（勝手な）では合いません。',
+  'p1_r_028':
+      '正解は scrutinize「細かく調べる」。報告書の一行ごとを精査する、という意味です。反対の disregard（無視する）や summarize（要約する）では合いません。',
+  'p1_r_029':
+      '正解は resilience「回復力」。けがから素早く立ち直る力を表します。reluctance（気が進まないこと）や negligence（怠慢）では文意に合いません。',
+  'p1_r_030':
+      '正解は deteriorate「悪化する」。治療にもかかわらず容体が悪化したので医師が心配した、という流れです。反対の flourish（栄える）では合いません。',
+  'p1_r_031':
+      '正解は comprehensive「包括的な」。あらゆる論点を詳しく検討した報道を表します。反対の superficial（うわべだけの）では後半と矛盾します。',
 };
 
 const Map<String, List<ReadingMockItem>> _kReadingPool = {
@@ -2100,6 +2124,187 @@ const _pre1Reading = [
       'It increases city traffic.',
     ],
     correctIdx: 1,
+  ),
+  // ── 長文 + 上級語い空所 — studio-expanded to official 31 target
+  //    (2026-06-12, content-qa, §VII-verified) ──
+  ReadingMockItem(
+    id: 'p1_r_020',
+    sectionId: 'p1_r3',
+    passageText:
+        'Honeybees communicate the location of food through a behavior known as '
+        'the waggle dance. By moving in a figure-eight pattern and vibrating '
+        'their bodies, a foraging bee tells the rest of the hive both the '
+        'direction and the distance of a flower patch. The angle of the dance '
+        'relative to the vertical indicates the direction relative to the sun, '
+        'while the duration of the waggle signals how far away the food lies.',
+    questionText: 'What does the duration of the waggle dance indicate?',
+    choices: [
+      'How far away the food source is',
+      'The exact species of the flower',
+      'The number of bees in the hive',
+      'The temperature outside the hive',
+    ],
+    correctIdx: 0,
+  ),
+  ReadingMockItem(
+    id: 'p1_r_021',
+    sectionId: 'p1_r3',
+    passageText:
+        'In the nineteenth century, many cities suffered repeated outbreaks of '
+        'cholera. People widely believed the disease spread through foul air. '
+        'A physician named John Snow doubted this idea. By mapping the homes of '
+        'the victims, he discovered that nearly all of them had drawn water '
+        'from a single public pump. When officials removed the pump handle, the '
+        'outbreak faded, offering early evidence that contaminated water, not '
+        'air, carried the disease.',
+    questionText: 'What did John Snow conclude about the cause of cholera?',
+    choices: [
+      'It was carried by contaminated water',
+      'It was spread by foul air',
+      'It was caused by overcrowded housing',
+      'It could not be traced to any source',
+    ],
+    correctIdx: 0,
+  ),
+  ReadingMockItem(
+    id: 'p1_r_022',
+    sectionId: 'p1_r3',
+    passageText:
+        'Many companies now allow employees to work remotely, and the trend '
+        'shows no sign of fading. Supporters argue that it saves commuting time '
+        'and widens the pool of available talent. Critics, however, warn that '
+        'it can weaken the bonds between colleagues and make it harder for new '
+        'staff to absorb the culture of a workplace. The author suggests that '
+        'the most successful firms will be those that strike a careful balance '
+        'between flexibility and connection.',
+    questionText: 'What does the author suggest about successful firms?',
+    choices: [
+      'They will balance flexibility with personal connection',
+      'They will abandon remote work entirely',
+      'They will hire only experienced staff',
+      'They will ignore the concerns of critics',
+    ],
+    correctIdx: 0,
+  ),
+  ReadingMockItem(
+    id: 'p1_r_023',
+    sectionId: 'p1_r3',
+    passageText:
+        'Coral reefs are among the most diverse ecosystems on the planet, yet '
+        'they are remarkably fragile. When ocean temperatures rise even '
+        'slightly, corals expel the tiny algae that live within them and supply '
+        'most of their food. Without these algae, the coral turns white, a '
+        'process called bleaching, and may eventually starve. Although bleached '
+        'reefs can recover if cooler conditions return quickly, repeated events '
+        'leave them little time to heal.',
+    questionText: 'Why does coral bleaching threaten the survival of reefs?',
+    choices: [
+      'The coral loses the algae that provide most of its food',
+      'The coral becomes too heavy to remain attached',
+      'Warmer water makes the coral grow too quickly',
+      'The white color attracts more predators',
+    ],
+    correctIdx: 0,
+  ),
+  ReadingMockItem(
+    id: 'p1_r_024',
+    sectionId: 'p1_r3',
+    passageText:
+        'The placebo effect describes how patients sometimes improve after '
+        'taking a treatment that contains no active medicine at all. Researchers '
+        'believe the effect arises partly from expectation: when people trust '
+        'that they will get better, the brain may release chemicals that ease '
+        'symptoms. Because of this, scientists testing a new drug must compare '
+        'it against a placebo to be sure that any benefit comes from the drug '
+        'itself rather than from belief.',
+    questionText: 'Why must scientists compare a new drug against a placebo?',
+    choices: [
+      'To confirm the benefit comes from the drug, not from belief',
+      'To make the new drug cheaper to produce',
+      'To prove that the placebo contains active medicine',
+      'To speed up the approval of the treatment',
+    ],
+    correctIdx: 0,
+  ),
+  ReadingMockItem(
+    id: 'p1_r_025',
+    sectionId: 'p1_r3',
+    passageText:
+        'For centuries, the precise mechanism of bird migration puzzled '
+        'naturalists. Recent studies suggest that some species can sense the '
+        'magnetic field of the Earth, using it as an internal compass during '
+        'long flights across featureless ocean. Other birds appear to rely on '
+        'the position of the stars or on landmarks learned from older members '
+        'of the flock. Most likely, migrating birds combine several of these '
+        'cues rather than depending on any single one.',
+    questionText: 'What does the passage conclude about how birds navigate?',
+    choices: [
+      'They probably combine several different cues',
+      'They depend solely on the magnetic field',
+      'They follow only the oldest bird in the flock',
+      'They are unable to cross open ocean',
+    ],
+    correctIdx: 0,
+  ),
+  ReadingMockItem(
+    id: 'p1_r_026',
+    sectionId: 'p1_r3',
+    passageText:
+        'The city built a series of wide drainage canals in an effort to ( ) '
+        'the damage caused by seasonal floods.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['mitigate', 'aggravate', 'accumulate', 'allocate'],
+    correctIdx: 0,
+  ),
+  ReadingMockItem(
+    id: 'p1_r_027',
+    sectionId: 'p1_r3',
+    passageText:
+        'The witness offered a ( ) account of the accident, but later evidence '
+        'showed that several of the details were false.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['plausible', 'arbitrary', 'redundant', 'ambiguous'],
+    correctIdx: 0,
+  ),
+  ReadingMockItem(
+    id: 'p1_r_028',
+    sectionId: 'p1_r3',
+    passageText:
+        'Before approving the budget, the committee asked an independent team '
+        'to ( ) every line of the financial report.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['scrutinize', 'disregard', 'summarize', 'postpone'],
+    correctIdx: 0,
+  ),
+  ReadingMockItem(
+    id: 'p1_r_029',
+    sectionId: 'p1_r3',
+    passageText:
+        'The young athlete showed remarkable ( ), recovering quickly from each '
+        'injury and returning stronger than before.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['resilience', 'reluctance', 'negligence', 'indifference'],
+    correctIdx: 0,
+  ),
+  ReadingMockItem(
+    id: 'p1_r_030',
+    sectionId: 'p1_r3',
+    passageText:
+        'Despite the new treatment, the patient continued to ( ), and the '
+        'doctors grew increasingly worried.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['deteriorate', 'flourish', 'stabilize', 'accelerate'],
+    correctIdx: 0,
+  ),
+  ReadingMockItem(
+    id: 'p1_r_031',
+    sectionId: 'p1_r3',
+    passageText:
+        'The journalist was praised for her ( ) coverage of the election, '
+        'which examined every major issue in thorough detail.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['comprehensive', 'superficial', 'reluctant', 'tentative'],
+    correctIdx: 0,
   ),
 ];
 

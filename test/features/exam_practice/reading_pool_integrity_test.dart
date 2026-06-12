@@ -43,7 +43,7 @@ void main() {
     'pre2': 19,
     'pre2plus': 31, // ratcheted to official target (studio expansion 2026-06-12)
     '2': 31, // ratcheted to official target (studio expansion 2026-06-12)
-    'pre1': 19,
+    'pre1': 31, // ratcheted to official target (studio expansion 2026-06-12)
   };
   // Official reading 大問 counts (verified eiken.or.jp, 2026-06-07).
   const readingTarget = {
