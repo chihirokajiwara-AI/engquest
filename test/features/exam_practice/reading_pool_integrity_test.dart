@@ -42,7 +42,7 @@ void main() {
     '3': 30, // ratcheted to official target (studio expansion 2026-06-12)
     'pre2': 19,
     'pre2plus': 31, // ratcheted to official target (studio expansion 2026-06-12)
-    '2': 19,
+    '2': 31, // ratcheted to official target (studio expansion 2026-06-12)
     'pre1': 19,
   };
   // Official reading 大問 counts (verified eiken.or.jp, 2026-06-07).

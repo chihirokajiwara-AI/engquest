@@ -338,6 +338,30 @@ const Map<String, String> _kReadingExplanations = {
       '正解は releasing「放出すること」。without releasing harmful gases で「有害なガスを出さずに」という意味になり、気候変動と戦う助けになるという流れに合います。',
   '2_r_019':
       '本文の However 以降に、自転車を「良い状態に保つのに苦労する」とあります。これが本文の挙げる問題点。idx1（自転車の整備）が正解です。逆接の However が手がかりです。',
+  '2_r_020':
+      '本文に these pieces can eventually reach the human food chain「小さな破片がいずれ人の食物連鎖に入る」とあります。よって idx1 が正解です。',
+  '2_r_021':
+      '本文に the cost of growing food would rise sharply「食料を育てる費用が急に上がる」とあります。ミツバチがいないと食料が高くなる、idx2 が正解。',
+  '2_r_022':
+      '本文に Scholars from many lands gathered there「多くの土地から学者が集まった」とあります。よって idx1 が正解。建物は destroyed されたので idx0 は誤りです。',
+  '2_r_023':
+      '本文の Skipping sleep before an exam … can actually lower a score「試験前に睡眠をけずると点が下がる」が根拠。研究者が警告する内容なので idx1 が正解です。',
+  '2_r_024':
+      '本文の最後に coastal towns that depend on them「サンゴ礁にたよる海辺の町」とあります。地元の人々がたよっている、idx2 が正解です。',
+  '2_r_025':
+      '本文に the first person ever to win the Nobel Prize in two different fields「2つの分野でノーベル賞を取った最初の人」とあります。idx1 が正解。',
+  '2_r_026':
+      '本文に so that new exercise machines can be installed「新しい運動機器を入れるため」とあります。休館の理由は機器の設置、idx1 が正解です。',
+  '2_r_027':
+      '品物が out of stock で遅れること、色ちがいの代替か返金を選べることを伝えるメールです。遅れの説明と選択肢の提示が目的なので idx2 が正解。',
+  '2_r_028':
+      '正解は had。No sooner had ＋ 主語 ＋ 過去分詞 … than ～は倒置で「～するやいなや」を表します。後ろに過去分詞 begun があるので had が入ります。',
+  '2_r_029':
+      '正解は drink。recommend that ＋ 主語 ＋ 動詞の原形は提案を表す仮定法現在です。三人称でも s をつけず原形のままにするのがポイントです。',
+  '2_r_030':
+      '正解は Affected。「雨に影響されて」と受け身の意味なので過去分詞で始める分詞構文です。後ろの the festival was canceled に自然につながります。',
+  '2_r_031':
+      '正解は but。not only A but also B で「A だけでなく B も」という決まった組み合わせです。and や or では but also の形になりません。',
   // ── 英検準1級 (pre1) — content-qa-verified 2026-06-12 ──
   'p1_r_001':
       '正解は revitalize「再び活気づける」。公共交通を広げて都市部を活性化する計画、という意味で文意に合います。replicate（複製する）や regulate（規制する）では合いません。',
@@ -1684,6 +1708,182 @@ const _grade2Reading = [
       'A lack of exercise',
       'Having too few users',
     ],
+    correctIdx: 1,
+  ),
+  // ── 長文内容一致 + 語い/文法 — studio-expanded to official 31 target
+  //    (2026-06-12, content-qa, §VII-verified) ──
+  ReadingMockItem(
+    id: '2_r_020',
+    sectionId: '2_r3',
+    passageText:
+        'Plastic waste in the ocean has become a global crisis. Scientists '
+        'estimate that millions of tons of plastic enter the sea every year. '
+        'Much of it breaks down into tiny pieces that fish mistake for food, '
+        'and these pieces can eventually reach the human food chain.',
+    questionText:
+        'According to the passage, why is ocean plastic a danger to people?',
+    choices: [
+      'It makes seawater taste bad.',
+      'Tiny pieces can reach the food we eat.',
+      'It raises the price of fish.',
+      'It blocks ships from sailing.',
+    ],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: '2_r_021',
+    sectionId: '2_r3',
+    passageText:
+        'Honeybees play a vital role in agriculture. By carrying pollen from '
+        'one flower to another, they allow many crops to produce fruit. If '
+        'these insects were to disappear, the cost of growing food would rise '
+        'sharply, and some foods might become rare.',
+    questionText: 'What does the passage say would happen without honeybees?',
+    choices: [
+      'Flowers would grow faster.',
+      'Farms would need fewer workers.',
+      'Food would become more expensive.',
+      'Bees would move to the city.',
+    ],
+    correctIdx: 2,
+  ),
+  ReadingMockItem(
+    id: '2_r_022',
+    sectionId: '2_r3',
+    passageText:
+        'The ancient Library of Alexandria was one of the greatest centers of '
+        'learning in the ancient world. Scholars from many lands gathered '
+        'there to study and copy thousands of scrolls. Although the building '
+        'was eventually destroyed, its reputation still inspires libraries '
+        'today.',
+    questionText: 'What is true about the Library of Alexandria?',
+    choices: [
+      'It still stands in its original form.',
+      'It welcomed scholars from many places.',
+      'It was used only by local students.',
+      'It refused to lend out its scrolls.',
+    ],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: '2_r_023',
+    sectionId: '2_r3',
+    passageText:
+        'A recent study suggests that students who sleep at least eight hours '
+        'perform better on tests. Researchers found that sleep helps the brain '
+        'organize and store new information. Skipping sleep before an exam, '
+        'they warn, can actually lower a student score.',
+    questionText: 'What do the researchers warn against?',
+    choices: [
+      'Studying in a quiet room',
+      'Losing sleep before an exam',
+      'Taking too many tests',
+      'Eating before bed',
+    ],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: '2_r_024',
+    sectionId: '2_r3',
+    passageText:
+        'Coral reefs support about a quarter of all ocean species, yet they '
+        'cover less than one percent of the sea floor. When water becomes too '
+        'warm, corals lose their color and may die. Protecting reefs is '
+        'therefore important not only for fish but also for coastal towns that '
+        'depend on them.',
+    questionText: 'Why are coral reefs important for coastal towns?',
+    choices: [
+      'They make the water warmer.',
+      'They cover most of the sea floor.',
+      'Local communities rely on them.',
+      'They produce most of the world oxygen.',
+    ],
+    correctIdx: 2,
+  ),
+  ReadingMockItem(
+    id: '2_r_025',
+    sectionId: '2_r3',
+    passageText:
+        'Marie Curie was a scientist who studied radioactivity. Working in a '
+        'poorly equipped laboratory, she discovered two new elements. She '
+        'became the first person ever to win the Nobel Prize in two different '
+        'fields of science.',
+    questionText: 'What was special about Marie Curie?',
+    choices: [
+      'She built her own large laboratory.',
+      'She won the Nobel Prize in two fields.',
+      'She refused to share her discoveries.',
+      'She studied only one chemical element.',
+    ],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: '2_r_026',
+    sectionId: '2_r3',
+    passageText:
+        'Notice to all members: The community gym will be closed next Monday '
+        'and Tuesday so that new exercise machines can be installed. The pool '
+        'will stay open as usual. We are sorry for any trouble this may cause '
+        'and thank you for your patience.',
+    questionText: 'Why will the gym be closed for two days?',
+    choices: [
+      'To clean the swimming pool',
+      'To install new machines',
+      'To train new staff members',
+      'To hold a sports event',
+    ],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: '2_r_027',
+    sectionId: '2_r3',
+    passageText:
+        'Dear Mr. Tanaka, Thank you for your order. Unfortunately, the desk '
+        'you chose is out of stock and will not arrive for three weeks. If you '
+        'cannot wait, we can offer you a similar model in a different color, '
+        'or give you a full refund. Please let us know which you prefer.',
+    questionText: 'What is the main purpose of this email?',
+    choices: [
+      'To advertise a new desk',
+      'To cancel the customer account',
+      'To explain a delay and offer choices',
+      'To ask the customer to pay again',
+    ],
+    correctIdx: 2,
+  ),
+  ReadingMockItem(
+    id: '2_r_028',
+    sectionId: '2_r1',
+    passageText:
+        'No sooner ( ) the concert begun than the power suddenly went out.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['had', 'has', 'was', 'did'],
+    correctIdx: 0,
+  ),
+  ReadingMockItem(
+    id: '2_r_029',
+    sectionId: '2_r1',
+    passageText:
+        'The doctor strongly recommended that he ( ) more water every day.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['drinks', 'drank', 'drink', 'drinking'],
+    correctIdx: 2,
+  ),
+  ReadingMockItem(
+    id: '2_r_030',
+    sectionId: '2_r1',
+    passageText: '( ) by heavy rain, the outdoor festival had to be canceled.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['Affecting', 'Affected', 'To affect', 'Affects'],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: '2_r_031',
+    sectionId: '2_r1',
+    passageText:
+        'She is not only a talented painter ( ) also a gifted musician.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['and', 'but', 'or', 'so'],
     correctIdx: 1,
   ),
 ];
