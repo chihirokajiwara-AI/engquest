@@ -169,6 +169,147 @@ const Map<String, String> _kReadingExplanations = {
       'こたえは「That is too bad」。「テストにまた落ちた」という残念な話なので、同情する返事を選びます。後ろの「もっと勉強した方がいい」ともつながります。',
   '3_r_022':
       'こたえは「By practicing every day」。本文に「he practiced every day（毎日練習した）」「Now he is the best player（今は一番うまい）」とあります。練習が上達の理由です。',
+  // ── 英検準2級 (pre2) — content-qa-verified 2026-06-12 ──
+  'p2_r_001':
+      '正解は「designed」。「初心者むけに作られた」という意味で、designed for は「〜のために設計された」。空所のあとの for beginners が手がかりだよ。',
+  'p2_r_002':
+      '正解は「get」。get enough sleep で「じゅうぶんな睡眠をとる」という決まった言い方。健康のために毎ばん「とる」もの、と考えよう。',
+  'p2_r_003':
+      '正解は「After 2020」。本文に this trend started growing quickly after 2020「2020年のあとに広がった」とそのまま書いてあるよ。',
+  'p2_r_004':
+      '正解は「finish」。by Friday「金曜までに」終わらせたい、という流れ。Bが手伝うと言っているのも、仕事を仕上げる話だね。',
+  'p2_r_005':
+      '正解は「It saves energy.」。本文に it also saves energy「エネルギーも節約する」とあるよ。ほかの選択肢は本文に出てこないね。',
+  'p2_r_006':
+      '正解は「studying」。has been ＋ ing は現在完了進行形で、「5年間ずっと勉強している」という今もつづく動作を表すよ。',
+  'p2_r_007':
+      '正解は「left」。had already ＋過去分詞で「もう出てしまっていた」。着いたときより前に起きたことだから過去完了になるね。',
+  'p2_r_008': '正解は「whose」。「その人の小説が有名」と、人と novels がつながるので所有を表す whose を使うよ。',
+  'p2_r_009': '正解は「where」。「育った町」と場所を説明するので関係副詞 where。grew up in が場所を指す手がかりだね。',
+  'p2_r_010':
+      '正解は「has been closed」。since last year「去年から」ずっと、という現在完了。橋は「閉じられている」側だから受け身の形になるよ。',
+  'p2_r_011': '正解は「cry」。make ＋ 人 ＋ 動詞の原形で「人を〜させる」。だから to のつかない cry が入るね。',
+  'p2_r_012':
+      '正解は「more」。The ＋比較級, the ＋比較級で「〜すればするほど…」。後ろが the better だから前も more になるよ。',
+  'p2_r_013': '正解は「to」。too ＋形容詞＋ to ～で「～するには…すぎる」。「重すぎて一人で運べない」という意味だね。',
+  'p2_r_014': '正解は「as soon as」。「着いたらすぐ電話して」という流れ。「〜するとすぐに」を表す言い方だよ。',
+  'p2_r_015':
+      '正解は「eating」。avoid「さける」のあとは動名詞 ～ing をとるよ。avoid to eat とは言わないので注意。',
+  'p2_r_016':
+      '正解は「launch」。launch a new smartphone で「新しいスマホを発売する」。来年の春に売り出す、という流れだね。',
+  'p2_r_017':
+      '正解は「effect」。have a positive effect on ～で「〜によい影響をあたえる」。名詞の effect「影響」を選ぼう。動詞の affect とまちがえやすいよ。',
+  'p2_r_018':
+      '正解は「Sure, go straight and turn left.」。道のたずね方への返事だから、行き方を教える文がぴったり。ほかは質問とかみ合わないね。',
+  'p2_r_019':
+      '正解は「They can learn new skills.」。本文に learn new skills「新しい技術を学ぶ」とそのまま書いてあるよ。',
+  // ── 英検準2級プラス (pre2plus) — content-qa-verified 2026-06-12 ──
+  'p2p_r_001':
+      '正解は「has been working」。since 2020「2020年から」ずっと働いている、と今もつづく動作を表す現在完了進行形だよ。',
+  'p2p_r_002':
+      '正解は「had been reviewed」。会議が始まるより前に「すでに見直されていた」。前のできごとを表す過去完了の受け身だね。',
+  'p2p_r_003': '正解は「whose」。「その人の車が外にとまっている」と、人と car をつなぐので所有を表す whose を使うよ。',
+  'p2p_r_004':
+      '正解は「where」。「条約が結ばれた建物」と場所を説明するので関係副詞 where。in the building が手がかりだね。',
+  'p2p_r_005': '正解は「unless」。「もっと勉強しないかぎり合格しない」。unless は「〜しないかぎり」という意味だよ。',
+  'p2p_r_006':
+      '正解は「Although」。「とても疲れていたけれど完走した」と前後が逆の内容。「〜だけれど」を表す Although が合うね。',
+  'p2p_r_007':
+      '正解は「carry out」。carry out the plan で「計画を実行する」。書かれたとおりに「やりとげる」という意味だよ。',
+  'p2p_r_008':
+      '正解は「put off」。put off で「延期する・中止する」。大あらしのせいでコンサートが見おくられた、という流れだね。',
+  'p2p_r_009':
+      '正解は「reduce」。reduce the risk で「危険をへらす」。やさいを食べると病気のリスクが下がる、という意味だよ。',
+  'p2p_r_010':
+      '正解は「impact」。have a major impact on ～で「〜に大きな影響をあたえる」。impact「影響」を選ぼう。',
+  'p2p_r_011':
+      '正解は「sooner」。The ＋比較級, the ＋比較級で「早く終えるほど、自由時間がふえる」。後ろが more だから前も sooner になるね。',
+  'p2p_r_012':
+      '正解は「enough」。形容詞 ＋ enough to ～で「～するのにじゅうぶん…」。enough は形容詞の後ろにおくのがポイントだよ。',
+  'p2p_r_013':
+      '正解は「introduce」。introduce a new topic で「新しい話題をとり上げる・しょうかいする」。あすの授業で出す、という流れだね。',
+  'p2p_r_014':
+      '正解は「read」。「世界中の人に読まれた小説」と受け身の意味なので過去分詞 read。名詞 the novel を後ろから説明しているよ。',
+  'p2p_r_015':
+      '正解は「Feeling isolated」。本文に feeling isolated「孤独を感じる」とあり、これが在宅勤務の欠点として書かれているね。',
+  // ── 英検2級 (grade2) — content-qa-verified 2026-06-12 ──
+  '2_r_001':
+      '正解は introduced「導入した」。新しい規則を「設ける」という意味で、introduce ～ to reduce…の流れに合います。intervened（介入する）や invented（発明する）は規則には合いません。',
+  '2_r_002':
+      '正解は found「分かった、突き止めた」。found that …で「～ということを発見した」と研究結果を述べる形です。funded（資金を出す）や formed（形づくる）では意味が通りません。',
+  '2_r_003':
+      '本文に、抗生物質が登場する前は「ささいな感染症さえ命にかかわった」とあります。つまりペニシリンの意義は、そうした感染症を治療できるようにしたこと。idx1 が正解です。',
+  '2_r_004':
+      '森が切り開かれると動物は生息地を「失う」ので lose が正解。次の and are forced to move…（移動を強いられる）が手がかりです。gain（得る）や protect（守る）では逆の意味になります。',
+  '2_r_005':
+      '本文の最後に which raises concerns about mental health「心の健康への心配を生む」とあります。よって本文が示す心配は心の健康への影響。idx0 が正解です。',
+  '2_r_006':
+      '正解は put off「延期する」。until next week「来週まで」とあるので、会議を先に延ばす意味になります。put on（着る）や put out（消す）とは意味が異なります。',
+  '2_r_007':
+      '正解は impact「影響」。had a significant impact on …で「～に大きな影響を与えた」という決まった言い方です。result や outcome は「結果」でも、この on を使う形には合いません。',
+  '2_r_008':
+      '正解は would have passed。If I had studied …, I would have …は仮定法過去完了で、過去の事実と反対のことを表します。「もっと勉強していたら合格できたのに」という意味です。',
+  '2_r_009':
+      '正解は Feeling。文頭で「～して」と理由を表す分詞構文です。Feeling tired …で「疲れていたので」となり、後ろの she went straight to bed につながります。',
+  '2_r_010':
+      '正解は what。tell me what you want で「あなたが何をほしいか教えて」という意味の名詞のかたまり（間接疑問）を作ります。先行詞がないので which や that では作れません。',
+  '2_r_011':
+      '正解は analyze「分析する」。研究者がデータに対してする作業として自然です。apologize（謝る）や advertise（宣伝する）は data には合いません。',
+  '2_r_012':
+      '正解は go ahead「進める」。go ahead with the plan で「計画を進める」という意味です。Despite the difficulties「困難にもかかわらず」の流れにも合います。',
+  '2_r_013':
+      '正解は reduce「減らす」。reduce unemployment で「失業を減らす」。新しい対策を取る目的として自然です。refuse（断る）や reply（返事する）では意味が通りません。',
+  '2_r_014':
+      '正解は who。It was John who broke …は強調構文で、「窓を割ったのはほかでもないジョンだ」と人を強調します。人が先行詞で主語の働きなので who を使います。',
+  '2_r_015':
+      '正解は expand「広げる」。expand your vocabulary で「語彙を増やす」という意味です。つづりの似た expend（費やす）や expire（期限が切れる）と区別しましょう。',
+  '2_r_016':
+      '正解は agreement「合意」。reach an agreement で「合意に達する」という決まった言い方です。長い話し合いの末という流れにも合います。argument（口論）と混同しないように。',
+  '2_r_017':
+      '正解は solve「解決する」。solve the mystery で「謎を解く」という決まった言い方です。名探偵がついにできたこととして自然ですね。melt（とかす）では合いません。',
+  '2_r_018':
+      '正解は releasing「放出すること」。without releasing harmful gases で「有害なガスを出さずに」という意味になり、気候変動と戦う助けになるという流れに合います。',
+  '2_r_019':
+      '本文の However 以降に、自転車を「良い状態に保つのに苦労する」とあります。これが本文の挙げる問題点。idx1（自転車の整備）が正解です。逆接の However が手がかりです。',
+  // ── 英検準1級 (pre1) — content-qa-verified 2026-06-12 ──
+  'p1_r_001':
+      '正解は revitalize「再び活気づける」。公共交通を広げて都市部を活性化する計画、という意味で文意に合います。replicate（複製する）や regulate（規制する）では合いません。',
+  'p1_r_002':
+      '正解は funded「資金を提供された」。be funded by …で「～から資金を得る」。国際的な財団が研究を支援したという受け身の文です。found や formed とつづりが似ているので注意。',
+  'p1_r_003':
+      '本文の最後に attribute these shifts primarily to rising global temperatures「世界の気温上昇が主な原因」とあります。よって idx1（気温の上昇）が正解です。',
+  'p1_r_004':
+      '正解は eliminate「なくす」。素材をできるだけ長く使い続けて廃棄物を減らす、という循環型経済の説明に合います。create（生み出す）では逆の意味になってしまいます。',
+  'p1_r_005':
+      '本文に rivals or surpasses experienced physicians「経験ある医師と同じくらいか、それ以上」とあります。よって AI は同等か、それ以上に正確になりうる。idx0 が正解です。',
+  'p1_r_006':
+      '正解は undermined「くつがえした、弱めた」。証拠が説をくつがえしたので、so he had to start over「やり直さねばならなかった」と続きます。supported（支持する）では逆です。',
+  'p1_r_007':
+      '正解は lay off「解雇する」。不況の間、会社が大勢の労働者をやむを得ず解雇したという文脈です。take on（雇い入れる）は逆の意味なので注意しましょう。',
+  'p1_r_008':
+      '正解は undeterred「ひるまない」。大きな挫折にもかかわらず研究を続けた、という流れに合います。disheartened（落胆した）では and continued「続けた」とつながりません。',
+  'p1_r_009':
+      '正解は fueled「あおった」。rather than easing it「やわらげるどころか」と対比されているので、疑いを強める意味の語が入ります。reduced や satisfied では対比が崩れます。',
+  'p1_r_010':
+      '正解は illegible「読めない」。so … that 構文で「あまりに読めないので、学者もほとんど読めなかった」となります。反対語の legible（読みやすい）と取りちがえないように。',
+  'p1_r_011':
+      '正解は compelling「説得力のある」。so … that で「あまりに説得力があり、誰も欠点を見つけられなかった」。weak（弱い）や vague（あいまい）では後半と矛盾します。',
+  'p1_r_012':
+      '正解は come up with「思いつく、考え出す」。代わりの解決策を出すという意味です。get away with（うまく逃れる）や put up with（がまんする）とは意味が異なります。',
+  'p1_r_013':
+      '正解は intervals「間隔」。at regular intervals で「一定の間隔で」という決まった言い方です。薬を規則正しい間隔でのむ、という文意に合います。',
+  'p1_r_014':
+      '正解は postpone「延期する」。深刻な技術的問題のため発売を延ばす、という流れに合います。promote（宣伝する）や produce（生産する）では理由とかみ合いません。',
+  'p1_r_015':
+      '正解は inexcusable「許しがたい」。式典での非常に無礼なふるまいを表す語として合います。反対の意味の justified（正当な）や commendable（ほめるべき）では合いません。',
+  'p1_r_016':
+      '正解は contain「封じ込める」。contain the spread で「広がりを食い止める」という意味です。つづりの似た maintain（維持する）や obtain（手に入れる）と区別しましょう。',
+  'p1_r_017':
+      '正解は complement「補い合う」。work well together「うまく組み合う」とあるので、互いの強みを補完するという意味になります。contradict（矛盾する）では合いません。',
+  'p1_r_018':
+      '正解は enhance「高める」。二言語を学ぶことが認知の柔軟性を「高める」という流れに合います。reduce（減らす）や prevent（防ぐ）では好ましい内容と矛盾します。',
+  'p1_r_019':
+      '本文に reduce the distance food must travel「食料が運ばれる距離を減らせる」とあります。これが都市農業の利点。idx1（食料の移動距離を縮める）が正解です。',
 };
 
 const Map<String, List<ReadingMockItem>> _kReadingPool = {
