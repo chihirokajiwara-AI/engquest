@@ -523,6 +523,10 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
                 ],
 
                 if (_answered) ...[
+                  if (item.explanation != null) ...[
+                    const SizedBox(height: 14),
+                    _ListeningExplanation(text: item.explanation!),
+                  ],
                   const SizedBox(height: 14),
                   _TranscriptPanel(item: item),
                 ],
@@ -678,6 +682,48 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
 /// said, so a child who misheard can READ it (the listening learning loop —
 /// listening had only a Next button before). Dialogue items (2 speakers) are
 /// labelled A / B; a monologue passage is shown as plain lines.
+/// 解説 card (「なぜこの答えか」) — the same teach-why aid the other practice
+/// modes have, shown above the script so the child reads the reason first, then
+/// sees the evidence in the transcript.
+class _ListeningExplanation extends StatelessWidget {
+  final String text;
+  const _ListeningExplanation({required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      key: const ValueKey('listening_explanation'),
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
+      decoration: BoxDecoration(
+        color: dqBox.withAlpha(235),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: dqGold, width: 1.5),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.lightbulb_rounded, color: dqGold, size: 18),
+              const SizedBox(width: 6),
+              Text('解説 / Why',
+                  style: dqText(
+                      size: 12, w: FontWeight.w800, color: dqGold, spacing: 1)),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            text,
+            style: dqText(size: 14, w: FontWeight.w500, color: dqInk)
+                .copyWith(height: 1.5),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _TranscriptPanel extends StatelessWidget {
   final ListeningItem item;
   const _TranscriptPanel({required this.item});

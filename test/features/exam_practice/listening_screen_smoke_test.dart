@@ -183,6 +183,30 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
+    testWidgets(
+        'grade 5 — answering reveals the 解説 teach-why card (parity '
+        'with reading/vocab; only when the item has an explanation)',
+        (tester) async {
+      await tester.pumpWidget(_wrap(
+        ListeningPracticeScreen(
+          eikenGrade: '5',
+          section: _listeningSection('5_l', 'リスニング 5級', 25, 20),
+        ),
+      ));
+      await tester.pump();
+      await tester.tap(find.textContaining('はじめる'));
+      await tester.pump();
+      // Pre-answer: no 解説 card (post-answer reveal only).
+      expect(find.byKey(const ValueKey('listening_explanation')), findsNothing);
+      await tester.tap(find.textContaining('1.  ').first);
+      await tester.pump();
+      // 5級 items are seeded with explanations → the 解説 card must appear.
+      expect(
+          find.byKey(const ValueKey('listening_explanation')), findsOneWidget);
+      expect(find.text('解説 / Why'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+
     testWidgets('grade 4 — pumps without exception', (tester) async {
       await tester.pumpWidget(_wrap(
         ListeningPracticeScreen(

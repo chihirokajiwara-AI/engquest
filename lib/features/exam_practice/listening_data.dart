@@ -52,6 +52,12 @@ class ListeningItem {
   final int correctIndex;
   final String? imageHint;
 
+  /// Optional child-facing 解説 (「なぜこの答えか」) shown after answering, next
+  /// to the script reveal — the same "teach why" aid vocab/reading/conversation
+  /// already have. Null → the transcript panel alone is shown (graceful, the
+  /// prior behavior). Seeded per-grade starting with 5級 (entry learners).
+  final String? explanation;
+
   const ListeningItem({
     required this.part,
     required this.grade,
@@ -62,6 +68,7 @@ class ListeningItem {
     required this.choices,
     required this.correctIndex,
     this.imageHint,
+    this.explanation,
   });
 
   ListeningItem copyWith({List<String>? choices, int? correctIndex}) =>
@@ -75,6 +82,7 @@ class ListeningItem {
         choices: choices ?? this.choices,
         correctIndex: correctIndex ?? this.correctIndex,
         imageHint: imageHint,
+        explanation: explanation,
       );
 }
 
@@ -110,6 +118,7 @@ const _grade5Part1 = <ListeningItem>[
       'I go to school.',
     ],
     correctIndex: 0,
+    explanation: 'あさのあいさつ「Good morning!」には、おなじ「Good morning!」とかえすよ。',
   ),
   ListeningItem(
     part: 1,
@@ -125,6 +134,8 @@ const _grade5Part1 = <ListeningItem>[
       'I like cats.',
     ],
     correctIndex: 1,
+    explanation:
+        '「How old are you?（なんさい?）」だから、ねんれいをこたえる「I am ten years old.（10さい）」だよ。',
   ),
   ListeningItem(
     part: 1,
@@ -140,6 +151,7 @@ const _grade5Part1 = <ListeningItem>[
       'She is my sister.',
     ],
     correctIndex: 0,
+    explanation: '「Do you ～?」できかれたら、Yes か No でこたえるよ。ここは「No, I do not.」だね。',
   ),
   ListeningItem(
     part: 1,
@@ -155,6 +167,7 @@ const _grade5Part1 = <ListeningItem>[
       'I bought it yesterday.',
     ],
     correctIndex: 2,
+    explanation: '「What color（なにいろ?）」ときかれているから、いろをこたえる「It is blue.（あおいよ）」だよ。',
   ),
 ];
 
@@ -177,6 +190,7 @@ const _grade5Part2 = <ListeningItem>[
       'A new ball.',
     ],
     correctIndex: 1,
+    explanation: 'おとこのこは「I want a new bike.（あたらしいじてんしゃがほしい）」といっているね。',
   ),
   ListeningItem(
     part: 2,
@@ -195,6 +209,7 @@ const _grade5Part2 = <ListeningItem>[
       'To the school.',
     ],
     correctIndex: 1,
+    explanation: 'おんなのこは「I am going to the park.（こうえんにいく）」といっているよ。',
   ),
   ListeningItem(
     part: 2,
@@ -213,6 +228,7 @@ const _grade5Part2 = <ListeningItem>[
       'At nine o\'clock.',
     ],
     correctIndex: 2,
+    explanation: '「It starts at eight thirty.（8じ30ぷん）」といっているね。',
   ),
   ListeningItem(
     part: 2,
@@ -231,6 +247,7 @@ const _grade5Part2 = <ListeningItem>[
       'History.',
     ],
     correctIndex: 2,
+    explanation: 'おんなのこは「I like science.（りかがすき）」といっているよ。math（さんすう）はすきじゃないね。',
   ),
 ];
 
@@ -252,6 +269,7 @@ const _grade5Part3 = <ListeningItem>[
       'Black.',
     ],
     correctIndex: 2,
+    explanation: 'はなしては「She is white.（しろい）」といっているね。ミミのいろは White だよ。',
   ),
   ListeningItem(
     part: 3,
@@ -269,6 +287,7 @@ const _grade5Part3 = <ListeningItem>[
       'On Mondays.',
     ],
     correctIndex: 1,
+    explanation: '「He plays soccer on Saturdays.（どようびにサッカー）」といっているよ。',
   ),
   ListeningItem(
     part: 3,
@@ -286,6 +305,7 @@ const _grade5Part3 = <ListeningItem>[
       'Music.',
     ],
     correctIndex: 2,
+    explanation: '「She teaches math.（すうがくをおしえる）」といっているね。',
   ),
   ListeningItem(
     part: 3,
@@ -303,6 +323,7 @@ const _grade5Part3 = <ListeningItem>[
       'Four.',
     ],
     correctIndex: 1,
+    explanation: '「two cats and one dog（ねこ2ひきといぬ1ぴき）」だから、ねこは Two だよ。',
   ),
 ];
 
