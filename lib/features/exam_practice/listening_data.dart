@@ -344,6 +344,8 @@ const _grade4Part1 = <ListeningItem>[
       'No, I do not like salt.',
     ],
     correctIndex: 0,
+    explanation:
+        '「Could you ～?（〜してくれる?）」のおねがいには「Sure, here you are.（はい、どうぞ）」とこたえるよ。',
   ),
   ListeningItem(
     part: 1,
@@ -359,6 +361,7 @@ const _grade4Part1 = <ListeningItem>[
       'Homework is important for students.',
     ],
     correctIndex: 1,
+    explanation: '「もうしゅくだいおわった?」にたいして「Not yet.（まだだよ）」がしぜんなこたえだね。',
   ),
   ListeningItem(
     part: 1,
@@ -374,6 +377,7 @@ const _grade4Part1 = <ListeningItem>[
       'My flight was very long.',
     ],
     correctIndex: 0,
+    explanation: '「When（いつ?）」ときかれているから、「two years ago（2ねんまえ）」と"とき"をこたえるよ。',
   ),
   ListeningItem(
     part: 1,
@@ -389,6 +393,8 @@ const _grade4Part1 = <ListeningItem>[
       'The restaurant is nearby.',
     ],
     correctIndex: 1,
+    explanation:
+        '「Would you like to ～?（〜しない?）」のさそいには「Thank you, I would love to.（よろこんで）」だね。',
   ),
   // ── #10 volume expansion: 4級 第1部 4→10 (応答選択, A2). Audio pending Kokoro;
   //    keys in ALLOWED_MISSING. Content-QA'd 2026-06-09.
@@ -406,6 +412,7 @@ const _grade4Part1 = <ListeningItem>[
       'I will visit my aunt tomorrow.',
     ],
     correctIndex: 0,
+    explanation: '「How was ～?（〜はどうだった?）」だから、しゅうまつのできごとをこたえる「It was great.」だよ。',
   ),
   ListeningItem(
     part: 1,
@@ -421,6 +428,8 @@ const _grade4Part1 = <ListeningItem>[
       'Stations are usually busy.',
     ],
     correctIndex: 0,
+    explanation:
+        '「えきへのみちをおしえて」だから、いきかたをこたえる「Go straight and turn left.（まっすぐいってひだり）」だね。',
   ),
   ListeningItem(
     part: 1,
@@ -436,6 +445,7 @@ const _grade4Part1 = <ListeningItem>[
       'Tea grows in warm places.',
     ],
     correctIndex: 0,
+    explanation: '「おちゃとコーヒーどっちがいい?」だから、どちらかをえらぶ「Coffee, please.」だよ。',
   ),
   ListeningItem(
     part: 1,
@@ -451,6 +461,7 @@ const _grade4Part1 = <ListeningItem>[
       'I have to leave soon.',
     ],
     correctIndex: 0,
+    explanation: '「おくれてごめん」には「That is okay.（だいじょうぶ）」とゆるすこたえがしぜんだね。',
   ),
   ListeningItem(
     part: 1,
@@ -466,6 +477,8 @@ const _grade4Part1 = <ListeningItem>[
       'The vacation was fun last year.',
     ],
     correctIndex: 0,
+    explanation:
+        '「なつやすみになにをする?」だから、よていをこたえる「I am going to visit my grandparents.（そふぼにあいにいく）」だよ。',
   ),
   ListeningItem(
     part: 1,
@@ -481,6 +494,7 @@ const _grade4Part1 = <ListeningItem>[
       'I like writing letters.',
     ],
     correctIndex: 0,
+    explanation: '「ペンかりていい?」のおねがいには「Of course. Here you go.（もちろん、どうぞ）」だね。',
   ),
 ];
 
