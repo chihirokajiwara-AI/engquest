@@ -672,7 +672,7 @@ class _VocabGrammarPracticeScreenState
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    'ヒントを つかった問題（もんだい）は、合格率（ごうかくりつ）に 入（はい）れません。',
+                    jpBreak('ヒントを つかった問題（もんだい）は、合格率（ごうかくりつ）に 入（はい）れません。'),
                     textAlign: TextAlign.center,
                     style: dqText(size: 11, color: dqInk.withAlpha(150)),
                   ),
