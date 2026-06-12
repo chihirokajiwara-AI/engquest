@@ -126,6 +126,25 @@ const Map<String, String> _kReadingExplanations = {
       '「I really liked it（とても気に入った）」と言っているので、よいかんそうの「It was great.」が正かい。',
   '4_r_022':
       'お知らせに「bring your hat and water bottle」とあるね。だから持っていくのは「ぼうしと水とう」だよ。',
+  '4_r_023': '相手が公園に行きたいかと聞いているので、さんせいする返事「Yes, that sounds fun.（いいね）」が正かい。',
+  '4_r_024': '「ありがとう」と言われたので、こたえる「You are welcome.（どういたしまして）」が正かい。',
+  '4_r_025': '助けてほしいと聞かれているので「Of course, I will help you.（もちろん手伝うよ）」が正かい。',
+  '4_r_026':
+      '本文に「Monday to Saturday, 10 a.m. to 5 p.m.」とあるね。図書かんは「月〜土（Monday to Saturday）」に開いてるよ。',
+  '4_r_027':
+      '本文に「My favorite was the baby elephant」とある。一番気に入ったのは「赤ちゃんぞう（baby elephant）」だよ。',
+  '4_r_028': '本文に「His favorite sport is soccer」とある。トムが一番好きなのは「サッカー（soccer）」。',
+  '4_r_029':
+      '本文の最後に「All meals include milk and fruit」とある。ぜんぶの食事に「ミルクとくだもの（milk and fruit）」がつくよ。',
+  '4_r_030':
+      '手紙に「your party on Saturday at 2:00 p.m.」とある。たんじょうび パーティーは「土よう日の午後2時」だよ。',
+  '4_r_031': '天気よほうに「Please bring an umbrella」とある。明日は「かさ（umbrella）」を持ってくると良いね。',
+  '4_r_032': '本文に「We usually go to the park」とある。ピクニックはいつも「公園（the park）」でするよ。',
+  '4_r_033':
+      'レシピに「Bake for 30 minutes at 180 degrees」とある。焼く温度（おんど）は「180度（180 degrees）」だよ。',
+  '4_r_034':
+      '本文に「We meet every Saturday at 3:00 p.m.」とある。クラブは「毎週土よう日の午後3時」に集まるね。',
+  '4_r_035': '本文に「He is five years old」とある。バディは「5才（five years old）」だよ。',
   // ── 英検3級 (content-qa-verified 2026-06-12) ──
   '3_r_001':
       'こたえは「plans」。Maria は三人称単数で、しかも「to study（〜するつもり）」が後ろにあるので「plans to study」となります。三単現の s を忘れずに。',
@@ -731,6 +750,167 @@ const _grade4Reading = [
       'Lunch',
       'A hat and water bottle',
       'A camera',
+    ],
+    correctIdx: 2,
+  ),
+  // ── 大問2 会話応答 + 大問3 長文読解 (studio-expanded 2026-06-12, content-qa) ──
+  ReadingMockItem(
+    id: '4_r_023',
+    sectionId: '4_r2',
+    passageText: 'A: "Do you want to go to the park?"  B: "( )"',
+    questionText: 'Choose the best response.',
+    choices: [
+      'Yes, that sounds fun.',
+      'I like apples.',
+      'It is sunny.',
+      'I am tall.'
+    ],
+    correctIdx: 0,
+  ),
+  ReadingMockItem(
+    id: '4_r_024',
+    sectionId: '4_r2',
+    passageText: 'A: "Thank you for helping me."  B: "( )"',
+    questionText: 'Choose the best response.',
+    choices: [
+      'Thank you for coming.',
+      'You are welcome.',
+      'That is great!',
+      'Who are you?'
+    ],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: '4_r_025',
+    sectionId: '4_r2',
+    passageText: 'A: "Can you help me?"  B: "( )"',
+    questionText: 'Choose the best response.',
+    choices: [
+      'Of course, I will help you.',
+      'I like soccer.',
+      'It is cold.',
+      'See you later.'
+    ],
+    correctIdx: 0,
+  ),
+  ReadingMockItem(
+    id: '4_r_026',
+    sectionId: '4_r3',
+    passageText: 'Library Notice: We have new English books for children! '
+        'Come and read at our library. It is open Monday to Saturday, 10 a.m. to 5 p.m. '
+        'On Sunday, we are closed. Books are free to borrow!',
+    questionText: 'When is the library open?',
+    choices: [
+      'Monday to Sunday',
+      'Monday to Saturday',
+      'Every day',
+      'Only on Saturday'
+    ],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: '4_r_027',
+    sectionId: '4_r3',
+    passageText: 'I went to the zoo last week. I saw many animals. '
+        'There were lions, elephants, and monkeys. The lions were very big and strong. '
+        'My favorite was the baby elephant. It was very cute!',
+    questionText: 'What was the writer\'s favorite animal?',
+    choices: ['A lion', 'A monkey', 'A baby elephant', 'A big cat'],
+    correctIdx: 2,
+  ),
+  ReadingMockItem(
+    id: '4_r_028',
+    sectionId: '4_r3',
+    passageText: 'My friend Tom loves sports. He plays soccer every day. '
+        'He also likes tennis and baseball. His favorite sport is soccer. '
+        'He dreams of becoming a soccer player when he grows up.',
+    questionText: 'What is Tom\'s favorite sport?',
+    choices: ['Tennis', 'Baseball', 'Soccer', 'Swimming'],
+    correctIdx: 2,
+  ),
+  ReadingMockItem(
+    id: '4_r_029',
+    sectionId: '4_r3',
+    passageText: 'School Lunch Menu: Monday — rice, fish, and vegetables. '
+        'Tuesday — curry and rice. Wednesday — spaghetti. Thursday — ramen. '
+        'Friday — pizza and salad. All meals include milk and fruit.',
+    questionText: 'What do all meals include?',
+    choices: ['Fish', 'Vegetables', 'Milk and fruit', 'Rice'],
+    correctIdx: 2,
+  ),
+  ReadingMockItem(
+    id: '4_r_030',
+    sectionId: '4_r3',
+    passageText:
+        'Dear Lisa, Thank you for the invitation to your birthday party. '
+        'I will come to your party on Saturday at 2:00 p.m. I am excited! See you then.',
+    questionText: 'When is Lisa\'s birthday party?',
+    choices: [
+      'Saturday at 2:00 p.m.',
+      'Sunday at 3:00 p.m.',
+      'Friday',
+      'Next week'
+    ],
+    correctIdx: 0,
+  ),
+  ReadingMockItem(
+    id: '4_r_031',
+    sectionId: '4_r3',
+    passageText:
+        'Weather Report: Today is sunny and warm. The temperature is 25 degrees. '
+        'Tomorrow will be cloudy, and it may rain in the evening. Please bring an umbrella.',
+    questionText: 'What should people bring tomorrow?',
+    choices: ['A coat', 'An umbrella', 'Sunglasses', 'A hat'],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: '4_r_032',
+    sectionId: '4_r3',
+    passageText:
+        'My family likes to have a picnic on weekends. We usually go to the park. '
+        'My mother makes sandwiches and cookies. My father brings drinks. '
+        'We have so much fun playing and eating together.',
+    questionText: 'Where does the family usually have a picnic?',
+    choices: ['At the beach', 'At home', 'At the park', 'At school'],
+    correctIdx: 2,
+  ),
+  ReadingMockItem(
+    id: '4_r_033',
+    sectionId: '4_r3',
+    passageText:
+        'Recipe: To make chocolate cake, you need eggs, flour, sugar, and butter. '
+        'Mix all the ingredients. Bake for 30 minutes at 180 degrees. Let it cool before eating.',
+    questionText: 'What temperature do you use to bake?',
+    choices: ['150 degrees', '180 degrees', '200 degrees', '220 degrees'],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: '4_r_034',
+    sectionId: '4_r3',
+    passageText:
+        'Adventure Club: We meet every Saturday at 3:00 p.m. in the gym. '
+        'We do fun activities like hiking, camping, and rock climbing. '
+        'No experience needed. Everyone is welcome! Cost: 500 yen per meeting.',
+    questionText: 'When does the Adventure Club meet?',
+    choices: [
+      'Every Friday',
+      'Every Saturday at 3:00 p.m.',
+      'Every Sunday',
+      'Every Tuesday'
+    ],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: '4_r_035',
+    sectionId: '4_r3',
+    passageText: 'My dog\'s name is Buddy. He is a brown and white dog. '
+        'He is five years old. Buddy loves to play fetch. He is very friendly and loves everyone.',
+    questionText: 'How old is Buddy?',
+    choices: [
+      'Three years old',
+      'Four years old',
+      'Five years old',
+      'Six years old'
     ],
     correctIdx: 2,
   ),
