@@ -307,14 +307,27 @@ class _PrologueScreenState extends State<PrologueScreen> {
           widthFactor: 0.52,
           child: AspectRatio(
             aspectRatio: 0.8,
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 900),
-              child: Image.asset(
-                _lampRestored
-                    ? 'assets/art/scenes_layton/npc_lampkeeper_color.webp'
-                    : 'assets/art/scenes_layton/npc_lampkeeper_grey.webp',
-                key: ValueKey(_lampRestored),
-                fit: BoxFit.contain,
+            // Feather the sprite into a soft oval so the lampkeeper reads as a
+            // figure IN the square, not a hard-edged portrait card pasted on it
+            // (the npc art has a baked vignette background) — super-strict
+            // re-audit, CEO 1366/1372.
+            child: ShaderMask(
+              blendMode: BlendMode.dstIn,
+              shaderCallback: (rect) => const RadialGradient(
+                center: Alignment.center,
+                radius: 0.6,
+                colors: [Colors.white, Colors.white, Colors.transparent],
+                stops: [0.0, 0.62, 1.0],
+              ).createShader(rect),
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 900),
+                child: Image.asset(
+                  _lampRestored
+                      ? 'assets/art/scenes_layton/npc_lampkeeper_color.webp'
+                      : 'assets/art/scenes_layton/npc_lampkeeper_grey.webp',
+                  key: ValueKey(_lampRestored),
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
           ),
