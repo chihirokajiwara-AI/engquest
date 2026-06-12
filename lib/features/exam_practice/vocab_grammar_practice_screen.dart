@@ -448,344 +448,372 @@ class _VocabGrammarPracticeScreenState
   Widget _buildQuestion() {
     final q = _questions[_currentIdx];
 
-    // Scrollable so the question + 4 choices + the explanation never overflow on
-    // small phones / landscape (the column was previously fixed-height).
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // Progress indicator
-          Row(
-            children: [
-              Text(
-                '問${_currentIdx + 1} / ${_questions.length}',
-                style: dqText(size: 14, w: FontWeight.w700, color: dqInk),
-              ),
-              const Spacer(),
-              Text(
-                '正答: $_correctCount',
-                style: dqText(
-                    size: 14,
-                    w: FontWeight.w700,
-                    color: const Color(0xFF8BE08B)),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(4),
-            child: LinearProgressIndicator(
-              value: (_currentIdx + 1) / _questions.length,
-              backgroundColor: dqNight1,
-              valueColor: const AlwaysStoppedAnimation<Color>(dqGold),
-            ),
-          ),
-          const SizedBox(height: 24),
-          // Cloze sentence
-          Container(
+    // Scrollable content + a STICKY bottom 次へ button (rank-2 studio fix): the
+    // button used to live inside the scroll view and scrolled out of sight on
+    // long answered items — confusing young children ("is it broken?"). Now the
+    // content scrolls and the button is pinned at the bottom, always visible.
+    return Column(
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
             padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: dqBox,
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: dqGoldDeep.withAlpha(120), width: 1.5),
-            ),
-            child: Text(
-              q.cloze,
-              style: dqText(size: 18, w: FontWeight.w500, color: dqInk)
-                  .copyWith(height: 1.6),
-            ),
-          ),
-          const SizedBox(height: 24),
-          // Answer choices
-          ...List.generate(q.choices.length, (i) {
-            final isSelected = _selectedAnswer == i;
-            final isCorrect = i == q.correctIdx;
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Progress indicator
+                Row(
+                  children: [
+                    Text(
+                      '問${_currentIdx + 1} / ${_questions.length}',
+                      style: dqText(size: 14, w: FontWeight.w700, color: dqInk),
+                    ),
+                    const Spacer(),
+                    Text(
+                      '正答: $_correctCount',
+                      style: dqText(
+                          size: 14,
+                          w: FontWeight.w700,
+                          color: const Color(0xFF8BE08B)),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(4),
+                  child: LinearProgressIndicator(
+                    value: (_currentIdx + 1) / _questions.length,
+                    backgroundColor: dqNight1,
+                    valueColor: const AlwaysStoppedAnimation<Color>(dqGold),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                // Cloze sentence
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: dqBox,
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(
+                        color: dqGoldDeep.withAlpha(120), width: 1.5),
+                  ),
+                  child: Text(
+                    q.cloze,
+                    style: dqText(size: 18, w: FontWeight.w500, color: dqInk)
+                        .copyWith(height: 1.6),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                // Answer choices
+                ...List.generate(q.choices.length, (i) {
+                  final isSelected = _selectedAnswer == i;
+                  final isCorrect = i == q.correctIdx;
 
-            // Dark dq palette (#67). Answer-state greens/reds tuned for the dark
-            // background; correct = pass-green, wrong = soft red.
-            Color bgColor = dqBox;
-            Color borderColor = dqGoldDeep.withAlpha(120);
-            Color textColor = dqInk;
+                  // Dark dq palette (#67). Answer-state greens/reds tuned for the dark
+                  // background; correct = pass-green, wrong = soft red.
+                  Color bgColor = dqBox;
+                  Color borderColor = dqGoldDeep.withAlpha(120);
+                  Color textColor = dqInk;
 
-            if (_answered) {
-              if (isCorrect) {
-                bgColor = const Color(0xFF14301B);
-                borderColor = const Color(0xFF8BE08B);
-                textColor = const Color(0xFF8BE08B);
-              } else if (isSelected && !isCorrect) {
-                bgColor = const Color(0xFF3A1A1A);
-                borderColor = const Color(0xFFE0853A);
-                textColor = const Color(0xFFE89A82);
-              }
-            } else if (isSelected) {
-              borderColor = dqGold;
-              bgColor = dqNight1;
-            }
+                  if (_answered) {
+                    if (isCorrect) {
+                      bgColor = const Color(0xFF14301B);
+                      borderColor = const Color(0xFF8BE08B);
+                      textColor = const Color(0xFF8BE08B);
+                    } else if (isSelected && !isCorrect) {
+                      bgColor = const Color(0xFF3A1A1A);
+                      borderColor = const Color(0xFFE0853A);
+                      textColor = const Color(0xFFE89A82);
+                    }
+                  } else if (isSelected) {
+                    borderColor = dqGold;
+                    bgColor = dqNight1;
+                  }
 
-            final semLabel = _answered && isCorrect
-                ? '${i + 1}. ${q.choices[i]}、せいかい'
-                : _answered && isSelected && !isCorrect
-                    ? '${i + 1}. ${q.choices[i]}、ふせいかい'
-                    : '${i + 1}. ${q.choices[i]}';
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: Semantics(
-                button: true,
-                label: semLabel,
-                onTap: _answered ? null : () => _selectAnswer(i),
-                excludeSemantics: true,
-                child: Material(
-                  color: bgColor,
-                  borderRadius: BorderRadius.circular(12),
-                  child: InkWell(
-                    key: ValueKey('vg_choice_$i'),
-                    onTap: () => _selectAnswer(i),
-                    borderRadius: BorderRadius.circular(12),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 14),
-                      decoration: BoxDecoration(
+                  final semLabel = _answered && isCorrect
+                      ? '${i + 1}. ${q.choices[i]}、せいかい'
+                      : _answered && isSelected && !isCorrect
+                          ? '${i + 1}. ${q.choices[i]}、ふせいかい'
+                          : '${i + 1}. ${q.choices[i]}';
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Semantics(
+                      button: true,
+                      label: semLabel,
+                      onTap: _answered ? null : () => _selectAnswer(i),
+                      excludeSemantics: true,
+                      child: Material(
+                        color: bgColor,
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: borderColor, width: 1.5),
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 28,
-                            height: 28,
+                        child: InkWell(
+                          key: ValueKey('vg_choice_$i'),
+                          onTap: () => _selectAnswer(i),
+                          borderRadius: BorderRadius.circular(12),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 14),
                             decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: borderColor.withAlpha(30),
+                              borderRadius: BorderRadius.circular(12),
+                              border:
+                                  Border.all(color: borderColor, width: 1.5),
                             ),
-                            child: Center(
-                              child: Text(
-                                '${i + 1}',
-                                style: TextStyle(
-                                  color: textColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
+                            child: Row(
                               children: [
-                                Text(
-                                  q.choices[i].replaceAll('_', ' '),
-                                  style: TextStyle(
-                                    color: textColor,
-                                    fontSize: 16,
-                                    fontWeight: isSelected
-                                        ? FontWeight.w600
-                                        : FontWeight.normal,
+                                Container(
+                                  width: 28,
+                                  height: 28,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: borderColor.withAlpha(30),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      '${i + 1}',
+                                      style: TextStyle(
+                                        color: textColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                                // Opt-in scaffold: the Japanese meaning under each
-                                // choice so a pre-reader can reason (this question
-                                // is then excluded from 合格率).
-                                if (_hintShown &&
-                                    _glossForChoice(q, i).isNotEmpty) ...[
-                                  const SizedBox(height: 2),
-                                  Text(
-                                    _glossForChoice(q, i),
-                                    style: dqText(
-                                        size: 12,
-                                        w: FontWeight.w600,
-                                        color: dqGold.withAlpha(220)),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        q.choices[i].replaceAll('_', ' '),
+                                        style: TextStyle(
+                                          color: textColor,
+                                          fontSize: 16,
+                                          fontWeight: isSelected
+                                              ? FontWeight.w600
+                                              : FontWeight.normal,
+                                        ),
+                                      ),
+                                      // Opt-in scaffold: the Japanese meaning under each
+                                      // choice so a pre-reader can reason (this question
+                                      // is then excluded from 合格率).
+                                      if (_hintShown &&
+                                          _glossForChoice(q, i).isNotEmpty) ...[
+                                        const SizedBox(height: 2),
+                                        Text(
+                                          _glossForChoice(q, i),
+                                          style: dqText(
+                                              size: 12,
+                                              w: FontWeight.w600,
+                                              color: dqGold.withAlpha(220)),
+                                        ),
+                                      ],
+                                    ],
                                   ),
-                                ],
+                                ),
+                                if (_answered && isCorrect)
+                                  const Icon(Icons.check_circle_rounded,
+                                      color: Color(0xFF8BE08B), size: 22),
+                                if (_answered && isSelected && !isCorrect)
+                                  const Icon(Icons.cancel_rounded,
+                                      color: Color(0xFFE0853A), size: 22),
                               ],
                             ),
                           ),
-                          if (_answered && isCorrect)
-                            const Icon(Icons.check_circle_rounded,
-                                color: Color(0xFF8BE08B), size: 22),
-                          if (_answered && isSelected && !isCorrect)
-                            const Icon(Icons.cancel_rounded,
-                                color: Color(0xFFE0853A), size: 22),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            );
-          }),
-          // Opt-in teach-first scaffold: reveal the choice meanings BEFORE
-          // answering so a child who can't yet read the English isn't reduced to
-          // guessing. Using it marks the question 学習 (excluded from 合格率).
-          if (!_answered && !_hintShown) ...[
-            const SizedBox(height: 4),
-            Semantics(
-              button: true,
-              label: 'いみを みる。ヒントを つかうと、この問題は 合格率に 入りません',
-              excludeSemantics: true,
-              child: InkWell(
-                key: const ValueKey('vg_hint'),
-                onTap: _showHint,
-                borderRadius: BorderRadius.circular(10),
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: dqGold.withAlpha(110)),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.translate_rounded,
-                          color: dqGold, size: 18),
-                      const SizedBox(width: 8),
-                      Flexible(
-                        child: Text(
-                          'いみを みる（読（よ）めないとき）',
-                          textAlign: TextAlign.center,
-                          style: dqText(
-                              size: 13, w: FontWeight.w700, color: dqGold),
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              'ヒントを つかった問題（もんだい）は、合格率（ごうかくりつ）に 入（はい）れません。',
-              textAlign: TextAlign.center,
-              style: dqText(size: 11, color: dqInk.withAlpha(150)),
-            ),
-          ],
-          const SizedBox(height: 24),
-          // Explanation + Next button (shown after answering)
-          if (_answered) ...[
-            // Struggling-child support: after a cold streak, encourage (never
-            // scold) and point to the hint. Only on a WRONG answer that extends
-            // the streak past the threshold. (CEO 1135 / no-scold spine)
-            if (_selectedAnswer != q.correctIdx &&
-                _consecutiveWrong >= kStruggleThreshold) ...[
-              const PracticeEncouragementBanner(message: kVocabEncourageMsg),
-              const SizedBox(height: 10),
-            ],
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: dqBox,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: dqGold.withAlpha(90)),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Icon(Icons.lightbulb_rounded,
-                          color: dqGold, size: 20),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          // Underscore keys (ice_cream, thank_you) are storage
-                          // keys, not spelling — show them spaced for the child.
-                          q.word.reading.isNotEmpty
-                              ? '${q.word.word.replaceAll('_', ' ')}（${q.word.reading}）— ${q.word.jpTranslation}'
-                              : '${q.word.word.replaceAll('_', ' ')} — ${q.word.jpTranslation}',
-                          style: dqText(
-                              size: 14, w: FontWeight.w800, color: dqGold),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      // Hear the correct word — non-reader support (CEO 1132).
-                      _HearWordButton(
-                        audio: _wordAudio,
-                        vocabId: q.word.id,
-                        word: q.word.word,
-                      ),
-                    ],
-                  ),
-                  // The word IN CONTEXT — for a cloze item this is the real
-                  // lesson: see the answer resolved in a natural sentence, not
-                  // just its meaning. Converts a wrong answer into learning.
-                  const SizedBox(height: 8),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 28),
-                    child: RichText(
-                      text: TextSpan(
-                        style: dqText(
-                                size: 13,
-                                w: FontWeight.w500,
-                                color: dqInk.withAlpha(220))
-                            .copyWith(height: 1.5),
-                        children: [
-                          const TextSpan(
-                            text: 'れい:  ',
-                            style: TextStyle(fontWeight: FontWeight.w800),
-                          ),
-                          ..._sentenceSpans(q.originalSentence, q.word.word),
-                        ],
-                      ),
                     ),
-                  ),
-                  // Teach the wrong choices too: each is a real same-grade word
-                  // with a different meaning that doesn't fit the blank. Turns one
-                  // cloze into a 4-word vocab lesson (#76 follow-through).
-                  if (q.choiceGloss.isNotEmpty) ...[
-                    const SizedBox(height: 10),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 28),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'ほかの言葉 / Other choices',
-                            style: dqText(
-                                size: 11,
-                                w: FontWeight.w700,
-                                color: dqInk.withAlpha(150)),
-                          ),
-                          const SizedBox(height: 3),
-                          ...q.choiceGloss.entries.map(
-                            (e) => Padding(
-                              padding: const EdgeInsets.only(top: 2),
-                              child: RichText(
-                                text: TextSpan(
-                                  style: dqText(
-                                      size: 12,
-                                      w: FontWeight.w500,
-                                      color: dqInk.withAlpha(190)),
-                                  children: [
-                                    TextSpan(
-                                      text: e.key.replaceAll('_', ' '),
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.w800),
-                                    ),
-                                    TextSpan(text: ' — ${e.value}'),
-                                  ],
-                                ),
+                  );
+                }),
+                // Opt-in teach-first scaffold: reveal the choice meanings BEFORE
+                // answering so a child who can't yet read the English isn't reduced to
+                // guessing. Using it marks the question 学習 (excluded from 合格率).
+                if (!_answered && !_hintShown) ...[
+                  const SizedBox(height: 4),
+                  Semantics(
+                    button: true,
+                    label: 'いみを みる。ヒントを つかうと、この問題は 合格率に 入りません',
+                    excludeSemantics: true,
+                    child: InkWell(
+                      key: const ValueKey('vg_hint'),
+                      onTap: _showHint,
+                      borderRadius: BorderRadius.circular(10),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 14, vertical: 11),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: dqGold.withAlpha(110)),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.translate_rounded,
+                                color: dqGold, size: 18),
+                            const SizedBox(width: 8),
+                            Flexible(
+                              child: Text(
+                                'いみを みる（読（よ）めないとき）',
+                                textAlign: TextAlign.center,
+                                style: dqText(
+                                    size: 13,
+                                    w: FontWeight.w700,
+                                    color: dqGold),
                               ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    'ヒントを つかった問題（もんだい）は、合格率（ごうかくりつ）に 入（はい）れません。',
+                    textAlign: TextAlign.center,
+                    style: dqText(size: 11, color: dqInk.withAlpha(150)),
+                  ),
+                ],
+                const SizedBox(height: 24),
+                // Explanation + Next button (shown after answering)
+                if (_answered) ...[
+                  // Struggling-child support: after a cold streak, encourage (never
+                  // scold) and point to the hint. Only on a WRONG answer that extends
+                  // the streak past the threshold. (CEO 1135 / no-scold spine)
+                  if (_selectedAnswer != q.correctIdx &&
+                      _consecutiveWrong >= kStruggleThreshold) ...[
+                    const PracticeEncouragementBanner(
+                        message: kVocabEncourageMsg),
+                    const SizedBox(height: 10),
+                  ],
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: dqBox,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: dqGold.withAlpha(90)),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Icon(Icons.lightbulb_rounded,
+                                color: dqGold, size: 20),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                // Underscore keys (ice_cream, thank_you) are storage
+                                // keys, not spelling — show them spaced for the child.
+                                q.word.reading.isNotEmpty
+                                    ? '${q.word.word.replaceAll('_', ' ')}（${q.word.reading}）— ${q.word.jpTranslation}'
+                                    : '${q.word.word.replaceAll('_', ' ')} — ${q.word.jpTranslation}',
+                                style: dqText(
+                                    size: 14,
+                                    w: FontWeight.w800,
+                                    color: dqGold),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            // Hear the correct word — non-reader support (CEO 1132).
+                            _HearWordButton(
+                              audio: _wordAudio,
+                              vocabId: q.word.id,
+                              word: q.word.word,
+                            ),
+                          ],
+                        ),
+                        // The word IN CONTEXT — for a cloze item this is the real
+                        // lesson: see the answer resolved in a natural sentence, not
+                        // just its meaning. Converts a wrong answer into learning.
+                        const SizedBox(height: 8),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 28),
+                          child: RichText(
+                            text: TextSpan(
+                              style: dqText(
+                                      size: 13,
+                                      w: FontWeight.w500,
+                                      color: dqInk.withAlpha(220))
+                                  .copyWith(height: 1.5),
+                              children: [
+                                const TextSpan(
+                                  text: 'れい:  ',
+                                  style: TextStyle(fontWeight: FontWeight.w800),
+                                ),
+                                ..._sentenceSpans(
+                                    q.originalSentence, q.word.word),
+                              ],
+                            ),
+                          ),
+                        ),
+                        // Teach the wrong choices too: each is a real same-grade word
+                        // with a different meaning that doesn't fit the blank. Turns one
+                        // cloze into a 4-word vocab lesson (#76 follow-through).
+                        if (q.choiceGloss.isNotEmpty) ...[
+                          const SizedBox(height: 10),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 28),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'ほかの言葉 / Other choices',
+                                  style: dqText(
+                                      size: 11,
+                                      w: FontWeight.w700,
+                                      color: dqInk.withAlpha(150)),
+                                ),
+                                const SizedBox(height: 3),
+                                ...q.choiceGloss.entries.map(
+                                  (e) => Padding(
+                                    padding: const EdgeInsets.only(top: 2),
+                                    child: RichText(
+                                      text: TextSpan(
+                                        style: dqText(
+                                            size: 12,
+                                            w: FontWeight.w500,
+                                            color: dqInk.withAlpha(190)),
+                                        children: [
+                                          TextSpan(
+                                            text: e.key.replaceAll('_', ' '),
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w800),
+                                          ),
+                                          TextSpan(text: ' — ${e.value}'),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
-                      ),
+                      ],
                     ),
-                  ],
+                  ),
                 ],
+              ],
+            ),
+          ),
+        ),
+        // Sticky bottom — the 次へ button never scrolls out of view (rank-2).
+        if (_answered)
+          Container(
+            padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
+            decoration: BoxDecoration(
+              color: dqNight0,
+              border: Border(top: BorderSide(color: dqGoldDeep.withAlpha(60))),
+            ),
+            child: SafeArea(
+              top: false,
+              child: DqButton(
+                label: _currentIdx < _questions.length - 1 ? '次の問題へ' : '結果を見る',
+                onTap: _nextQuestion,
               ),
             ),
-            const SizedBox(height: 12),
-            DqButton(
-              label: _currentIdx < _questions.length - 1 ? '次の問題へ' : '結果を見る',
-              onTap: _nextQuestion,
-            ),
-          ],
-        ],
-      ),
+          ),
+      ],
     );
   }
 
