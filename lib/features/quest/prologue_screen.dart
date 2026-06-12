@@ -133,66 +133,141 @@ class _PrologueScreenState extends State<PrologueScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return DqScene(
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 10, 20, 18),
-          child: Column(
-            children: [
-              // Skip (top-right) — available from the first panel.
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: widget.onDone,
-                  child: Text('スキップ ▶▶', style: dqText(size: 12, color: dqInk)),
-                ),
-              ),
-              Expanded(
-                child: Center(
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 450),
-                    child: KeyedSubtree(key: ValueKey(_index), child: _stage()),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              DqDialogBox(
-                speaker: 'ものがたり',
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(_p.jp, style: dqText(size: 15).copyWith(height: 1.7)),
-                    const SizedBox(height: 8),
-                    Text(_p.en,
-                        style:
-                            dqText(size: 11, color: dqInk, w: FontWeight.w400)
-                                .copyWith(height: 1.4)),
+    // Full-bleed cinematic opening (diverse-team redesign, CEO 1372/1375): the
+    // painted 灰色のひろば fills the whole screen; the narrative is a subtitle over
+    // a bottom scrim — no bordered card, no DqDialogBox. The framed-thumbnail
+    // "asset-preview slideshow" is gone.
+    return ColoredBox(
+      color: const Color(0xFF05060F),
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          // 0 — full-bleed background (the grey square for scene beats; dark else)
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 450),
+            child:
+                KeyedSubtree(key: ValueKey('bg$_index'), child: _background()),
+          ),
+          // 1 — bottom scrim so captions stay legible over the art
+          const IgnorePointer(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.transparent,
+                    Colors.transparent,
+                    Colors.black87
                   ],
+                  stops: [0.0, 0.5, 1.0],
                 ),
               ),
-              const SizedBox(height: 16),
-              _advanceControl(),
-              // Progress dots.
-              const SizedBox(height: 12),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+            ),
+          ),
+          // 2 — content overlay
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 10, 20, 18),
+              child: Column(
                 children: [
-                  for (var i = 0; i < _panels.length; i++)
-                    Container(
-                      width: 7,
-                      height: 7,
-                      margin: const EdgeInsets.symmetric(horizontal: 3),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: i == _index ? dqGold : dqGoldDeep.withAlpha(110),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: widget.onDone,
+                      child: Text('スキップ ▶▶',
+                          style: dqText(size: 12, color: dqInk)),
+                    ),
+                  ),
+                  Expanded(
+                    child: Center(
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 450),
+                        child: KeyedSubtree(
+                            key: ValueKey(_index), child: _foregroundElement()),
                       ),
                     ),
+                  ),
+                  // Cinema subtitle over the scrim (replaces the dialog box).
+                  Text(_p.jp,
+                      style: dqText(size: 16).copyWith(
+                          height: 1.7,
+                          shadows: const [
+                            Shadow(color: Colors.black, blurRadius: 8)
+                          ])),
+                  const SizedBox(height: 6),
+                  Text(_p.en,
+                      style: dqText(size: 11, color: dqInk, w: FontWeight.w400)
+                          .copyWith(height: 1.4)),
+                  const SizedBox(height: 16),
+                  _advanceControl(),
+                  const SizedBox(height: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      for (var i = 0; i < _panels.length; i++)
+                        Container(
+                          width: 7,
+                          height: 7,
+                          margin: const EdgeInsets.symmetric(horizontal: 3),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: i == _index
+                                ? dqGold
+                                : dqGoldDeep.withAlpha(110),
+                          ),
+                        ),
+                    ],
+                  ),
                 ],
               ),
-            ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Full-bleed background. Scene beats (1,2) = the canonical 灰色のひろば under the
+  /// saturation filter + a slow Ken Burns push-in; other beats = a dark gradient
+  /// (their foreground element carries the moment). Reduced-motion jumps to end.
+  Widget _background() {
+    final isScene = _index == 1 || _index == 2;
+    if (!isScene) {
+      return const DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Color(0xFF0A0E24), Color(0xFF05060F)],
           ),
         ),
-      ),
+      );
+    }
+    const asset = 'assets/art/scenes_layton/town_pre1_grey_square.webp';
+    final drain =
+        _index == 2; // panel 2 = colour drains; panel 1 = colour blooms
+    final from = drain ? 1.0 : 0.0;
+    final to = drain ? 0.0 : 1.0;
+    Widget plate(double sat, double scale) => ClipRect(
+          child: Transform.scale(
+            scale: scale,
+            child: ColorFiltered(
+              colorFilter: ColorFilter.matrix(_saturationMatrix(sat)),
+              child: Image.asset(asset,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: double.infinity),
+            ),
+          ),
+        );
+    if (prefersReducedMotion(context)) return plate(to, 1.06);
+    return TweenAnimationBuilder<double>(
+      key: ValueKey('bgtween$_index'),
+      tween: Tween<double>(begin: 0.0, end: 1.0),
+      duration: const Duration(milliseconds: 2600),
+      curve: Curves.easeInOut,
+      builder: (_, t, __) => plate(from + (to - from) * t, 1.04 + 0.06 * t),
     );
   }
 
@@ -206,8 +281,9 @@ class _PrologueScreenState extends State<PrologueScreen> {
         label: _p.isLast ? '▶ はじめる / Begin' : '▶ つぎへ', onTap: _next);
   }
 
-  // ── Per-panel "stage" art (minimal-but-evocative within the dq dark palette).
-  Widget _stage() {
+  // ── Foreground element over the full-bleed background. Scene beats (1,2) put
+  //    the painted square in the background, so they have no foreground element.
+  Widget _foregroundElement() {
     if (_p.interactive) {
       return BlendWordCard(
         letters: const ['c', 'a', 't'],
@@ -223,16 +299,9 @@ class _PrologueScreenState extends State<PrologueScreen> {
       case 0:
         return _glyphRow(['s', 'a', 't'], const Color(0xFFEDE3C8));
       case 1:
-        // こえが いろになった: a real painted ソネア town blooms from grey to
-        // colour — the bible's "grey village tinting to colour", using the app's
-        // own painted scene (not a labelled circle). Animated saturation filter.
-        return _sceneStage('assets/art/scenes_layton/town5_lane.webp',
-            drain: false);
       case 2:
-        // しずけさ: the same world has its colour DRAWN BACK OUT to grey — the
-        // Silence spreading, shown by a colour→grey desaturation, not a monster.
-        return _sceneStage('assets/art/scenes_layton/town5_lane.webp',
-            drain: true);
+        return const SizedBox
+            .shrink(); // the square is the full-bleed background
       case 3:
         return _heroSpark();
       default: // last
@@ -257,56 +326,6 @@ class _PrologueScreenState extends State<PrologueScreen> {
       );
 
   /// A real painted ソネア scene whose COLOUR animates in or out — the bible's
-  /// "colour is born / the Silence draws it back to grey", rendered with the
-  /// app's own painted art (not a placeholder circle) via an animated saturation
-  /// ColorFilter. [drain] false = grey→colour, true = colour→grey. Reduced-motion
-  /// jumps to the end state. No new asset — reuses a bundled town scene.
-  Widget _sceneStage(String asset, {required bool drain}) {
-    final from = drain ? 1.0 : 0.0;
-    final to = drain ? 0.0 : 1.0;
-    return LayoutBuilder(
-      builder: (context, c) {
-        // Fill the panel as a DOMINANT hero image (the scene is the moment), not
-        // a small card marooned in dead space (super-strict re-audit, CEO 1366).
-        final maxW = c.maxWidth.isFinite ? c.maxWidth : 360.0;
-        final maxH = c.maxHeight.isFinite ? c.maxHeight : 360.0;
-        var w = maxW;
-        var h = w * 0.72; // tall, cinematic presence
-        if (h > maxH) {
-          h = maxH;
-          w = h / 0.72;
-        }
-        Widget frame(double s) => Container(
-              width: w,
-              height: h,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: dqGoldDeep.withAlpha(150), width: 2),
-                boxShadow: const [
-                  BoxShadow(
-                      color: Colors.black87, blurRadius: 28, spreadRadius: 2)
-                ],
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(14),
-                child: ColorFiltered(
-                  colorFilter: ColorFilter.matrix(_saturationMatrix(s)),
-                  child: Image.asset(asset, fit: BoxFit.cover),
-                ),
-              ),
-            );
-        if (prefersReducedMotion(context)) return frame(to);
-        return TweenAnimationBuilder<double>(
-          key: ValueKey('scenesat-$_index'),
-          tween: Tween<double>(begin: from, end: to),
-          duration: const Duration(milliseconds: 2200),
-          curve: Curves.easeInOut,
-          builder: (_, s, __) => frame(s),
-        );
-      },
-    );
-  }
-
   /// 5x4 colour matrix that scales saturation: [s]=1 → identity (full colour),
   /// [s]=0 → fully desaturated (luminance grey). Rec.709 luma weights.
   List<double> _saturationMatrix(double s) {
