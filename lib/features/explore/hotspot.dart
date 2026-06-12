@@ -1121,7 +1121,7 @@ final SceneDef kTownPre2PlusScene = SceneDef(
       framingJa: '橋（はし）の なかほど。渡（わた）し守（もり）が ふかい きりの '
           'たにを 見下（みお）ろしている。\n'
           '「〜する 場所（ばしょ）」を つなぐ ことば — 関係副詞（かんけいふくし）'
-          'where — が ためされる。\n'
+          '— が ためされる。\n'
           '「This is the place ___ many travellers turn back.」',
       npcGreyAsset: 'assets/art/scenes_layton/npc_fisher_grey.webp',
       npcColorAsset: 'assets/art/scenes_layton/npc_fisher_color.webp',
@@ -1203,7 +1203,7 @@ final SceneDef kTown2Scene = SceneDef(
           'こんや 城（しろ）の ホールで 講演（こうえん）する… のに、'
           'その”人（ひと）”を つなぐ ことばが…」',
       framingJa: '人（ひと）を つなぐ ことば — 関係代名詞（かんけいだいめいし）'
-          'who — が ためされる。\n'
+          '— が ためされる。\n'
           '「The professor ___ wrote this book is giving a lecture tonight.」',
       npcGreyAsset: 'assets/art/scenes_layton/npc_scholar_grey.webp',
       npcColorAsset: 'assets/art/scenes_layton/npc_scholar_color.webp',
@@ -1250,7 +1250,7 @@ final SceneDef kTownPre1Scene = SceneDef(
       framingJa: 'すべての 色（いろ）が きえた、しずかな ひろば。'
           'ここが サイレントの こころの まんなか。\n'
           '英検準1級（きゅう）の こなれた 言（い）い回（まわ）し — '
-          '「決断（けつだん）を くだす」は make — が ためされる。\n'
+          '「決断（けつだん）を くだす」と いう 動詞（どうし）と 名詞（めいし）の 組（く）み合（あ）わせ — が ためされる。\n'
           '正（ただ）しい ことばが、灰色（はいいろ）に 最初（さいしょ）の 色（いろ）を もどす。',
       // Authored 3-tier ladder — concept-only, names neither answer nor any
       // distractor (anti-leak rail: hintViolatesAnswerRail).
