@@ -61,15 +61,27 @@ async function waitForLabel(needle, timeout = DEAD_MS) {
   return -1;
 }
 
-// Click the first semantic node whose stripped label contains `needle`.
+// Click the MOST SPECIFIC semantic node whose stripped label contains `needle`.
+// Flutter nests a full-screen container group (which contains ALL child text) over
+// the real leaf widgets, so a naive "first match" clicks the whole screen at its
+// centre and hits the wrong target. Prefer role=button; otherwise the smallest-area
+// node — that is the actual tappable leaf, not its ancestor.
 async function clickLabel(needle) {
   const handle = await page.evaluateHandle((n) => {
     const host = document.querySelector('flt-semantics-host') || document;
+    let best = null, bestArea = Infinity, bestBtn = false;
     for (const el of host.querySelectorAll('flt-semantics, [role], [aria-label]')) {
       const lbl = (el.getAttribute('aria-label') || el.textContent || '').replace(/​/g, '');
-      if (lbl.includes(n)) return el;
+      if (!lbl.includes(n)) continue;
+      const isBtn = el.getAttribute('role') === 'button';
+      const r = el.getBoundingClientRect();
+      const area = Math.max(1, r.width * r.height);
+      // Prefer a button; among same kind prefer smaller area (the leaf).
+      if ((isBtn && !bestBtn) || (isBtn === bestBtn && area < bestArea)) {
+        best = el; bestArea = area; bestBtn = isBtn;
+      }
     }
-    return null;
+    return best;
   }, zwsp(needle));
   const el = handle.asElement();
   if (!el) return false;
@@ -109,10 +121,25 @@ record('boot → home interactive', Date.now() - t0, titleFound >= 0,
 // ── Tap the 英検 CTA → real Navigator.push to the exam hub ────────────────────
 // Assert on '試験概要' (EXAM OVERVIEW) — present ONLY on the exam hub, never home,
 // so a match proves the navigation actually happened (no false positive).
-const ok = await clickLabel('れんしゅう');
-const examMs = ok ? await waitForLabel('試験概要', DEAD_MS) : -1;
+const okCta = await clickLabel('れんしゅう');
+const examMs = okCta ? await waitForLabel('試験概要', DEAD_MS) : -1;
 record('tap 英検 CTA → exam hub', examMs < 0 ? DEAD_MS : examMs, examMs >= 0,
-  !ok ? 'CTA not found' : (examMs < 0 ? 'DEAD tap (no exam screen)' : ''));
+  !okCta ? 'CTA not found' : (examMs < 0 ? 'DEAD tap (no exam screen)' : ''));
+
+// ── exam hub → 筆記1 (大問1 vocab) → assert the active question screen ─────────
+// '正答' (the score counter) appears ONLY on the live question screen, never on
+// the hub button, so a match proves we actually entered the 大問.
+const okSec = examMs >= 0 && await clickLabel('筆記1');
+const q1Ms = okSec ? await waitForLabel('正答', DEAD_MS) : -1;
+record('tap 筆記1 → 大問1 question', q1Ms < 0 ? DEAD_MS : q1Ms, q1Ms >= 0,
+  !okSec ? '筆記1 not reached' : (q1Ms < 0 ? 'DEAD tap (no question screen)' : ''));
+
+// ── answer the question → assert the 解説/reveal (the core learning moment) ────
+// Tapping a choice must register and reveal the explanation + the 次へ control.
+const okAns = q1Ms >= 0 && await clickLabel('1. ');
+const revealMs = okAns ? await waitForLabel('次の問題へ', DEAD_MS) : -1;
+record('answer → 解説 reveal', revealMs < 0 ? DEAD_MS : revealMs, revealMs >= 0,
+  !okAns ? 'no choice to tap' : (revealMs < 0 ? 'DEAD tap (answer did nothing)' : ''));
 await page.screenshot({ path: '/tmp/eq_smoke_end.png' }).catch(() => {});
 
 // ── Report ────────────────────────────────────────────────────────────────────
