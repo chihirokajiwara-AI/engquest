@@ -803,6 +803,18 @@ class _BattleScreenState extends State<BattleScreen>
             _StreakBadge(streak: _streak),
           ],
           const Spacer(),
+          // Live XP ring (game-feel, CEO 1320): a bar filling toward the next
+          // level, visible while answering, so the child sees momentum and
+          // chooses "one more problem". Reactive to XP awards via profileNotifier.
+          ValueListenableBuilder<XpProfile?>(
+            valueListenable: _xpService.profileNotifier,
+            builder: (_, profile, __) => profile == null
+                ? const SizedBox.shrink()
+                : Padding(
+                    padding: const EdgeInsets.only(right: 6),
+                    child: _XpRing(profile: profile),
+                  ),
+          ),
           IconButton(
             icon: Icon(
               _sound.muted ? Icons.volume_off : Icons.volume_up,
@@ -1211,6 +1223,105 @@ class _StreakBadge extends StatelessWidget {
           size: 13,
           w: FontWeight.w800,
           color: const Color(0xFF2A1C00),
+        ),
+      ),
+    );
+  }
+}
+
+// ── Live XP progress ring ──────────────────────────────────────────────────────
+//
+// Game-feel (CEO 1320): a small ring in the battle header that fills toward the
+// next level as the child answers, so they *see* momentum and choose "one more
+// problem" — the fun→volume→英検合格 loop. Pulses gently when within ~2 answers
+// of levelling up to pull them over the line. Reduced-motion respected; no new
+// backend, no network. Reactive to XP awards via XpService.profileNotifier.
+class _XpRing extends StatefulWidget {
+  final XpProfile profile;
+  const _XpRing({required this.profile});
+
+  @override
+  State<_XpRing> createState() => _XpRingState();
+}
+
+class _XpRingState extends State<_XpRing> with SingleTickerProviderStateMixin {
+  late final AnimationController _pulse = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 650),
+  );
+
+  // Within ~2 "easy" answers of the next level (and not already maxed).
+  bool get _close {
+    final p = widget.profile;
+    if (p.levelXpSpan == 0 || p.levelXpSpan == 9999) return false;
+    return (p.levelXpSpan - p.currentLevelXp) <= (kGradeXp['easy']! * 2);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _syncPulse();
+  }
+
+  @override
+  void didUpdateWidget(covariant _XpRing old) {
+    super.didUpdateWidget(old);
+    _syncPulse();
+  }
+
+  void _syncPulse() {
+    final on = _close && !prefersReducedMotion(context);
+    if (on && !_pulse.isAnimating) {
+      _pulse.repeat(reverse: true);
+    } else if (!on && _pulse.isAnimating) {
+      _pulse
+        ..stop()
+        ..value = 0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _pulse.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final p = widget.profile;
+    final maxed = p.levelXpSpan == 9999;
+    final remaining =
+        maxed ? 0 : (p.levelXpSpan - p.currentLevelXp).clamp(0, 9999);
+    return Tooltip(
+      message: maxed ? 'さいこうレベル！' : 'つぎのレベルまで あと $remaining',
+      child: AnimatedBuilder(
+        animation: _pulse,
+        builder: (_, child) => Opacity(
+          opacity: _close ? 0.62 + _pulse.value * 0.38 : 1.0,
+          child: child,
+        ),
+        child: SizedBox(
+          width: 38,
+          height: 38,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              SizedBox(
+                width: 36,
+                height: 36,
+                child: CircularProgressIndicator(
+                  value: maxed ? 1.0 : p.levelProgress,
+                  strokeWidth: 3,
+                  backgroundColor: dqGold.withAlpha(38),
+                  valueColor: const AlwaysStoppedAnimation<Color>(dqGold),
+                ),
+              ),
+              Text(
+                'Lv${p.level}',
+                style: dqText(size: 10, w: FontWeight.w800, color: dqGold),
+              ),
+            ],
+          ),
         ),
       ),
     );
