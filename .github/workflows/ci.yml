@@ -52,6 +52,14 @@ jobs:
       - name: Verify audio assets
         run: python3 scripts/verify_audio_assets.py
 
+      # ── 英検 listening audio coverage ───────────────────────────────────────
+      # Asserts every audioKey in listening_data.dart has a non-empty bundled
+      # clip (and no stale ALLOWED_MISSING waiver). AudioCueService swallows a
+      # missing clip silently, so without this a listening item ships a dead 🔊
+      # button and is dropped from the by-ear 合格率 with no error.
+      - name: Verify listening audio coverage
+        run: python3 scripts/verify_listening_audio.py
+
       # ── Native audio manifest contract ─────────────────────────────────────
       # Asserts assets/content/audio_manifest.json covers all 300 words with a
       # schema that AudioManifestEntry.fromJson (tts_service.dart) can parse
