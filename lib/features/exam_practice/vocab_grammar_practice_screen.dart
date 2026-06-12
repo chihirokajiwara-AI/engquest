@@ -12,6 +12,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import '../../core/audio/word_audio_player_service.dart';
+import '../../core/sound/practice_feedback.dart';
 import '../../core/data/vocab_repository.dart';
 import '../../core/models/vocab_item.dart';
 import 'distractor_generator.dart';
@@ -317,6 +318,8 @@ class _VocabGrammarPracticeScreenState
         if (correct) _unaidedCorrect++;
       }
     });
+    // Game-feel (#51): a haptic tick + chime so answering feels responsive.
+    PracticeFeedback.answered(correct: correct);
     // Spaced repetition (#119): schedule this word via FSRS so a missed word
     // is re-surfaced in a future session (acquisition, not one-shot recognition).
     // Fire-and-forget; a hinted-correct is scheduled as 'hard' (not mastered).
@@ -387,6 +390,7 @@ class _VocabGrammarPracticeScreenState
     if (_currentIdx >= _questions.length - 1) {
       _recordSessionResult(); // fire-and-forget; UI does not wait
       setState(() => _sessionDone = true);
+      PracticeFeedback.sessionComplete();
     } else {
       setState(() {
         _currentIdx++;

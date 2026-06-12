@@ -27,6 +27,7 @@ import 'package:flutter/material.dart';
 
 import 'choice_shuffle.dart';
 import '../../core/audio/audio_assets.dart';
+import '../../core/sound/practice_feedback.dart';
 import '../../core/audio/audio_cue_service.dart';
 import '../../core/audio/audio_mute.dart';
 import '../../core/storage/preferences_service.dart';
@@ -196,6 +197,8 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
         if (correct) _measuredCorrect++;
       }
     });
+    // Game-feel (#51): a haptic tick + chime so answering feels responsive.
+    PracticeFeedback.answered(correct: idx == item.correctIndex);
     // Reveal the スクリプト (what was said) so the child can read what they
     // misheard — the listening learning loop, using the authored transcript.
     // jumpTo (not animateTo): instant, leaves no pending animation that would

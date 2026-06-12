@@ -13,6 +13,7 @@ import 'choice_shuffle.dart';
 import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
 import '../quest/ui/dq_ui.dart';
+import '../../core/sound/practice_feedback.dart';
 import '../home/streak_service.dart';
 
 /// Returns [p] with its choices shuffled and [correctIdx] remapped. The authored
@@ -109,6 +110,9 @@ class _ConversationPracticeScreenState
       if (correct) _correctCount++;
       _consecutiveWrong = correct ? 0 : _consecutiveWrong + 1;
     });
+    // Game-feel (#51): a haptic tick + chime so answering feels responsive.
+    PracticeFeedback.answered(
+        correct: idx == _problems[_currentIdx].correctIdx);
     if (_problems[_currentIdx].explanation != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (_qScroll.hasClients) {
@@ -145,6 +149,7 @@ class _ConversationPracticeScreenState
     if (_currentIdx >= _problems.length - 1) {
       _recordSessionResult(); // fire-and-forget; UI does not wait
       setState(() => _sessionDone = true);
+      PracticeFeedback.sessionComplete();
     } else {
       setState(() {
         _currentIdx++;

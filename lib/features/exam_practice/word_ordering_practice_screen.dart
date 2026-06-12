@@ -16,6 +16,7 @@ import 'eiken_exam_config.dart';
 import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
 import '../home/streak_service.dart';
+import '../../core/sound/practice_feedback.dart';
 import '../quest/ui/dq_ui.dart';
 
 /// A 語句整序 (word-ordering) problem in the authentic 英検 大問3 form: a Japanese
@@ -145,6 +146,8 @@ class _WordOrderingPracticeScreenState
         if (isCorrect) _unaidedCorrect++;
       }
     });
+    // Game-feel (#51): a haptic tick + chime so answering feels responsive.
+    PracticeFeedback.answered(correct: isCorrect);
   }
 
   /// Records the completed session result into [SkillAccuracyStore].
@@ -172,6 +175,7 @@ class _WordOrderingPracticeScreenState
     if (_currentIdx >= _problems.length - 1) {
       _recordSessionResult(); // fire-and-forget; UI does not wait
       setState(() => _sessionDone = true);
+      PracticeFeedback.sessionComplete();
     } else {
       setState(() {
         _currentIdx++;

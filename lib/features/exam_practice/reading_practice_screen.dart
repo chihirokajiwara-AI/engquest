@@ -12,6 +12,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:engquest/features/quest/ui/dq_ui.dart';
 import 'package:engquest/features/home/streak_service.dart';
+import 'package:engquest/core/sound/practice_feedback.dart';
 import 'eiken_exam_config.dart';
 import 'practice_encouragement.dart';
 import 'choice_shuffle.dart';
@@ -201,6 +202,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
         if (correct) _measuredCorrect++;
       }
     });
+    // Game-feel (#51): a haptic tick + chime so answering feels responsive.
+    PracticeFeedback.answered(correct: correct);
     // After the 解説 lays out, bring it into view (it renders below the choices).
     if (_currentQuestion.explanation != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -260,6 +263,7 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
     } else {
       _recordSessionResult(); // fire-and-forget; UI does not wait
       setState(() => _sessionDone = true);
+      PracticeFeedback.sessionComplete();
     }
   }
 
