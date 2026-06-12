@@ -516,6 +516,7 @@ const _grade4Part2 = <ListeningItem>[
       'Two to one.',
     ],
     correctIndex: 2,
+    explanation: 'Bは「won three to one（3たい1でかった）」といっているね。スコアは Three to one だよ。',
   ),
   ListeningItem(
     part: 2,
@@ -534,6 +535,8 @@ const _grade4Part2 = <ListeningItem>[
       'He takes the train.',
     ],
     correctIndex: 2,
+    explanation:
+        'Bは「I take the bus（バスでいく）」といっているよ。about twenty minutes ともいっているね。',
   ),
   ListeningItem(
     part: 2,
@@ -552,6 +555,8 @@ const _grade4Part2 = <ListeningItem>[
       'Go to an amusement park.',
     ],
     correctIndex: 2,
+    explanation:
+        'Bは「visit my grandparents（そふぼに あいにいく）」といっているね。in Osaka（おおさか）だよ。',
   ),
   ListeningItem(
     part: 2,
@@ -570,6 +575,7 @@ const _grade4Part2 = <ListeningItem>[
       'A new phone.',
     ],
     correctIndex: 1,
+    explanation: 'Bは「gave me a new guitar（ギターをもらった）」といっているよ。',
   ),
   ListeningItem(
     part: 2,
@@ -588,6 +594,7 @@ const _grade4Part2 = <ListeningItem>[
       'At noon.',
     ],
     correctIndex: 1,
+    explanation: 'Bは「It opens at nine in the morning（あさ9じにあく）」といっているね。',
   ),
   ListeningItem(
     part: 2,
@@ -606,6 +613,8 @@ const _grade4Part2 = <ListeningItem>[
       'At the shopping mall.',
     ],
     correctIndex: 2,
+    explanation:
+        'Bは「at the department store near the station（えきの ちかくのデパート）」といっているよ。',
   ),
   ListeningItem(
     part: 2,
@@ -624,6 +633,7 @@ const _grade4Part2 = <ListeningItem>[
       'Four.',
     ],
     correctIndex: 2,
+    explanation: 'Bは「two dogs and a cat（いぬ2ひきと ねこ1ぴき）」といっているね。あわせて 3びき だよ。',
   ),
   ListeningItem(
     part: 2,
@@ -642,6 +652,7 @@ const _grade4Part2 = <ListeningItem>[
       'She forgot about it.',
     ],
     correctIndex: 1,
+    explanation: 'Bは「I had a cold（かぜを ひいた）」といっているよ。だから やすんだんだね。',
   ),
   ListeningItem(
     part: 2,
@@ -660,6 +671,7 @@ const _grade4Part2 = <ListeningItem>[
       'Orange juice.',
     ],
     correctIndex: 3,
+    explanation: 'Bは「Orange juice, please（オレンジジュース）」といっているね。',
   ),
   ListeningItem(
     part: 2,
@@ -678,6 +690,7 @@ const _grade4Part2 = <ListeningItem>[
       'This weekend.',
     ],
     correctIndex: 1,
+    explanation: 'Bは「She will be back next month（らいげつ もどる）」といっているよ。',
   ),
 ];
 
