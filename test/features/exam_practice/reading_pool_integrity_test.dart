@@ -40,8 +40,9 @@ void main() {
     '5': 24,
     '4': 35, // ratcheted to official target (studio expansion 2026-06-12)
     '3': 30, // ratcheted to official target (studio expansion 2026-06-12)
-    'pre2': 19,
-    'pre2plus': 31, // ratcheted to official target (studio expansion 2026-06-12)
+    'pre2': 29, // ratcheted to official target (studio expansion 2026-06-12)
+    'pre2plus':
+        31, // ratcheted to official target (studio expansion 2026-06-12)
     '2': 31, // ratcheted to official target (studio expansion 2026-06-12)
     'pre1': 31, // ratcheted to official target (studio expansion 2026-06-12)
   };

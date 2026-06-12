@@ -238,6 +238,26 @@ const Map<String, String> _kReadingExplanations = {
       '正解は「Sure, go straight and turn left.」。道のたずね方への返事だから、行き方を教える文がぴったり。ほかは質問とかみ合わないね。',
   'p2_r_019':
       '正解は「They can learn new skills.」。本文に learn new skills「新しい技術を学ぶ」とそのまま書いてあるよ。',
+  'p2_r_020':
+      '正解は「analyze」。analyze the data で「データを分析する」。コンピューターでデータをくわしく調べる、という流れだね。',
+  'p2_r_021':
+      '正解は「rains」。If ＋ 主語 ＋ 現在形, 主語 ＋ will ～ の形（条件のif）。未来のことでも if のあとは現在形を使うよ。',
+  'p2_r_022':
+      '正解は「take」。take advantage of ～で「〜を利用する・いかす」。チャンスをいかして留学する、という意味だね。',
+  'p2_r_023':
+      '正解は「No thanks, I am fine.」。「もっとお茶はいかが？」へのていねいな断り方だよ。ほかは話がかみ合わないね。',
+  'p2_r_024':
+      '正解は「That sounds like a great idea.」。「テニス部に入ろうと思う」への自然な相づち。That sounds ～「〜そうだね」は会話でよく使うよ。',
+  'p2_r_025':
+      '正解は「More than fifty.」。本文に now more than fifty families「今は50家族以上」とあるよ。only ten は「はじめは」の数だね。',
+  'p2_r_026':
+      '正解は「Water and tools.」。本文に provides water and tools for free「水と道具を無料でていきょうする」とそのまま書いてあるよ。',
+  'p2_r_027':
+      '正解は「He had to speak English.」。本文に nervous about speaking English「英語を話すのがきんちょうした」とあるね。',
+  'p2_r_028':
+      '正解は「It grew.」。本文の最後に his confidence grew「自信が育った」とあるよ。grow は「育つ・大きくなる」だね。',
+  'p2_r_029':
+      '正解は「About eight to ten hours.」。本文に need about eight to ten hours「8〜10時間ひつよう」とあるよ。専門家の意見の部分を読み取ろう。',
   // ── 英検準2級プラス (pre2plus) — content-qa-verified 2026-06-12 ──
   'p2p_r_001':
       '正解は「has been working」。since 2020「2020年から」ずっと働いている、と今もつづく動作を表す現在完了進行形だよ。',
@@ -1534,6 +1554,141 @@ const _pre2Reading = [
       'They can travel abroad.',
     ],
     correctIdx: 2,
+  ),
+  // ── 大問1 語句空所補充 (vocabulary + grammar, CEFR B1) — studio expansion 2026-06-12 ──
+  ReadingMockItem(
+    id: 'p2_r_020',
+    sectionId: 'p2_r1',
+    passageText: 'The scientist used a computer to ( ) the data carefully.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['announce', 'avoid', 'analyze', 'admire'],
+    correctIdx: 2,
+  ),
+  ReadingMockItem(
+    id: 'p2_r_021',
+    sectionId: 'p2_r1',
+    passageText: 'If it ( ) tomorrow, we will cancel the picnic.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['will rain', 'rained', 'rains', 'raining'],
+    correctIdx: 2,
+  ),
+  ReadingMockItem(
+    id: 'p2_r_022',
+    sectionId: 'p2_r1',
+    passageText: 'You should ( ) advantage of this chance to study abroad.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['make', 'take', 'do', 'get'],
+    correctIdx: 1,
+  ),
+  // ── 大問2 会話文の文空所補充 (conversation response) ──────────────────────
+  ReadingMockItem(
+    id: 'p2_r_023',
+    sectionId: 'p2_r2',
+    passageText: 'A: Would you like some more tea?  B: ( )',
+    questionText: 'Choose the best response.',
+    choices: [
+      'Yes, please turn it off.',
+      'No thanks, I am fine.',
+      'It is on the table.',
+      'I went there last week.',
+    ],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: 'p2_r_024',
+    sectionId: 'p2_r2',
+    passageText: 'A: I am thinking of joining the tennis club.  B: ( )',
+    questionText: 'Choose the best response.',
+    choices: [
+      'You should not have.',
+      'That sounds like a great idea.',
+      'No, I am not tired.',
+      'Because it was raining.',
+    ],
+    correctIdx: 1,
+  ),
+  // ── 大問3 長文の内容一致選択 (passage comprehension) ──────────────────────
+  ReadingMockItem(
+    id: 'p2_r_025',
+    sectionId: 'p2_r3',
+    passageText: 'Greenfield Town started a community garden three years ago. '
+        'At first, only ten families joined, but now more than fifty families '
+        'grow vegetables there. The town provides water and tools for free, '
+        'and members share their harvest with a local food bank.',
+    questionText:
+        'According to the passage, how many families grow vegetables now?',
+    choices: [
+      'Exactly ten.',
+      'About thirty.',
+      'More than fifty.',
+      'Fewer than ten.',
+    ],
+    correctIdx: 2,
+  ),
+  ReadingMockItem(
+    id: 'p2_r_026',
+    sectionId: 'p2_r3',
+    passageText: 'Greenfield Town started a community garden three years ago. '
+        'At first, only ten families joined, but now more than fifty families '
+        'grow vegetables there. The town provides water and tools for free, '
+        'and members share their harvest with a local food bank.',
+    questionText: 'What does the town provide for free?',
+    choices: [
+      'Seeds and money.',
+      'Water and tools.',
+      'Food and clothes.',
+      'Land and houses.',
+    ],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: 'p2_r_027',
+    sectionId: 'p2_r3',
+    passageText: 'Last summer, Kenji spent two weeks in Australia as part of a '
+        'student exchange program. He stayed with a host family and attended a '
+        'local high school. Although he was nervous about speaking English at '
+        'first, he soon made many friends and his confidence grew.',
+    questionText: 'Why was Kenji nervous at first?',
+    choices: [
+      'He missed his family.',
+      'He could not find the school.',
+      'He had to speak English.',
+      'He did not like the food.',
+    ],
+    correctIdx: 2,
+  ),
+  ReadingMockItem(
+    id: 'p2_r_028',
+    sectionId: 'p2_r3',
+    passageText: 'Last summer, Kenji spent two weeks in Australia as part of a '
+        'student exchange program. He stayed with a host family and attended a '
+        'local high school. Although he was nervous about speaking English at '
+        'first, he soon made many friends and his confidence grew.',
+    questionText: "What happened to Kenji's confidence during the trip?",
+    choices: [
+      'It grew.',
+      'It disappeared.',
+      'It stayed the same.',
+      'It made him tired.',
+    ],
+    correctIdx: 0,
+  ),
+  ReadingMockItem(
+    id: 'p2_r_029',
+    sectionId: 'p2_r3',
+    passageText: 'Many high school students do not get enough sleep. Experts '
+        'say teenagers need about eight to ten hours each night, but many sleep '
+        'far less because of homework and smartphones. Lack of sleep can make '
+        'it harder to concentrate in class.',
+    questionText:
+        'According to experts, how many hours of sleep do teenagers need?',
+    choices: [
+      'About four hours.',
+      'About eight to ten hours.',
+      'Exactly twelve hours.',
+      'Less than six hours.',
+    ],
+    correctIdx: 1,
   ),
 ];
 
