@@ -267,6 +267,38 @@ const Map<String, String> _kReadingExplanations = {
       '正解は「read」。「世界中の人に読まれた小説」と受け身の意味なので過去分詞 read。名詞 the novel を後ろから説明しているよ。',
   'p2p_r_015':
       '正解は「Feeling isolated」。本文に feeling isolated「孤独を感じる」とあり、これが在宅勤務の欠点として書かれているね。',
+  'p2p_r_016':
+      '正解は「The museum will be closed for repairs.」。本文に has been moved ... because the building will be closed for repairs とあり、修理のための休館が理由だね。',
+  'p2p_r_017':
+      '正解は「It can kill certain harmful bacteria.」。本文に researchers have discovered that honey can kill ... bacteria とあるよ。今の研究で分かったことを問う問題だね。',
+  'p2p_r_018':
+      '正解は「Beginners who have never swum before」。本文に for beginners who have never swum before「泳いだことのない初心者向け」と書かれているよ。',
+  'p2p_r_019':
+      '正解は「To meet people and make friends」。本文に To meet people, she joined a volunteer group とあり、友だちを作るために参加したと分かるね。',
+  'p2p_r_020':
+      '正解は「They stop water from escaping.」。本文の a waxy layer that keeps water from escaping「水分がにげるのを防ぐ」が手がかりだよ。',
+  'p2p_r_021':
+      '正解は「To explain that an item is delayed and offer choices」。品物が out of stock で遅れること、色の変更か返金を選べることを伝えるメールだね。',
+  'p2p_r_022':
+      '正解は「Hotels have been fully booked and cafes have opened.」。Since ... 以降に hotels have been fully booked, new cafes have opened とあるよ。現在完了に注目しよう。',
+  'p2p_r_023':
+      '正解は「It is a popular myth that is not true.」。最後に The idea ... is simply a popular myth「ただのよくある思いこみ」とあり、本当ではないと述べているね。',
+  'p2p_r_024':
+      '正解は「He came to enjoy it.」。running became something he actually looked forward to「楽しみになった」とあるから、好きになったと分かるよ。',
+  'p2p_r_025':
+      '正解は「It saves money and waste over time.」。本文の it saves both money and waste in the long run「長い目で見るとお金もごみも減らせる」が根拠だね。',
+  'p2p_r_026':
+      '正解は「therefore」。「宿題が終わらなかった、だから時間をもらった」と理由→結果の流れ。therefore は「だから」を表すつなぎ言葉だよ。',
+  'p2p_r_027':
+      '正解は「look up」。look up ～ in a dictionary で「辞書で～を調べる」。意味を調べる、という熟語だね。',
+  'p2p_r_028':
+      '正解は「had had」。If ＋過去完了, would have ～で「あのとき～だったら…だっただろう」という仮定法過去完了。過去の事実と反対の話だよ。',
+  'p2p_r_029':
+      '正解は「comply with」。comply with the rules で「規則を守る・従う」。安全基準を守れなかった、という流れだね。',
+  'p2p_r_030':
+      '正解は「so」。so ＋副詞 ＋ that ～で「とても…なので～」。fluently は副詞だから such ではなく so を使うよ。',
+  'p2p_r_031':
+      '正解は「make」。make a decision で「決定をする」という決まった組み合わせ。do や take ではなく make を使うのがポイントだよ。',
   // ── 英検2級 (grade2) — content-qa-verified 2026-06-12 ──
   '2_r_001':
       '正解は introduced「導入した」。新しい規則を「設ける」という意味で、introduce ～ to reduce…の流れに合います。intervened（介入する）や invented（発明する）は規則には合いません。',
@@ -2010,5 +2042,237 @@ const _pre2plusReading = [
       'Longer working hours',
     ],
     correctIdx: 1,
+  ),
+  // ── 大問3 長文の内容一致 (B1) + 語い/文法 空所補充 — studio-expanded to official
+  //    31 target (2026-06-12, content-qa, §VII-verified) ──
+  ReadingMockItem(
+    id: 'p2p_r_016',
+    sectionId: 'p2p_r3',
+    passageText:
+        'Subject: School Trip\n\nDear students,\nThe museum visit planned for '
+        'Thursday has been moved to the following Monday because the building '
+        'will be closed for repairs. The bus will still leave from the main '
+        'gate at 8:30 a.m. Please bring the form your parents have signed.',
+    questionText: 'Why was the museum visit changed to a different day?',
+    choices: [
+      'The bus broke down.',
+      'The museum will be closed for repairs.',
+      'The students were not ready.',
+      'The teachers were busy on Thursday.',
+    ],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: 'p2p_r_017',
+    sectionId: 'p2p_r3',
+    passageText:
+        'Honey has been used as a natural medicine for thousands of years. '
+        'Long before modern science, people put it on wounds because it helped '
+        'them heal. Today, researchers have discovered that honey can kill '
+        'certain harmful bacteria, which explains why those early treatments '
+        'often worked.',
+    questionText: 'What have modern researchers discovered about honey?',
+    choices: [
+      'It tastes better than sugar.',
+      'It can kill certain harmful bacteria.',
+      'It was invented by scientists.',
+      'It should never be put on wounds.',
+    ],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: 'p2p_r_018',
+    sectionId: 'p2p_r3',
+    passageText:
+        'Notice: The community pool will offer free swimming lessons every '
+        'Saturday in July. The lessons are designed for beginners who have '
+        'never swum before. Spaces are limited, so anyone who wants to join '
+        'must sign up at the front desk by June 30.',
+    questionText: 'Who are these lessons mainly intended for?',
+    choices: [
+      'People who already swim well',
+      'Beginners who have never swum before',
+      'Children under three years old',
+      'Visitors from other towns only',
+    ],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: 'p2p_r_019',
+    sectionId: 'p2p_r3',
+    passageText:
+        'When Mia moved to a new town, she was worried that she would not make '
+        'any friends. To meet people, she joined a volunteer group that cleaned '
+        'the local park every weekend. Although the work was tiring, she soon '
+        'felt that she belonged, and the other members became like a second '
+        'family to her.',
+    questionText: 'Why did Mia join the volunteer group?',
+    choices: [
+      'To earn some extra money',
+      'To get exercise on weekends',
+      'To meet people and make friends',
+      'Because her teacher told her to',
+    ],
+    correctIdx: 2,
+  ),
+  ReadingMockItem(
+    id: 'p2p_r_020',
+    sectionId: 'p2p_r3',
+    passageText:
+        'Some plants are able to survive in deserts where almost no rain falls. '
+        'Their leaves are often thin and covered with a waxy layer that keeps '
+        'water from escaping. In addition, their roots spread widely so that '
+        'they can absorb any water as soon as it reaches the ground.',
+    questionText: 'How do the waxy leaves help these desert plants?',
+    choices: [
+      'They make the plants grow taller.',
+      'They stop water from escaping.',
+      'They attract more insects.',
+      'They protect the plants from the cold.',
+    ],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: 'p2p_r_021',
+    sectionId: 'p2p_r3',
+    passageText:
+        'Subject: Order Update\n\nThank you for your order. Unfortunately, the '
+        'blue jacket you chose is currently out of stock and will not arrive '
+        'until next month. If you do not wish to wait, you may either choose a '
+        'different color or cancel your order for a full refund.',
+    questionText: 'What is the main reason for this email?',
+    choices: [
+      'To thank the customer for visiting the store',
+      'To explain that an item is delayed and offer choices',
+      'To advertise a new jacket on sale',
+      'To remind the customer to pay',
+    ],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: 'p2p_r_022',
+    sectionId: 'p2p_r3',
+    passageText:
+        'For years, the small town of Riverton had been losing visitors. Then '
+        'the local council decided to hold a music festival each autumn. Since '
+        'the first festival was held, hotels have been fully booked and many '
+        'new cafes have opened. The event has brought new life to the whole '
+        'area.',
+    questionText: 'What has happened since the festival began?',
+    choices: [
+      'The town has become quieter than before.',
+      'Hotels have been fully booked and cafes have opened.',
+      'The council has cancelled all future events.',
+      'Visitors have stopped coming to the town.',
+    ],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: 'p2p_r_023',
+    sectionId: 'p2p_r3',
+    passageText:
+        'Many people believe that we only use a small part of our brains, but '
+        'this is not true. Scientists who study the brain have shown that '
+        'almost every region is active at some point during a normal day. The '
+        'idea that most of the brain is unused is simply a popular myth.',
+    questionText:
+        'What does the passage say about the idea that we use only a small part of our brains?',
+    choices: [
+      'It has been proven by scientists.',
+      'It is true only while we sleep.',
+      'It is a popular myth that is not true.',
+      'It applies to children but not adults.',
+    ],
+    correctIdx: 2,
+  ),
+  ReadingMockItem(
+    id: 'p2p_r_024',
+    sectionId: 'p2p_r3',
+    passageText:
+        'Tom had always wanted to run a marathon, but he kept finding reasons '
+        'to put it off. After a friend signed up with him, he finally began '
+        'training every morning. The early starts were hard at first; however, '
+        'as the weeks passed, running became something he actually looked '
+        'forward to.',
+    questionText: 'How did Tom feel about running by the end of the passage?',
+    choices: [
+      'He came to enjoy it.',
+      'He decided to give it up.',
+      'He found it more boring than before.',
+      'He was too tired to continue.',
+    ],
+    correctIdx: 0,
+  ),
+  ReadingMockItem(
+    id: 'p2p_r_025',
+    sectionId: 'p2p_r3',
+    passageText:
+        'Reusing shopping bags is one simple way to help the environment. A '
+        'single cloth bag can replace hundreds of plastic ones over its life. '
+        'While a cloth bag costs more at first, it saves both money and waste '
+        'in the long run, which is why many stores now encourage shoppers to '
+        'bring their own.',
+    questionText:
+        'According to the passage, what is one benefit of using a cloth bag?',
+    choices: [
+      'It is cheaper to buy than a plastic bag.',
+      'It saves money and waste over time.',
+      'It can only be used a few times.',
+      'It is given away free at every store.',
+    ],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: 'p2p_r_026',
+    sectionId: 'p2p_r3',
+    passageText:
+        'I could not finish the homework; ( ), I asked my teacher for more time.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['therefore', 'however', 'although', 'unless'],
+    correctIdx: 0,
+  ),
+  ReadingMockItem(
+    id: 'p2p_r_027',
+    sectionId: 'p2p_r3',
+    passageText:
+        'Please ( ) these difficult words in a dictionary before class.',
+    questionText: 'Choose the best phrase for the blank.',
+    choices: ['look after', 'look up', 'look for', 'look into'],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: 'p2p_r_028',
+    sectionId: 'p2p_r3',
+    passageText:
+        'If I ( ) more time yesterday, I would have visited the castle.',
+    questionText: 'Choose the best phrase for the blank.',
+    choices: ['have had', 'had had', 'have', 'would have'],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: 'p2p_r_029',
+    sectionId: 'p2p_r3',
+    passageText:
+        'The factory was closed down because it failed to ( ) the new safety rules.',
+    questionText: 'Choose the best phrase for the blank.',
+    choices: ['comply with', 'depend on', 'give up', 'take part'],
+    correctIdx: 0,
+  ),
+  ReadingMockItem(
+    id: 'p2p_r_030',
+    sectionId: 'p2p_r3',
+    passageText:
+        'She speaks English ( ) fluently that people think she grew up abroad.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['such', 'too', 'so', 'very'],
+    correctIdx: 2,
+  ),
+  ReadingMockItem(
+    id: 'p2p_r_031',
+    sectionId: 'p2p_r3',
+    passageText: 'We need to ( ) a decision soon, or we will miss the chance.',
+    questionText: 'Choose the best word for the blank.',
+    choices: ['make', 'do', 'take', 'give'],
+    correctIdx: 0,
   ),
 ];
