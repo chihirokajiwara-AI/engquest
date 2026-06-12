@@ -65,6 +65,26 @@ void main() {
         reason: 'a brand-new user should see the 本格 title first');
   });
 
+  testWidgets(
+      'NEW player meets the opening STORY before the onboarding form '
+      '(CEO 1363 — hook before configure)', (tester) async {
+    // The order must be title → STORY → form → home, NOT the old title → age/
+    // level/avatar FORM → story (a dry config gate before the game was ever
+    // established — the Day-1 anti-pattern the CEO flagged).
+    SharedPreferences.setMockInitialValues({});
+    await _boot(tester);
+    expect(find.text(_titleStart), findsOneWidget);
+    await tester.tap(find.text(_titleStart));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 600)); // AnimatedSwitcher
+    expect(find.byKey(const ValueKey('phase-prologue')), findsOneWidget,
+        reason: 'the opening story must precede the onboarding form');
+    expect(find.byKey(const ValueKey('phase-onboarding')), findsNothing,
+        reason: 'the dry config form must NOT gate the story');
+    await _drain(tester);
+    _drainOverflowOnly(tester);
+  });
+
   testWidgets('returning onboarded player skips the title on refresh (#53)',
       (tester) async {
     SharedPreferences.setMockInitialValues({

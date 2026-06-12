@@ -1012,31 +1012,36 @@ class _AppEntryPointState extends State<_AppEntryPoint> {
         child: QuestTitleScreen(onStart: () => setState(() => _started = true)),
       );
     }
-    if (_onboardingComplete) {
-      // First time into the adventure: the opening PROLOGUE plays once, then the
-      // child LANDS on the コトバ探偵 daily-return home (streak case-log + 今日のナゾ
-      // from FSRS-due → into the painted scene). This is the retention spine + the
-      // fix for the buried-soul seam (Opus review 2026-06-06): the painted world is
-      // the landing, not a level-select menu. The map stays reachable from the home.
-      if (!_prologueSeen) {
-        return KeyedSubtree(
-          key: const ValueKey('phase-prologue'),
-          child: PrologueScreen(onDone: _handlePrologueDone),
-        );
-      }
+    // HOOK BEFORE CONFIGURE (CEO 1363 + 2026 onboarding research): the opening
+    // STORY plays FIRST — the interactive 🔊 c·a·t blend + the サイレント world
+    // establish コトバ探偵 BEFORE any form. The old order led with a dry
+    // age→placement-quiz→avatar→goal form and buried the story behind it — the
+    // textbook Day-1 anti-pattern (a child had to pass a test before meeting the
+    // game). The prologue is generic (hero.png silhouette, NO avatar dependency on
+    // onboarding — verified), so it needs nothing from the form. Once-ever.
+    if (!_prologueSeen) {
       return KeyedSubtree(
-        key: const ValueKey('phase-home'),
-        // #134: the LIVE home reads the child's REAL FSRS due-count from Firestore
-        // (battle persists there) instead of an empty per-screen InMemory store, so
-        // a returning child sees their actual 「きょうの ナゾ」, not a false 0. Preview
-        // routes + tests keep InMemory (offline-safe). The home's getDueCards is
-        // already guarded (falls to 0 on offline/failure).
-        child: KotobaHomeScreen(cardRepository: FirestoreFsrsCardRepository()),
+        key: const ValueKey('phase-prologue'),
+        child: PrologueScreen(onDone: _handlePrologueDone),
       );
     }
+    // Now the child is bought-in by the story → configure (age/level/avatar/goal).
+    if (!_onboardingComplete) {
+      return KeyedSubtree(
+        key: const ValueKey('phase-onboarding'),
+        child: OnboardingFlow(onComplete: _handleOnboardingComplete),
+      );
+    }
+    // Then LAND on the painted コトバ探偵 daily-return home (streak case-log + 今日の
+    // ナゾ from FSRS-due → into the painted scene) — the landing, not a menu.
     return KeyedSubtree(
-      key: const ValueKey('phase-onboarding'),
-      child: OnboardingFlow(onComplete: _handleOnboardingComplete),
+      key: const ValueKey('phase-home'),
+      // #134: the LIVE home reads the child's REAL FSRS due-count from Firestore
+      // (battle persists there) instead of an empty per-screen InMemory store, so
+      // a returning child sees their actual 「きょうの ナゾ」, not a false 0. Preview
+      // routes + tests keep InMemory (offline-safe). The home's getDueCards is
+      // already guarded (falls to 0 on offline/failure).
+      child: KotobaHomeScreen(cardRepository: FirestoreFsrsCardRepository()),
     );
   }
 
