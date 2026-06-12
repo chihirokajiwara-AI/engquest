@@ -312,6 +312,33 @@ class DqPortrait extends StatelessWidget {
 /// every short label since the app teaches English). Pass [stacked] to lay the
 /// English under the Japanese (for tiles / large headings) instead of inline.
 /// [jpSize] sizes the Japanese line; the English line is rendered ~0.7× in gold.
+/// True for hiragana, katakana, CJK ideographs, and fullwidth forms (（）「」 etc.).
+bool _isCjk(int r) =>
+    (r >= 0x3040 && r <= 0x30FF) ||
+    (r >= 0x4E00 && r <= 0x9FFF) ||
+    (r >= 0x3000 && r <= 0x303F) ||
+    (r >= 0xFF00 && r <= 0xFFEF);
+
+/// Insert zero-width-space (U+200B) break opportunities after CJK characters so
+/// Flutter-web/CanvasKit WRAPS long Japanese lines instead of overflowing and
+/// clipping at the screen edge — CanvasKit does not apply CJK line-break rules
+/// (verified on the live :8088 build, 2026-06-12; flutter#74742). Basic kinsoku:
+/// never allow a break BEFORE closing punctuation. Latin runs keep normal spaces.
+String jpBreak(String s) {
+  const noBreakBefore = '。、，．）」』】〕｝！？・…ー';
+  final runes = s.runes.toList();
+  final b = StringBuffer();
+  for (var i = 0; i < runes.length; i++) {
+    b.writeCharCode(runes[i]);
+    if (i + 1 < runes.length &&
+        _isCjk(runes[i]) &&
+        !noBreakBefore.contains(String.fromCharCode(runes[i + 1]))) {
+      b.writeCharCode(0x200B);
+    }
+  }
+  return b.toString();
+}
+
 Widget dqBilingual(
   String jp,
   String en, {
@@ -344,7 +371,7 @@ Widget dqBilingual(
     textAlign: align,
     text: TextSpan(children: [
       TextSpan(
-          text: jp,
+          text: jpBreak(jp),
           style: dqText(size: jpSize, w: FontWeight.w700, color: jpColor)),
       TextSpan(
           text: '  /  ',
