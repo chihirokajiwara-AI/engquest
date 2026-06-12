@@ -189,16 +189,27 @@ class _PrologueScreenState extends State<PrologueScreen> {
                     ),
                   ),
                   // Cinema subtitle over the scrim (replaces the dialog box).
-                  Text(_p.jp,
-                      style: dqText(size: 16).copyWith(
-                          height: 1.7,
-                          shadows: const [
-                            Shadow(color: Colors.black, blurRadius: 8)
-                          ])),
+                  // Full-width + centred so long JP lines wrap instead of
+                  // clipping at the screen edge.
+                  SizedBox(
+                    width: double.infinity,
+                    child: Text(_p.jp,
+                        textAlign: TextAlign.center,
+                        style: dqText(size: 16).copyWith(
+                            height: 1.7,
+                            shadows: const [
+                              Shadow(color: Colors.black, blurRadius: 8)
+                            ])),
+                  ),
                   const SizedBox(height: 6),
-                  Text(_p.en,
-                      style: dqText(size: 11, color: dqInk, w: FontWeight.w400)
-                          .copyWith(height: 1.4)),
+                  SizedBox(
+                    width: double.infinity,
+                    child: Text(_p.en,
+                        textAlign: TextAlign.center,
+                        style:
+                            dqText(size: 11, color: dqInk, w: FontWeight.w400)
+                                .copyWith(height: 1.4)),
+                  ),
                   const SizedBox(height: 16),
                   _advanceControl(),
                   const SizedBox(height: 12),
