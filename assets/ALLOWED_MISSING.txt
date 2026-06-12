@@ -29,45 +29,6 @@ assets/art/scenes/town_pre2plus.png | 2026-06-06 | T31 pending: 英検準2級+ t
 assets/art/scenes/town_2.png | 2026-06-06 | T31 pending: 英検2級 town scene art
 # ---------------------------------------------------------------------------
 
-# 6 new 英検3級 第1部 listening clips — #10 item-volume expansion (4→10).
-# Audio (Kokoro TTS) pending a dedicated heavy-job gen; items already function via
-# the post-answer transcript reveal, and listening audio is excluded from the live
-# demo deploy regardless. Registered 2026-06-09.
-audio/listening/l3_p1_05.mp3 | 2026-06-09 | 3級 第1部 expansion; Kokoro gen pending
-audio/listening/l3_p1_06.mp3 | 2026-06-09 | 3級 第1部 expansion; Kokoro gen pending
-audio/listening/l3_p1_07.mp3 | 2026-06-09 | 3級 第1部 expansion; Kokoro gen pending
-audio/listening/l3_p1_08.mp3 | 2026-06-09 | 3級 第1部 expansion; Kokoro gen pending
-audio/listening/l3_p1_09.mp3 | 2026-06-09 | 3級 第1部 expansion; Kokoro gen pending
-audio/listening/l3_p1_10.mp3 | 2026-06-09 | 3級 第1部 expansion; Kokoro gen pending
-# 12 more 英検3級 listening clips — #10 vol expansion, 第2部+第3部 4→10 (3級 now 10/10/10).
-audio/listening/l3_p2_05.mp3 | 2026-06-09 | 3級 第2部 expansion; Kokoro gen pending
-audio/listening/l3_p2_06.mp3 | 2026-06-09 | 3級 第2部 expansion; Kokoro gen pending
-audio/listening/l3_p2_07.mp3 | 2026-06-09 | 3級 第2部 expansion; Kokoro gen pending
-audio/listening/l3_p2_08.mp3 | 2026-06-09 | 3級 第2部 expansion; Kokoro gen pending
-audio/listening/l3_p2_09.mp3 | 2026-06-09 | 3級 第2部 expansion; Kokoro gen pending
-audio/listening/l3_p2_10.mp3 | 2026-06-09 | 3級 第2部 expansion; Kokoro gen pending
-audio/listening/l3_p3_05.mp3 | 2026-06-09 | 3級 第3部 expansion; Kokoro gen pending
-audio/listening/l3_p3_06.mp3 | 2026-06-09 | 3級 第3部 expansion; Kokoro gen pending
-audio/listening/l3_p3_07.mp3 | 2026-06-09 | 3級 第3部 expansion; Kokoro gen pending
-audio/listening/l3_p3_08.mp3 | 2026-06-09 | 3級 第3部 expansion; Kokoro gen pending
-audio/listening/l3_p3_09.mp3 | 2026-06-09 | 3級 第3部 expansion; Kokoro gen pending
-audio/listening/l3_p3_10.mp3 | 2026-06-09 | 3級 第3部 expansion; Kokoro gen pending
-# 6 英検4級 第1部 listening clips — #10 vol expansion, 応答選択 4→10.
-audio/listening/l4_p1_05.mp3 | 2026-06-09 | 4級 第1部 expansion; Kokoro gen pending
-audio/listening/l4_p1_06.mp3 | 2026-06-09 | 4級 第1部 expansion; Kokoro gen pending
-audio/listening/l4_p1_07.mp3 | 2026-06-09 | 4級 第1部 expansion; Kokoro gen pending
-audio/listening/l4_p1_08.mp3 | 2026-06-09 | 4級 第1部 expansion; Kokoro gen pending
-audio/listening/l4_p1_09.mp3 | 2026-06-09 | 4級 第1部 expansion; Kokoro gen pending
-audio/listening/l4_p1_10.mp3 | 2026-06-09 | 4級 第1部 expansion; Kokoro gen pending
-audio/listening/l4_p2_05.mp3 | 2026-06-09 | 4級 第2/3部 expansion to 10/part; Kokoro gen pending
-audio/listening/l4_p2_06.mp3 | 2026-06-09 | 4級 第2/3部 expansion to 10/part; Kokoro gen pending
-audio/listening/l4_p2_07.mp3 | 2026-06-09 | 4級 第2/3部 expansion to 10/part; Kokoro gen pending
-audio/listening/l4_p2_08.mp3 | 2026-06-09 | 4級 第2/3部 expansion to 10/part; Kokoro gen pending
-audio/listening/l4_p2_09.mp3 | 2026-06-09 | 4級 第2/3部 expansion to 10/part; Kokoro gen pending
-audio/listening/l4_p2_10.mp3 | 2026-06-09 | 4級 第2/3部 expansion to 10/part; Kokoro gen pending
-audio/listening/l4_p3_05.mp3 | 2026-06-09 | 4級 第2/3部 expansion to 10/part; Kokoro gen pending
-audio/listening/l4_p3_06.mp3 | 2026-06-09 | 4級 第2/3部 expansion to 10/part; Kokoro gen pending
-audio/listening/l4_p3_07.mp3 | 2026-06-09 | 4級 第2/3部 expansion to 10/part; Kokoro gen pending
-audio/listening/l4_p3_08.mp3 | 2026-06-09 | 4級 第2/3部 expansion to 10/part; Kokoro gen pending
-audio/listening/l4_p3_09.mp3 | 2026-06-09 | 4級 第2/3部 expansion to 10/part; Kokoro gen pending
-audio/listening/l4_p3_10.mp3 | 2026-06-09 | 4級 第2/3部 expansion to 10/part; Kokoro gen pending
+# 英検 listening audio (l3/l4/l5/lp2/lpp/l2/lpre1) — all 108 referenced clips
+# generated via Kokoro TTS (scripts/generate_listening_audio.py), 2026-06-12.
+# No longer missing; entries removed.
