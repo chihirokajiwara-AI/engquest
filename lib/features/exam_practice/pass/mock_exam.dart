@@ -61,6 +61,11 @@ class MockMcqItem {
   /// Source section id from [ExamSection.id] (for audit tracing).
   final String sectionId;
 
+  /// Optional authored 解説 (teach-why) for the post-mock review. Null when the
+  /// source item has no authored rationale — the review NEVER fabricates one
+  /// (honesty). Populated where real explanations exist (e.g. reading items).
+  final String? explanation;
+
   const MockMcqItem({
     required this.id,
     required this.questionText,
@@ -68,6 +73,7 @@ class MockMcqItem {
     required this.correctIdx,
     required this.skill,
     required this.sectionId,
+    this.explanation,
   });
 }
 

@@ -10,7 +10,8 @@
 // defaulting to a まちがいだけ (wrong-only) focus so review targets the gaps.
 //
 // HONESTY: it reads back the SAME items + answers the child actually saw/picked —
-// no fabricated explanation. Items carry no authored rationale in the mock model,
+// no fabricated explanation. Items show an authored 解説 only when one exists
+// (英検5級 reading so far); items without one show no rationale (never fabricated),
 // so we show the correct choice plainly (見直し), never a made-up "why".
 //
 // NO dart:io. Pure-Dart widget. (R4)
@@ -349,6 +350,24 @@ class _ReviewCard extends StatelessWidget {
               ),
             );
           }),
+          // Authored 解説 (teach-why) — only when the item carries a real one
+          // (no fabricated rationale). Currently populated for 英検5級 reading.
+          if (item.explanation != null) ...[
+            const SizedBox(height: 8),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: dqGold.withAlpha(20),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: dqGold.withAlpha(90)),
+              ),
+              child: Text(
+                '💡 ${item.explanation!}',
+                style: dqText(size: 12.5).copyWith(height: 1.5),
+              ),
+            ),
+          ],
         ],
       ),
     );

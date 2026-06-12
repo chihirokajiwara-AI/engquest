@@ -57,8 +57,47 @@ List<MockMcqItem> readingItemsFor(String grade) => (_kReadingPool[grade] ??
           correctIdx: r.correctIdx,
           skill: EikenSkill.reading,
           sectionId: r.sectionId,
+          // Authored 解説 (teach-why) surfaced in the post-mock review when one
+          // exists for this item; null otherwise (the review never fabricates).
+          explanation: _kReadingExplanations[r.id],
         ))
     .toList();
+
+/// Authored per-item 解説 (teach-why) for the post-mock review, keyed by item id.
+/// Each points at the passage evidence for the correct answer (content-qa-verified,
+/// 英検5級 2026-06-12). Items without an entry show no 解説 (no fabrication).
+/// Extend grade-by-grade (5級 done; 4級/3級/… next).
+const Map<String, String> _kReadingExplanations = {
+  '5_r_001': 'ほんぶんに「Tom has a dog.」とあるね。トムが もっているのは「いぬ（A dog）」だよ。',
+  '5_r_002':
+      'アンナが ペンをきいて、ボブが「here you are（はい、どうぞ）」とわたしているよ。だからこたえは「A pen（ペン）」。',
+  '5_r_003': 'pictures（え）といっしょにつかうことばは draw（かく）。「えを かく」で「draw」がせいかいだよ。',
+  '5_r_004': 'あとに「take an umbrella（かさを もって）」とあるね。かさがいるおてんきは rainy（あめ）だよ。',
+  '5_r_005': '「He（かれ）」がしゅごで、every day（まいにち）のはなしだから、go に s がついた goes がせいかい。',
+  '5_r_006':
+      '「She（かのじょ）」がしゅごのときは does をつかうよ。「homework（しゅくだい）を する」で does がせいかい。',
+  '5_r_007': 'まえに「cats（ねこたち）」とたくさんいるね。たくさんのものをさすことばは They（かれら・それら）だよ。',
+  '5_r_008': '「my mother（おかあさん）」のなまえのはなしだね。おんなのひとには Her（かのじょの）をつかうよ。',
+  '5_r_009': '「like（すき）」をつかうしつもんのはじめは Do だよ。「Do you like 〜?」のかたちをおぼえよう。',
+  '5_r_010':
+      'しゅごが「My father（おとうさん）」で every morning（まいあさ）のはなし。drink に s がついた drinks がせいかい。',
+  '5_r_011': 'ようび（Monday）のまえには on をつかうよ。「on Monday（げつようびに）」でおぼえよう。',
+  '5_r_012': '「the box（はこ）」のなかにペンがあるね。「〜のなかに」は in をつかうよ。',
+  '5_r_013': '「it（それ）」がしゅごのときは is をつかうよ。「What time is it now?（いま なんじ?）」のかたちだね。',
+  '5_r_014': 'こたえが「In May（5がつに）」とときをこたえているね。ときをきくことばは When（いつ）だよ。',
+  '5_r_015': 'can のあとのことばは、そのままのかたち（play）になるよ。だから「can play」がせいかい。',
+  '5_r_016': 'しゅごが「We（わたしたち）」のときは are をつかうよ。「We are students」でおぼえよう。',
+  '5_r_017': '「a big park」はひとつだけのものだね。ひとつのときの There 〜 は is をつかうよ。',
+  '5_r_018': '「apple」は a・i・u・e・o のおとではじまることばだね。まえには an をつけるよ。',
+  '5_r_019': 'あとに「Your bag is small（ちいさい）」とあるね。はんたいのことばだから big（おおきい）がせいかい。',
+  '5_r_020': '「you（あなた）」がしゅごだから are をつかうよ。「How are you?（げんき?）」のあいさつだね。',
+  '5_r_021': 'こたえが「my friend, Ken（ともだちのケン）」とひとをこたえているね。ひとをきくことばは Who（だれ）だよ。',
+  '5_r_022':
+      '「Let us play soccer（サッカーしよう）」というさそいだね。さんせいのへんじは「That is a good idea.（いいね）」だよ。',
+  '5_r_023': 'ほんぶんに「I can play the guitar.」とあるね。ユイがひけるのは The guitar（ギター）だよ。',
+  '5_r_024':
+      'ほんぶんに「He has breakfast at seven.」とあるね。7じにすることは「He has breakfast（あさごはんをたべる）」だよ。',
+};
 
 const Map<String, List<ReadingMockItem>> _kReadingPool = {
   '5': _grade5Reading,
