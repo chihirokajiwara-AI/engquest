@@ -713,6 +713,7 @@ const _grade4Part3 = <ListeningItem>[
       'This Saturday.',
     ],
     correctIndex: 1,
+    explanation: '本文（ほんぶん）に「つぎの どようび・11月22日」とあるね。',
   ),
   ListeningItem(
     part: 3,
@@ -731,6 +732,7 @@ const _grade4Part3 = <ListeningItem>[
       'His older sister.',
     ],
     correctIndex: 2,
+    explanation: '本文に「おじいさんに ならった（from my grandfather）」とあるよ。',
   ),
   ListeningItem(
     part: 3,
@@ -749,6 +751,7 @@ const _grade4Part3 = <ListeningItem>[
       'Due to a signal failure.',
     ],
     correctIndex: 2,
+    explanation: '本文に「おおあめ のため」でんしゃが おくれる、とあるね。',
   ),
   ListeningItem(
     part: 3,
@@ -767,6 +770,7 @@ const _grade4Part3 = <ListeningItem>[
       'For six months.',
     ],
     correctIndex: 1,
+    explanation: '本文に「2年（ねん）かん にほんごを べんきょうしている」とあるよ。',
   ),
   ListeningItem(
     part: 3,
@@ -785,6 +789,7 @@ const _grade4Part3 = <ListeningItem>[
       'Tomorrow morning.',
     ],
     correctIndex: 2,
+    explanation: '本文に「6じ（this evening）に セールが おわる」とあるね。',
   ),
   ListeningItem(
     part: 3,
@@ -803,6 +808,7 @@ const _grade4Part3 = <ListeningItem>[
       'The monkeys.',
     ],
     correctIndex: 2,
+    explanation: '本文に「The pandas were my favorite（パンダが いちばん すき）」とあるよ。',
   ),
   ListeningItem(
     part: 3,
@@ -821,6 +827,7 @@ const _grade4Part3 = <ListeningItem>[
       'Their textbooks.',
     ],
     correctIndex: 1,
+    explanation: '本文に「えんぴつ2ほんと けしゴムを もってくる」とあるね。',
   ),
   ListeningItem(
     part: 3,
@@ -839,6 +846,7 @@ const _grade4Part3 = <ListeningItem>[
       'Three times a week.',
     ],
     correctIndex: 1,
+    explanation: '本文に「かようび と もくようび れんしゅう」＝しゅう2かい だね。',
   ),
   ListeningItem(
     part: 3,
@@ -857,6 +865,7 @@ const _grade4Part3 = <ListeningItem>[
       'It will snow.',
     ],
     correctIndex: 2,
+    explanation: '本文に「ごごは あめ（it will rain in the afternoon）」とあるよ。',
   ),
   ListeningItem(
     part: 3,
@@ -875,6 +884,7 @@ const _grade4Part3 = <ListeningItem>[
       'By ship.',
     ],
     correctIndex: 2,
+    explanation: '本文に「ひこうきで ほっかいどうへ いった（by plane）」とあるね。',
   ),
 ];
 
