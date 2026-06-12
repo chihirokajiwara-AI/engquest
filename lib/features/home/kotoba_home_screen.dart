@@ -388,43 +388,49 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
     // to life by getting closer to 合格" hook on the front door. Colour == real
     // progress only (0 when there is no practice data yet).
     final readiness = (est?.readinessPct ?? 0) / 100.0;
-    return GestureDetector(
-      onTap: _goToPassMeter,
-      child: DqPanel(
-        title: '合格率（ごうかくりつ） / Pass readiness',
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ProgressTintedCharacter(
-              asset: HeroChoice.asset,
-              readiness: readiness,
-              width: 44,
-              height: 64,
-              semanticLabel: 'あなたの たんてい。れんしゅうするほど 色（いろ）がつくよ。',
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: est == null
-                  ? Row(
-                      children: [
-                        const Icon(Icons.insights_outlined,
-                            color: dqGold, size: 28),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Text(
-                            'れんしゅうすると、合格（ごうかく）まで あと どれくらいか'
-                            ' わかるよ。タップして はじめよう！',
-                            style: dqText(size: 13, color: dqInk)
-                                .copyWith(height: 1.5),
+    // a11y (T14): announce the readiness card as a tappable BUTTON (opens the
+    // 合格メーター), not a bare 'group' — same fix as the 英検 CTA.
+    return Semantics(
+      button: true,
+      label: '合格率（ごうかくりつ）をみる',
+      child: GestureDetector(
+        onTap: _goToPassMeter,
+        child: DqPanel(
+          title: '合格率（ごうかくりつ） / Pass readiness',
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ProgressTintedCharacter(
+                asset: HeroChoice.asset,
+                readiness: readiness,
+                width: 44,
+                height: 64,
+                semanticLabel: 'あなたの たんてい。れんしゅうするほど 色（いろ）がつくよ。',
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: est == null
+                    ? Row(
+                        children: [
+                          const Icon(Icons.insights_outlined,
+                              color: dqGold, size: 28),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Text(
+                              'れんしゅうすると、合格（ごうかく）まで あと どれくらいか'
+                              ' わかるよ。タップして はじめよう！',
+                              style: dqText(size: 13, color: dqInk)
+                                  .copyWith(height: 1.5),
+                            ),
                           ),
-                        ),
-                        const Icon(Icons.chevron_right,
-                            color: dqGold, size: 22),
-                      ],
-                    )
-                  : _buildReadinessData(est),
-            ),
-          ],
+                          const Icon(Icons.chevron_right,
+                              color: dqGold, size: 22),
+                        ],
+                      )
+                    : _buildReadinessData(est),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -774,53 +780,62 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
   // the product's primary daily path — the prominent gold action.
 
   Widget _buildExamCta() {
-    return GestureDetector(
-      onTap: _goToExamPractice,
-      child: Container(
-        width: double.infinity,
-        alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(vertical: 18),
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [dqGold, dqGoldDeep],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+    // a11y (T14): the primary action must announce as a BUTTON to screen
+    // readers / switch access — a bare GestureDetector exposes only a 'group',
+    // so a non-visual user can't tell it's tappable. The nested SpeakerButton
+    // stays separately focusable (additive 読み上げ). Verified via the semantics
+    // tree (scripts/smoke_flow.mjs probe): this flips role group→button.
+    return Semantics(
+      button: true,
+      label: '英検（えいけん）れんしゅう。合格率（ごうかくりつ）をみる',
+      child: GestureDetector(
+        onTap: _goToExamPractice,
+        child: Container(
+          width: double.infinity,
+          alignment: Alignment.center,
+          padding: const EdgeInsets.symmetric(vertical: 18),
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [dqGold, dqGoldDeep],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: dqBorder, width: 2),
+            boxShadow: [
+              BoxShadow(
+                  color: dqGoldDeep.withAlpha(140),
+                  blurRadius: 16,
+                  offset: const Offset(0, 4)),
+            ],
           ),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: dqBorder, width: 2),
-          boxShadow: [
-            BoxShadow(
-                color: dqGoldDeep.withAlpha(140),
-                blurRadius: 16,
-                offset: const Offset(0, 4)),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.fact_check_rounded,
-                color: Color(0xFF2A1C00), size: 26),
-            const SizedBox(width: 8),
-            Flexible(
-              // jpBreak gives CanvasKit CJK break points so this long label wraps
-              // within the button instead of clipping at the edge (the FittedBox
-              // scaleDown was not shrinking it — real web clip, flutter#74742).
-              child: Text(
-                jpBreak('英検（えいけん）れんしゅう　／　合格率（ごうかくりつ）'),
-                textAlign: TextAlign.center,
-                style: dqText(
-                  size: 16,
-                  w: FontWeight.w800,
-                  color: const Color(0xFF2A1C00),
-                  spacing: 1,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.fact_check_rounded,
+                  color: Color(0xFF2A1C00), size: 26),
+              const SizedBox(width: 8),
+              Flexible(
+                // jpBreak gives CanvasKit CJK break points so this long label wraps
+                // within the button instead of clipping at the edge (the FittedBox
+                // scaleDown was not shrinking it — real web clip, flutter#74742).
+                child: Text(
+                  jpBreak('英検（えいけん）れんしゅう　／　合格率（ごうかくりつ）'),
+                  textAlign: TextAlign.center,
+                  style: dqText(
+                    size: 16,
+                    w: FontWeight.w800,
+                    color: const Color(0xFF2A1C00),
+                    spacing: 1,
+                  ),
                 ),
               ),
-            ),
-            // #133 pre-literacy: a non-reader taps this speaker to HEAR the label.
-            // Additive — tapping the button itself still navigates to practice.
-            const SizedBox(width: 4),
-            const SpeakerButton('exam', color: Color(0xFF2A1C00), size: 22),
-          ],
+              // #133 pre-literacy: a non-reader taps this speaker to HEAR the label.
+              // Additive — tapping the button itself still navigates to practice.
+              const SizedBox(width: 4),
+              const SpeakerButton('exam', color: Color(0xFF2A1C00), size: 22),
+            ],
+          ),
         ),
       ),
     );
