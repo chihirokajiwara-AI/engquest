@@ -13,6 +13,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:engquest/features/exam_practice/pass/pass_meter_screen.dart';
 import 'package:engquest/features/exam_practice/pass/cse_model.dart';
+import 'package:engquest/features/exam_practice/pass/mastery_advisor.dart';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -314,6 +315,45 @@ void main() {
       await tester.tap(find.text('もどる'));
       await tester.pumpAndSettle();
       expect(popped, isNull);
+    });
+  });
+
+  // #14: the mastery-based progression advice card renders when supplied and is
+  // absent (no fabrication) when null.
+  group('PassMeterScreen — mastery progression advice (#14)', () {
+    testWidgets('advance recommendation renders its card + reason',
+        (tester) async {
+      const rec = MasteryRecommendation(
+        advice: ProgressionAdvice.advance,
+        suggestedGrade: '4',
+        reasonJa: 'たくさん せいかいできてるね！',
+      );
+      await tester
+          .pumpWidget(_wrap(const PassMeterScreen(recommendation: rec)));
+      await tester.pump();
+      expect(find.textContaining('つぎの きゅうへ'), findsOneWidget);
+      expect(find.textContaining('せいかいできてる'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('review recommendation renders its card', (tester) async {
+      const rec = MasteryRecommendation(
+        advice: ProgressionAdvice.reviewBasics,
+        suggestedGrade: '5',
+        reasonJa: 'あせらず きそを かためよう。',
+      );
+      await tester
+          .pumpWidget(_wrap(const PassMeterScreen(recommendation: rec)));
+      await tester.pump();
+      expect(find.textContaining('きそを かためよう'), findsWidgets);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('null recommendation → no advice card', (tester) async {
+      await tester.pumpWidget(_wrap(const PassMeterScreen()));
+      await tester.pump();
+      expect(find.textContaining('つぎの きゅうへ'), findsNothing);
+      expect(tester.takeException(), isNull);
     });
   });
 }
