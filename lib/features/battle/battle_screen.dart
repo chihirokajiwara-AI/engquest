@@ -188,6 +188,11 @@ class _BattleScreenState extends State<BattleScreen>
   int _streak = 0; // consecutive Good/Easy answers
   int _totalXp = 0;
 
+  // Daily-return snapshot, loaded AFTER this session is recorded, so the summary
+  // can surface the day-streak + 「きょうの目標」 progress at peak engagement
+  // (CEO 1320 fun→volume loop / CEO 951 daily-return spine). Null until loaded.
+  StreakState? _streakSnapshot;
+
   // ── Card flip animation ────────────────────────────────────────────────────
   late AnimationController _flipCtrl;
   late Animation<double> _flipAnim;
@@ -523,6 +528,9 @@ class _BattleScreenState extends State<BattleScreen>
       try {
         await streak.recordStudySession();
         await streak.recordProgress(answered);
+        // Surface the resulting streak/goal on the summary (peak engagement).
+        final snapshot = await streak.load();
+        if (mounted) setState(() => _streakSnapshot = snapshot);
       } catch (_) {
         // Non-fatal: SharedPreferences failure is rare.
       }
@@ -1137,6 +1145,14 @@ class _BattleScreenState extends State<BattleScreen>
                       style:
                           dqText(size: 16, w: FontWeight.w800, color: dqGold)),
                 ),
+                // Daily-return hook — day-streak + 「きょうの目標」 progress at the
+                // peak-engagement moment, so the child feels the habit building
+                // and is pulled to「あと N問」 (CEO 1320 fun→volume→合格 loop;
+                // CEO 951 daily-return spine). Honest: real StreakService data.
+                if (_streakSnapshot != null) ...[
+                  const SizedBox(height: 12),
+                  _DailyReturnCard(snapshot: _streakSnapshot!),
+                ],
                 // 合格率 progress moment — the in-context "I'm closer to 合格"
                 // signal at peak engagement (the daily-return spine, CEO 951).
                 // Skipped when there's no estimate yet (never fabricate).
@@ -1224,6 +1240,47 @@ class _StreakBadge extends StatelessWidget {
           w: FontWeight.w800,
           color: const Color(0xFF2A1C00),
         ),
+      ),
+    );
+  }
+}
+
+// ── Daily-return hook (summary) ────────────────────────────────────────────────
+//
+// Shown on the session-complete summary: the day-streak the child just extended
+// plus how close they are to today's 目標. This is the daily-return spine made
+// visible at peak engagement (CEO 951/1320) — and it is honest, reading real
+// StreakService state, never fabricating a streak.
+class _DailyReturnCard extends StatelessWidget {
+  final StreakState snapshot;
+  const _DailyReturnCard({required this.snapshot});
+
+  @override
+  Widget build(BuildContext context) {
+    final streak = snapshot.currentStreak;
+    final goalLine = snapshot.goalMet
+        ? '🎉 きょうの目標 たっせい！'
+        : 'あと ${snapshot.remainingToGoal}問 で きょうの目標！';
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
+      decoration: BoxDecoration(
+        color: dqNight0.withAlpha(180),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: dqGold.withAlpha(120), width: 1.5),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (streak >= 1)
+            Text('🔥 $streak日 れんぞく！',
+                style: dqText(size: 16, w: FontWeight.w800, color: dqGold)),
+          if (streak >= 1) const SizedBox(height: 4),
+          Text(goalLine,
+              style: dqText(
+                  size: 13,
+                  w: FontWeight.w700,
+                  color: snapshot.goalMet ? const Color(0xFF8BE08B) : dqInk)),
+        ],
       ),
     );
   }
