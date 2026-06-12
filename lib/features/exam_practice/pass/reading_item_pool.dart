@@ -97,6 +97,7 @@ const Map<String, String> _kReadingExplanations = {
   '5_r_023': 'ほんぶんに「I can play the guitar.」とあるね。ユイがひけるのは The guitar（ギター）だよ。',
   '5_r_024':
       'ほんぶんに「He has breakfast at seven.」とあるね。7じにすることは「He has breakfast（あさごはんをたべる）」だよ。',
+  '5_r_025': 'ほんぶんに「He is white.」とあるね。ポチのいろは White（しろ）だよ。',
   // ── 英検4級 (content-qa-verified 2026-06-12) ──
   '4_r_001':
       'science の本をたくさん読むので、科学が「interested（きょうみがある）」が正かいだよ。in science とつながるね。',
@@ -665,6 +666,15 @@ const _grade5Reading = [
       'He has breakfast.',
     ],
     correctIdx: 3,
+  ),
+  ReadingMockItem(
+    id: '5_r_025',
+    sectionId: '5_r3',
+    passageText:
+        'This is my dog. His name is Pochi. He is white. He likes to run in the park.',
+    questionText: 'What color is Pochi?',
+    choices: ['Black', 'Brown', 'White', 'Yellow'],
+    correctIdx: 2,
   ),
 ];
 

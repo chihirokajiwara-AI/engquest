@@ -37,7 +37,7 @@ void main() {
 
   // Regression ratchet — current achieved counts. RAISE toward the target; never lower.
   const readingFloor = {
-    '5': 24,
+    '5': 25, // ratcheted to official target (studio expansion 2026-06-12)
     '4': 35, // ratcheted to official target (studio expansion 2026-06-12)
     '3': 30, // ratcheted to official target (studio expansion 2026-06-12)
     'pre2': 29, // ratcheted to official target (studio expansion 2026-06-12)
