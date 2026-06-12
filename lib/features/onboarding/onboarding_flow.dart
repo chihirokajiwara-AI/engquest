@@ -380,11 +380,11 @@ class _StepAge extends StatelessWidget {
           const SizedBox(height: 8),
           Center(
             child: dqBilingual(
-              // Flavor-aware: aken → "A-KEN Quest", edilab → "ENG Quest".
-              // Was a hardcoded "ENG Quest" (old codename) shown even on the
-              // commercial build — the first screen after Start (#25, UX P1).
+              // Flavor-aware product name (A-KEN Quest / ENG Quest) kept; the
+              // "brave one"→"word detective" + 賢者/勇者→探偵 recast removes the OLD
+              // hero trope that contradicted the shipped コトバ探偵 opening (CEO 1363).
               '${FlavorConfig.instanceOrNull?.appName ?? 'A-KEN Quest'} へようこそ',
-              'Welcome, brave one',
+              'Welcome, word detective',
               jpSize: 22,
               jpColor: dqGold,
               stacked: true,
@@ -395,14 +395,16 @@ class _StepAge extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const DqPortrait(emoji: '🧙‍♂️', size: 52),
+              const DqPortrait(emoji: '🕵️', size: 52),
               const SizedBox(width: 12),
               Expanded(
                 child: DqDialogBox(
-                  speaker: '賢者（けんじゃ） / Sage',
+                  speaker: 'せんぱい / Mentor',
                   child: Text(
-                    'ようこそ、勇者（ゆうしゃ）よ。旅（たび）をはじめる前（まえ）に、'
-                    'いくつか たずねたいことがある。\nそなたは 何才（なんさい）かな？',
+                    'ようこそ、コトバ探偵（たんてい）へ。\n'
+                    'しごとを はじめる まえに、\n'
+                    'すこし おしえてほしい。\n'
+                    'きみは 何才（なんさい）？',
                     style: dqText(size: 15, color: dqInk),
                   ),
                 ),
@@ -532,7 +534,7 @@ class _StepPlacement extends StatelessWidget {
           ),
           const SizedBox(height: 22),
           DqDialogBox(
-            speaker: '賢者（けんじゃ） / Sage',
+            speaker: 'せんぱい / Mentor',
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -648,9 +650,9 @@ class _PlacementResult extends StatelessWidget {
           ),
           const SizedBox(height: 18),
           DqDialogBox(
-            speaker: '賢者（けんじゃ） / Sage',
+            speaker: 'せんぱい / Mentor',
             child: Text(
-              'よし、そなたの ちからは わかった。\nさあ、旅（たび）の仲間（なかま）を えらぼう。',
+              'よし、きみの ちからは わかった。\nつぎは、きみの すがたを えらぼう。',
               style: dqText(size: 15, color: dqInk),
             ),
           ),
@@ -689,8 +691,8 @@ class _StepAvatar extends StatelessWidget {
           const SizedBox(height: 8),
           Center(
             child: dqBilingual(
-              '仲間（なかま）を選（えら）ぼう',
-              'Choose Your Hero',
+              '探偵（たんてい）を えらぼう',
+              'Choose Your Detective',
               jpSize: 22,
               jpColor: dqGold,
               stacked: true,
