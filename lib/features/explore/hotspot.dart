@@ -856,7 +856,7 @@ final SceneDef kTown4Scene = SceneDef(
       clueLineJa: '「そらが くらい。なにかが おきる…と わかるのに、'
           'それを いう ことばが でてこない。」',
       framingJa: '灯台（とうだい）の うえ。おじいさんが くろい そらを みあげている。\n'
-          '「あした」を かたる ことば — 未来（みらい）の will — が きえかけている。\n'
+          '「あした」を かたる ことば — 未来（みらい）を あらわす かたち — が きえかけている。\n'
           '「I think it ___ rain soon.」— これから おきる ことを いう かたちは？\n'
           '正（ただ）しく いえたら、おじいさんは かさを かしてくれる。',
       npcGreyAsset: 'assets/art/scenes_layton/npc_lampkeeper_grey.webp',
@@ -931,7 +931,7 @@ final SceneDef kTown3Scene = SceneDef(
       framingJa: '学（まな）びの都（みやこ）の 大（だい）としょかん。'
           'たなは からっぽ、ほんの ことばが きえている。\n'
           '司書（ししょ）は「いままで ずっと」を かたる ことば — '
-          '現在完了（げんざいかんりょう）の for — を まもっている。\n'
+          '現在完了（げんざいかんりょう）で 期間（きかん）を あらわす ことば — を まもっている。\n'
           '「I have worked in this library ___ ten years.」— どの ことばが はいる？',
       npcGreyAsset: 'assets/art/scenes_layton/npc_librarian_grey.webp',
       npcColorAsset: 'assets/art/scenes_layton/npc_librarian_color.webp',
@@ -946,7 +946,7 @@ final SceneDef kTown3Scene = SceneDef(
       clueLineJa: '「この ほんを かえさなきゃ。でも… まだ よみおわっていないんだ。」',
       framingJa: '中庭（なかにわ）の ベンチ。学生（がくせい）が ほんを かかえて'
           'こまっている。\n'
-          '「まだ〜していない」を いう ことば — 現在完了の yet — が でてこない。\n'
+          '「まだ〜していない」を いう ことば — 現在完了（かんりょう）で つかう ことば — が でてこない。\n'
           '「I haven\'t finished it ___.」— 否定（ひてい）の文（ぶん）に あう ことばは？',
       npcGreyAsset: 'assets/art/scenes_layton/npc_scholar_grey.webp',
       npcColorAsset: 'assets/art/scenes_layton/npc_scholar_color.webp',
