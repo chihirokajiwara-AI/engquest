@@ -331,7 +331,9 @@ void main() {
       await tester
           .pumpWidget(_wrap(const PassMeterScreen(recommendation: rec)));
       await tester.pump();
-      expect(find.textContaining('つぎの きゅうへ'), findsOneWidget);
+      // The advance card names the concrete target grade (actionable).
+      expect(find.textContaining('英けん4きゅう'), findsOneWidget);
+      expect(find.textContaining('いける かも'), findsOneWidget);
       expect(find.textContaining('せいかいできてる'), findsOneWidget);
       expect(tester.takeException(), isNull);
     });
@@ -352,7 +354,7 @@ void main() {
     testWidgets('null recommendation → no advice card', (tester) async {
       await tester.pumpWidget(_wrap(const PassMeterScreen()));
       await tester.pump();
-      expect(find.textContaining('つぎの きゅうへ'), findsNothing);
+      expect(find.textContaining('いける かも'), findsNothing);
       expect(tester.takeException(), isNull);
     });
   });

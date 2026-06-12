@@ -644,8 +644,13 @@ class _MasteryAdviceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Name the concrete target grade when there is one, so the advice is
+    // actionable ("英けん4きゅうに いける かも！") rather than vague.
+    final g = rec.suggestedGrade;
+    final gl = g != null ? _gradeLabelJa(g) : null;
     final title = switch (rec.advice) {
-      ProgressionAdvice.advance => '🎉 つぎの きゅうへ いける かも！',
+      ProgressionAdvice.advance =>
+        gl != null ? '🎉 $gl に いける かも！' : '🎉 つぎの きゅうへ いける かも！',
       ProgressionAdvice.reviewBasics => '🌱 きそを かためよう',
       ProgressionAdvice.keepPracticing => '💪 この ちょうしで つづけよう',
     };
