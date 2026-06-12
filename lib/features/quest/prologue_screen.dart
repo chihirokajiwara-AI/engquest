@@ -14,8 +14,6 @@
 // the blend on panel 5 (blend_cat.mp3 exists); phoneme keys are wired so they
 // light up the instant the founder records them.
 
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 import '../../core/audio/audio_cue_service.dart';
@@ -82,23 +80,19 @@ class _PrologueScreenState extends State<PrologueScreen> {
   final _cue = AudioCueService();
   late int _index = widget.startIndex.clamp(0, _panels.length - 1);
 
-  // Panel 5 (interactive blend) — drives the c→a→t tile sweep, mirrored from
-  // QuestScreen so the demo matches the real game exactly.
-  int _activeLetter = -1;
-  Timer? _sweep;
-  bool _blendDone = false; // gates the "▶ つぎへ" until the child has tried once
+  // The blend beat: each 🔊 tap lights the next phoneme c→a→t (tap-driven).
+  int _activeLetter = -1; // -1 none lit; 0=c, 1=a, 2=t
+  bool _blendDone = false; // true once all three are sounded → join + restore
 
   _Panel get _p => _panels[_index];
 
   @override
   void dispose() {
-    _sweep?.cancel();
     _cue.dispose();
     super.dispose();
   }
 
   void _next() {
-    _sweep?.cancel();
     if (_p.isLast) {
       widget.onDone();
       return;
@@ -113,26 +107,16 @@ class _PrologueScreenState extends State<PrologueScreen> {
     if (!_p.interactive && _p.audio != null) _cue.play(_p.audio);
   }
 
+  /// TAP-DRIVEN blend (the diverse-team design's core: the CHILD performs the
+  /// blend, not an auto-animation). Each 🔊 tap lights the next phoneme c→a→t;
+  /// the third tap joins them into "cat" and restores ランプ. Errorless — there
+  /// is no wrong tap, only "not yet complete" (the no-scold spine).
   void _playBlend() {
     _cue.play(_p.audio);
-    _sweepLetters();
-    setState(() => _blendDone = true);
-  }
-
-  void _sweepLetters() {
-    _sweep?.cancel();
-    setState(() => _activeLetter = 0);
-    var i = 0;
-    _sweep = Timer.periodic(const Duration(milliseconds: 460), (t) {
-      i++;
-      if (i >= 3) {
-        t.cancel();
-        _sweep = Timer(const Duration(milliseconds: 520), () {
-          if (mounted) setState(() => _activeLetter = -1);
-        });
-      } else if (mounted) {
-        setState(() => _activeLetter = i);
-      }
+    setState(() {
+      _activeLetter++;
+      // c·a·t all sounded → join into the word + restore ランプ.
+      if (_activeLetter >= 2) _blendDone = true;
     });
   }
 
