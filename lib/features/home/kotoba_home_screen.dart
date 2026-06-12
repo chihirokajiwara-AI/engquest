@@ -37,6 +37,7 @@ import 'package:engquest/features/home/streak_service.dart';
 import 'package:engquest/features/exam_practice/exam_practice_screen.dart';
 import 'package:engquest/features/battle/battle_screen.dart';
 import 'package:engquest/features/exam_practice/pass/cse_model.dart';
+import 'package:engquest/features/exam_practice/pass/mastery_advisor.dart';
 import 'package:engquest/features/exam_practice/pass/skill_accuracy_store.dart';
 import 'package:engquest/features/exam_practice/pass/pass_meter_screen.dart';
 import 'package:engquest/features/exam_practice/pass/pass_gauge.dart';
@@ -91,6 +92,7 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
   String _eikenLevel = '5'; // used to route to the right scene
   int _childAge = 8; // used to age-filter the FSRS review deck
   CseEstimate? _estimate; // live 合格率, null until the child has practice data
+  MasteryRecommendation? _advice; // mastery-based progression advice (#14)
   bool _loading = true;
 
   @override
@@ -170,12 +172,15 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
 
     // Live 合格率 for the home readiness card (null until there is practice data).
     final estimate = await liveCseEstimate(_eikenLevel);
+    // Mastery-based progression advice (#14), from the same accuracy data.
+    final advice = await liveMasteryAdvice(_eikenLevel);
 
     if (!mounted) return;
     setState(() {
       _streak = streak;
       _dueCount = dueCount;
       _estimate = estimate;
+      _advice = advice;
       _loading = false;
     });
   }
@@ -276,7 +281,9 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
       return;
     }
     final weak = await Navigator.of(context).push<EikenSkill?>(
-      MaterialPageRoute(builder: (_) => PassMeterScreen(estimate: est)),
+      MaterialPageRoute(
+        builder: (_) => PassMeterScreen(estimate: est, recommendation: _advice),
+      ),
     );
     if (!mounted) return;
     if (weak != null) {

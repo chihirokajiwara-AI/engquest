@@ -33,6 +33,7 @@ import 'package:flutter/foundation.dart';
 
 import '../../../core/storage/preferences_service.dart';
 import 'cse_model.dart';
+import 'mastery_advisor.dart';
 
 // ── Key helpers ───────────────────────────────────────────────────────────────
 
@@ -205,6 +206,19 @@ Future<CseEstimate?> liveCseEstimate(String grade) async {
       grade: grade,
       accuracies: store.readAccuracies(grade),
     );
+  } catch (_) {
+    return null;
+  }
+}
+
+/// Mastery-based progression advice (#14) from the learner's accumulated
+/// accuracy at [grade]; null when there is no data yet. Reuses the same
+/// per-skill accuracy the 合格率 reads, so the advice and the meter never disagree.
+Future<MasteryRecommendation?> liveMasteryAdvice(String grade) async {
+  try {
+    final store = await SkillAccuracyStore.getInstance();
+    if (!store.hasAnyData(grade)) return null;
+    return adviseProgression(grade, store.readAccuracies(grade));
   } catch (_) {
     return null;
   }

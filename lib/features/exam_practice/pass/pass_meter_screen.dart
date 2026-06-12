@@ -31,6 +31,7 @@ import 'package:flutter/material.dart';
 import '../../character/progress_tinted_character.dart';
 import '../../quest/ui/dq_ui.dart';
 import 'cse_model.dart';
+import 'mastery_advisor.dart';
 import 'pass_gauge.dart';
 
 // ── Demo profile (used when estimate is null, e.g. ?preview) ─────────────────
@@ -62,7 +63,16 @@ class PassMeterScreen extends StatelessWidget {
   /// non-mock uses (the live 合格メーター), which have nothing to review.
   final WidgetBuilder? onReviewBuilder;
 
-  const PassMeterScreen({super.key, this.estimate, this.onReviewBuilder});
+  /// Mastery-based progression advice (#14). When non-null, a gentle card
+  /// suggests advancing / keeping practising / reviewing easier material.
+  final MasteryRecommendation? recommendation;
+
+  const PassMeterScreen({
+    super.key,
+    this.estimate,
+    this.onReviewBuilder,
+    this.recommendation,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -102,6 +112,12 @@ class PassMeterScreen extends StatelessWidget {
 
             // ── Hero meter ──────────────────────────────────────────────────
             _PassHero(est: est),
+
+            // ── Mastery-based progression advice (#14) ──────────────────────
+            if (recommendation != null) ...[
+              const SizedBox(height: 16),
+              _MasteryAdviceCard(rec: recommendation!),
+            ],
 
             const SizedBox(height: 20),
 
@@ -618,4 +634,38 @@ String _ctaLabel(CseEstimate est) {
     return '${CseEstimator.skillLabelJa(skill)}を れんしゅうする';
   }
   return 'れんしゅうする';
+}
+
+/// Gentle mastery-based progression advice card (#14). Encouraging, never
+/// scolding — even "review" is framed as a positive next step.
+class _MasteryAdviceCard extends StatelessWidget {
+  final MasteryRecommendation rec;
+  const _MasteryAdviceCard({required this.rec});
+
+  @override
+  Widget build(BuildContext context) {
+    final title = switch (rec.advice) {
+      ProgressionAdvice.advance => '🎉 つぎの きゅうへ いける かも！',
+      ProgressionAdvice.reviewBasics => '🌱 きそを かためよう',
+      ProgressionAdvice.keepPracticing => '💪 この ちょうしで つづけよう',
+    };
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: dqGold.withAlpha(22),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: dqGold.withAlpha(90)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(title,
+              style: dqText(size: 13, w: FontWeight.w800, color: dqGold)),
+          const SizedBox(height: 4),
+          Text(rec.reasonJa, style: dqText(size: 12.5).copyWith(height: 1.5)),
+        ],
+      ),
+    );
+  }
 }
