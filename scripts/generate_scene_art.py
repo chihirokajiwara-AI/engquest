@@ -30,19 +30,21 @@ NEG = ("photo, 3d, 3dcg, flat vector, grey background, plain background, textbox
 # slime=4×4 sheet, chancellor=ensemble plate). For npc_* we PREPEND solo-portrait
 # terms and use a NEG that drops the plain-background ban and adds crowd/sheet/
 # frame negatives.
-NPC_POS = ("solo, 1character, single character, upper body portrait bust, centered, "
-           "facing viewer, kind clearly-visible friendly eyes, warm approachable "
-           "wholesome all-ages storybook-game townsfolk, fully clothed, simple "
-           "uncluttered background, ")
-# STYLE COHERENCE (2026-06-11, CEO 1294): NPCs MUST match the LOCKED protagonist
-# mains (M5/M6, generate_expressions.py) — same Animagine-XL model, same コトバ探偵
-# world + "refined detailed illustration, cinematic dramatic light" suffix → crisp
-# anime, NOT the soft watercolour/storybook/chibi look the earlier batch produced.
-# Crisp anime characters over the painterly scene backgrounds is the intended combo.
-NPC_STYLE = ("detective-world wardrobe, dusty teal and brass-amber コトバ探偵 "
-             "word-detective world palette, refined detailed anime illustration, "
-             "clean sharp linework, soft warm even lighting, bright clearly-lit face, "
-             "gentle wholesome, masterpiece, best quality, absurdres")
+# CLIP TRUNCATION FIX (2026-06-12, CEO 本格 check): the pipeline hard-truncates the
+# positive prompt at 77 tokens. The old NPC_POS + subject + NPC_STYLE ran to ~166
+# tokens, so the STYLE-coherence tail ("refined detailed anime, sharp linework") was
+# SILENTLY DROPPED — which is why NPCs never matched the mains' crisp-anime look.
+# Fix: FRONT-LOAD the non-negotiable terms (anti-crowd + sharp anime + detailed
+# coloured eyes + mature face) into NPC_POS so they always survive; keep NPC_STYLE a
+# short tail. Combined frame ≈ 31 + subject ≈ 30 + tail ≈ 10 ≈ 71 < 77.
+NPC_POS = ("solo, 1character, single character, upper body portrait, centered, "
+           "refined detailed anime, sharp clean linework, "
+           "detailed eyes with dark pupils and warm coloured irises, "
+           "kind mature face, fully clothed, simple background, ")
+# STYLE COHERENCE (CEO 1294): match the LOCKED M5/M6 mains (Animagine-XL, コトバ探偵
+# world). Kept short so it fits inside the 77-token window after the subject.
+NPC_STYLE = ("コトバ探偵 dusty-teal and brass-amber palette, warm even lighting, "
+             "masterpiece, best quality")
 # Child-safety negatives are NON-NEGOTIABLE for a kids' 英検 app: the anime base
 # model defaults to young sexualized female figures and ignores age cues, so we
 # hard-negative sexualization AND the young-woman bias. Mirrors the mains' NEG
@@ -59,7 +61,13 @@ NPC_NEG = ("crowd, chibi, multiple people, group, 2girls, 2boys, multiple views,
            "cleavage, large breasts, breasts, busty, large chest, hourglass figure, "
            "sexualized, sexy, sultry, seductive, fanservice, revealing clothing, "
            "bare skin, midriff, suggestive, swimsuit, lingerie, gravure, "
-           "shadowed face, hidden eyes, eyes covered by shadow, face in shadow, dark face")
+           "shadowed face, hidden eyes, eyes covered by shadow, face in shadow, dark face, "
+           # 2026-06-12 (CEO 本格 check): the prior batch output blank glowing-white
+           # pupilless eyes (eerie, off the mains' detailed coloured eyes + the
+           # opening bible's no-creepy rule). Hard-negate them + the chibi/childish lean.
+           "blank eyes, white eyes, all-white eyes, glowing eyes, glowing white eyes, "
+           "pupilless, no pupils, empty eyes, blank stare, soulless eyes, dead eyes, "
+           "childish, infantile, cutesy, baby face, deformed eyes, asymmetrical eyes")
 
 # Optional overrides (used for verified test runs before touching committed art):
 #   ART_FILTER  — only generate jobs whose filename contains this substring
@@ -260,13 +268,18 @@ def main():
         # crisp-anime コトバ探偵 STYLE so they still cohere with the M5/M6 mains.
         is_creature = is_npc and "slime" in fn
         if is_creature:
-            prompt = (f"solo, one single small round cute slime creature mascot, "
-                      f"simple round blob body, one gentle face, centered, plain "
-                      f"uncluttered background, {subject}, {NPC_STYLE}")
-            neg = ("two faces, multiple faces, extra face, double face, humanoid, human, "
-                   "person, girl, boy, clothes, dress, robe, shirt, arms, hands, "
-                   "crowd, multiple, character sheet, grid, border, frame, watercolour, "
-                   "storybook, photo, 3d, text, watermark, lowres, blurry, bad anatomy, deformed")
+            # FRONT-LOAD singularity (CLIP-77 + grid-prone, QA 2026-06-12: the model
+            # output a 24-slime sticker grid). One large centred slime filling the
+            # frame, anti-grid terms first so they survive truncation.
+            prompt = (f"1 slime, solo, a single whole slime creature, one large round "
+                      f"blob filling the frame, one gentle face, centered closeup, "
+                      f"plain background, {subject}, {NPC_STYLE}")
+            neg = ("grid, sprite sheet, character sheet, sticker sheet, multiple slimes, "
+                   "many slimes, rows of slimes, tiled, repeated, collection, set of, "
+                   "pattern, two faces, multiple faces, double face, humanoid, human, "
+                   "person, girl, boy, clothes, robe, arms, hands, crowd, multiple, "
+                   "border, frame, watercolour, storybook, photo, 3d, text, watermark, "
+                   "lowres, blurry, bad anatomy, deformed")
         elif is_npc:
             prompt = f"{NPC_POS}{subject}, {NPC_STYLE}"
             neg = NPC_NEG
