@@ -408,127 +408,147 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
     final item = _current;
     if (item == null) return const SizedBox.shrink();
 
-    return SingleChildScrollView(
-      controller: _scroll,
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // Progress bar
-          ClipRRect(
-            borderRadius: BorderRadius.circular(4),
-            child: LinearProgressIndicator(
-              value: _items.isEmpty ? 0 : (_currentIdx + 1) / _items.length,
-              backgroundColor: dqNight1,
-              valueColor: const AlwaysStoppedAnimation<Color>(dqGold),
-              minHeight: 6,
-            ),
-          ),
-          const SizedBox(height: 16),
-
-          // 🔊 Large replay button — OR, when this item's clip isn't bundled, an
-          // honest 準備中 note (no dead button) that also says it won't count
-          // toward 合格率 (#112). [_audioOk] starts true so the button is the
-          // default; the note only appears for a genuinely-missing clip.
-          Center(
-            child: (_currentIdx < _audioOk.length && !_audioOk[_currentIdx])
-                ? _missingAudioNote()
-                : DqReplayButton(
-                    label: '🔊 もう いちど きく',
-                    onTap: _playAudio,
+    // Scrollable content + STICKY bottom つぎへ button (rank-2): the button used
+    // to scroll out of view on long answered items; it is now pinned.
+    return Column(
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            controller: _scroll,
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Progress bar
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(4),
+                  child: LinearProgressIndicator(
+                    value:
+                        _items.isEmpty ? 0 : (_currentIdx + 1) / _items.length,
+                    backgroundColor: dqNight1,
+                    valueColor: const AlwaysStoppedAnimation<Color>(dqGold),
+                    minHeight: 6,
                   ),
+                ),
+                const SizedBox(height: 16),
+
+                // 🔊 Large replay button — OR, when this item's clip isn't bundled, an
+                // honest 準備中 note (no dead button) that also says it won't count
+                // toward 合格率 (#112). [_audioOk] starts true so the button is the
+                // default; the note only appears for a genuinely-missing clip.
+                Center(
+                  child:
+                      (_currentIdx < _audioOk.length && !_audioOk[_currentIdx])
+                          ? _missingAudioNote()
+                          : DqReplayButton(
+                              label: '🔊 もう いちど きく',
+                              onTap: _playAudio,
+                            ),
+                ),
+                const SizedBox(height: 8),
+                // Deaf/HoH inclusion (#125): read the script instead of hearing it.
+                // The transcript already exists; in caption mode we show it BEFORE the
+                // choices so a child who can't hear can still practise comprehension.
+                Center(
+                  child: TextButton.icon(
+                    onPressed: _toggleCaptions,
+                    icon: Icon(
+                      _captionsOn
+                          ? Icons.volume_up_rounded
+                          : Icons.subtitles_rounded,
+                      color: dqGold,
+                      size: 18,
+                    ),
+                    label: Text(
+                      _captionsOn
+                          ? '音（おと）で きくモードに もどす'
+                          : '🔤 文字（もじ）で よむ（音（おと）が きこえないとき）',
+                      style: dqText(size: 12, color: dqGold),
+                    ),
+                  ),
+                ),
+                if (_captionsOn && !_answered) ...[
+                  const SizedBox(height: 8),
+                  _TranscriptPanel(item: item),
+                  const SizedBox(height: 4),
+                  Text(
+                    '※ 文字（もじ）で よむモードは「聞（き）く力（ちから）」の'
+                    '合格率（ごうかくりつ）には 入（い）れません。',
+                    textAlign: TextAlign.center,
+                    style: dqText(size: 11, color: dqInk.withAlpha(150)),
+                  ),
+                ],
+                const SizedBox(height: 20),
+
+                // Question card (shown after play or after answer)
+                DqDialogBox(
+                  speaker: '問${_currentIdx + 1}',
+                  child: Text(
+                    item.question,
+                    style: dqText(size: 15, color: dqInk),
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                // Answer choices
+                ...List.generate(item.choices.length, (i) {
+                  DqChoiceState state = DqChoiceState.normal;
+                  if (_answered) {
+                    if (i == item.correctIndex) {
+                      state = DqChoiceState.correct;
+                    } else if (i == _selectedAnswer) {
+                      state = DqChoiceState.wrong;
+                    }
+                  }
+                  return DqChoice(
+                    label: '${i + 1}.  ${item.choices[i]}',
+                    state: state,
+                    showCursor: !_answered && _selectedAnswer == null,
+                    onTap: _answered ? null : () => _selectAnswer(i),
+                  );
+                }),
+
+                // 解説 after answer: show the スクリプト (what was said) so a child who
+                // misheard can read it — the listening learning loop. Replay (🔊 above)
+                // stays available to hear it again.
+                // Struggling-child support: after a cold streak of misheard items, a
+                // gentle 探偵 encouragement that points to replay/captions — never a
+                // scold. Only on a wrong answer past the threshold. (CEO 1135)
+                if (_answered &&
+                    _selectedAnswer != item.correctIndex &&
+                    _consecutiveWrong >= kStruggleThreshold) ...[
+                  const SizedBox(height: 14),
+                  const PracticeEncouragementBanner(
+                      message: kListeningEncourageMsg),
+                ],
+
+                if (_answered) ...[
+                  const SizedBox(height: 14),
+                  _TranscriptPanel(item: item),
+                ],
+              ],
+            ),
           ),
-          const SizedBox(height: 8),
-          // Deaf/HoH inclusion (#125): read the script instead of hearing it.
-          // The transcript already exists; in caption mode we show it BEFORE the
-          // choices so a child who can't hear can still practise comprehension.
-          Center(
-            child: TextButton.icon(
-              onPressed: _toggleCaptions,
-              icon: Icon(
-                _captionsOn ? Icons.volume_up_rounded : Icons.subtitles_rounded,
-                color: dqGold,
-                size: 18,
+        ),
+        // Sticky bottom — つぎへ button never scrolls out of view (rank-2).
+        if (_answered)
+          Container(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+            decoration: BoxDecoration(
+              color: dqNight0,
+              border: Border(top: BorderSide(color: dqGoldDeep.withAlpha(60))),
+            ),
+            child: SafeArea(
+              top: false,
+              child: DqButton(
+                label: _currentIdx < _items.length - 1
+                    ? 'つぎへ / Next'
+                    : 'けっか / Results',
+                onTap: _next,
               ),
-              label: Text(
-                _captionsOn
-                    ? '音（おと）で きくモードに もどす'
-                    : '🔤 文字（もじ）で よむ（音（おと）が きこえないとき）',
-                style: dqText(size: 12, color: dqGold),
-              ),
             ),
           ),
-          if (_captionsOn && !_answered) ...[
-            const SizedBox(height: 8),
-            _TranscriptPanel(item: item),
-            const SizedBox(height: 4),
-            Text(
-              '※ 文字（もじ）で よむモードは「聞（き）く力（ちから）」の'
-              '合格率（ごうかくりつ）には 入（い）れません。',
-              textAlign: TextAlign.center,
-              style: dqText(size: 11, color: dqInk.withAlpha(150)),
-            ),
-          ],
-          const SizedBox(height: 20),
-
-          // Question card (shown after play or after answer)
-          DqDialogBox(
-            speaker: '問${_currentIdx + 1}',
-            child: Text(
-              item.question,
-              style: dqText(size: 15, color: dqInk),
-            ),
-          ),
-          const SizedBox(height: 16),
-
-          // Answer choices
-          ...List.generate(item.choices.length, (i) {
-            DqChoiceState state = DqChoiceState.normal;
-            if (_answered) {
-              if (i == item.correctIndex) {
-                state = DqChoiceState.correct;
-              } else if (i == _selectedAnswer) {
-                state = DqChoiceState.wrong;
-              }
-            }
-            return DqChoice(
-              label: '${i + 1}.  ${item.choices[i]}',
-              state: state,
-              showCursor: !_answered && _selectedAnswer == null,
-              onTap: _answered ? null : () => _selectAnswer(i),
-            );
-          }),
-
-          // 解説 after answer: show the スクリプト (what was said) so a child who
-          // misheard can read it — the listening learning loop. Replay (🔊 above)
-          // stays available to hear it again.
-          // Struggling-child support: after a cold streak of misheard items, a
-          // gentle 探偵 encouragement that points to replay/captions — never a
-          // scold. Only on a wrong answer past the threshold. (CEO 1135)
-          if (_answered &&
-              _selectedAnswer != item.correctIndex &&
-              _consecutiveWrong >= kStruggleThreshold) ...[
-            const SizedBox(height: 14),
-            const PracticeEncouragementBanner(message: kListeningEncourageMsg),
-          ],
-
-          if (_answered) ...[
-            const SizedBox(height: 14),
-            _TranscriptPanel(item: item),
-          ],
-
-          // Next button after answer
-          if (_answered) ...[
-            const SizedBox(height: 12),
-            DqButton(
-              label: _currentIdx < _items.length - 1
-                  ? 'つぎへ / Next'
-                  : 'けっか / Results',
-              onTap: _next,
-            ),
-          ],
-        ],
-      ),
+      ],
     );
   }
 
