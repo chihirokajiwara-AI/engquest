@@ -802,17 +802,17 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
                 color: Color(0xFF2A1C00), size: 26),
             const SizedBox(width: 8),
             Flexible(
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  '英検（えいけん）れんしゅう　／　合格率（ごうかくりつ）',
-                  maxLines: 1,
-                  style: dqText(
-                    size: 16,
-                    w: FontWeight.w800,
-                    color: const Color(0xFF2A1C00),
-                    spacing: 1,
-                  ),
+              // jpBreak gives CanvasKit CJK break points so this long label wraps
+              // within the button instead of clipping at the edge (the FittedBox
+              // scaleDown was not shrinking it — real web clip, flutter#74742).
+              child: Text(
+                jpBreak('英検（えいけん）れんしゅう　／　合格率（ごうかくりつ）'),
+                textAlign: TextAlign.center,
+                style: dqText(
+                  size: 16,
+                  w: FontWeight.w800,
+                  color: const Color(0xFF2A1C00),
+                  spacing: 1,
                 ),
               ),
             ),
