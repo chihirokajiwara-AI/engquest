@@ -14,6 +14,7 @@ import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
 import '../quest/ui/dq_ui.dart';
 import '../../core/sound/practice_feedback.dart';
+import 'practice_result_stars.dart';
 import '../home/streak_service.dart';
 
 /// Returns [p] with its choices shuffled and [correctIdx] remapped. The authored
@@ -435,6 +436,8 @@ class _ConversationPracticeScreenState
             '$_correctCount / ${_problems.length} 正解 ($pct%)',
             style: dqText(size: 18, w: FontWeight.w600, color: dqInk),
           ),
+          const SizedBox(height: 16),
+          PracticeResultStars(correct: _correctCount, total: _problems.length),
           const SizedBox(height: 32),
           DqButton(
             label: '戻る',

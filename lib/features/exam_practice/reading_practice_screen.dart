@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:engquest/features/quest/ui/dq_ui.dart';
 import 'package:engquest/features/home/streak_service.dart';
 import 'package:engquest/core/sound/practice_feedback.dart';
+import 'package:engquest/features/exam_practice/practice_result_stars.dart';
 import 'eiken_exam_config.dart';
 import 'practice_encouragement.dart';
 import 'choice_shuffle.dart';
@@ -609,6 +610,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
               '$_correctCount / $_totalQuestions 正解 ($pct%)',
               style: dqText(size: 18, w: FontWeight.w600, color: dqInk),
             ),
+            const SizedBox(height: 16),
+            PracticeResultStars(correct: _correctCount, total: _totalQuestions),
             const SizedBox(height: 32),
             DqButton(
               label: '戻る',

@@ -28,6 +28,7 @@ import 'package:flutter/material.dart';
 import 'choice_shuffle.dart';
 import '../../core/audio/audio_assets.dart';
 import '../../core/sound/practice_feedback.dart';
+import 'practice_result_stars.dart';
 import '../../core/audio/audio_cue_service.dart';
 import '../../core/audio/audio_mute.dart';
 import '../../core/storage/preferences_service.dart';
@@ -594,58 +595,62 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
     final passed = pct >= 60;
 
     return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              passed ? '🎉' : '💪',
-              style: const TextStyle(fontSize: 64),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              passed ? '合格（ごうかく）ライン到達（とうたつ）！' : 'もう少（すこ）し！',
-              style: dqText(size: 22, color: dqGold),
-            ),
-            const SizedBox(height: 16),
-            DqPanel(
-              title: 'RESULT',
-              child: Column(
-                children: [
-                  Text(
-                    '$_correctCount / ${_items.length} 正解',
-                    style: dqText(size: 20, color: dqInk),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    '$pct%',
-                    style: dqText(
-                      size: 28,
-                      color: passed
-                          ? const Color(0xFF8BE08B)
-                          : const Color(0xFFE89090),
-                      w: FontWeight.w800,
-                    ),
-                  ),
-                ],
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(32),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                passed ? '🎉' : '💪',
+                style: const TextStyle(fontSize: 64),
               ),
-            ),
-            if (_items.length - _measuredTotal > 0) ...[
               const SizedBox(height: 12),
               Text(
-                '音声（おんせい）のない ${_items.length - _measuredTotal}問（もん）は、\n'
-                '合格率（ごうかくりつ）に 入（い）れていません。',
-                textAlign: TextAlign.center,
-                style: dqText(size: 12, color: dqInk.withAlpha(170)),
+                passed ? '合格（ごうかく）ライン到達（とうたつ）！' : 'もう少（すこ）し！',
+                style: dqText(size: 22, color: dqGold),
+              ),
+              const SizedBox(height: 16),
+              PracticeResultStars(correct: _correctCount, total: _items.length),
+              const SizedBox(height: 16),
+              DqPanel(
+                title: 'RESULT',
+                child: Column(
+                  children: [
+                    Text(
+                      '$_correctCount / ${_items.length} 正解',
+                      style: dqText(size: 20, color: dqInk),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      '$pct%',
+                      style: dqText(
+                        size: 28,
+                        color: passed
+                            ? const Color(0xFF8BE08B)
+                            : const Color(0xFFE89090),
+                        w: FontWeight.w800,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (_items.length - _measuredTotal > 0) ...[
+                const SizedBox(height: 12),
+                Text(
+                  '音声（おんせい）のない ${_items.length - _measuredTotal}問（もん）は、\n'
+                  '合格率（ごうかくりつ）に 入（い）れていません。',
+                  textAlign: TextAlign.center,
+                  style: dqText(size: 12, color: dqInk.withAlpha(170)),
+                ),
+              ],
+              const SizedBox(height: 32),
+              DqButton(
+                label: 'もどる / Back',
+                onTap: () => Navigator.of(context).pop(),
               ),
             ],
-            const SizedBox(height: 32),
-            DqButton(
-              label: 'もどる / Back',
-              onTap: () => Navigator.of(context).pop(),
-            ),
-          ],
+          ),
         ),
       ),
     );

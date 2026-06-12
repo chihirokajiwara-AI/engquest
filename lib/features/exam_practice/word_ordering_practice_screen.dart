@@ -17,6 +17,7 @@ import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
 import '../home/streak_service.dart';
 import '../../core/sound/practice_feedback.dart';
+import 'practice_result_stars.dart';
 import '../quest/ui/dq_ui.dart';
 
 /// A 語句整序 (word-ordering) problem in the authentic 英検 大問3 form: a Japanese
@@ -567,6 +568,9 @@ class _WordOrderingPracticeScreenState
               '$_correctCount / ${_problems.length} 正解（せいかい）（$pct%）',
               style: dqText(color: dqInk, size: 18),
             ),
+            const SizedBox(height: 16),
+            PracticeResultStars(
+                correct: _correctCount, total: _problems.length),
             if (_assistedCount > 0) ...[
               const SizedBox(height: 10),
               Text(

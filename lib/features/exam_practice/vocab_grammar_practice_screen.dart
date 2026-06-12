@@ -13,6 +13,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import '../../core/audio/word_audio_player_service.dart';
 import '../../core/sound/practice_feedback.dart';
+import 'practice_result_stars.dart';
 import '../../core/data/vocab_repository.dart';
 import '../../core/models/vocab_item.dart';
 import 'distractor_generator.dart';
@@ -848,6 +849,9 @@ class _VocabGrammarPracticeScreenState
               '$_correctCount / ${_questions.length} 正解 ($pct%)',
               style: dqText(size: 18, w: FontWeight.w600, color: dqInk),
             ),
+            const SizedBox(height: 16),
+            PracticeResultStars(
+                correct: _correctCount, total: _questions.length),
             // Honesty: tell the child/parent that hinted questions were kept out
             // of the 合格率, so the pass-meter reflects unaided skill only.
             if (_assistedCount > 0) ...[
