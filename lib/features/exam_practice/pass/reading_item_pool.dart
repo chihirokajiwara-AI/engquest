@@ -188,6 +188,22 @@ const Map<String, String> _kReadingExplanations = {
       'こたえは「That is too bad」。「テストにまた落ちた」という残念な話なので、同情する返事を選びます。後ろの「もっと勉強した方がいい」ともつながります。',
   '3_r_022':
       'こたえは「By practicing every day」。本文に「he practiced every day（毎日練習した）」「Now he is the best player（今は一番うまい）」とあります。練習が上達の理由です。',
+  '3_r_023':
+      'こたえは「At 11:00 a.m.」。お知らせに「The lions are fed at 11:00 a.m.」とあり、ライオンにえさをやる時こくが書いてあります。',
+  '3_r_024':
+      'こたえは「To put in new computers.」。「closed ... because we are putting in new computers」とあり、休む理ゆうは新しいコンピューターを入れるためです。',
+  '3_r_025':
+      'こたえは「She had a lot of fun.」。「her teacher was kind, so she had a lot of fun」とあり、エマは楽しかったと書いてあります。',
+  '3_r_026':
+      'こたえは「Their lunch and some water.」。「Please bring your lunch and some water.」とあり、持って行く物が書いてあります。',
+  '3_r_027':
+      'こたえは「Near the park.」。「She was last seen near the park」とあり、犬が最後に見られた場所は公園の近くです。',
+  '3_r_028':
+      'こたえは「Because of the rain.」。「it started raining ... decided to move the sports day」とあり、雨のために来週へうつしました。',
+  '3_r_029':
+      'こたえは「They bought new books.」。「we bought new books for our school library」とあり、お金で新しい本を買いました。',
+  '3_r_030':
+      'こたえは「He did not know anyone.」。「nervous ... because he knew no one there」とあり、だれも知らなかったからです。',
   // ── 英検準2級 (pre2) — content-qa-verified 2026-06-12 ──
   'p2_r_001':
       '正解は「designed」。「初心者むけに作られた」という意味で、designed for は「〜のために設計された」。空所のあとの for beginners が手がかりだよ。',
@@ -1124,6 +1140,125 @@ const _grade3Reading = [
       'By practicing every day.',
     ],
     correctIdx: 3,
+  ),
+  // ── 大問3 長文読解 (studio-expanded to official 30 target, 2026-06-12, content-qa) ──
+  ReadingMockItem(
+    id: '3_r_023',
+    sectionId: '3_r3',
+    passageText:
+        'Notice: "The city zoo opens at 9:00 a.m. and closes at 5:00 p.m. '
+        'The lions are fed at 11:00 a.m. every day. Please do not give food '
+        'to the animals."',
+    questionText: 'What time are the lions fed?',
+    choices: ['At 9:00 a.m.', 'At 11:00 a.m.', 'At 5:00 p.m.', 'At 1:00 p.m.'],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: '3_r_024',
+    sectionId: '3_r3',
+    passageText:
+        'Dear members,\nThe city library will be closed next Monday because '
+        'we are putting in new computers. We will open again on Tuesday. '
+        'We are sorry for the trouble.',
+    questionText: 'Why will the library be closed on Monday?',
+    choices: [
+      'To clean the building.',
+      'To put in new computers.',
+      'Because it is a holiday.',
+      'To buy new books.',
+    ],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: '3_r_025',
+    sectionId: '3_r3',
+    passageText:
+        'Last Saturday, Emma went to a cooking class for the first time. '
+        'She learned how to make pizza. It was difficult, but her teacher '
+        'was kind, so she had a lot of fun.',
+    questionText: 'How did Emma feel about the cooking class?',
+    choices: [
+      'She had a lot of fun.',
+      'She was bored.',
+      'She was angry.',
+      'She felt sick.',
+    ],
+    correctIdx: 0,
+  ),
+  ReadingMockItem(
+    id: '3_r_026',
+    sectionId: '3_r3',
+    passageText:
+        'Our class will visit the mountains on Friday. We will leave school '
+        'at 8:00 in the morning and walk to the top. Please bring your lunch '
+        'and some water.',
+    questionText: 'What should students bring on Friday?',
+    choices: [
+      'A camera and a map.',
+      'Their lunch and some water.',
+      'Warm gloves.',
+      'A tennis racket.',
+    ],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: '3_r_027',
+    sectionId: '3_r3',
+    passageText:
+        'Lost: a small brown dog named Coco. She was last seen near the park '
+        'on Sunday afternoon. She is very friendly. If you find her, please '
+        'call Mr. Brown at the number below.',
+    questionText: 'Where was the dog last seen?',
+    choices: ['At the station.', 'Near the park.', 'In a shop.', 'At school.'],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: '3_r_028',
+    sectionId: '3_r3',
+    passageText:
+        'The school sports day was planned for today. However, it started '
+        'raining in the morning. The teachers decided to move the sports day '
+        'to next week.',
+    questionText: 'Why was the sports day moved to next week?',
+    choices: [
+      'Because of the rain.',
+      'Because the field was small.',
+      'Because the students were sick.',
+      'Because it was a holiday.',
+    ],
+    correctIdx: 0,
+  ),
+  ReadingMockItem(
+    id: '3_r_029',
+    sectionId: '3_r3',
+    passageText:
+        'Our class collected old newspapers for three weeks. We took them to '
+        'a recycling center. With the money we got, we bought new books for '
+        'our school library.',
+    questionText: 'What did the class do with the money?',
+    choices: [
+      'They kept it for a trip.',
+      'They bought new books.',
+      'They gave it to the teacher.',
+      'They bought a computer.',
+    ],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: '3_r_030',
+    sectionId: '3_r3',
+    passageText:
+        'Daniel was nervous before summer camp because he knew no one there. '
+        'But on the first day, he met a boy who liked the same games. By the '
+        'end of the week, they were good friends.',
+    questionText: 'Why was Daniel nervous at first?',
+    choices: [
+      'He did not know anyone.',
+      'He did not like camping.',
+      'He forgot his bag.',
+      'He was not feeling well.',
+    ],
+    correctIdx: 0,
   ),
 ];
 
