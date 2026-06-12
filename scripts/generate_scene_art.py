@@ -31,20 +31,35 @@ NEG = ("photo, 3d, 3dcg, flat vector, grey background, plain background, textbox
 # terms and use a NEG that drops the plain-background ban and adds crowd/sheet/
 # frame negatives.
 NPC_POS = ("solo, 1character, single character, upper body portrait bust, centered, "
-           "facing viewer, modest wholesome storybook character for a children's book, "
-           "fully clothed, simple soft uncluttered background, ")
+           "facing viewer, kind clearly-visible friendly eyes, warm approachable "
+           "wholesome all-ages storybook-game townsfolk, fully clothed, simple "
+           "uncluttered background, ")
+# STYLE COHERENCE (2026-06-11, CEO 1294): NPCs MUST match the LOCKED protagonist
+# mains (M5/M6, generate_expressions.py) — same Animagine-XL model, same コトバ探偵
+# world + "refined detailed illustration, cinematic dramatic light" suffix → crisp
+# anime, NOT the soft watercolour/storybook/chibi look the earlier batch produced.
+# Crisp anime characters over the painterly scene backgrounds is the intended combo.
+NPC_STYLE = ("detective-world wardrobe, dusty teal and brass-amber コトバ探偵 "
+             "word-detective world palette, refined detailed anime illustration, "
+             "clean sharp linework, soft warm even lighting, bright clearly-lit face, "
+             "gentle wholesome, masterpiece, best quality, absurdres")
 # Child-safety negatives are NON-NEGOTIABLE for a kids' 英検 app: the anime base
-# model (Animagine XL) defaults to young sexualized female figures and ignores
-# "elderly/old man" age cues, so we hard-negative sexualization AND the default
-# young-woman bias (per-character subjects still carry the intended age/sex).
-NPC_NEG = ("photo, 3d, 3dcg, flat vector, textbox, ui, hud, text, watermark, signature, "
-           "sterile, modern anime gloss, glossy, harsh black outlines, cel shading, neon, "
-           "lowres, blurry, jpeg artifacts, bad anatomy, extra limbs, "
-           "multiple people, crowd, group, 2girls, 2boys, multiple views, character sheet, "
-           "reference sheet, model sheet, grid, collage, montage, border, frame, ornate frame, "
-           "many faces, busy background, town full of people, "
-           "cleavage, large breasts, breasts, sexualized, sexy, fanservice, revealing clothing, "
-           "bare skin, midriff, suggestive, swimsuit, lingerie, gravure")
+# model defaults to young sexualized female figures and ignores age cues, so we
+# hard-negative sexualization AND the young-woman bias. Mirrors the mains' NEG
+# (crowd/chibi/glossy) — note we do NOT negate sharp outlines/cel shading (that
+# pushed the first batch soft); we ADD anti-watercolour/storybook to lock the
+# mains' crisp look, plus crowd/sheet/frame and child-safety terms.
+NPC_NEG = ("crowd, chibi, multiple people, group, 2girls, 2boys, multiple views, "
+           "character sheet, reference sheet, model sheet, grid, collage, montage, "
+           "border, frame, ornate frame, many faces, town full of people, busy background, "
+           "watercolour, gouache, storybook illustration, soft painterly, washed out, "
+           "photo, 3d, 3dcg, flat vector, textbox, ui, hud, text, watermark, signature, "
+           "glossy, neon, lowres, blurry, jpeg artifacts, bad anatomy, extra limbs, deformed, "
+           "white coat, lab coat, "
+           "cleavage, large breasts, breasts, busty, large chest, hourglass figure, "
+           "sexualized, sexy, sultry, seductive, fanservice, revealing clothing, "
+           "bare skin, midriff, suggestive, swimsuit, lingerie, gravure, "
+           "shadowed face, hidden eyes, eyes covered by shadow, face in shadow, dark face")
 
 # Optional overrides (used for verified test runs before touching committed art):
 #   ART_FILTER  — only generate jobs whose filename contains this substring
@@ -239,8 +254,25 @@ def main():
             print(f"  skip {webp} (exists)")
             continue
         is_npc = fn.startswith("npc_")
-        prompt = f"{NPC_POS if is_npc else ''}{subject}, {POS}"
-        neg = NPC_NEG if is_npc else NEG
+        # Creature mascots (slime) are NOT humanoid — the "fully-clothed upper-body
+        # bust" framing malforms them (a slime grew a second face + a robed body,
+        # QA 2026-06-12). Give creatures a body-appropriate POS/NEG; keep the
+        # crisp-anime コトバ探偵 STYLE so they still cohere with the M5/M6 mains.
+        is_creature = is_npc and "slime" in fn
+        if is_creature:
+            prompt = (f"solo, one single small round cute slime creature mascot, "
+                      f"simple round blob body, one gentle face, centered, plain "
+                      f"uncluttered background, {subject}, {NPC_STYLE}")
+            neg = ("two faces, multiple faces, extra face, double face, humanoid, human, "
+                   "person, girl, boy, clothes, dress, robe, shirt, arms, hands, "
+                   "crowd, multiple, character sheet, grid, border, frame, watercolour, "
+                   "storybook, photo, 3d, text, watermark, lowres, blurry, bad anatomy, deformed")
+        elif is_npc:
+            prompt = f"{NPC_POS}{subject}, {NPC_STYLE}"
+            neg = NPC_NEG
+        else:
+            prompt = f"{subject}, {POS}"
+            neg = NEG
         g = torch.Generator(device="mps").manual_seed(seed)
         print(f"  generating {webp} ({w}x{h}, seed {seed})…")
         img = pipe(prompt=prompt, negative_prompt=neg, width=w, height=h,
