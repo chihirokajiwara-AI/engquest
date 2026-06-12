@@ -37,11 +37,11 @@ const _panels = <_Panel>[
     audio: 'audio/phonics/phoneme_s.mp3',
   ),
   _Panel(
-    'むかし、この くに〈ソネア〉では、\nこえに だした ことばが、そのまま「いろ」に なった。',
+    'むかし、この くに〈ソネア〉では、\nこえに だした ことばが、\nそのまま「いろ」に なった。',
     'Long ago, in Sonea, a spoken word turned into colour.',
   ),
   _Panel(
-    'でも、あるひから ──\n「しずけさ」が、ひろがりはじめた。\nことばが きえると、いろも、こえも、しずかに なる。',
+    'でも、あるひから ──\n「しずけさ」が、ひろがりはじめた。\nことばが きえると、\nいろも、こえも、しずかに なる。',
     'But one day, the Silence began to spread. When a word is forgotten, its colour and its voice grow quiet too.',
   ),
   _Panel(
