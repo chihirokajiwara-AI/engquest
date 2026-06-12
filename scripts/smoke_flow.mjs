@@ -140,6 +140,33 @@ const okAns = q1Ms >= 0 && await clickLabel('1. ');
 const revealMs = okAns ? await waitForLabel('次の問題へ', DEAD_MS) : -1;
 record('answer → 解説 reveal', revealMs < 0 ? DEAD_MS : revealMs, revealMs >= 0,
   !okAns ? 'no choice to tap' : (revealMs < 0 ? 'DEAD tap (answer did nothing)' : ''));
+
+// ── advance: 次の問題へ → 問2 (the in-大問 next-question transition works) ──────
+const okNext = revealMs >= 0 && await clickLabel('次の問題へ');
+const q2Ms = okNext ? await waitForLabel('問2', DEAD_MS) : -1;
+record('次の問題へ → 問2', q2Ms < 0 ? DEAD_MS : q2Ms, q2Ms >= 0,
+  !okNext ? 'no 次へ control' : (q2Ms < 0 ? 'DEAD tap (no Q2)' : ''));
+
+// ── back-nav: tap the ✕ close (unlabeled 40×40 button top-left) → exam hub ─────
+// The close has no semantic label, so tap it by position — a real pointer event to
+// Flutter's glass pane. Proves the back-navigation a user relies on actually works.
+if (q2Ms >= 0) await page.mouse.click(24, 24);
+const backMs = q2Ms >= 0 ? await waitForLabel('試験概要', DEAD_MS) : -1;
+record('✕ close → back to hub', backMs < 0 ? DEAD_MS : backMs, backMs >= 0,
+  q2Ms < 0 ? 'skipped' : (backMs < 0 ? 'DEAD tap (no hub)' : ''));
+
+// ── 筆記2 (大問2 会話文) loads + is answerable — generalises beyond 大問1 ────────
+// Assert '正答' (active-question score counter) — present on the live 大問2 screen
+// but NOT on the hub button (whose label merely *contains* '会話文'), avoiding the
+// false-positive of matching the hub button text itself.
+const okSec2 = backMs >= 0 && await clickLabel('筆記2');
+const conv = okSec2 ? await waitForLabel('正答', DEAD_MS) : -1;
+record('tap 筆記2 → 大問2 question', conv < 0 ? DEAD_MS : conv, conv >= 0,
+  !okSec2 ? '筆記2 not reached' : (conv < 0 ? 'DEAD tap (no question screen)' : ''));
+const okAns2 = conv >= 0 && await clickLabel('1. ');
+const reveal2 = okAns2 ? await waitForLabel('次の問題へ', DEAD_MS) : -1;
+record('筆記2 answer → reveal', reveal2 < 0 ? DEAD_MS : reveal2, reveal2 >= 0,
+  !okAns2 ? 'no choice to tap' : (reveal2 < 0 ? 'DEAD tap (answer did nothing)' : ''));
 await page.screenshot({ path: '/tmp/eq_smoke_end.png' }).catch(() => {});
 
 // ── Report ────────────────────────────────────────────────────────────────────
