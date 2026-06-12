@@ -15,6 +15,7 @@ import 'package:engquest/core/audio/word_audio_player_service.dart';
 import 'package:engquest/core/config/flavor_config.dart';
 import 'package:engquest/core/storage/preferences_service.dart';
 import 'package:engquest/features/settings/settings_screen.dart';
+import 'package:engquest/features/quest/prologue_screen.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -82,6 +83,30 @@ void main() {
     expect(find.text('もじの 大（おお）きさ'), findsOneWidget); // readability (#114)
     expect(find.text('あそびかた'), findsOneWidget); // how-to-play
     expect(find.byType(Switch), findsNWidgets(3)); // SFX, Voice, master
+  });
+
+  testWidgets('Replay-opening tile is present and opens the PrologueScreen',
+      (tester) async {
+    // The opening story plays once-ever on first launch; a child who loved it
+    // (or a parent) must be able to re-watch it from Settings.
+    tester.view.physicalSize = const Size(800, 2000);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
+
+    final tile = find.text('Replay opening');
+    expect(tile, findsOneWidget);
+    await tester.ensureVisible(tile);
+    await tester.tap(tile);
+    await tester.pump(); // start the route push
+    await tester.pump(const Duration(milliseconds: 400)); // advance transition
+    expect(find.byType(PrologueScreen), findsOneWidget);
+    // Unmount so the pushed screen's async (audio preload) does not leak.
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump(const Duration(seconds: 1));
   });
 
   // ── #66 — Support contact dialog ─────────────────────────────────────────

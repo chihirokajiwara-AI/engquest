@@ -31,6 +31,7 @@ import 'package:engquest/core/ui/readability_scale.dart';
 import 'package:engquest/features/quest/ui/dq_ui.dart';
 import 'package:engquest/features/parent_dashboard/parent_login_screen.dart';
 import 'package:engquest/features/achievements/achievements_screen.dart';
+import 'package:engquest/features/quest/prologue_screen.dart';
 
 // ── Platform URL helpers ──────────────────────────────────────────────────────
 
@@ -289,6 +290,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 onTap: () => Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (_) => const AchievementsScreen(),
+                                  ),
+                                ),
+                              ),
+                              _divider(),
+                              // Re-watch the opening story. It plays once-ever on
+                              // first launch; a child who loved it (or a parent)
+                              // had no way to see it again. onDone just pops back
+                              // — the caller owns the once-ever 'seen' flag, so a
+                              // replay never re-gates the first-launch flow.
+                              DqTile(
+                                jp: 'オープニングを もういちど みる',
+                                en: 'Replay opening',
+                                icon: Icons.replay,
+                                onTap: () => Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => PrologueScreen(
+                                      onDone: () =>
+                                          Navigator.of(context).maybePop(),
+                                    ),
                                   ),
                                 ),
                               ),

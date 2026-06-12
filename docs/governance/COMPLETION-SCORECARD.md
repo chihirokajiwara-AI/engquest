@@ -79,14 +79,14 @@ needs CEO go (spend / secret / prod / legal / art-gen).
 |47|error耐性|58|BUILD|error states, retries, empty states|
 
 ## H. GAME COMPOSITION (TOP PRIORITY — CEO 1244, ~5%, mostly BUILD)
-|48|世界/物語実装|28|BUILD|implement STORY-BIBLE 7-case arc into quest_data (currently 英検+thin skin)|
+|48|世界/物語実装|55|BUILD|STALE→re-audited 2026-06-12: all 7 STORY-BIBLE towns ARE in quest_data incl recast finale 灰色のひろば (333 narrative lines: companionArrival/teachJa/npcLine/onCorrect); nazo tied to eikenLevel. NOT "thin skin". REMAINING: world-class narrative depth + GATE scene art (#54)|
 |49|キャラ in-game|35|BUILD|cast dialogue, arcs, presence (bible→code); art-gen separate|
 |50|探索の深さ|40|BUILD|scene/nazo/hotspot depth → Layton/Minecraft-grade|
 |51|ゲームフィール/演出|42|BUILD|answer juice (haptic+chime) now across all 5 英検 modes + battle, plus XP ring / daily hook / スラ companion reacts (2026-06-12); REMAINING: scene+route transitions, bigger reward-moment set-pieces|
 |52|事件→英検の有機結合|32|BUILD|each case's puzzles ARE the 英検 skills, diegetic|
 |53|手がかりドリップ|40|BUILD|one clue/case edge→centre per WORLD-BIBLE|
 |54|視覚の本格バー|30|GATE:art-gen|dark-navy/gold look; cast+scene art (heavy job)|
-|55|オープニング/掴み|28|BUILD|implement OPENING-NARRATIVE-BIBLE as playable|
+|55|オープニング/掴み|62|BUILD|STALE→re-audited 2026-06-12: the 6-panel OPENING-NARRATIVE-BIBLE prologue IS built (prologue_screen.dart, incl interactive 🔊 c·a·t blend) AND wired (app.dart:1021, once-ever) AND now replayable from Settings. REMAINING: bible's richer 3-beat town ArrivalScene + GATE phoneme clips/leitmotif (#56) + scene art (#54)|
 |56|サウンド/音楽|35|GATE:audio|BGM/SE design+wiring (founder/paid gen escalates)|
 |57|nav到達性/ハブ|72|BUILD|kill orphaned WorldMap hub remnants; clean flow|
 |58|onboarding没入|72|BUILD|make CAT placement diegetic (探偵の入所試験)|
