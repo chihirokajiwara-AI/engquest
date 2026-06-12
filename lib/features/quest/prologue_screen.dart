@@ -223,9 +223,16 @@ class _PrologueScreenState extends State<PrologueScreen> {
       case 0:
         return _glyphRow(['s', 'a', 't'], const Color(0xFFEDE3C8));
       case 1:
-        return _orb(const Color(0xFF6FC9FF), bright: true, label: 'いろ');
+        // こえが いろになった: a real painted ソネア town blooms from grey to
+        // colour — the bible's "grey village tinting to colour", using the app's
+        // own painted scene (not a labelled circle). Animated saturation filter.
+        return _sceneStage('assets/art/scenes_layton/town5_lane.webp',
+            drain: false);
       case 2:
-        return _orb(const Color(0xFF5A6072), bright: false, label: 'しずけさ');
+        // しずけさ: the same world has its colour DRAWN BACK OUT to grey — the
+        // Silence spreading, shown by a colour→grey desaturation, not a monster.
+        return _sceneStage('assets/art/scenes_layton/town5_lane.webp',
+            drain: true);
       case 3:
         return _heroSpark();
       default: // last
@@ -249,31 +256,54 @@ class _PrologueScreenState extends State<PrologueScreen> {
         ],
       );
 
-  /// A glowing orb — colour returning (bright) or draining to grey (dim).
-  Widget _orb(Color c, {required bool bright, required String label}) => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 110,
-            height: 110,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: RadialGradient(
-                  colors: [c.withAlpha(bright ? 235 : 90), c.withAlpha(0)]),
-              boxShadow: bright
-                  ? [
-                      BoxShadow(
-                          color: c.withAlpha(150),
-                          blurRadius: 40,
-                          spreadRadius: 6)
-                    ]
-                  : null,
+  /// A real painted ソネア scene whose COLOUR animates in or out — the bible's
+  /// "colour is born / the Silence draws it back to grey", rendered with the
+  /// app's own painted art (not a placeholder circle) via an animated saturation
+  /// ColorFilter. [drain] false = grey→colour, true = colour→grey. Reduced-motion
+  /// jumps to the end state. No new asset — reuses a bundled town scene.
+  Widget _sceneStage(String asset, {required bool drain}) {
+    final from = drain ? 1.0 : 0.0;
+    final to = drain ? 0.0 : 1.0;
+    Widget frame(double s) => Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: dqGoldDeep.withAlpha(140), width: 1.5),
+            boxShadow: const [BoxShadow(color: Colors.black54, blurRadius: 18)],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(13),
+            child: SizedBox(
+              width: 300,
+              height: 184,
+              child: ColorFiltered(
+                colorFilter: ColorFilter.matrix(_saturationMatrix(s)),
+                child: Image.asset(asset, fit: BoxFit.cover),
+              ),
             ),
           ),
-          const SizedBox(height: 14),
-          Text(label, style: dqText(size: 13, color: bright ? dqGold : dqInk)),
-        ],
-      );
+        );
+    if (prefersReducedMotion(context)) return frame(to);
+    return TweenAnimationBuilder<double>(
+      key: ValueKey('scenesat-$_index'),
+      tween: Tween<double>(begin: from, end: to),
+      duration: const Duration(milliseconds: 2200),
+      curve: Curves.easeInOut,
+      builder: (_, s, __) => frame(s),
+    );
+  }
+
+  /// 5x4 colour matrix that scales saturation: [s]=1 → identity (full colour),
+  /// [s]=0 → fully desaturated (luminance grey). Rec.709 luma weights.
+  List<double> _saturationMatrix(double s) {
+    const r = 0.2126, g = 0.7152, b = 0.0722;
+    final i = 1 - s;
+    return <double>[
+      i * r + s, i * g, i * b, 0, 0, //
+      i * r, i * g + s, i * b, 0, 0, //
+      i * r, i * g, i * b + s, 0, 0, //
+      0, 0, 0, 1, 0,
+    ];
+  }
 
   /// きみ as the last surviving spark of voice.
   Widget _heroSpark() => Column(

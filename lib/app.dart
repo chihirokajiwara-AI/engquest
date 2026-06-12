@@ -334,6 +334,8 @@ const List<String> kPreviewRouteNames = [
   'silentbattle',
   'silentbattle4',
   'prologue',
+  'prologue1',
+  'prologue2',
   'prologue3',
   'prologue4',
   'prologue5',
@@ -429,6 +431,10 @@ Widget _previewFor(String? name) {
           town: kQuestTowns[1], previewStraightToBattle: true);
     case 'prologue':
       return PrologueScreen(onDone: () {});
+    case 'prologue1': // colour-is-born scene panel (design/quality audit)
+      return PrologueScreen(onDone: () {}, startIndex: 1);
+    case 'prologue2': // silence-drains-colour scene panel (design/quality audit)
+      return PrologueScreen(onDone: () {}, startIndex: 2);
     case 'prologue3':
       return PrologueScreen(onDone: () {}, startIndex: 3);
     case 'prologue4':
