@@ -426,4 +426,45 @@ void main() {
     // Goal-met ring shows a check, not the numeric counter.
     expect(find.byIcon(Icons.check_rounded), findsOneWidget);
   });
+
+  // ── スラ companion (progress-reactive retention mechanic) ───────────────────
+
+  testWidgets('KotobaHomeScreen: スラ companion celebrates a met daily goal',
+      (tester) async {
+    await tester.pumpWidget(_wrap(
+      streakService: _MockStreakService(
+        const StreakState(
+          currentStreak: 3,
+          weeklyBits: 7,
+          todayCount: 2,
+          problemsToday: 12,
+          dailyGoal: 10,
+        ),
+      ),
+      cardRepository: InMemoryFsrsCardRepository(),
+    ));
+    await _settle(tester);
+    // The companion card is present and reacts to the met-goal state.
+    expect(find.byKey(const ValueKey('home_companion_sura')), findsOneWidget);
+    expect(find.textContaining('きみと いると たのしいよ'), findsOneWidget);
+  });
+
+  testWidgets('KotobaHomeScreen: スラ companion warmly welcomes a returner',
+      (tester) async {
+    await tester.pumpWidget(_wrap(
+      streakService: _MockStreakService(
+        const StreakState(
+          currentStreak: 0,
+          weeklyBits: 0,
+          todayCount: 0,
+          streakBroken: true,
+        ),
+      ),
+      cardRepository: InMemoryFsrsCardRepository(),
+    ));
+    await _settle(tester);
+    expect(find.byKey(const ValueKey('home_companion_sura')), findsOneWidget);
+    // A lapsed returner gets a warm, non-shaming welcome — not a guilt nag.
+    expect(find.textContaining('また いっしょに なぞ'), findsOneWidget);
+  });
 }

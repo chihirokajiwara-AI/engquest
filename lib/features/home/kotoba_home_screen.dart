@@ -551,6 +551,73 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
           const SizedBox(height: 14),
           // Weekly dots — subtle, no red "missed day" highlight.
           _buildWeekDots(),
+          // スラ companion reacts to the child's actual progress (greets a
+          // returner, celebrates a met goal / long streak, encourages mid-way).
+          // A companion that responds to YOUR growth is the parasocial-bonding
+          // retention mechanic (2026 kids-EdTech best practice; CEO 1320
+          // characters + the daily-return spine) — honest, reads real state.
+          _buildCompanionCard(),
+        ],
+      ),
+    );
+  }
+
+  /// スラ's in-character line for the current progress state. Mirrors the
+  /// research-backed mascot modes: greet/welcome-back, celebrate, encourage.
+  String _companionLine() {
+    final s = _streak;
+    if (s.streakBroken) {
+      return 'おかえり！ また いっしょに なぞを ときにいこう！';
+    }
+    if (s.goalMet) {
+      return 'きょうの目標（もくひょう）たっせい！ きみと いると たのしいよ！';
+    }
+    if (s.currentStreak >= 7) {
+      return '${s.currentStreak}日（にち）も つづくなんて、ほんものの たんていだね！';
+    }
+    if (s.problemsToday > 0) {
+      // No 「あと N問」 here — the goal caption right above already says it;
+      // スラ adds encouragement, not a repeat.
+      return 'その ちょうし！ いっしょに なぞを ときつづけよう！';
+    }
+    return 'きょうも なぞとき、いってみよう！';
+  }
+
+  /// スラ companion card — same dusty-teal #5DA9E9 identity as the scene-entry
+  /// arrival banner (CHARACTER-BIBLE §3), so the sidekick feels like one
+  /// character across the hub and the exploration scenes.
+  Widget _buildCompanionCard() {
+    return Container(
+      key: const ValueKey('home_companion_sura'),
+      margin: const EdgeInsets.only(top: 14),
+      padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+      decoration: BoxDecoration(
+        color: dqBox.withAlpha(235),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFF5DA9E9), width: 2),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('🟢', style: TextStyle(fontSize: 22)),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('スラ',
+                    style: dqText(
+                        size: 11,
+                        w: FontWeight.w700,
+                        color: const Color(0xFF5DA9E9))),
+                const SizedBox(height: 2),
+                Text(_companionLine(),
+                    style:
+                        dqText(size: 13, color: dqInk).copyWith(height: 1.55)),
+              ],
+            ),
+          ),
         ],
       ),
     );
