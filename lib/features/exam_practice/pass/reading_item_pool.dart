@@ -215,7 +215,7 @@ const Map<String, String> _kReadingExplanations = {
   'p2_r_004':
       '正解は「finish」。by Friday「金曜までに」終わらせたい、という流れ。Bが手伝うと言っているのも、仕事を仕上げる話だね。',
   'p2_r_005':
-      '正解は「It saves energy.」。本文に it also saves energy「エネルギーも節約する」とあるよ。ほかの選択肢は本文に出てこないね。',
+      '正解は「It saves energy.」。本文に it also saves energy「エネルギーも節約する」とあるよ。ほかの答えは本文に出てこないね。',
   'p2_r_006':
       '正解は「studying」。has been ＋ ing は現在完了進行形で、「5年間ずっと勉強している」という今もつづく動作を表すよ。',
   'p2_r_007':
@@ -326,11 +326,11 @@ const Map<String, String> _kReadingExplanations = {
   '2_r_002':
       '正解は found「分かった、突き止めた」。found that …で「～ということを発見した」と研究結果を述べる形です。funded（資金を出す）や formed（形づくる）では意味が通りません。',
   '2_r_003':
-      '本文に、抗生物質が登場する前は「ささいな感染症さえ命にかかわった」とあります。つまりペニシリンの意義は、そうした感染症を治療できるようにしたこと。idx1 が正解です。',
+      '本文に、抗生物質が登場する前は「ささいな感染症さえ命にかかわった」とあります。つまりペニシリンの意義は、そうした感染症を治療できるようにしたこと。「It made minor infections treatable.」 が正解です。',
   '2_r_004':
       '森が切り開かれると動物は生息地を「失う」ので lose が正解。次の and are forced to move…（移動を強いられる）が手がかりです。gain（得る）や protect（守る）では逆の意味になります。',
   '2_r_005':
-      '本文の最後に which raises concerns about mental health「心の健康への心配を生む」とあります。よって本文が示す心配は心の健康への影響。idx0 が正解です。',
+      '本文の最後に which raises concerns about mental health「心の健康への心配を生む」とあります。よって本文が示す心配は心の健康への影響。「Its effect on mental health」 が正解です。',
   '2_r_006':
       '正解は put off「延期する」。until next week「来週まで」とあるので、会議を先に延ばす意味になります。put on（着る）や put out（消す）とは意味が異なります。',
   '2_r_007':
@@ -358,23 +358,23 @@ const Map<String, String> _kReadingExplanations = {
   '2_r_018':
       '正解は releasing「放出すること」。without releasing harmful gases で「有害なガスを出さずに」という意味になり、気候変動と戦う助けになるという流れに合います。',
   '2_r_019':
-      '本文の However 以降に、自転車を「良い状態に保つのに苦労する」とあります。これが本文の挙げる問題点。idx1（自転車の整備）が正解です。逆接の However が手がかりです。',
+      '本文の However 以降に、自転車を「良い状態に保つのに苦労する」とあります。これが本文の挙げる問題点。「Maintaining the bicycles」（自転車の整備）が正解です。逆接の However が手がかりです。',
   '2_r_020':
-      '本文に these pieces can eventually reach the human food chain「小さな破片がいずれ人の食物連鎖に入る」とあります。よって idx1 が正解です。',
+      '本文に these pieces can eventually reach the human food chain「小さな破片がいずれ人の食物連鎖に入る」とあります。よって 「Tiny pieces can reach the food we eat.」 が正解です。',
   '2_r_021':
-      '本文に the cost of growing food would rise sharply「食料を育てる費用が急に上がる」とあります。ミツバチがいないと食料が高くなる、idx2 が正解。',
+      '本文に the cost of growing food would rise sharply「食料を育てる費用が急に上がる」とあります。ミツバチがいないと食料が高くなる、「Food would become more expensive.」 が正解。',
   '2_r_022':
-      '本文に Scholars from many lands gathered there「多くの土地から学者が集まった」とあります。よって idx1 が正解。建物は destroyed されたので idx0 は誤りです。',
+      '本文に Scholars from many lands gathered there「多くの土地から学者が集まった」とあります。よって 「It welcomed scholars from many places.」 が正解です。建物は destroyed されたので 「It still stands in its original form.」 は誤りです。',
   '2_r_023':
-      '本文の Skipping sleep before an exam … can actually lower a score「試験前に睡眠をけずると点が下がる」が根拠。研究者が警告する内容なので idx1 が正解です。',
+      '本文の Skipping sleep before an exam … can actually lower a score「試験前に睡眠をけずると点が下がる」が根拠。研究者が警告する内容なので 「Losing sleep before an exam」 が正解です。',
   '2_r_024':
-      '本文の最後に coastal towns that depend on them「サンゴ礁にたよる海辺の町」とあります。地元の人々がたよっている、idx2 が正解です。',
+      '本文の最後に coastal towns that depend on them「サンゴ礁にたよる海辺の町」とあります。地元の人々がたよっている、「Local communities rely on them.」 が正解です。',
   '2_r_025':
-      '本文に the first person ever to win the Nobel Prize in two different fields「2つの分野でノーベル賞を取った最初の人」とあります。idx1 が正解。',
+      '本文に the first person ever to win the Nobel Prize in two different fields「2つの分野でノーベル賞を取った最初の人」とあります。「She won the Nobel Prize in two fields.」 が正解。',
   '2_r_026':
-      '本文に so that new exercise machines can be installed「新しい運動機器を入れるため」とあります。休館の理由は機器の設置、idx1 が正解です。',
+      '本文に so that new exercise machines can be installed「新しい運動機器を入れるため」とあります。休館の理由は機器の設置、「To install new machines」 が正解です。',
   '2_r_027':
-      '品物が out of stock で遅れること、色ちがいの代替か返金を選べることを伝えるメールです。遅れの説明と選択肢の提示が目的なので idx2 が正解。',
+      '品物が out of stock で遅れること、色ちがいの代替か返金を選べることを伝えるメールです。遅れの説明と代わりの提案が目的なので 「To explain a delay and offer choices」 が正解。',
   '2_r_028':
       '正解は had。No sooner had ＋ 主語 ＋ 過去分詞 … than ～は倒置で「～するやいなや」を表します。後ろに過去分詞 begun があるので had が入ります。',
   '2_r_029':
@@ -389,11 +389,11 @@ const Map<String, String> _kReadingExplanations = {
   'p1_r_002':
       '正解は funded「資金を提供された」。be funded by …で「～から資金を得る」。国際的な財団が研究を支援したという受け身の文です。found や formed とつづりが似ているので注意。',
   'p1_r_003':
-      '本文の最後に attribute these shifts primarily to rising global temperatures「世界の気温上昇が主な原因」とあります。よって idx1（気温の上昇）が正解です。',
+      '本文の最後に attribute these shifts primarily to rising global temperatures「世界の気温上昇が主な原因」とあります。よって 「Rising global temperatures」（気温の上昇）が正解です。',
   'p1_r_004':
       '正解は eliminate「なくす」。素材をできるだけ長く使い続けて廃棄物を減らす、という循環型経済の説明に合います。create（生み出す）では逆の意味になってしまいます。',
   'p1_r_005':
-      '本文に rivals or surpasses experienced physicians「経験ある医師と同じくらいか、それ以上」とあります。よって AI は同等か、それ以上に正確になりうる。idx0 が正解です。',
+      '本文に rivals or surpasses experienced physicians「経験ある医師と同じくらいか、それ以上」とあります。よって AI は同等か、それ以上に正確になりうる。「It can be equally or more accurate.」 が正解です。',
   'p1_r_006':
       '正解は undermined「くつがえした、弱めた」。証拠が説をくつがえしたので、so he had to start over「やり直さねばならなかった」と続きます。supported（支持する）では逆です。',
   'p1_r_007':
@@ -421,19 +421,19 @@ const Map<String, String> _kReadingExplanations = {
   'p1_r_018':
       '正解は enhance「高める」。二言語を学ぶことが認知の柔軟性を「高める」という流れに合います。reduce（減らす）や prevent（防ぐ）では好ましい内容と矛盾します。',
   'p1_r_019':
-      '本文に reduce the distance food must travel「食料が運ばれる距離を減らせる」とあります。これが都市農業の利点。idx1（食料の移動距離を縮める）が正解です。',
+      '本文に reduce the distance food must travel「食料が運ばれる距離を減らせる」とあります。これが都市農業の利点。「It shortens the distance food travels.」（食料の移動距離を縮める）が正解です。',
   'p1_r_020':
-      '本文に the duration of the waggle signals how far away the food lies「ダンスの長さが食料までの距離を示す」とあります。よって idx0（食料までの距離）が正解です。',
+      '本文に the duration of the waggle signals how far away the food lies「ダンスの長さが食料までの距離を示す」とあります。よって 「How far away the food source is」（食料までの距離）が正解です。',
   'p1_r_021':
-      '本文で全員が同じ井戸の水をくんでいたとわかり、ポンプを外すと流行が収まりました。水が原因という証拠です。idx0（汚れた水が運んだ）が正解です。',
+      '本文で全員が同じ井戸の水をくんでいたとわかり、ポンプを外すと流行が収まりました。水が原因という証拠です。「It was carried by contaminated water」（汚れた水が運んだ）が正解です。',
   'p1_r_022':
-      '本文の最後に strike a careful balance between flexibility and connection「柔軟さとつながりの均衡を取る」とあります。idx0（柔軟さと人のつながりの両立）が正解です。',
+      '本文の最後に strike a careful balance between flexibility and connection「柔軟さとつながりの均衡を取る」とあります。「They will balance flexibility with personal connection」（柔軟さと人のつながりの両立）が正解です。',
   'p1_r_023':
-      '本文に corals expel the algae … and may eventually starve「藻を失い、やがて飢える」とあります。藻が食料の大半を供給するためです。idx0 が正解です。',
+      '本文に corals expel the algae … and may eventually starve「藻を失い、やがて飢える」とあります。藻が食料の大半を供給するためです。「The coral loses the algae that provide most of its food」 が正解です。',
   'p1_r_024':
-      '本文に compare it against a placebo to be sure that any benefit comes from the drug itself「効果が薬そのものから来ると確かめるため」とあります。idx0 が正解です。',
+      '本文に compare it against a placebo to be sure that any benefit comes from the drug itself「効果が薬そのものから来ると確かめるため」とあります。「To confirm the benefit comes from the drug, not from belief」 が正解です。',
   'p1_r_025':
-      '本文の最後に combine several of these cues rather than depending on any single one「複数の手がかりを組み合わせる」とあります。idx0 が正解です。',
+      '本文の最後に combine several of these cues rather than depending on any single one「複数の手がかりを組み合わせる」とあります。「They probably combine several different cues」 が正解です。',
   'p1_r_026':
       '正解は mitigate「やわらげる」。水路で洪水の被害をやわらげる、という文意に合います。aggravate（悪化させる）は逆の意味なので注意しましょう。',
   'p1_r_027':

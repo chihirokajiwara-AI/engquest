@@ -98,6 +98,31 @@ void main() {
     }
   });
 
+  group('reading pool — teach-why 解説 coverage + shuffle-safety', () {
+    // The post-mock reading review renders item.explanation. Every pool item must
+    // (a) carry a non-empty 解説 (mock review teaches, not just marks), and (b)
+    // justify by PASSAGE EVIDENCE, never by a choice position — mock-exam choices
+    // are shuffled at render (shuffledChoiceSet), so any 'idxN'/'N番'/'選択肢'/
+    // '番目' reference points at the wrong option after the shuffle. (Flaw-hunt
+    // 2026-06-13: 21 upper-grade 解説 said 'idxN が正解' and misled the learner.)
+    // Read via readingItemsFor — the SAME composed items the mock exam serves
+    // (mock_exam.dart:263), which inject the learner-facing 解説. (rawReadingItemsFor
+    // exposes the pool's own — often null — explanation field, not what's shown.)
+    final positionRef = RegExp(r'idx\s*\d|[0-9０-９]番|選択肢|番目');
+    for (final g in grades) {
+      test('英検$g reading 解説 are complete + position-free', () {
+        for (final it in readingItemsFor(g)) {
+          expect(it.explanation != null && it.explanation!.trim().isNotEmpty,
+              isTrue,
+              reason: '${it.id}: missing 解説 — mock review would teach nothing');
+          expect(positionRef.hasMatch(it.explanation!), isFalse,
+              reason: '${it.id}: 解説 references a choice position '
+                  '(choices shuffle at render): "${it.explanation}"');
+        }
+      });
+    }
+  });
+
   group('pool count floor (ratchet — never regress)', () {
     for (final g in grades) {
       test('英検$g reading >= ${readingFloor[g]}', () {
