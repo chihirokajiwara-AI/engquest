@@ -852,7 +852,7 @@ const _grade4Part2 = <ListeningItem>[
     questionType: ListeningQuestionType.dialogueContent,
     question: 'Where did the boy buy his jacket?',
     choices: [
-      'At a shop near her house.',
+      'At a shop near his house.',
       'On the internet.',
       'At the department store near the station.',
       'At the shopping mall.',
@@ -1274,10 +1274,10 @@ const _grade3Part1 = <ListeningItem>[
     questionType: ListeningQuestionType.dialogueContent,
     question: 'Why is the boy tired?',
     choices: [
-      'She studied all night.',
-      'She practiced the piano.',
-      'She watched TV late.',
-      'She had a fever.',
+      'He studied all night.',
+      'He practiced the piano.',
+      'He watched TV late.',
+      'He had a fever.',
     ],
     correctIndex: 1,
     explanation:
@@ -1426,10 +1426,10 @@ const _grade3Part2 = <ListeningItem>[
     questionType: ListeningQuestionType.dialogueContent,
     question: 'How does the boy practice English outside of class?',
     choices: [
-      'She reads English novels.',
-      'She watches English videos and keeps a diary.',
-      'She listens to English radio programs.',
-      'She takes private lessons online.',
+      'He reads English novels.',
+      'He watches English videos and keeps a diary.',
+      'He listens to English radio programs.',
+      'He takes private lessons online.',
     ],
     correctIndex: 1,
     explanation:
@@ -1475,8 +1475,8 @@ const _grade3Part2 = <ListeningItem>[
     choices: [
       'His old one was stolen.',
       'The brakes are broken and it is too small.',
-      'He wants a faster one for racing.',
-      'His friend gave him money for it.',
+      'She wants a faster one for racing.',
+      'Her friend gave her money for it.',
     ],
     correctIndex: 1,
     explanation:
@@ -1540,10 +1540,10 @@ const _grade3Part2 = <ListeningItem>[
     questionType: ListeningQuestionType.dialogueContent,
     question: 'How did the boy prepare for the contest?',
     choices: [
-      'She watched videos of other speeches.',
-      'She practiced in front of her family.',
-      'She took lessons from a teacher.',
-      'She wrote many different drafts.',
+      'He watched videos of other speeches.',
+      'He practiced in front of his family.',
+      'He took lessons from a teacher.',
+      'He wrote many different drafts.',
     ],
     correctIndex: 1,
     explanation: '「practiced in front of my family every night（毎晩家族の前で練習した）」。',
@@ -2648,10 +2648,10 @@ const _grade2Part1 = <ListeningItem>[
     questionType: ListeningQuestionType.dialogueQA,
     question: 'What does the woman do at the animal shelter?',
     choices: [
-      'He trains the staff.',
-      'He repairs the building.',
-      'He manages the money.',
-      'He walks dogs and helps with adoptions.',
+      'She trains the staff.',
+      'She repairs the building.',
+      'She manages the money.',
+      'She walks dogs and helps with adoptions.',
     ],
     correctIndex: 3,
     explanation:
@@ -3410,9 +3410,9 @@ const _gradePre2PlusPart1 = <ListeningItem>[
     questionType: ListeningQuestionType.dialogueQA,
     question: 'What is the man worried about?',
     choices: [
-      'She has a piano lesson.',
-      'She has no present.',
-      'She does not know the host.',
+      'He has a piano lesson.',
+      'He has no present.',
+      'He does not know the host.',
       'The party is cancelled.',
     ],
     correctIndex: 0,
