@@ -151,17 +151,14 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
     }
 
     // 3. FSRS due-count — guarded; repo may be empty or throw.
-    // #134: read under the child's REAL anonymous Firebase UID (the identity Battle
-    // writes FSRS under) so a returning child sees their actual due-count, not a
-    // false 0 from a fake shared key against an empty store. Falls back to 'local'
-    // only when Auth is unavailable (offline / tests) — InMemory repos key on that.
+    // #134 + #16: read under the SAME stable identity Battle WRITES the deck under.
+    // resolveUid() returns the real anon uid when Firebase is up (persisting it),
+    // else the last-persisted real uid / AuthService.offlineUid. Previously this
+    // read used getOrCreateUid() with a 'local' fallback while Battle writes under
+    // resolveUid() — so when Firebase init flaked the read key ('local') and write
+    // key ('offline_user'/persisted) diverged and the home showed a false 0 due.
     int dueCount = 0;
-    String userId = 'local';
-    try {
-      userId = await AuthService().getOrCreateUid();
-    } catch (_) {
-      // Auth/Firebase unavailable → keep the 'local' fallback.
-    }
+    final userId = await AuthService().resolveUid();
     try {
       final due = await _repo.getDueCards(userId, DateTime.now());
       dueCount = due.length;

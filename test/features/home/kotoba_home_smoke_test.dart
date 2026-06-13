@@ -17,6 +17,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:engquest/core/firebase/auth_service.dart';
 import 'package:engquest/core/fsrs/fsrs_card_repository.dart';
 import 'package:engquest/core/fsrs/fsrs_card.dart';
 import 'package:engquest/core/storage/preferences_service.dart';
@@ -61,7 +62,9 @@ class _SequenceStreakService extends StreakService {
 /// Returns a Future so callers can await seeding before pumping the widget.
 Future<InMemoryFsrsCardRepository> _repoWithDue(int dueCount) async {
   final repo = InMemoryFsrsCardRepository();
-  const userId = 'local';
+  // Seed under the SAME id the home resolves to in a Firebase-less test:
+  // resolveUid() falls back to AuthService.offlineUid (no persisted uid here).
+  final userId = AuthService.offlineUid;
   final now = DateTime.now().subtract(const Duration(minutes: 1));
   for (var i = 0; i < dueCount; i++) {
     await repo.saveCard(
