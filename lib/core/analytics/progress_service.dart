@@ -79,32 +79,17 @@ class ProgressService {
     final masteryPct =
         deckSize > 0 ? (totalMastered / deckSize).clamp(0.0, 1.0) : 0.0;
 
-    final progress = LearningProgress(
+    return LearningProgress(
       uid: uid,
       currentStreak: streak,
       totalWordsMastered: totalMastered,
       totalWordsPracticed: totalPracticed,
       masteryPercent: masteryPct,
       last7Days: last7 ?? _emptyLast7Days(),
-      eikenReadiness: 0, // placeholder, recalculated below
       nextReviewDue: nextReview,
       vocabPoolSize: deckSize,
       categoryMastery: categoryMastery,
       reviewSchedule: reviewSchedule,
-    );
-
-    return LearningProgress(
-      uid: uid,
-      currentStreak: progress.currentStreak,
-      totalWordsMastered: progress.totalWordsMastered,
-      totalWordsPracticed: progress.totalWordsPracticed,
-      masteryPercent: progress.masteryPercent,
-      last7Days: progress.last7Days,
-      eikenReadiness: calculateEikenReadiness(progress),
-      nextReviewDue: progress.nextReviewDue,
-      vocabPoolSize: progress.vocabPoolSize,
-      categoryMastery: progress.categoryMastery,
-      reviewSchedule: progress.reviewSchedule,
     );
   }
 
@@ -127,14 +112,6 @@ class ProgressService {
       totalPracticed: totalPracticed,
       streak: streak,
     );
-  }
-
-  /// Eiken readiness score (0–100).
-  /// 90% mastery → 100; linear below that.
-  double calculateEikenReadiness(LearningProgress progress) {
-    const double threshold = 0.9;
-    if (progress.masteryPercent >= threshold) return 100.0;
-    return (progress.masteryPercent / threshold) * 100.0;
   }
 
   // -----------------------------------------------------------------------

@@ -83,7 +83,6 @@ class LearningProgress {
   final double
       masteryPercent; // totalWordsMastered / vocabPoolSize, clamped 0–1
   final List<DailyProgress> last7Days;
-  final double eikenReadiness; // 0-100
   final DateTime? nextReviewDue; // earliest FSRS due date
 
   /// Size of the child's actual vocab deck — the denominator behind
@@ -105,7 +104,6 @@ class LearningProgress {
     required this.totalWordsPracticed,
     required this.masteryPercent,
     required this.last7Days,
-    required this.eikenReadiness,
     this.nextReviewDue,
     this.vocabPoolSize = 0,
     this.categoryMastery = const [],
@@ -122,7 +120,6 @@ class LearningProgress {
       last7Days: (json['last7Days'] as List<dynamic>)
           .map((e) => DailyProgress.fromJson(e as Map<String, dynamic>))
           .toList(),
-      eikenReadiness: (json['eikenReadiness'] as num).toDouble(),
       nextReviewDue: json['nextReviewDue'] != null
           ? DateTime.parse(json['nextReviewDue'] as String)
           : null,
@@ -138,7 +135,6 @@ class LearningProgress {
         'totalWordsPracticed': totalWordsPracticed,
         'masteryPercent': masteryPercent,
         'last7Days': last7Days.map((d) => d.toJson()).toList(),
-        'eikenReadiness': eikenReadiness,
         'nextReviewDue': nextReviewDue?.toIso8601String(),
         'vocabPoolSize': vocabPoolSize,
       };

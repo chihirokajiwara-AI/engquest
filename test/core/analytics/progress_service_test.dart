@@ -6,7 +6,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:engquest/core/analytics/progress_service.dart';
 import 'package:engquest/core/analytics/firestore_progress_repository.dart';
-import 'package:engquest/core/models/progress_data.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 
 void main() {
@@ -45,9 +44,9 @@ void main() {
       expect(progress.totalWordsMastered, equals(0));
     });
 
-    test('eiken readiness is 0 for new user', () async {
+    test('masteryPercent is 0 for new user (no deck loaded)', () async {
       final progress = await service.getProgress('new_user');
-      expect(progress.eikenReadiness, closeTo(0.0, 0.001));
+      expect(progress.masteryPercent, closeTo(0.0, 0.001));
     });
   });
 
@@ -86,29 +85,28 @@ void main() {
       expect(progress.totalWordsPracticed, equals(200));
     });
 
-    test('calculates eikenReadiness from mastery percent', () async {
+    test('masteryPercent reaches ~0.9 near full deck mastery', () async {
       await fakeDb.collection('users').doc('readiness_user').set({
-        'totalWordsMastered': 9, // 9/10 = 90% = 100 readiness
+        'totalWordsMastered': 9, // 9/10 of the deck
         'totalWordsPracticed': 10,
         'currentStreak': 10,
       });
       await seedDeck('readiness_user', 10);
 
       final progress = await service.getProgress('readiness_user');
-      expect(progress.eikenReadiness, closeTo(100.0, 0.1));
+      expect(progress.masteryPercent, closeTo(0.9, 0.001));
     });
 
-    test('eikenReadiness is linear below 90% mastery', () async {
+    test('masteryPercent is mastered/deck below full', () async {
       await fakeDb.collection('users').doc('half_user').set({
-        'totalWordsMastered': 9, // 9/20 = 45% → 50% of 100 = 50.0
+        'totalWordsMastered': 9, // 9/20 = 45%
         'totalWordsPracticed': 20,
         'currentStreak': 2,
       });
       await seedDeck('half_user', 20);
 
       final progress = await service.getProgress('half_user');
-      // 45% / 90% * 100 = 50.0
-      expect(progress.eikenReadiness, closeTo(50.0, 0.5));
+      expect(progress.masteryPercent, closeTo(0.45, 0.001));
     });
 
     test('masteryPercent scales with the real deck size, not a fixed 300',
@@ -202,52 +200,4 @@ void main() {
       expect(progress.last7Days.last.wordsPracticed, equals(20));
     });
   });
-
-  // ── calculateEikenReadiness ───────────────────────────────────────────────
-
-  group('calculateEikenReadiness', () {
-    test('returns 100 at 90% mastery', () {
-      final p = _makeProgress(mastered: 270); // 270/300 = 90%
-      expect(service.calculateEikenReadiness(p), closeTo(100.0, 0.001));
-    });
-
-    test('returns 100 above 90% mastery', () {
-      final p = _makeProgress(mastered: 300); // 100%
-      expect(service.calculateEikenReadiness(p), closeTo(100.0, 0.001));
-    });
-
-    test('returns 0 at 0% mastery', () {
-      final p = _makeProgress(mastered: 0);
-      expect(service.calculateEikenReadiness(p), closeTo(0.0, 0.001));
-    });
-
-    test('returns ~55.6 at 50% mastery', () {
-      final p = _makeProgress(mastered: 150); // 150/300 = 50%
-      // 50% / 90% * 100 ≈ 55.56
-      expect(service.calculateEikenReadiness(p), closeTo(55.56, 0.1));
-    });
-  });
-}
-
-// ── Helpers ───────────────────────────────────────────────────────────────────
-
-LearningProgress _makeProgress({required int mastered}) {
-  final now = DateTime.now();
-  return LearningProgress(
-    uid: 'test',
-    currentStreak: 0,
-    totalWordsMastered: mastered,
-    totalWordsPracticed: mastered,
-    masteryPercent: mastered / 300.0,
-    last7Days: List.generate(
-      7,
-      (i) => DailyProgress(
-        date: now.subtract(Duration(days: 6 - i)),
-        wordsPracticed: 0,
-        sessionMinutes: 0,
-        averageScore: 0.0,
-      ),
-    ),
-    eikenReadiness: 0,
-  );
 }
