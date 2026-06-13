@@ -28,8 +28,10 @@
 
 import 'package:flutter/material.dart';
 
+import '../../../core/config/flavor_config.dart';
 import '../../../core/storage/preferences_service.dart';
 import '../../character/progress_tinted_character.dart';
+import '../../paywall/grade_gate_screen.dart';
 import '../../quest/ui/dq_ui.dart';
 import 'cse_model.dart';
 import 'mastery_advisor.dart';
@@ -708,6 +710,23 @@ class _MasteryAdviceCard extends StatelessWidget {
   /// anytime from Settings.
   Future<void> _confirmAdvance(
       BuildContext context, String grade, String label) async {
+    // A paid grade (aken freemium) must go through the paywall — never a free
+    // one-tap advance. Mirrors GradeSelectorScreen / the Settings grade picker.
+    if (!FlavorConfig.instance.isGradeFree(grade)) {
+      await Navigator.of(context).push(MaterialPageRoute(
+        builder: (_) => GradeGateScreen(
+          eikenGrade: grade,
+          onSubscribe: () async {
+            try {
+              final prefs = await PreferencesService.getInstance();
+              await prefs.setString('onboarding_start_level', grade);
+            } catch (_) {/* leave unchanged */}
+            if (context.mounted) Navigator.of(context).pop(); // close the gate
+          },
+        ),
+      ));
+      return;
+    }
     final ok = await showDialog<bool>(
       context: context,
       builder: (d) => AlertDialog(

@@ -31,6 +31,7 @@ import 'package:engquest/core/ui/readability_scale.dart';
 import 'package:engquest/core/storage/preferences_service.dart';
 import 'package:engquest/features/exam_practice/eiken_exam_config.dart'
     show gradeLabelJa;
+import 'package:engquest/features/paywall/grade_gate_screen.dart';
 import 'package:engquest/features/quest/ui/dq_ui.dart';
 import 'package:engquest/features/parent_dashboard/parent_login_screen.dart';
 import 'package:engquest/features/achievements/achievements_screen.dart';
@@ -133,6 +134,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   /// onboarding_start_level when it next loads (the gear-open now refreshes), so
   /// the new grade drives practice + 合格率 across the app.
   Future<void> _changeGrade() async {
+    final flavor = FlavorConfig.instance;
     final picked = await showDialog<String>(
       context: context,
       builder: (ctx) => SimpleDialog(
@@ -153,6 +155,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   const SizedBox(width: 12),
                   Text(gradeLabelJa(g), style: dqText(size: 15, color: dqInk)),
+                  // Paid grades (aken freemium) show a lock — selecting one opens
+                  // the paywall, never switches free (no bypass of the gate).
+                  if (!flavor.isGradeFree(g)) ...[
+                    const SizedBox(width: 8),
+                    const Icon(Icons.lock, color: dqGoldDeep, size: 16),
+                  ],
                 ],
               ),
             ),
@@ -160,17 +168,36 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
     );
     if (picked == null || picked == _currentGrade) return;
-    try {
-      final prefs = await PreferencesService.getInstance();
-      await prefs.setString(_kStartLevelKey, picked);
-    } catch (_) {
-      // Best-effort; if persistence fails the UI simply does not change.
+    // A locked (paid) grade must go through the paywall, not switch for free.
+    if (!flavor.isGradeFree(picked)) {
+      if (!mounted) return;
+      await Navigator.of(context).push(MaterialPageRoute(
+        builder: (_) => GradeGateScreen(
+          eikenGrade: picked,
+          onSubscribe: () {
+            Navigator.of(context).pop(); // close the gate after purchase
+            _applyGrade(picked);
+          },
+        ),
+      ));
       return;
     }
+    await _applyGrade(picked);
+  }
+
+  /// Persist the new grade + confirm. Shared by the free-grade path and the
+  /// post-purchase callback so the paywall is never bypassed.
+  Future<void> _applyGrade(String grade) async {
+    try {
+      final prefs = await PreferencesService.getInstance();
+      await prefs.setString(_kStartLevelKey, grade);
+    } catch (_) {
+      return; // best-effort; on failure the UI simply does not change
+    }
     if (!mounted) return;
-    setState(() => _currentGrade = picked);
+    setState(() => _currentGrade = grade);
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text('きゅうを ${gradeLabelJa(picked)} に かえたよ！'),
+      content: Text('きゅうを ${gradeLabelJa(grade)} に かえたよ！'),
       duration: const Duration(seconds: 2),
     ));
   }

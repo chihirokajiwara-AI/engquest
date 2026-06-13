@@ -14,6 +14,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:engquest/features/exam_practice/pass/pass_meter_screen.dart';
 import 'package:engquest/features/exam_practice/pass/cse_model.dart';
 import 'package:engquest/features/exam_practice/pass/mastery_advisor.dart';
+import 'package:engquest/core/config/flavor_config.dart';
+import 'package:engquest/features/paywall/grade_gate_screen.dart';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -343,8 +345,11 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('advance button opens a reversible confirm dialog',
+    testWidgets('advance button opens a reversible confirm dialog (free grade)',
         (tester) async {
+      // edilab = all grades free → advancing is a direct (reversible) confirm.
+      FlavorConfig.setFlavor(Flavor.edilab);
+      addTearDown(() => FlavorConfig.setFlavor(Flavor.edilab));
       tester.view.physicalSize = const Size(800, 1600);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.reset);
@@ -365,6 +370,35 @@ void main() {
       // Confirms before changing the grade + reassures it is reversible.
       expect(find.textContaining('すすむ？'), findsOneWidget);
       expect(find.textContaining('もどせるよ'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('advance to a PAID grade opens the paywall, not a free switch',
+        (tester) async {
+      // aken freemium: only 5級 is free, so advancing to 4級 must hit the paywall
+      // (GradeGateScreen), never a one-tap free advance — no bypass.
+      FlavorConfig.setFlavor(Flavor.aken);
+      addTearDown(() => FlavorConfig.setFlavor(Flavor.edilab));
+      tester.view.physicalSize = const Size(800, 1600);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+      const rec = MasteryRecommendation(
+        advice: ProgressionAdvice.advance,
+        suggestedGrade: '4',
+        reasonJa: 'たくさん せいかいできてるね！',
+      );
+      await tester
+          .pumpWidget(_wrap(const PassMeterScreen(recommendation: rec)));
+      await tester.pump();
+
+      final btn = find.byKey(const ValueKey('advice_advance_button'));
+      await tester.ensureVisible(btn);
+      await tester.pumpAndSettle();
+      await tester.tap(btn);
+      await tester.pumpAndSettle();
+      // The paywall — NOT the free confirm dialog.
+      expect(find.byType(GradeGateScreen), findsOneWidget);
+      expect(find.textContaining('すすむ？'), findsNothing);
       expect(tester.takeException(), isNull);
     });
 

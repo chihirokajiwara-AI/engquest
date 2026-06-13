@@ -17,6 +17,7 @@ import 'package:engquest/core/storage/preferences_service.dart';
 import 'package:engquest/features/settings/settings_screen.dart';
 import 'package:engquest/features/exam_practice/eiken_exam_config.dart'
     show gradeLabelJa;
+import 'package:engquest/features/paywall/grade_gate_screen.dart';
 import 'package:engquest/features/quest/prologue_screen.dart';
 
 void main() {
@@ -235,6 +236,8 @@ void main() {
   testWidgets(
       '英検 grade is changeable from Settings (was immutable after '
       'onboarding)', (tester) async {
+    FlavorConfig.setFlavor(Flavor.edilab); // all grades free → direct switch
+    addTearDown(() => FlavorConfig.setFlavor(Flavor.edilab));
     tester.view.physicalSize = const Size(800, 2400);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
@@ -259,6 +262,36 @@ void main() {
       (await SharedPreferences.getInstance())
           .getString('onboarding_start_level'),
       '3',
+    );
+  });
+
+  testWidgets(
+      'changing to a PAID grade opens the paywall, does NOT switch for free',
+      (tester) async {
+    // aken freemium: only 5級 is free → picking 3級 must hit the paywall, never
+    // bypass it by silently switching.
+    FlavorConfig.setFlavor(Flavor.aken);
+    addTearDown(() => FlavorConfig.setFlavor(Flavor.edilab));
+    tester.view.physicalSize = const Size(800, 2400);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    SharedPreferences.setMockInitialValues({'onboarding_start_level': '5'});
+    await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
+    await tester.pumpAndSettle();
+
+    final tile = find.text('Change 英検 grade');
+    await tester.ensureVisible(tile);
+    await tester.tap(tile);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text(gradeLabelJa('3'))); // a PAID grade
+    await tester.pumpAndSettle();
+
+    // Paywall shown; grade NOT changed.
+    expect(find.byType(GradeGateScreen), findsOneWidget);
+    expect(
+      (await SharedPreferences.getInstance())
+          .getString('onboarding_start_level'),
+      '5',
     );
   });
 }
