@@ -33,6 +33,20 @@ bool _isAllowed(int o) {
       o < 0x80; // ASCII (latin glosses, digits, punctuation, spaces)
 }
 
+// Inverse of [_isAllowed] for the English example sentences: they are clozed and
+// shown to the child as English, so they must contain NO CJK/Japanese. Accented
+// Latin (café, São Paulo), scientific notation (CO₂, E=mc²), currency (¥€£) and
+// dashes are all legitimately present and are NOT in these blocks.
+bool _isCjk(int o) {
+  return (o >= 0x3000 && o <= 0x303F) || // CJK symbols & punctuation
+      (o >= 0x3040 && o <= 0x309F) || // hiragana
+      (o >= 0x30A0 && o <= 0x30FF) || // katakana
+      (o >= 0x3400 && o <= 0x4DBF) || // CJK ext A
+      (o >= 0x4E00 && o <= 0x9FFF) || // CJK unified (kanji)
+      (o >= 0xF900 && o <= 0xFAFF) || // CJK compatibility
+      (o >= 0xFF00 && o <= 0xFFEF); // fullwidth / halfwidth forms
+}
+
 void main() {
   test(
       'every vocab jpTranslation uses only Japanese/ASCII glyphs (#97 no-tofu)',
@@ -69,5 +83,45 @@ void main() {
     expect(offenders, isEmpty,
         reason: 'foreign-script / non-Japanese glyphs in glosses → tofu:\n'
             '${offenders.take(20).join('\n')}');
+  });
+
+  // Example sentences are English (clozed + shown as れい:). Japanese/CJK leaking
+  // in renders oddly in the cloze and is a content-pipeline slip — found 「英検2級」
+  // inside three otherwise-English examples (2026-06-14). This locks them English.
+  test('every vocab exampleSentence is English (no CJK/Japanese leaked in)',
+      () {
+    final files = Directory('assets/data')
+        .listSync()
+        .whereType<File>()
+        .where((f) => RegExp(r'eiken.*_vocab\.json$').hasMatch(f.path))
+        .toList();
+    expect(files, isNotEmpty, reason: 'vocab banks must be present');
+
+    final offenders = <String>[];
+    var checked = 0;
+    for (final f in files) {
+      final data = jsonDecode(f.readAsStringSync());
+      final words = (data is Map && data['words'] is List)
+          ? data['words'] as List
+          : (data as List);
+      for (final w in words) {
+        for (final ex in (w['exampleSentences'] as List? ?? const [])) {
+          final s = ex as String;
+          checked++;
+          for (final rune in s.runes) {
+            if (_isCjk(rune)) {
+              offenders.add(
+                  '${f.path.split('/').last} ${w['id']} (${w['word']}): '
+                  '"$s" has CJK U+${rune.toRadixString(16).toUpperCase().padLeft(4, '0')}');
+              break;
+            }
+          }
+        }
+      }
+    }
+    expect(checked, greaterThan(5000), reason: 'sanity: most banks loaded');
+    expect(offenders, isEmpty,
+        reason: 'Japanese/CJK leaked into an English example sentence '
+            '(renders oddly in the cloze):\n${offenders.take(20).join('\n')}');
   });
 }
