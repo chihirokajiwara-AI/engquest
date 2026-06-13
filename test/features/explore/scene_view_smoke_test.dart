@@ -127,6 +127,27 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  // a11y: the scene hotspots are invisible CanvasKit tap targets — without
+  // Semantics a screen-reader child cannot find or play the 探偵 exploration scene.
+  // Each NPC + coin must announce as a named button.
+  testWidgets(
+      'scene hotspots expose a11y button labels (screen-reader playable)',
+      (tester) async {
+    final handle = tester.ensureSemantics();
+    await tester.pumpWidget(
+      MaterialApp(home: SceneView(scene: kTown5Scene, eikenLevel: '5')),
+    );
+    await tester.pump();
+
+    // Unsolved NPC hotspots + the coin each carry a descriptive button label.
+    expect(find.bySemanticsLabel(RegExp('ナゾの ぬし')), findsWidgets,
+        reason: 'NPC hotspots must be labelled buttons for screen readers');
+    expect(find.bySemanticsLabel(RegExp('ひかる てがかり')), findsOneWidget,
+        reason: 'the coin hotspot must be a labelled button');
+    handle.dispose();
+    expect(tester.takeException(), isNull);
+  });
+
   // REGRESSION (CEO 2026-06-09, live demo): tapping 「？」ナゾをみる did NOTHING
   // because the speech bubble was nested inside the hotspot's small
   // GestureDetector and overflowed its bounds (Clip.none) — Flutter renders such

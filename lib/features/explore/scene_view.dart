@@ -568,17 +568,37 @@ class _SceneViewState extends State<SceneView> {
       top: cy - size / 2,
       width: size,
       height: size,
-      child: GestureDetector(
-        onTap: () => _onHotspotTap(idx),
-        // Just the hotspot target. The speech bubble is rendered separately at
-        // SCENE level (see _bubbleOverlay) so it stays hit-testable — nesting it
-        // here overflowed this small GestureDetector's bounds and silently ate
-        // the tap (the 「ナゾをみる」-does-nothing bug, CEO 2026-06-09).
-        child: hotspot.kind == HotspotKind.coin
-            ? _coinTarget(size)
-            : _npcTarget(idx, hotspot, isSolved, size),
+      // a11y: each hotspot is an invisible CanvasKit target — without a label a
+      // screen-reader child cannot find or play the 探偵 exploration scene at all.
+      // Mark it a named button so it is announced and activatable.
+      child: Semantics(
+        button: true,
+        label: _hotspotSemanticLabel(hotspot, isSolved),
+        excludeSemantics: true,
+        child: GestureDetector(
+          onTap: () => _onHotspotTap(idx),
+          // Just the hotspot target. The speech bubble is rendered separately at
+          // SCENE level (see _bubbleOverlay) so it stays hit-testable — nesting it
+          // here overflowed this small GestureDetector's bounds and silently ate
+          // the tap (the 「ナゾをみる」-does-nothing bug, CEO 2026-06-09).
+          child: hotspot.kind == HotspotKind.coin
+              ? _coinTarget(size)
+              : _npcTarget(idx, hotspot, isSolved, size),
+        ),
       ),
     );
+  }
+
+  /// a11y label for a scene hotspot — describes the interactive target by kind +
+  /// solved state (the Hotspot model carries no per-NPC name, so labels are
+  /// generic but clear). Child-facing ひらがな + English.
+  String _hotspotSemanticLabel(Hotspot hotspot, bool isSolved) {
+    if (hotspot.kind == HotspotKind.coin) {
+      return 'ひかる てがかり。タップして しらべる / A shining clue — tap to investigate';
+    }
+    return isSolved
+        ? 'ナゾ クリアずみ / Mystery solved'
+        : 'ナゾの ぬし。タップして はなしかける / A mystery to solve — tap to talk';
   }
 
   /// The 「？」speech bubble for the active NPC, rendered at SCENE level (a direct
@@ -593,10 +613,18 @@ class _SceneViewState extends State<SceneView> {
     return Positioned(
       left: (cx - bubbleW / 2).clamp(4.0, (w - bubbleW - 4).clamp(4.0, w)),
       bottom: (h - (cy - size / 2) + 6).clamp(4.0, h - 48),
-      child: GestureDetector(
-        onTap: () => _onBubbleTap(idx),
-        child: _speechBubble(hotspot.clueLineJa,
-            ctaLabel: hotspot.kind == HotspotKind.coin ? '✦ ひろう' : '「？」ナゾをみる'),
+      child: Semantics(
+        button: true,
+        label: hotspot.kind == HotspotKind.coin
+            ? 'てがかりを ひろう / Pick up the clue'
+            : 'ナゾを みる / Open the mystery',
+        excludeSemantics: true,
+        child: GestureDetector(
+          onTap: () => _onBubbleTap(idx),
+          child: _speechBubble(hotspot.clueLineJa,
+              ctaLabel:
+                  hotspot.kind == HotspotKind.coin ? '✦ ひろう' : '「？」ナゾをみる'),
+        ),
       ),
     );
   }
