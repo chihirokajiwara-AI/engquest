@@ -23,7 +23,7 @@ needs CEO go (spend / secret / prod / legal / art-gen).
 |5|2級語彙|84|BUILD|same|
 |6|準1語彙|80|BUILD|C1 review, collocations|
 |7|Reading項目量|45|BUILD|author passages to ~30/grade (thin: ~140 total)|
-|8|Listening項目量|40|BUILD|author items + fill missing audio (110 total)|
+|8|Listening項目量|72|BUILD|204 items at full official 大問 targets (was stale "110"); gated by mock_listening_fulllength; answer keys content-qa-verified all 7 grades|
 |9|Writing課題量|50|BUILD|expand prompt bank per grade|
 |10|distractor意味品質|65|GATE:backend|runtime same-POS now; semantic uniqueness = LLM|
 |11|例文品質|72|BUILD|tighten cloze-clean sentences|
@@ -76,7 +76,7 @@ needs CEO go (spend / secret / prod / legal / art-gen).
 |44|backend proxy deploy|10|GATE:spend+secret+prod|backend/server.js EXISTS (29KB) + Dockerfile; needs host + Anthropic key + deploy|
 |45|Firebase設定|55|GATE:secret|placeholder keys → real project|
 |46|offline永続|70|BUILD|hold|
-|47|error耐性|58|BUILD|error states, retries, empty states|
+|47|error耐性|68|BUILD|2026-06-14: app-wide child-safe ErrorWidget.builder (release) so an uncaught build error never shows a grey box; exam screens already have 準備中 empty-states + try/catch. REMAINING: retries on transient Firestore/asset failures, richer offline empty-states|
 
 ## H. GAME COMPOSITION (TOP PRIORITY — CEO 1244, ~5%, mostly BUILD)
 |48|世界/物語実装|55|BUILD|STALE→re-audited 2026-06-12: all 7 STORY-BIBLE towns ARE in quest_data incl recast finale 灰色のひろば (333 narrative lines: companionArrival/teachJa/npcLine/onCorrect); nazo tied to eikenLevel. NOT "thin skin". REMAINING: world-class narrative depth + GATE scene art (#54)|
