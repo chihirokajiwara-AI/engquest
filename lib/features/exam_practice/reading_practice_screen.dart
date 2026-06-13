@@ -1170,6 +1170,82 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
         ),
       ],
     ),
+    // Depth expansion 2026-06-14: more practice variety on the high-weight reading
+    // skill (the standalone practice screen seeded only 2 passages/grade).
+    _ReadingPassage(
+      title: 'The History of Chocolate',
+      type: 'article',
+      content:
+          'Chocolate is one of the most popular sweets in the world, but its '
+          'history is longer and more surprising than many people think. '
+          'Chocolate comes from the seeds of the cacao tree, which grows in warm '
+          'areas near the equator.\n\n'
+          'More than three thousand years ago, the ancient peoples of Central '
+          'America were the first to use cacao. However, they did not eat sweet '
+          'chocolate bars like we do today. Instead, they made a bitter drink by '
+          'mixing ground cacao seeds with water and spices. This drink was so '
+          'valuable that cacao seeds were sometimes used as money.\n\n'
+          'When explorers brought cacao back to Europe in the sixteenth century, '
+          'people there added sugar to make the drink sweeter. For a long time, '
+          'chocolate remained an expensive treat that only rich people could '
+          'enjoy.\n\n'
+          'Everything changed in the nineteenth century. New machines made it '
+          'possible to produce solid chocolate bars quickly and cheaply. Soon, '
+          'chocolate became a treat that almost everyone could afford. Today, '
+          'millions of tons of chocolate are made every year, and it is enjoyed '
+          'by people of all ages around the world.',
+      questions: [
+        _ComprehensionQuestion(
+          question: 'Where does chocolate come from?',
+          choices: [
+            'The leaves of a special plant.',
+            'The seeds of the cacao tree.',
+            'A type of sugar cane.',
+            'The roots of a tree.',
+          ],
+          correctIdx: 1,
+          explanation:
+              '本文（ほんぶん）に "Chocolate comes from the seeds of the cacao tree" とあるね。カカオの木（き）の種（たね）からできるよ。',
+        ),
+        _ComprehensionQuestion(
+          question: 'How did the ancient peoples of Central America use cacao?',
+          choices: [
+            'They ate sweet chocolate bars.',
+            'They used it only as medicine.',
+            'They made a bitter drink from it.',
+            'They grew it for its flowers.',
+          ],
+          correctIdx: 2,
+          explanation:
+              '"they made a bitter drink by mixing ground cacao seeds with water and spices" とあるよ。',
+        ),
+        _ComprehensionQuestion(
+          question:
+              'Why could only rich people enjoy chocolate for a long time?',
+          choices: [
+            'Because it was hard to find.',
+            'Because it was illegal.',
+            'Because it tasted bad.',
+            'Because it was expensive.',
+          ],
+          correctIdx: 3,
+          explanation:
+              '"chocolate remained an expensive treat that only rich people could enjoy" とあるね。値段（ねだん）が高（たか）かったから。',
+        ),
+        _ComprehensionQuestion(
+          question: 'What change happened in the nineteenth century?',
+          choices: [
+            'Machines made cheap solid chocolate bars possible.',
+            'Cacao trees disappeared.',
+            'Chocolate became illegal.',
+            'People stopped adding sugar.',
+          ],
+          correctIdx: 0,
+          explanation:
+              '"New machines made it possible to produce solid chocolate bars quickly and cheaply" とあるよ。',
+        ),
+      ],
+    ),
   ];
 
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

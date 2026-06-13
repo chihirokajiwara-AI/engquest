@@ -293,11 +293,12 @@ void main() {
       expect(find.textContaining('/10'), findsOneWidget);
     });
 
-    testWidgets('pre-2 has at least 7 questions total', (tester) async {
+    testWidgets('pre-2 comprehension shows its total question count',
+        (tester) async {
       await pumpReading(tester, 'pre2', pre2Section);
 
-      // Progress should show /7
-      expect(find.textContaining('/7'), findsOneWidget);
+      // 3 passages × their questions = 11 total (depth expansion 2026-06-14).
+      expect(find.textContaining('/11'), findsOneWidget);
     });
 
     testWidgets('grade 2 comprehension has 12 questions', (tester) async {
