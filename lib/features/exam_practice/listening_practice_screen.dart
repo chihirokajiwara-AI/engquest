@@ -24,6 +24,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 
 import 'choice_shuffle.dart';
 import '../../core/audio/audio_assets.dart';
@@ -201,6 +202,12 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
     });
     // Game-feel (#51): a haptic tick + chime so answering feels responsive.
     PracticeFeedback.answered(correct: idx == item.correctIndex);
+    // a11y (WCAG 4.1.3): speak the verdict for assistive-tech users.
+    SemanticsService.sendAnnouncement(
+      View.of(context),
+      idx == item.correctIndex ? 'せいかい' : 'ふせいかい',
+      Directionality.of(context),
+    );
     // Reveal the スクリプト (what was said) so the child can read what they
     // misheard — the listening learning loop, using the authored transcript.
     // jumpTo (not animateTo): instant, leaves no pending animation that would

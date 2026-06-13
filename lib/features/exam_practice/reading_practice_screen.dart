@@ -10,6 +10,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:engquest/features/quest/ui/dq_ui.dart';
 import 'package:engquest/features/home/streak_service.dart';
 import 'package:engquest/core/sound/practice_feedback.dart';
@@ -206,6 +207,12 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
     });
     // Game-feel (#51): a haptic tick + chime so answering feels responsive.
     PracticeFeedback.answered(correct: correct);
+    // a11y (WCAG 4.1.3): speak the verdict for assistive-tech users.
+    SemanticsService.sendAnnouncement(
+      View.of(context),
+      correct ? 'せいかい' : 'ふせいかい',
+      Directionality.of(context),
+    );
     // After the 解説 lays out, bring it into view (it renders below the choices).
     if (_currentQuestion.explanation != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {

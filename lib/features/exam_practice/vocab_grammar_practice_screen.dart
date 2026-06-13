@@ -11,6 +11,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import '../../core/audio/word_audio_player_service.dart';
 import '../../core/sound/practice_feedback.dart';
 import 'practice_result_stars.dart';
@@ -334,6 +335,14 @@ class _VocabGrammarPracticeScreenState
     });
     // Game-feel (#51): a haptic tick + chime so answering feels responsive.
     PracticeFeedback.answered(correct: correct);
+    // a11y (WCAG 4.1.3 Status Messages): a blind/low-vision child only gets a
+    // colour+icon swap, so SPEAK the verdict + the answer word & meaning — the
+    // teaching reveal below is otherwise silent to assistive tech.
+    SemanticsService.sendAnnouncement(
+      View.of(context),
+      '${correct ? 'せいかい' : 'ふせいかい'}。 ${q.word.word.replaceAll('_', ' ')}は${q.word.jpTranslation}。',
+      Directionality.of(context),
+    );
     // Spaced repetition (#119): schedule this word via FSRS so a missed word
     // is re-surfaced in a future session (acquisition, not one-shot recognition).
     // Fire-and-forget; a hinted-correct is scheduled as 'hard' (not mastered).

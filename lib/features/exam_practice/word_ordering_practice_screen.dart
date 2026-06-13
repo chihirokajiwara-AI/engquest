@@ -12,6 +12,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'eiken_exam_config.dart';
 import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
@@ -151,6 +152,12 @@ class _WordOrderingPracticeScreenState
     });
     // Game-feel (#51): a haptic tick + chime so answering feels responsive.
     PracticeFeedback.answered(correct: isCorrect);
+    // a11y (WCAG 4.1.3): speak the verdict for assistive-tech users.
+    SemanticsService.sendAnnouncement(
+      View.of(context),
+      isCorrect ? 'せいかい' : 'ふせいかい',
+      Directionality.of(context),
+    );
   }
 
   /// Records the completed session result into [SkillAccuracyStore].

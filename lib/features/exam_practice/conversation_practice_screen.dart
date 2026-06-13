@@ -7,6 +7,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'eiken_exam_config.dart';
 import 'practice_encouragement.dart';
 import 'choice_shuffle.dart';
@@ -125,8 +126,15 @@ class _ConversationPracticeScreenState
       _consecutiveWrong = correct ? 0 : _consecutiveWrong + 1;
     });
     // Game-feel (#51): a haptic tick + chime so answering feels responsive.
-    PracticeFeedback.answered(
-        correct: idx == _problems[_currentIdx].correctIdx);
+    final correct = idx == _problems[_currentIdx].correctIdx;
+    PracticeFeedback.answered(correct: correct);
+    // a11y (WCAG 4.1.3): speak the verdict so AT users get the feedback the
+    // colour/icon swap only shows sighted users.
+    SemanticsService.sendAnnouncement(
+      View.of(context),
+      correct ? 'せいかい' : 'ふせいかい',
+      Directionality.of(context),
+    );
     if (_problems[_currentIdx].explanation != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (_qScroll.hasClients) {
