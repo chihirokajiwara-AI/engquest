@@ -137,6 +137,30 @@ void main() {
       expect(result.didLevelUp, false);
     });
 
+    // awardXpAmount: a single-write flat award (exam-practice participation XP),
+    // so the exam-focused learner LEVELS UP from their main activity, not only the
+    // vocab battle (2026-06-14 fix). 20 questions × kExamXpPerQuestion(5) = 100 XP.
+    test('awardXpAmount adds a flat amount and detects a level-up', () async {
+      final result = await service.awardXpAmount(uid, 20 * kExamXpPerQuestion);
+      expect(result.xpGained, 100);
+      expect(result.after.totalXp, 100);
+      expect(result.after.level, 2);
+      expect(result.didLevelUp, true);
+    });
+
+    test('awardXpAmount accumulates across sessions', () async {
+      await service.awardXpAmount(uid, 60); // a session
+      final result = await service.awardXpAmount(uid, 45); // another session
+      expect(result.after.totalXp, 105);
+      expect(result.after.level, 2);
+    });
+
+    test('awardXpAmount(0) is a safe no-op', () async {
+      final result = await service.awardXpAmount(uid, 0);
+      expect(result.xpGained, 0);
+      expect(result.after.totalXp, 0);
+    });
+
     test('Hard grade awards 5 XP', () async {
       final result = await service.awardXp(uid, Grade.hard);
       expect(result.xpGained, 5);

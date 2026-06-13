@@ -23,6 +23,7 @@ import 'package:flutter/foundation.dart';
 
 import 'xp_profile.dart';
 import '../fsrs/fsrs_card.dart';
+import '../firebase/auth_service.dart';
 
 // ── Level-up event ────────────────────────────────────────────────────────────
 
@@ -159,6 +160,28 @@ class XpService {
     return last!;
   }
 
+  /// Award a flat XP amount in a SINGLE Firestore write — for an end-of-session
+  /// participation bonus (e.g. 英検 exam practice), where awarding per item via
+  /// [awardXpBatch] would do N writes. Levels up + notifies like [awardXp].
+  Future<XpAwardResult> awardXpAmount(String uid, int xp) async {
+    final before = await init(uid);
+    if (xp <= 0) {
+      return XpAwardResult(xpGained: 0, before: before, after: before);
+    }
+    final newTotalXp = before.totalXp + xp;
+    final after = XpProfile(
+        uid: uid, totalXp: newTotalXp, level: levelFromXp(newTotalXp));
+    _cached = after;
+    profileNotifier.value = after;
+    _saveToFirestore(uid, after).catchError((_) {});
+
+    final result = XpAwardResult(xpGained: xp, before: before, after: after);
+    if (result.didLevelUp) {
+      levelUpNotifier.value = result;
+    }
+    return result;
+  }
+
   // ── Get current profile (sync, from cache) ────────────────────────────────
 
   /// Returns the cached profile, or null if [init] hasn't been called yet.
@@ -200,4 +223,29 @@ class XpService {
       SetOptions(merge: true),
     );
   }
+}
+
+/// XP awarded per question answered in a completed 英検 practice session.
+/// Matches the FSRS battle's "Hard" tick — a calm participation rate so the
+/// exam-focused learner LEVELS UP from their main activity (exam practice), not
+/// only the vocab battle. Mirrors the streak's practice-VOLUME philosophy.
+const int kExamXpPerQuestion = 5;
+
+/// Award participation XP for a completed 英検 practice session of any section
+/// ([questionsAnswered] questions). Resolves the uid itself and writes once via
+/// [XpService.awardXpAmount]. Fire-and-forget: swallows offline/Firebase errors
+/// so it never blocks the learner. Call it alongside recordExamHabit at session
+/// end. Before this, XP came ONLY from the vocab battle, so a child who practised
+/// the exam sections daily never levelled up.
+void recordExamXp(int questionsAnswered) {
+  if (questionsAnswered <= 0) return;
+  () async {
+    try {
+      final uid = await AuthService().resolveUid();
+      await XpService()
+          .awardXpAmount(uid, questionsAnswered * kExamXpPerQuestion);
+    } catch (_) {
+      // Non-fatal: offline / Firebase unavailable.
+    }
+  }();
 }

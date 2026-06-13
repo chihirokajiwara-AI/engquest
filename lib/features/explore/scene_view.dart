@@ -20,6 +20,7 @@ import '../../core/gamification/hint_coin_service.dart';
 import '../../core/sound/sound_service.dart';
 import '../quest/ui/dq_ui.dart';
 import '../home/streak_service.dart';
+import '../../core/gamification/xp_service.dart';
 import '../exam_practice/pass/cse_model.dart';
 import '../exam_practice/pass/skill_accuracy_store.dart';
 import 'hotspot.dart';
@@ -263,6 +264,7 @@ class _SceneViewState extends State<SceneView> {
       // daily-goal), same as exam practice. Before this, scene play earned ZERO
       // streak/goal credit.
       recordExamHabit(1);
+      recordExamXp(1);
       // …and feed 合格率 with an HONEST signal: record first-try correctness
       // (a ナゾ retries to solve, so 1/1 every time would inflate the meter).
       // Scene ナゾ test vocab/reading 英検 knowledge → EikenSkill.reading.
