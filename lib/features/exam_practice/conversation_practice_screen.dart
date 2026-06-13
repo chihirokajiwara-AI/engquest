@@ -77,6 +77,7 @@ class _ConversationPracticeScreenState
   int? _selectedAnswer;
   bool _answered = false;
   int _correctCount = 0;
+  StreakState? _earnedStreak; // shown on results via SessionEndHook
   // Grammar/usage points missed THIS session — surfaced on the results screen as
   // a concrete "review these patterns" study list (the explanation of each missed
   // conversation item), so 大問2 closes with an actionable next-step, not just a
@@ -143,7 +144,9 @@ class _ConversationPracticeScreenState
   /// conversationComplete → EikenSkill.reading (Part 2 = Reading大問).
   Future<void> _recordSessionResult() async {
     if (_problems.isEmpty) return;
-    recordExamHabit(_problems.length); // streak + daily-goal, not just 合格率
+    recordExamHabitAndGet(_problems.length).then((st) {
+      if (mounted && st != null) setState(() => _earnedStreak = st);
+    });
     try {
       final store = await SkillAccuracyStore.getInstance();
       await store.record(
@@ -487,6 +490,10 @@ class _ConversationPracticeScreenState
                 ],
               ),
             ),
+          ],
+          if (_earnedStreak != null) ...[
+            const SizedBox(height: 20),
+            SessionEndHook(streak: _earnedStreak!),
           ],
           const SizedBox(height: 32),
           DqButton(

@@ -16,6 +16,7 @@ import 'eiken_exam_config.dart';
 import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
 import '../home/streak_service.dart';
+import 'practice_encouragement.dart';
 import '../../core/sound/practice_feedback.dart';
 import 'practice_result_stars.dart';
 import '../quest/ui/dq_ui.dart';
@@ -81,6 +82,7 @@ class _WordOrderingPracticeScreenState
   bool _answered = false;
   bool _correct = false;
   int _correctCount = 0;
+  StreakState? _earnedStreak; // shown on results via SessionEndHook
   bool _sessionDone = false;
 
   // Teach-first scaffold (CEO 1132 cont. / #111): the Japanese meaning is already
@@ -155,7 +157,9 @@ class _WordOrderingPracticeScreenState
   /// wordOrdering → EikenSkill.reading (Part 3 = Reading大問, 5/4級).
   Future<void> _recordSessionResult() async {
     if (_problems.isEmpty) return;
-    recordExamHabit(_problems.length); // streak + daily-goal, not just 合格率
+    recordExamHabitAndGet(_problems.length).then((st) {
+      if (mounted && st != null) setState(() => _earnedStreak = st);
+    });
     // Honesty: feed 合格率 ONLY the unaided problems. If every one used the rule
     // hint, nothing is recorded (the skill stays honestly 未測定).
     if (_unaidedTotal == 0) return;
@@ -547,7 +551,7 @@ class _WordOrderingPracticeScreenState
         : (_correctCount / _problems.length * 100).round();
     final passed = pct >= 60;
 
-    return Center(
+    return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -578,6 +582,10 @@ class _WordOrderingPracticeScreenState
                 textAlign: TextAlign.center,
                 style: dqText(color: dqInk.withAlpha(160), size: 12),
               ),
+            ],
+            if (_earnedStreak != null) ...[
+              const SizedBox(height: 20),
+              SessionEndHook(streak: _earnedStreak!),
             ],
             const SizedBox(height: 32),
             DqButton(

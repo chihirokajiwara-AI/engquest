@@ -142,6 +142,7 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
   int? _selectedAnswer;
   bool _answered = false;
   int _correctCount = 0;
+  StreakState? _earnedStreak; // shown on results via SessionEndHook
 
   // Struggling-child support (CEO 1135 / no-scold spine): a cold streak triggers
   // a gentle 探偵 encouragement (shared PracticeEncouragementBanner). Resets to 0
@@ -224,7 +225,9 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
   Future<void> _recordSessionResult() async {
     if (_totalQuestions <= 0) return;
     // Feed the home engagement spine (streak + daily-goal) for any attempt.
-    recordExamHabit(_totalQuestions);
+    recordExamHabitAndGet(_totalQuestions).then((st) {
+      if (mounted && st != null) setState(() => _earnedStreak = st);
+    });
     // Only plausibly-read answers feed the by-comprehension 合格率 (#R5). If every
     // answer was too fast to be real reading, record nothing — reading stays
     // honestly 未測定 rather than logging un-read guesses.
@@ -589,7 +592,7 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
         : (_correctCount / _totalQuestions * 100).round();
     final passed = pct >= 60;
 
-    return Center(
+    return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 40),
         child: Column(
@@ -612,6 +615,10 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             ),
             const SizedBox(height: 16),
             PracticeResultStars(correct: _correctCount, total: _totalQuestions),
+            if (_earnedStreak != null) ...[
+              const SizedBox(height: 20),
+              SessionEndHook(streak: _earnedStreak!),
+            ],
             const SizedBox(height: 32),
             DqButton(
               label: '戻る',

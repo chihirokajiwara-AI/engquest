@@ -64,6 +64,7 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
   int? _selectedAnswer;
   bool _answered = false;
   int _correctCount = 0;
+  StreakState? _earnedStreak; // shown on results via SessionEndHook
 
   // Struggling-child support (CEO 1135 / no-scold spine): mirror the 大問1 cold-
   // streak encouragement — a child who mishears several in a row gets a gentle,
@@ -215,7 +216,9 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
   /// listening → EikenSkill.listening.
   Future<void> _recordSessionResult() async {
     if (_items.isEmpty) return;
-    recordExamHabit(_items.length); // streak + daily-goal, not just 合格率
+    recordExamHabitAndGet(_items.length).then((st) {
+      if (mounted && st != null) setState(() => _earnedStreak = st);
+    });
     // Honesty: feed 合格率 ONLY the items the child could actually hear. If none
     // were audible (e.g. a grade whose clips aren't bundled), record nothing —
     // listening stays honestly 未測定 rather than logging un-heard guesses.
@@ -643,6 +646,10 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
                   textAlign: TextAlign.center,
                   style: dqText(size: 12, color: dqInk.withAlpha(170)),
                 ),
+              ],
+              if (_earnedStreak != null) ...[
+                const SizedBox(height: 20),
+                SessionEndHook(streak: _earnedStreak!),
               ],
               const SizedBox(height: 32),
               DqButton(

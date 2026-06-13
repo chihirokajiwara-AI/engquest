@@ -112,6 +112,9 @@ class _VocabGrammarPracticeScreenState
   // same words are already scheduled in the FSRS review store (#119), so the
   // list and the home due-count agree.
   final List<VocabItem> _missedWords = [];
+  // The streak/daily-goal earned THIS session, shown on the results screen so the
+  // child feels their progress at the moment that pulls them back (SessionEndHook).
+  StreakState? _earnedStreak;
   bool _loading = true;
   bool _sessionDone = false;
 
@@ -359,7 +362,11 @@ class _VocabGrammarPracticeScreenState
   /// vocabGrammar → EikenSkill.reading (Part 1 = Reading大問).
   Future<void> _recordSessionResult() async {
     if (_questions.isEmpty) return;
-    recordExamHabit(_questions.length); // streak + daily-goal, not just 合格率
+    // Capture the streak/daily-goal the child just earned so the results screen
+    // can SHOW it at the session-end peak (SessionEndHook), not only on home.
+    recordExamHabitAndGet(_questions.length).then((st) {
+      if (mounted && st != null) setState(() => _earnedStreak = st);
+    });
     // Honesty: feed 合格率 ONLY the unaided answers. If every question used the
     // hint, nothing is recorded (the skill stays honestly 未測定 rather than
     // logging a meaning-matched guess as reading skill).
@@ -923,6 +930,12 @@ class _VocabGrammarPracticeScreenState
                   ],
                 ),
               ),
+            ],
+            // Session-end retention hook: the streak/goal just earned, in スラ's
+            // voice — felt at the peak, closing the loop with the home spine.
+            if (_earnedStreak != null) ...[
+              const SizedBox(height: 20),
+              SessionEndHook(streak: _earnedStreak!),
             ],
             const SizedBox(height: 32),
             DqButton(

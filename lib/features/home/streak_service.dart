@@ -258,13 +258,22 @@ class StreakService {
 /// swallowed; never blocks or interrupts the learner.
 void recordExamHabit(int answered) {
   if (answered <= 0) return;
-  unawaited(() async {
-    try {
-      final streak = StreakService();
-      await streak.recordStudySession();
-      await streak.recordProgress(answered);
-    } catch (_) {
-      // Non-fatal: SharedPreferences failure is rare and must not surface.
-    }
-  }());
+  unawaited(recordExamHabitAndGet(answered));
+}
+
+/// Same as [recordExamHabit] but RETURNS the updated [StreakState] so a session-
+/// end screen can SHOW the streak/daily-goal the child just earned — surfacing
+/// the engagement spine at the emotional peak (session end), not only on the next
+/// home visit. Returns null on no-op or a (rare) prefs failure, so the caller can
+/// simply skip the hook. Fire-and-forget callers use the void wrapper above.
+Future<StreakState?> recordExamHabitAndGet(int answered) async {
+  if (answered <= 0) return null;
+  try {
+    final streak = StreakService();
+    await streak.recordStudySession();
+    return await streak.recordProgress(answered);
+  } catch (_) {
+    // Non-fatal: SharedPreferences failure is rare and must not surface.
+    return null;
+  }
 }

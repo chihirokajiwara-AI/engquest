@@ -13,6 +13,7 @@
 import 'package:flutter/material.dart';
 
 import '../quest/ui/dq_ui.dart';
+import '../home/streak_service.dart';
 
 /// Consecutive wrong answers before the gentle encouragement appears.
 const int kStruggleThreshold = 3;
@@ -65,3 +66,50 @@ const String kConversationEncourageMsg = 'なんども まちがえても へい
 const String kReadingEncourageMsg = 'なんども まちがえても へいき！ 本文（ほんぶん）を もう一度（いちど）'
     'よむと、答（こた）えの てがかりが みつかるよ。\n'
     'めいたんていも、てがかりを さがして 事件（じけん）を とくんだ。';
+
+/// Session-end retention hook: surfaces the streak / daily-goal the child JUST
+/// earned at the emotional peak (results screen), in スラ's voice, with a
+/// forward-looking line — so the engagement spine is felt at the moment that can
+/// pull them back tomorrow, not only on the next home visit. Honest + COPPA-safe:
+/// it shows the child's OWN real progress (no social, no nag, no dark pattern);
+/// the "また あした" line only appears once the goal is genuinely met.
+class SessionEndHook extends StatelessWidget {
+  final StreakState streak;
+  const SessionEndHook({super.key, required this.streak});
+
+  @override
+  Widget build(BuildContext context) {
+    final s = streak;
+    final String line = s.goalMet
+        ? '${s.currentStreak}日（にち）れんぞく！ きょうの目標（もくひょう）たっせい！'
+        : 'あと ${s.remainingToGoal}問（もん）で きょうの目標（もくひょう）！';
+    final String tomorrow =
+        s.goalMet ? 'また あした、つづきを しらべよう！' : 'もう少（すこ）し やってみる？';
+    return Container(
+      key: const ValueKey('session_end_hook'),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: dqBox,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: const Color(0xFF5DA9E9), width: 2),
+      ),
+      child: Column(
+        children: [
+          Text('🔵 スラ',
+              style: dqText(
+                  size: 12,
+                  w: FontWeight.w800,
+                  color: const Color(0xFF5DA9E9))),
+          const SizedBox(height: 6),
+          Text(line,
+              textAlign: TextAlign.center,
+              style: dqText(size: 15, w: FontWeight.w900, color: dqGold)),
+          const SizedBox(height: 4),
+          Text(tomorrow,
+              textAlign: TextAlign.center,
+              style: dqText(size: 12, color: dqInk.withAlpha(200))),
+        ],
+      ),
+    );
+  }
+}
