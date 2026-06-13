@@ -198,7 +198,12 @@ class _SceneViewState extends State<SceneView> {
   void _onHotspotTap(int idx) {
     final h = widget.scene.hotspots[idx];
     if (h.kind == HotspotKind.coin) {
-      _collectCoin(idx, h);
+      if (_coinFound[idx] == true) return;
+      // Discovery beat (not a silent pickup): show スラ's authored clue first —
+      // notice → discover → collect, the only real "find something" verb in the
+      // world. Collection happens on the bubble's 「ひろう」 tap (_onBubbleTap).
+      setState(() => _bubbleIndex = (_bubbleIndex == idx) ? null : idx);
+      _cue.play(null); // best-effort discovery chirp (no asset yet → no-op)
     } else if (h.kind == HotspotKind.npc) {
       _tapNpc(idx, h);
     }
@@ -218,6 +223,12 @@ class _SceneViewState extends State<SceneView> {
 
   void _onBubbleTap(int idx) {
     final h = widget.scene.hotspots[idx];
+    if (h.kind == HotspotKind.coin) {
+      // The discovery payoff: collect on the 「ひろう」 tap.
+      setState(() => _bubbleIndex = null);
+      _collectCoin(idx, h);
+      return;
+    }
     if (h.step == null) return;
     setState(() => _bubbleIndex = null);
     _openNazo(idx, h);
@@ -584,7 +595,8 @@ class _SceneViewState extends State<SceneView> {
       bottom: (h - (cy - size / 2) + 6).clamp(4.0, h - 48),
       child: GestureDetector(
         onTap: () => _onBubbleTap(idx),
-        child: _speechBubble(hotspot.clueLineJa),
+        child: _speechBubble(hotspot.clueLineJa,
+            ctaLabel: hotspot.kind == HotspotKind.coin ? '✦ ひろう' : '「？」ナゾをみる'),
       ),
     );
   }
@@ -769,7 +781,7 @@ class _SceneViewState extends State<SceneView> {
     );
   }
 
-  Widget _speechBubble(String? clueLineJa) {
+  Widget _speechBubble(String? clueLineJa, {String ctaLabel = '「？」ナゾをみる'}) {
     return Container(
       constraints: const BoxConstraints(maxWidth: 220),
       padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
@@ -801,7 +813,7 @@ class _SceneViewState extends State<SceneView> {
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(
-                  '「？」ナゾをみる',
+                  ctaLabel,
                   style: dqText(
                       size: 12,
                       w: FontWeight.w800,

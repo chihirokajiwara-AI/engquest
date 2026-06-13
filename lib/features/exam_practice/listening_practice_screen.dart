@@ -248,6 +248,9 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
     if (_currentIdx >= _items.length - 1) {
       _recordSessionResult(); // fire-and-forget; UI does not wait
       setState(() => _sessionDone = true);
+      // Celebrate the finish like the other 4 modes — listening (the hardest
+      // skill) was the only one landing on its results screen in silence.
+      PracticeFeedback.sessionComplete();
     } else {
       setState(() {
         _currentIdx++;
