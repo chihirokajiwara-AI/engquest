@@ -592,6 +592,49 @@ class _ConversationPracticeScreenState
               'で返事をするよ。「ごめん、できないんだ。宿題があるの'
               '（Sorry, I can\'t. I have homework.）」がさそいへの自然な返事。',
         ),
+        // Depth expansion 2026-06-14: more practice variety (大問2 会話).
+        _ConversationProblem(
+          context: 'At the store',
+          speakerA: 'How much is this pen?',
+          speakerB: '(        )',
+          choices: [
+            'It is one hundred yen.',
+            'I like pens very much.',
+            'Yes, I do.',
+            'It is on the desk.',
+          ],
+          correctIdx: 0,
+          explanation: '「How much 〜?」は ねだん（いくら？）をたずねる質問。'
+              'だから「It is one hundred yen.（100円）」が正解。',
+        ),
+        _ConversationProblem(
+          context: 'At school',
+          speakerA: 'Where is your bag?',
+          speakerB: '(        )',
+          choices: [
+            'I have a new bag.',
+            'It is under the desk.',
+            'It is red.',
+            'Yes, it is.',
+          ],
+          correctIdx: 1,
+          explanation: '「Where 〜?」は ばしょ（どこ？）をたずねる質問。'
+              'だから「It is under the desk.（つくえの下）」が正解。',
+        ),
+        _ConversationProblem(
+          context: 'After class',
+          speakerA: 'Let us play tennis.',
+          speakerB: '(        )',
+          choices: [
+            'It is a racket.',
+            'I am twelve.',
+            'Sure, that sounds fun.',
+            'On Sunday.',
+          ],
+          correctIdx: 2,
+          explanation: '「Let us 〜（〜しよう）」のさそいには、'
+              '「Sure, that sounds fun.（いいね）」のように こたえるよ。',
+        ),
       ];
     } else if (grade == '4') {
       return const [
@@ -664,6 +707,49 @@ class _ConversationPracticeScreenState
           correctIdx: 0,
           explanation:
               '「もっとケーキはいかが？」のおすすめには、いる か いらない で答えるよ。「No, thank you. I\'m full.」がていねいな ことわり方。',
+        ),
+        // Depth expansion 2026-06-14: more practice variety (大問2 会話).
+        _ConversationProblem(
+          context: 'At a restaurant',
+          speakerA: 'What would you like to drink?',
+          speakerB: '(        )',
+          choices: [
+            'I would like some orange juice.',
+            'I am very hungry.',
+            'It is delicious.',
+            'Yes, please sit down.',
+          ],
+          correctIdx: 0,
+          explanation: '「What would you like 〜?」は ほしいものを たずねる '
+              'ていねいな質問。「I would like some orange juice.」が正解。',
+        ),
+        _ConversationProblem(
+          context: 'On the phone',
+          speakerA: 'Can you come to my party on Saturday?',
+          speakerB: '(        )',
+          choices: [
+            'It is my party.',
+            'I am at home now.',
+            'Sure, I would love to.',
+            'It is Saturday.',
+          ],
+          correctIdx: 2,
+          explanation: '「Can you 〜?」のさそい・依頼には、'
+              '「Sure, I would love to.（喜んで）」のように答えるよ。',
+        ),
+        _ConversationProblem(
+          context: 'At school',
+          speakerA: 'Why are you so happy today?',
+          speakerB: '(        )',
+          choices: [
+            'I am very happy.',
+            'Because I got a good score on the test.',
+            'It is Monday.',
+            'Yes, I am.',
+          ],
+          correctIdx: 1,
+          explanation: '「Why 〜?」は りゆう（なぜ？）をたずねる質問。'
+              '「Because 〜」で理由を答えるよ。good score on the test が正解。',
         ),
       ];
     } else if (grade == '3') {

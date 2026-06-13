@@ -48,8 +48,9 @@ void main() {
 
   test('英検5級 conversation items all carry a 解説 (#7 teach-why)', () {
     final items = conversationItemsForTest('5');
-    expect(items.length, 5);
-    // (Coverage is asserted via the widget reveal above; this guards count.)
+    // ≥ one exam's worth (5); depth-expanded to 8 (2026-06-14). The per-item 解説
+    // + position-free invariants are enforced in the well-formed loop below.
+    expect(items.length, greaterThanOrEqualTo(5));
   });
   // 大問2 会話 choices are shuffled at load (_shuffleConversationChoices), so a
   // 解説 must justify by the answer's CONTENT, never by a choice position — the
