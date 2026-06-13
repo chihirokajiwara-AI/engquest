@@ -464,9 +464,7 @@ class _SceneViewState extends State<SceneView> {
     final done = p.solved == p.total;
     final color = done ? const Color(0xFF8BE08B) : dqGold;
     return Semantics(
-      label: done
-          ? 'ナゾ ぜんぶ クリア'
-          : 'ナゾ ${p.total}こ のうち ${p.solved}こ クリア',
+      label: done ? 'ナゾ ぜんぶ クリア' : 'ナゾ ${p.total}こ のうち ${p.solved}こ クリア',
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
         decoration: BoxDecoration(

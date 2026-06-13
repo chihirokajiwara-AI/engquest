@@ -72,9 +72,8 @@ void main() {
         for (var i = 0; i < kTown5Scene.hotspots.length; i++)
           if (kTown5Scene.hotspots[i].kind == HotspotKind.npc) i,
       ];
-      final coinCount = kTown5Scene.hotspots
-          .where((h) => h.kind == HotspotKind.coin)
-          .length;
+      final coinCount =
+          kTown5Scene.hotspots.where((h) => h.kind == HotspotKind.coin).length;
       expect(coinCount, greaterThan(0),
           reason: '5級 scene has a hidden coin → must be excluded from total');
 
@@ -89,11 +88,10 @@ void main() {
       expect(one.total, npcIdx.length);
 
       // Solving the coin slot must NOT count toward ナゾ progress.
-      final coinIdx = kTown5Scene.hotspots
-          .indexWhere((h) => h.kind == HotspotKind.coin);
+      final coinIdx =
+          kTown5Scene.hotspots.indexWhere((h) => h.kind == HotspotKind.coin);
       final coinOnly = nazoProgress(kTown5Scene, {coinIdx: true});
-      expect(coinOnly.solved, 0,
-          reason: 'a found coin is not a solved ナゾ');
+      expect(coinOnly.solved, 0, reason: 'a found coin is not a solved ナゾ');
 
       // All solved.
       final all = nazoProgress(kTown5Scene, {for (final i in npcIdx) i: true});
