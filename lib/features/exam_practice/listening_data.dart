@@ -910,6 +910,7 @@ const _grade3Part1 = <ListeningItem>[
       'In September.',
     ],
     correctIndex: 1,
+    explanation: 'B が「starting in April（4月から）」と言っている＝オーストラリアへ行くのは4月。',
   ),
   ListeningItem(
     part: 1,
@@ -929,6 +930,8 @@ const _grade3Part1 = <ListeningItem>[
       'Work part-time at a café.',
     ],
     correctIndex: 2,
+    explanation:
+        '「volunteer at a local animal shelter（動物保護施設でボランティアする）」が夏休みの予定。',
   ),
   ListeningItem(
     part: 1,
@@ -949,6 +952,7 @@ const _grade3Part1 = <ListeningItem>[
       'He has not taken the test yet.',
     ],
     correctIndex: 2,
+    explanation: 'B が「I think I failed（落ちたと思う）」＝テストに失敗したと感じている。',
   ),
   ListeningItem(
     part: 1,
@@ -968,6 +972,7 @@ const _grade3Part1 = <ListeningItem>[
       'Romance movies.',
     ],
     correctIndex: 2,
+    explanation: '「I prefer documentaries（ドキュメンタリーの方が好き）」と言っている。',
   ),
   // ── #10 volume expansion: 3級 第1部 4→10 (会話内容一致, A2–B1). Audio pending
   //    Kokoro gen → keys registered in ALLOWED_MISSING; items work via the
@@ -990,6 +995,7 @@ const _grade3Part1 = <ListeningItem>[
       'Next month.',
     ],
     correctIndex: 2,
+    explanation: '「I will return it next week（来週返す）」と言っている。',
   ),
   ListeningItem(
     part: 1,
@@ -1009,6 +1015,7 @@ const _grade3Part1 = <ListeningItem>[
       'At 3:50.',
     ],
     correctIndex: 1,
+    explanation: '「The next one is at 3:15（次は3時15分）」が予定時刻。よく遅れるが予定は3:15。',
   ),
   ListeningItem(
     part: 1,
@@ -1028,6 +1035,8 @@ const _grade3Part1 = <ListeningItem>[
       'She had a fever.',
     ],
     correctIndex: 1,
+    explanation:
+        '「practicing the piano for the school concert（コンサートのためピアノを練習していた）」ので眠い。',
   ),
   ListeningItem(
     part: 1,
@@ -1047,6 +1056,7 @@ const _grade3Part1 = <ListeningItem>[
       'A scarf.',
     ],
     correctIndex: 1,
+    explanation: 'B が「How about flowers?（花はどう?）」と提案している。',
   ),
   ListeningItem(
     part: 1,
@@ -1066,6 +1076,7 @@ const _grade3Part1 = <ListeningItem>[
       'It was closed.',
     ],
     correctIndex: 2,
+    explanation: '「The space exhibit was amazing（宇宙の展示がすごかった）」と感想を述べている。',
   ),
   ListeningItem(
     part: 1,
@@ -1085,6 +1096,7 @@ const _grade3Part1 = <ListeningItem>[
       'Call his friend.',
     ],
     correctIndex: 1,
+    explanation: '「I have to meet my teacher first（先に先生に会わなければ）」＝まず先生に会う。',
   ),
 ];
 
