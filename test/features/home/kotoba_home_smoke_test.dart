@@ -70,7 +70,10 @@ Future<InMemoryFsrsCardRepository> _repoWithDue(int dueCount) async {
     await repo.saveCard(
       userId,
       FSRSCard(
-        vocabId: 'test_$i',
+        // Real 5級 vocab IDs (eiken5_001…): the home now grade-scopes the
+        // due-count to the current grade's deck (matching Battle), so synthetic
+        // IDs would be filtered out as "not in this grade". Reflects reality.
+        vocabId: 'eiken5_${(i + 1).toString().padLeft(3, '0')}',
         state: CardState.review,
         stability: 1.0,
         difficulty: 5.0,
