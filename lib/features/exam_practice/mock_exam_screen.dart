@@ -37,6 +37,7 @@ import 'pass/pass_meter_screen.dart';
 import 'pass/skill_accuracy_store.dart';
 import '../home/streak_service.dart';
 import '../../core/gamification/xp_service.dart';
+import '../../core/sound/practice_feedback.dart';
 import 'exam_session_rewards.dart';
 
 class MockExamScreen extends StatefulWidget {
@@ -190,6 +191,11 @@ class _MockExamScreenState extends State<MockExamScreen> {
       Navigator.of(context).pop();
       return;
     }
+    // A finished 模試 is a milestone — mark it with the same completion fanfare
+    // the individual sections already play (the flagship full mock previously
+    // ended silently). Exam realism is preserved: there is still NO per-question
+    // correct/wrong chime during the mock, only this end-of-exam flourish.
+    PracticeFeedback.sessionComplete();
     // Capture items + answers for the post-mock 答え合わせ (review). Copied by
     // value so they survive this screen's disposal under pushReplacement.
     final reviewItems = List<MockMcqItem>.from(_items);
