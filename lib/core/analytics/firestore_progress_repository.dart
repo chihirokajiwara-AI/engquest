@@ -311,9 +311,12 @@ class FirestoreProgressRepository {
   /// Best-effort deletion of all Firestore data under users/{uid}.
   ///
   /// Schema covered:
-  ///   users/{uid}                    → profile doc
+  ///   users/{uid}                    → profile doc (incl. XP totals)
   ///   users/{uid}/sessions/{*}       → daily session docs
   ///   users/{uid}/cards/{*}          → FSRS card docs
+  ///   users/{uid}/achievements/{*}   → unlocked-badge docs
+  /// (Skill-accuracy / streak / settings are SharedPreferences-only and are
+  ///  cleared separately via prefs.clear() in the parent dashboard.)
   ///
   /// All sub-collection deletes run in parallel to minimise latency.
   /// NEVER throws: if Firestore is offline / Firebase unavailable the method
@@ -340,14 +343,28 @@ class FirestoreProgressRepository {
           .then((snap) => snap.docs.map((d) => d.reference).toList())
           .catchError((_) => <DocumentReference<Map<String, dynamic>>>[]);
 
-      final results = await Future.wait([sessionsFuture, cardsFuture]);
+      // Achievements live in their own sub-collection (AchievementService) and
+      // must also be erased — otherwise a child's unlocked-badge records survive
+      // a "delete all my data" request, an incomplete COPPA deletion (#67).
+      final achievementsFuture = _db
+          .collection('users')
+          .doc(uid)
+          .collection('achievements')
+          .get(getOpts)
+          .then((snap) => snap.docs.map((d) => d.reference).toList())
+          .catchError((_) => <DocumentReference<Map<String, dynamic>>>[]);
+
+      final results =
+          await Future.wait([sessionsFuture, cardsFuture, achievementsFuture]);
       final sessionRefs = results[0];
       final cardRefs = results[1];
+      final achievementRefs = results[2];
 
       // Delete all sub-docs first, then the profile doc.
       final deleteFutures = [
         ...sessionRefs.map((r) => r.delete().catchError((_) {})),
         ...cardRefs.map((r) => r.delete().catchError((_) {})),
+        ...achievementRefs.map((r) => r.delete().catchError((_) {})),
       ];
       await Future.wait(deleteFutures);
 

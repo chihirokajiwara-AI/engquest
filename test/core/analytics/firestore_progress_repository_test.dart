@@ -356,4 +356,40 @@ void main() {
       expect(result, isNull); // new state cards excluded
     });
   });
+
+  group('deleteUserData (#67 COPPA — complete erasure)', () {
+    test('erases the profile AND every sub-collection (incl. achievements)',
+        () async {
+      const uid = 'user_delete_001';
+      final users = fakeDb.collection('users');
+      await users.doc(uid).set({'totalWordsMastered': 42});
+      await users
+          .doc(uid)
+          .collection('sessions')
+          .doc('2026-06-14')
+          .set({'wordsPracticed': 10});
+      await users
+          .doc(uid)
+          .collection('cards')
+          .doc('c1')
+          .set({'state': 'review'});
+      // Achievements — the sub-collection that used to survive deletion.
+      await users
+          .doc(uid)
+          .collection('achievements')
+          .doc('streak_3')
+          .set({'unlocked': true});
+
+      final ok = await repo.deleteUserData(uid);
+      expect(ok, isTrue);
+
+      expect((await users.doc(uid).get()).exists, isFalse,
+          reason: 'profile doc must be deleted');
+      for (final sub in ['sessions', 'cards', 'achievements']) {
+        final snap = await users.doc(uid).collection(sub).get();
+        expect(snap.docs, isEmpty,
+            reason: '$sub sub-collection must be fully erased');
+      }
+    });
+  });
 }
