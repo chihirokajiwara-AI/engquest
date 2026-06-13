@@ -249,8 +249,8 @@ const List<WritingPrompt> kWritingPrompts = [
     modelAnswer:
         'Remote work has changed where people choose to live. Because many jobs '
         'can now be done online, some workers are leaving expensive cities for '
-        'smaller towns and rural areas, where housing is cheaper and life is more '
-        'pleasant. This benefits rural economies, but it also worries large '
+        'the countryside, where homes cost less and daily life feels calmer. '
+        'This benefits rural economies, but it also worries large '
         'cities about losing talent and investment.',
   ),
 
@@ -288,8 +288,8 @@ const List<WritingPrompt> kWritingPrompts = [
         'accurately, sometimes spotting diseases earlier than human doctors. '
         'Supporters believe AI makes healthcare more efficient and reduces '
         'errors. Critics, however, worry about responsibility when an AI makes a '
-        'mistake, and about privacy, since these systems need access to large '
-        'amounts of patient data.',
+        'mistake, and about privacy, since these systems must process huge '
+        'volumes of personal patient records.',
   ),
   WritingPrompt(
     id: 'pre1_summary_2',
