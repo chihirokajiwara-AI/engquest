@@ -1633,6 +1633,144 @@ const _gradePre2Part1 = <ListeningItem>[
     explanation:
         'B が「the government plans to ban gasoline cars by 2035（政府は2035年までにガソリン車を禁止する予定）」と記事の内容を説明している。',
   ),
+  // ── Studio expansion 2026-06-13: 準2級 第1部 toward the 30-item target ──────────
+  ListeningItem(
+    part: 1,
+    grade: 'pre2',
+    audioKey: 'lp2_p1_05.mp3',
+    transcripts: [
+      'A: Have you decided which club to join this year?',
+      'B: I am torn between the photography club and the drama club.',
+      'A: You were great in the school play last year, though.',
+      'B: True. Maybe I will go with drama after all.',
+      'Question: Which club will the girl most likely choose?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'Which club will the girl most likely choose?',
+    choices: [
+      'The photography club.',
+      'The drama club.',
+      'The tennis club.',
+      'The science club.',
+    ],
+    correctIndex: 1,
+    explanation:
+        'B は最後に「I will go with drama after all（やっぱり演劇部にする）」と述べている。昨年の school play での活躍も後押し。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre2',
+    audioKey: 'lp2_p1_06.mp3',
+    transcripts: [
+      'A: My parents said I can get a part-time job this summer.',
+      'B: That is great. Will you work every day?',
+      'A: No, only on weekends. I want to keep studying on weekdays.',
+      'B: That sounds like a good balance.',
+      'Question: When does the boy plan to work?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'When does the boy plan to work?',
+    choices: [
+      'Every weekday.',
+      'Every day after school.',
+      'Only on weekends.',
+      'Only during exams.',
+    ],
+    correctIndex: 2,
+    explanation: 'A は「only on weekends（週末だけ）」働き、平日は勉強を続けると述べている。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre2',
+    audioKey: 'lp2_p1_07.mp3',
+    transcripts: [
+      'A: I heard the school trip destination was changed.',
+      'B: Yes, instead of Kyoto we are going to Hiroshima this year.',
+      'A: Really? Why the change?',
+      'B: The teachers wanted us to learn about peace and history.',
+      'Question: Where will the students go on the school trip?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'Where will the students go on the school trip?',
+    choices: [
+      'Hiroshima.',
+      'Kyoto.',
+      'Nara.',
+      'Tokyo.',
+    ],
+    correctIndex: 0,
+    explanation:
+        'B が「instead of Kyoto we are going to Hiroshima（京都の代わりに広島へ行く）」と述べている。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre2',
+    audioKey: 'lp2_p1_08.mp3',
+    transcripts: [
+      'A: Excuse me, can I keep this book one more week?',
+      'B: Let me check. Yes, I can extend it until next Friday.',
+      'A: Thank you. I have not finished reading it yet.',
+      'B: No problem. Just return it by then.',
+      'Question: What does the woman want to do?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What does the woman want to do?',
+    choices: [
+      'Return the book today.',
+      'Extend the loan of her book.',
+      'Borrow a new book.',
+      'Pay a late fee.',
+    ],
+    correctIndex: 1,
+    explanation:
+        'A は「can I keep this book one more week（あと1週間借りていられますか）」と本の貸出延長を頼んでいる。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre2',
+    audioKey: 'lp2_p1_09.mp3',
+    transcripts: [
+      'A: Should we still go hiking tomorrow?',
+      'B: The forecast says it will rain in the afternoon.',
+      'A: Then let us start early and come back before lunch.',
+      'B: Good idea. I will set my alarm for six.',
+      'Question: What will they do because of the weather?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What will they do because of the weather?',
+    choices: [
+      'Cancel the hike.',
+      'Postpone it to next week.',
+      'Start the hike early.',
+      'Go shopping instead.',
+    ],
+    correctIndex: 2,
+    explanation:
+        'A が「start early and come back before lunch（早く出発して昼前に戻る）」と提案し、B も同意。雨は午後の予報。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre2',
+    audioKey: 'lp2_p1_10.mp3',
+    transcripts: [
+      'A: Have you tried that new app for memorizing English words?',
+      'B: Yes, it reminds me to review words every day.',
+      'A: Does it really help?',
+      'B: Definitely. My vocabulary has improved a lot this month.',
+      'Question: Why does the girl like the app?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'Why does the girl like the app?',
+    choices: [
+      'It is free to use.',
+      'It plays word games.',
+      'It translates whole sentences.',
+      'It reminds her to review words every day.',
+    ],
+    correctIndex: 3,
+    explanation:
+        'B は「it reminds me to review words every day（毎日単語を復習するよう促してくれる）」と述べ、語彙が増えたと言っている。',
+  ),
 ];
 
 const _gradePre2Part2 = <ListeningItem>[
