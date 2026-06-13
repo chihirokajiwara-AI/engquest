@@ -106,6 +106,12 @@ class _VocabGrammarPracticeScreenState
   int? _selectedAnswer;
   bool _answered = false;
   int _correctCount = 0;
+  // Words missed THIS session, surfaced on the results screen as a concrete
+  // "review exactly what you got wrong" study list (with meanings) — an
+  // actionable, outcomes-oriented close to the session, not just a score. The
+  // same words are already scheduled in the FSRS review store (#119), so the
+  // list and the home due-count agree.
+  final List<VocabItem> _missedWords = [];
   bool _loading = true;
   bool _sessionDone = false;
 
@@ -307,7 +313,11 @@ class _VocabGrammarPracticeScreenState
     setState(() {
       _selectedAnswer = idx;
       _answered = true;
-      if (correct) _correctCount++;
+      if (correct) {
+        _correctCount++;
+      } else if (!_missedWords.contains(q.word)) {
+        _missedWords.add(q.word);
+      }
       // Track a cold streak to trigger gentle encouragement (no-scold spine).
       _consecutiveWrong = correct ? 0 : _consecutiveWrong + 1;
       // Honest measurement: only UNAIDED answers count toward 合格率. A hinted
@@ -828,11 +838,12 @@ class _VocabGrammarPracticeScreenState
         : (_correctCount / _questions.length * 100).round();
     final passed = pct >= 60;
 
-    return Center(
+    return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Icon(
               passed ? Icons.workspace_premium_rounded : Icons.refresh_rounded,
@@ -860,6 +871,57 @@ class _VocabGrammarPracticeScreenState
                 'ヒントを つかった $_assistedCount問（もん）は、\n合格率（ごうかくりつ）に 入（い）れていません。',
                 textAlign: TextAlign.center,
                 style: dqText(size: 12, color: dqInk.withAlpha(160)),
+              ),
+            ],
+            // Actionable next-step: the exact words missed this session, with
+            // meanings — a "review what you got wrong" study list. They're already
+            // in the FSRS review list, so the home will resurface them too.
+            if (_missedWords.isNotEmpty) ...[
+              const SizedBox(height: 20),
+              Container(
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: dqBox,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: dqGold.withAlpha(90)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'ふくしゅうする言葉（ことば） / Review these',
+                      style:
+                          dqText(size: 13, w: FontWeight.w800, color: dqGold),
+                    ),
+                    const SizedBox(height: 8),
+                    ..._missedWords.map(
+                      (w) => Padding(
+                        padding: const EdgeInsets.only(bottom: 4),
+                        child: RichText(
+                          text: TextSpan(
+                            style: dqText(
+                                size: 13,
+                                w: FontWeight.w500,
+                                color: dqInk.withAlpha(220)),
+                            children: [
+                              TextSpan(
+                                text: w.word.replaceAll('_', ' '),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w800),
+                              ),
+                              TextSpan(text: ' — ${w.jpTranslation}'),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'この言葉（ことば）は、ふくしゅうリストに 入（い）れたよ。',
+                      style: dqText(size: 11, color: dqInk.withAlpha(160)),
+                    ),
+                  ],
+                ),
               ),
             ],
             const SizedBox(height: 32),
