@@ -437,6 +437,68 @@ const List<WritingPrompt> kWritingPrompts = [
         'governments can offer subsidies to help them. For these reasons, '
         'investing in renewable energy is a wise and necessary choice.',
   ),
+
+  // ── 準2級プラス 要約 (45-55語) + 意見論述 (50-60語) ──────────────────────────
+  // 2025 new grade. Closes the standalone 準備中 gap: pre2plus had a 要約+意見
+  // writing section in config (p2p_w1) but no authored prompts. Word counts per
+  // eiken.or.jp (要約45-55 / 意見50-60, verified 2026-06-06 — config p2p_w1).
+  WritingPrompt(
+    id: 'pre2plus_summary_1',
+    type: WritingTaskType.summary,
+    instructionJa:
+        '次の英文を読み、その内容を英語で要約してください。\n45語以上55語以内で書いてください。\n本文の言葉をそのまま書き写すことなく、自分の言葉でまとめてください。',
+    instructionEn: 'Read the following passage and summarize it in English.\n'
+        'Use 45–55 words. Do NOT copy sentences verbatim — paraphrase.',
+    stimulus:
+        'Online reviews have become an important part of how people shop today. '
+        'Before buying a product or visiting a restaurant, many customers read '
+        'what others have written about it. Positive reviews can quickly make a '
+        'business popular, while negative ones can drive customers away. However, '
+        'not all reviews are honest. Some companies pay people to write good '
+        'reviews about their products, and a few even post fake negative reviews '
+        'about their competitors. Because of this, experts advise shoppers to '
+        'read many reviews and to be careful about trusting any single one.',
+    underlinedQuestions: [],
+    wordCountMin: 45,
+    wordCountMax: 55,
+    rubricPoints: [
+      '内容 / Content',
+      '構成 / Organization',
+      '語彙 / Vocabulary',
+      '文法 / Grammar',
+    ],
+    modelAnswer:
+        'Online reviews strongly influence shopping, since customers read them '
+        'before buying. Good reviews help a business, while bad ones hurt it. '
+        'However, some reviews are dishonest, because certain companies pay for '
+        'fake positive reviews or post fake negative ones about rivals. Experts '
+        'therefore advise reading many reviews and trusting no single one.',
+  ),
+  WritingPrompt(
+    id: 'pre2plus_opinion_1',
+    type: WritingTaskType.opinion,
+    instructionJa:
+        '以下のTOPICについて、あなたの意見とその理由を英語で書いてください。\n理由を2つ挙げ、50語以上60語以内で書いてください。',
+    instructionEn:
+        'Write your opinion on the TOPIC below with 2 reasons (50–60 words).',
+    stimulus:
+        'TOPIC: Do you think students should be allowed to use smartphones at school?',
+    underlinedQuestions: [],
+    wordCountMin: 50,
+    wordCountMax: 60,
+    rubricPoints: [
+      '内容 / Content',
+      '構成 / Organization',
+      '語彙 / Vocabulary',
+      '文法 / Grammar',
+    ],
+    modelAnswer:
+        'I think students should be allowed to use smartphones at school. First, '
+        'smartphones are useful learning tools, because students can quickly look '
+        'up information and use educational apps. Second, in an emergency, '
+        'students can contact their families right away. For these reasons, I '
+        'believe smartphones should be allowed, with clear rules.',
+  ),
 ];
 
 /// Returns the appropriate prompts for a given Eiken grade + section.

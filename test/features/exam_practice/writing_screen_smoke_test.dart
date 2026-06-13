@@ -278,6 +278,15 @@ void main() {
       expect(promptsForGrade('pre1').isNotEmpty, isTrue);
     });
 
+    // 準2級プラス (2025 new grade) writing was 準備中 — no pre2plus_ prompts. Now
+    // its 要約 + 意見論述 prompts exist, so the writing section is no longer empty.
+    test('prompts for grade pre2plus exist (要約 + 意見)', () {
+      final p = promptsForGrade('pre2plus');
+      expect(p, isNotEmpty);
+      expect(p.any((q) => q.type == WritingTaskType.summary), isTrue);
+      expect(p.any((q) => q.type == WritingTaskType.opinion), isTrue);
+    });
+
     // P0-2 regression: 5級/4級 have NO writing section → empty (NOT cross-grade
     // opinion essays); "pre2" must not leak "pre2plus" prompts (prefix guard).
     test('grade 5 and 4 have NO writing prompts', () {
