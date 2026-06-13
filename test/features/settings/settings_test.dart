@@ -15,6 +15,8 @@ import 'package:engquest/core/audio/word_audio_player_service.dart';
 import 'package:engquest/core/config/flavor_config.dart';
 import 'package:engquest/core/storage/preferences_service.dart';
 import 'package:engquest/features/settings/settings_screen.dart';
+import 'package:engquest/features/exam_practice/eiken_exam_config.dart'
+    show gradeLabelJa;
 import 'package:engquest/features/quest/prologue_screen.dart';
 
 void main() {
@@ -228,5 +230,35 @@ void main() {
     await tester.pump(const Duration(milliseconds: 50));
 
     expect(find.text('Manage subscription'), findsNothing);
+  });
+
+  testWidgets(
+      '英検 grade is changeable from Settings (was immutable after '
+      'onboarding)', (tester) async {
+    tester.view.physicalSize = const Size(800, 2400);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    SharedPreferences.setMockInitialValues({'onboarding_start_level': '5'});
+    await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
+    await tester.pumpAndSettle();
+
+    // The change-grade tile opens a picker of all grades.
+    final tile = find.text('Change 英検 grade');
+    expect(tile, findsOneWidget);
+    await tester.ensureVisible(tile);
+    await tester.tap(tile);
+    await tester.pumpAndSettle();
+    expect(find.text(gradeLabelJa('3')), findsOneWidget);
+
+    // Picking a new grade persists it + confirms (previously there was NO way
+    // to change the grade after onboarding).
+    await tester.tap(find.text(gradeLabelJa('3')));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('かえたよ'), findsOneWidget);
+    expect(
+      (await SharedPreferences.getInstance())
+          .getString('onboarding_start_level'),
+      '3',
+    );
   });
 }

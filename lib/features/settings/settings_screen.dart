@@ -28,6 +28,9 @@ import 'package:engquest/core/config/flavor_config.dart';
 import 'package:engquest/core/sound/sound_service.dart';
 import 'package:engquest/core/audio/audio_mute.dart';
 import 'package:engquest/core/ui/readability_scale.dart';
+import 'package:engquest/core/storage/preferences_service.dart';
+import 'package:engquest/features/exam_practice/eiken_exam_config.dart'
+    show gradeLabelJa;
 import 'package:engquest/features/quest/ui/dq_ui.dart';
 import 'package:engquest/features/parent_dashboard/parent_login_screen.dart';
 import 'package:engquest/features/achievements/achievements_screen.dart';
@@ -93,6 +96,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool _voiceOn = true;
   double _textScale = 1.0;
   bool _loaded = false;
+  // The child's current 英検 grade (onboarding_start_level). Until now it was set
+  // ONCE at onboarding with no way to change it — a mis-placed child, or one who
+  // outgrew their grade, was stuck. This lets the child/parent change it.
+  static const _kStartLevelKey = 'onboarding_start_level';
+  static const _kGrades = ['5', '4', '3', 'pre2', 'pre2plus', '2', 'pre1'];
+  String _currentGrade = '5';
 
   @override
   void initState() {
@@ -103,13 +112,67 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> _load() async {
     await _sound.loadPreferences();
     await AudioMute.loadVoicePreference();
+    String grade = '5';
+    try {
+      final prefs = await PreferencesService.getInstance();
+      grade = prefs.getString(_kStartLevelKey) ?? '5';
+    } catch (_) {
+      // Prefs unavailable → keep default.
+    }
     if (!mounted) return;
     setState(() {
       _sfxOn = !_sound.muted;
       _voiceOn = !AudioMute.voiceMuted;
       _textScale = ReadabilityScale.value;
+      _currentGrade = grade;
       _loaded = true;
     });
+  }
+
+  /// Lets the child/parent change the persisted 英検 grade. The home re-reads
+  /// onboarding_start_level when it next loads (the gear-open now refreshes), so
+  /// the new grade drives practice + 合格率 across the app.
+  Future<void> _changeGrade() async {
+    final picked = await showDialog<String>(
+      context: context,
+      builder: (ctx) => SimpleDialog(
+        title: Text('英検（えいけん）の きゅうを えらぶ',
+            style: dqText(size: 15, w: FontWeight.w700, color: dqInk)),
+        children: [
+          for (final g in _kGrades)
+            SimpleDialogOption(
+              onPressed: () => Navigator.pop(ctx, g),
+              child: Row(
+                children: [
+                  Icon(
+                    g == _currentGrade
+                        ? Icons.radio_button_checked
+                        : Icons.radio_button_unchecked,
+                    color: g == _currentGrade ? dqGold : dqGoldDeep,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 12),
+                  Text(gradeLabelJa(g), style: dqText(size: 15, color: dqInk)),
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
+    if (picked == null || picked == _currentGrade) return;
+    try {
+      final prefs = await PreferencesService.getInstance();
+      await prefs.setString(_kStartLevelKey, picked);
+    } catch (_) {
+      // Best-effort; if persistence fails the UI simply does not change.
+      return;
+    }
+    if (!mounted) return;
+    setState(() => _currentGrade = picked);
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text('きゅうを ${gradeLabelJa(picked)} に かえたよ！'),
+      duration: const Duration(seconds: 2),
+    ));
   }
 
   Future<void> _setTextScale(double s) async {
@@ -272,6 +335,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           title: 'メニュー / Menu',
                           child: Column(
                             children: [
+                              DqTile(
+                                jp: '英検（えいけん）の きゅう：'
+                                    '${gradeLabelJa(_currentGrade)}',
+                                en: 'Change 英検 grade',
+                                icon: Icons.school,
+                                onTap: _changeGrade,
+                              ),
+                              _divider(),
                               DqTile(
                                 jp: '保護者（ほごしゃ）の方（かた）へ',
                                 en: 'For Parents',

@@ -358,9 +358,14 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
             label: 'せってい / Settings',
             excludeSemantics: true,
             child: GestureDetector(
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const SettingsScreen()),
-              ),
+              // Reload on return so a 英検-grade change made in Settings takes
+              // effect immediately (the grade drives _eikenLevel + 合格率).
+              onTap: () async {
+                await Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const SettingsScreen()),
+                );
+                if (mounted) await _loadData();
+              },
               child: Container(
                 // ≥44px hit target for small fingers.
                 padding: const EdgeInsets.all(10),
