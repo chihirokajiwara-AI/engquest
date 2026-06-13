@@ -130,4 +130,30 @@ void main() {
         conversationItemsForTest('pre2').map((i) => i.choices.first).toList();
     expect(g3, isNot(equals(gpre2)));
   });
+
+  testWidgets('#16 hint: 50/50 lifeline narrows to 2 + 合格率-exclusion notice',
+      (tester) async {
+    tester.view.physicalSize = const Size(440, 1400);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(const MaterialApp(
+      home: ConversationPracticeScreen(
+        eikenGrade: '5',
+        section: grade5Section,
+      ),
+    ));
+    await tester.pumpAndSettle();
+
+    final hintBtn = find.byKey(const ValueKey('conv_hint_button'));
+    expect(hintBtn, findsOneWidget);
+    expect(find.textContaining('しぼったよ'), findsNothing);
+
+    await tester.tap(hintBtn);
+    await tester.pumpAndSettle();
+
+    // Consumed (once per question) + the honesty notice appears.
+    expect(find.byKey(const ValueKey('conv_hint_button')), findsNothing);
+    expect(find.textContaining('合格率に 入りません'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
 }

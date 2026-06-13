@@ -81,6 +81,15 @@ class _ConversationPracticeScreenState
   bool _answered = false;
   int _correctCount = 0;
   StreakState? _earnedStreak; // shown on results via SessionEndHook
+
+  // #16 hint scaffold: a once-per-question "2つに しぼる" (narrow to 2) lifeline.
+  // A hinted answer is EXCLUDED from the 合格率 (honesty) — only [_measuredCorrect]
+  // / [_measuredTotal] (non-hinted answers) feed SkillAccuracyStore, while the
+  // visible _correctCount still counts every answer for the session summary.
+  bool _hintUsed = false;
+  Set<int> _eliminated = {};
+  int _measuredCorrect = 0;
+  int _measuredTotal = 0;
   // Grammar/usage points missed THIS session — surfaced on the results screen as
   // a concrete "review these patterns" study list (the explanation of each missed
   // conversation item), so 大問2 closes with an actionable next-step, not just a
@@ -111,12 +120,33 @@ class _ConversationPracticeScreenState
     super.dispose();
   }
 
+  /// Eliminate two WRONG choices (keep the correct one + one distractor) — a
+  /// once-per-question 50/50 lifeline that excludes the question from the 合格率.
+  void _useHint() {
+    if (_answered || _hintUsed) return;
+    final q = _problems[_currentIdx];
+    final wrong = [
+      for (var i = 0; i < q.choices.length; i++)
+        if (i != q.correctIdx) i
+    ]..shuffle();
+    setState(() {
+      _hintUsed = true;
+      _eliminated = {...wrong.take(2)};
+    });
+  }
+
   void _selectAnswer(int idx) {
-    if (_answered) return;
+    if (_answered || _eliminated.contains(idx)) return;
     setState(() {
       _selectedAnswer = idx;
       _answered = true;
       final correct = idx == _problems[_currentIdx].correctIdx;
+      // Only non-hinted answers feed the 合格率 (honesty — a hinted answer is not
+      // a clean comprehension result).
+      if (!_hintUsed) {
+        _measuredTotal++;
+        if (correct) _measuredCorrect++;
+      }
       if (correct) {
         _correctCount++;
       } else {
@@ -161,11 +191,13 @@ class _ConversationPracticeScreenState
     });
     try {
       final store = await SkillAccuracyStore.getInstance();
+      // Record only the NON-hinted answers (measured tally). With no hints used
+      // this equals _correctCount / _problems.length, so behaviour is unchanged.
       await store.record(
         grade: widget.eikenGrade,
         skill: EikenSkill.reading,
-        correct: _correctCount,
-        total: _problems.length,
+        correct: _measuredCorrect,
+        total: _measuredTotal,
       );
     } catch (_) {
       // Store errors are non-fatal — never interrupt the learner.
@@ -183,6 +215,8 @@ class _ConversationPracticeScreenState
         _currentIdx++;
         _selectedAnswer = null;
         _answered = false;
+        _hintUsed = false;
+        _eliminated = {};
       });
     }
   }
@@ -328,6 +362,9 @@ class _ConversationPracticeScreenState
                     itemBuilder: (context, i) {
                       final isSelected = _selectedAnswer == i;
                       final isCorrect = i == p.correctIdx;
+                      // #16 hint: a choice removed by the 50/50 lifeline is dimmed
+                      // + un-tappable (only before answering).
+                      final eliminated = !_answered && _eliminated.contains(i);
 
                       Color bgColor = dqBox;
                       Color borderColor = dqGoldDeep.withAlpha(120);
@@ -343,6 +380,10 @@ class _ConversationPracticeScreenState
                           borderColor = const Color(0xFFE0853A);
                           textColor = const Color(0xFFE89A82);
                         }
+                      } else if (eliminated) {
+                        bgColor = dqBox.withAlpha(90);
+                        borderColor = dqGoldDeep.withAlpha(50);
+                        textColor = dqInk.withAlpha(90);
                       } else if (isSelected) {
                         borderColor = dqGold;
                         bgColor = dqNight1;
@@ -352,18 +393,22 @@ class _ConversationPracticeScreenState
                           ? '${i + 1}. ${p.choices[i]}、せいかい'
                           : _answered && isSelected && !isCorrect
                               ? '${i + 1}. ${p.choices[i]}、ふせいかい'
-                              : '${i + 1}. ${p.choices[i]}';
+                              : eliminated
+                                  ? '${i + 1}. ${p.choices[i]}、じょがい'
+                                  : '${i + 1}. ${p.choices[i]}';
                       return Semantics(
                         button: true,
                         label: semLabel,
-                        onTap: _answered ? null : () => _selectAnswer(i),
+                        onTap: (_answered || eliminated)
+                            ? null
+                            : () => _selectAnswer(i),
                         excludeSemantics: true,
                         child: Material(
                           color: bgColor,
                           borderRadius: BorderRadius.circular(10),
                           child: InkWell(
                             key: ValueKey('conv_choice_$i'),
-                            onTap: () => _selectAnswer(i),
+                            onTap: eliminated ? null : () => _selectAnswer(i),
                             borderRadius: BorderRadius.circular(10),
                             child: Container(
                               padding: const EdgeInsets.symmetric(
@@ -405,6 +450,53 @@ class _ConversationPracticeScreenState
                       );
                     },
                   ),
+                  // #16 hint scaffold: a once-per-question 50/50 lifeline.
+                  if (!_answered && !_hintUsed)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Semantics(
+                        button: true,
+                        label: '2つに しぼる。ヒントを つかうと、この問題は '
+                            '合格率に 入りません',
+                        excludeSemantics: true,
+                        child: InkWell(
+                          key: const ValueKey('conv_hint_button'),
+                          onTap: _useHint,
+                          borderRadius: BorderRadius.circular(10),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 9),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                  color: dqGoldDeep.withAlpha(120), width: 1.5),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(Icons.lightbulb_outline,
+                                    color: dqGold, size: 18),
+                                const SizedBox(width: 8),
+                                Flexible(
+                                  child: Text(
+                                    '2つに しぼる（合格率には 入りません）',
+                                    style: dqText(size: 12, color: dqGoldDeep),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  if (_hintUsed && !_answered)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Text(
+                        '💡 2つに しぼったよ。この問題は 合格率に 入りません。',
+                        style: dqText(size: 12, color: dqGoldDeep),
+                      ),
+                    ),
                   // Struggling-child support: a cold streak shows a gentle,
                   // non-scolding 探偵 encouragement above the 解説. (CEO 1135)
                   if (_answered &&
