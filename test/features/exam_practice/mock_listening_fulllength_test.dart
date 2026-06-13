@@ -26,10 +26,20 @@ void main() {
 
       // The assembled MCQ list must actually carry a full listening section.
       final listeningItems =
-          mock.mcqItems.where((m) => m.skill == EikenSkill.listening).length;
-      expect(listeningItems, greaterThanOrEqualTo(target),
+          mock.mcqItems.where((m) => m.skill == EikenSkill.listening).toList();
+      expect(listeningItems.length, greaterThanOrEqualTo(target),
           reason:
-              '$g mock serves only $listeningItems/$target listening items');
+              '$g mock serves only ${listeningItems.length}/$target listening items');
+
+      // Teach-why must survive assembly: every listening item has an authored
+      // 解説 (listening_explanation_coverage_test), so every assembled listening
+      // MockMcqItem must carry it into the 模試review — it used to be dropped.
+      for (final m in listeningItems) {
+        expect(
+            m.explanation != null && m.explanation!.trim().isNotEmpty, isTrue,
+            reason: '$g mock listening item ${m.id} lost its 解説 in assembly '
+                '(模試review would teach nothing for it)');
+      }
     });
   }
 }

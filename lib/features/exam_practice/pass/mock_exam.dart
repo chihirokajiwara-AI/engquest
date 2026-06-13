@@ -254,6 +254,12 @@ class MockExamAssembler {
         correctIdx: s.correctIdx,
         skill: EikenSkill.listening,
         sectionId: '${grade}_l',
+        // Carry the authored teach-why 解説 into the post-mock review. Every
+        // listening item has one (listening_explanation_coverage_test) and they
+        // are content-grounded / position-free, so they stay valid after the
+        // choice shuffle above. Previously dropped here — a missed listening item
+        // in 模試review taught nothing, unlike the standalone listening screen.
+        explanation: it.explanation,
       );
     }).toList();
   }
