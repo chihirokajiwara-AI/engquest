@@ -3130,6 +3130,135 @@ const _gradePre2PlusPart1 = <ListeningItem>[
     correctIndex: 0,
     explanation: 'B が「on your right, next to the cafe（右側、カフェのとなり）」と場所を教えている。',
   ),
+  // ── Studio expansion 2026-06-13 (cont.): 準2級プラス 第1部 to 14 (→29 total) ────
+  ListeningItem(
+    part: 1,
+    grade: 'pre2plus',
+    audioKey: 'lpp_p1_10.mp3',
+    transcripts: [
+      'A: When is the history report due?',
+      'B: It was due Friday, but the teacher extended it to next Monday.',
+      'A: Oh good, I need more time.',
+      'Question: When is the history report due now?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'When is the history report due now?',
+    choices: [
+      'On Friday.',
+      'On next Monday.',
+      'Today.',
+      'It is not due at all.',
+    ],
+    correctIndex: 1,
+    explanation: 'B が「extended it to next Monday（次の月曜に延長された）」と述べている。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre2plus',
+    audioKey: 'lpp_p1_11.mp3',
+    transcripts: [
+      'A: Are you coming to the birthday party on Saturday?',
+      'B: I want to, but I have a piano lesson until five.',
+      'A: The party starts at six, so you can still come after.',
+      'Question: What is the woman worried about?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What is the woman worried about?',
+    choices: [
+      'She has a piano lesson.',
+      'She has no present.',
+      'She does not know the host.',
+      'The party is cancelled.',
+    ],
+    correctIndex: 0,
+    explanation:
+        'B は「I have a piano lesson until five（5時までピアノのレッスンがある）」と心配している。パーティーは6時開始。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre2plus',
+    audioKey: 'lpp_p1_12.mp3',
+    transcripts: [
+      'A: Excuse me, does this bus go to the station?',
+      'B: No, this one goes to the hospital. The station bus is number five.',
+      'A: Thank you, I will wait for number five.',
+      'Question: Which bus should the man take to the station?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'Which bus should the man take to the station?',
+    choices: [
+      'This bus.',
+      'Bus number five.',
+      'The hospital bus.',
+      'A taxi.',
+    ],
+    correctIndex: 1,
+    explanation: 'B が「The station bus is number five（駅行きは5番）」と教えている。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre2plus',
+    audioKey: 'lpp_p1_13.mp3',
+    transcripts: [
+      'A: I would like to make an appointment with Dr. Sato.',
+      'B: She is available on Tuesday at three or Thursday at ten.',
+      'A: Thursday at ten works better for me.',
+      'Question: When is the appointment?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'When is the appointment?',
+    choices: [
+      'Tuesday at three.',
+      'Wednesday at three.',
+      'Friday at ten.',
+      'Thursday at ten.',
+    ],
+    correctIndex: 3,
+    explanation: 'A は「Thursday at ten works better（木曜10時のほうが都合がよい）」と答えている。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre2plus',
+    audioKey: 'lpp_p1_14.mp3',
+    transcripts: [
+      'A: I cannot decide between the art club and the photography club.',
+      'B: You take great photos, so I think photography suits you.',
+      'A: You are right. I will join the photography club.',
+      'Question: Which club will the boy join?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'Which club will the boy join?',
+    choices: [
+      'The art club.',
+      'The music club.',
+      'The photography club.',
+      'Neither club.',
+    ],
+    correctIndex: 2,
+    explanation: 'A は「I will join the photography club（写真部に入る）」と最後に決めている。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre2plus',
+    audioKey: 'lpp_p1_15.mp3',
+    transcripts: [
+      'A: Did you finish reading the book for the book club?',
+      'B: Almost. I have about twenty pages left.',
+      'A: The meeting is tomorrow, so you should hurry.',
+      'Question: What does the woman still need to do?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What does the woman still need to do?',
+    choices: [
+      'Buy the book.',
+      'Finish the last twenty pages.',
+      'Cancel the meeting.',
+      'Choose a new book.',
+    ],
+    correctIndex: 1,
+    explanation:
+        'B は「I have about twenty pages left（残り約20ページ）」と述べ、明日の会合までに読み終える必要がある。',
+  ),
 ];
 
 const _gradePre2PlusPart2 = <ListeningItem>[
@@ -3326,6 +3455,141 @@ const _gradePre2PlusPart2 = <ListeningItem>[
     correctIndex: 2,
     explanation:
         '放送に「come to the gym on Friday to meet the members（金曜に体育館へ来てメンバーに会う）」とある。',
+  ),
+  // ── Studio expansion 2026-06-13 (cont.): 準2級プラス 第2部 to 15 (→29 total) ────
+  ListeningItem(
+    part: 2,
+    grade: 'pre2plus',
+    audioKey: 'lpp_p2_10.mp3',
+    transcripts: [
+      'Here is some information about the school trip next week. The bus will '
+          'leave from the front gate at eight in the morning, so please arrive by '
+          'seven forty-five. Bring a packed lunch and wear comfortable shoes, as '
+          'we will be walking a lot. Do not forget a hat, because it may be hot.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'What time should students arrive at the front gate?',
+    choices: [
+      'At seven forty-five.',
+      'At eight.',
+      'At seven.',
+      'At nine.',
+    ],
+    correctIndex: 0,
+    explanation:
+        '放送に「please arrive by seven forty-five（7時45分までに来てください）」とある。バスは8時発。',
+  ),
+  ListeningItem(
+    part: 2,
+    grade: 'pre2plus',
+    audioKey: 'lpp_p2_11.mp3',
+    transcripts: [
+      'Getting enough sleep is very important for students. When you sleep well, '
+          'you can concentrate better and remember what you studied. Experts say '
+          'that students should sleep at least eight hours a night. Watching '
+          'screens late at night can make it harder to fall asleep, so it is a '
+          'good idea to turn them off early.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question:
+        'What can make it harder to fall asleep, according to the passage?',
+    choices: [
+      'Eating breakfast.',
+      'Watching screens late at night.',
+      'Studying in the morning.',
+      'Drinking water.',
+    ],
+    correctIndex: 1,
+    explanation:
+        '本文に「Watching screens late at night can make it harder to fall asleep（夜遅くの画面視聴は寝つきを悪くする）」とある。',
+  ),
+  ListeningItem(
+    part: 2,
+    grade: 'pre2plus',
+    audioKey: 'lpp_p2_12.mp3',
+    transcripts: [
+      'The town library will hold a special event this Sunday. A famous author of '
+          'books for children will read from her new book and answer questions. '
+          'The event is free, but seats are limited. Children who attend will also '
+          'receive a free bookmark. Please arrive early to get a good seat.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'What will children who attend receive?',
+    choices: [
+      'A free book.',
+      'A free drink.',
+      'A signed photo.',
+      'A free bookmark.',
+    ],
+    correctIndex: 3,
+    explanation: '放送に「receive a free bookmark（無料のしおりがもらえる）」とある。',
+  ),
+  ListeningItem(
+    part: 2,
+    grade: 'pre2plus',
+    audioKey: 'lpp_p2_13.mp3',
+    transcripts: [
+      'Many stores no longer give out free plastic bags. Instead, customers are '
+          'encouraged to bring their own reusable bags when they shop. This change '
+          'helps reduce the amount of plastic waste. Some stores still sell paper '
+          'bags for a small price, but bringing your own bag is the cheapest and '
+          'greenest choice.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'What are customers encouraged to do?',
+    choices: [
+      'Buy more plastic bags.',
+      'Shop only online.',
+      'Bring their own reusable bags.',
+      'Stop shopping entirely.',
+    ],
+    correctIndex: 2,
+    explanation:
+        '本文に「bring their own reusable bags（自分の再利用可能な袋を持参する）」よう勧めているとある。',
+  ),
+  ListeningItem(
+    part: 2,
+    grade: 'pre2plus',
+    audioKey: 'lpp_p2_14.mp3',
+    transcripts: [
+      'Good morning. Here is the weather for today. It will be cloudy in the '
+          'morning, and rain is expected to start around noon. The afternoon will '
+          'be cool and windy, so please take an umbrella and a jacket if you go '
+          'out. The rain should stop by evening, and tomorrow will be sunny.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'What is the weather expected to be like in the afternoon?',
+    choices: [
+      'Sunny and hot.',
+      'Cool and windy.',
+      'Snowy.',
+      'Foggy.',
+    ],
+    correctIndex: 1,
+    explanation: '放送に「The afternoon will be cool and windy（午後は涼しく風が強い）」とある。',
+  ),
+  ListeningItem(
+    part: 2,
+    grade: 'pre2plus',
+    audioKey: 'lpp_p2_15.mp3',
+    transcripts: [
+      'Online shopping has become very popular because it is convenient. People '
+          'can buy almost anything from home and have it delivered to their door. '
+          'However, one disadvantage is that you cannot try on clothes or check '
+          'products before buying. For this reason, many people still prefer to '
+          'visit real stores for certain items.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'What is one disadvantage of online shopping mentioned?',
+    choices: [
+      'It is too expensive.',
+      'It takes no time at all.',
+      'You cannot try products before buying.',
+      'It is only for clothes.',
+    ],
+    correctIndex: 2,
+    explanation:
+        '本文に「you cannot try on clothes or check products before buying（買う前に試したり確認できない）」と欠点が述べられている。',
   ),
 ];
 
