@@ -331,10 +331,40 @@ void main() {
       await tester
           .pumpWidget(_wrap(const PassMeterScreen(recommendation: rec)));
       await tester.pump();
-      // The advance card names the concrete target grade (actionable).
-      expect(find.textContaining('英けん4きゅう'), findsOneWidget);
+      // The advance card names the concrete target grade — now in TWO places:
+      // the headline AND the one-tap advance button (actionable, not a dead-end).
+      expect(find.textContaining('英けん4きゅう'), findsNWidgets(2));
       expect(find.textContaining('いける かも'), findsOneWidget);
       expect(find.textContaining('せいかいできてる'), findsOneWidget);
+      // The advance action is present + tappable.
+      expect(
+          find.byKey(const ValueKey('advice_advance_button')), findsOneWidget);
+      expect(find.textContaining('に すすむ'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('advance button opens a reversible confirm dialog',
+        (tester) async {
+      tester.view.physicalSize = const Size(800, 1600);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+      const rec = MasteryRecommendation(
+        advice: ProgressionAdvice.advance,
+        suggestedGrade: '4',
+        reasonJa: 'たくさん せいかいできてるね！',
+      );
+      await tester
+          .pumpWidget(_wrap(const PassMeterScreen(recommendation: rec)));
+      await tester.pump();
+
+      final btn = find.byKey(const ValueKey('advice_advance_button'));
+      await tester.ensureVisible(btn);
+      await tester.pumpAndSettle();
+      await tester.tap(btn);
+      await tester.pumpAndSettle();
+      // Confirms before changing the grade + reassures it is reversible.
+      expect(find.textContaining('すすむ？'), findsOneWidget);
+      expect(find.textContaining('もどせるよ'), findsOneWidget);
       expect(tester.takeException(), isNull);
     });
 

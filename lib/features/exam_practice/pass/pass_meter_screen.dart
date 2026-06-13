@@ -28,6 +28,7 @@
 
 import 'package:flutter/material.dart';
 
+import '../../../core/storage/preferences_service.dart';
 import '../../character/progress_tinted_character.dart';
 import '../../quest/ui/dq_ui.dart';
 import 'cse_model.dart';
@@ -669,8 +670,68 @@ class _MasteryAdviceCard extends StatelessWidget {
               style: dqText(size: 13, w: FontWeight.w800, color: dqGold)),
           const SizedBox(height: 4),
           Text(rec.reasonJa, style: dqText(size: 12.5).copyWith(height: 1.5)),
+          // One-tap action so the "advance" advice is not a dead-end: tap to
+          // move up a grade right here (confirmed, reversible from Settings).
+          if (rec.advice == ProgressionAdvice.advance && g != null) ...[
+            const SizedBox(height: 10),
+            Semantics(
+              button: true,
+              label: '${gl ?? ''} に すすむ',
+              excludeSemantics: true,
+              child: InkWell(
+                key: const ValueKey('advice_advance_button'),
+                onTap: () => _confirmAdvance(context, g, gl ?? ''),
+                borderRadius: BorderRadius.circular(8),
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: dqGold,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text('${gl ?? 'つぎの きゅう'} に すすむ',
+                      style: dqText(
+                          size: 13,
+                          w: FontWeight.w800,
+                          color: const Color(0xFF2A1C00))),
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );
+  }
+
+  /// Confirm + change the persisted 英検 grade, then pop back to the home (which
+  /// reloads on return, so the new grade drives practice + 合格率). Reversible
+  /// anytime from Settings.
+  Future<void> _confirmAdvance(
+      BuildContext context, String grade, String label) async {
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (d) => AlertDialog(
+        title: Text('$label に すすむ？',
+            style: dqText(size: 15, w: FontWeight.w700, color: dqInk)),
+        content:
+            Text('いつでも せっていで もどせるよ。', style: dqText(size: 13, color: dqInk)),
+        actions: [
+          TextButton(
+              onPressed: () => Navigator.pop(d, false),
+              child: Text('まだ', style: dqText(size: 13, color: dqGoldDeep))),
+          TextButton(
+              onPressed: () => Navigator.pop(d, true),
+              child: Text('すすむ', style: dqText(size: 13, color: dqGold))),
+        ],
+      ),
+    );
+    if (ok != true) return;
+    try {
+      final prefs = await PreferencesService.getInstance();
+      await prefs.setString('onboarding_start_level', grade);
+    } catch (_) {
+      return; // persistence failed → leave the grade unchanged
+    }
+    if (context.mounted) Navigator.of(context).pop(); // → home reloads
   }
 }
