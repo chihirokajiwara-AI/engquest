@@ -456,12 +456,14 @@ void main() {
   // because _loadBundledAsset looked in the unbundled audio/eiken5/ dir instead of
   // the manifest's audio/a1/ path where the 300 MP3s actually ship.
   group('bundled word audio resolves from the manifest a1 path', () {
-    test('getAudioForWord(eiken5_001, cat) -> bundledAsset with bytes', () async {
+    test('getAudioForWord(eiken5_001, cat) -> bundledAsset with bytes',
+        () async {
       final tts = TtsService();
       await tts.initialize();
       final r = await tts.getAudioForWord('eiken5_001', 'cat');
       expect(r.source, TtsAudioSource.bundledAsset,
-          reason: 'must load the bundled a1/ MP3, not fall through to unavailable');
+          reason:
+              'must load the bundled a1/ MP3, not fall through to unavailable');
       expect(r.isAvailable, isTrue);
       expect(r.audioBytes, isNotNull);
       expect(r.audioBytes!.lengthInBytes, greaterThan(1000));
