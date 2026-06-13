@@ -2320,6 +2320,121 @@ const _grade2Part1 = <ListeningItem>[
     explanation:
         'A が「it actually improves productivity and employee well-being（実際は生産性と従業員の幸福度を高める）」と研究結果を述べている。',
   ),
+  // ── Studio expansion 2026-06-13: 2級 第1部 toward the 30-item target ──────────
+  ListeningItem(
+    part: 1,
+    grade: '2',
+    audioKey: 'l2_p1_05.mp3',
+    transcripts: [
+      'A: Our company is letting employees work from home two days a week now.',
+      'B: That must save a lot of commuting time.',
+      'A: Exactly. I use those hours to focus on difficult tasks without interruptions.',
+      'B: It sounds like productivity has actually gone up.',
+      'Question: What benefit does the man mention about working from home?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What benefit does the man mention about working from home?',
+    choices: [
+      'A higher salary.',
+      'More time to focus without interruptions.',
+      'A bigger office.',
+      'Free meals at work.',
+    ],
+    correctIndex: 1,
+    explanation:
+        'A は「focus on difficult tasks without interruptions（中断なく難しい作業に集中できる）」と在宅勤務の利点を述べている。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: '2',
+    audioKey: 'l2_p1_06.mp3',
+    transcripts: [
+      'A: We finally installed solar panels on our roof last month.',
+      'B: Has it made a difference to your electricity bill?',
+      'A: Yes, it has dropped by almost a third already.',
+      'B: That is impressive. It must be good for the environment too.',
+      'Question: What happened after they installed solar panels?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What happened after they installed solar panels?',
+    choices: [
+      'Their electricity bill dropped by about a third.',
+      'Their electricity bill increased.',
+      'They sold their house.',
+      'Nothing changed at all.',
+    ],
+    correctIndex: 0,
+    explanation: 'A は「dropped by almost a third（約3分の1下がった）」と電気代の変化を述べている。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: '2',
+    audioKey: 'l2_p1_07.mp3',
+    transcripts: [
+      'A: Did you watch that documentary about ocean pollution last night?',
+      'B: I did. I had no idea plastic affected so many sea creatures.',
+      'A: It really made me want to reduce my own plastic use.',
+      'B: Same here. Small changes can add up.',
+      'Question: How did the documentary affect the speakers?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'How did the documentary affect the speakers?',
+    choices: [
+      'It bored them.',
+      'It confused them.',
+      'It made them want to reduce their plastic use.',
+      'It made them buy more plastic.',
+    ],
+    correctIndex: 2,
+    explanation:
+        'A は「made me want to reduce my own plastic use（自分のプラスチック使用を減らしたくなった）」と述べ、B も同意。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: '2',
+    audioKey: 'l2_p1_08.mp3',
+    transcripts: [
+      'A: I started volunteering at the animal shelter on weekends.',
+      'B: That is wonderful. What do you do there?',
+      'A: Mostly walking the dogs and helping visitors find pets to adopt.',
+      'B: It must be rewarding to help animals find homes.',
+      'Question: What does the man do at the animal shelter?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What does the man do at the animal shelter?',
+    choices: [
+      'He trains the staff.',
+      'He repairs the building.',
+      'He manages the money.',
+      'He walks dogs and helps with adoptions.',
+    ],
+    correctIndex: 3,
+    explanation:
+        'A は「walking the dogs and helping visitors find pets to adopt（犬の散歩と里親探しの手伝い）」をすると述べている。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: '2',
+    audioKey: 'l2_p1_09.mp3',
+    transcripts: [
+      'A: I read that many apps collect more personal data than they need.',
+      'B: That worries me. How can we protect ourselves?',
+      'A: One simple step is to check the privacy settings and limit what you share.',
+      'B: I should review my settings tonight then.',
+      'Question: What does the man suggest to protect personal data?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What does the man suggest to protect personal data?',
+    choices: [
+      'Delete all apps immediately.',
+      'Check privacy settings and limit sharing.',
+      'Buy a new phone.',
+      'Stop using the internet.',
+    ],
+    correctIndex: 1,
+    explanation:
+        'A は「check the privacy settings and limit what you share（プライバシー設定を確認し共有を制限する）」と助言している。',
+  ),
 ];
 
 const _grade2Part2 = <ListeningItem>[
@@ -2416,6 +2531,120 @@ const _grade2Part2 = <ListeningItem>[
     correctIndex: 2,
     explanation:
         '本文に「Reducing single-use plastic consumption is considered a key step（使い捨てプラスチックの消費削減が重要な一歩）」とある。',
+  ),
+  // ── Studio expansion 2026-06-13: 2級 第2部 toward the 30-item target ──────────
+  ListeningItem(
+    part: 2,
+    grade: '2',
+    audioKey: 'l2_p2_05.mp3',
+    transcripts: [
+      'Many cities are now creating more parks and green roofs. Research shows '
+          'that access to green spaces can lower stress and encourage people to '
+          'exercise. Trees also help cool city streets during hot summers and '
+          'improve air quality. As a result, urban planners increasingly see '
+          'greenery as essential, not just decorative.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'Why do urban planners increasingly value green spaces?',
+    choices: [
+      'Because they are very cheap to build.',
+      'Because they are essential for health and the environment, not just decoration.',
+      'Because they attract tourists only.',
+      'Because they replace the need for hospitals.',
+    ],
+    correctIndex: 1,
+    explanation:
+        '本文は緑地が「essential, not just decorative（装飾でなく不可欠）」で健康と環境に役立つと述べている。',
+  ),
+  ListeningItem(
+    part: 2,
+    grade: '2',
+    audioKey: 'l2_p2_06.mp3',
+    transcripts: [
+      'Coffee has a long and fascinating history. It is believed to have been '
+          'first discovered in Ethiopia, where the plant grows wild. From there, '
+          'it spread to the Middle East and eventually to Europe, where coffee '
+          'houses became popular meeting places for discussion and business. '
+          'Today, coffee is one of the most widely traded products in the world.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'Where is coffee believed to have been first discovered?',
+    choices: [
+      'In Europe.',
+      'In the Middle East.',
+      'In Ethiopia.',
+      'In South America.',
+    ],
+    correctIndex: 2,
+    explanation: '本文に「first discovered in Ethiopia（最初にエチオピアで発見された）」とある。',
+  ),
+  ListeningItem(
+    part: 2,
+    grade: '2',
+    audioKey: 'l2_p2_07.mp3',
+    transcripts: [
+      'Learning a second language does more than allow you to communicate with '
+          'more people. Studies suggest that bilingual people are often better at '
+          'multitasking and may keep their minds sharp as they age. Switching '
+          'between languages seems to exercise the brain in useful ways. These '
+          'findings encourage many schools to start language education early.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'What do studies suggest about bilingual people?',
+    choices: [
+      'They earn more money.',
+      'They travel more often.',
+      'They sleep better at night.',
+      'They are often better at multitasking.',
+    ],
+    correctIndex: 3,
+    explanation:
+        '本文に「bilingual people are often better at multitasking（バイリンガルはマルチタスクが得意なことが多い）」とある。',
+  ),
+  ListeningItem(
+    part: 2,
+    grade: '2',
+    audioKey: 'l2_p2_08.mp3',
+    transcripts: [
+      'A surprising amount of food is wasted every day, much of it still safe to '
+          'eat. Some supermarkets now sell products that are close to their '
+          'best-by date at lower prices to reduce waste. Restaurants are also '
+          'finding creative ways to use leftover ingredients. Reducing food waste '
+          'saves money and lessens the impact on the environment.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'How are some supermarkets trying to reduce food waste?',
+    choices: [
+      'By selling near-date products at lower prices.',
+      'By throwing food away faster.',
+      'By closing much earlier.',
+      'By buying less popular food.',
+    ],
+    correctIndex: 0,
+    explanation:
+        '本文に「sell products that are close to their best-by date at lower prices（賞味期限が近い商品を安く売る）」とある。',
+  ),
+  ListeningItem(
+    part: 2,
+    grade: '2',
+    audioKey: 'l2_p2_09.mp3',
+    transcripts: [
+      'Good evening. The public lecture this evening on space exploration will '
+          'begin at seven in the main hall. The speaker, a former astronaut, will '
+          'share her experiences living on the space station. After the talk, '
+          'there will be a question-and-answer session. Please turn off your '
+          'mobile phones before the lecture starts.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'Who is the speaker this evening?',
+    choices: [
+      'A university professor.',
+      'A former astronaut.',
+      'A science writer.',
+      'A government official.',
+    ],
+    correctIndex: 1,
+    explanation: '放送に「The speaker, a former astronaut（講演者は元宇宙飛行士）」とある。',
   ),
 ];
 
