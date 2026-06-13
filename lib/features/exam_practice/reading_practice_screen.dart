@@ -640,7 +640,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
   // ── Passage banks ─────────────────────────────────────────────────────────
 
   static List<_ReadingPassage> _getPassages(String grade, String sectionId) {
-    // Passage fill-in sections (Grade 2 / Pre-1)
+    // Passage fill-in sections (準2級プラス / Grade 2 / Pre-1)
+    if (sectionId == 'p2p_r2') return _pre2PlusFillIn;
     if (sectionId == '2_r2') return _grade2FillIn;
     if (sectionId == 'p1_r2') return _pre1FillIn;
 
@@ -1406,6 +1407,96 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   // GRADE 2 — Passage Fill-in (長文語句空所補充) (6 questions)
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // 準2級プラス (A2–B1) — 大問2 長文の語句空所補充 (passage cloze)
+  // Closes the standalone 準備中 gap: pre2plus reading was mock-only before.
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  static const _pre2PlusFillIn = [
+    _ReadingPassage(
+      title: 'The Comeback of the Bicycle',
+      type: 'article',
+      content:
+          'In many cities around the world, the bicycle is becoming popular '
+          'again. For years, cars were the most common way to travel, but rising '
+          'fuel prices and growing concern about the environment have changed how '
+          'people get around. ( 1 ), more and more people are choosing to ride '
+          'bicycles for their daily commute.\n\n'
+          'One reason for this change is health. Riding a bicycle is a form of '
+          'exercise that fits easily into a busy day. Doctors say that cycling for '
+          'just thirty minutes a day can improve heart health and reduce stress. '
+          '( 2 ), it does not require expensive equipment or a gym membership.\n\n'
+          'Cities have also started to support cyclists. Many have built special '
+          'bicycle lanes that make riding ( 3 ) than before. Some cities offer '
+          'bike-sharing programs, where people can rent a bicycle for a short trip '
+          'and return it at another station. These programs are especially useful '
+          'for tourists and for people who do not own a bicycle.\n\n'
+          'Of course, cycling is not perfect for everyone. In very hot or rainy '
+          'weather, riding can be uncomfortable, and some people live ( 4 ) to '
+          'cycle to work. Still, for short distances, the bicycle is often faster '
+          'than a car, because cyclists do not get stuck in traffic.\n\n'
+          'As more people discover these advantages, experts believe the number '
+          'of cyclists will continue to ( 5 ) in the coming years.',
+      questions: [
+        _ComprehensionQuestion(
+          question: 'Which phrase best fits in blank ( 1 )?',
+          choices: [
+            'As a result,',
+            'However,',
+            'For example,',
+            'In contrast,',
+          ],
+          correctIdx: 0,
+          explanation: '習慣が変わった「結果」として自転車を選ぶ人が増えた、という流れ。As a result（その結果）が自然。',
+        ),
+        _ComprehensionQuestion(
+          question: 'Which phrase best fits in blank ( 2 )?',
+          choices: [
+            'However,',
+            'Instead,',
+            'In addition,',
+            'Finally,',
+          ],
+          correctIdx: 2,
+          explanation: '前文(健康効果)に「さらに」費用がかからない利点を加えている。In addition（さらに）が適切。',
+        ),
+        _ComprehensionQuestion(
+          question: 'Which phrase best fits in blank ( 3 )?',
+          choices: [
+            'more dangerous',
+            'slower',
+            'more expensive',
+            'safer and more comfortable',
+          ],
+          correctIdx: 3,
+          explanation:
+              '自転車レーンを作ると、以前より「安全で快適」に乗れるという文脈。safer and more comfortable が適切。',
+        ),
+        _ComprehensionQuestion(
+          question: 'Which phrase best fits in blank ( 4 )?',
+          choices: [
+            'close enough',
+            'too far away',
+            'very near',
+            'right next door',
+          ],
+          correctIdx: 1,
+          explanation: '職場まで「遠すぎて」自転車で通えない人もいる、という欠点。too far away が適切。',
+        ),
+        _ComprehensionQuestion(
+          question: 'Which word best fits in blank ( 5 )?',
+          choices: [
+            'disappear',
+            'fall',
+            'grow',
+            'stop',
+          ],
+          correctIdx: 2,
+          explanation: '利点に気づく人が増え、自転車利用者は今後も「増え続ける」と専門家は考えている。grow が適切。',
+        ),
+      ],
+    ),
+  ];
 
   static const _grade2FillIn = [
     _ReadingPassage(

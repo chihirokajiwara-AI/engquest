@@ -88,6 +88,16 @@ void main() {
     description: 'テスト用',
   );
 
+  const pre2PlusFillInSection = ExamSection(
+    id: 'p2p_r2',
+    nameJa: '筆記2: 長文の語句空所補充',
+    nameEn: 'Reading 2: Passage Fill-in',
+    type: ExamSectionType.readingComprehension,
+    questionCount: 6,
+    timeLimitMinutes: 12,
+    description: 'テスト用',
+  );
+
   Widget buildScreen(String grade, ExamSection section) {
     return MaterialApp(
       home: ReadingPracticeScreen(
@@ -122,6 +132,19 @@ void main() {
             RegExp('^\\d+\\. ${RegExp.escape(answer)}\$').hasMatch(w.data!),
         description: 'choice "$answer" at any position',
       );
+
+  // Regression: 準2級プラス reading 大問2 was 準備中 standalone (no _getPassages case
+  // → empty) even though the content existed in the mock pool. It now serves a
+  // real cloze passage; this locks that it is no longer 準備中.
+  testWidgets('準2級プラス 大問2 serves a real cloze passage, not 準備中',
+      (tester) async {
+    await pumpReading(tester, 'pre2plus', pre2PlusFillInSection);
+    expect(find.textContaining('The Comeback of the Bicycle'), findsOneWidget,
+        reason: 'pre2plus passage cloze must render its passage');
+    expect(find.textContaining('準備中'), findsNothing,
+        reason: 'pre2plus reading 大問2 is no longer a 準備中 gap');
+    expect(tester.takeException(), isNull);
+  });
 
   Future<void> answer(WidgetTester tester, String correct) async {
     await tester.tap(choice(correct));
