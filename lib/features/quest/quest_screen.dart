@@ -6,6 +6,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import '../character/progress_tinted_character.dart';
 
 import '../../core/audio/audio_cue_service.dart';
 import '../../core/audio/audio_mute.dart';
@@ -465,10 +466,10 @@ class _QuestScreenState extends State<QuestScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Column(children: [
-            const DqPortrait(
-                imageAsset: 'assets/art/masters/hero.webp',
-                emoji: '🧭',
-                size: 44),
+            // The player portrait must be the SAME detective main shown on home /
+            // pass-meter (HeroChoice m5/m6), not a clashing armored-warrior asset —
+            // 'きみ' is one character, one art style (CEO 1294 art-direction lock).
+            DqPortrait(imageAsset: HeroChoice.asset, emoji: '🧭', size: 44),
             const SizedBox(height: 2),
             Text('きみ',
                 style: dqText(size: 10, color: dqInk, w: FontWeight.w400)),
