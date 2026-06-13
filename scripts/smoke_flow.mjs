@@ -89,6 +89,29 @@ async function clickLabel(needle) {
   return true;
 }
 
+// Tap the ✕ close (an unlabeled ~40×40 button in the top-left). Click the actual
+// semantic node (robust across screens/states) rather than a hardcoded coordinate.
+async function tapClose() {
+  const handle = await page.evaluateHandle(() => {
+    const host = document.querySelector('flt-semantics-host') || document;
+    let best = null, bestArea = Infinity;
+    for (const el of host.querySelectorAll('flt-semantics, [role]')) {
+      if (el.getAttribute('role') !== 'button') continue;
+      const lbl = (el.getAttribute('aria-label') || el.textContent || '').trim();
+      if (lbl.length > 3) continue; // close button has an empty/tiny label
+      const r = el.getBoundingClientRect();
+      if (r.x > 80 || r.y > 80) continue; // top-left region only
+      const area = Math.max(1, r.width * r.height);
+      if (area < bestArea) { best = el; bestArea = area; }
+    }
+    return best;
+  });
+  const el = handle.asElement();
+  if (el) { await el.click({ force: true }).catch(() => {}); return true; }
+  await page.mouse.click(24, 24); // fallback
+  return false;
+}
+
 const steps = [];
 function record(name, ms, ok, note = '') { steps.push({ name, ms, ok, note }); }
 
@@ -150,7 +173,7 @@ record('次の問題へ → 問2', q2Ms < 0 ? DEAD_MS : q2Ms, q2Ms >= 0,
 // ── back-nav: tap the ✕ close (unlabeled 40×40 button top-left) → exam hub ─────
 // The close has no semantic label, so tap it by position — a real pointer event to
 // Flutter's glass pane. Proves the back-navigation a user relies on actually works.
-if (q2Ms >= 0) await page.mouse.click(24, 24);
+if (q2Ms >= 0) await tapClose();
 const backMs = q2Ms >= 0 ? await waitForLabel('試験概要', DEAD_MS) : -1;
 record('✕ close → back to hub', backMs < 0 ? DEAD_MS : backMs, backMs >= 0,
   q2Ms < 0 ? 'skipped' : (backMs < 0 ? 'DEAD tap (no hub)' : ''));
@@ -167,6 +190,15 @@ const okAns2 = conv >= 0 && await clickLabel('1. ');
 const reveal2 = okAns2 ? await waitForLabel('次の問題へ', DEAD_MS) : -1;
 record('筆記2 answer → reveal', reveal2 < 0 ? DEAD_MS : reveal2, reveal2 >= 0,
   !okAns2 ? 'no choice to tap' : (reveal2 < 0 ? 'DEAD tap (answer did nothing)' : ''));
+
+// ── 筆記3 (大問3 語句の並びかえ) loads — the remaining 筆記 大問 ─────────────────
+// Back to the hub, then assert the live question screen ('正答', not on the hub).
+if (reveal2 >= 0) await tapClose(); // ✕ close → hub
+const back2 = reveal2 >= 0 ? await waitForLabel('試験概要', DEAD_MS) : -1;
+const okSec3 = back2 >= 0 && await clickLabel('筆記3');
+const r3 = okSec3 ? await waitForLabel('正答', DEAD_MS) : -1;
+record('tap 筆記3 → 大問3 (語句整序) loads', r3 < 0 ? DEAD_MS : r3, r3 >= 0,
+  back2 < 0 ? 'no hub return' : (!okSec3 ? '筆記3 not reached' : (r3 < 0 ? 'DEAD tap (no question screen)' : '')));
 await page.screenshot({ path: '/tmp/eq_smoke_end.png' }).catch(() => {});
 
 // ── Report ────────────────────────────────────────────────────────────────────
