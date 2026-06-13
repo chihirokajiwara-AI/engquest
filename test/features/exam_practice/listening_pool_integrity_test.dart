@@ -20,6 +20,14 @@ void main() {
   // them signals a content-pipeline corruption (gloss leaked into an option).
   final cjk = RegExp(r'[぀-ヿ㐀-䶿一-鿿ｦ-ﾟ]');
 
+  // A question that refers to a speaker's gender ("the woman / 女性", "the man /
+  // 男性") is only answerable from audio if the clip actually has two distinct-
+  // gender speakers — the pipeline voices Speaker-A female / Speaker-B male, so a
+  // single-voice clip conveys no gender. Guards the authoring contract documented
+  // in listening_data.dart's header against a future single-speaker gender item.
+  final genderRef =
+      RegExp(r'女性|女の人|男性|男の人|woman|\bman\b', caseSensitive: false);
+
   // Iterate the live map so a newly-added grade is covered automatically.
   for (final entry in kListeningItems.entries) {
     final grade = entry.key;
@@ -54,8 +62,18 @@ void main() {
             reason: '$id: duplicate audioKey within grade $grade');
 
         // Transcript is what the (TTS) audio is generated from — non-empty.
-        expect(it.transcripts.where((t) => t.trim().isNotEmpty), isNotEmpty,
-            reason: '$id: no transcript lines');
+        final liveLines =
+            it.transcripts.where((t) => t.trim().isNotEmpty).toList();
+        expect(liveLines, isNotEmpty, reason: '$id: no transcript lines');
+
+        // A gender-referencing question must be a ≥2-speaker dialogue, or the
+        // audio cannot convey which speaker is meant (single voice = no gender).
+        if (genderRef.hasMatch(it.question)) {
+          expect(liveLines.length, greaterThanOrEqualTo(2),
+              reason: '$id: question references a speaker gender '
+                  '("${it.question}") but the clip has only ${liveLines.length} '
+                  'transcript line(s) — gender is not conveyable by a single voice');
+        }
       }
     });
   }

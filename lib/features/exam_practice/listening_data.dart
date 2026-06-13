@@ -7,6 +7,18 @@
 //   audioKey   : key relative to assets/audio/listening/, e.g. 'l5_p1_01.mp3'
 //   transcripts: lines the TTS pipeline will speak (for QA + generation input)
 //                For 2-speaker items, lines alternate Speaker-A / Speaker-B.
+//
+// SPEAKER VOICES (authoring contract — binding for any gender-referencing Q):
+//   The audio pipeline (scripts/generate_listening_audio.py) voices alternating
+//   dialogue lines by a FIXED 英検 convention:
+//       Speaker-A (even-index lines, 0,2,…) → female voice (af_heart)
+//       Speaker-B (odd-index lines,  1,3,…) → male   voice (am_echo)
+//   So a question that refers to "the woman / 女性" means Speaker-A, and "the
+//   man / 男性" means Speaker-B. If you write such a question, the referenced
+//   speaker MUST be the correct one under this mapping, and the item MUST be a
+//   ≥2-line dialogue (a single-voice clip can convey no gender). The
+//   listening_pool_integrity_test enforces the dialogue requirement; the A=female
+//   / B=male mapping is the author's responsibility to honour.
 //   questionType:
 //     応答選択          — hear ONE line → pick the best reply (grades 5/4)
 //     会話内容一致      — hear a SHORT dialogue (2–4 turns) → answer a content Q
