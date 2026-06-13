@@ -426,11 +426,11 @@ class _BattleScreenState extends State<BattleScreen>
     // Persist XP to Firestore (fire-and-forget); check for level-up
     final uid = _userId;
     if (uid != null) {
-      _xpService.awardXp(uid, grade).then((result) {
-        if (result.didLevelUp && mounted) {
-          _showLevelUpDialog(result.after);
-        }
-      }).catchError((_) {
+      // XP persists to Firestore; a level-up sets XpService.levelUpNotifier,
+      // which the app-root LevelUpCelebrationHost (app.dart) celebrates for
+      // EVERY XP source — battle AND exam practice alike — so the level-up
+      // moment is no longer battle-only (it was silent for exam-focused kids).
+      _xpService.awardXp(uid, grade).then((_) {}).catchError((_) {
         // Non-fatal: XP syncs later via Firestore offline cache
       });
     }
@@ -670,71 +670,6 @@ class _BattleScreenState extends State<BattleScreen>
   }
 
   // ── Level-up dialog (P2-7) ────────────────────────────────────────────────
-
-  /// Shows a celebratory dialog when the player reaches a new level.
-  /// Auto-dismisses after 3 seconds; user can also tap to dismiss.
-  void _showLevelUpDialog(XpProfile newProfile) {
-    if (!mounted) return;
-    _sound.playLevelUp();
-    HapticFeedback.heavyImpact();
-    showDialog<void>(
-      context: context,
-      barrierDismissible: true,
-      barrierColor: Colors.black.withAlpha(180),
-      builder: (ctx) {
-        // Auto-close after 3 seconds
-        Future.delayed(const Duration(seconds: 3), () {
-          if (ctx.mounted) Navigator.of(ctx, rootNavigator: true).pop();
-        });
-
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          child: DqPanel(
-            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 24),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Text('🌟', style: TextStyle(fontSize: 56)),
-                const SizedBox(height: 12),
-                Center(
-                  child: dqBilingual(
-                    'レベルアップ！',
-                    'LEVEL UP',
-                    jpSize: 26,
-                    jpColor: dqGold,
-                    stacked: true,
-                    align: TextAlign.center,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Text('Lv.${newProfile.level} に到達！',
-                    style: dqText(size: 19, color: dqInk)),
-                const SizedBox(height: 4),
-                Text('合計 ${newProfile.totalXp} XP',
-                    style: dqText(size: 13, color: dqGoldDeep)),
-                const SizedBox(height: 20),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: LinearProgressIndicator(
-                    value: newProfile.levelProgress,
-                    backgroundColor: dqNight0,
-                    valueColor: const AlwaysStoppedAnimation<Color>(dqGold),
-                    minHeight: 10,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                    '${newProfile.currentLevelXp} / ${newProfile.levelXpSpan} XP',
-                    style: dqText(size: 12, color: dqGoldDeep)),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
 
   // ── Build ──────────────────────────────────────────────────────────────────
 

@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:engquest/core/gamification/xp_service.dart';
+import 'package:engquest/core/gamification/xp_profile.dart';
+import 'package:engquest/core/sound/sound_service.dart';
 import 'package:engquest/core/ui/app_fonts.dart';
 import 'package:engquest/core/ui/readability_scale.dart';
 import 'package:engquest/core/config/flavor_config.dart';
@@ -209,7 +213,12 @@ class EngQuestApp extends StatelessWidget {
                     child: inner ?? const SizedBox.shrink(),
                   );
                 },
-                child: child ?? const SizedBox.shrink(),
+                // Wrap the whole app so a level-up from ANY XP source (battle,
+                // every 英検 exam section, scene ナゾ) is celebrated by the one
+                // app-root listener below — not just inside BattleScreen.
+                child: LevelUpCelebrationHost(
+                  child: child ?? const SizedBox.shrink(),
+                ),
               ),
             ),
           ),
@@ -1076,6 +1085,145 @@ class _AppEntryPointState extends State<_AppEntryPoint> {
         ],
       ),
       child: _buildPhase(),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Global level-up celebration
+// ---------------------------------------------------------------------------
+
+/// Overlays a celebratory banner whenever ANY XP source crosses a level
+/// threshold — the vocab battle, every 英検 exam-practice section, scene ナゾ, and
+/// any future source. [XpService.awardXp] / [XpService.awardXpAmount] publish
+/// each level-up to the static [XpService.levelUpEvents]; the problem was that
+/// only [BattleScreen] reacted (via its own award result), so an exam-focused
+/// child (the primary 英検 path) levelled up silently. Mounting one listener at
+/// the app root makes the level-up moment universal and removes per-screen wiring.
+class LevelUpCelebrationHost extends StatefulWidget {
+  const LevelUpCelebrationHost({super.key, required this.child});
+
+  final Widget child;
+
+  @override
+  State<LevelUpCelebrationHost> createState() => _LevelUpCelebrationHostState();
+}
+
+class _LevelUpCelebrationHostState extends State<LevelUpCelebrationHost>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctl;
+  final SoundService _sound = SoundService();
+  XpProfile? _profile;
+
+  @override
+  void initState() {
+    super.initState();
+    // 2.8s total — pop-in → hold → fade-out, all driven by the controller's
+    // value via Interval maths in [_banner], so there is no separate Timer
+    // (Timers leak into widget tests). On completion we clear the banner and
+    // reset the notifier so the next level-up — even to the same level — fires.
+    _ctl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2800),
+    )..addStatusListener((status) {
+        if (status == AnimationStatus.completed && mounted) {
+          setState(() => _profile = null);
+          XpService.levelUpEvents.value = null;
+        }
+      });
+    XpService.levelUpEvents.addListener(_onLevelUp);
+  }
+
+  void _onLevelUp() {
+    final result = XpService.levelUpEvents.value;
+    if (result == null || !mounted) return;
+    setState(() => _profile = result.after);
+    _sound.playLevelUp();
+    HapticFeedback.heavyImpact();
+    _ctl.forward(from: 0);
+  }
+
+  @override
+  void dispose() {
+    XpService.levelUpEvents.removeListener(_onLevelUp);
+    _ctl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Positioned.fill keeps the app's Navigator filling exactly as before; the
+    // banner is a cosmetic, input-transparent overlay above it.
+    return Stack(
+      children: [
+        Positioned.fill(child: widget.child),
+        if (_profile != null)
+          Positioned.fill(
+            child: IgnorePointer(
+              child: AnimatedBuilder(
+                animation: _ctl,
+                builder: (context, _) => _banner(_profile!, _ctl.value),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _banner(XpProfile profile, double t) {
+    // t runs 0→1 over 2.8s: pop-in 0–0.12, hold to 0.82, fade-out 0.82–1.0.
+    final appear = Curves.easeOutBack.transform((t / 0.12).clamp(0.0, 1.0));
+    final fade = t < 0.82 ? 1.0 : (1.0 - (t - 0.82) / 0.18).clamp(0.0, 1.0);
+    return Material(
+      type: MaterialType.transparency,
+      child: Center(
+        child: Opacity(
+          opacity: fade,
+          child: Transform.scale(
+            scale: 0.8 + 0.2 * appear,
+            child: DqPanel(
+              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text('🌟', style: TextStyle(fontSize: 56)),
+                  const SizedBox(height: 12),
+                  Center(
+                    child: dqBilingual(
+                      'レベルアップ！',
+                      'LEVEL UP',
+                      jpSize: 26,
+                      jpColor: dqGold,
+                      stacked: true,
+                      align: TextAlign.center,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text('Lv.${profile.level} に到達！',
+                      style: dqText(size: 19, color: dqInk)),
+                  const SizedBox(height: 4),
+                  Text('合計 ${profile.totalXp} XP',
+                      style: dqText(size: 13, color: dqGoldDeep)),
+                  const SizedBox(height: 20),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: LinearProgressIndicator(
+                      value: profile.levelProgress,
+                      backgroundColor: dqNight0,
+                      valueColor: const AlwaysStoppedAnimation<Color>(dqGold),
+                      minHeight: 10,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text('${profile.currentLevelXp} / ${profile.levelXpSpan} XP',
+                      style: dqText(size: 12, color: dqGoldDeep)),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

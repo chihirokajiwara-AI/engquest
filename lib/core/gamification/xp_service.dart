@@ -82,6 +82,16 @@ class XpService {
   /// UI should clear this after showing the animation.
   final ValueNotifier<XpAwardResult?> levelUpNotifier = ValueNotifier(null);
 
+  /// App-wide level-up broadcast. The per-instance [levelUpNotifier] is useless
+  /// as a cross-component signal because every `XpService()` is a fresh instance
+  /// with its own notifier (callers like exam practice do `XpService()...` ad
+  /// hoc). This STATIC notifier is shared by ALL instances, so one app-root
+  /// listener ([LevelUpCelebrationHost]) can celebrate a level-up from ANY XP
+  /// source — the vocab battle, every 英検 exam section, scene ナゾ. The listener
+  /// resets it to null after showing the celebration.
+  static final ValueNotifier<XpAwardResult?> levelUpEvents =
+      ValueNotifier(null);
+
   // ── Firestore helpers ─────────────────────────────────────────────────────
 
   DocumentReference<Map<String, dynamic>> _profileRef(String uid) =>
@@ -140,6 +150,7 @@ class XpService {
 
     if (result.didLevelUp) {
       levelUpNotifier.value = result;
+      levelUpEvents.value = result; // app-wide celebration (any source)
     }
 
     return result;
@@ -178,6 +189,7 @@ class XpService {
     final result = XpAwardResult(xpGained: xp, before: before, after: after);
     if (result.didLevelUp) {
       levelUpNotifier.value = result;
+      levelUpEvents.value = result; // app-wide celebration (any source)
     }
     return result;
   }
