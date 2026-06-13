@@ -3209,6 +3209,122 @@ const _gradePre1Part1 = <ListeningItem>[
     explanation:
         'B が「some residents worry about the increased traffic（交通量の増加を心配する住民がいる）」と述べている。',
   ),
+  // ── Studio expansion 2026-06-13: 準1級 第1部 toward the 29-item target ─────────
+  ListeningItem(
+    part: 1,
+    grade: 'pre1',
+    audioKey: 'lpre1_p1_05.mp3',
+    transcripts: [
+      'A: The client is asking us to deliver the prototype two weeks earlier.',
+      'B: That is going to be tight. Our testing phase alone takes ten days.',
+      'A: I know. Could we run some tests in parallel with development?',
+      'B: It is risky, but it might be the only way to meet the deadline.',
+      'Question: What does the woman propose to meet the earlier deadline?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What does the woman propose to meet the earlier deadline?',
+    choices: [
+      'Hiring more staff.',
+      'Running tests in parallel with development.',
+      'Skipping the testing phase entirely.',
+      'Asking the client for more time.',
+    ],
+    correctIndex: 1,
+    explanation:
+        'A は「run some tests in parallel with development（テストを開発と並行して進める）」ことを提案している。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre1',
+    audioKey: 'lpre1_p1_06.mp3',
+    transcripts: [
+      'A: I heard your lab is partnering with the university on the new battery project.',
+      'B: Yes, they have the equipment we lack, and we bring the materials expertise.',
+      'A: That sounds like a perfect match.',
+      'B: It is. We expect to publish our first results by the end of the year.',
+      'Question: What does each side contribute to the partnership?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What does each side contribute to the partnership?',
+    choices: [
+      'Both provide only funding.',
+      'Both share the same equipment.',
+      'The lab provides only students.',
+      'The university provides equipment and the lab provides materials expertise.',
+    ],
+    correctIndex: 3,
+    explanation:
+        'B は「they have the equipment we lack, and we bring the materials expertise（大学は設備、研究室は材料の専門知識を提供）」と述べている。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre1',
+    audioKey: 'lpre1_p1_07.mp3',
+    transcripts: [
+      'A: Congratulations on the promotion to department head.',
+      'B: Thank you, though I am a little nervous about managing a larger team.',
+      'A: You will be fine. Your communication skills are exactly what the role needs.',
+      'B: I appreciate that. I will focus on listening to everyone first.',
+      'Question: What is the man nervous about?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What is the man nervous about?',
+    choices: [
+      'Moving to a new city.',
+      'Managing a larger team.',
+      'Losing his current salary.',
+      'Learning new software.',
+    ],
+    correctIndex: 1,
+    explanation:
+        'B は「nervous about managing a larger team（より大きなチームを管理することに不安）」と述べている。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre1',
+    audioKey: 'lpre1_p1_08.mp3',
+    transcripts: [
+      'A: How do you think my presentation went this morning?',
+      'B: The content was strong, but you went through the data slides too quickly.',
+      'A: You are right. I was worried about running over time.',
+      'B: Next time, cut a few slides rather than rushing through them.',
+      'Question: What advice does the man give the woman?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What advice does the man give the woman?',
+    choices: [
+      'To add more data slides.',
+      'To speak more loudly.',
+      'To cut a few slides rather than rushing.',
+      'To start the presentation earlier.',
+    ],
+    correctIndex: 2,
+    explanation:
+        'B は「cut a few slides rather than rushing through them（急ぐより数枚減らす）」と助言している。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre1',
+    audioKey: 'lpre1_p1_09.mp3',
+    transcripts: [
+      'A: We are over budget on the advertising campaign again.',
+      'B: Where do you think we should cut back?',
+      'A: Honestly, the printed flyers are getting very little response. We could shift that money to online ads.',
+      'B: That makes sense. Online ads are easier to measure anyway.',
+      'Question: What does the woman suggest doing with the budget?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What does the woman suggest doing with the budget?',
+    choices: [
+      'Shifting money from flyers to online ads.',
+      'Cancelling the whole campaign.',
+      'Printing even more flyers.',
+      'Asking for a larger budget.',
+    ],
+    correctIndex: 0,
+    explanation:
+        'A は反応の薄いチラシから「shift that money to online ads（その予算をオンライン広告に回す）」ことを提案している。',
+  ),
 ];
 
 const _gradePre1Part2 = <ListeningItem>[
@@ -3311,6 +3427,133 @@ const _gradePre1Part2 = <ListeningItem>[
     correctIndex: 0,
     explanation:
         '専門家は「the two will increasingly work together（人間と機械はますます協働する）」と考えている。',
+  ),
+  // ── Studio expansion 2026-06-13: 準1級 第2部 toward the 29-item target ─────────
+  ListeningItem(
+    part: 2,
+    grade: 'pre1',
+    audioKey: 'lpre1_p2_05.mp3',
+    transcripts: [
+      'Habits are powerful because they allow the brain to save energy. When a '
+          'behavior is repeated often enough, it becomes automatic, requiring '
+          'little conscious thought. Researchers have found that habits form most '
+          'easily when they are linked to an existing routine, such as brushing '
+          'your teeth after breakfast. Breaking a bad habit, however, is usually '
+          'harder than forming a good one, because the old pattern remains stored '
+          'in the brain. Experts suggest replacing an unwanted habit with a new '
+          'behavior rather than simply trying to stop.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'According to the passage, what makes forming a habit easier?',
+    choices: [
+      'Doing it only on weekends.',
+      'Linking it to an existing routine.',
+      'Avoiding all daily routines.',
+      'Thinking about it constantly.',
+    ],
+    correctIndex: 1,
+    explanation:
+        '本文に「habits form most easily when they are linked to an existing routine（既存の習慣に結びつくと最も形成されやすい）」とある。',
+  ),
+  ListeningItem(
+    part: 2,
+    grade: 'pre1',
+    audioKey: 'lpre1_p2_06.mp3',
+    transcripts: [
+      'Renewable energy sources such as wind and solar power are clean, but they '
+          'share a major challenge: they do not produce electricity all the time. '
+          'The sun does not always shine, and the wind does not always blow. To '
+          'make these sources reliable, engineers are developing better ways to '
+          'store energy, such as large batteries and systems that pump water '
+          'uphill to release later. Without effective storage, surplus energy '
+          'produced on sunny or windy days is simply wasted.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'What is the major challenge of wind and solar power mentioned?',
+    choices: [
+      'They do not produce electricity all the time.',
+      'They are far too expensive to build.',
+      'They cause serious noise pollution.',
+      'They require imported fuel.',
+    ],
+    correctIndex: 0,
+    explanation:
+        '本文に「they do not produce electricity all the time（常に発電するわけではない）」と課題が述べられている。',
+  ),
+  ListeningItem(
+    part: 2,
+    grade: 'pre1',
+    audioKey: 'lpre1_p2_07.mp3',
+    transcripts: [
+      'The rise of remote work is beginning to reshape cities. As more employees '
+          'work from home, demand for office space in city centers has fallen, '
+          'while interest in larger homes in suburban areas has grown. Some '
+          'economists warn that this shift could reduce the tax income that '
+          'cities rely on. Others argue that it offers a chance to convert empty '
+          'offices into housing and to create more livable neighborhoods. The '
+          'long-term effects are still uncertain.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'What is one concern some economists have about remote work?',
+    choices: [
+      'It will increase office rents.',
+      'It will end suburban living.',
+      'It will raise fuel prices.',
+      'It could reduce the tax income cities rely on.',
+    ],
+    correctIndex: 3,
+    explanation:
+        '本文に「could reduce the tax income that cities rely on（都市が頼る税収を減らしうる）」と懸念が述べられている。',
+  ),
+  ListeningItem(
+    part: 2,
+    grade: 'pre1',
+    audioKey: 'lpre1_p2_08.mp3',
+    transcripts: [
+      'Coral reefs support a quarter of all ocean life, yet they are '
+          'disappearing at an alarming rate due to warming seas. Scientists are '
+          'now experimenting with ways to help reefs recover. In some projects, '
+          'small pieces of coral are grown in underwater nurseries and then '
+          'attached to damaged reefs. Early results are promising, but researchers '
+          'caution that restoration alone cannot save reefs unless the underlying '
+          'problem of rising ocean temperatures is also addressed.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'What do researchers caution about reef restoration?',
+    choices: [
+      'It is too cheap to be effective.',
+      'It harms other sea life.',
+      'It cannot save reefs unless rising ocean temperatures are addressed.',
+      'It works only in very cold water.',
+    ],
+    correctIndex: 2,
+    explanation:
+        '本文に「restoration alone cannot save reefs unless ... rising ocean temperatures is also addressed（海水温の上昇に対処しなければ修復だけでは救えない）」とある。',
+  ),
+  ListeningItem(
+    part: 2,
+    grade: 'pre1',
+    audioKey: 'lpre1_p2_09.mp3',
+    transcripts: [
+      'The development of vaccines is one of the greatest achievements in medical '
+          'history. The idea began over two centuries ago, when a doctor noticed '
+          'that people who had caught a mild disease called cowpox did not become '
+          'sick with the far more dangerous smallpox. This observation led to the '
+          'first vaccine. Since then, vaccines have helped control or even '
+          'eliminate many deadly diseases, saving millions of lives every year '
+          'through prevention rather than treatment.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'What observation led to the first vaccine?',
+    choices: [
+      'That smallpox was actually harmless.',
+      'That people who had cowpox did not catch smallpox.',
+      'That cowpox spread very quickly.',
+      'That treatment was better than prevention.',
+    ],
+    correctIndex: 1,
+    explanation:
+        '本文に「people who had caught ... cowpox did not become sick with ... smallpox（牛痘にかかった人は天然痘にかからなかった）」という観察が最初のワクチンにつながったとある。',
   ),
 ];
 
