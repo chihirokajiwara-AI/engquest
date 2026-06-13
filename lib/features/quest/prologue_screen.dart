@@ -249,8 +249,13 @@ class _PrologueScreenState extends State<PrologueScreen> {
     }
   }
 
-  /// Whether ランプ is restored to colour (after the blend, and at 結).
-  bool get _lampRestored => _index == 4 || (_index == 3 && _blendDone);
+  /// Whether ランプ shows in COLOUR. He colours WITH the world, so the lampkeeper
+  /// is never grey-on-colour (the pasted-card tension): grey at 起, colour as the
+  /// memory blooms at 承, grey again as the Silence drains it at 転, colour the
+  /// moment the child completes the blend, and colour at 結. Tracking the beat's
+  /// own saturation keeps the man and the world in lockstep (CEO 1436 design:
+  /// "承 = 色がブワッと戻る").
+  bool get _lampColoured => _beatSaturation >= 1.0;
 
   /// Full-bleed background: the canonical 灰色のひろば across every beat, under an
   /// animated saturation filter + a slow Ken Burns push-in. Reduced-motion jumps
@@ -306,10 +311,10 @@ class _PrologueScreenState extends State<PrologueScreen> {
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 900),
                 child: Image.asset(
-                  _lampRestored
+                  _lampColoured
                       ? 'assets/art/scenes_layton/npc_lampkeeper_color.webp'
                       : 'assets/art/scenes_layton/npc_lampkeeper_grey.webp',
-                  key: ValueKey(_lampRestored),
+                  key: ValueKey(_lampColoured),
                   fit: BoxFit.contain,
                 ),
               ),
