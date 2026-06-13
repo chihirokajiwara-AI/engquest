@@ -66,6 +66,12 @@ class WritingPrompt {
   /// Which 観点 to score (official rubric 観点).
   final List<String> rubricPoints;
 
+  /// One well-written 見本解答 (model answer) for this prompt — a content exemplar
+  /// the learner reveals AFTER attempting, to see what a complete, in-range answer
+  /// looks like (compare-to-model, distinct from self-grading). Optional: a prompt
+  /// without one simply shows no example card.
+  final String? modelAnswer;
+
   const WritingPrompt({
     required this.id,
     required this.type,
@@ -76,6 +82,7 @@ class WritingPrompt {
     required this.wordCountMin,
     required this.wordCountMax,
     required this.rubricPoints,
+    this.modelAnswer,
   });
 }
 
@@ -104,6 +111,9 @@ const List<WritingPrompt> kWritingPrompts = [
     wordCountMin: 15,
     wordCountMax: 25,
     rubricPoints: ['内容 / Content', '語彙 / Vocabulary', '文法 / Grammar'],
+    modelAnswer:
+        'Hi! Thank you for your message. My new pet is a small brown rabbit '
+        'named Momo. She loves to eat carrots and fresh vegetables.',
   ),
   WritingPrompt(
     id: '3_email_2',
@@ -122,6 +132,9 @@ const List<WritingPrompt> kWritingPrompts = [
     wordCountMin: 15,
     wordCountMax: 25,
     rubricPoints: ['内容 / Content', '語彙 / Vocabulary', '文法 / Grammar'],
+    modelAnswer:
+        'Hi! You should visit Kyoto to see beautiful old temples. You should '
+        'also try sushi, because it is fresh and delicious.',
   ),
 
   // ── 準2級 Eメール (40-50語) ──────────────────────────────────────────────
@@ -287,6 +300,10 @@ const List<WritingPrompt> kWritingPrompts = [
     wordCountMin: 25,
     wordCountMax: 35,
     rubricPoints: ['内容 / Content', '語彙 / Vocabulary', '文法 / Grammar'],
+    modelAnswer:
+        'Yes, I agree that children should play sports. First, sports help them '
+        'stay healthy and strong. Second, playing on a team teaches them to work '
+        'with others and make new friends.',
   ),
 
   // ── 準2級 意見論述 ────────────────────────────────────────────────────────
@@ -706,6 +723,66 @@ class _WritingSelfCheckCardState extends State<WritingSelfCheckCard> {
   }
 }
 
+// ── 見本解答 / model answer (reveal-on-demand content exemplar) ────────────────
+//
+// Shown on the result screen AFTER the learner has written. Pedagogy: attempt
+// first, then compare to ONE good example (compare-to-model — a validated aid,
+// distinct from the self-grading we deliberately avoid). Gated behind a reveal
+// tap so it never spoils the attempt, and framed honestly as one example (same
+// meaning, different wording is also correct). Feeds the 合格率 nothing.
+class _ModelAnswerCard extends StatefulWidget {
+  const _ModelAnswerCard({required this.modelAnswer});
+
+  final String modelAnswer;
+
+  @override
+  State<_ModelAnswerCard> createState() => _ModelAnswerCardState();
+}
+
+class _ModelAnswerCardState extends State<_ModelAnswerCard> {
+  bool _revealed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return DqPanel(
+      title: '見本解答 / Example answer',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'まず じぶんで 書いてから、この 見本と くらべてみよう。これは 一つの 例（れい）。'
+            'おなじ いみなら、ちがう 書き方でも せいかいです。',
+            style: dqText(size: 12, color: dqGoldDeep),
+          ),
+          const SizedBox(height: 10),
+          if (!_revealed)
+            Align(
+              alignment: Alignment.centerLeft,
+              child: DqButton(
+                label: '見本（みほん）を 見る',
+                onTap: () => setState(() => _revealed = true),
+              ),
+            )
+          else
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: dqGold.withAlpha(20),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: dqGold.withAlpha(90)),
+              ),
+              child: Text(
+                widget.modelAnswer,
+                style: dqText(size: 14, color: dqInk),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
 // ── Main screen ───────────────────────────────────────────────────────────────
 
 class WritingPracticeScreen extends StatefulWidget {
@@ -1119,6 +1196,11 @@ class _WritingPracticeScreenState extends State<WritingPracticeScreen> {
                 .formComplete) ...[
               const SizedBox(height: 12),
               WritingSelfCheckCard(taskType: _prompt.type),
+            ],
+            // 見本解答: a content exemplar to compare against (reveal-on-demand).
+            if (_prompt.modelAnswer != null) ...[
+              const SizedBox(height: 12),
+              _ModelAnswerCard(modelAnswer: _prompt.modelAnswer!),
             ],
           ] else ...[
             // Score summary
