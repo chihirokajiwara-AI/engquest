@@ -38,9 +38,11 @@
 //   • No choice equals the answer key itself (no giveaway repetition).
 //
 // AUDIO STATUS (R2):
-//   All audioKey values below are registered in assets/ALLOWED_MISSING.txt because
-//   audio has not yet been generated (Kokoro is CPU-heavy; must run via
-//   scripts/safe-job.sh). Run scripts/generate_listening_audio.py to synthesize.
+//   Audio is GENERATED and bundled: all 204 referenced clips exist under
+//   assets/audio/listening/ (Kokoro TTS, scripts/generate_listening_audio.py,
+//   2026-06-12) — verified by listening_pool_integrity / clip-coverage gates. To
+//   regenerate, run that script via scripts/safe-job.sh (Kokoro is CPU-heavy).
+//   (Earlier this set was ALLOWED_MISSING-registered; that note is now obsolete.)
 //
 // NOTE: 5級/4級 structure per verified spec (EIKEN-MASTERY-AND-GAPS-2026-06-06.json):
 //   5級: 第1部10 (応答選択) + 第2部5 (会話内容一致) + 第3部10 (文内容一致) = 25
