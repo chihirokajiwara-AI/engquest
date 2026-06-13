@@ -3024,6 +3024,112 @@ const _gradePre2PlusPart1 = <ListeningItem>[
     explanation:
         'A が seafood pasta を勧められ「Then I will order that（ではそれを注文する）」と答えている。',
   ),
+  // ── Studio expansion 2026-06-13: 準2級プラス 第1部 toward the 29-item target ────
+  ListeningItem(
+    part: 1,
+    grade: 'pre2plus',
+    audioKey: 'lpp_p1_05.mp3',
+    transcripts: [
+      'A: Is the science class on Tuesday or Wednesday this week?',
+      'B: It was moved to Wednesday because the lab is being cleaned on Tuesday.',
+      'A: Thanks for letting me know.',
+      'Question: When is the science class this week?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'When is the science class this week?',
+    choices: [
+      'On Tuesday.',
+      'On Wednesday.',
+      'On Monday.',
+      'It is cancelled.',
+    ],
+    correctIndex: 1,
+    explanation: 'B が「moved to Wednesday（水曜に変更された）」と述べている。火曜は実験室の清掃のため。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre2plus',
+    audioKey: 'lpp_p1_06.mp3',
+    transcripts: [
+      'A: Do you want to go to the beach this weekend?',
+      'B: I would love to, but the forecast says it will rain on Saturday.',
+      'A: Then let us go on Sunday instead.',
+      'Question: When will they probably go to the beach?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'When will they probably go to the beach?',
+    choices: [
+      'On Saturday.',
+      'On Friday.',
+      'They will not go at all.',
+      'On Sunday.',
+    ],
+    correctIndex: 3,
+    explanation: '雨の予報のため A が「go on Sunday instead（代わりに日曜に行こう）」と提案している。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre2plus',
+    audioKey: 'lpp_p1_07.mp3',
+    transcripts: [
+      'A: I would like to reserve a table for four at seven tonight.',
+      'B: I am sorry, we are fully booked at seven, but we have space at eight.',
+      'A: Eight is fine, thank you.',
+      'Question: What time is the reservation?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What time is the reservation?',
+    choices: [
+      'At seven.',
+      'At eight.',
+      'At six.',
+      'At nine.',
+    ],
+    correctIndex: 1,
+    explanation: '7時は満席で、A は「Eight is fine（8時で結構）」と答えている。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre2plus',
+    audioKey: 'lpp_p1_08.mp3',
+    transcripts: [
+      'A: I bought this shirt yesterday, but it is too small. Can I exchange it?',
+      'B: Of course. Would you like a larger size or a refund?',
+      'A: A larger size, please.',
+      'Question: What does the customer want to do?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What does the customer want to do?',
+    choices: [
+      'Get a refund.',
+      'Buy another shirt.',
+      'Exchange the shirt for a larger size.',
+      'Keep the shirt as it is.',
+    ],
+    correctIndex: 2,
+    explanation: 'A は「A larger size, please（大きいサイズをお願いします）」と交換を希望している。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre2plus',
+    audioKey: 'lpp_p1_09.mp3',
+    transcripts: [
+      'A: Excuse me, is there a bookstore near here?',
+      'B: Yes, go straight and it is on your right, next to the cafe.',
+      'A: Great, thank you very much.',
+      'Question: Where is the bookstore?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'Where is the bookstore?',
+    choices: [
+      'Next to the cafe.',
+      'Across from the station.',
+      'Behind the school.',
+      'Inside the shopping mall.',
+    ],
+    correctIndex: 0,
+    explanation: 'B が「on your right, next to the cafe（右側、カフェのとなり）」と場所を教えている。',
+  ),
 ];
 
 const _gradePre2PlusPart2 = <ListeningItem>[
@@ -3111,6 +3217,115 @@ const _gradePre2PlusPart2 = <ListeningItem>[
     correctIndex: 0,
     explanation:
         '本文に「borrow up to five books at a time, instead of three（一度に3冊でなく5冊まで借りられる）」と新制度の変更点がある。',
+  ),
+  // ── Studio expansion 2026-06-13: 準2級プラス 第2部 toward the 29-item target ────
+  ListeningItem(
+    part: 2,
+    grade: 'pre2plus',
+    audioKey: 'lpp_p2_05.mp3',
+    transcripts: [
+      'The community center is offering a free cooking class next Saturday '
+          'afternoon. Participants will learn how to make simple and healthy '
+          'meals. All ingredients will be provided, but please bring your own '
+          'apron. Spaces are limited, so sign up early at the front desk.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'What should participants bring to the cooking class?',
+    choices: [
+      'Their own ingredients.',
+      'Their own apron.',
+      'A cooking book.',
+      'Money for ingredients.',
+    ],
+    correctIndex: 1,
+    explanation:
+        '放送に「please bring your own apron（自分のエプロンを持参してください）」とある。材料は提供される。',
+  ),
+  ListeningItem(
+    part: 2,
+    grade: 'pre2plus',
+    audioKey: 'lpp_p2_06.mp3',
+    transcripts: [
+      'Our school has started a new recycling program. Students are asked to '
+          'separate paper, plastic, and cans into different bins in each '
+          'classroom. The class that recycles the most each month will receive a '
+          'small prize. Teachers hope this will help students build good habits.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'What will the class that recycles the most receive?',
+    choices: [
+      'A free trip.',
+      'Extra holidays.',
+      'New textbooks.',
+      'A small prize.',
+    ],
+    correctIndex: 3,
+    explanation: '放送に「will receive a small prize（小さな賞品がもらえる）」とある。',
+  ),
+  ListeningItem(
+    part: 2,
+    grade: 'pre2plus',
+    audioKey: 'lpp_p2_07.mp3',
+    transcripts: [
+      'Please note that starting next month, the city museum will open one hour '
+          'earlier, at nine in the morning. The closing time will stay the same. '
+          'The museum will also be closed on Mondays for cleaning. We hope the new '
+          'hours will be more convenient for visitors.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'What change will happen at the museum next month?',
+    choices: [
+      'It will open one hour earlier.',
+      'It will close much earlier.',
+      'It will open on Mondays.',
+      'It will charge an entrance fee.',
+    ],
+    correctIndex: 0,
+    explanation: '放送に「open one hour earlier, at nine（1時間早く9時に開館）」とある。',
+  ),
+  ListeningItem(
+    part: 2,
+    grade: 'pre2plus',
+    audioKey: 'lpp_p2_08.mp3',
+    transcripts: [
+      'Bananas are one of the most popular fruits in the world. They are easy to '
+          'carry, do not need to be peeled with a knife, and are full of energy. '
+          'Many athletes eat bananas before exercise because they provide quick '
+          'energy. Bananas are also grown in many warm countries and are '
+          'available all year round.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'Why do many athletes eat bananas before exercise?',
+    choices: [
+      'Because they are very cheap.',
+      'Because they provide quick energy.',
+      'Because they are colorful.',
+      'Because they last a long time.',
+    ],
+    correctIndex: 1,
+    explanation: '本文に「provide quick energy（すぐにエネルギーになる）」ため運動前に食べるとある。',
+  ),
+  ListeningItem(
+    part: 2,
+    grade: 'pre2plus',
+    audioKey: 'lpp_p2_09.mp3',
+    transcripts: [
+      'The school tennis club is looking for new members this spring. No '
+          'experience is necessary, and rackets can be borrowed for free. The '
+          'club practices on Mondays and Thursdays after school. If you are '
+          'interested, please come to the gym on Friday to meet the members.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'What should interested students do?',
+    choices: [
+      'Buy a racket first.',
+      'Pay a membership fee.',
+      'Come to the gym on Friday.',
+      'Practice on Tuesday.',
+    ],
+    correctIndex: 2,
+    explanation:
+        '放送に「come to the gym on Friday to meet the members（金曜に体育館へ来てメンバーに会う）」とある。',
   ),
 ];
 
