@@ -442,7 +442,11 @@ class _HomeTab extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '${progress.totalWordsMastered} / 300 習得',
+                    // Denominator is the child's real deck (grade-scaled), not a
+                    // fixed 300 — a 3級 child works through ~1,300 words, not 300.
+                    progress.vocabPoolSize > 0
+                        ? '${progress.totalWordsMastered} / ${progress.vocabPoolSize} 習得'
+                        : '${progress.totalWordsMastered} 習得',
                     style: dqText(size: 14, w: FontWeight.w600, color: dqInk),
                   ),
                   Text(

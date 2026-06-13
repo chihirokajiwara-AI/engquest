@@ -80,10 +80,16 @@ class LearningProgress {
   final int currentStreak; // consecutive study days
   final int totalWordsMastered; // Retrievability > 0.9
   final int totalWordsPracticed;
-  final double masteryPercent; // totalWordsMastered / 300
+  final double
+      masteryPercent; // totalWordsMastered / vocabPoolSize, clamped 0–1
   final List<DailyProgress> last7Days;
   final double eikenReadiness; // 0-100
   final DateTime? nextReviewDue; // earliest FSRS due date
+
+  /// Size of the child's actual vocab deck — the denominator behind
+  /// [masteryPercent]. Scales with their 英検 grade (5級 ~300 … 準1級 ~3000), so
+  /// the parent sees a true "X / pool 習得", not a fixed 300. 0 = no deck loaded.
+  final int vocabPoolSize;
 
   /// Real category mastery from Firestore FSRS cards.
   /// Empty list = no card data yet (show "no data" state in UI).
@@ -101,6 +107,7 @@ class LearningProgress {
     required this.last7Days,
     required this.eikenReadiness,
     this.nextReviewDue,
+    this.vocabPoolSize = 0,
     this.categoryMastery = const [],
     this.reviewSchedule = const ReviewSchedule.empty(),
   });
@@ -119,6 +126,7 @@ class LearningProgress {
       nextReviewDue: json['nextReviewDue'] != null
           ? DateTime.parse(json['nextReviewDue'] as String)
           : null,
+      vocabPoolSize: (json['vocabPoolSize'] as num?)?.toInt() ?? 0,
       // categoryMastery and reviewSchedule are runtime-only; not serialized
     );
   }
@@ -132,5 +140,6 @@ class LearningProgress {
         'last7Days': last7Days.map((d) => d.toJson()).toList(),
         'eikenReadiness': eikenReadiness,
         'nextReviewDue': nextReviewDue?.toIso8601String(),
+        'vocabPoolSize': vocabPoolSize,
       };
 }

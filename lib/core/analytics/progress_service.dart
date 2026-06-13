@@ -15,8 +15,6 @@ import 'package:engquest/core/models/progress_data.dart';
 import 'package:engquest/core/analytics/firestore_progress_repository.dart';
 
 class ProgressService {
-  static const int _totalVocabPool = 300;
-
   final FirestoreProgressRepository _repo;
 
   ProgressService({FirestoreProgressRepository? repository})
@@ -70,7 +68,16 @@ class ProgressService {
             ? (profile['currentStreak'] as num).toInt()
             : 0;
 
-    final masteryPct = totalMastered / _totalVocabPool;
+    // Mastery % is progress through the child's ACTUAL vocab deck, which scales
+    // with their 英検 grade (5級 ~300 words … 準1級 ~3000). This was a hardcoded
+    // 300 (the 5級/A1 pool), so a 3級 child who had mastered 270 of their 1,300
+    // words showed 90% mastery → "100% 英検 ready" to the paying parent. Use the
+    // real loaded deck size (already fetched as [allCards]); clamp because
+    // totalMastered is a cumulative profile counter that can briefly exceed the
+    // current deck right after a grade switch. Empty deck (nothing loaded) → 0.
+    final deckSize = allCards.length;
+    final masteryPct =
+        deckSize > 0 ? (totalMastered / deckSize).clamp(0.0, 1.0) : 0.0;
 
     final progress = LearningProgress(
       uid: uid,
@@ -81,6 +88,7 @@ class ProgressService {
       last7Days: last7 ?? _emptyLast7Days(),
       eikenReadiness: 0, // placeholder, recalculated below
       nextReviewDue: nextReview,
+      vocabPoolSize: deckSize,
       categoryMastery: categoryMastery,
       reviewSchedule: reviewSchedule,
     );
@@ -94,6 +102,7 @@ class ProgressService {
       last7Days: progress.last7Days,
       eikenReadiness: calculateEikenReadiness(progress),
       nextReviewDue: progress.nextReviewDue,
+      vocabPoolSize: progress.vocabPoolSize,
       categoryMastery: progress.categoryMastery,
       reviewSchedule: progress.reviewSchedule,
     );

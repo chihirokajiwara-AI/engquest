@@ -20,6 +20,20 @@ void main() {
     service = ProgressService(repository: repo);
   });
 
+  // Seeds [count] FSRS card docs under users/{uid}/cards — the child's deck.
+  // masteryPercent is measured against this real deck size (which scales with
+  // 英検 grade), not a hardcoded 300.
+  Future<void> seedDeck(String uid, int count, {String state = 'new'}) async {
+    for (var i = 0; i < count; i++) {
+      await fakeDb
+          .collection('users')
+          .doc(uid)
+          .collection('cards')
+          .doc('c$i')
+          .set({'state': state});
+    }
+  }
+
   // ── getProgress fallback ──────────────────────────────────────────────────
 
   group('getProgress — no Firestore data', () {
@@ -74,10 +88,11 @@ void main() {
 
     test('calculates eikenReadiness from mastery percent', () async {
       await fakeDb.collection('users').doc('readiness_user').set({
-        'totalWordsMastered': 270, // 270/300 = 90% = 100 readiness
-        'totalWordsPracticed': 300,
+        'totalWordsMastered': 9, // 9/10 = 90% = 100 readiness
+        'totalWordsPracticed': 10,
         'currentStreak': 10,
       });
+      await seedDeck('readiness_user', 10);
 
       final progress = await service.getProgress('readiness_user');
       expect(progress.eikenReadiness, closeTo(100.0, 0.1));
@@ -85,14 +100,47 @@ void main() {
 
     test('eikenReadiness is linear below 90% mastery', () async {
       await fakeDb.collection('users').doc('half_user').set({
-        'totalWordsMastered': 135, // 135/300 = 45% → 50% of 100 = 50.0
-        'totalWordsPracticed': 200,
+        'totalWordsMastered': 9, // 9/20 = 45% → 50% of 100 = 50.0
+        'totalWordsPracticed': 20,
         'currentStreak': 2,
       });
+      await seedDeck('half_user', 20);
 
       final progress = await service.getProgress('half_user');
       // 45% / 90% * 100 = 50.0
       expect(progress.eikenReadiness, closeTo(50.0, 0.5));
+    });
+
+    test('masteryPercent scales with the real deck size, not a fixed 300',
+        () async {
+      // A higher-grade child: mastered 3 of a 12-word deck. The denominator must
+      // be the child's actual deck (which scales with 英検 grade), so the paying
+      // parent sees a true %: 3/12 = 0.25, NOT 3/300 = 0.01 (the old hardcoded
+      // pool). The inverse bug overstated readiness: 270 mastered of a 1,300
+      // deck used to show 270/300 = 90% → "100% 英検 ready".
+      await fakeDb.collection('users').doc('grade3_user').set({
+        'totalWordsMastered': 3,
+        'totalWordsPracticed': 12,
+      });
+      await seedDeck('grade3_user', 12);
+
+      final progress = await service.getProgress('grade3_user');
+      expect(progress.masteryPercent, closeTo(0.25, 0.001));
+      // The real deck size is surfaced so the dashboard shows "3 / 12 習得".
+      expect(progress.vocabPoolSize, equals(12));
+    });
+
+    test('masteryPercent clamps to 1.0 when the counter exceeds the deck',
+        () async {
+      // totalWordsMastered is a cumulative profile counter; after a grade switch
+      // to a smaller deck it can briefly exceed the deck size. Clamp, never >100%.
+      await fakeDb.collection('users').doc('switch_user').set({
+        'totalWordsMastered': 15,
+      });
+      await seedDeck('switch_user', 10);
+
+      final progress = await service.getProgress('switch_user');
+      expect(progress.masteryPercent, closeTo(1.0, 0.001));
     });
 
     test('reads last7Days from session subcollection', () async {
