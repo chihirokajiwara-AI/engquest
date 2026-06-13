@@ -1791,6 +1791,67 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
         ),
       ],
     ),
+    // Depth expansion 2026-06-14: more practice variety (reading).
+    _ReadingPassage(
+      title: 'The Rise of Food Trucks',
+      type: 'article',
+      content:
+          'Food trucks have become a common sight in many cities. A food truck '
+          'is a large vehicle with a kitchen inside, where cooks prepare and sell '
+          'meals to customers on the street. Although food trucks have existed '
+          'for over a hundred years, they have become especially popular in the '
+          'last decade.\n\n'
+          'There are several reasons for their success. First, starting a food '
+          'truck costs much less than opening a traditional restaurant, so it '
+          'allows young cooks to start their own business more easily. Second, '
+          'because the trucks can move, owners can drive to busy areas such as '
+          'office districts at lunchtime or music festivals on weekends.\n\n'
+          'Customers enjoy food trucks too. They often offer creative and '
+          'international dishes that are hard to find elsewhere, and the food is '
+          'usually served quickly. Many cities now hold food truck events where '
+          'dozens of trucks gather in one place.\n\n'
+          'Of course, food trucks face challenges as well. The weather can affect '
+          'business, and owners must follow strict health and safety rules. Even '
+          'so, food trucks continue to grow in popularity, changing the way many '
+          'people eat in cities.',
+      questions: [
+        _ComprehensionQuestion(
+          question: 'What is a food truck?',
+          choices: [
+            'A restaurant with many tables.',
+            'A large vehicle with a kitchen that sells meals on the street.',
+            'A store that sells vegetables.',
+            'A delivery service for restaurants.',
+          ],
+          correctIdx: 1,
+          explanation:
+              '本文に "a large vehicle with a kitchen inside, where cooks prepare and sell meals to customers on the street" とあるね。',
+        ),
+        _ComprehensionQuestion(
+          question: 'Why is starting a food truck attractive to young cooks?',
+          choices: [
+            'It requires no cooking skills.',
+            'It is open only on weekends.',
+            'It costs much less than opening a restaurant.',
+            'The government pays for it.',
+          ],
+          correctIdx: 2,
+          explanation:
+              '"starting a food truck costs much less than opening a traditional restaurant" とあるよ。',
+        ),
+        _ComprehensionQuestion(
+          question: 'What is one challenge food trucks face?',
+          choices: [
+            'They cannot move at all.',
+            'They are always too cheap.',
+            'Customers dislike new dishes.',
+            'Bad weather can affect business.',
+          ],
+          correctIdx: 3,
+          explanation: '"The weather can affect business" とあるね。',
+        ),
+      ],
+    ),
   ];
 
   static const _grade2FillIn = [
@@ -2102,6 +2163,86 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
           correctIdx: 1,
           explanation:
               '"When synthetic clothing is washed, thousands of microscopic fibers are released into wastewater." とあるよ。合成素材の服を洗うと、無数の細かい糸が排水へ流れ出す（日常の行動が発生源）。',
+        ),
+      ],
+    ),
+    // Depth expansion 2026-06-14: more practice variety (B2 reading).
+    _ReadingPassage(
+      title: 'Why Languages Disappear',
+      type: 'article',
+      content:
+          'Of the roughly seven thousand languages spoken around the world '
+          'today, experts estimate that nearly half may disappear by the end of '
+          'this century. A language is generally considered endangered when '
+          'children stop learning it as their first language, because once a '
+          'generation grows up speaking only a dominant language, the older '
+          'tongue is rarely passed on.\n\n'
+          'Several forces drive this decline. Globalization encourages people to '
+          'adopt widely spoken languages such as English or Mandarin for '
+          'education and business, often at the expense of their local language. '
+          'In addition, migration from rural villages to cities scatters small '
+          'language communities, making it harder for speakers to use their '
+          'language daily.\n\n'
+          'The loss of a language is more than the loss of words. Each language '
+          'carries unique knowledge about the natural world, history, and ways of '
+          'thinking that may not exist anywhere else. When a language vanishes, '
+          'this cultural heritage often disappears with it.\n\n'
+          'Linguists and communities are working to reverse the trend. Some '
+          'create written records and dictionaries, while others develop apps and '
+          'school programs to teach younger generations. Although saving every '
+          'endangered language is unlikely, these efforts can preserve at least '
+          'part of the remarkable linguistic diversity of the world.',
+      questions: [
+        _ComprehensionQuestion(
+          question: 'When is a language generally considered endangered?',
+          choices: [
+            'When it has fewer than a thousand words.',
+            'When children stop learning it as their first language.',
+            'When it is not written down.',
+            'When it is spoken only in cities.',
+          ],
+          correctIdx: 1,
+          explanation:
+              '本文に "considered endangered when children stop learning it as their first language" とある。',
+        ),
+        _ComprehensionQuestion(
+          question:
+              'According to the passage, how does globalization contribute to language decline?',
+          choices: [
+            'It bans local languages by law.',
+            'It reduces the world population.',
+            'It makes international travel more expensive.',
+            'People adopt widely spoken languages for education and business.',
+          ],
+          correctIdx: 3,
+          explanation:
+              '"Globalization encourages people to adopt widely spoken languages such as English or Mandarin for education and business" とある。',
+        ),
+        _ComprehensionQuestion(
+          question:
+              'Why does the passage say losing a language is more than losing words?',
+          choices: [
+            'Each language carries unique cultural knowledge.',
+            'Words can easily be replaced by new ones.',
+            'Languages are used only for business.',
+            'New words appear every year.',
+          ],
+          correctIdx: 0,
+          explanation:
+              '"Each language carries unique knowledge about the natural world, history, and ways of thinking" とある。',
+        ),
+        _ComprehensionQuestion(
+          question:
+              'What are linguists and communities doing to reverse the trend?',
+          choices: [
+            'Banning all dominant languages.',
+            'Moving people back to villages.',
+            'Creating records and developing teaching programs.',
+            'Stopping all migration to cities.',
+          ],
+          correctIdx: 2,
+          explanation:
+              '"Some create written records and dictionaries, while others develop apps and school programs to teach younger generations" とある。',
         ),
       ],
     ),
