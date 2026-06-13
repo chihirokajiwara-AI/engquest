@@ -355,6 +355,32 @@ class TtsService {
   /// behaviour. When per-word pronunciation ships it should be served on demand
   /// (network/CDN), not re-bundled. a1 + quiz + phonics + listening remain.
   Future<TtsAudioResult?> _loadBundledAsset(String vocabId, String word) async {
+    // FIRST: the manifest's declared bundled path. For 英検5級 the manifest points
+    // every word at `audio/a1/<id>_<word>.mp3` — the dir that IS in pubspec (the
+    // 300 eiken5_* MP3s live there). The grade-prefix path built below points at
+    // `audio/eiken5/…`, which is NOT bundled, so without this the 🔊 hear-the-word
+    // button was silent for 100% of taps despite the audio shipping (flaw-hunt
+    // 2026-06-13; re-verified — the prior "plays from a1" belief was wrong).
+    final entry = _manifest?.getById(vocabId);
+    if (entry != null &&
+        entry.status == 'ready' &&
+        entry.localCachePath.isNotEmpty) {
+      final manifestPath = 'assets/${entry.localCachePath}';
+      try {
+        final data = await rootBundle.load(manifestPath);
+        final bytes = data.buffer.asUint8List();
+        _memoryCache[_cacheKey(vocabId, word)] = bytes;
+        return TtsAudioResult(
+          vocabId: vocabId,
+          word: word,
+          audioBytes: bytes,
+          source: TtsAudioSource.bundledAsset,
+        );
+      } catch (_) {
+        // Manifest path not actually bundled → fall through to the grade-dir try.
+      }
+    }
+
     final grade = _gradeFromVocabId(vocabId);
     if (grade == null) return null;
 
