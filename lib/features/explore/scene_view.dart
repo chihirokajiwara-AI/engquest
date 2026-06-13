@@ -175,12 +175,19 @@ class _SceneViewState extends State<SceneView> {
 
   /// Restore which ナゾ were already solved so the world the child coloured in
   /// STAYS coloured across sessions (#115) — no silent re-greying overnight.
+  /// Also restores collected coins so a child can't re-enter and re-farm the
+  /// same coin for unlimited hint coins.
   Future<void> _restoreSolved() async {
     final solved = await SceneSolvedStore.solvedIndices(widget.eikenLevel);
-    if (!mounted || solved.isEmpty) return;
+    final coins =
+        await SceneSolvedStore.collectedCoinIndices(widget.eikenLevel);
+    if (!mounted || (solved.isEmpty && coins.isEmpty)) return;
     setState(() {
       for (final idx in solved) {
         _solved[idx] = true;
+      }
+      for (final idx in coins) {
+        _coinFound[idx] = true;
       }
     });
   }
@@ -312,6 +319,9 @@ class _SceneViewState extends State<SceneView> {
   Future<void> _collectCoin(int idx, Hotspot h) async {
     if (_coinFound[idx] == true) return;
     setState(() => _coinFound[idx] = true);
+    // Persist BEFORE awarding so a re-entry can never re-collect this coin even
+    // if the award races — the coin is finite (one collect per scene, ever).
+    await SceneSolvedStore.markCoinCollected(widget.eikenLevel, idx);
     _sound.playXpGain();
     final newBalance = await _coins.addCoin(h.coinValue);
     if (mounted) setState(() => _coinBalance = newBalance);

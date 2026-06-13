@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:engquest/features/explore/scene_view.dart';
+import 'package:engquest/features/explore/scene_solved_store.dart';
 import 'package:engquest/features/explore/nazo_screen.dart';
 
 void main() {
@@ -178,5 +179,39 @@ void main() {
     expect(find.byType(NazoScreen), findsOneWidget,
         reason: 'tapping 「ナゾをみる」 must open the ナゾ');
     expect(tester.takeException(), isNull);
+  });
+
+  // Coin re-farm guard (flaw-hunt 2026-06-14): coin-found state must persist, or
+  // a child re-enters the scene and re-collects the SAME coin for unlimited hint
+  // coins — re-opening the finite-economy hole R9 closed for the balance.
+  testWidgets('a collected coin does NOT reappear on re-entry (no re-farm)',
+      (tester) async {
+    final coinLabel = RegExp('ひかる てがかり');
+
+    // Control: a fresh scene presents the coin's investigate target.
+    final h1 = tester.ensureSemantics();
+    await tester.pumpWidget(
+      MaterialApp(home: SceneView(scene: kTown5Scene, eikenLevel: '5')),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
+    expect(find.bySemanticsLabel(coinLabel), findsOneWidget,
+        reason: 'an un-collected coin must be present on the first visit');
+    h1.dispose();
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump();
+
+    // Re-entry after the coin was collected in a prior session → it must be GONE.
+    await SceneSolvedStore.markCoinCollected('5', 3); // idx 3 = the 5級 coin
+    final h2 = tester.ensureSemantics();
+    await tester.pumpWidget(
+      MaterialApp(home: SceneView(scene: kTown5Scene, eikenLevel: '5')),
+    );
+    await tester.pump();
+    await tester
+        .pump(const Duration(milliseconds: 50)); // _restoreSolved applies
+    expect(find.bySemanticsLabel(coinLabel), findsNothing,
+        reason: 'a collected coin must not reappear (would allow re-farming)');
+    h2.dispose();
   });
 }

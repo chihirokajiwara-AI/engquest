@@ -33,4 +33,34 @@ void main() {
     expect(await SceneSolvedStore.solvedIndices('5'), equals(<int>{1}));
     expect(await SceneSolvedStore.solvedIndices('4'), equals(<int>{9}));
   });
+
+  // ── Collected coins (anti re-farm) ─────────────────────────────────────────
+
+  test('markCoinCollected persists and collectedCoinIndices reads it back',
+      () async {
+    expect(await SceneSolvedStore.collectedCoinIndices('5'), isEmpty);
+    await SceneSolvedStore.markCoinCollected('5', 3);
+    expect(await SceneSolvedStore.collectedCoinIndices('5'), equals(<int>{3}));
+  });
+
+  test('markCoinCollected is idempotent — a coin is collectable once, ever',
+      () async {
+    await SceneSolvedStore.markCoinCollected('5', 3);
+    await SceneSolvedStore.markCoinCollected('5', 3);
+    expect(await SceneSolvedStore.collectedCoinIndices('5'), equals(<int>{3}));
+  });
+
+  test('coin-state and solve-state are independent namespaces', () async {
+    // A collected coin at idx 3 must NOT register as a solved ナゾ at idx 3
+    // (and vice-versa) — they drive different hotspot kinds.
+    await SceneSolvedStore.markCoinCollected('5', 3);
+    await SceneSolvedStore.markSolved('5', 1);
+    expect(await SceneSolvedStore.solvedIndices('5'), equals(<int>{1}));
+    expect(await SceneSolvedStore.collectedCoinIndices('5'), equals(<int>{3}));
+  });
+
+  test('collected coins are per-scene namespaced (5級 ≠ 4級)', () async {
+    await SceneSolvedStore.markCoinCollected('5', 3);
+    expect(await SceneSolvedStore.collectedCoinIndices('4'), isEmpty);
+  });
 }

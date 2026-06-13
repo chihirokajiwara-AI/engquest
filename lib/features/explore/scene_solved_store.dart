@@ -15,6 +15,7 @@ class SceneSolvedStore {
   SceneSolvedStore._();
 
   static const _prefsKey = 'scene_solved_v1';
+  static const _coinsKey = 'scene_coins_v1';
 
   /// The solved-hotspot keys for [sceneKey] (e.g. '5') as a set of indices.
   /// Returns an empty set on any error so exploration always works.
@@ -45,9 +46,43 @@ class SceneSolvedStore {
     }
   }
 
-  /// Test seam: clear all persisted solve-state.
+  // ── Collected coins ────────────────────────────────────────────────────────
+  // Coin-found state must persist too, or a child can re-enter a scene and
+  // re-collect the SAME coin every visit → unlimited hint coins (the exact
+  // finite-economy hole R9 closed for the balance, re-opened via re-entry).
+
+  /// The collected-coin hotspot indices for [sceneKey]. Empty set on any error.
+  static Future<Set<int>> collectedCoinIndices(String sceneKey) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final all = prefs.getStringList(_coinsKey) ?? const [];
+      final prefix = '$sceneKey:';
+      return all
+          .where((e) => e.startsWith(prefix))
+          .map((e) => int.tryParse(e.substring(prefix.length)))
+          .whereType<int>()
+          .toSet();
+    } catch (_) {
+      return <int>{};
+    }
+  }
+
+  /// Mark coin hotspot [idx] of [sceneKey] collected (idempotent). Best-effort.
+  static Future<void> markCoinCollected(String sceneKey, int idx) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final all = (prefs.getStringList(_coinsKey) ?? const <String>[]).toSet();
+      all.add('$sceneKey:$idx');
+      await prefs.setStringList(_coinsKey, all.toList());
+    } catch (_) {
+      // Non-fatal: at worst the coin stays collectable (degrades to old bug).
+    }
+  }
+
+  /// Test seam: clear all persisted solve- AND coin-state.
   static Future<void> clearForTest() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_prefsKey);
+    await prefs.remove(_coinsKey);
   }
 }
