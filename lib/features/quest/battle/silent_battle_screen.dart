@@ -147,14 +147,9 @@ class _SilentBattleScreenState extends State<SilentBattleScreen> {
   /// already been played and we simply skip persistence rather than crash.
   Future<void> _applyRewards() async {
     try {
-      String uid = widget.uid ?? 'offline_user';
-      if (widget.uid == null) {
-        try {
-          uid = await AuthService().getOrCreateUid();
-        } catch (_) {
-          uid = 'offline_user';
-        }
-      }
+      // Stable uid: persists the real uid and reuses it when Firebase init
+      // flakes, so reward writes never fork the durable deck (#14).
+      final uid = widget.uid ?? await AuthService().resolveUid();
       final repo = widget.repository ??
           (() {
             try {

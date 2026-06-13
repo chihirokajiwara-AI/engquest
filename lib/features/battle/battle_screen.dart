@@ -267,14 +267,9 @@ class _BattleScreenState extends State<BattleScreen>
   // ── Deck initialisation (async — loads from Firestore) ────────────────────
 
   Future<void> _initDeckAsync() async {
-    // 1. Get or create anonymous uid
-    String uid;
-    try {
-      uid = await _auth.getOrCreateUid();
-    } catch (_) {
-      // Firebase Auth unavailable (offline cold start) — use local fallback uid
-      uid = 'offline_user';
-    }
+    // 1. Resolve a STABLE uid (persists the real uid; reuses it when Firebase
+    //    init flakes, so the durable per-uid FSRS deck never forks — #14).
+    final uid = await _auth.resolveUid();
     if (!mounted) return;
     _userId = uid;
 
