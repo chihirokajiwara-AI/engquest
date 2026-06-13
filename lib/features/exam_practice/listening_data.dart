@@ -3325,6 +3325,75 @@ const _gradePre1Part1 = <ListeningItem>[
     explanation:
         'A は反応の薄いチラシから「shift that money to online ads（その予算をオンライン広告に回す）」ことを提案している。',
   ),
+  // ── Studio expansion 2026-06-13 (cont.): 準1級 第1部 to 12 (→29 total) ─────────
+  ListeningItem(
+    part: 1,
+    grade: 'pre1',
+    audioKey: 'lpre1_p1_10.mp3',
+    transcripts: [
+      'A: I am afraid I have to move our Thursday meeting. A client visit came up.',
+      'B: No problem. Would Friday morning work for you instead?',
+      'A: Friday is full, but I could do Monday at ten.',
+      'B: Monday at ten it is. I will send an updated invitation.',
+      'Question: When will the meeting now take place?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'When will the meeting now take place?',
+    choices: [
+      'On Thursday as planned.',
+      'On Friday morning.',
+      'On Monday at ten.',
+      'It has been cancelled.',
+    ],
+    correctIndex: 2,
+    explanation: '最終的に「Monday at ten（月曜10時）」で合意し、B が招待を送り直すと述べている。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre1',
+    audioKey: 'lpre1_p1_11.mp3',
+    transcripts: [
+      'A: A customer called to say the software keeps crashing after the latest update.',
+      'B: Have we received other reports of the same problem?',
+      'A: Yes, several. The engineering team thinks it is a compatibility issue.',
+      'B: Let us send affected users a temporary fix while we prepare a full update.',
+      'Question: What does the man decide to do about the problem?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What does the man decide to do about the problem?',
+    choices: [
+      'Ignore the complaints.',
+      'Cancel the latest update entirely.',
+      'Blame the customers.',
+      'Send a temporary fix while preparing a full update.',
+    ],
+    correctIndex: 3,
+    explanation:
+        'B は「send affected users a temporary fix while we prepare a full update（本格修正の準備中に応急処置を送る）」と決めている。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre1',
+    audioKey: 'lpre1_p1_12.mp3',
+    transcripts: [
+      'A: Have you decided between the two candidates for the analyst position?',
+      'B: It is close. One has more experience, but the other showed real enthusiasm and fresh ideas.',
+      'A: Experience matters, but enthusiasm can be hard to teach.',
+      'B: True. I am leaning toward the one with fresh ideas.',
+      'Question: Which candidate does the woman favor?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'Which candidate does the woman favor?',
+    choices: [
+      'The one with enthusiasm and fresh ideas.',
+      'The one with more experience.',
+      'Neither candidate.',
+      'Both candidates equally.',
+    ],
+    correctIndex: 0,
+    explanation:
+        'B は「leaning toward the one with fresh ideas（新しい発想を持つ方に傾いている）」と述べている。',
+  ),
 ];
 
 const _gradePre1Part2 = <ListeningItem>[
@@ -3555,6 +3624,82 @@ const _gradePre1Part2 = <ListeningItem>[
     explanation:
         '本文に「people who had caught ... cowpox did not become sick with ... smallpox（牛痘にかかった人は天然痘にかからなかった）」という観察が最初のワクチンにつながったとある。',
   ),
+  // ── Studio expansion 2026-06-13 (cont.): 準1級 第2部 to 12 (→29 total) ─────────
+  ListeningItem(
+    part: 2,
+    grade: 'pre1',
+    audioKey: 'lpre1_p2_10.mp3',
+    transcripts: [
+      'Forgetting is often seen as a weakness, but scientists now believe it '
+          'serves an important purpose. The brain cannot store every detail it '
+          'encounters, so it filters out information that seems unimportant. This '
+          'allows us to focus on what matters and to adapt to new situations. In '
+          'fact, people who remember too much detail can find it difficult to '
+          'think flexibly. Forgetting, therefore, may be a necessary part of '
+          'healthy thinking.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'According to the passage, why might forgetting be useful?',
+    choices: [
+      'It helps us focus on what matters and stay flexible.',
+      'It makes the brain work much harder.',
+      'It improves physical health.',
+      'It increases total memory capacity.',
+    ],
+    correctIndex: 0,
+    explanation:
+        '本文に「focus on what matters and to adapt to new situations（重要なことに集中し新しい状況に適応できる）」と忘却の利点がある。',
+  ),
+  ListeningItem(
+    part: 2,
+    grade: 'pre1',
+    audioKey: 'lpre1_p2_11.mp3',
+    transcripts: [
+      'As cities expand, they often replace natural habitats with buildings and '
+          'roads, threatening local wildlife. However, recent studies show that '
+          'thoughtful urban design can help. Green roofs, tree-lined streets, and '
+          'connected parks allow some species to survive and even thrive within '
+          'cities. Researchers argue that cities do not have to be hostile to '
+          'nature; with careful planning, they can become part of the solution '
+          'rather than only a problem.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'What do recent studies show about cities and wildlife?',
+    choices: [
+      'Cities can never support any wildlife.',
+      'Thoughtful urban design can help some species survive.',
+      'Wildlife always prefers city centers.',
+      'Parks mainly harm local species.',
+    ],
+    correctIndex: 1,
+    explanation:
+        '本文に「thoughtful urban design can help（よく考えた都市設計が役立つ）」とあり、緑の屋根や公園で一部の種が生き延びられるとある。',
+  ),
+  ListeningItem(
+    part: 2,
+    grade: 'pre1',
+    audioKey: 'lpre1_p2_12.mp3',
+    transcripts: [
+      'Recycling is widely praised as good for the environment, but its economics '
+          'are complex. Collecting, sorting, and processing used materials can be '
+          'expensive, and the value of recycled products depends heavily on market '
+          'demand. When demand is low, some recyclables end up in landfills '
+          'despite being collected. Experts argue that designing products to be '
+          'easier to recycle, and creating stronger markets for recycled goods, '
+          'are essential for making recycling truly sustainable.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'What happens to some recyclables when demand is low?',
+    choices: [
+      'They are exported abroad.',
+      'They are burned for energy.',
+      'They become much more valuable.',
+      'They end up in landfills despite being collected.',
+    ],
+    correctIndex: 3,
+    explanation:
+        '本文に「some recyclables end up in landfills despite being collected（回収されても埋め立てられる）」とある。',
+  ),
 ];
 
 const _gradePre1Part3 = <ListeningItem>[
@@ -3648,6 +3793,31 @@ const _gradePre1Part3 = <ListeningItem>[
     correctIndex: 0,
     explanation:
         '「classes will start two hours late, at ten（授業は2時間遅れの10時に始まる）」。',
+  ),
+  // ── Studio expansion 2026-06-13: 準1級 第3部 Real-Life to 5 (→29 total) ────────
+  ListeningItem(
+    part: 3,
+    grade: 'pre1',
+    audioKey: 'lpre1_p3_05.mp3',
+    transcripts: [
+      'Attention library visitors. Our self-checkout machines are temporarily '
+          'out of service due to a system update. If you wish to borrow books '
+          'today, please bring them to the main desk on the first floor, where '
+          'staff will check them out for you. We expect the machines to be working '
+          'again by tomorrow morning.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question:
+        '状況: あなたは図書館で本を借りたい利用者です。\nWhat should the visitor do to borrow books today?',
+    choices: [
+      'Use the self-checkout machines.',
+      'Bring the books to the main desk on the first floor.',
+      'Come back tomorrow morning.',
+      'Borrow the books online instead.',
+    ],
+    correctIndex: 1,
+    explanation:
+        '放送は「bring them to the main desk on the first floor（1階のメインデスクに持っていく）」よう案内している。自動貸出機は更新中で使えない。',
   ),
 ];
 
