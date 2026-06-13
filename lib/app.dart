@@ -1371,3 +1371,45 @@ class _AchievementUnlockHostState extends State<AchievementUnlockHost>
     );
   }
 }
+
+// ---------------------------------------------------------------------------
+// Child-safe error fallback
+// ---------------------------------------------------------------------------
+
+/// Replaces Flutter's default error box — a bare grey container in release — with
+/// a calm, child-safe screen, so an uncaught build error never shows a child a
+/// scary or blank screen. Wired in [bootstrapApp] for RELEASE builds only (debug
+/// keeps Flutter's detailed red error for developers). Self-contained: it renders
+/// in place of whatever failed, so it assumes no inherited widgets are available.
+Widget friendlyErrorWidget(FlutterErrorDetails details) {
+  return Directionality(
+    textDirection: TextDirection.ltr,
+    child: Material(
+      color: dqNight0,
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(28),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.sentiment_dissatisfied_rounded,
+                  color: dqGold, size: 48),
+              const SizedBox(height: 16),
+              Text(
+                'あれ？ ちょっと うまく いかなかったみたい。',
+                textAlign: TextAlign.center,
+                style: dqText(size: 16, w: FontWeight.w700, color: dqInk),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'まえの がめんに もどってみてね。',
+                textAlign: TextAlign.center,
+                style: dqText(size: 13, color: dqInk),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
+}

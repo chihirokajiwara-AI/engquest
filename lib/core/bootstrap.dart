@@ -29,6 +29,13 @@ Future<void> bootstrapApp(Flavor flavor) async {
 
   WidgetsFlutterBinding.ensureInitialized();
 
+  // A child must never see Flutter's default error box (a bare grey container in
+  // release) if a widget throws during build. Show a calm, child-safe screen
+  // instead. Release-only: debug keeps Flutter's detailed red error for devs.
+  if (kReleaseMode) {
+    ErrorWidget.builder = friendlyErrorWidget;
+  }
+
   // 1. SharedPreferences — pre-warm so the first frame has data.
   await PreferencesService.getInstance();
 
