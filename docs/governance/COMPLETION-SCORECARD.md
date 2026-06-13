@@ -33,7 +33,7 @@ needs CEO go (spend / secret / prod / legal / art-gen).
 | # | item | now | type | next action |
 |---|------|----|------|-------------|
 |13|FSRS|75|BUILD|tune params|
-|14|適応難易度|20|BUILD|per-child difficulty (T12) — SELF-BUILDABLE|
+|14|適応難易度|38|BUILD|2026-06-14: grade is now CHANGEABLE post-onboarding (Settings picker; was immutable → child stuck + MasteryAdvisor advice was a dead-end). Placement→grade + mastery advice (advance/review) wired. REMAINING: continuous-θ WITHIN-grade item difficulty (per-item difficulty data needed); one-tap "advance" from the advice card|
 |15|teach-why|78|BUILD|reading in mock-review, grammar 解説|
 |16|hint scaffold|90|BUILD|2026-06-14: hint present on ALL practice surfaces — vocab=meaning-reveal, reading+conversation=50/50 "narrow to 2" (合格率-excluded), listening=replay+caption (excl), nazo=3-tier coin ladder. REMAINING: tune copy / per-screen polish only|
 |17|音声強化|65|GATE:backend|TTS coverage needs backend/static gen|
