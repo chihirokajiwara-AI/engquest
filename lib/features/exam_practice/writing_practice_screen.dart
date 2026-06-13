@@ -474,6 +474,42 @@ const List<WritingPrompt> kWritingPrompts = [
         'fake positive reviews or post fake negative ones about rivals. Experts '
         'therefore advise reading many reviews and trusting no single one.',
   ),
+  // Depth/parity 2026-06-14: a 2nd 準2級プラス 要約 so the 2025 grade matches peers
+  // (3 writing prompts: 2 of its main type + 1 opinion).
+  WritingPrompt(
+    id: 'pre2plus_summary_2',
+    type: WritingTaskType.summary,
+    instructionJa:
+        '次の英文を読み、その内容を英語で要約してください。\n45語以上55語以内で書いてください。\n本文の言葉をそのまま書き写すことなく、自分の言葉でまとめてください。',
+    instructionEn: 'Read the following passage and summarize it in English.\n'
+        'Use 45–55 words. Do NOT copy sentences verbatim — paraphrase.',
+    stimulus:
+        'Buying secondhand items has become increasingly popular in recent '
+        'years. Instead of always buying new products, many people now look for '
+        'used clothes, furniture, and electronics in secondhand shops or on '
+        'online marketplaces. There are several reasons for this trend. '
+        'Secondhand goods are usually much cheaper than new ones, which helps '
+        'people save money. In addition, reusing items is good for the '
+        'environment, because it reduces waste and the need to produce new '
+        'things. Some shoppers also enjoy the fun of searching for unique or '
+        'rare items that are no longer sold in stores. As a result, secondhand '
+        'shopping is now seen as a smart and responsible choice.',
+    underlinedQuestions: [],
+    wordCountMin: 45,
+    wordCountMax: 55,
+    rubricPoints: [
+      '内容 / Content',
+      '構成 / Organization',
+      '語彙 / Vocabulary',
+      '文法 / Grammar',
+    ],
+    modelAnswer:
+        'Secondhand shopping has grown popular as people choose used clothing, '
+        'furniture, and gadgets over new ones. It is cheaper, so shoppers save '
+        'money, and reusing things protects the environment by cutting waste. '
+        'Some buyers also enjoy hunting for rare finds. Today, many people '
+        'consider buying used a wise and eco-friendly habit.',
+  ),
   WritingPrompt(
     id: 'pre2plus_opinion_1',
     type: WritingTaskType.opinion,
