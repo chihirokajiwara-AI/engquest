@@ -35,7 +35,7 @@ needs CEO go (spend / secret / prod / legal / art-gen).
 |13|FSRS|75|BUILD|tune params|
 |14|適応難易度|20|BUILD|per-child difficulty (T12) — SELF-BUILDABLE|
 |15|teach-why|78|BUILD|reading in mock-review, grammar 解説|
-|16|hint scaffold|82|BUILD|extend to all screens|
+|16|hint scaffold|85|BUILD|2026-06-14: reading now has a 50/50 "narrow to 2" lifeline (合格率-excluded). vocab=meaning-reveal hint; nazo=3-tier coin ladder; listening=replay+caption (excl). REMAINING: conversation 大問2 lifeline|
 |17|音声強化|65|GATE:backend|TTS coverage needs backend/static gen|
 |18|連続ミス励まし|85|BUILD|done 4 screens; tune copy|
 |19|メタ認知/calibration|25|BUILD|"how sure are you?" + calibration — SELF-BUILDABLE|
