@@ -2076,3 +2076,10 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
     ),
   ];
 }
+
+/// Test-only: whether the reading practice screen serves real passages for a
+/// (grade, sectionId) — i.e. it would NOT show the 準備中 empty state. Used by the
+/// exam-surface completeness gate so a config section can never ship as 準備中.
+@visibleForTesting
+bool readingHasPassagesForTest(String grade, String sectionId) =>
+    _ReadingPracticeScreenState._getPassages(grade, sectionId).isNotEmpty;
