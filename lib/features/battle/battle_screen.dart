@@ -68,6 +68,22 @@ String _gradeJp(Grade g) {
   }
 }
 
+// ── Cumulative deck stats (achievement / progress inputs) ─────────────────────
+//
+// The deck merges every grade vocab id with the child's PERSISTED FSRS state, so
+// these counts are cumulative across sessions (not this session only). Feeding a
+// per-session count to the achievement check made practice_50/200/500 unreachable;
+// feeding the whole deck length over-reported. Pure + public so the invariant is
+// unit-tested. INVARIANT: masteredCardCount <= practicedCardCount (review ⊂ not-new).
+
+/// Cumulative mastered = cards in the FSRS review state.
+int masteredCardCount(Iterable<FSRSCard> deck) =>
+    deck.where((c) => c.state == CardState.review).length;
+
+/// Cumulative practiced = cards that have LEFT the new state (studied ≥ once).
+int practicedCardCount(Iterable<FSRSCard> deck) =>
+    deck.where((c) => c.state != CardState.newCard).length;
+
 // ── Session result per card ───────────────────────────────────────────────────
 class _CardResult {
   final String word;
@@ -544,9 +560,15 @@ class _BattleScreenState extends State<BattleScreen>
         _sessionResults.fold(0.0, (sum, r) => sum + r.grade.index1.toDouble());
     final avgScore = gradeSum / total;
 
-    // Count 'review' state cards as mastered
-    final masteredCount =
-        _deck.where((c) => c.state == CardState.review).length;
+    // Cumulative mastered/practiced across all sessions (the deck merges
+    // persisted FSRS state). The achievement check previously received `total`
+    // (THIS session's size, ~10-20), so the monotonic practice progress never
+    // reached practice_50/200/500's targets and those badges could never unlock
+    // — even after the child had practiced hundreds of words. The Firestore
+    // record used `_deck.length` (the WHOLE grade vocab), over-reporting the
+    // opposite way. Both now use the same honest cumulative count.
+    final masteredCount = masteredCardCount(_deck);
+    final practicedCount = practicedCardCount(_deck);
 
     // Real elapsed study time (P0.1) — computed from session start timestamp.
     final minutes =
@@ -563,15 +585,16 @@ class _BattleScreenState extends State<BattleScreen>
       minutes: minutes,
       avgScore: avgScore,
       totalMastered: masteredCount,
-      totalPracticed: _deck.length,
+      totalPracticed: practicedCount,
       streak: 1, // server will recalculate from session history
     )
         .catchError((_) {
       // Non-fatal: offline writes queued by Firestore SDK
     });
 
-    // Check achievements after session (T06)
-    _checkAchievements(uid, masteredCount, total);
+    // Check achievements after session (T06). Use the CUMULATIVE practiced count,
+    // not `total` (this session only) — else practice_50/200/500 never unlock.
+    _checkAchievements(uid, masteredCount, practicedCount);
   }
 
   // ── Achievement check (T06) ───────────────────────────────────────────────
