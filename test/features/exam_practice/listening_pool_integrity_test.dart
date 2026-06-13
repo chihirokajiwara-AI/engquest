@@ -74,6 +74,25 @@ void main() {
                   '("${it.question}") but the clip has only ${liveLines.length} '
                   'transcript line(s) — gender is not conveyable by a single voice');
         }
+
+        // The question is duplicated: the on-screen [question] field AND the
+        // spoken "Question:" transcript line (the TTS narrator reads the latter).
+        // They MUST agree, or the child reads one thing and hears another. Locks
+        // the 2026-06-14 speaker-gender fix (30 items): an edit to one occurrence
+        // but not the other now fails CI. Items without a spoken Question line
+        // (5級/4級 第2部 are dialogue-only) are skipped.
+        final qLine = it.transcripts.firstWhere(
+          (t) => t.trimLeft().startsWith('Question:'),
+          orElse: () => '',
+        );
+        if (qLine.isNotEmpty) {
+          final spoken =
+              qLine.replaceFirst(RegExp(r'^\s*Question:\s*'), '').trim();
+          expect(spoken, equals(it.question.trim()),
+              reason:
+                  '$id: the spoken "Question:" transcript line differs from '
+                  'the displayed question field — audio↔text desync');
+        }
       }
     });
   }
