@@ -234,9 +234,9 @@ void main() {
     testWidgets('advances through questions and shows results', (tester) async {
       await pumpReading(tester, '5', grade5Section);
 
-      // Answer all 4 questions (2 passages × 2 questions). Tap whatever choice
+      // Answer all 6 questions (3 passages × 2 questions). Tap whatever choice
       // is in slot 0 — we only need to advance, not be correct.
-      for (int i = 0; i < 4; i++) {
+      for (int i = 0; i < 6; i++) {
         await tester.tap(find.byKey(const ValueKey('reading_choice_0')));
         await tester.pumpAndSettle();
         await tester.tap(find.text('次へ'));
@@ -259,7 +259,7 @@ void main() {
           () => ReadingPracticeScreen.minReadTime = const Duration(seconds: 2));
 
       await pumpReading(tester, '5', grade5Section);
-      for (int i = 0; i < 4; i++) {
+      for (int i = 0; i < 6; i++) {
         await tester.tap(find.byKey(const ValueKey('reading_choice_0')));
         await tester.pumpAndSettle();
         await tester.tap(find.text('次へ'));
@@ -334,15 +334,17 @@ void main() {
     testWidgets('results show pass when >= 60%', (tester) async {
       await pumpReading(tester, '5', grade5Section);
 
-      // Answer all 4 correctly by their TEXT (positions are now shuffled).
+      // Answer all 6 correctly by their TEXT (positions are now shuffled).
       await answer(tester, 'On Saturday, November 15');
       await answer(tester, 'Sell rice balls');
       await answer(tester, 'A cat');
       await answer(tester, "On Yuki's bed");
+      await answer(tester, 'A rabbit.');
+      await answer(tester, 'Carrots and lettuce.');
 
       // Should show pass result
       expect(find.text('合格（ごうかく）ライン到達（とうたつ）！'), findsOneWidget);
-      expect(find.text('4 / 4 正解 (100%)'), findsOneWidget);
+      expect(find.text('6 / 6 正解 (100%)'), findsOneWidget);
     });
   });
 }

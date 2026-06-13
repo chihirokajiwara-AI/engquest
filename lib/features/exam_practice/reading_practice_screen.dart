@@ -746,6 +746,42 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
         ),
       ],
     ),
+    // Depth expansion 2026-06-14: more practice variety (reading).
+    _ReadingPassage(
+      title: 'My Favorite Animal',
+      type: 'email',
+      content: 'Hello. My name is Emma. I like animals very much. My favorite '
+          'animal is the rabbit. I have a white rabbit at home. Its name is '
+          'Snow. Snow likes to eat carrots and lettuce. Every morning, I give '
+          'Snow some water and clean its box. I love playing with Snow after '
+          'school.',
+      questions: [
+        _ComprehensionQuestion(
+          question: 'What animal does Emma like best?',
+          choices: [
+            'A cat.',
+            'A dog.',
+            'A rabbit.',
+            'A bird.',
+          ],
+          correctIdx: 2,
+          explanation: '"My favorite animal is the rabbit." とあるね。'
+              'エマの すきな どうぶつは「ウサギ（rabbit）」だよ。',
+        ),
+        _ComprehensionQuestion(
+          question: 'What does Snow like to eat?',
+          choices: [
+            'Rice and fish.',
+            'Carrots and lettuce.',
+            'Bread and milk.',
+            'Meat.',
+          ],
+          correctIdx: 1,
+          explanation: '"Snow likes to eat carrots and lettuce." とあるよ。'
+              'ニンジンと レタスを たべるんだ。',
+        ),
+      ],
+    ),
   ];
 
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -841,6 +877,53 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
           explanation: '"Please sign up at the front desk by March 15." '
               'とあるよ。だから「3月15日までに申し込む（sign up by March 15）」が正解。'
               '（材料は用意されているよ：Materials provided.）',
+        ),
+      ],
+    ),
+    // Depth expansion 2026-06-14: more practice variety (reading).
+    _ReadingPassage(
+      title: 'NOTICE: New City Library',
+      type: 'notice',
+      content: 'The new city library will open next Monday. It is near the '
+          'train station. The library has more than 50,000 books in English and '
+          'Japanese. You can also use the computers there for free. The library '
+          'is open from 9 a.m. to 8 p.m. every day except Wednesday. To borrow '
+          'books, please bring your student card or ID card.',
+      questions: [
+        _ComprehensionQuestion(
+          question: 'Where is the new library?',
+          choices: [
+            'Near the school.',
+            'Near the train station.',
+            'Near the park.',
+            'In the city hall.',
+          ],
+          correctIdx: 1,
+          explanation: '"It is near the train station." とあるね。'
+              '駅（えき）の ちかくだよ。',
+        ),
+        _ComprehensionQuestion(
+          question: 'When is the library closed?',
+          choices: [
+            'On Monday.',
+            'On Sunday.',
+            'On Wednesday.',
+            'It is never closed.',
+          ],
+          correctIdx: 2,
+          explanation: '"open ... every day except Wednesday" とあるよ。'
+              '水曜日（すいようび）は おやすみ。',
+        ),
+        _ComprehensionQuestion(
+          question: 'What do you need to borrow books?',
+          choices: [
+            'Money.',
+            'A student card or ID card.',
+            'A library bag.',
+            'A computer.',
+          ],
+          correctIdx: 1,
+          explanation: '"please bring your student card or ID card" とあるね。',
         ),
       ],
     ),
