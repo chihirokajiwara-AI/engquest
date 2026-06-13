@@ -655,13 +655,15 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
         return _grade3Passages;
       case 'pre2':
         return _pre2Passages;
+      case 'pre2plus':
+        return _pre2PlusPassages;
       case '2':
         return _grade2Passages;
       case 'pre1':
         return _pre1Passages;
       default:
-        // No dedicated passages for this grade (e.g. 準2級プラス) → empty, so the
-        // screen shows a 準備中 state rather than silently serving 3級 passages.
+        // No dedicated passages for this grade → empty, so the screen shows a
+        // 準備中 state rather than silently serving another grade's passages.
         return const [];
     }
   }
@@ -1493,6 +1495,140 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
           ],
           correctIdx: 2,
           explanation: '利点に気づく人が増え、自転車利用者は今後も「増え続ける」と専門家は考えている。grow が適切。',
+        ),
+      ],
+    ),
+  ];
+
+  // 準2級プラス (A2–B1) — 大問3 長文の内容一致選択 (reading comprehension)
+  static const _pre2PlusPassages = [
+    _ReadingPassage(
+      title: 'Community Gardens',
+      type: 'article',
+      content:
+          'In recent years, community gardens have appeared in many towns and '
+          'cities. A community garden is a shared piece of land where local '
+          'people can grow their own vegetables, fruits, and flowers. Each person '
+          'or family usually rents a small plot for a low yearly fee.\n\n'
+          'These gardens offer many benefits. First, they give people who live in '
+          'apartments a chance to grow fresh food, even if they have no garden of '
+          'their own. Second, gardening is good exercise and can reduce stress. '
+          'Many gardeners say that spending time outdoors makes them feel calmer '
+          'and happier.\n\n'
+          'Community gardens also bring people together. Neighbors who might never '
+          'have spoken often become friends while working side by side. '
+          'Experienced gardeners share advice with beginners, and some gardens '
+          'hold events where members cook and eat the food they have grown.\n\n'
+          'Of course, running a community garden takes effort. Members must agree '
+          'on rules, share tools, and take turns caring for shared areas such as '
+          'paths and water taps. Despite these challenges, the number of community '
+          'gardens continues to grow, as more people discover the joy of growing '
+          'food and making friends at the same time.',
+      questions: [
+        _ComprehensionQuestion(
+          question: 'What is a community garden?',
+          choices: [
+            'A large public park with no plants.',
+            'A shared piece of land where local people grow plants.',
+            'A private farm owned by one family.',
+            'A store that sells vegetables.',
+          ],
+          correctIdx: 1,
+          explanation:
+              '本文（ほんぶん）に "a shared piece of land where local people can grow their own vegetables" とあるね。地域（ちいき）の人がみんなで使（つか）う土地（とち）だよ。',
+        ),
+        _ComprehensionQuestion(
+          question:
+              'According to the passage, what is one benefit for people who live in apartments?',
+          choices: [
+            'They can sell their vegetables for money.',
+            'They get free apartments.',
+            'They can grow fresh food even without their own garden.',
+            'They no longer need to buy any food.',
+          ],
+          correctIdx: 2,
+          explanation:
+              '"give people who live in apartments a chance to grow fresh food, even if they have no garden of their own" とあるね。',
+        ),
+        _ComprehensionQuestion(
+          question: 'How do community gardens bring people together?',
+          choices: [
+            'By holding sports competitions.',
+            'By giving away free land.',
+            'Neighbors become friends while working side by side.',
+            'By offering paid cooking classes.',
+          ],
+          correctIdx: 2,
+          explanation:
+              '"Neighbors who might never have spoken often become friends while working side by side." とあるよ。',
+        ),
+        _ComprehensionQuestion(
+          question: 'What is one challenge of running a community garden?',
+          choices: [
+            'The vegetables are very expensive.',
+            'There is never enough sunlight.',
+            'Only experts are allowed to join.',
+            'Members must agree on rules and share tools.',
+          ],
+          correctIdx: 3,
+          explanation:
+              '"Members must agree on rules, share tools, and take turns caring for shared areas" とあるね。',
+        ),
+      ],
+    ),
+    _ReadingPassage(
+      title: 'NOTICE: Spring Beach Cleanup',
+      type: 'notice',
+      content:
+          'The Greenport Town Council invites all residents to join our annual '
+          'beach cleanup on Saturday, April 12th. Last year, more than 200 '
+          'volunteers collected over 500 bags of trash from our beaches. This '
+          'year, we hope to do even better.\n\n'
+          'Volunteers should meet at the main beach entrance at 9:00 a.m. Gloves '
+          'and trash bags will be provided, but please bring your own water bottle '
+          'and wear a hat, as the weather may be sunny and warm. The cleanup will '
+          'finish at noon, and a free lunch will be served to all volunteers at '
+          'the beach cafe.\n\n'
+          'Children under 12 are welcome but must be accompanied by an adult. If '
+          'it rains heavily, the event will be moved to the following Saturday, '
+          'April 19th. For more information, please call the town office or visit '
+          'our website.',
+      questions: [
+        _ComprehensionQuestion(
+          question: 'What should volunteers bring?',
+          choices: [
+            'Their own gloves and trash bags.',
+            'Their own water bottle.',
+            'Their own lunch.',
+            'A small boat.',
+          ],
+          correctIdx: 1,
+          explanation:
+              '"Gloves and trash bags will be provided, but please bring your own water bottle" とあるね。手袋（てぶくろ）とゴミ袋（ぶくろ）は用意（ようい）される。',
+        ),
+        _ComprehensionQuestion(
+          question: 'What happens if it rains heavily?',
+          choices: [
+            'The event is cancelled completely.',
+            'The event starts earlier.',
+            'Volunteers clean indoors.',
+            'The event moves to the following Saturday.',
+          ],
+          correctIdx: 3,
+          explanation:
+              '"If it rains heavily, the event will be moved to the following Saturday, April 19th." とあるよ。',
+        ),
+        _ComprehensionQuestion(
+          question: 'What is provided to volunteers at noon?',
+          choices: [
+            'A free T-shirt.',
+            'A free lunch.',
+            'A cash reward.',
+            'A boat trip.',
+          ],
+          correctIdx: 1,
+          explanation:
+              '"a free lunch will be served to all volunteers at the beach cafe." とあるね。',
         ),
       ],
     ),

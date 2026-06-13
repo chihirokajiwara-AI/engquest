@@ -146,6 +146,25 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('準2級プラス 大問3 serves a real comprehension passage, not 準備中',
+      (tester) async {
+    const pre2PlusCompSection = ExamSection(
+      id: 'p2p_r3',
+      nameJa: '筆記3: 長文の内容一致選択',
+      nameEn: 'Reading 3: Reading Comprehension',
+      type: ExamSectionType.readingComprehension,
+      questionCount: 8,
+      timeLimitMinutes: 22,
+      description: 'テスト用',
+    );
+    await pumpReading(tester, 'pre2plus', pre2PlusCompSection);
+    expect(find.textContaining('Community Gardens'), findsOneWidget,
+        reason: 'pre2plus comprehension must render its first passage');
+    expect(find.textContaining('準備中'), findsNothing,
+        reason: 'pre2plus reading 大問3 is no longer a 準備中 gap');
+    expect(tester.takeException(), isNull);
+  });
+
   Future<void> answer(WidgetTester tester, String correct) async {
     await tester.tap(choice(correct));
     await tester.pumpAndSettle();
