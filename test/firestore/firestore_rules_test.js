@@ -342,6 +342,52 @@ async function runTests() {
       );
     });
   });
+
+  await describe('10. Link codes → no enumeration (COPPA isolation)', async () => {
+    // The hole: `allow read` on link_codes also permits LIST, so any anon user
+    // could enumerate every code + childUid, then self-assert a parent_link to
+    // any child and read that child's data. Fix splits get (known code) from a
+    // childUid-constrained list.
+    await it('attacker CANNOT enumerate all link codes (unconstrained list)',
+      async () => {
+        const db = authAs(UID_B);
+        await assertFails(db.collection('link_codes').get());
+      });
+
+    await it('attacker CANNOT list codes filtered to ANOTHER child', async () => {
+      const db = authAs(UID_B);
+      await assertFails(
+        db.collection('link_codes').where('childUid', '==', UID_A).get()
+      );
+    });
+
+    await it('a child CAN list ONLY their own codes (own-childUid cleanup)',
+      async () => {
+        const db = authAs(UID_A);
+        await assertSucceeds(
+          db.collection('link_codes').where('childUid', '==', UID_A).get()
+        );
+      });
+
+    await it('a parent CAN get a code by its id (the redeem path)', async () => {
+      const db = authAs(UID_B);
+      await assertSucceeds(db.collection('link_codes').doc('123456').get());
+    });
+
+    await it('a child CAN create a code for their OWN uid', async () => {
+      const db = authAs(UID_A);
+      await assertSucceeds(
+        db.collection('link_codes').doc('654321').set({ childUid: UID_A })
+      );
+    });
+
+    await it('a user CANNOT create a code for ANOTHER child uid', async () => {
+      const db = authAs(UID_B);
+      await assertFails(
+        db.collection('link_codes').doc('777777').set({ childUid: UID_A })
+      );
+    });
+  });
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────────

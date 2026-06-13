@@ -145,9 +145,20 @@ service cloud.firestore {
     // ── Link codes (temporary child-parent linking) ──────────────────────
 
     // link_codes/{code} — 6-digit codes for parent-child account linking.
-    // Child creates (only their own UID), any signed-in user can read.
+    // The code is a SHARED SECRET shown on the child's screen; a parent who
+    // knows it reads that one doc to learn the childUid, then links.
     match /link_codes/{code} {
-      allow read: if isSignedIn();
+      // GET by the known code id — the parent redeeming a code they were shown.
+      allow get: if isSignedIn();
+      // LIST is restricted to a child querying their OWN codes (the app deletes
+      // a child's stale codes before issuing a new one). A blanket `allow read`
+      // also permits an unconstrained collection LIST, letting ANY anonymous
+      // user enumerate every code + childUid, self-assert a parent_link to any
+      // child, and read that child's data (COPPA isolation breach). Constraining
+      // each returned doc to the requester blocks enumeration while keeping the
+      // child's own cleanup query working.
+      allow list: if isSignedIn()
+        && resource.data.childUid == request.auth.uid;
       allow create: if isSignedIn()
         && request.resource.data.childUid == request.auth.uid;
       allow delete: if isSignedIn()
