@@ -51,6 +51,11 @@ void main() {
     expect(items.length, 5);
     // (Coverage is asserted via the widget reveal above; this guards count.)
   });
+  // 大問2 会話 choices are shuffled at load (_shuffleConversationChoices), so a
+  // 解説 must justify by the answer's CONTENT, never by a choice position — the
+  // same defect found in the reading pool (idxN/選択肢/番目). This locks every
+  // authored 会話 item to a non-empty, position-free teach-why 解説.
+  final positionRef = RegExp(r'idx\s*\d|[0-9０-９]番|選択肢|番目');
   for (final grade in ['5', '4', '3', 'pre2']) {
     test('英検$grade級 会話 items are well-formed 大問2 (4 choices, valid key)', () {
       final items = conversationItemsForTest(grade);
@@ -70,6 +75,14 @@ void main() {
           expect(c.trim(), isNotEmpty,
               reason: 'empty choice in ${item.choices}');
         }
+        // Teach-why 解説: present and position-free (choices shuffle at render).
+        expect(item.explanation != null && item.explanation!.trim().isNotEmpty,
+            isTrue,
+            reason: 'grade $grade: item missing 解説 — the reveal would teach '
+                'nothing for ${item.choices}');
+        expect(positionRef.hasMatch(item.explanation!), isFalse,
+            reason: 'grade $grade: 解説 references a choice position '
+                '(choices shuffle): "${item.explanation}"');
       }
     });
   }

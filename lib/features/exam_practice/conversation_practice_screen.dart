@@ -1024,12 +1024,17 @@ class _ConvExplanationPanel extends StatelessWidget {
   }
 }
 
-/// Test-only: the choices + correct index per conversation item, so the content
-/// invariant (4 distinct non-empty choices, valid correctIdx) can be asserted
-/// in CI without exposing the private problem type.
+/// Test-only: the choices + correct index + 解説 per conversation item, so the
+/// content invariants (4 distinct non-empty choices, valid correctIdx, and a
+/// non-empty position-free teach-why 解説) can be asserted in CI without exposing
+/// the private problem type.
 @visibleForTesting
-List<({List<String> choices, int correctIdx})> conversationItemsForTest(
-        String grade) =>
-    _ConversationPracticeScreenState._getProblems(grade)
-        .map((p) => (choices: p.choices, correctIdx: p.correctIdx))
-        .toList();
+List<({List<String> choices, int correctIdx, String? explanation})>
+    conversationItemsForTest(String grade) =>
+        _ConversationPracticeScreenState._getProblems(grade)
+            .map((p) => (
+                  choices: p.choices,
+                  correctIdx: p.correctIdx,
+                  explanation: p.explanation,
+                ))
+            .toList();
