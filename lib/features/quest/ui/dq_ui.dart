@@ -298,6 +298,12 @@ class DqPortrait extends StatelessWidget {
       child: imageAsset != null
           ? Image.asset(imageAsset!,
               fit: BoxFit.cover,
+              // Decode to the on-screen size, not the asset's native resolution:
+              // a 1024px master sprite shown in a ~56px circle otherwise rasterizes
+              // to ~4MB RAM and a main-thread decode hit (#perf flaw-hunt). cacheWidth
+              // caps the decode at the displayed pixels. (Same pattern as scene_view.)
+              cacheWidth:
+                  (size * MediaQuery.devicePixelRatioOf(context)).round(),
               errorBuilder: (_, __, ___) => Center(
                   child: Text(emoji ?? '👤',
                       style: TextStyle(fontSize: size * 0.5))))

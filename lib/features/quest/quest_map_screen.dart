@@ -417,7 +417,7 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const DqPortrait(
-                imageAsset: 'assets/art/masters/hero.png',
+                imageAsset: 'assets/art/masters/hero.webp',
                 emoji: '🧭',
                 size: 48),
             const SizedBox(width: 14),
