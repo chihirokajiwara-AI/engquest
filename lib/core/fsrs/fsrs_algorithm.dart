@@ -73,11 +73,16 @@ class FSRSAlgorithm {
 
   // ── Subsequent-review difficulty ──────────────────────────────────────────
 
-  /// D′ = D − w₆·(G−3)  then mean-revert: D′ + w₇·(w₄ − D′)
+  /// D′ = D − w₆·(G−3)  then mean-revert toward D₀(4): D′ + w₇·(D₀(4) − D′).
+  /// The published FSRS reversion target is D₀(4) — the EASY-grade initial
+  /// difficulty (≈3.28) — NOT the raw weight w[4] (≈7.21 = the Again-grade D₀(1)).
+  /// Using w[4] drove well-known cards to D≈7.21, halving the (11−D) stability
+  /// factor → intervals ~51% short → mastered vocab over-reviewed ~2× (fix
+  /// 2026-06-13, verified vs expertium FSRS spec + a convergence unit test).
   double _nextDifficulty(double d, Grade g) {
     final dPrime = d - w[6] * (g.index1 - 3);
-    // Mean reversion toward initial difficulty
-    final reverted = dPrime + w[7] * (w[4] - dPrime);
+    final target = initialDifficulty(Grade.easy); // D₀(4)
+    final reverted = dPrime + w[7] * (target - dPrime);
     return reverted.clamp(1.0, 10.0);
   }
 
