@@ -1164,10 +1164,10 @@ const _grade3Part1 = <ListeningItem>[
     transcripts: [
       'A: Do you have any plans for the summer holidays?',
       'B: Yes, I\'m going to volunteer at a local animal shelter.',
-      'Question: What is the girl going to do during the summer holidays?',
+      'Question: What is the boy going to do during the summer holidays?',
     ],
     questionType: ListeningQuestionType.dialogueContent,
-    question: 'What is the girl going to do during the summer holidays?',
+    question: 'What is the boy going to do during the summer holidays?',
     choices: [
       'Take a language course.',
       'Travel overseas.',
@@ -1206,10 +1206,10 @@ const _grade3Part1 = <ListeningItem>[
     transcripts: [
       'A: What kind of movies do you like?',
       'B: I prefer documentaries. I find action movies too loud.',
-      'Question: What kind of movies does the girl prefer?',
+      'Question: What kind of movies does the boy prefer?',
     ],
     questionType: ListeningQuestionType.dialogueContent,
-    question: 'What kind of movies does the girl prefer?',
+    question: 'What kind of movies does the boy prefer?',
     choices: [
       'Action movies.',
       'Comedy movies.',
@@ -1269,10 +1269,10 @@ const _grade3Part1 = <ListeningItem>[
     transcripts: [
       'A: You look tired today. Did you stay up late?',
       'B: Yeah, I was practicing the piano for the school concert.',
-      'Question: Why is the girl tired?',
+      'Question: Why is the boy tired?',
     ],
     questionType: ListeningQuestionType.dialogueContent,
-    question: 'Why is the girl tired?',
+    question: 'Why is the boy tired?',
     choices: [
       'She studied all night.',
       'She practiced the piano.',
@@ -1310,10 +1310,10 @@ const _grade3Part1 = <ListeningItem>[
     transcripts: [
       'A: Have you ever been to the new science museum downtown?',
       'B: Yes, I went last weekend. The space exhibit was amazing.',
-      'Question: What did the girl think of the science museum?',
+      'Question: What did the boy think of the science museum?',
     ],
     questionType: ListeningQuestionType.dialogueContent,
-    question: 'What did the girl think of the science museum?',
+    question: 'What did the boy think of the science museum?',
     choices: [
       'It was boring.',
       'It was too crowded.',
@@ -1356,10 +1356,10 @@ const _grade3Part2 = <ListeningItem>[
       'B: I want to become a nurse. I love helping people.',
       'A: That\'s wonderful. Are you going to study nursing at university?',
       'B: Yes, I\'ve already applied.',
-      'Question: What career does the girl want to pursue?',
+      'Question: What career does the boy want to pursue?',
     ],
     questionType: ListeningQuestionType.dialogueContent,
-    question: 'What career does the girl want to pursue?',
+    question: 'What career does the boy want to pursue?',
     choices: [
       'A doctor.',
       'A nurse.',
@@ -1421,10 +1421,10 @@ const _grade3Part2 = <ListeningItem>[
       'A: How do you practice English outside of class?',
       'B: I watch English videos online every day. I also keep a diary in English.',
       'A: That\'s a great idea.',
-      'Question: How does the girl practice English outside of class?',
+      'Question: How does the boy practice English outside of class?',
     ],
     questionType: ListeningQuestionType.dialogueContent,
-    question: 'How does the girl practice English outside of class?',
+    question: 'How does the boy practice English outside of class?',
     choices: [
       'She reads English novels.',
       'She watches English videos and keeps a diary.',
@@ -1468,10 +1468,10 @@ const _grade3Part2 = <ListeningItem>[
       'B: Why? Is something wrong with your old one?',
       'A: The brakes are broken, and it has become too small for me.',
       'B: You should try the shop near the station.',
-      'Question: Why does the boy want a new bicycle?',
+      'Question: Why does the girl want a new bicycle?',
     ],
     questionType: ListeningQuestionType.dialogueContent,
-    question: 'Why does the boy want a new bicycle?',
+    question: 'Why does the girl want a new bicycle?',
     choices: [
       'His old one was stolen.',
       'The brakes are broken and it is too small.',
@@ -1535,10 +1535,10 @@ const _grade3Part2 = <ListeningItem>[
       'B: I won first prize in the speech contest!',
       'A: Congratulations! How did you prepare?',
       'B: I practiced in front of my family every night.',
-      'Question: How did the girl prepare for the contest?',
+      'Question: How did the boy prepare for the contest?',
     ],
     questionType: ListeningQuestionType.dialogueContent,
-    question: 'How did the girl prepare for the contest?',
+    question: 'How did the boy prepare for the contest?',
     choices: [
       'She watched videos of other speeches.',
       'She practiced in front of her family.',
