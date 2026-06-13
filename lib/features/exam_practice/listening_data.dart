@@ -1562,6 +1562,8 @@ const _gradePre2Part1 = <ListeningItem>[
       'Take an intensive language course abroad.',
     ],
     correctIndex: 1,
+    explanation:
+        'A は「travel in Southeast Asia and volunteer at schools（東南アジアを旅して学校でボランティアをする）」と述べている。これが gap year の計画。',
   ),
   ListeningItem(
     part: 1,
@@ -1583,6 +1585,8 @@ const _gradePre2Part1 = <ListeningItem>[
       'Economics and political science.',
     ],
     correctIndex: 1,
+    explanation:
+        'B の「torn between environmental science and computer science」が答え。be torn between A and B＝AとBの間で迷う、の意味。',
   ),
   ListeningItem(
     part: 1,
@@ -1604,6 +1608,7 @@ const _gradePre2Part1 = <ListeningItem>[
       'One semester.',
     ],
     correctIndex: 1,
+    explanation: 'A が「Two weeks（2週間）。授業に出て、ホストファミリーに泊まる」と答えている。',
   ),
   ListeningItem(
     part: 1,
@@ -1625,6 +1630,8 @@ const _gradePre2Part1 = <ListeningItem>[
       'Offer subsidies for electric vehicle buyers.',
     ],
     correctIndex: 1,
+    explanation:
+        'B が「the government plans to ban gasoline cars by 2035（政府は2035年までにガソリン車を禁止する予定）」と記事の内容を説明している。',
   ),
 ];
 
@@ -1651,6 +1658,8 @@ const _gradePre2Part2 = <ListeningItem>[
       'Four hours.',
     ],
     correctIndex: 2,
+    explanation:
+        '本文に「spend an average of three hours per day on social media（1日平均3時間SNSに費やす）」とある。',
   ),
   ListeningItem(
     part: 2,
@@ -1672,6 +1681,8 @@ const _gradePre2Part2 = <ListeningItem>[
       'Regular high-intensity exercise.',
     ],
     correctIndex: 3,
+    explanation:
+        '本文が挙げる理由は plant-based diet・social connections・ikigai の3つ。high-intensity exercise（激しい運動）は述べられていない＝NOT問題の答え。',
   ),
   ListeningItem(
     part: 2,
@@ -1692,6 +1703,8 @@ const _gradePre2Part2 = <ListeningItem>[
       'Monday, June sixteenth.',
     ],
     correctIndex: 3,
+    explanation:
+        '本文に「reopen on Monday, June sixteenth（6月16日月曜に再開）」とある。改装休館は9日〜13日。',
   ),
   ListeningItem(
     part: 2,
@@ -1712,6 +1725,8 @@ const _gradePre2Part2 = <ListeningItem>[
       'It eliminates the need for traditional grocery stores.',
     ],
     correctIndex: 1,
+    explanation:
+        '本文に「reducing the need to transport food long distances（食料を長距離輸送する必要を減らす）」と都市農業の利点が述べられている。',
   ),
 ];
 
@@ -1739,6 +1754,8 @@ const _grade2Part1 = <ListeningItem>[
       'Because the environmental impact was too great.',
     ],
     correctIndex: 1,
+    explanation:
+        'A が「budget constraints were the main reason（予算の制約が主な理由）」と説明している。',
   ),
   ListeningItem(
     part: 1,
@@ -1760,6 +1777,8 @@ const _grade2Part1 = <ListeningItem>[
       'To save money on groceries.',
     ],
     correctIndex: 2,
+    explanation:
+        'A が「Mostly environmental concerns（主に環境への懸念）。食肉生産は炭素排出が大きい」と理由を述べている。',
   ),
   ListeningItem(
     part: 1,
@@ -1781,6 +1800,8 @@ const _grade2Part1 = <ListeningItem>[
       'On weekends only.',
     ],
     correctIndex: 2,
+    explanation:
+        'B が「I speak with a French partner every Tuesday evening（毎週火曜の夜にフランス人の相手と話す）」と答えている。Twice a week は誤り。',
   ),
   ListeningItem(
     part: 1,
@@ -1802,6 +1823,8 @@ const _grade2Part1 = <ListeningItem>[
       'It is only effective in technology companies.',
     ],
     correctIndex: 2,
+    explanation:
+        'A が「it actually improves productivity and employee well-being（実際は生産性と従業員の幸福度を高める）」と研究結果を述べている。',
   ),
 ];
 
@@ -1827,6 +1850,8 @@ const _grade2Part2 = <ListeningItem>[
       'To manage hospital scheduling systems.',
     ],
     correctIndex: 1,
+    explanation:
+        '本文に「AI is being used to predict patient deterioration before symptoms become critical（症状が深刻化する前に患者の悪化を予測する）」とある。',
   ),
   ListeningItem(
     part: 2,
@@ -1848,6 +1873,8 @@ const _grade2Part2 = <ListeningItem>[
       'Collecting travel points for frequent flyers.',
     ],
     correctIndex: 2,
+    explanation:
+        '本文に「prioritize meaningful connections with local communities（地域社会との有意義なつながりを優先する）」とある。',
   ),
   ListeningItem(
     part: 2,
@@ -1869,6 +1896,7 @@ const _grade2Part2 = <ListeningItem>[
       'Monday, March eighteenth.',
     ],
     correctIndex: 1,
+    explanation: '放送に「extended to Friday, March fifteenth（3月15日金曜まで延長）」とある。',
   ),
   ListeningItem(
     part: 2,
@@ -1892,6 +1920,8 @@ const _grade2Part2 = <ListeningItem>[
       'Educating marine biologists about contamination.',
     ],
     correctIndex: 2,
+    explanation:
+        '本文に「Reducing single-use plastic consumption is considered a key step（使い捨てプラスチックの消費削減が重要な一歩）」とある。',
   ),
 ];
 
@@ -1923,6 +1953,8 @@ const _gradePre2PlusPart1 = <ListeningItem>[
       'It is closed all day.',
     ],
     correctIndex: 0,
+    explanation:
+        'B が「today is Saturday, so it closes at six（今日は土曜なので6時に閉まる）」と述べている。平日の8時は誤り。',
   ),
   ListeningItem(
     part: 1,
@@ -1943,6 +1975,8 @@ const _gradePre2PlusPart1 = <ListeningItem>[
       'The weather will be bad.',
     ],
     correctIndex: 0,
+    explanation:
+        'B が「I promised to help my brother move（兄/弟の引っ越しを手伝うと約束した）」と理由を述べている。',
   ),
   ListeningItem(
     part: 1,
@@ -1963,6 +1997,8 @@ const _gradePre2PlusPart1 = <ListeningItem>[
       'Check the train schedule.',
     ],
     correctIndex: 0,
+    explanation:
+        'B が「call the station ... lost and found（駅の遺失物取扱所に電話するとよい）」と勧めている。',
   ),
   ListeningItem(
     part: 1,
@@ -1983,6 +2019,8 @@ const _gradePre2PlusPart1 = <ListeningItem>[
       'The same as the man.',
     ],
     correctIndex: 0,
+    explanation:
+        'A が seafood pasta を勧められ「Then I will order that（ではそれを注文する）」と答えている。',
   ),
 ];
 
@@ -2006,6 +2044,8 @@ const _gradePre2PlusPart2 = <ListeningItem>[
       'By eight o\'clock.',
     ],
     correctIndex: 0,
+    explanation:
+        '放送に「bring your items to the checkout by eight fifteen（8時15分までにレジへ）」とある。閉店は8時30分。',
   ),
   ListeningItem(
     part: 2,
@@ -2025,6 +2065,8 @@ const _gradePre2PlusPart2 = <ListeningItem>[
       'Because it now starts earlier.',
     ],
     correctIndex: 0,
+    explanation:
+        '放送に「moved indoors ... because rain is forecast（雨の予報のため屋内に変更）」とある。',
   ),
   ListeningItem(
     part: 2,
@@ -2044,6 +2086,8 @@ const _gradePre2PlusPart2 = <ListeningItem>[
       'They can grow without any sunlight.',
     ],
     correctIndex: 0,
+    explanation:
+        '本文に「they grow quickly and need only sunlight and water（早く育ち、日光と水だけでよい）」とトマトが初心者に人気の理由がある。',
   ),
   ListeningItem(
     part: 2,
@@ -2063,6 +2107,8 @@ const _gradePre2PlusPart2 = <ListeningItem>[
       'The library will buy more computers.',
     ],
     correctIndex: 0,
+    explanation:
+        '本文に「borrow up to five books at a time, instead of three（一度に3冊でなく5冊まで借りられる）」と新制度の変更点がある。',
   ),
 ];
 

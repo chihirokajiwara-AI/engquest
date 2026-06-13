@@ -12,7 +12,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:engquest/features/exam_practice/listening_data.dart';
 
 /// Grades whose listening 解説 are 100% authored (every item) and content-QA'd.
-const _fullyCovered = ['5', '4', '3', 'pre1'];
+const _fullyCovered = ['5', '4', '3', 'pre2', 'pre2plus', '2', 'pre1'];
 
 void main() {
   for (final grade in _fullyCovered) {
