@@ -1122,6 +1122,7 @@ const _grade3Part2 = <ListeningItem>[
       'A social worker.',
     ],
     correctIndex: 1,
+    explanation: 'B が「I want to become a nurse（看護師になりたい）」と言っている。',
   ),
   ListeningItem(
     part: 2,
@@ -1143,6 +1144,7 @@ const _grade3Part2 = <ListeningItem>[
       'Food and restaurants.',
     ],
     correctIndex: 2,
+    explanation: '「Mostly nature and old buildings（主に自然と古い建物）」を撮ると言っている。',
   ),
   ListeningItem(
     part: 2,
@@ -1164,6 +1166,7 @@ const _grade3Part2 = <ListeningItem>[
       'A gym, a café, and a hotel.',
     ],
     correctIndex: 0,
+    explanation: '「a gym, a library, and a café（ジム・図書館・カフェ）」ができる。',
   ),
   ListeningItem(
     part: 2,
@@ -1184,6 +1187,8 @@ const _grade3Part2 = <ListeningItem>[
       'She takes private lessons online.',
     ],
     correctIndex: 1,
+    explanation:
+        '「watch English videos ... keep a diary in English（英語の動画を見て、英語で日記をつける）」と言っている。',
   ),
   // ── #10 volume expansion: 3級 第2部 4→10 (会話内容一致). Audio pending Kokoro;
   //    keys in ALLOWED_MISSING. Content-QA'd 2026-06-09.
@@ -1207,6 +1212,7 @@ const _grade3Part2 = <ListeningItem>[
       'Ten temples.',
     ],
     correctIndex: 2,
+    explanation: '「we saw five in one day（1日で5つ見た）」＝お寺は5つ。',
   ),
   ListeningItem(
     part: 2,
@@ -1228,6 +1234,8 @@ const _grade3Part2 = <ListeningItem>[
       'His friend gave him money for it.',
     ],
     correctIndex: 1,
+    explanation:
+        '「The brakes are broken ... too small for me（ブレーキが壊れ、小さくなった）」が理由。',
   ),
   ListeningItem(
     part: 2,
@@ -1249,6 +1257,7 @@ const _grade3Part2 = <ListeningItem>[
       'It was too expensive.',
     ],
     correctIndex: 1,
+    explanation: '「it is the wrong size（サイズが違う）」ので返品したい。',
   ),
   ListeningItem(
     part: 2,
@@ -1270,6 +1279,7 @@ const _grade3Part2 = <ListeningItem>[
       'Sandwiches.',
     ],
     correctIndex: 1,
+    explanation: '「decided on takoyaki（たこ焼きに決めた）」と言っている。',
   ),
   ListeningItem(
     part: 2,
@@ -1291,6 +1301,7 @@ const _grade3Part2 = <ListeningItem>[
       'She wrote many different drafts.',
     ],
     correctIndex: 1,
+    explanation: '「practiced in front of my family every night（毎晩家族の前で練習した）」。',
   ),
   ListeningItem(
     part: 2,
@@ -1312,6 +1323,7 @@ const _grade3Part2 = <ListeningItem>[
       'Friday evening.',
     ],
     correctIndex: 1,
+    explanation: '土曜の午前はピアノ、「free after lunch（昼食後は空いている）」→午後に水族館へ行く。',
   ),
 ];
 
