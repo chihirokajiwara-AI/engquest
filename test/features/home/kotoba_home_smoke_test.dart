@@ -170,6 +170,32 @@ void main() {
     expect(find.textContaining('はじめての'), findsWidgets);
   });
 
+  testWidgets('streak with NO study today → gentle keep-going nudge (#22)',
+      (tester) async {
+    await tester.pumpWidget(_wrap(
+      // Active streak but problemsToday == 0 → not yet studied today.
+      streakService: _MockStreakService(const StreakState(
+          currentStreak: 5, weeklyBits: 31, todayCount: 0, problemsToday: 0)),
+      cardRepository: InMemoryFsrsCardRepository(),
+    ));
+    await _settle(tester);
+    // A no-guilt invitation to continue — never a "you'll lose it" threat.
+    expect(find.textContaining('つづけよう'), findsWidgets);
+  });
+
+  testWidgets('streak already studied today → celebrates, no nudge (#22)',
+      (tester) async {
+    await tester.pumpWidget(_wrap(
+      // problemsToday > 0 → streak secured for today.
+      streakService: _MockStreakService(const StreakState(
+          currentStreak: 5, weeklyBits: 31, todayCount: 1, problemsToday: 8)),
+      cardRepository: InMemoryFsrsCardRepository(),
+    ));
+    await _settle(tester);
+    // Celebratory tier, not the keep-going nudge.
+    expect(find.textContaining('つづいてる'), findsNothing);
+  });
+
   // ── Due-count display ─────────────────────────────────────────────────────
 
   testWidgets('KotobaHomeScreen: empty due-state shows quiet館 message',

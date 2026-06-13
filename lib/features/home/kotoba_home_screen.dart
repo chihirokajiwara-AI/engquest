@@ -507,8 +507,13 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
     // Build a gentle, celebratory message — no guilt, no red countdown. A
     // lapsed returner (#123) gets a warm 「おかえり！」 instead of the first-time
     // line, and the count honestly reads 0 (the broken streak), not a stale value.
-    final String streakMessage =
-        _streakMessage(streak, broken: _streak.streakBroken);
+    final String streakMessage = _streakMessage(
+      streak,
+      broken: _streak.streakBroken,
+      // Practised at least once today → streak already secured (celebrate);
+      // otherwise show the gentle keep-it-going nudge.
+      studiedToday: _streak.problemsToday > 0,
+    );
 
     return DqPanel(
       title: '探偵（たんてい）の捜査日誌（そうさにっし）',
@@ -669,11 +674,22 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
   }
 
   /// Returns a calm, diegetic streak message that never shames.
-  String _streakMessage(int n, {bool broken = false}) {
+  // [studiedToday] = the child has practised at least once today, so the streak
+  // is already safe. When they have a streak but HAVEN'T studied yet today, show
+  // a warm, no-guilt invitation to continue — never a "you'll lose it" threat.
+  // (2026 streak-design research for children: celebrate progress, encourage
+  // recovery, never punish a lapse — anxiety-driven streaks burn kids out.)
+  String _streakMessage(int n,
+      {bool broken = false, bool studiedToday = false}) {
     if (n == 0 && broken) {
       return 'おかえり！ また きょうから つづけよう。';
     }
     if (n == 0) return 'はじめての じけん、はじまる……';
+    if (!studiedToday) {
+      // Active streak, not yet studied today → gentle daily-return nudge.
+      return '$n日（にち）つづいてる！ きょうも ナゾを といて つづけよう。';
+    }
+    // Studied today — the streak is secured; celebrate it.
     if (n == 1) return 'さあ、最初（さいしょ）の ページを開（ひら）いた！';
     if (n < 5) return 'じっくり 記録（きろく）が 積（つ）みあがってきた。';
     if (n < 10) return 'すごい！探偵（たんてい）の 手帳（てちょう）が 充実（じゅうじつ）してきた。';
