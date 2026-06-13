@@ -217,4 +217,58 @@ void main() {
     expect(state.currentStreak, 0);
     expect(state.problemsToday, 0);
   });
+
+  // Display freshness on a pure load() — recordStudySession resets weekly dots /
+  // today-count only when the child STUDIES; load() must not show stale activity.
+
+  test('load() in a NEW week shows an empty weekly calendar, not last week\'s',
+      () async {
+    // Last study: Wed 2026-06-03 (week of Mon 06-01), full week of dots set.
+    // Now: Wed 2026-06-10 (week of Mon 06-08) — a different week.
+    final now = DateTime(2026, 6, 10);
+    SharedPreferences.setMockInitialValues({
+      'streak_current': 5,
+      'streak_weekly_bits': 127, // all 7 days "studied" last week
+      'streak_today_count': 4,
+      'streak_last_study_date': '2026-06-03',
+    });
+    PreferencesService.resetInstance();
+    final state = await StreakService().load(now: now);
+    expect(state.weeklyBits, 0,
+        reason: 'a new week must not display last week\'s weekday dots');
+    expect(state.todayCount, 0, reason: 'no sessions today yet');
+  });
+
+  test('load() a NEW day in the SAME week keeps the dots, resets today-count',
+      () async {
+    // Last study: Tue 06-09; now: Wed 06-10 — same week (Mon 06-08).
+    final now = DateTime(2026, 6, 10);
+    SharedPreferences.setMockInitialValues({
+      'streak_current': 3,
+      'streak_weekly_bits': 1 << 1, // Tuesday bit
+      'streak_today_count': 3,
+      'streak_last_study_date': '2026-06-09',
+    });
+    PreferencesService.resetInstance();
+    final state = await StreakService().load(now: now);
+    expect(state.weeklyBits, 1 << 1,
+        reason: 'same-week dots stay — Tuesday was genuinely studied');
+    expect(state.studiedOn(1), isTrue);
+    expect(state.todayCount, 0,
+        reason: 'yesterday\'s sessions are not today\'s');
+  });
+
+  test('load() the SAME day preserves weekly dots and today-count', () async {
+    final now = DateTime(2026, 6, 10);
+    SharedPreferences.setMockInitialValues({
+      'streak_current': 3,
+      'streak_weekly_bits': 1 << 2, // Wednesday bit
+      'streak_today_count': 2,
+      'streak_last_study_date': '2026-06-10',
+    });
+    PreferencesService.resetInstance();
+    final state = await StreakService().load(now: now);
+    expect(state.weeklyBits, 1 << 2);
+    expect(state.todayCount, 2);
+  });
 }

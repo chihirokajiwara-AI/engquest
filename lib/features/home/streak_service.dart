@@ -119,8 +119,8 @@ class StreakService {
     final prefs = await PreferencesService.getInstance();
     final nowDt = now ?? DateTime.now();
     final storedStreak = prefs.getInt(_kCurrent);
-    final bits = prefs.getInt(_kWeeklyBits);
-    final today = prefs.getInt(_kTodayCount);
+    int bits = prefs.getInt(_kWeeklyBits);
+    int today = prefs.getInt(_kTodayCount);
 
     // HONESTY (#123): a streak is only ALIVE if the last study was today or
     // yesterday (you can still continue it today). If the child lapsed (last
@@ -141,6 +141,22 @@ class StreakService {
         (problemsDate == todayKey) ? prefs.getInt(_kProblemsToday) : 0;
     final storedGoal = prefs.getInt(_kDailyGoal);
     final dailyGoal = storedGoal > 0 ? storedGoal : kDefaultDailyGoal;
+
+    // Display-side freshness (#123 sibling): recordStudySession only resets the
+    // weekly dots / today-count when the child STUDIES. On a pure load — opening
+    // the app in a new week or a new day WITHOUT studying yet — the raw prefs
+    // would show last week's weekday dots as this week's, and yesterday's session
+    // count as today's. Reset them for display so the engagement spine is honest.
+    if (lastDate != null) {
+      final lastMonday =
+          lastDate.subtract(Duration(days: lastDate.weekday - 1));
+      final nowMonday = nowDt.subtract(Duration(days: nowDt.weekday - 1));
+      if (_daysBetween(lastMonday, nowMonday) != 0) bits = 0; // a new week
+      if (lastDateStr != todayKey) today = 0; // no sessions TODAY yet
+    } else {
+      bits = 0;
+      today = 0;
+    }
 
     return StreakState(
       currentStreak: streak,
