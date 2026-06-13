@@ -312,6 +312,54 @@ void main() {
       expect(notified, isNotNull);
       expect(notified, contains('mastery_10'));
     });
+
+    test('also fires the static unlockEvents broadcast (any source)', () async {
+      final db = FakeFirebaseFirestore();
+      final svc = AchievementService(firestore: db);
+      addTearDown(() => AchievementService.unlockEvents.value = const []);
+
+      await svc.checkAndUpdate(
+        uid: uid,
+        totalMastered: 10,
+        currentStreak: 0,
+        totalPracticed: 0,
+        level: 1,
+      );
+
+      // The static broadcast is what the app-root AchievementUnlockHost listens
+      // to, so an unlock from ANY source (battle OR exam practice) celebrates.
+      expect(AchievementService.unlockEvents.value, contains('mastery_10'));
+    });
+
+    test('progress is monotonic — a partial-stat check never regresses it',
+        () async {
+      final db = FakeFirebaseFirestore();
+      final svc = AchievementService(firestore: db);
+
+      // A battle advances mastery progress to 40/50 (mastery_50 still locked).
+      await svc.checkAndUpdate(
+        uid: uid,
+        totalMastered: 40,
+        currentStreak: 0,
+        totalPracticed: 0,
+        level: 1,
+      );
+      expect(svc.cachedStates!['mastery_50']!.progress, 40);
+
+      // Then an exam-practice session checks with the stats IT knows (streak +
+      // level) and 0 for mastery it doesn't track. This must NOT erase the 40.
+      await svc.checkAndUpdate(
+        uid: uid,
+        totalMastered: 0,
+        currentStreak: 3,
+        totalPracticed: 0,
+        level: 1,
+      );
+      expect(svc.cachedStates!['mastery_50']!.progress, 40,
+          reason: 'partial-stat check must not regress mastery progress');
+      // …and the streak achievement it DID advance unlocked.
+      expect(svc.cachedStates!['streak_3']!.unlocked, true);
+    });
   });
 
   // ── clearCache ────────────────────────────────────────────────────────────

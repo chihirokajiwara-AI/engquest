@@ -18,6 +18,7 @@ import '../../core/sound/practice_feedback.dart';
 import 'practice_result_stars.dart';
 import '../home/streak_service.dart';
 import '../../core/gamification/xp_service.dart';
+import 'exam_session_rewards.dart';
 
 /// Returns [p] with its choices shuffled and [correctIdx] remapped. The authored
 /// data is 92% correctIdx:0, which let a child score ~92% by always tapping
@@ -154,6 +155,7 @@ class _ConversationPracticeScreenState
   Future<void> _recordSessionResult() async {
     if (_problems.isEmpty) return;
     recordExamXp(_problems.length);
+    recordExamAchievements();
     recordExamHabitAndGet(_problems.length).then((st) {
       if (mounted && st != null) setState(() => _earnedStreak = st);
     });

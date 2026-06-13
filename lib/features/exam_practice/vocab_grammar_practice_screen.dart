@@ -26,6 +26,7 @@ import 'vocab_review_store.dart';
 import '../quest/ui/dq_ui.dart';
 import '../home/streak_service.dart';
 import '../../core/gamification/xp_service.dart';
+import 'exam_session_rewards.dart';
 
 /// The CEFR band a 大問1 *graded answer* must stay within, per grade (#84).
 /// 英検 grades map to CEFR ceilings; the cloze TARGET (the word being tested)
@@ -375,6 +376,7 @@ class _VocabGrammarPracticeScreenState
     // Capture the streak/daily-goal the child just earned so the results screen
     // can SHOW it at the session-end peak (SessionEndHook), not only on home.
     recordExamXp(_questions.length);
+    recordExamAchievements();
     recordExamHabitAndGet(_questions.length).then((st) {
       if (mounted && st != null) setState(() => _earnedStreak = st);
     });

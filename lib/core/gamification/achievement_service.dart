@@ -42,7 +42,19 @@ class AchievementService {
 
   /// Notifies UI when a new achievement is unlocked.
   /// Value is the list of newly unlocked achievement IDs (cleared by UI).
+  ///
+  /// NOTE: per-instance — and `AchievementService()` is constructed ad hoc per
+  /// screen, so this was never an effective cross-screen signal (no production
+  /// listener ever existed; the battle read checkAndUpdate's return value). Use
+  /// [unlockEvents] for the app-wide celebration. Kept for the unit test + any
+  /// same-instance use.
   final ValueNotifier<List<String>> unlockedNotifier = ValueNotifier([]);
+
+  /// App-wide achievement-unlock broadcast. STATIC (mirrors
+  /// [XpService.levelUpEvents]) so the one app-root [AchievementUnlockHost] can
+  /// celebrate an unlock from ANY source — the vocab battle AND 英検 exam
+  /// practice. Carries the newly-unlocked achievement IDs; the host clears it.
+  static final ValueNotifier<List<String>> unlockEvents = ValueNotifier([]);
 
   // ── Firestore helpers ────────────────────────────────────────────────────
 
@@ -107,11 +119,21 @@ class AchievementService {
         level: level,
       );
 
-      final reached = currentProgress >= def.target;
-      if (currentProgress != state.progress || reached) {
+      // Progress is monotonic non-decreasing: a partial-stat check from another
+      // surface — e.g. exam practice calls checkAndUpdate with the streak/level
+      // it knows but 0 for the mastery/practice counts it doesn't track — must
+      // NEVER regress a stored value. Taking the max makes checkAndUpdate safe
+      // to call from any screen with only the stats that screen has, which is
+      // what lets streak/level unlocks fire during exam practice, not only the
+      // battle. (Previously this overwrote progress with currentProgress, so a
+      // 0 would erase real progress.)
+      final newProgress =
+          currentProgress > state.progress ? currentProgress : state.progress;
+      final reached = newProgress >= def.target;
+      if (newProgress != state.progress || reached) {
         final now = DateTime.now();
         final updated = state.copyWith(
-          progress: currentProgress,
+          progress: newProgress,
           unlocked: reached,
           unlockedAt: reached ? now : null,
         );
@@ -128,6 +150,8 @@ class AchievementService {
 
     if (newlyUnlocked.isNotEmpty) {
       unlockedNotifier.value = List.unmodifiable(newlyUnlocked);
+      unlockEvents.value =
+          List.unmodifiable(newlyUnlocked); // app-wide celebration (any source)
     }
 
     return newlyUnlocked;

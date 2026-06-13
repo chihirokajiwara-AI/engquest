@@ -14,6 +14,7 @@ import 'package:flutter/semantics.dart';
 import 'package:engquest/features/quest/ui/dq_ui.dart';
 import 'package:engquest/features/home/streak_service.dart';
 import '../../core/gamification/xp_service.dart';
+import 'exam_session_rewards.dart';
 import 'package:engquest/core/sound/practice_feedback.dart';
 import 'package:engquest/features/exam_practice/practice_result_stars.dart';
 import 'eiken_exam_config.dart';
@@ -234,6 +235,7 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
     if (_totalQuestions <= 0) return;
     // Feed the home engagement spine (streak + daily-goal) for any attempt.
     recordExamXp(_totalQuestions);
+    recordExamAchievements();
     recordExamHabitAndGet(_totalQuestions).then((st) {
       if (mounted && st != null) setState(() => _earnedStreak = st);
     });

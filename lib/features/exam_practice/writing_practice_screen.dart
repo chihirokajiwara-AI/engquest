@@ -26,6 +26,7 @@ import '../../core/dialog/claude_client.dart';
 import '../quest/ui/dq_ui.dart';
 import '../home/streak_service.dart';
 import '../../core/gamification/xp_service.dart';
+import 'exam_session_rewards.dart';
 import 'eiken_exam_config.dart';
 import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
@@ -1030,6 +1031,7 @@ class _WritingPracticeScreenState extends State<WritingPracticeScreen> {
     // practice is never invisible to the engagement spine.
     recordExamHabit(1);
     recordExamXp(1);
+    recordExamAchievements();
     setState(() {
       _phase = _Phase.grading;
       _gradingError = null;

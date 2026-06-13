@@ -17,6 +17,7 @@ import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
 import '../home/streak_service.dart';
 import '../../core/gamification/xp_service.dart';
+import 'exam_session_rewards.dart';
 import 'practice_encouragement.dart';
 import '../../core/sound/practice_feedback.dart';
 import 'practice_result_stars.dart';
@@ -167,6 +168,7 @@ class _WordOrderingPracticeScreenState
   Future<void> _recordSessionResult() async {
     if (_problems.isEmpty) return;
     recordExamXp(_problems.length);
+    recordExamAchievements();
     recordExamHabitAndGet(_problems.length).then((st) {
       if (mounted && st != null) setState(() => _earnedStreak = st);
     });

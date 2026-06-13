@@ -41,7 +41,6 @@ import '../../core/fsrs/firestore_card_repository.dart';
 import '../../core/fsrs/fsrs_algorithm.dart';
 import '../../core/fsrs/fsrs_card.dart';
 import '../../core/fsrs/fsrs_card_repository.dart';
-import '../../core/gamification/achievement.dart';
 import '../../core/gamification/achievement_service.dart';
 import '../../core/gamification/xp_service.dart';
 import '../../core/gamification/xp_profile.dart';
@@ -590,83 +589,18 @@ class _BattleScreenState extends State<BattleScreen>
     } catch (_) {}
     if (!mounted) return;
     try {
-      final newlyUnlocked = await _achievementService.checkAndUpdate(
+      await _achievementService.checkAndUpdate(
         uid: uid,
         totalMastered: masteredCount,
         currentStreak: currentStreak,
         totalPracticed: totalPracticed,
         level: profile?.level ?? 1,
       );
-      if (newlyUnlocked.isNotEmpty && mounted) {
-        _showAchievementUnlocked(newlyUnlocked);
-      }
+      // The unlock is broadcast via AchievementService.unlockEvents (set inside
+      // checkAndUpdate) and celebrated by the app-root AchievementUnlockHost
+      // (app.dart), so EVERY source — battle AND exam practice — shows the same
+      // バッジ獲得 banner. No per-screen popup here anymore.
     } catch (_) {}
-  }
-
-  void _showAchievementUnlocked(List<String> ids) {
-    if (!mounted) return;
-    _sound.playAchievement();
-    HapticFeedback.heavyImpact();
-    final def = achievementDefById(ids.first);
-    if (def == null) return;
-
-    showDialog<void>(
-      context: context,
-      barrierDismissible: true,
-      builder: (ctx) {
-        Future.delayed(const Duration(seconds: 3), () {
-          if (ctx.mounted) Navigator.of(ctx, rootNavigator: true).pop();
-        });
-
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          child: DqPanel(
-            padding: const EdgeInsets.all(26),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Center(
-                  child: dqBilingual(
-                    'バッジ獲得！',
-                    'BADGE EARNED',
-                    jpSize: 20,
-                    jpColor: dqGold,
-                    stacked: true,
-                    align: TextAlign.center,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Container(
-                  width: 64,
-                  height: 64,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: LinearGradient(colors: def.gradient),
-                    border: Border.all(color: dqBorder, width: 2),
-                  ),
-                  child: Icon(def.icon, color: Colors.white, size: 32),
-                ),
-                const SizedBox(height: 14),
-                Text(def.titleJa,
-                    textAlign: TextAlign.center,
-                    style: dqText(size: 18, w: FontWeight.w800, color: dqInk)),
-                const SizedBox(height: 6),
-                Text(def.descriptionJa,
-                    textAlign: TextAlign.center,
-                    style: dqText(size: 14, color: dqInk)),
-                if (ids.length > 1) ...[
-                  const SizedBox(height: 8),
-                  Text('+${ids.length - 1}個のバッジも獲得！',
-                      style: dqText(size: 12, color: dqGoldDeep)),
-                ],
-              ],
-            ),
-          ),
-        );
-      },
-    );
   }
 
   // ── Level-up dialog (P2-7) ────────────────────────────────────────────────

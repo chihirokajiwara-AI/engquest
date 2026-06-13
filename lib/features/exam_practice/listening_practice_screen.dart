@@ -36,6 +36,7 @@ import '../../core/storage/preferences_service.dart';
 import '../quest/ui/dq_ui.dart';
 import '../home/streak_service.dart';
 import '../../core/gamification/xp_service.dart';
+import 'exam_session_rewards.dart';
 import 'eiken_exam_config.dart';
 import 'listening_data.dart';
 import 'practice_encouragement.dart';
@@ -225,6 +226,7 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
   Future<void> _recordSessionResult() async {
     if (_items.isEmpty) return;
     recordExamXp(_items.length);
+    recordExamAchievements();
     recordExamHabitAndGet(_items.length).then((st) {
       if (mounted && st != null) setState(() => _earnedStreak = st);
     });

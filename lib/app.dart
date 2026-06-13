@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:engquest/core/gamification/xp_service.dart';
 import 'package:engquest/core/gamification/xp_profile.dart';
+import 'package:engquest/core/gamification/achievement_service.dart';
+import 'package:engquest/core/gamification/achievement.dart';
 import 'package:engquest/core/sound/sound_service.dart';
 import 'package:engquest/core/ui/app_fonts.dart';
 import 'package:engquest/core/ui/readability_scale.dart';
@@ -213,11 +215,14 @@ class EngQuestApp extends StatelessWidget {
                     child: inner ?? const SizedBox.shrink(),
                   );
                 },
-                // Wrap the whole app so a level-up from ANY XP source (battle,
-                // every 英検 exam section, scene ナゾ) is celebrated by the one
-                // app-root listener below — not just inside BattleScreen.
+                // Wrap the whole app so a level-up OR an achievement unlock from
+                // ANY source (battle, every 英検 exam section, scene ナゾ) is
+                // celebrated by the app-root listeners below — not just inside
+                // BattleScreen.
                 child: LevelUpCelebrationHost(
-                  child: child ?? const SizedBox.shrink(),
+                  child: AchievementUnlockHost(
+                    child: child ?? const SizedBox.shrink(),
+                  ),
                 ),
               ),
             ),
@@ -1218,6 +1223,145 @@ class _LevelUpCelebrationHostState extends State<LevelUpCelebrationHost>
                   const SizedBox(height: 8),
                   Text('${profile.currentLevelXp} / ${profile.levelXpSpan} XP',
                       style: dqText(size: 12, color: dqGoldDeep)),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Global achievement-unlock celebration
+// ---------------------------------------------------------------------------
+
+/// Overlays a「バッジ獲得！」banner whenever an achievement unlocks from ANY
+/// source. [AchievementService.checkAndUpdate] publishes unlocked IDs to the
+/// static [AchievementService.unlockEvents]; the problem was that the unlock
+/// popup lived only inside [BattleScreen] and checkAndUpdate was never called
+/// from exam practice, so an exam-focused child's streak/level unlocks were
+/// silent until they happened to open the achievements screen. One app-root
+/// listener makes the badge celebration universal. Mirrors
+/// [LevelUpCelebrationHost].
+class AchievementUnlockHost extends StatefulWidget {
+  const AchievementUnlockHost({super.key, required this.child});
+
+  final Widget child;
+
+  @override
+  State<AchievementUnlockHost> createState() => _AchievementUnlockHostState();
+}
+
+class _AchievementUnlockHostState extends State<AchievementUnlockHost>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctl;
+  final SoundService _sound = SoundService();
+  List<String> _ids = const [];
+
+  @override
+  void initState() {
+    super.initState();
+    _ctl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 3000),
+    )..addStatusListener((status) {
+        if (status == AnimationStatus.completed && mounted) {
+          setState(() => _ids = const []);
+          AchievementService.unlockEvents.value = const [];
+        }
+      });
+    AchievementService.unlockEvents.addListener(_onUnlock);
+  }
+
+  void _onUnlock() {
+    final ids = AchievementService.unlockEvents.value;
+    if (ids.isEmpty || !mounted) return;
+    if (achievementDefById(ids.first) == null) return; // unknown id → ignore
+    setState(() => _ids = ids);
+    _sound.playAchievement();
+    HapticFeedback.heavyImpact();
+    _ctl.forward(from: 0);
+  }
+
+  @override
+  void dispose() {
+    AchievementService.unlockEvents.removeListener(_onUnlock);
+    _ctl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final def = _ids.isEmpty ? null : achievementDefById(_ids.first);
+    return Stack(
+      children: [
+        Positioned.fill(child: widget.child),
+        if (def != null)
+          Positioned.fill(
+            child: IgnorePointer(
+              child: AnimatedBuilder(
+                animation: _ctl,
+                builder: (context, _) => _banner(def, _ids.length, _ctl.value),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _banner(AchievementDef def, int count, double t) {
+    final appear = Curves.easeOutBack.transform((t / 0.12).clamp(0.0, 1.0));
+    final fade = t < 0.82 ? 1.0 : (1.0 - (t - 0.82) / 0.18).clamp(0.0, 1.0);
+    return Material(
+      type: MaterialType.transparency,
+      child: Center(
+        child: Opacity(
+          opacity: fade,
+          child: Transform.scale(
+            scale: 0.8 + 0.2 * appear,
+            child: DqPanel(
+              padding: const EdgeInsets.all(26),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Center(
+                    child: dqBilingual(
+                      'バッジ獲得！',
+                      'BADGE EARNED',
+                      jpSize: 20,
+                      jpColor: dqGold,
+                      stacked: true,
+                      align: TextAlign.center,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Container(
+                    width: 64,
+                    height: 64,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: LinearGradient(colors: def.gradient),
+                      border: Border.all(color: dqBorder, width: 2),
+                    ),
+                    child: Icon(def.icon, color: Colors.white, size: 32),
+                  ),
+                  const SizedBox(height: 14),
+                  Text(def.titleJa,
+                      textAlign: TextAlign.center,
+                      style:
+                          dqText(size: 18, w: FontWeight.w800, color: dqInk)),
+                  const SizedBox(height: 6),
+                  Text(def.descriptionJa,
+                      textAlign: TextAlign.center,
+                      style: dqText(size: 14, color: dqInk)),
+                  if (count > 1) ...[
+                    const SizedBox(height: 8),
+                    Text('+${count - 1}個のバッジも獲得！',
+                        style: dqText(size: 12, color: dqGoldDeep)),
+                  ],
                 ],
               ),
             ),
