@@ -156,6 +156,11 @@ const List<WritingPrompt> kWritingPrompts = [
     wordCountMin: 40,
     wordCountMax: 50,
     rubricPoints: ['内容 / Content', '語彙 / Vocabulary', '文法 / Grammar'],
+    modelAnswer:
+        'Hi! Thanks for your message. I play the piano. I started when I was six '
+        'years old. It took me about three years to play simple songs well, and I '
+        'am still practicing harder pieces today. I really hope you find a hobby '
+        'you enjoy too.',
   ),
   WritingPrompt(
     id: 'pre2_email_2',
@@ -174,6 +179,11 @@ const List<WritingPrompt> kWritingPrompts = [
     wordCountMin: 40,
     wordCountMax: 50,
     rubricPoints: ['内容 / Content', '語彙 / Vocabulary', '文法 / Grammar'],
+    modelAnswer:
+        'Hi! That sounds like a fun event. I would recommend okonomiyaki, a '
+        'popular dish from Japan. The main ingredients are flour, eggs, shredded '
+        'cabbage, and sliced pork. People often add a special sweet sauce on top. '
+        'It is easy to make and everyone at the fair will love it.',
   ),
 
   // ── 2級 要約 (45-55語) ──────────────────────────────────────────────────
@@ -202,6 +212,13 @@ const List<WritingPrompt> kWritingPrompts = [
       '語彙 / Vocabulary',
       '文法 / Grammar',
     ],
+    modelAnswer:
+        'Many cities lack affordable housing because rising urban populations '
+        'push prices and rents higher, hurting low- and middle-income families. '
+        'Governments have built public housing and offered rent subsidies, but '
+        'experts say these are not enough. Increasing the housing supply through '
+        'zoning reform and encouraging developers to build affordable units is '
+        'the long-term solution.',
   ),
   WritingPrompt(
     id: '2_summary_2',
@@ -227,6 +244,12 @@ const List<WritingPrompt> kWritingPrompts = [
       '語彙 / Vocabulary',
       '文法 / Grammar',
     ],
+    modelAnswer:
+        'Remote work has changed where people choose to live. Because many jobs '
+        'can now be done online, some workers are leaving expensive cities for '
+        'smaller towns and rural areas, where housing is cheaper and life is more '
+        'pleasant. This benefits rural economies, but it also worries large '
+        'cities about losing talent and investment.',
   ),
 
   // ── 準1級 要約 (60-70語) ────────────────────────────────────────────────
@@ -257,6 +280,14 @@ const List<WritingPrompt> kWritingPrompts = [
       '語彙 / Vocabulary',
       '文法 / Grammar',
     ],
+    modelAnswer:
+        'Artificial intelligence is increasingly helping doctors diagnose and '
+        'treat patients. Machine learning can analyze medical images very '
+        'accurately, sometimes spotting diseases earlier than human doctors. '
+        'Supporters believe AI makes healthcare more efficient and reduces '
+        'errors. Critics, however, worry about responsibility when an AI makes a '
+        'mistake, and about privacy, since these systems need access to large '
+        'amounts of patient data.',
   ),
   WritingPrompt(
     id: 'pre1_summary_2',
@@ -285,6 +316,13 @@ const List<WritingPrompt> kWritingPrompts = [
       '語彙 / Vocabulary',
       '文法 / Grammar',
     ],
+    modelAnswer:
+        'The four-day workweek is being considered as a way to reduce burnout and '
+        'raise productivity. Trials in Iceland, the United Kingdom, and Japan '
+        'reported lower stress, better work-life balance, and stable or higher '
+        'productivity, plus less staff turnover. However, some industries like '
+        'healthcare and retail cannot easily adapt, and companies fear that '
+        'working fewer hours could leave them behind their competitors.',
   ),
 
   // ── 3級 意見論述 ────────────────────────────────────────────────────────
@@ -325,6 +363,12 @@ const List<WritingPrompt> kWritingPrompts = [
       '語彙 / Vocabulary',
       '文法 / Grammar',
     ],
+    modelAnswer:
+        'I think people should use public transportation more. First, buses and '
+        'trains carry many passengers at once, so they reduce traffic jams and '
+        'air pollution in cities. Second, using public transportation is often '
+        'cheaper than driving a car every day, which helps people save money. For '
+        'these reasons, I believe more people should choose it.',
   ),
 
   // ── 2級 意見論述 ──────────────────────────────────────────────────────────
@@ -346,6 +390,16 @@ const List<WritingPrompt> kWritingPrompts = [
       '語彙 / Vocabulary',
       '文法 / Grammar',
     ],
+    modelAnswer:
+        'I believe companies should be required to give employees more paid '
+        'vacation time. First, rest is essential for health. Employees who take '
+        'enough time off are less likely to suffer from stress and burnout, which '
+        'can lead to serious illness. Second, well-rested workers are usually '
+        'more productive and creative when they return, so longer vacations can '
+        'actually benefit the company itself. Some managers worry about losing '
+        'working hours, but the long-term gains in employee health and motivation '
+        'outweigh this concern. For these reasons, I strongly support requiring '
+        'more paid vacation.',
   ),
 
   // ── 準1級 意見論述 ────────────────────────────────────────────────────────
@@ -367,6 +421,21 @@ const List<WritingPrompt> kWritingPrompts = [
       '語彙 / Vocabulary',
       '文法 / Grammar',
     ],
+    modelAnswer:
+        'I firmly believe that governments should invest more in renewable '
+        'energy, even if doing so temporarily raises electricity prices. The most '
+        'important reason is the urgent need to address climate change. Fossil '
+        'fuels release large amounts of carbon dioxide, which contributes to '
+        'global warming and extreme weather. By shifting to sources such as solar '
+        'and wind power, countries can significantly reduce their emissions and '
+        'protect the environment for future generations. Secondly, although '
+        'renewable energy may be expensive at first, the long-term economic '
+        'benefits are considerable. As technology improves and production '
+        'expands, the cost of clean energy continues to fall, and nations become '
+        'less dependent on imported fuel, whose prices are often unstable. While '
+        'higher electricity bills are a genuine concern for some families, '
+        'governments can offer subsidies to help them. For these reasons, '
+        'investing in renewable energy is a wise and necessary choice.',
   ),
 ];
 
