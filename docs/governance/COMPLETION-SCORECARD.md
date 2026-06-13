@@ -41,7 +41,7 @@ needs CEO go (spend / secret / prod / legal / art-gen).
 |19|メタ認知/calibration|25|BUILD|"how sure are you?" + calibration — SELF-BUILDABLE|
 |20|合格率誠実性|90|BUILD|hold; keep honest|
 |21|mastery追跡|70|BUILD|surface per-skill mastery|
-|22|再来訪/通知|58|BUILD|web push / streak reminders|
+|22|再来訪/通知|62|BUILD|2026-06-14: in-app daily-return nudge done (gentle no-guilt "keep it going today" when streak active + not studied today; 2026 streak research). REMAINING: web push / out-of-app streak reminder (needs SW + permission)|
 
 ## C. アセスメント
 |23|模試組立採点|82|BUILD|residual fidelity|
