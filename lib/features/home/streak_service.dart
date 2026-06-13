@@ -98,6 +98,23 @@ class StreakService {
   static const _kProblemsTodayDate = 'streak_problems_today_date';
   static const _kDailyGoal = 'streak_daily_goal';
 
+  // The parent's onboarding goal choice (written by OnboardingStorage.save as
+  // onboarding_goal_minutes, used here as a question-count proxy — see header).
+  static const _kOnboardingGoal = 'onboarding_goal_minutes';
+
+  /// The effective daily question goal, honouring the parent's onboarding pick.
+  /// Precedence: an explicit streak_daily_goal (a future in-app goal editor) →
+  /// the onboarding goal → the default. Before this, the onboarding choice was
+  /// captured but DEAD: nothing ever wrote streak_daily_goal, so the ring always
+  /// showed the default regardless of what the parent set up.
+  static int _effectiveDailyGoal(PreferencesService prefs) {
+    final explicit = prefs.getInt(_kDailyGoal);
+    if (explicit > 0) return explicit;
+    final onboarding = prefs.getInt(_kOnboardingGoal);
+    if (onboarding > 0) return onboarding;
+    return kDefaultDailyGoal;
+  }
+
   // ISO-8601 date string for a given DateTime.
   static String _dateKey(DateTime d) => '${d.year.toString().padLeft(4, '0')}'
       '-${d.month.toString().padLeft(2, '0')}'
@@ -139,8 +156,7 @@ class StreakService {
     final problemsDate = prefs.getString(_kProblemsTodayDate);
     final problemsToday =
         (problemsDate == todayKey) ? prefs.getInt(_kProblemsToday) : 0;
-    final storedGoal = prefs.getInt(_kDailyGoal);
-    final dailyGoal = storedGoal > 0 ? storedGoal : kDefaultDailyGoal;
+    final dailyGoal = _effectiveDailyGoal(prefs);
 
     // Display-side freshness (#123 sibling): recordStudySession only resets the
     // weekly dots / today-count when the child STUDIES. On a pure load — opening
@@ -254,13 +270,12 @@ class StreakService {
     final problemsDate = prefs.getString(_kProblemsTodayDate);
     final problemsToday =
         (problemsDate == todayKey) ? prefs.getInt(_kProblemsToday) : 0;
-    final storedGoal = prefs.getInt(_kDailyGoal);
     return StreakState(
       currentStreak: streak,
       weeklyBits: bits,
       todayCount: todayCount,
       problemsToday: problemsToday,
-      dailyGoal: storedGoal > 0 ? storedGoal : kDefaultDailyGoal,
+      dailyGoal: _effectiveDailyGoal(prefs),
     );
   }
 }

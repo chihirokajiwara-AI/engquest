@@ -271,4 +271,41 @@ void main() {
     expect(state.weeklyBits, 1 << 2);
     expect(state.todayCount, 2);
   });
+
+  // ── Daily goal honours the onboarding choice ───────────────────────────────
+  // Regression (flaw-hunt 2026-06-14): the onboarding goal-picker wrote
+  // onboarding_goal_minutes, but nothing ever wrote streak_daily_goal, so the
+  // ring always showed kDefaultDailyGoal regardless of the parent's choice.
+
+  test('dailyGoal falls back to the onboarding goal when no explicit goal set',
+      () async {
+    SharedPreferences.setMockInitialValues({'onboarding_goal_minutes': 25});
+    PreferencesService.resetInstance();
+    final state = await StreakService().load();
+    expect(state.dailyGoal, 25,
+        reason: "the parent's onboarding goal must drive the ring");
+  });
+
+  test('an explicit streak_daily_goal takes precedence over onboarding',
+      () async {
+    SharedPreferences.setMockInitialValues({
+      'onboarding_goal_minutes': 25,
+      'streak_daily_goal': 15,
+    });
+    PreferencesService.resetInstance();
+    final state = await StreakService().load();
+    expect(state.dailyGoal, 15);
+  });
+
+  test('dailyGoal is the default when neither goal is set', () async {
+    final state = await StreakService().load();
+    expect(state.dailyGoal, kDefaultDailyGoal);
+  });
+
+  test('recordStudySession also reports the onboarding-derived goal', () async {
+    SharedPreferences.setMockInitialValues({'onboarding_goal_minutes': 30});
+    PreferencesService.resetInstance();
+    final state = await StreakService().recordStudySession();
+    expect(state.dailyGoal, 30);
+  });
 }
