@@ -938,12 +938,14 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
           icon: Icons.play_arrow_rounded,
           label: 'じけんげんばへ　／　Story',
           onTap: _goToScene,
+          navKey: 'scene', // pre-literacy: a non-reader hears the label
         ),
         const SizedBox(height: 10),
         _adventureButton(
           icon: Icons.map_outlined,
           label: 'ちずを みる　／　Adventure Map',
           onTap: _goToQuestMap,
+          navKey: 'map',
         ),
       ],
     );
@@ -953,10 +955,11 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
     required IconData icon,
     required String label,
     required VoidCallback onTap,
+    String? navKey,
   }) {
     // a11y (T14): a labelled button so screen-reader / switch users can navigate
     // to it (a bare GestureDetector exposes only a 'group', not a tap action).
-    return Semantics(
+    final button = Semantics(
       button: true,
       label: label,
       excludeSemantics: true,
@@ -993,6 +996,17 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
           ),
         ),
       ),
+    );
+    // #133 pre-literacy: an additive speaker so a non-reader can HEAR the label
+    // (matches the primary CTA). Placed OUTSIDE the button's excludeSemantics so
+    // it stays separately focusable; the button itself still navigates by tap.
+    if (navKey == null) return button;
+    return Row(
+      children: [
+        Expanded(child: button),
+        const SizedBox(width: 4),
+        SpeakerButton(navKey, color: dqGold.withAlpha(200), size: 20),
+      ],
     );
   }
 }

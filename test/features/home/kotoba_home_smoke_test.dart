@@ -17,6 +17,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:engquest/core/audio/nav_speak.dart' show SpeakerButton;
 import 'package:engquest/core/firebase/auth_service.dart';
 import 'package:engquest/core/fsrs/fsrs_card_repository.dart';
 import 'package:engquest/core/fsrs/fsrs_card.dart';
@@ -516,5 +517,20 @@ void main() {
     await _settle(tester);
     expect(find.bySemanticsLabel('せってい / Settings'), findsOneWidget);
     handle.dispose();
+  });
+
+  testWidgets(
+      'KotobaHomeScreen: all three primary actions have a tap-to-speak button '
+      '(#133 pre-literacy)', (tester) async {
+    // A non-reading 5yo must be able to HEAR every main action, not just the
+    // primary CTA. The exam CTA + both adventure buttons (Story/Map) each carry
+    // a SpeakerButton; previously only the exam CTA did, so Story/Map were
+    // silent text for a pre-reader (flaw-hunt 2026-06-14). Lock all three.
+    await tester.pumpWidget(_wrap(
+      streakService: _MockStreakService(const StreakState.zero()),
+      cardRepository: InMemoryFsrsCardRepository(),
+    ));
+    await _settle(tester);
+    expect(find.byType(SpeakerButton), findsNWidgets(3));
   });
 }

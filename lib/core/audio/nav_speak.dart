@@ -25,6 +25,7 @@ class NavSpeak {
   static const Set<String> keys = {
     'exam',
     'passrate',
+    'scene', // home adventure: じけんげんばへ / Story
     'map',
     'settings',
     'hint',
