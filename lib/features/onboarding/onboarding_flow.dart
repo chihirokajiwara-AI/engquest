@@ -7,6 +7,22 @@ import '../quest/ui/dq_ui.dart';
 import 'placement_engine.dart';
 import 'placement_item_bank.dart';
 
+/// Age at or below which a child is treated as a PRE-READER: the English-text
+/// placement quiz is skipped (a non-reader can't answer it) and they're placed at
+/// the 5級 floor instead. Public so the contract is unit-testable.
+const int kPreReaderMaxAge = 7;
+
+/// The placement a pre-reader (age ≤ [kPreReaderMaxAge]) gets without the quiz:
+/// the 5級 floor — the kindest start; they can level up later via the grade
+/// selector. Low confidence (age-seeded, not measured).
+const PlacementOutcome kPreReaderPlacement = PlacementOutcome(
+  grade: 0,
+  eikenLevel: '5',
+  cefr: 'A1−',
+  confidence: PlacementConfidence.low,
+  theta: 0.0,
+);
+
 /// ENG Quest — Onboarding Flow (C10)
 ///
 /// 4-step onboarding for new users:
@@ -190,11 +206,20 @@ class _OnboardingFlowState extends State<OnboardingFlow>
     _fadeCtrl.reverse().then((_) {
       setState(() {
         _step++;
-        // Entering placement step — initialise the engine now so the age seed
-        // is correct.  The engine itself is pure Dart (no Firebase, no async).
-        if (_step == 1 && _engine == null) {
-          _engine = PlacementEngine.fromAge(_age);
-          _pickNextItem();
+        // Entering placement step.
+        if (_step == 1 && _engine == null && _outcome == null) {
+          if (_age <= kPreReaderMaxAge) {
+            // Pre-reader: the placement quiz is English reading MCQs a non-reader
+            // CANNOT answer — gating first value behind an unanswerable text test
+            // (2026 onboarding anti-pattern). Skip it: place at the 5級 floor and
+            // go straight to avatar — first value in a few taps.
+            _outcome = kPreReaderPlacement;
+            _step = 2; // skip the placement quiz entirely
+          } else {
+            // Reader: run the adaptive quiz, seeded by age. Pure Dart, no async.
+            _engine = PlacementEngine.fromAge(_age);
+            _pickNextItem();
+          }
         }
       });
       _fadeCtrl.forward();
