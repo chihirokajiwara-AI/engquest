@@ -22,7 +22,31 @@ or network needed — pure file + regex, CI-friendly.
 
 import os
 import re
+import shutil
+import subprocess
 import sys
+
+# A clip shorter than this almost certainly means synthesis silently failed
+# (empty/near-silent output that still has a valid MP3 header, so the byte-size
+# check passes). The shortest legitimate clip — a 5級 single-line 応答 like
+# "Thank you very much." — is ~1.8s, so 0.4s is a very conservative floor with
+# zero false positives. Only enforced when ffprobe is available (CI-safe).
+_MIN_DURATION_S = 0.4
+
+
+def _duration_seconds(path: str):
+    """Clip duration via ffprobe, or None if ffprobe is unavailable / fails."""
+    if not shutil.which("ffprobe"):
+        return None
+    try:
+        out = subprocess.run(
+            ["ffprobe", "-v", "error", "-show_entries", "format=duration",
+             "-of", "csv=p=0", path],
+            capture_output=True, text=True, timeout=15,
+        )
+        return float(out.stdout.strip())
+    except (ValueError, OSError, subprocess.SubprocessError):
+        return None
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(
@@ -52,12 +76,22 @@ def main() -> int:
                     waived.add(line.split("|")[0].strip().split("/")[-1])
 
     errors = []
+    ffprobe_ok = shutil.which("ffprobe") is not None
     for key in keys:
         path = os.path.join(AUDIO_DIR, key)
         if not os.path.exists(path):
             errors.append(f"{key}: no bundled clip (assets/audio/listening/{key})")
         elif os.path.getsize(path) == 0:
             errors.append(f"{key}: clip is zero bytes")
+        else:
+            # Catch a silently-failed synthesis: a valid-but-near-silent MP3
+            # passes the byte check but plays as nothing. (ffprobe-gated → CI-safe.)
+            dur = _duration_seconds(path)
+            if dur is not None and dur < _MIN_DURATION_S:
+                errors.append(
+                    f"{key}: clip is only {dur:.2f}s "
+                    f"(< {_MIN_DURATION_S}s — likely a silent synthesis failure)"
+                )
         if key in waived:
             errors.append(
                 f"{key}: exists on disk but still waived in ALLOWED_MISSING.txt "
@@ -76,7 +110,12 @@ def main() -> int:
         )
         return 1
 
-    print(f"OK: all {len(keys)} referenced 英検 listening clips bundled & non-empty.")
+    dur_note = (
+        "bundled, non-empty & ≥%.1fs" % _MIN_DURATION_S
+        if ffprobe_ok
+        else "bundled & non-empty (duration check skipped — no ffprobe)"
+    )
+    print(f"OK: all {len(keys)} referenced 英検 listening clips {dur_note}.")
     return 0
 
 
