@@ -65,4 +65,46 @@ void main() {
       expect(allNpcsSolved(sceneNoNpc, {}), isTrue);
     });
   });
+
+  group('nazoProgress', () {
+    test('counts only NPC ナゾ (coins excluded) and tracks solved/total', () {
+      final npcIdx = [
+        for (var i = 0; i < kTown5Scene.hotspots.length; i++)
+          if (kTown5Scene.hotspots[i].kind == HotspotKind.npc) i,
+      ];
+      final coinCount = kTown5Scene.hotspots
+          .where((h) => h.kind == HotspotKind.coin)
+          .length;
+      expect(coinCount, greaterThan(0),
+          reason: '5級 scene has a hidden coin → must be excluded from total');
+
+      // None solved.
+      final none = nazoProgress(kTown5Scene, {});
+      expect(none.total, npcIdx.length);
+      expect(none.solved, 0);
+
+      // One solved.
+      final one = nazoProgress(kTown5Scene, {npcIdx.first: true});
+      expect(one.solved, 1);
+      expect(one.total, npcIdx.length);
+
+      // Solving the coin slot must NOT count toward ナゾ progress.
+      final coinIdx = kTown5Scene.hotspots
+          .indexWhere((h) => h.kind == HotspotKind.coin);
+      final coinOnly = nazoProgress(kTown5Scene, {coinIdx: true});
+      expect(coinOnly.solved, 0,
+          reason: 'a found coin is not a solved ナゾ');
+
+      // All solved.
+      final all = nazoProgress(kTown5Scene, {for (final i in npcIdx) i: true});
+      expect(all.solved, all.total);
+      expect(all.solved, npcIdx.length);
+    });
+
+    test('multi-ナゾ scene so the pill is meaningful (total >= 2)', () {
+      // The pill only renders for total >= 2; assert the real 5級 scene clears
+      // that bar so the engagement-spine progress cue actually shows.
+      expect(nazoProgress(kTown5Scene, {}).total, greaterThanOrEqualTo(2));
+    });
+  });
 }

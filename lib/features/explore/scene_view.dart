@@ -68,6 +68,23 @@ bool allNpcsSolved(SceneDef scene, Map<int, bool> solved) {
   return true;
 }
 
+/// (solved, total) NPC ナゾ counts for [scene]. Drives the header progress pill
+/// so the child can always see how many of the scene's mysteries remain before
+/// its colour is restored — progress visibility, not just a binary all-or-nothing
+/// flood (engagement spine: 「あと1つ」). Coins are excluded (they are optional
+/// finds, not gated puzzles).
+({int solved, int total}) nazoProgress(SceneDef scene, Map<int, bool> solved) {
+  var total = 0;
+  var done = 0;
+  for (var i = 0; i < scene.hotspots.length; i++) {
+    if (scene.hotspots[i].kind == HotspotKind.npc) {
+      total++;
+      if (solved[i] == true) done++;
+    }
+  }
+  return (solved: done, total: total);
+}
+
 class SceneView extends StatefulWidget {
   final SceneDef scene;
 
@@ -416,9 +433,12 @@ class _SceneViewState extends State<SceneView> {
                 style: dqText(size: 16, w: FontWeight.w800, color: dqGold),
               ),
             ),
+            // ナゾ progress pill — how many of the scene's mysteries are solved.
+            // Makes progress visible instead of a binary all-done colour flood.
+            _nazoProgressPill(),
             // Coin HUD
             Padding(
-              padding: const EdgeInsets.only(right: 8),
+              padding: const EdgeInsets.only(left: 8, right: 8),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -432,6 +452,41 @@ class _SceneViewState extends State<SceneView> {
           ],
         ),
       );
+
+  /// Compact "ナゾ solved/total" pill shown in the header. Hidden for scenes with
+  /// fewer than two ナゾ (a single puzzle needs no progress bar). Turns green with
+  /// a check when every ナゾ is solved — the visible "this case is closed" cue
+  /// that mirrors the grey→colour restoration. Semantics-labelled for screen
+  /// readers / tap-to-speak.
+  Widget _nazoProgressPill() {
+    final p = nazoProgress(widget.scene, _solved);
+    if (p.total < 2) return const SizedBox.shrink();
+    final done = p.solved == p.total;
+    final color = done ? const Color(0xFF8BE08B) : dqGold;
+    return Semantics(
+      label: done
+          ? 'ナゾ ぜんぶ クリア'
+          : 'ナゾ ${p.total}こ のうち ${p.solved}こ クリア',
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+        decoration: BoxDecoration(
+          color: Colors.black.withAlpha(70),
+          borderRadius: BorderRadius.circular(11),
+          border: Border.all(color: color.withAlpha(150)),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(done ? Icons.check_circle : Icons.search,
+                color: color, size: 14),
+            const SizedBox(width: 4),
+            Text('${p.solved}/${p.total}',
+                style: dqText(size: 13, w: FontWeight.w800, color: color)),
+          ],
+        ),
+      ),
+    );
+  }
 
   Widget _sceneStack() {
     return GestureDetector(
