@@ -9,6 +9,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:engquest/features/exam_practice/pass/mock_exam.dart';
 import 'package:engquest/features/exam_practice/pass/cse_model.dart';
+import 'package:engquest/features/exam_practice/listening_data.dart';
 
 void main() {
   const grades = ['5', '4', '3', 'pre2', 'pre2plus', '2', 'pre1'];
@@ -40,6 +41,38 @@ void main() {
             reason: '$g mock listening item ${m.id} lost its 解説 in assembly '
                 '(模試review would teach nothing for it)');
       }
+    });
+
+    // Anti-gaming WIRING lock (#28): the authored listening keys cluster at one
+    // slot, so the mock must SHUFFLE each item's choices — otherwise a child who
+    // taps the same position every time games the 合格率 (shown to paying parents)
+    // with zero comprehension. choice_shuffle_test locks the util; this locks
+    // that the mock actually CALLS it. Compare each assembled listening item's
+    // answer position to its authored source position: with shuffle wired a large
+    // fraction MOVE; if a refactor drops the shuffle, ALL stay put → 0% moved.
+    test('英検$g mock shuffles listening answer positions (anti-gaming wiring)',
+        () {
+      final mock = MockExamAssembler.assemble(g, seed: 7);
+      final source = {
+        for (final it in (kListeningItems[g] ?? const []))
+          it.audioKey: it.correctIndex,
+      };
+      final listening =
+          mock.mcqItems.where((m) => m.skill == EikenSkill.listening).toList();
+      final comparable =
+          listening.where((m) => source.containsKey(m.id)).toList();
+      expect(comparable.length, greaterThanOrEqualTo(8),
+          reason: '$g: too few listening items to assess shuffle wiring');
+
+      final moved =
+          comparable.where((m) => m.correctIdx != source[m.id]).length;
+      final movedFrac = moved / comparable.length;
+      // Shuffle (4 slots) moves ~75% of answers; unshuffled = 0%. 0.30 cleanly
+      // separates "wired" from "dropped" without being seed-fragile.
+      expect(movedFrac, greaterThan(0.30),
+          reason: '$g: only ${(movedFrac * 100).round()}% of mock listening '
+              'answers moved from their authored slot — the choice shuffle looks '
+              'unwired, so the 合格率 is gameable by always tapping one position');
     });
   }
 }
