@@ -1866,6 +1866,143 @@ const _gradePre2Part2 = <ListeningItem>[
     explanation:
         '本文に「reducing the need to transport food long distances（食料を長距離輸送する必要を減らす）」と都市農業の利点が述べられている。',
   ),
+  // ── Studio expansion 2026-06-13: 準2級 第2部 toward the 30-item target ──────────
+  ListeningItem(
+    part: 2,
+    grade: 'pre2',
+    audioKey: 'lp2_p2_05.mp3',
+    transcripts: [
+      'Online learning has become much more common in recent years. Students '
+          'can now take courses from universities around the world without '
+          'leaving home. One major advantage is flexibility: learners can study '
+          'at their own pace and review lessons as many times as they need. '
+          'However, it requires strong self-discipline to stay motivated.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question:
+        'According to the passage, what is one advantage of online learning?',
+    choices: [
+      'It is always completely free.',
+      'Learners can study at their own pace.',
+      'It does not require the internet.',
+      'Teachers visit students at home.',
+    ],
+    correctIndex: 1,
+    explanation:
+        '本文に「learners can study at their own pace（自分のペースで学べる）」と利点が述べられている。',
+  ),
+  ListeningItem(
+    part: 2,
+    grade: 'pre2',
+    audioKey: 'lp2_p2_06.mp3',
+    transcripts: [
+      'Attention residents. Starting next month, the city will collect plastic '
+          'bottles every Tuesday instead of every other week. Please remove the '
+          'caps and rinse the bottles before putting them out. This change is '
+          'part of the city plan to increase its recycling rate.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'What change will happen next month?',
+    choices: [
+      'Plastic bottles will be collected more often.',
+      'Recycling will stop completely.',
+      'Caps will no longer need to be removed.',
+      'Collection will move to Sunday.',
+    ],
+    correctIndex: 0,
+    explanation:
+        '放送に「collect plastic bottles every Tuesday instead of every other week（隔週でなく毎週火曜に回収）」とあり、回収の頻度が増える。',
+  ),
+  ListeningItem(
+    part: 2,
+    grade: 'pre2',
+    audioKey: 'lp2_p2_07.mp3',
+    transcripts: [
+      'Many teenagers do not get enough sleep. Doctors recommend that people '
+          'aged thirteen to eighteen sleep about nine hours each night. A lack '
+          'of sleep can make it harder to concentrate at school and may affect '
+          'mood. Experts suggest avoiding screens before bedtime to sleep better.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'What do experts suggest in order to sleep better?',
+    choices: [
+      'Drinking coffee at night.',
+      'Studying until very late.',
+      'Avoiding screens before bedtime.',
+      'Sleeping only six hours.',
+    ],
+    correctIndex: 2,
+    explanation:
+        '本文に「avoiding screens before bedtime（就寝前に画面を避ける）」とよく眠るための助言がある。',
+  ),
+  ListeningItem(
+    part: 2,
+    grade: 'pre2',
+    audioKey: 'lp2_p2_08.mp3',
+    transcripts: [
+      'Welcome to the city science museum. We are pleased to announce a special '
+          'exhibition on space exploration, opening this Saturday. Visitors can '
+          'see real models of rockets and try a virtual spacewalk. The exhibition '
+          'is free for students with a valid school ID.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'Who can see the special exhibition for free?',
+    choices: [
+      'Everyone who visits.',
+      'Only adults.',
+      'Only museum members.',
+      'Students with a valid school ID.',
+    ],
+    correctIndex: 3,
+    explanation:
+        '放送に「free for students with a valid school ID（有効な学生証を持つ生徒は無料）」とある。',
+  ),
+  ListeningItem(
+    part: 2,
+    grade: 'pre2',
+    audioKey: 'lp2_p2_09.mp3',
+    transcripts: [
+      'Bees play a vital role in nature. As they move from flower to flower '
+          'collecting nectar, they carry pollen, which helps plants produce '
+          'fruits and seeds. Without bees, many of the fruits and vegetables we '
+          'eat would become much harder to grow. That is why protecting bees is '
+          'so important.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'Why are bees important according to the passage?',
+    choices: [
+      'They produce honey to sell.',
+      'They keep gardens clean.',
+      'They help plants produce fruits and seeds.',
+      'They scare away other insects.',
+    ],
+    correctIndex: 2,
+    explanation:
+        '本文に「carry pollen, which helps plants produce fruits and seeds（花粉を運び、植物が実や種を作るのを助ける）」とある。',
+  ),
+  ListeningItem(
+    part: 2,
+    grade: 'pre2',
+    audioKey: 'lp2_p2_10.mp3',
+    transcripts: [
+      'The school library is holding a reading challenge this summer. Students '
+          'who read at least ten books will receive a certificate, and the top '
+          'reader in each grade will win a gift card. Librarians hope the '
+          'challenge will encourage students to discover new authors and enjoy '
+          'reading more.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'What will students who read at least ten books receive?',
+    choices: [
+      'A certificate.',
+      'A gift card.',
+      'A free book.',
+      'Extra homework.',
+    ],
+    correctIndex: 0,
+    explanation:
+        '本文に「read at least ten books will receive a certificate（10冊以上読むと賞状がもらえる）」とある。gift card は各学年の最多読者のみ。',
+  ),
 ];
 
 // ── 英検2級 ─────────────────────────────────────────────────────────────────
