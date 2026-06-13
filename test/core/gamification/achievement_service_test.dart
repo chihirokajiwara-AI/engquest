@@ -162,6 +162,57 @@ void main() {
       expect(svc.cachedStates!['mastery_10']!.unlocked, false);
     });
 
+    // Regression (2026-06-14): streak/level achievements are advanced by ANY
+    // activity (exam practice + scenes build the streak/XP), but checkAndUpdate
+    // was only called from the vocab battle. A child who never battles could earn
+    // a 7-day streak yet never unlock streak_*. The achievements screen now
+    // re-checks on open; this locks that a streak unlock needs NO battle stats.
+    test('streak achievement unlocks with zero battle (mastery/practice) stats',
+        () async {
+      final db = FakeFirebaseFirestore();
+      final svc = AchievementService(firestore: db);
+
+      final unlocked = await svc.checkAndUpdate(
+        uid: uid,
+        totalMastered: 0, // never did the vocab battle
+        currentStreak: 7, // but practised (exam) 7 days
+        totalPracticed: 0,
+        level: 1,
+      );
+
+      expect(unlocked, containsAll(<String>['streak_3', 'streak_7']));
+      expect(svc.cachedStates!['streak_7']!.unlocked, true);
+    });
+
+    test('re-check with STORED mastery progress does not regress it', () async {
+      final db = FakeFirebaseFirestore();
+      final svc = AchievementService(firestore: db);
+
+      // Battle banked 30 mastered (mastery_50 in progress, not unlocked).
+      await svc.checkAndUpdate(
+        uid: uid,
+        totalMastered: 30,
+        currentStreak: 0,
+        totalPracticed: 0,
+        level: 1,
+      );
+      expect(svc.cachedStates!['mastery_50']!.progress, 30);
+
+      // A non-battle re-check passes the STORED mastery (30), not 0, so it must
+      // NOT regress while it unlocks the now-earned streak.
+      await svc.checkAndUpdate(
+        uid: uid,
+        totalMastered: 30,
+        currentStreak: 7,
+        totalPracticed: 0,
+        level: 1,
+      );
+      expect(svc.cachedStates!['streak_7']!.unlocked, true);
+      expect(svc.cachedStates!['mastery_50']!.progress, 30,
+          reason:
+              'stored mastery progress must not regress on a non-battle re-check');
+    });
+
     test('unlocks multiple achievements at once', () async {
       final db = FakeFirebaseFirestore();
       final svc = AchievementService(firestore: db);

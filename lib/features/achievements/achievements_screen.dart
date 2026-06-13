@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import '../../core/firebase/auth_service.dart';
 import '../../core/gamification/achievement.dart';
 import '../../core/gamification/achievement_service.dart';
+import '../../core/gamification/xp_service.dart';
+import '../home/streak_service.dart';
 import '../quest/ui/dq_ui.dart';
 
 class AchievementsScreen extends StatefulWidget {
@@ -34,7 +36,36 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
   Future<void> _load() async {
     try {
       final uid = await _auth.getOrCreateUid();
-      final states = await _achievementService.init(uid);
+      var states = await _achievementService.init(uid);
+
+      // Re-check on OPEN so badges earned through ANY activity unlock — not just
+      // the vocab battle. checkAndUpdate is otherwise called only from
+      // battle_screen, so a child who does exam practice / scene ナゾ (which also
+      // build the streak + XP level) but never the battle would never unlock
+      // their streak_* / level_* achievements despite earning them. Streak + level
+      // are re-read live; mastery + practice pass their STORED progress so a
+      // battle-tracked count is never regressed to 0 here.
+      int streak = 0;
+      try {
+        streak = (await StreakService().load()).currentStreak;
+      } catch (_) {}
+      int level = 1;
+      try {
+        level = (await XpService().init(uid)).level;
+      } catch (_) {}
+      try {
+        await _achievementService.checkAndUpdate(
+          uid: uid,
+          totalMastered:
+              _maxStoredProgress(states, AchievementCategory.mastery),
+          currentStreak: streak,
+          totalPracticed:
+              _maxStoredProgress(states, AchievementCategory.practice),
+          level: level,
+        );
+        states = await _achievementService.init(uid); // pick up newly unlocked
+      } catch (_) {}
+
       if (mounted) {
         setState(() {
           _states = states;
@@ -44,6 +75,20 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
     } catch (_) {
       if (mounted) setState(() => _loading = false);
     }
+  }
+
+  /// Highest stored progress among a category's achievements — used so a re-check
+  /// triggered from a non-battle context does not regress a battle-tracked count.
+  int _maxStoredProgress(
+      Map<String, AchievementState> states, AchievementCategory cat) {
+    var max = 0;
+    for (final def in kAchievements) {
+      if (def.category == cat) {
+        final p = states[def.id]?.progress ?? 0;
+        if (p > max) max = p;
+      }
+    }
+    return max;
   }
 
   @override
