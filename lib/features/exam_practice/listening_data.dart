@@ -1771,6 +1771,117 @@ const _gradePre2Part1 = <ListeningItem>[
     explanation:
         'B は「it reminds me to review words every day（毎日単語を復習するよう促してくれる）」と述べ、語彙が増えたと言っている。',
   ),
+  // ── Studio expansion 2026-06-13 (cont.): 準2級 第1部 to 15 (→30 total) ──────────
+  ListeningItem(
+    part: 1,
+    grade: 'pre2',
+    audioKey: 'lp2_p1_11.mp3',
+    transcripts: [
+      'A: Excuse me, how can I get to the city library from here?',
+      'B: Go straight for two blocks and turn left at the bank. It is next to the post office.',
+      'A: Thank you very much.',
+      'B: You are welcome.',
+      'Question: Where is the city library?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'Where is the city library?',
+    choices: [
+      'Across from the station.',
+      'Next to the post office.',
+      'Next to the bank.',
+      'Behind the school.',
+    ],
+    correctIndex: 1,
+    explanation: 'B は「It is next to the post office（郵便局のとなり）」と図書館の場所を教えている。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre2',
+    audioKey: 'lp2_p1_12.mp3',
+    transcripts: [
+      'A: What do you recommend here?',
+      'B: The blueberry pancakes are very popular.',
+      'A: That sounds good. I will try them.',
+      'B: Great choice. Would you like something to drink?',
+      'Question: What will the man order?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What will the man order?',
+    choices: [
+      'The blueberry pancakes.',
+      'A cup of coffee.',
+      'A sandwich.',
+      'Nothing yet.',
+    ],
+    correctIndex: 0,
+    explanation: 'A は「I will try them（それにします）」と blueberry pancakes を注文している。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre2',
+    audioKey: 'lp2_p1_13.mp3',
+    transcripts: [
+      'A: I cannot find my phone anywhere.',
+      'B: Did you check the classroom? You used it during lunch.',
+      'A: You are right. I will go back and look.',
+      'B: I hope you find it.',
+      'Question: What will the girl do next?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What will the girl do next?',
+    choices: [
+      'Buy a new phone.',
+      'Call her parents.',
+      'Go back to the classroom.',
+      'Borrow a phone.',
+    ],
+    correctIndex: 2,
+    explanation: 'B の助言を受け A は「I will go back and look（戻って探す）」＝教室へ戻ると述べている。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre2',
+    audioKey: 'lp2_p1_14.mp3',
+    transcripts: [
+      'A: I want to buy a present for Mika. Any ideas?',
+      'B: She loves reading, so how about a book?',
+      'A: She already has so many. Maybe a nice bookmark instead.',
+      'B: That is a thoughtful idea.',
+      'Question: What will the woman probably buy?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What will the woman probably buy?',
+    choices: [
+      'A book.',
+      'A bookmark.',
+      'A bag.',
+      'A pen.',
+    ],
+    correctIndex: 1,
+    explanation: 'A は本は多いので「a nice bookmark instead（代わりに素敵なしおり）」を買うと述べている。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre2',
+    audioKey: 'lp2_p1_15.mp3',
+    transcripts: [
+      'A: Do you want to see a movie this Saturday?',
+      'B: Actually, there is a science exhibition I really want to visit.',
+      'A: That sounds fun. Let us go there instead.',
+      'B: Great. It opens at ten.',
+      'Question: What will they do on Saturday?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What will they do on Saturday?',
+    choices: [
+      'See a movie.',
+      'Stay home.',
+      'Go shopping.',
+      'Visit a science exhibition.',
+    ],
+    correctIndex: 3,
+    explanation: 'A が「Let us go there instead（代わりにそこへ行こう）」と科学展に行くことに同意している。',
+  ),
 ];
 
 const _gradePre2Part2 = <ListeningItem>[
@@ -2002,6 +2113,114 @@ const _gradePre2Part2 = <ListeningItem>[
     correctIndex: 0,
     explanation:
         '本文に「read at least ten books will receive a certificate（10冊以上読むと賞状がもらえる）」とある。gift card は各学年の最多読者のみ。',
+  ),
+  // ── Studio expansion 2026-06-13 (cont.): 準2級 第2部 to 15 (→30 total) ──────────
+  ListeningItem(
+    part: 2,
+    grade: 'pre2',
+    audioKey: 'lp2_p2_11.mp3',
+    transcripts: [
+      'Attention passengers. Due to a signal check, the express train to Central '
+          'Station will be delayed by about fifteen minutes. The local train on '
+          'platform three will depart on time. We apologize for any inconvenience.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'Which train will leave on time?',
+    choices: [
+      'The express train.',
+      'The local train on platform three.',
+      'All of the trains.',
+      'None of the trains.',
+    ],
+    correctIndex: 1,
+    explanation:
+        '放送に「The local train on platform three will depart on time（3番線の普通列車は定刻に発車）」とある。急行は遅延。',
+  ),
+  ListeningItem(
+    part: 2,
+    grade: 'pre2',
+    audioKey: 'lp2_p2_12.mp3',
+    transcripts: [
+      'Walking is one of the simplest ways to stay healthy. Just thirty minutes '
+          'a day can improve your heart health and reduce stress. Unlike many '
+          'sports, walking needs no special equipment and can be done almost '
+          'anywhere. Doctors often recommend it for people of all ages.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'What is one benefit of walking mentioned in the passage?',
+    choices: [
+      'It improves heart health and reduces stress.',
+      'It builds large muscles quickly.',
+      'It requires special equipment.',
+      'It can only be done in a gym.',
+    ],
+    correctIndex: 0,
+    explanation:
+        '本文に「improve your heart health and reduce stress（心臓の健康を改善しストレスを減らす）」とある。',
+  ),
+  ListeningItem(
+    part: 2,
+    grade: 'pre2',
+    audioKey: 'lp2_p2_13.mp3',
+    transcripts: [
+      'Our school festival will be held next Saturday from ten in the morning. '
+          'Each class has prepared games, food stalls, and performances. Visitors '
+          'are asked to wear a name tag at the entrance. We look forward to '
+          'seeing everyone there.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'What are visitors asked to do?',
+    choices: [
+      'Arrive before nine.',
+      'Bring their own food.',
+      'Pay an entrance fee.',
+      'Wear a name tag at the entrance.',
+    ],
+    correctIndex: 3,
+    explanation: '放送に「wear a name tag at the entrance（入口で名札をつける）」と来場者への依頼がある。',
+  ),
+  ListeningItem(
+    part: 2,
+    grade: 'pre2',
+    audioKey: 'lp2_p2_14.mp3',
+    transcripts: [
+      'Every year, a huge amount of plastic ends up in the ocean. This waste can '
+          'harm sea animals that mistake it for food. Some countries have started '
+          'banning single-use plastic bags to reduce the problem. Scientists say '
+          'that small daily choices can make a big difference.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'What have some countries started doing?',
+    choices: [
+      'Feeding sea animals.',
+      'Cleaning every beach daily.',
+      'Banning single-use plastic bags.',
+      'Building new factories.',
+    ],
+    correctIndex: 2,
+    explanation:
+        '本文に「banning single-use plastic bags（使い捨てレジ袋を禁止する）」と一部の国の対策が述べられている。',
+  ),
+  ListeningItem(
+    part: 2,
+    grade: 'pre2',
+    audioKey: 'lp2_p2_15.mp3',
+    transcripts: [
+      'A new bakery café will open downtown next Monday. For the first week, all '
+          'customers will receive a free drink with any purchase. The café will '
+          'be open from seven in the morning to eight in the evening, every day '
+          'except Wednesday.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'When is the café closed?',
+    choices: [
+      'On Monday.',
+      'On Sunday.',
+      'On Wednesday.',
+      'It is never closed.',
+    ],
+    correctIndex: 2,
+    explanation: '本文に「every day except Wednesday（水曜以外毎日）」とあり、水曜は休み。',
   ),
 ];
 
