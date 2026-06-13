@@ -1347,6 +1347,8 @@ const _grade3Part3 = <ListeningItem>[
       'Special recycling trucks for schools.',
     ],
     correctIndex: 1,
+    explanation:
+        '「Many cities now have separate bins for paper, plastic, and glass（紙・プラ・ガラスの分別ごみ箱がある）」。',
   ),
   ListeningItem(
     part: 3,
@@ -1366,6 +1368,7 @@ const _grade3Part3 = <ListeningItem>[
       'Saturday afternoon.',
     ],
     correctIndex: 2,
+    explanation: '「expected to arrive on Friday evening（金曜の夜に来る見込み）」。',
   ),
   ListeningItem(
     part: 3,
@@ -1385,6 +1388,8 @@ const _grade3Part3 = <ListeningItem>[
       'She practiced with her Japanese neighbors.',
     ],
     correctIndex: 1,
+    explanation:
+        '「she took Japanese lessons twice a week（週2回日本語のレッスンを受けた）」で上達した。',
   ),
   ListeningItem(
     part: 3,
@@ -1404,6 +1409,7 @@ const _grade3Part3 = <ListeningItem>[
       'At eleven in the morning.',
     ],
     correctIndex: 1,
+    explanation: '「reopen tomorrow at nine in the morning（明日の朝9時に再開する）」。',
   ),
   // ── #10 volume expansion: 3級 第3部 4→10 (文内容一致). Audio pending Kokoro;
   //    keys in ALLOWED_MISSING. Content-QA'd 2026-06-09.
@@ -1425,6 +1431,8 @@ const _grade3Part3 = <ListeningItem>[
       'He buys seeds at the garden store.',
     ],
     correctIndex: 1,
+    explanation:
+        '「Every morning before school, he waters the plants and checks（毎朝登校前に水やりと確認をする）」。',
   ),
   ListeningItem(
     part: 3,
@@ -1444,6 +1452,7 @@ const _grade3Part3 = <ListeningItem>[
       'A small fee.',
     ],
     correctIndex: 1,
+    explanation: '「you will need a library card（図書館カードが必要）」と言っている。',
   ),
   ListeningItem(
     part: 3,
@@ -1463,6 +1472,8 @@ const _grade3Part3 = <ListeningItem>[
       'They collected old clothes.',
     ],
     correctIndex: 1,
+    explanation:
+        '「Students sold handmade crafts and baked goods（手作りの工芸品と焼き菓子を売った）」。',
   ),
   ListeningItem(
     part: 3,
@@ -1482,6 +1493,7 @@ const _grade3Part3 = <ListeningItem>[
       'There were too many passengers.',
     ],
     correctIndex: 1,
+    explanation: '「delayed ... because of heavy rain（大雨のため遅延）」。',
   ),
   ListeningItem(
     part: 3,
@@ -1501,6 +1513,7 @@ const _grade3Part3 = <ListeningItem>[
       'His team was already full.',
     ],
     correctIndex: 1,
+    explanation: '「last month he hurt his leg during a game（先月、試合で足をけがした）」から。',
   ),
   ListeningItem(
     part: 3,
@@ -1520,6 +1533,8 @@ const _grade3Part3 = <ListeningItem>[
       'At seven o\'clock.',
     ],
     correctIndex: 1,
+    explanation:
+        '「the special exhibition ... closes at five today（特別展は今日5時に閉まる）」。',
   ),
 ];
 
