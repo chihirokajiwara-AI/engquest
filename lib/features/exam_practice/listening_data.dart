@@ -2435,6 +2435,143 @@ const _grade2Part1 = <ListeningItem>[
     explanation:
         'A は「check the privacy settings and limit what you share（プライバシー設定を確認し共有を制限する）」と助言している。',
   ),
+  // ── Studio expansion 2026-06-13 (cont.): 2級 第1部 to 15 (→30 total) ──────────
+  ListeningItem(
+    part: 1,
+    grade: '2',
+    audioKey: 'l2_p1_10.mp3',
+    transcripts: [
+      'A: I have a job interview next week and I am quite nervous.',
+      'B: Have you researched the company beforehand?',
+      'A: Yes, and I have practiced answering common questions with a friend.',
+      'B: Then you are well prepared. Just stay calm and be yourself.',
+      'Question: What has the woman done to prepare for the interview?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What has the woman done to prepare for the interview?',
+    choices: [
+      'She has bought a new suit.',
+      'She has researched the company and practiced questions.',
+      'She has cancelled the interview.',
+      'She has called the manager.',
+    ],
+    correctIndex: 1,
+    explanation:
+        'A は「researched the company ... and ... practiced answering common questions（会社を調べ、よくある質問に答える練習をした）」と準備を述べている。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: '2',
+    audioKey: 'l2_p1_11.mp3',
+    transcripts: [
+      'A: Our drama club is holding a charity concert next month.',
+      'B: That is a great idea. What is the money for?',
+      'A: We want to buy new instruments for the music room.',
+      'B: I will definitely buy a ticket then.',
+      'Question: What will the money from the concert be used for?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What will the money from the concert be used for?',
+    choices: [
+      'To pay the club members.',
+      'To repair the stage.',
+      'To hire a teacher.',
+      'To buy new instruments for the music room.',
+    ],
+    correctIndex: 3,
+    explanation:
+        'A は「buy new instruments for the music room（音楽室に新しい楽器を買う）」ためと述べている。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: '2',
+    audioKey: 'l2_p1_12.mp3',
+    transcripts: [
+      'A: I am thinking about studying abroad next year.',
+      'B: That sounds exciting. Where would you like to go?',
+      'A: Probably Canada, because I want to improve my English in a friendly environment.',
+      'B: Canada is a wonderful choice for that.',
+      'Question: Why does the woman want to study in Canada?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'Why does the woman want to study in Canada?',
+    choices: [
+      'Because she wants to improve her English.',
+      'Because it is cheap.',
+      'Because her family lives there.',
+      'Because of the warm weather.',
+    ],
+    correctIndex: 0,
+    explanation:
+        'A は「improve my English in a friendly environment（友好的な環境で英語を上達させる）」ためとカナダを選ぶ理由を述べている。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: '2',
+    audioKey: 'l2_p1_13.mp3',
+    transcripts: [
+      'A: I noticed you separate your trash very carefully.',
+      'B: Yes, our town has strict recycling rules now.',
+      'A: Does it take a lot of extra time?',
+      'B: Not really, once you get used to it.',
+      'Question: Why does the man separate his trash carefully?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'Why does the man separate his trash carefully?',
+    choices: [
+      'Because it saves money.',
+      'Because a friend told him to.',
+      'Because the town has strict recycling rules.',
+      'Because he simply enjoys it.',
+    ],
+    correctIndex: 2,
+    explanation:
+        'B は「our town has strict recycling rules（町に厳しいリサイクル規則がある）」からと述べている。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: '2',
+    audioKey: 'l2_p1_14.mp3',
+    transcripts: [
+      'A: I just became a member of the art museum.',
+      'B: Really? What are the benefits?',
+      'A: I can visit any exhibition for free and get discounts at the gift shop.',
+      'B: That sounds worth it if you go often.',
+      'Question: What is one benefit of the museum membership?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What is one benefit of the museum membership?',
+    choices: [
+      'Free meals.',
+      'Free entry to any exhibition.',
+      'A free painting.',
+      'Free parking downtown.',
+    ],
+    correctIndex: 1,
+    explanation: 'A は「visit any exhibition for free（どの展示も無料で見られる）」と会員特典を述べている。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: '2',
+    audioKey: 'l2_p1_15.mp3',
+    transcripts: [
+      'A: How is your part-time job at the bookstore going?',
+      'B: I really enjoy it. I get to recommend books to customers.',
+      'A: That sounds perfect for someone who loves reading.',
+      'B: It is. I have even discovered some new authors myself.',
+      'Question: What does the woman enjoy about her job?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What does the woman enjoy about her job?',
+    choices: [
+      'The high pay.',
+      'The short hours.',
+      'Recommending books to customers.',
+      'Meeting famous writers.',
+    ],
+    correctIndex: 2,
+    explanation: 'B は「recommend books to customers（客に本を勧める）」のが楽しいと述べている。',
+  ),
 ];
 
 const _grade2Part2 = <ListeningItem>[
@@ -2645,6 +2782,148 @@ const _grade2Part2 = <ListeningItem>[
     ],
     correctIndex: 1,
     explanation: '放送に「The speaker, a former astronaut（講演者は元宇宙飛行士）」とある。',
+  ),
+  // ── Studio expansion 2026-06-13 (cont.): 2級 第2部 to 15 (→30 total) ──────────
+  ListeningItem(
+    part: 2,
+    grade: '2',
+    audioKey: 'l2_p2_10.mp3',
+    transcripts: [
+      'Reading regularly offers many benefits beyond entertainment. It can '
+          'expand your vocabulary, improve concentration, and even reduce stress. '
+          'Some studies suggest that reading fiction helps people understand the '
+          'emotions of others. Many experts recommend setting aside a little time '
+          'each day to read, even just before going to sleep.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question:
+        'According to the passage, what is one benefit of reading fiction?',
+    choices: [
+      'It guarantees better grades.',
+      'It helps people understand the emotions of others.',
+      'It improves eyesight.',
+      'It removes the need for sleep.',
+    ],
+    correctIndex: 1,
+    explanation:
+        '本文に「reading fiction helps people understand the emotions of others（小説を読むと他者の感情を理解しやすくなる）」とある。',
+  ),
+  ListeningItem(
+    part: 2,
+    grade: '2',
+    audioKey: 'l2_p2_11.mp3',
+    transcripts: [
+      'Electric cars are becoming more common around the world. They produce no '
+          'exhaust gases while driving, which helps reduce air pollution in '
+          'cities. However, the electricity used to charge them must also come '
+          'from clean sources to make the biggest difference. Governments are '
+          'building more charging stations to encourage drivers to switch.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'Why are governments building more charging stations?',
+    choices: [
+      'To make cars faster.',
+      'To reduce traffic jams.',
+      'To lower fuel prices.',
+      'To encourage drivers to switch to electric cars.',
+    ],
+    correctIndex: 3,
+    explanation:
+        '本文に「building more charging stations to encourage drivers to switch（乗り換えを促すため充電所を増やす）」とある。',
+  ),
+  ListeningItem(
+    part: 2,
+    grade: '2',
+    audioKey: 'l2_p2_12.mp3',
+    transcripts: [
+      'A community garden has opened in the center of town. Residents can rent a '
+          'small plot to grow their own vegetables and flowers. Besides providing '
+          'fresh food, the garden has become a place where neighbors meet and '
+          'share gardening tips. Organizers hope it will bring the community '
+          'closer together.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question:
+        'Besides fresh food, what is one benefit of the community garden?',
+    choices: [
+      'It earns money for the city.',
+      'It provides free housing.',
+      'It is a place where neighbors meet and share tips.',
+      'It reduces local taxes.',
+    ],
+    correctIndex: 2,
+    explanation:
+        '本文に「a place where neighbors meet and share gardening tips（近隣の人が出会いコツを共有する場）」とある。',
+  ),
+  ListeningItem(
+    part: 2,
+    grade: '2',
+    audioKey: 'l2_p2_13.mp3',
+    transcripts: [
+      'Sleep is essential not only for rest but also for memory. While we sleep, '
+          'the brain organizes and stores what we learned during the day. This is '
+          'why students who sleep well often remember information better than '
+          'those who stay up late studying. Experts say a good night of sleep can '
+          'be as important as study time itself.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'What does the brain do while we sleep?',
+    choices: [
+      'It stops working completely.',
+      'It organizes and stores what we learned.',
+      'It forgets the day entirely.',
+      'It creates new languages.',
+    ],
+    correctIndex: 1,
+    explanation:
+        '本文に「the brain organizes and stores what we learned during the day（脳は日中学んだことを整理し蓄える）」とある。',
+  ),
+  ListeningItem(
+    part: 2,
+    grade: '2',
+    audioKey: 'l2_p2_14.mp3',
+    transcripts: [
+      'The city library is pleased to introduce a new digital service. Members '
+          'can now borrow e-books and audiobooks from home using their library '
+          'card. The service is available at any time, and titles are '
+          'automatically returned at the end of the loan period, so there are no '
+          'late fees. Visit the library website to get started.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'What is one advantage of the new digital service?',
+    choices: [
+      'There are no late fees because titles return automatically.',
+      'Books are delivered by mail.',
+      'It is only open on weekends.',
+      'Members receive free tablets.',
+    ],
+    correctIndex: 0,
+    explanation:
+        '放送に「automatically returned ... so there are no late fees（自動で返却され延滞料がない）」とある。',
+  ),
+  ListeningItem(
+    part: 2,
+    grade: '2',
+    audioKey: 'l2_p2_15.mp3',
+    transcripts: [
+      'In recent years, the number of honeybees has been falling in many '
+          'countries. Since bees pollinate a large share of the crops we eat, '
+          'this decline is a serious concern. Possible causes include the loss of '
+          'wild flowers, disease, and the use of certain chemicals. Researchers '
+          'are working to protect bees by planting more flowers and reducing '
+          'harmful pesticides.',
+    ],
+    questionType: ListeningQuestionType.passageContent,
+    question: 'Why is the decline of honeybees a serious concern?',
+    choices: [
+      'Because bees make expensive honey.',
+      'Because bees clean the air.',
+      'Because bees pollinate many of the crops we eat.',
+      'Because bees frighten farmers.',
+    ],
+    correctIndex: 2,
+    explanation:
+        '本文に「bees pollinate a large share of the crops we eat（ミツバチは私たちが食べる作物の多くを受粉する）」ため減少が深刻だとある。',
   ),
 ];
 
