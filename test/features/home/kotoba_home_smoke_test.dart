@@ -467,4 +467,22 @@ void main() {
     // A lapsed returner gets a warm, non-shaming welcome — not a guilt nag.
     expect(find.textContaining('また いっしょに なぞ'), findsOneWidget);
   });
+
+  // ── a11y (T14): the icon-only settings gear must be a labelled button ───────
+
+  testWidgets('KotobaHomeScreen: settings gear is an a11y-labelled button',
+      (tester) async {
+    // The gear is the sole gateway to mute / how-to-play / Parent / Achievements
+    // / Battle. As a bare icon-only GestureDetector a screen reader announced
+    // nothing, so a non-visual child could not reach settings at all (flaw-hunt
+    // 2026-06-13). It must expose a name + button role like the readiness card.
+    final handle = tester.ensureSemantics();
+    await tester.pumpWidget(_wrap(
+      streakService: _MockStreakService(const StreakState.zero()),
+      cardRepository: InMemoryFsrsCardRepository(),
+    ));
+    await _settle(tester);
+    expect(find.bySemanticsLabel('せってい / Settings'), findsOneWidget);
+    handle.dispose();
+  });
 }

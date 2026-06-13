@@ -352,14 +352,23 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
         // Settings gear (mute / how-to-play) — top-right, title stays centred.
         Align(
           alignment: Alignment.centerRight,
-          child: GestureDetector(
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const SettingsScreen()),
-            ),
-            child: Container(
-              // ≥44px hit target for small fingers.
-              padding: const EdgeInsets.all(10),
-              child: const Icon(Icons.settings, color: dqGold, size: 24),
+          // a11y (T14): the gear is icon-only — without a Semantics label a
+          // screen reader announces nothing, so the sole gateway to mute /
+          // how-to-play / Parent / Achievements / Battle is unreachable for a
+          // VoiceOver child. Mark it a labelled button like the readiness card.
+          child: Semantics(
+            button: true,
+            label: 'せってい / Settings',
+            excludeSemantics: true,
+            child: GestureDetector(
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const SettingsScreen()),
+              ),
+              child: Container(
+                // ≥44px hit target for small fingers.
+                padding: const EdgeInsets.all(10),
+                child: const Icon(Icons.settings, color: dqGold, size: 24),
+              ),
             ),
           ),
         ),
@@ -726,50 +735,57 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
 
     // Tappable → FSRS vocabulary review (#66): the panel announces the due-count
     // and now actually opens the review, instead of stranding the child.
-    return GestureDetector(
-      onTap: _goToReview,
-      child: DqPanel(
-        title: 'きょうの ナゾ（たんごの ふくしゅう）',
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Icon(Icons.search_rounded, color: dqGold, size: 28),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (hasDue) ...[
-                    // Two separate Text widgets so find.textContaining works in
-                    // tests (RichText TextSpan children are not matched by the
-                    // text-finder in flutter_test).
-                    Text(
-                      '館（やかた）に あたらしい ナゾが $_dueCount つ とどいた！',
-                      style: dqText(size: 14, w: FontWeight.w500, color: dqInk),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'タップして たんごを ふくしゅうしよう / Review',
-                      style:
-                          dqText(size: 12, w: FontWeight.w500, color: dqGold),
-                    ),
-                  ] else ...[
-                    Text(
-                      '館（やかた）は しずか……',
-                      style: dqText(size: 14, w: FontWeight.w600, color: dqInk),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'タップして たんごを ふくしゅうしよう / Review',
-                      style:
-                          dqText(size: 12, w: FontWeight.w500, color: dqGold),
-                    ),
+    // a11y (T14): mark it a button so a screen reader exposes the tap action
+    // (the inner due-count text still reads as the name).
+    return Semantics(
+      button: true,
+      child: GestureDetector(
+        onTap: _goToReview,
+        child: DqPanel(
+          title: 'きょうの ナゾ（たんごの ふくしゅう）',
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Icon(Icons.search_rounded, color: dqGold, size: 28),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (hasDue) ...[
+                      // Two separate Text widgets so find.textContaining works in
+                      // tests (RichText TextSpan children are not matched by the
+                      // text-finder in flutter_test).
+                      Text(
+                        '館（やかた）に あたらしい ナゾが $_dueCount つ とどいた！',
+                        style:
+                            dqText(size: 14, w: FontWeight.w500, color: dqInk),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'タップして たんごを ふくしゅうしよう / Review',
+                        style:
+                            dqText(size: 12, w: FontWeight.w500, color: dqGold),
+                      ),
+                    ] else ...[
+                      Text(
+                        '館（やかた）は しずか……',
+                        style:
+                            dqText(size: 14, w: FontWeight.w600, color: dqInk),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'タップして たんごを ふくしゅうしよう / Review',
+                        style:
+                            dqText(size: 12, w: FontWeight.w500, color: dqGold),
+                      ),
+                    ],
                   ],
-                ],
+                ),
               ),
-            ),
-            const Icon(Icons.chevron_right, color: dqGold, size: 24),
-          ],
+              const Icon(Icons.chevron_right, color: dqGold, size: 24),
+            ],
+          ),
         ),
       ),
     );
@@ -876,36 +892,43 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
     required String label,
     required VoidCallback onTap,
   }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: double.infinity,
-        alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: BoxDecoration(
-          color: dqBox.withAlpha(160),
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: dqBorder.withAlpha(120), width: 1.5),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, color: dqGold.withAlpha(200), size: 18),
-            const SizedBox(width: 8),
-            Flexible(
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  label,
-                  maxLines: 1,
-                  style: dqText(
-                      size: 13,
-                      w: FontWeight.w600,
-                      color: dqInk.withAlpha(210)),
+    // a11y (T14): a labelled button so screen-reader / switch users can navigate
+    // to it (a bare GestureDetector exposes only a 'group', not a tap action).
+    return Semantics(
+      button: true,
+      label: label,
+      excludeSemantics: true,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          width: double.infinity,
+          alignment: Alignment.center,
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          decoration: BoxDecoration(
+            color: dqBox.withAlpha(160),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: dqBorder.withAlpha(120), width: 1.5),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, color: dqGold.withAlpha(200), size: 18),
+              const SizedBox(width: 8),
+              Flexible(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    style: dqText(
+                        size: 13,
+                        w: FontWeight.w600,
+                        color: dqInk.withAlpha(210)),
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
