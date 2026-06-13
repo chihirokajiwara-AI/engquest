@@ -81,12 +81,16 @@ service cloud.firestore {
     /// Validates a session summary document on write.
     function isValidSession(data) {
       return (
-        // wordsPracticed: 0 – 1000 per session
-        (!('wordsPracticed' in data) || (data.wordsPracticed is int && inRange(data.wordsPracticed, 0, 1000))) &&
-        // minutes: 0 – 480 (8 hours max per session)
-        (!('minutes' in data) || (data.minutes is int && inRange(data.minutes, 0, 480))) &&
-        // avgScore: 0.0 – 4.0 (FSRS grade scale)
-        (!('avgScore' in data) || (data.avgScore is float && inRange(data.avgScore, 0.0, 4.0)))
+        // wordsPracticed: this field holds the CUMULATIVE day total (the repo
+        // writes prevWords + new into the same daily doc), NOT a single session —
+        // so the old "per session" 1000 cap silently DENIED a heavy-study day's
+        // write, losing that day's progress/streak. Generous anti-abuse ceiling
+        // instead (a real child never exceeds this; 10^9 garbage is still blocked).
+        (!('wordsPracticed' in data) || (data.wordsPracticed is int && inRange(data.wordsPracticed, 0, 50000)))
+        // NOTE: the daily doc's other fields are 'sessionMinutes' / 'averageScore'
+        // (NOT 'minutes' / 'avgScore'), so adding type-validation for them here
+        // would need Firebase-emulator rules tests to confirm it never denies a
+        // legit write — left unvalidated (permissive) until that toolchain exists.
       );
     }
 
