@@ -2053,6 +2053,8 @@ const _gradePre1Part1 = <ListeningItem>[
       'Because of next quarter\'s budget cuts.',
     ],
     correctIndex: 0,
+    explanation:
+        'A の「That is because we expanded into two new regions（2つの新しい地域に進出したからだ）」が理由。マーケティング費の増加は新地域への進出が原因。',
   ),
   ListeningItem(
     part: 1,
@@ -2073,6 +2075,8 @@ const _gradePre1Part1 = <ListeningItem>[
       'Find a different professor.',
     ],
     correctIndex: 0,
+    explanation:
+        '教授の助言は「focus on a single case study rather than the whole field（分野全体でなく一つの事例研究に絞る）」。',
   ),
   ListeningItem(
     part: 1,
@@ -2093,6 +2097,8 @@ const _gradePre1Part1 = <ListeningItem>[
       'Fly on Saturday instead.',
     ],
     correctIndex: 0,
+    explanation:
+        '変更手数料50ドルと言われ「That is fine. Please go ahead.」と答えた＝手数料を払って早い便に変える。',
   ),
   ListeningItem(
     part: 1,
@@ -2113,6 +2119,8 @@ const _gradePre1Part1 = <ListeningItem>[
       'The closing of the factory.',
     ],
     correctIndex: 0,
+    explanation:
+        'B が「some residents worry about the increased traffic（交通量の増加を心配する住民がいる）」と述べている。',
   ),
 ];
 
@@ -2140,6 +2148,8 @@ const _gradePre1Part2 = <ListeningItem>[
       'Removing all algae from the corals.',
     ],
     correctIndex: 0,
+    explanation:
+        '最後の文「breeding heat-resistant corals（熱に強いサンゴを繁殖させている）」が科学者の取り組み。',
   ),
   ListeningItem(
     part: 2,
@@ -2162,6 +2172,8 @@ const _gradePre1Part2 = <ListeningItem>[
       'The government encouraged people to drink it.',
     ],
     correctIndex: 0,
+    explanation:
+        '「as trade increased, prices fell（貿易が増えて価格が下がった）」ことで一般家庭に広まった。',
   ),
   ListeningItem(
     part: 2,
@@ -2185,6 +2197,8 @@ const _gradePre1Part2 = <ListeningItem>[
       'They eat a healthier breakfast.',
     ],
     correctIndex: 0,
+    explanation:
+        '睡眠が「strengthens the connections involved in learning（学習に関わる結合を強める）」ため、よく眠った学生はよく覚える。',
   ),
   ListeningItem(
     part: 2,
@@ -2208,6 +2222,8 @@ const _gradePre1Part2 = <ListeningItem>[
       'Machine translation will stop improving.',
     ],
     correctIndex: 0,
+    explanation:
+        '専門家は「the two will increasingly work together（人間と機械はますます協働する）」と考えている。',
   ),
 ];
 
@@ -2232,6 +2248,8 @@ const _gradePre1Part3 = <ListeningItem>[
       'Leave the airport and go home.',
     ],
     correctIndex: 0,
+    explanation:
+        'アナウンスは「collect a meal voucher at the service desk（サービスデスクで食事券を受け取れる）」と案内している。',
   ),
   ListeningItem(
     part: 3,
@@ -2252,6 +2270,8 @@ const _gradePre1Part3 = <ListeningItem>[
       'Take the day off.',
     ],
     correctIndex: 0,
+    explanation:
+        '「From Wednesday, you will start handling simple tasks on your own（水曜から簡単な仕事を一人で始める）」。',
   ),
   ListeningItem(
     part: 3,
@@ -2273,6 +2293,8 @@ const _gradePre1Part3 = <ListeningItem>[
       'Nowhere — it is allowed everywhere.',
     ],
     correctIndex: 0,
+    explanation:
+        '「Photography is allowed everywhere except in the special exhibition（特別展以外はどこでも撮影可）」＝特別展だけ撮影禁止。',
   ),
   ListeningItem(
     part: 3,
@@ -2294,6 +2316,8 @@ const _gradePre1Part3 = <ListeningItem>[
       'Classes are canceled all day.',
     ],
     correctIndex: 0,
+    explanation:
+        '「classes will start two hours late, at ten（授業は2時間遅れの10時に始まる）」。',
   ),
 ];
 
