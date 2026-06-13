@@ -77,6 +77,11 @@ class _ConversationPracticeScreenState
   int? _selectedAnswer;
   bool _answered = false;
   int _correctCount = 0;
+  // Grammar/usage points missed THIS session — surfaced on the results screen as
+  // a concrete "review these patterns" study list (the explanation of each missed
+  // conversation item), so 大問2 closes with an actionable next-step, not just a
+  // score (consistent with the 大問1 review list).
+  final List<String> _missedPoints = [];
 
   // Struggling-child support (CEO 1135 / no-scold spine): a cold streak triggers
   // a gentle 探偵 encouragement (shared PracticeEncouragementBanner). Resets to 0
@@ -108,7 +113,14 @@ class _ConversationPracticeScreenState
       _selectedAnswer = idx;
       _answered = true;
       final correct = idx == _problems[_currentIdx].correctIdx;
-      if (correct) _correctCount++;
+      if (correct) {
+        _correctCount++;
+      } else {
+        final exp = _problems[_currentIdx].explanation;
+        if (exp != null && exp.isNotEmpty && !_missedPoints.contains(exp)) {
+          _missedPoints.add(exp);
+        }
+      }
       _consecutiveWrong = correct ? 0 : _consecutiveWrong + 1;
     });
     // Game-feel (#51): a haptic tick + chime so answering feels responsive.
@@ -417,9 +429,11 @@ class _ConversationPracticeScreenState
         : (_correctCount / _problems.length * 100).round();
     final passed = pct >= 60;
 
-    return Center(
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Icon(
             passed ? Icons.workspace_premium_rounded : Icons.refresh_rounded,
@@ -438,6 +452,42 @@ class _ConversationPracticeScreenState
           ),
           const SizedBox(height: 16),
           PracticeResultStars(correct: _correctCount, total: _problems.length),
+          // Actionable next-step: the conversation patterns missed this session,
+          // each with its 解説 — a "review these points" study list.
+          if (_missedPoints.isNotEmpty) ...[
+            const SizedBox(height: 20),
+            Container(
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: dqBox,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: dqGold.withAlpha(90)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'ふくしゅうする ポイント / Review these',
+                    style: dqText(size: 13, w: FontWeight.w800, color: dqGold),
+                  ),
+                  const SizedBox(height: 8),
+                  ..._missedPoints.map(
+                    (e) => Padding(
+                      padding: const EdgeInsets.only(bottom: 6),
+                      child: Text(
+                        '・$e',
+                        style: dqText(
+                                size: 12,
+                                w: FontWeight.w500,
+                                color: dqInk.withAlpha(220))
+                            .copyWith(height: 1.5),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
           const SizedBox(height: 32),
           DqButton(
             label: '戻る',
