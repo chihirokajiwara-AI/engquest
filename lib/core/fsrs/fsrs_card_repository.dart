@@ -17,6 +17,7 @@
 
 import 'dart:convert';
 import 'fsrs_card.dart';
+import '../storage/preferences_service.dart';
 
 // ---------------------------------------------------------------------------
 // Repository interface
@@ -147,3 +148,73 @@ class InMemoryFsrsCardRepository implements FsrsCardRepository {
 //   - Run migrations in onCreate/onUpgrade
 //   - Use batch() for saveCards()
 //   - Map Dart DateTime ↔ ISO-8601 string
+
+// ---------------------------------------------------------------------------
+// SharedPreferences-backed implementation (durable, web-safe, no native dep)
+// ---------------------------------------------------------------------------
+
+/// Persists each user's FSRS deck to SharedPreferences (= localStorage on web)
+/// as one JSON map per user, so a child's spaced-repetition memory SURVIVES a
+/// page reload — including OFFLINE, where Firestore is unreachable and the deck
+/// would otherwise live only in a wiped-on-reload in-memory Map (flaw-hunt
+/// 2026-06-13). Mirrors VocabReviewStore's prefs pattern. The other progress
+/// stores (streak / 合格率 / scene-solved / review) already persist this way;
+/// this gives the FSRS deck — the spaced-repetition core — the same durability.
+class PrefsFsrsCardRepository implements FsrsCardRepository {
+  static String _key(String userId) => 'fsrs_deck_$userId';
+
+  Future<Map<String, dynamic>> _read(String userId) async {
+    final prefs = await PreferencesService.getInstance();
+    final raw = prefs.getString(_key(userId));
+    if (raw == null || raw.isEmpty) return {};
+    try {
+      return jsonDecode(raw) as Map<String, dynamic>;
+    } catch (_) {
+      return {}; // corrupt entry → start fresh rather than crash
+    }
+  }
+
+  Future<void> _write(String userId, Map<String, dynamic> map) async {
+    final prefs = await PreferencesService.getInstance();
+    await prefs.setString(_key(userId), jsonEncode(map));
+  }
+
+  @override
+  Future<List<FSRSCard>> loadDeck(String userId) async {
+    final map = await _read(userId);
+    return map.values
+        .map((j) => FSRSCard.fromJson(j as Map<String, dynamic>))
+        .toList();
+  }
+
+  @override
+  Future<void> saveCard(String userId, FSRSCard card) async {
+    final map = await _read(userId);
+    map[card.vocabId] = card.toJson();
+    await _write(userId, map);
+  }
+
+  @override
+  Future<void> saveCards(String userId, List<FSRSCard> cards) async {
+    if (cards.isEmpty) return;
+    final map = await _read(userId);
+    for (final c in cards) {
+      map[c.vocabId] = c.toJson();
+    }
+    await _write(userId, map);
+  }
+
+  @override
+  Future<List<FSRSCard>> getDueCards(String userId, DateTime now) async {
+    final all = await loadDeck(userId);
+    return all
+        .where((c) => c.dueDate == null || !now.isBefore(c.dueDate!))
+        .toList();
+  }
+
+  @override
+  Future<void> clearDeck(String userId) async {
+    final prefs = await PreferencesService.getInstance();
+    await prefs.remove(_key(userId));
+  }
+}

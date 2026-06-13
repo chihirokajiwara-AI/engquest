@@ -45,7 +45,7 @@ class FirestoreFsrsCardRepository implements FsrsCardRepository {
   // in-memory repo rather than blanking the Battle screen at construction.
   final FirebaseFirestore? _injectedDb;
   FirebaseFirestore? _dbCache;
-  final InMemoryFsrsCardRepository _fallback = InMemoryFsrsCardRepository();
+  final FsrsCardRepository _fallback = PrefsFsrsCardRepository();
 
   FirestoreFsrsCardRepository({FirebaseFirestore? firestore})
       : _injectedDb = firestore;
