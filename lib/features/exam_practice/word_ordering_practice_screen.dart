@@ -9,10 +9,9 @@
 //   Words: [school / I / to / every / walk / day]
 //   Answer: I walk to school every day.
 
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
+import 'choice_shuffle.dart';
 import 'eiken_exam_config.dart';
 import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
@@ -47,7 +46,9 @@ class _OrderingProblem {
     this.whyExplanation,
   })  : assert(correctOrder.length == 5,
             '英検 大問3 語句整序 is exactly 5 chunks: $correctOrder'),
-        scrambled = List.from(correctOrder)..shuffle(Random());
+        // Never present the puzzle already-solved (#79-style guard): a plain
+        // shuffle can reproduce correctOrder. See [scrambleDistinct].
+        scrambled = scrambleDistinct(correctOrder);
 
   /// The 語句 at the 2nd position (what the real exam asks for).
   String get secondChunk => correctOrder[1];
