@@ -348,4 +348,26 @@ void main() {
       expect(find.text('6 / 6 正解 (100%)'), findsOneWidget);
     });
   });
+
+  group('#16 hint scaffold — 50/50 lifeline', () {
+    testWidgets('hint button narrows to 2 + shows the 合格率-exclusion notice',
+        (tester) async {
+      await pumpReading(tester, '5', grade5Section);
+
+      // Before answering, the lifeline is offered and the honesty notice is not
+      // yet shown.
+      final hintBtn = find.byKey(const ValueKey('reading_hint_button'));
+      expect(hintBtn, findsOneWidget);
+      expect(find.textContaining('しぼったよ'), findsNothing);
+
+      await tester.tap(hintBtn);
+      await tester.pumpAndSettle();
+
+      // After using it: the button is consumed (once per question) and the
+      // 合格率-exclusion notice appears.
+      expect(find.byKey(const ValueKey('reading_hint_button')), findsNothing);
+      expect(find.textContaining('合格率に 入りません'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+  });
 }

@@ -161,6 +161,14 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
   int _measuredCorrect = 0;
   int _measuredTotal = 0;
 
+  // #16 hint scaffold: a once-per-question "2つに しぼる" (narrow to 2) lifeline for
+  // a struggling reader — eliminates two WRONG choices (50/50). Using it EXCLUDES
+  // the question from the by-comprehension 合格率 (same honesty principle as a
+  // too-fast or un-read answer): a hinted answer is not a clean comprehension
+  // result, so it never inflates readiness.
+  bool _hintUsed = false;
+  Set<int> _eliminated = {};
+
   // Drives the question pane so the 解説 (which appears below the choices on
   // answer) is scrolled into view — otherwise the teaching sits below the fold.
   final ScrollController _qScroll = ScrollController();
@@ -186,8 +194,24 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
   _ComprehensionQuestion get _currentQuestion =>
       _passages[_passageIdx].questions[_questionIdx];
 
+  /// Eliminate two WRONG choices (keep the correct one + one distractor) — a
+  /// once-per-question 50/50 lifeline. Marks the question hint-used so it is
+  /// excluded from the by-comprehension 合格率.
+  void _useHint() {
+    if (_answered || _hintUsed) return;
+    final q = _currentQuestion;
+    final wrong = [
+      for (var i = 0; i < q.choices.length; i++)
+        if (i != q.correctIdx) i
+    ]..shuffle();
+    setState(() {
+      _hintUsed = true;
+      _eliminated = {...wrong.take(2)};
+    });
+  }
+
   void _selectAnswer(int idx) {
-    if (_answered) return;
+    if (_answered || _eliminated.contains(idx)) return;
     // Only count this question toward the by-comprehension reading 合格率 if the
     // child plausibly had time to READ it (#R5). An answer faster than a human can
     // read+comprehend is not a real reading result — excluded, NOT blocked (the
@@ -202,7 +226,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
       _answered = true;
       if (correct) _correctCount++;
       _consecutiveWrong = correct ? 0 : _consecutiveWrong + 1;
-      if (measured) {
+      // A hinted answer is excluded from the by-comprehension 合格率 (honesty).
+      if (measured && !_hintUsed) {
         _measuredTotal++;
         if (correct) _measuredCorrect++;
       }
@@ -265,6 +290,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
         _questionIdx++;
         _selectedAnswer = null;
         _answered = false;
+        _hintUsed = false;
+        _eliminated = {};
         _questionShownAt = DateTime.now(); // restart read-time clock (#R5)
       });
     } else if (_passageIdx < _passages.length - 1) {
@@ -273,6 +300,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
         _questionIdx = 0;
         _selectedAnswer = null;
         _answered = false;
+        _hintUsed = false;
+        _eliminated = {};
         _questionShownAt = DateTime.now(); // restart read-time clock (#R5)
       });
     } else {
@@ -495,6 +524,11 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
                             Color borderColor = dqGoldDeep.withAlpha(120);
                             Color textColor = dqInk;
 
+                            // #16 hint: a choice eliminated by the 50/50 lifeline
+                            // is dimmed + un-tappable (only before answering).
+                            final eliminated =
+                                !_answered && _eliminated.contains(i);
+
                             if (_answered) {
                               if (isCorrect) {
                                 bgColor = const Color(0xFF14301B);
@@ -505,6 +539,10 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
                                 borderColor = const Color(0xFFE0853A);
                                 textColor = const Color(0xFFE89A82);
                               }
+                            } else if (eliminated) {
+                              bgColor = dqBox.withAlpha(90);
+                              borderColor = dqGoldDeep.withAlpha(50);
+                              textColor = dqInk.withAlpha(90);
                             } else if (isSelected) {
                               borderColor = dqGold;
                               bgColor = dqNight1;
@@ -514,18 +552,24 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
                                 ? '${i + 1}. ${question.choices[i]}、せいかい'
                                 : _answered && isSelected
                                     ? '${i + 1}. ${question.choices[i]}、ふせいかい'
-                                    : '${i + 1}. ${question.choices[i]}';
+                                    : eliminated
+                                        ? '${i + 1}. ${question.choices[i]}、じょがい'
+                                        : '${i + 1}. ${question.choices[i]}';
                             return Semantics(
                               button: true,
                               label: semLabel,
-                              onTap: _answered ? null : () => _selectAnswer(i),
+                              onTap: (_answered || eliminated)
+                                  ? null
+                                  : () => _selectAnswer(i),
                               excludeSemantics: true,
                               child: Material(
                                 color: bgColor,
                                 borderRadius: BorderRadius.circular(10),
                                 child: InkWell(
                                   key: ValueKey('reading_choice_$i'),
-                                  onTap: () => _selectAnswer(i),
+                                  onTap: eliminated
+                                      ? null
+                                      : () => _selectAnswer(i),
                                   borderRadius: BorderRadius.circular(10),
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(
@@ -564,6 +608,57 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
                             );
                           },
                         ),
+                        // #16 hint scaffold: a once-per-question 50/50 lifeline.
+                        // Hidden after answering; replaced by an honesty notice
+                        // once used (the question is then out of the 合格率).
+                        if (!_answered && !_hintUsed)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10),
+                            child: Semantics(
+                              button: true,
+                              label: '2つに しぼる。ヒントを つかうと、この問題は '
+                                  '合格率に 入りません',
+                              excludeSemantics: true,
+                              child: InkWell(
+                                key: const ValueKey('reading_hint_button'),
+                                onTap: _useHint,
+                                borderRadius: BorderRadius.circular(10),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 9),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                        color: dqGoldDeep.withAlpha(120),
+                                        width: 1.5),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Icon(Icons.lightbulb_outline,
+                                          color: dqGold, size: 18),
+                                      const SizedBox(width: 8),
+                                      Flexible(
+                                        child: Text(
+                                          '2つに しぼる（合格率には 入りません）',
+                                          style: dqText(
+                                              size: 12, color: dqGoldDeep),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        if (_hintUsed && !_answered)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10),
+                            child: Text(
+                              '💡 2つに しぼったよ。この問題は 合格率に 入りません。',
+                              style: dqText(size: 12, color: dqGoldDeep),
+                            ),
+                          ),
                         // Struggling-child support: a cold streak shows a gentle,
                         // non-scolding 探偵 encouragement above the 解説. (CEO 1135)
                         if (_answered &&
