@@ -14,6 +14,8 @@ void main() {
     '5級': kTown5Scene,
     '4級': kTown4Scene,
     '3級': kTown3Scene,
+    '準2級': kTownPre2Scene,
+    '準2級プラス': kTownPre2PlusScene,
   };
 
   group('per-solve lore drip (§3)', () {
@@ -67,6 +69,10 @@ void main() {
           reason: 'bookmark #2 "told a story," (4級 drip)');
       expect(fragJoin(kTown3Scene).contains('and the whole'), isTrue,
           reason: 'bookmark #3 "and the whole" (3級 drip)');
+      expect(fragJoin(kTownPre2Scene).contains('grey world'), isTrue,
+          reason: 'bookmark #4 "grey world" (準2級 drip)');
+      expect(fragJoin(kTownPre2PlusScene).contains('turned to'), isTrue,
+          reason: 'bookmark #5 "turned to" (準2級プラス drip)');
     });
 
     test('coins never carry lore (only ナゾ solves drip)', () {

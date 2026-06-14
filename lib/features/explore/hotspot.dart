@@ -1067,6 +1067,9 @@ final SceneDef kTownPre2Scene = SceneDef(
           '「Do you know where they ___ ?」— ものが どう されるかを いう かたちは？',
       npcGreyAsset: 'assets/art/scenes_layton/npc_merchant_grey.webp',
       npcColorAsset: 'assets/art/scenes_layton/npc_merchant_color.webp',
+      // §3 lore drip — CH.4: the lost words of disagreement-with-respect.
+      mysteryFragmentJa: 'たんていメモ：ことばを なくした ひとは、こえも なく にらみあう。\n'
+          '「ちがう、でも きみを みとめる」――それが いえないだけ。',
     ),
     // ── NPC 2: せんちょう — 大船（おおぶね）の船長 / 関係代名詞 who ────────────
     // Encounter index 3: 「What kind of sailor do you respect?」(relative who).
@@ -1084,6 +1087,9 @@ final SceneDef kTownPre2Scene = SceneDef(
           '「A sailor ___ never gives up in a storm.」— 人（ひと）を つなぐ かたちは？',
       npcGreyAsset: 'assets/art/scenes_layton/npc_captain_grey.webp',
       npcColorAsset: 'assets/art/scenes_layton/npc_captain_color.webp',
+      // §3 lore drip — CH.4: the WHY — this port once BEGGED for silence.
+      mysteryFragmentJa: 'たんていメモ：クワイエが つぶやく――\n'
+          '「ことばは ひとを きずつける。だから、ない ほうが いいんだ。」',
     ),
     // ── NPC 3: とうだいもり — 港（みなと）の灯（あか）り守 / 関係副詞 where ──────
     // Encounter index 4: 「describe the place ships feel safe」(relative where).
@@ -1101,6 +1107,9 @@ final SceneDef kTownPre2Scene = SceneDef(
           '「the harbour ___ the storms cannot reach」— 場所（ばしょ）を つなぐ かたちは？',
       npcGreyAsset: 'assets/art/scenes_layton/npc_lampkeeper_grey.webp',
       npcColorAsset: 'assets/art/scenes_layton/npc_lampkeeper_color.webp',
+      // §3 lore drip — CH.4: Bookmark #4 ("grey world") + words can HEAL.
+      mysteryFragmentJa: 'たんていメモ：4まいめの しおり――「grey world」。\n'
+          'ことばが もどると、にくみあいが あくしゅに かわった。',
     ),
     // ── Coin: hidden among the moored ships' rigging ────────────────────────
     Hotspot.coin(
@@ -1150,6 +1159,9 @@ final SceneDef kTownPre2PlusScene = SceneDef(
           '「I ___ on this bridge since 2025.」— どの かたちが はいる？',
       npcGreyAsset: 'assets/art/scenes_layton/npc_gatekeeper_grey.webp',
       npcColorAsset: 'assets/art/scenes_layton/npc_gatekeeper_color.webp',
+      // §3 lore drip — CH.5: each solved ナゾ lights the next lantern in the fog.
+      mysteryFragmentJa: 'たんていメモ：ナゾを とくたびに、つぎの ランプが ともる。\n'
+          'ともった ぶんだけ、きりの むこうが みえてくる。',
     ),
     // 渡し守 — 関係副詞 where (idx 1): "the place ___ many travellers turn back."
     Hotspot.npc(
@@ -1166,6 +1178,10 @@ final SceneDef kTownPre2PlusScene = SceneDef(
           '「This is the place ___ many travellers turn back.」',
       npcGreyAsset: 'assets/art/scenes_layton/npc_fisher_grey.webp',
       npcColorAsset: 'assets/art/scenes_layton/npc_fisher_color.webp',
+      // §3 lore drip — CH.5: the FIRST sight of サイレント, resting not blocking,
+      // + Bookmark #5 ("turned to").
+      mysteryFragmentJa: 'たんていメモ：はしの まんなかに、はいいろの ひとが すわっている。\n'
+          '「ここまで きたの…つかれたら、すわっても いいんだよ。」 5まいめ――「turned to」。',
     ),
     // Coin — スラ (the companion) voices the hint here, as in every district.
     Hotspot.coin(
