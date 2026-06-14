@@ -178,6 +178,12 @@ class _XpPopup {
 class BattleScreen extends StatefulWidget {
   final FsrsCardRepository? repository;
 
+  /// Vocab source — injected in tests with a pre-seeded repo so the widget is
+  /// pumpable (the production VocabRepository does rootBundle asset I/O in init,
+  /// which never completes under flutter_test's FakeAsync clock). Null →
+  /// production VocabRepository.
+  final VocabRepository? vocabRepo;
+
   /// Child's age in years (from OnboardingResult). Defaults to 8 (full A1 deck).
   final int childAge;
 
@@ -187,6 +193,7 @@ class BattleScreen extends StatefulWidget {
   const BattleScreen({
     super.key,
     this.repository,
+    this.vocabRepo,
     this.childAge = 8,
     this.eikenGrade = '5',
   });
@@ -220,7 +227,7 @@ class _BattleScreenState extends State<BattleScreen>
   final _wordAudio = WordAudioPlayerService();
   late final FsrsCardRepository _repository;
   final _auth = AuthService();
-  final _vocabRepo = VocabRepository();
+  late final VocabRepository _vocabRepo;
   final _xpService = XpService();
   final _achievementService = AchievementService();
   String? _userId;
@@ -289,6 +296,7 @@ class _BattleScreenState extends State<BattleScreen>
     super.initState();
     // Resolve repository: injected (tests) or production Firestore
     _repository = widget.repository ?? FirestoreFsrsCardRepository();
+    _vocabRepo = widget.vocabRepo ?? VocabRepository();
     _flipCtrl = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 400),

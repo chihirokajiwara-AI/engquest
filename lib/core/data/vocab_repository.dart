@@ -136,6 +136,18 @@ class VocabRepository {
   int get totalWords => _words.length;
   String get loadedGrade => _loadedGrade;
 
+  /// Test-only: pre-load [words] for [grade] so a widget test can inject vocab
+  /// WITHOUT the `rootBundle` asset I/O that never completes under flutter_test's
+  /// FakeAsync clock (which is why screens doing this I/O in initState — e.g.
+  /// BattleScreen — were previously un-pumpable). [initialize] for the same grade
+  /// then no-ops.
+  @visibleForTesting
+  void seedForTest(List<VocabItem> words, {String grade = '5'}) {
+    _words = List.of(words);
+    _initialized = true;
+    _loadedGrade = grade;
+  }
+
   /// Load the vocabulary database from bundled asset.
   /// [eikenGrade] selects which file to load (default "5").
   Future<void> initialize({String eikenGrade = '5'}) async {
