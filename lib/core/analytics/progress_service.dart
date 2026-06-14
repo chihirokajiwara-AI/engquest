@@ -11,6 +11,7 @@
 //   2. Empty/zero defaults            ← first-run / no data yet
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:engquest/core/data/vocab_repository.dart';
 import 'package:engquest/core/models/progress_data.dart';
 import 'package:engquest/core/analytics/firestore_progress_repository.dart';
 
@@ -45,8 +46,10 @@ class ProgressService {
     final masteredCount = results[4] as int;
     final allCards = results[5] as List<Map<String, dynamic>>;
 
-    // Compute category mastery from real card data
-    final categoryMastery = _buildCategoryMastery(allCards);
+    // Compute category mastery from real card data + the REAL vocab category
+    // (looked up from the vocab DB, not inferred from the id's sequence number).
+    final categoryMastery = aggregateCategoryMastery(
+        allCards, await _loadVocabCategoryMap(allCards));
 
     // Compute review schedule from real card data
     final reviewSchedule = _buildReviewSchedule(allCards);
@@ -118,49 +121,32 @@ class ProgressService {
   // Category mastery builder (from real Firestore card data)
   // -----------------------------------------------------------------------
 
-  /// Derives per-category mastery from raw Firestore card documents.
-  ///
-  /// Card document IDs follow the pattern "{eikenLevel}_{seq}" (e.g. "eiken5_001").
-  /// The vocab content db defines the category for each vocabId; however, since
-  /// we only have card state data in Firestore (not category), we use the
-  /// vocabId prefix to group cards.
-  ///
-  /// Category mapping is derived from the known A1 vocab structure.
-  /// Cards with no recognizable category prefix are grouped as "その他 / Other".
-  ///
-  /// Returns empty list when [allCards] is empty (no study activity yet).
-  List<CategoryMastery> _buildCategoryMastery(
-      List<Map<String, dynamic>> allCards) {
-    if (allCards.isEmpty) return [];
-
-    // Group cards by category using the vocabId → category lookup table.
-    // The category data is embedded in the vocabId prefix for A1 words.
-    // We compute this from the known category-to-id-range mapping in vocab_a1_300.
-    final Map<String, _CategoryAgg> byCategory = {};
-
+  /// Builds a vocabId → REAL category map from the bundled vocab DBs, for
+  /// whatever 英検 grades appear in the child's cards (the vocabId embeds the
+  /// grade). Replaces the old sequence-number inference, which mislabeled every
+  /// word past the first two categories and collapsed most of the deck into
+  /// "Other" — a paying parent saw a wrong category breakdown.
+  Future<Map<String, String>> _loadVocabCategoryMap(
+      List<Map<String, dynamic>> allCards) async {
+    final grades = <String>{};
     for (final card in allCards) {
-      final vocabId = card['id'] as String? ?? '';
-      final state = card['state'] as String? ?? 'new';
-      final category = _categoryForVocabId(vocabId);
-
-      byCategory.putIfAbsent(category, () => _CategoryAgg());
-      byCategory[category]!.total++;
-      if (state == 'review') {
-        byCategory[category]!.mastered++;
+      final g = vocabGradeFromId(card['id'] as String? ?? '');
+      if (g != null) grades.add(g);
+    }
+    final map = <String, String>{};
+    for (final g in grades) {
+      if (!VocabRepository.hasGrade(g)) continue;
+      try {
+        final repo = VocabRepository();
+        await repo.initialize(eikenGrade: g);
+        for (final v in repo.getAll()) {
+          map[v.id] = v.category;
+        }
+      } catch (_) {
+        // Vocab DB unavailable for this grade → its cards fall back to "Other".
       }
     }
-
-    // Convert to sorted list (highest mastery first)
-    final result = byCategory.entries
-        .map((e) => CategoryMastery(
-              name: e.key,
-              masteredCount: e.value.mastered,
-              totalCount: e.value.total,
-            ))
-        .toList();
-
-    result.sort((a, b) => b.ratio.compareTo(a.ratio));
-    return result;
+    return map;
   }
 
   // -----------------------------------------------------------------------
@@ -224,35 +210,6 @@ class ProgressService {
 
   /// Maps a vocabId to its display category name.
   ///
-  /// The A1 vocab database uses IDs like "eiken5_001" through "eiken5_300".
-  /// Categories are assigned in contiguous blocks in the JSON asset:
-  ///   001-030 Animals, 031-060 Food, 061-090 Colors & Shapes,
-  ///   091-120 Numbers & Time, 121-150 Family & People, 151-180 Body,
-  ///   181-210 Home & Objects, 211-240 Nature, 241-270 Actions,
-  ///   271-300 School & Transport
-  ///
-  /// If the vocabId doesn't follow the expected pattern, returns "その他 / Other".
-  String _categoryForVocabId(String vocabId) {
-    // Support both "eiken5_NNN" and "a2_NNN" patterns
-    final match = RegExp(r'_(\d+)$').firstMatch(vocabId);
-    if (match == null) return 'その他 / Other';
-
-    final seq = int.tryParse(match.group(1)!);
-    if (seq == null) return 'その他 / Other';
-
-    if (seq <= 30) return 'どうぶつ / Animals';
-    if (seq <= 60) return 'たべもの / Food';
-    if (seq <= 90) return 'いろ・かたち / Colors & Shapes';
-    if (seq <= 120) return 'かず・じかん / Numbers & Time';
-    if (seq <= 150) return 'かぞく・ひと / Family & People';
-    if (seq <= 180) return 'からだ / Body';
-    if (seq <= 210) return 'いえ・もの / Home & Objects';
-    if (seq <= 240) return 'しぜん / Nature';
-    if (seq <= 270) return 'うごき / Actions';
-    if (seq <= 300) return 'がっこう・のりもの / School & Transport';
-    return 'その他 / Other';
-  }
-
   /// Returns 7 days of zero-activity DailyProgress for honest empty state.
   List<DailyProgress> _emptyLast7Days() {
     final now = DateTime.now();
@@ -272,4 +229,54 @@ class ProgressService {
 class _CategoryAgg {
   int total = 0;
   int mastered = 0;
+}
+
+/// vocabId → 英検 grade key, from the id prefix (the prefixes are irregular per
+/// grade — mirrors the bundled vocab file naming). Non-overlapping under
+/// startsWith, so no id maps to two grades. Null when no prefix matches.
+const Map<String, String> _kGradeIdPrefixes = {
+  'eiken5_': '5',
+  'eiken4_': '4',
+  'eiken3_': '3',
+  'eikenpre2_': 'pre2',
+  'pre2plus_': 'pre2plus',
+  'eiken2_': '2',
+  'eiken_pre1_': 'pre1',
+};
+
+/// Resolves a vocabId to its 英検 grade key, or null if unrecognised.
+String? vocabGradeFromId(String vocabId) {
+  for (final e in _kGradeIdPrefixes.entries) {
+    if (vocabId.startsWith(e.key)) return e.value;
+  }
+  return null;
+}
+
+/// Pure category-mastery aggregation: group cards by their REAL category (from
+/// [idToCategory]) and count 'review'-state cards as mastered, sorted by ratio.
+/// A vocabId absent from the map falls back to "その他 / Other" (e.g. a grade
+/// whose vocab DB didn't load). Empty cards → empty list (honest "no data").
+List<CategoryMastery> aggregateCategoryMastery(
+  List<Map<String, dynamic>> allCards,
+  Map<String, String> idToCategory,
+) {
+  if (allCards.isEmpty) return [];
+  final byCategory = <String, _CategoryAgg>{};
+  for (final card in allCards) {
+    final vocabId = card['id'] as String? ?? '';
+    final state = card['state'] as String? ?? 'new';
+    final category = idToCategory[vocabId] ?? 'その他 / Other';
+    byCategory.putIfAbsent(category, () => _CategoryAgg());
+    byCategory[category]!.total++;
+    if (state == 'review') byCategory[category]!.mastered++;
+  }
+  final result = byCategory.entries
+      .map((e) => CategoryMastery(
+            name: e.key,
+            masteredCount: e.value.mastered,
+            totalCount: e.value.total,
+          ))
+      .toList();
+  result.sort((a, b) => b.ratio.compareTo(a.ratio));
+  return result;
 }
