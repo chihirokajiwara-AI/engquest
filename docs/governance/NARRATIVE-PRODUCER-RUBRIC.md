@@ -36,14 +36,14 @@ modal. grey→colour restoration mechanic; assembling-bookmark mystery (5/7).
 |N9|Opening hook / first-run|70|70|now|story-first prologue (🔊 c·a·t blend) → config → painted landing. At bar; surpass via a stronger emotional cold-open beat.|
 |N10|Pacing / 8-min session shape|68|65|now|home→ナゾ→colour→recap is tight. Tune beat spacing.|
 |N11|Audio immersion (voice/SFX/music)|40|70|**gated**|SFX wired; no character VO, no adaptive music. Needs audio/voice gen → CEO resource (ElevenLabs).|
-|N12|Replayability / post-clear content|30|60|now|no post-clear lore/secrets/NG+. Add post-clear hotspots + a case-log review (in-scope).|
+|N12|Replayability / post-clear content|62|60|now|✅ 事件簿 case-log shipped (1fd2768): re-read cleared cases + the assembling-bookmark sentence visualised as a collectible. REMAINING: post-clear secret hotspots + NG+ (in-scope, next).|
 
-**Weighted narrative score ≈ 62/100** (Layton bar 70; was 58 — N1+N3 shipped to
-完成 2026-06-14, 37fba51). We now **exceed** Layton on mystery structure (N1),
-puzzle↔narrative integration (N2), and per-solve story drip (N3). Next lowest
-in-scope levers: replayability (N12=30), cutscene beats (N6=45), dialogue
-volume/voice (N5=55). We remain **far below** on scene density (N4, gated) and
-audio (N11, gated).
+**Weighted narrative score ≈ 65/100** (Layton bar 70; 58→62→65 as N1/N3/N12
+shipped 2026-06-14). We now **exceed** Layton on mystery structure (N1),
+puzzle↔narrative integration (N2), per-solve story drip (N3), and meet it on
+replayability (N12). Next lowest in-scope levers: cutscene beats (N6=45),
+dialogue volume/voice (N5=55), env. storytelling (N8=62). We remain **far below**
+on scene density (N4, gated) and audio (N11, gated).
 
 ## The honest answer to "when do we surpass Layton?"
 
