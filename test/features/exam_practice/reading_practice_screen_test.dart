@@ -370,4 +370,34 @@ void main() {
       expect(tester.takeException(), isNull);
     });
   });
+
+  // Teach-why completeness gate (flaw-hunt 2026-06-14): reading was the only
+  // major question type WITHOUT an explanation-coverage test (listening,
+  // conversation, word-ordering all have one). Every comprehension question must
+  // teach WHY — the explanation is revealed on answer to quote the passage
+  // evidence. Covers default passages (any non-fill-in sectionId → grade
+  // passages) AND the upper-grade 長文空所補充 fill-in sections; empty
+  // (grade,section) combos contribute nothing, so this only asserts that
+  // questions which EXIST teach why.
+  group('reading explanation coverage (every question teaches why)', () {
+    const surfaces = <List<String>>[
+      ['5', 'r'], ['4', 'r'], ['3', 'r'], ['pre2', 'r'],
+      ['pre2plus', 'r'], ['2', 'r'], ['pre1', 'r'], // default passages
+      ['pre2plus', 'p2p_r2'], ['2', '2_r2'], ['pre1', 'p1_r2'], // fill-in
+    ];
+    for (final s in surfaces) {
+      final grade = s[0];
+      final section = s[1];
+      test('every reading question in $grade/$section has an explanation', () {
+        final expl = readingExplanationsForTest(grade, section);
+        for (var i = 0; i < expl.length; i++) {
+          final e = expl[i];
+          expect(e != null && e.trim().isNotEmpty, isTrue,
+              reason:
+                  'reading $grade/$section Q#$i has no explanation — a wrong '
+                  'answer would teach the child nothing');
+        }
+      });
+    }
+  });
 }

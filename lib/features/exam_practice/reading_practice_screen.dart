@@ -2482,3 +2482,13 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
 @visibleForTesting
 bool readingHasPassagesForTest(String grade, String sectionId) =>
     _ReadingPracticeScreenState._getPassages(grade, sectionId).isNotEmpty;
+
+/// Test-only: every comprehension question's explanation (null if absent) across
+/// all passages of (grade, sectionId) — for the teach-why coverage gate, so a
+/// reading question can never ship without teaching WHY the answer is correct.
+@visibleForTesting
+List<String?> readingExplanationsForTest(String grade, String sectionId) =>
+    _ReadingPracticeScreenState._getPassages(grade, sectionId)
+        .expand((p) => p.questions)
+        .map((q) => q.explanation)
+        .toList();
