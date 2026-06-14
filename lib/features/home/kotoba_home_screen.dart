@@ -541,6 +541,20 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
                     : '$n問の けっかで けいさん',
                 style: dqText(size: 11, color: dqInk.withAlpha(160)),
               ),
+              // Honesty: each skill is capped at the pass 目安, so an UNTESTED
+              // skill drags the % down. Without this a parent reads a low number
+              // as "failing" when the child has simply not practised every skill
+              // yet. Say so plainly — and frame it as motivating (the number
+              // rises as you try the missing skills), never shaming.
+              if (!thin && est.unmeasuredSkills.isNotEmpty) ...[
+                const SizedBox(height: 3),
+                Text(
+                  'まだ ためしていない ぎのうが ${est.unmeasuredSkills.length}こ。\n'
+                  'れんしゅうすると 数字（すうじ）は あがるよ',
+                  style: dqText(size: 10.5, color: dqGold.withAlpha(210))
+                      .copyWith(height: 1.35),
+                ),
+              ],
               const SizedBox(height: 3),
               Text('タップで くわしく / Details',
                   style: dqText(size: 11, color: dqGold)),

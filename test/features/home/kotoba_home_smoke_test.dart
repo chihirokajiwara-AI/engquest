@@ -533,4 +533,28 @@ void main() {
     await _settle(tester);
     expect(find.byType(SpeakerButton), findsNWidgets(3));
   });
+
+  // Honesty: with per-skill capping, an UNTESTED skill drags the 合格率 down. A
+  // child who has practised enough Reading (past the diagnosing threshold) but
+  // no Listening must be told the low number is because a skill is untested, not
+  // because they are failing — and that practising it raises the number.
+  testWidgets('readiness card explains untested skills (not "failing")',
+      (tester) async {
+    // 5級 = Reading + Listening. Seed enough Reading to clear the diagnosing
+    // threshold, leave Listening untested.
+    final store = await SkillAccuracyStore.getInstance();
+    await store.record(
+        grade: '5', skill: EikenSkill.reading, correct: 18, total: 25);
+
+    await tester.pumpWidget(_wrap(
+      streakService: _MockStreakService(const StreakState.zero()),
+      cardRepository: InMemoryFsrsCardRepository(),
+      initialEikenLevel: '5',
+    ));
+    await _settle(tester);
+
+    expect(find.textContaining('ためしていない'), findsOneWidget,
+        reason: 'an untested skill must be explained, not read as failing');
+    expect(tester.takeException(), isNull);
+  });
 }
