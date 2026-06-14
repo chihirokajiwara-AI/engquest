@@ -94,19 +94,22 @@ void main() {
   });
 
   // grade → official total 筆記 READING-skill question count (大問1〜4: 語句空所補充
-  // + 会話空所 + 語句整序 + 長文内容一致). SETTLED grades 5/4/3 are locked here, plus
-  // 準1級 (#137): 大問1=18 + 大問2=6 + 大問3=7 = 31, matching the official post-2024
-  // count — 大問3 was a stale 10 (over-stating the section); fixing it to 7 settled
-  // the pre1 total. 準2級 is now ALSO pinned: Task#32 added the missing 大問3
-  // 長文の語句空所補充 (2 blanks, post-2024 reform), so 準2 sums to the official
-  // 15+5+2+7=29. (2級/準2プラス still pending their own content re-author, #108.)
-  // 4級 was a stale 30 (大問4=5) — this guard would have caught it.
-  // Verified eiken.or.jp: 5級=25, 4級=35, 3級=30, 準2級=29, 準1級=31 (post-2024). 2026-06-14.
+  // + 会話空所 + 語句整序 + 長文内容一致). ALL 7 grades now pinned (準2 closed via
+  // Task#32, which added its missing 大問3). Post-2024-reform official totals
+  // (eiken.or.jp 2024renewal + 旺文社/eslclub, verified 2026-06-09/14):
+  //   5=25, 4=35 (was a stale 30 — 大問4 was 5, should be 10), 3=30,
+  //   準2=29 (15+5+2+7), 準2プラス=31 (17+6+8), 2級=31 (17+6+8, was 38),
+  //   準1=31 (18+6+7, was 41 — 大問3 was a stale 10).
+  // 3級 correctly has NO 語句整序 (verified: 語句整序 is 5級/4級 only); its reading
+  // is 15+5+10=30. 2級/準2プラス STRUCTURE is correct here; only their content
+  // QUALITY re-author is pending (#108), which this count test does not gate.
   const readingTotal = <String, int>{
     '5': 25,
     '4': 35,
     '3': 30,
     'pre2': 29,
+    'pre2plus': 31,
+    '2': 31,
     'pre1': 31,
   };
   const readingTypes = {
@@ -116,7 +119,7 @@ void main() {
     ExamSectionType.readingComprehension,
   };
 
-  test('筆記 reading-skill total matches official for the settled grades 5/4/3',
+  test('筆記 reading-skill total matches official post-2024 for ALL 7 grades',
       () {
     for (final entry in readingTotal.entries) {
       final def = kEikenExams[entry.key];
