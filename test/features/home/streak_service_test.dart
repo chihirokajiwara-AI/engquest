@@ -308,4 +308,33 @@ void main() {
     final state = await StreakService().recordStudySession();
     expect(state.dailyGoal, 30);
   });
+
+  // In-app goal editor (parent dashboard, flaw-hunt 2026-06-14): setDailyGoal
+  // persists the explicit goal, which drives the home ring and overrides the
+  // onboarding proxy. Previously the parent's daily-goal pick was setState-only
+  // (lost on close, never connected to the ring).
+
+  test('setDailyGoal persists and drives the home ring (load + current)',
+      () async {
+    final svc = StreakService();
+    await svc.setDailyGoal(30);
+    expect(await svc.currentDailyGoal(), 30);
+    expect((await svc.load()).dailyGoal, 30,
+        reason: 'the explicit goal must drive the home ring');
+  });
+
+  test('an explicit setDailyGoal overrides the onboarding proxy', () async {
+    SharedPreferences.setMockInitialValues({'onboarding_goal_minutes': 15});
+    PreferencesService.resetInstance();
+    await StreakService().setDailyGoal(25);
+    expect((await StreakService().load()).dailyGoal, 25);
+  });
+
+  test('setDailyGoal clamps to a sane range', () async {
+    final svc = StreakService();
+    await svc.setDailyGoal(99999);
+    expect(await svc.currentDailyGoal(), lessThanOrEqualTo(200));
+    await svc.setDailyGoal(0);
+    expect(await svc.currentDailyGoal(), greaterThanOrEqualTo(1));
+  });
 }

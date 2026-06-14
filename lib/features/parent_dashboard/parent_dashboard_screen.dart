@@ -9,6 +9,7 @@ import 'package:engquest/features/exam_practice/pass/cse_model.dart';
 import 'package:engquest/features/exam_practice/pass/skill_accuracy_store.dart';
 import 'package:engquest/features/quest/ui/dq_ui.dart';
 import 'package:engquest/features/onboarding/onboarding_flow.dart';
+import 'package:engquest/features/home/streak_service.dart';
 
 // ══════════════════════════════════════════════════════════════════════════════
 //  ParentDashboardScreen — C08
@@ -42,10 +43,13 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
   final _auth = AuthService();
   late Future<LearningProgress> _progressFuture;
 
-  // Settings state
-  int _dailyGoal = 20;
+  // Settings state. _dailyGoal mirrors the REAL home-ring goal (streak_daily_goal
+  // via StreakService); it is loaded on open and written on change. (The old
+  // 難易度 picker was removed — it was setState-only, never persisted, never read,
+  // and wiring it = the CEO-gated adaptive-difficulty work, not a live setting.)
+  final _streak = StreakService();
+  int _dailyGoal = kDefaultDailyGoal;
   TimeOfDay _notifTime = const TimeOfDay(hour: 18, minute: 0);
-  String _difficulty = '標準';
 
   @override
   void initState() {
@@ -54,6 +58,20 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
     _tabController = TabController(length: 4, vsync: this);
     _loadProgress();
     _loadReminderTime();
+    _loadDailyGoal();
+  }
+
+  /// Load the active daily goal so the editor shows what the home ring targets.
+  Future<void> _loadDailyGoal() async {
+    final g = await _streak.currentDailyGoal();
+    if (mounted) setState(() => _dailyGoal = g);
+  }
+
+  /// Persist the parent's daily-goal choice — it drives the child's home ring
+  /// immediately (StreakService gives an explicit goal precedence over defaults).
+  Future<void> _setDailyGoal(int g) async {
+    await _streak.setDailyGoal(g);
+    if (mounted) setState(() => _dailyGoal = g);
   }
 
   /// Restore the saved reminder time so the setting is remembered across
@@ -236,11 +254,8 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
                     _SettingsTab(
                       dailyGoal: _dailyGoal,
                       notifTime: _notifTime,
-                      difficulty: _difficulty,
-                      onGoalChanged: (v) => setState(() => _dailyGoal = v),
+                      onGoalChanged: _setDailyGoal,
                       onNotifChanged: _setReminderTime,
-                      onDifficultyChanged: (v) =>
-                          setState(() => _difficulty = v),
                       // #67 — data deletion; parent-gated via this screen.
                       onDeleteData: _handleDeleteData,
                     ),
@@ -954,20 +969,16 @@ class _ReviewCard extends StatelessWidget {
 class _SettingsTab extends StatelessWidget {
   final int dailyGoal;
   final TimeOfDay notifTime;
-  final String difficulty;
   final ValueChanged<int> onGoalChanged;
   final ValueChanged<TimeOfDay> onNotifChanged;
-  final ValueChanged<String> onDifficultyChanged;
   // #67 — data deletion callback; invoked after user confirms the dialog.
   final VoidCallback? onDeleteData;
 
   const _SettingsTab({
     required this.dailyGoal,
     required this.notifTime,
-    required this.difficulty,
     required this.onGoalChanged,
     required this.onNotifChanged,
-    required this.onDifficultyChanged,
     this.onDeleteData,
   });
 
@@ -1063,44 +1074,6 @@ class _SettingsTab extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 14),
-
-        // ── Difficulty ────────────────────────────────────────────────────
-        DqPanel(
-          title: '難易度 / Difficulty',
-          child: Column(
-            children: ['やさしい', '標準', 'むずかしい'].map((d) {
-              final selected = d == difficulty;
-              return GestureDetector(
-                onTap: () => onDifficultyChanged(d),
-                behavior: HitTestBehavior.opaque,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 7),
-                  child: Row(
-                    children: [
-                      Icon(
-                        selected
-                            ? Icons.radio_button_checked
-                            : Icons.radio_button_unchecked,
-                        color: selected ? dqGold : dqGoldDeep,
-                        size: 22,
-                      ),
-                      const SizedBox(width: 12),
-                      Text(
-                        d,
-                        style: dqText(
-                          size: 15,
-                          w: selected ? FontWeight.w800 : FontWeight.w600,
-                          color: selected ? dqGold : dqInk,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            }).toList(),
-          ),
-        ),
-        const SizedBox(height: 24),
 
         // #65 / #67 — データ / Consent & account data panel.
         // Parent-gated: only reachable inside the parent dashboard (requires

@@ -115,6 +115,21 @@ class StreakService {
     return kDefaultDailyGoal;
   }
 
+  /// The current effective daily question goal — what the home ring targets.
+  /// The in-app goal editor (parent dashboard) reads this to show the active
+  /// value, and writes it via [setDailyGoal].
+  Future<int> currentDailyGoal() async =>
+      _effectiveDailyGoal(await PreferencesService.getInstance());
+
+  /// Set the daily question goal (the in-app goal editor). Persists the explicit
+  /// `streak_daily_goal`, which takes precedence over the onboarding proxy in
+  /// [_effectiveDailyGoal] — so the parent's choice immediately drives the home
+  /// ring. Values are clamped to a sane range (1..200).
+  Future<void> setDailyGoal(int goal) async {
+    final prefs = await PreferencesService.getInstance();
+    await prefs.setInt(_kDailyGoal, goal.clamp(1, 200));
+  }
+
   // ISO-8601 date string for a given DateTime.
   static String _dateKey(DateTime d) => '${d.year.toString().padLeft(4, '0')}'
       '-${d.month.toString().padLeft(2, '0')}'
