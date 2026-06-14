@@ -120,21 +120,27 @@ bool hintViolatesAnswerRail(
   String answer,
   List<String> distractors,
 ) {
-  // Normalise to lower-case for case-insensitive comparison.
-  final lowerHint = hintTextJa.toLowerCase();
-  final lowerAnswer = answer.trim().toLowerCase();
-
-  // A non-empty answer token found verbatim inside the hint text → violation.
-  if (lowerAnswer.isNotEmpty && lowerHint.contains(lowerAnswer)) return true;
-
-  // Any distractor label found verbatim in the hint → eliminates a wrong
-  // choice by naming it, which is also illegal.
+  if (_railLeaks(hintTextJa, answer)) return true;
   for (final d in distractors) {
-    final lowerD = d.trim().toLowerCase();
-    if (lowerD.isNotEmpty && lowerHint.contains(lowerD)) return true;
+    if (_railLeaks(hintTextJa, d)) return true;
   }
-
   return false;
+}
+
+/// True when [token] leaks into [hint]. Multi-character tokens use a plain
+/// substring match (naming "are"/"Hello!" verbatim is a leak). SINGLE-character
+/// tokens — phonics letters like 's'/'t'/'a' — match ONLY as a standalone token
+/// (bounded by non-alphanumerics or string ends), so an incidental letter never
+/// false-positives: e.g. the 'T' in a 「ヒント T1」 tier prefix must NOT count as
+/// naming a /t/ answer. Still catches a real single-letter leak like 「s」.
+bool _railLeaks(String hint, String token) {
+  final t = token.trim().toLowerCase();
+  if (t.isEmpty) return false;
+  final h = hint.toLowerCase();
+  if (t.length == 1) {
+    return RegExp('(^|[^a-z0-9])${RegExp.escape(t)}(\$|[^a-z0-9])').hasMatch(h);
+  }
+  return h.contains(t);
 }
 
 /// Built-in fallback hints generated from the step's eikenLevel + penalizeWrong.

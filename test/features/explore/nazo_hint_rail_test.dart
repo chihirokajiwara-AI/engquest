@@ -100,6 +100,31 @@ void main() {
         isTrue,
       );
     });
+
+    // Single-character (phonics) answers match ONLY as a standalone token, so an
+    // incidental letter never false-positives — notably the 'T' in a 「ヒント T1」
+    // tier prefix must not count as naming a /t/ answer (content-qa advisory).
+    test('single-char /t/ answer: 「ヒント T1」 prefix is NOT a violation', () {
+      expect(
+        hintViolatesAnswerRail(
+            '【ヒント T1】したを はの うらに つけて だす おと。', 't', const ['s']),
+        isFalse,
+      );
+    });
+
+    test('single-char answer named standalone (「s」) IS a violation', () {
+      expect(
+        hintViolatesAnswerRail('こたえは「s」の おと だよ。', 's', const ['a']),
+        isTrue,
+      );
+    });
+
+    test('single-char answer not present at all → false', () {
+      expect(
+        hintViolatesAnswerRail('ヘビの ながい おと を さがそう。', 's', const ['a']),
+        isFalse,
+      );
+    });
   });
 
   // ── NazoHint model ──────────────────────────────────────────────────────────
