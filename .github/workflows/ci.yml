@@ -202,8 +202,25 @@ jobs:
       # CHECK verifies the iOS app COMPILES via the edilab entrypoint on the
       # default Runner scheme; flavor bundle-id/app-name config is a release
       # concern, not a compilation one. (#143 → iOS-flavor-schemes follow-up)
+      # The CocoaPods CDN (cdn.cocoapods.org) intermittently 404s during the
+      # pod install that the iOS build runs ("fatal: repository
+      # 'https://cdn.cocoapods.org/' not found"), turning main red on pure infra
+      # noise while analyze/test/android stay green. Retry up to 3× so a transient
+      # CDN blip self-heals; a real compile error still fails all 3 → red.
       - name: Build iOS (edilab entrypoint, no-codesign)
-        run: flutter build ios -t lib/main_edilab.dart --no-codesign
+        run: |
+          for attempt in 1 2 3; do
+            echo "::group::iOS build attempt $attempt/3"
+            if flutter build ios -t lib/main_edilab.dart --no-codesign; then
+              echo "::endgroup::"
+              exit 0
+            fi
+            echo "::endgroup::"
+            echo "attempt $attempt failed (often a transient CocoaPods CDN 404); retrying in 20s…"
+            sleep 20
+          done
+          echo "iOS build failed after 3 attempts"
+          exit 1
 
   # ── Summary job (required status check) ────────────────────────────────────
   ci-pass:
