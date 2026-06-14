@@ -11,6 +11,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>ENG Quest</title>
   <link rel="manifest" href="manifest.json">
+  <!-- Preload the bundled JP serif (2.2 MB) so the browser fetches it IN PARALLEL
+       with the engine download instead of serially after FontManifest.json parses
+       (~4 s in). The CSS boot-splash below keeps first-paint instant either way, so
+       this just removes the post-engine tofu flash — child-facing 日本語 renders
+       with glyphs the moment Flutter paints, not 2 s later. URL is the real
+       Flutter-web asset path (double-assets/ quirk; verified 200 + 2.2 MB on the
+       live build). crossorigin is mandatory for font preloads (fonts fetch in CORS
+       mode even same-origin) or the browser double-fetches. (perf, CEO 1355) -->
+  <link rel="preload" href="assets/assets/fonts/NotoSerifJP.ttf" as="font" type="font/ttf" crossorigin>
   <style>
     body {
       background: #0F0E17;
