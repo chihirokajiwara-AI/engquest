@@ -154,55 +154,9 @@ class ProgressService {
   // -----------------------------------------------------------------------
 
   /// Computes how many cards are due today, tomorrow, and this week.
-  ///
-  /// - new / learning / relearning: always count as due today
-  /// - review: due when dueDate <= end of the target day
-  ///
-  /// Returns ReviewSchedule.empty() when [allCards] is empty.
-  ReviewSchedule _buildReviewSchedule(List<Map<String, dynamic>> allCards) {
-    if (allCards.isEmpty) return const ReviewSchedule.empty();
-
-    final now = DateTime.now();
-    final todayEnd = DateTime(now.year, now.month, now.day, 23, 59, 59);
-    final tomorrowEnd = todayEnd.add(const Duration(days: 1));
-    final weekEnd = todayEnd.add(const Duration(days: 6));
-
-    var todayDue = 0;
-    var tomorrowDue = 0;
-    var weekDue = 0;
-
-    for (final card in allCards) {
-      final state = card['state'] as String? ?? 'new';
-      final dueDateRaw = card['dueDate'];
-
-      DateTime? dueDate;
-      if (dueDateRaw is Timestamp) {
-        dueDate = dueDateRaw.toDate();
-      }
-
-      if (state == 'new' || state == 'learning' || state == 'relearning') {
-        // Always due now
-        todayDue++;
-        weekDue++;
-      } else if (state == 'review') {
-        if (dueDate == null || !dueDate.isAfter(todayEnd)) {
-          todayDue++;
-          weekDue++;
-        } else if (!dueDate.isAfter(tomorrowEnd)) {
-          tomorrowDue++;
-          weekDue++;
-        } else if (!dueDate.isAfter(weekEnd)) {
-          weekDue++;
-        }
-      }
-    }
-
-    return ReviewSchedule(
-      todayDue: todayDue,
-      tomorrowDue: tomorrowDue,
-      weekDue: weekDue,
-    );
-  }
+  /// Thin wrapper over the pure [buildReviewSchedule] (uses the wall clock).
+  ReviewSchedule _buildReviewSchedule(List<Map<String, dynamic>> allCards) =>
+      buildReviewSchedule(allCards, DateTime.now());
 
   // -----------------------------------------------------------------------
   // Helpers
@@ -279,4 +233,56 @@ List<CategoryMastery> aggregateCategoryMastery(
       .toList();
   result.sort((a, b) => b.ratio.compareTo(a.ratio));
   return result;
+}
+
+/// Pure review-schedule bucketing as of [now]. Counts how many cards are due
+/// today / tomorrow / this-week (7 days inclusive of today):
+///   • new / learning / relearning → always due today (and this week)
+///   • review → bucketed by dueDate (a null or past dueDate = overdue = today)
+/// [card]['dueDate'] may be a Firestore Timestamp or a DateTime (tests).
+/// Empty cards → ReviewSchedule.empty(). Pure + public so it is unit-tested.
+ReviewSchedule buildReviewSchedule(
+  List<Map<String, dynamic>> allCards,
+  DateTime now,
+) {
+  if (allCards.isEmpty) return const ReviewSchedule.empty();
+
+  final todayEnd = DateTime(now.year, now.month, now.day, 23, 59, 59);
+  final tomorrowEnd = todayEnd.add(const Duration(days: 1));
+  final weekEnd = todayEnd.add(const Duration(days: 6));
+
+  var todayDue = 0;
+  var tomorrowDue = 0;
+  var weekDue = 0;
+
+  for (final card in allCards) {
+    final state = card['state'] as String? ?? 'new';
+    final dueRaw = card['dueDate'];
+    final DateTime? dueDate = dueRaw is Timestamp
+        ? dueRaw.toDate()
+        : dueRaw is DateTime
+            ? dueRaw
+            : null;
+
+    if (state == 'new' || state == 'learning' || state == 'relearning') {
+      todayDue++;
+      weekDue++;
+    } else if (state == 'review') {
+      if (dueDate == null || !dueDate.isAfter(todayEnd)) {
+        todayDue++;
+        weekDue++;
+      } else if (!dueDate.isAfter(tomorrowEnd)) {
+        tomorrowDue++;
+        weekDue++;
+      } else if (!dueDate.isAfter(weekEnd)) {
+        weekDue++;
+      }
+    }
+  }
+
+  return ReviewSchedule(
+    todayDue: todayDue,
+    tomorrowDue: tomorrowDue,
+    weekDue: weekDue,
+  );
 }
