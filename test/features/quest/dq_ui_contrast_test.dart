@@ -25,6 +25,16 @@ double contrast(Color a, Color b) {
   return (hi + 0.05) / (lo + 0.05);
 }
 
+// Composite a reduced-alpha foreground over an opaque background (alpha-over).
+// Reduced-alpha text must be flattened against its surface BEFORE contrast is
+// computed — the ratio of the half-transparent colour is meaningless on its own.
+Color _over(Color fg, Color bg) {
+  final a = fg.a; // 0..1 opacity
+  int ch(double f, double b) =>
+      ((f * a + b * (1 - a)) * 255).round().clamp(0, 255);
+  return Color.fromARGB(255, ch(fg.r, bg.r), ch(fg.g, bg.g), ch(fg.b, bg.b));
+}
+
 void main() {
   // The dark brown used for text on gold action buttons (home CTA / battle badge
   // / parent selectors). Keep in sync with those call sites.
@@ -59,6 +69,37 @@ void main() {
       expect(contrast(dqInk, dqGold), lessThan(4.5),
           reason:
               'cream-on-gold is low contrast; the convention is dark-on-gold');
+    });
+
+    // ACTIVE secondary/caption text (解説, captions, hints, the session-end
+    // review panels) renders as reduced-alpha cream over the panel/background.
+    // The opaque pairings above don't catch it — a palette tweak OR a lower alpha
+    // could silently drop the COMPOSITED text below AA. 140 is the lowest alpha
+    // used for ACTIVE text; anything below (eliminated choices @90, locked badges
+    // @120, unlit gauge @80) is an INACTIVE state, WCAG-exempt and not guarded.
+    const activeCaptionAlphas = [140, 150, 160, 170, 190, 200, 210, 220];
+    for (final surface
+        in {'panel (dqBox)': dqBox, 'bg (dqNight0)': dqNight0}.entries) {
+      for (final alpha in activeCaptionAlphas) {
+        test('cream@$alpha over ${surface.key} meets AA normal (>=4.5:1)', () {
+          final composited = _over(dqInk.withAlpha(alpha), surface.value);
+          final r = contrast(composited, surface.value);
+          expect(r, greaterThanOrEqualTo(4.5),
+              reason: 'dqInk@$alpha over ${surface.key} is '
+                  '${r.toStringAsFixed(2)}:1 — below WCAG-AA 4.5');
+        });
+      }
+    }
+
+    // Boundary doc: the 140 active-text floor is deliberately the lowest that
+    // still clears AA. Dropping to 130 over the panel would breach it — this
+    // pins the floor so nobody lowers active-caption alpha "just a little".
+    test('alpha just below the 140 floor (130) would breach AA on the panel',
+        () {
+      final r = contrast(_over(dqInk.withAlpha(130), dqBox), dqBox);
+      expect(r, lessThan(4.5),
+          reason: '130 is the documented inactive/active boundary — '
+              'active text must stay >= 140');
     });
   });
 }
