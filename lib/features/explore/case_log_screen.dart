@@ -164,8 +164,14 @@ class _CaseLogScreenState extends State<CaseLogScreen> {
           ),
           const SizedBox(height: 6),
           Text(
-            '事件（じけん）を かいけつ するたび、やぶれた おはなしの 1ページが もどる。',
-            style: dqText(size: 11, color: dqInk.withAlpha(180)),
+            cleared.isEmpty
+                // Warm first-visit state — a bleak all-？ board would discourage;
+                // frame the empty 事件簿 as an invitation to the first case.
+                ? 'まだ、どの 事件（じけん）も かいけつ していない。\n'
+                    'さいしょの 事件（じけん）から、やぶれた おはなしを あつめにいこう！'
+                : '事件（じけん）を かいけつ するたび、やぶれた おはなしの 1ページが もどる。',
+            style: dqText(size: 11, color: dqInk.withAlpha(180))
+                .copyWith(height: 1.5),
           ),
         ],
       ),

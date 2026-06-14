@@ -68,6 +68,9 @@ void main() {
       // All-uncleared on a fresh store → the sentence is hidden.
       expect(find.textContaining('Once, I'), findsNothing);
       expect(find.textContaining('みかいふう'), findsWidgets);
+      // Warm first-visit state, not a bleak all-？ board.
+      expect(find.textContaining('さいしょの 事件'), findsOneWidget,
+          reason: 'an empty 事件簿 should invite the first case, not feel bleak');
       expect(tester.takeException(), isNull);
     });
 
