@@ -77,6 +77,14 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
   bool _sessionDone = false;
   bool _partHeaderShown = false;
 
+  // Items the child got WRONG this session — surfaced on the results screen as a
+  // "review these" list with a 🔊 replay button + 解説 per item (Task #26). For
+  // listening this is the highest-value review: the child can re-hear exactly the
+  // clips they misheard, then read the 解説/script. Consistent with the 大問2 会話
+  // / 大問1 語彙 missed-review lists. The full item is stored (audioKey/question/
+  // explanation are unaffected by the choice-shuffle).
+  final List<ListeningItem> _missedItems = [];
+
   // HONESTY (CEO 2026-06-09 flaw-hunt #112): a listening item whose audio clip
   // is not actually bundled (the 40 ALLOWED_MISSING l3/l4 part-2/3 clips) can be
   // "answered" only by guessing from the question — recording that as listening
@@ -194,7 +202,12 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
       _selectedAnswer = idx;
       _answered = true;
       final correct = idx == item.correctIndex;
-      if (correct) _correctCount++;
+      if (correct) {
+        _correctCount++;
+      } else {
+        // Track the missed item for the session-end review list (Task #26).
+        _missedItems.add(item);
+      }
       _consecutiveWrong = correct ? 0 : _consecutiveWrong + 1;
       // Only audible items feed the 合格率 (honest listening measurement).
       if (measurable) {
@@ -661,6 +674,14 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
                   style: dqText(size: 12, color: dqInk.withAlpha(170)),
                 ),
               ],
+              if (_missedItems.isNotEmpty) ...[
+                const SizedBox(height: 20),
+                ListeningReviewPanel(
+                  missed: _missedItems,
+                  onReplay: (audioKey) =>
+                      _cue.play('audio/listening/$audioKey'),
+                ),
+              ],
               if (_earnedStreak != null) ...[
                 const SizedBox(height: 20),
                 SessionEndHook(streak: _earnedStreak!),
@@ -702,6 +723,103 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Session-end "review these" list for listening (Task #26): one row per item
+/// the child missed, each with a 🔊 replay button (re-hear the EXACT clip) and
+/// its 解説 (why) when authored. Listening benefits most from re-listening, so
+/// the session closes with an actionable, re-hearable study list — the same
+/// pattern 大問2 会話 / 大問1 語彙 use, but audio-aware. Pure + testable: takes the
+/// missed items + an onReplay callback (no audio coupling), so a widget test can
+/// assert the rows, the 解説, and that replay fires with the right audioKey.
+class ListeningReviewPanel extends StatelessWidget {
+  final List<ListeningItem> missed;
+  final void Function(String audioKey) onReplay;
+  const ListeningReviewPanel({
+    super.key,
+    required this.missed,
+    required this.onReplay,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      key: const ValueKey('listening_review_panel'),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: dqBox,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: dqGold.withAlpha(90)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'もう一度（いちど）きいてみよう / Review these',
+            style: dqText(size: 13, w: FontWeight.w800, color: dqGold),
+          ),
+          const SizedBox(height: 10),
+          for (final item in missed)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // 🔊 re-hear the exact clip. 44px child-friendly target
+                      // (WCAG 2.2 SC 2.5.8 floor is 24px; we use the kid bar).
+                      Semantics(
+                        button: true,
+                        label: 'もういちど きく',
+                        child: InkWell(
+                          onTap: () => onReplay(item.audioKey),
+                          borderRadius: BorderRadius.circular(8),
+                          child: Container(
+                            constraints: const BoxConstraints(
+                                minWidth: 44, minHeight: 44),
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: dqGold.withAlpha(40),
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: dqGold.withAlpha(120)),
+                            ),
+                            child: const Text('🔊',
+                                style: TextStyle(fontSize: 18)),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          item.question,
+                          style:
+                              dqText(size: 12, w: FontWeight.w600, color: dqInk)
+                                  .copyWith(height: 1.4),
+                        ),
+                      ),
+                    ],
+                  ),
+                  if (item.explanation != null &&
+                      item.explanation!.isNotEmpty) ...[
+                    const SizedBox(height: 4),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 54),
+                      child: Text(
+                        item.explanation!,
+                        style: dqText(size: 11, color: dqInk.withAlpha(200))
+                            .copyWith(height: 1.5),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+        ],
       ),
     );
   }
