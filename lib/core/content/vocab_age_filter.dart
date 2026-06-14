@@ -43,9 +43,21 @@ const Set<String> kYoungLearnerCategories = {
 /// safely shuffle/mutate the result.
 List<VocabItem> filterVocabByAge(List<VocabItem> source, int age) {
   if (age < kYoungLearnerAgeThreshold) {
-    return source
+    final young = source
         .where((v) => kYoungLearnerCategories.contains(v.category))
         .toList();
+    // NEVER strand a non-empty grade. The young-learner categories are concrete
+    // nouns that exist mainly in the beginner grades (5級/4級); higher grades
+    // (3級+) carry abstract/academic vocab in none of these categories, so the
+    // subset would be EMPTY → the BattleScreen deck is empty → a RangeError
+    // crash on the core review screen. A child placed at an advanced grade is
+    // advanced regardless of age, so fall back to the full deck rather than
+    // hand back nothing. (Beginner grades keep their concrete subset unchanged,
+    // since `young` is non-empty there.)
+    if (young.isEmpty && source.isNotEmpty) {
+      return List<VocabItem>.from(source);
+    }
+    return young;
   }
   return List<VocabItem>.from(source);
 }

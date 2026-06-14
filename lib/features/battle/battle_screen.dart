@@ -687,16 +687,26 @@ class _BattleScreenState extends State<BattleScreen>
   @override
   Widget build(BuildContext context) {
     // Key changes when the body state changes, triggering AnimatedSwitcher.
+    // Empty-deck guard (defense-in-depth): if the load produced no cards (a grade
+    // with no vocab at all), _queue is empty and _buildCardSession would deref
+    // _vocab[_queue[0]] → RangeError. Show a calm empty state instead of crashing
+    // the core review screen. (The usual age-filter-empties-a-grade cause is fixed
+    // at the root in filterVocabByAge; this guards the remaining truly-empty case.)
+    final isEmpty = !_repoLoading && !_sessionDone && _queue.isEmpty;
     final bodyKey = _repoLoading
         ? const ValueKey('loading')
         : _sessionDone
             ? const ValueKey('summary')
-            : const ValueKey('session');
+            : isEmpty
+                ? const ValueKey('empty')
+                : const ValueKey('session');
     final body = _repoLoading
         ? _buildLoadingSpinner()
         : _sessionDone
             ? _buildSummary()
-            : _buildCardSession();
+            : isEmpty
+                ? _buildEmptyDeck()
+                : _buildCardSession();
 
     return DqScene(
       child: Column(
@@ -724,6 +734,33 @@ class _BattleScreenState extends State<BattleScreen>
           const SizedBox(height: 16),
           Text('カードを読み込んでいます…', style: dqText(size: 14, color: dqInk)),
         ],
+      ),
+    );
+  }
+
+  /// Calm empty state when this grade has no cards to review (never crash).
+  Widget _buildEmptyDeck() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('🃏', style: TextStyle(fontSize: 48)),
+            const SizedBox(height: 14),
+            Text(
+              'このグレードの カードは、まだ じゅんびちゅう。\n'
+              'ほかの グレードで れんしゅう してみよう！',
+              textAlign: TextAlign.center,
+              style: dqText(size: 14, color: dqInk).copyWith(height: 1.6),
+            ),
+            const SizedBox(height: 20),
+            DqButton(
+              label: 'もどる',
+              onTap: () => Navigator.maybePop(context),
+            ),
+          ],
+        ),
       ),
     );
   }

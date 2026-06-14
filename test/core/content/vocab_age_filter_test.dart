@@ -134,6 +134,33 @@ void main() {
       expect(filterVocabByAge(<VocabItem>[], 5), isEmpty);
       expect(filterVocabByAge(<VocabItem>[], 10), isEmpty);
     });
+
+    // Regression: a young child on a higher grade (3級+) whose vocab carries NO
+    // young-learner categories must NOT get an empty deck — that emptied the
+    // BattleScreen deck and crashed (_queue[0] RangeError) on the core review
+    // screen. Fall back to the full deck instead of stranding the grade.
+    test(
+        'young age on a grade with no concrete categories → full deck, never empty',
+        () {
+      final abstractOnly = [
+        for (var i = 1; i <= 5; i++)
+          VocabItem(
+            id: 'eiken2_${i.toString().padLeft(3, '0')}',
+            word: 'w$i',
+            reading: 'r$i',
+            jpTranslation: 'j$i',
+            cefrLevel: CefrLevel.a1,
+            eikenLevel: '2',
+            pos: const [PartOfSpeech.noun],
+            exampleSentences: const ['example.'],
+            category: 'Abstract',
+          ),
+      ];
+      final result = filterVocabByAge(abstractOnly, 5);
+      expect(result, isNotEmpty,
+          reason: 'a non-empty grade must never be emptied by the age filter');
+      expect(result.length, equals(abstractOnly.length));
+    });
   });
 
   group('onboarding age → deck mapping (wiring contract)', () {
