@@ -13,8 +13,10 @@
 // Elements:
 //   1. 探偵の捜査日誌 streak display (「N日 れんぞく」) — gentle, gold.
 //   2. 「きょうの ナゾ」— FSRS-due item count, diegetically framed.
-//   3. Primary CTA 「▶ じけんげんばへ / つづける」— SceneView (kTown5Scene),
-//      or QuestMapScreen for higher levels whose SceneView is not yet built.
+//   3. Primary CTA 「▶ じけんげんばへ / つづける」— SceneView. All 7 grades now have a
+//      painted SceneDef (kScenesByGrade), so the spine is ALWAYS the scene
+//      (COMPOSITION-ARCHITECTURE.md §7.3/§8 warp closed). The map fallback below
+//      only guards an unknown/future grade key, never a real grade.
 //   4. Secondary 「ちずを みる」— QuestMapScreen (level-select stays reachable).
 //
 // All data is injected via constructor so ?preview=kotobahome works with NO
@@ -230,10 +232,11 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
 
   /// Navigate to the painted scene (primary CTA).
   ///
-  /// 英検5級 and 4級 have painted SceneViews (see [kScenesByGrade]).  Grades
-  /// without a scene yet fall back to QuestMapScreen (level-select) — honest,
-  /// and consistent with the current build-out where painted districts are
-  /// shipping grade-by-grade.
+  /// All 7 grades (5/4/3/準2/準2プラス/2/準1) have painted SceneViews (see
+  /// [kScenesByGrade]), so the spine is always the scene — the
+  /// COMPOSITION-ARCHITECTURE.md §7.3/§8 "map-as-spine" warp is closed and locked
+  /// by composition_conformance_test. The QuestMapScreen fallback below remains
+  /// only as a safety net for an unknown/future grade key.
   /// Push a screen and RELOAD home state when the child returns. Every practice
   /// surface writes streak / daily-goal / 合格率 progress, so the home must
   /// re-read on pop — otherwise the「きょうの目標」ring, the due-count and the
