@@ -466,11 +466,13 @@ class _StepAge extends StatelessWidget {
                   children: [
                     _AgeStepButton(
                       icon: Icons.remove_rounded,
+                      semanticLabel: 'ねんれいを へらす / decrease age',
                       onTap: age > 4 ? () => onAgeChanged(age - 1) : null,
                     ),
                     const SizedBox(width: 44),
                     _AgeStepButton(
                       icon: Icons.add_rounded,
+                      semanticLabel: 'ねんれいを ふやす / increase age',
                       onTap: age < 18 ? () => onAgeChanged(age + 1) : null,
                     ),
                   ],
@@ -494,29 +496,40 @@ class _StepAge extends StatelessWidget {
 /// limit (4 or 18) is reached → muted/disabled.
 class _AgeStepButton extends StatelessWidget {
   final IconData icon;
+  final String semanticLabel;
   final VoidCallback? onTap;
-  const _AgeStepButton({required this.icon, this.onTap});
+  const _AgeStepButton(
+      {required this.icon, required this.semanticLabel, this.onTap});
 
   @override
   Widget build(BuildContext context) {
     final enabled = onTap != null;
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 56,
-        height: 56,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          gradient: enabled
-              ? const LinearGradient(colors: [dqGold, dqGoldDeep])
-              : null,
-          color: enabled ? null : dqNight1,
-          border: Border.all(color: dqBorder, width: 2),
+    // a11y: the onboarding age stepper is the FIRST interaction — an icon-only
+    // button is silent to a screen reader, so a low-vision parent can't set the
+    // child's age and can't even start. Announce it as a named button.
+    return Semantics(
+      button: true,
+      enabled: enabled,
+      label: semanticLabel,
+      excludeSemantics: true,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          width: 56,
+          height: 56,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            gradient: enabled
+                ? const LinearGradient(colors: [dqGold, dqGoldDeep])
+                : null,
+            color: enabled ? null : dqNight1,
+            border: Border.all(color: dqBorder, width: 2),
+          ),
+          child: Icon(icon,
+              color: enabled ? const Color(0xFF2A1C00) : dqInk.withAlpha(80),
+              size: 30),
         ),
-        child: Icon(icon,
-            color: enabled ? const Color(0xFF2A1C00) : dqInk.withAlpha(80),
-            size: 30),
       ),
     );
   }
@@ -909,53 +922,65 @@ class _StepGoal extends StatelessWidget {
                 return Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: GestureDetector(
-                      onTap: () => onGoalChanged(min),
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 200),
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        decoration: BoxDecoration(
-                          gradient: selected
-                              ? const LinearGradient(
-                                  colors: [dqGold, dqGoldDeep])
-                              : null,
-                          color: selected ? null : dqNight0.withAlpha(180),
-                          borderRadius: BorderRadius.circular(9),
-                          border: Border.all(
-                            color:
-                                selected ? dqBorder : dqGoldDeep.withAlpha(110),
-                            width: selected ? 2 : 1.5,
+                    // a11y: the daily-goal presets are icon/number tiles — label
+                    // each as a selectable button so a screen-reader parent can
+                    // set the goal (the onboarding is the gateway flow).
+                    child: Semantics(
+                      button: true,
+                      selected: selected,
+                      label: 'まいにち $min ふんの もくひょう',
+                      excludeSemantics: true,
+                      child: GestureDetector(
+                        onTap: () => onGoalChanged(min),
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          decoration: BoxDecoration(
+                            gradient: selected
+                                ? const LinearGradient(
+                                    colors: [dqGold, dqGoldDeep])
+                                : null,
+                            color: selected ? null : dqNight0.withAlpha(180),
+                            borderRadius: BorderRadius.circular(9),
+                            border: Border.all(
+                              color: selected
+                                  ? dqBorder
+                                  : dqGoldDeep.withAlpha(110),
+                              width: selected ? 2 : 1.5,
+                            ),
+                            boxShadow: selected
+                                ? [
+                                    BoxShadow(
+                                        color: dqGold.withAlpha(90),
+                                        blurRadius: 8)
+                                  ]
+                                : null,
                           ),
-                          boxShadow: selected
-                              ? [
-                                  BoxShadow(
-                                      color: dqGold.withAlpha(90),
-                                      blurRadius: 8)
-                                ]
-                              : null,
-                        ),
-                        child: Column(
-                          children: [
-                            Text(
-                              '$min',
-                              style: dqText(
-                                size: 22,
-                                w: FontWeight.w800,
-                                color:
-                                    selected ? const Color(0xFF2A1C00) : dqGold,
+                          child: Column(
+                            children: [
+                              Text(
+                                '$min',
+                                style: dqText(
+                                  size: 22,
+                                  w: FontWeight.w800,
+                                  color: selected
+                                      ? const Color(0xFF2A1C00)
+                                      : dqGold,
+                                ),
                               ),
-                            ),
-                            Text(
-                              'min',
-                              style: dqText(
-                                size: 11,
-                                w: FontWeight.w600,
-                                color:
-                                    selected ? const Color(0xFF2A1C00) : dqInk,
-                                spacing: 1,
+                              Text(
+                                'min',
+                                style: dqText(
+                                  size: 11,
+                                  w: FontWeight.w600,
+                                  color: selected
+                                      ? const Color(0xFF2A1C00)
+                                      : dqInk,
+                                  spacing: 1,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
