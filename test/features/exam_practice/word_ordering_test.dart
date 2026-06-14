@@ -135,4 +135,48 @@ void main() {
       }
     });
   }
+
+  // a11y (Task #27, 2026-06-14): the 大問3 sort was bare GestureDetectors over
+  // ~36px chips — AT users couldn't perceive/operate the core mechanic and the
+  // targets were marginal for small/impaired fingers. Lock the fix.
+  testWidgets('大問3 chunks are screen-reader buttons with 44px tap targets',
+      (tester) async {
+    tester.view.physicalSize = const Size(640, 2400);
+    tester.view.devicePixelRatio = 2.0;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(const MaterialApp(
+      home: WordOrderingPracticeScreen(
+        eikenGrade: '4',
+        section: ExamSection(
+          id: '4_p3',
+          nameJa: '筆記3',
+          nameEn: 'Word Ordering',
+          type: ExamSectionType.wordOrdering,
+          questionCount: 10,
+          timeLimitMinutes: 10,
+          description: 'test',
+        ),
+      ),
+    ));
+    await tester.pump();
+
+    // The chunk pool exposes Semantics buttons (was AT-invisible).
+    final poolButtons = find.bySemanticsLabel(RegExp('ならべる'));
+    expect(poolButtons, findsWidgets,
+        reason: 'pool chunks must be screen-reader buttons');
+
+    // 44px child-friendly tap target (the chip enforces a min box).
+    final size = tester.getSize(poolButtons.first);
+    expect(size.height, greaterThanOrEqualTo(44.0));
+    expect(size.width, greaterThanOrEqualTo(44.0));
+
+    // Placing a chunk turns it into an announced "tap to remove" button.
+    final firstChunk = wordOrderingChunksForTest('4').first.first;
+    await tester.tap(find.text(firstChunk));
+    await tester.pump();
+    expect(find.bySemanticsLabel(RegExp('もどす')), findsWidgets,
+        reason: 'placed chunks must be screen-reader "tap to remove" buttons');
+  });
 }

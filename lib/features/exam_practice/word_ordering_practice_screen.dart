@@ -127,6 +127,9 @@ class _WordOrderingPracticeScreenState
       _remainingWords.remove(word);
       _selectedWords.add(word);
     });
+    // a11y: the sort is a visual drag for sighted users — announce the move so
+    // AT users know the chunk landed and at which position.
+    _announce('$word を ${_selectedWords.length}番目（ばんめ）に いれた');
   }
 
   void _removeWord(int idx) {
@@ -134,7 +137,17 @@ class _WordOrderingPracticeScreenState
     setState(() {
       final word = _selectedWords.removeAt(idx);
       _remainingWords.add(word);
+      _announce('$word を もどした');
     });
+  }
+
+  void _announce(String message) {
+    if (!mounted) return;
+    SemanticsService.sendAnnouncement(
+      View.of(context),
+      message,
+      Directionality.of(context),
+    );
   }
 
   void _checkAnswer() {
@@ -344,29 +357,39 @@ class _WordOrderingPracticeScreenState
                             runSpacing: 6,
                             crossAxisAlignment: WrapCrossAlignment.center,
                             children: List.generate(_selectedWords.length, (i) {
-                              return GestureDetector(
-                                onTap: () => _removeWord(i),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    // Position marker ①②③④⑤ — the slots the real exam
-                                    // counts ("2番目と4番目").
-                                    Text(
-                                      i < _kCircled.length
-                                          ? _kCircled[i]
-                                          : '${i + 1}',
-                                      style: dqText(
-                                        size: 11,
-                                        color: dqGold,
-                                        w: FontWeight.bold,
+                              return Semantics(
+                                button: !_answered,
+                                // AT users hear which chunk this is + that tapping
+                                // returns it to the pool (the sort was invisible
+                                // to screen readers before).
+                                label: _answered
+                                    ? '${i + 1}番目（ばんめ）：${_selectedWords[i]}'
+                                    : '${i + 1}番目（ばんめ）：${_selectedWords[i]}。'
+                                        'タップして もどす',
+                                child: GestureDetector(
+                                  onTap: () => _removeWord(i),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      // Position marker ①②③④⑤ — the slots the real exam
+                                      // counts ("2番目と4番目").
+                                      Text(
+                                        i < _kCircled.length
+                                            ? _kCircled[i]
+                                            : '${i + 1}',
+                                        style: dqText(
+                                          size: 11,
+                                          color: dqGold,
+                                          w: FontWeight.bold,
+                                        ),
                                       ),
-                                    ),
-                                    _WordChip(
-                                      word: _selectedWords[i],
-                                      selected: true,
-                                      removable: !_answered,
-                                    ),
-                                  ],
+                                      _WordChip(
+                                        word: _selectedWords[i],
+                                        selected: true,
+                                        removable: !_answered,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               );
                             }),
@@ -500,9 +523,16 @@ class _WordOrderingPracticeScreenState
                       spacing: 8,
                       runSpacing: 8,
                       children: _remainingWords.map((word) {
-                        return GestureDetector(
-                          onTap: () => _tapWord(word),
-                          child: _WordChip(word: word, selected: false),
+                        return Semantics(
+                          button: true,
+                          // The chunk pool was a bare GestureDetector — invisible
+                          // to AT. Expose each chunk as a button that builds the
+                          // sentence.
+                          label: '$word。タップして ならべる',
+                          child: GestureDetector(
+                            onTap: () => _tapWord(word),
+                            child: _WordChip(word: word, selected: false),
+                          ),
                         );
                       }).toList(),
                     ),
@@ -799,6 +829,12 @@ class _WordChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      // 44px child-friendly tap target (WCAG 2.2 SC 2.5.8 floor is 24px) — a
+      // short chunk like "is"/"a" was ~36px tall and narrow, marginal for small
+      // fingers + motor impairment on the core 大問3 sort mechanic. NOTE: no
+      // `alignment:` here — on a Container that makes it EXPAND to the parent's
+      // bounded width (blowing up the Wrap); the inner Row centres the label.
+      constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
         color: selected ? dqNight1 : dqBox,
