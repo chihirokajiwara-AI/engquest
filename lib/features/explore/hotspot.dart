@@ -750,6 +750,25 @@ final SceneDef kTown5Scene = SceneDef(
       pos: const Alignment(-0.45, 0.10),
       size: 0.20,
       step: _kStep(0),
+      // Per-case hint ladder: the generic 5級 fallback is a grammar word-order
+      // tip — useless for this phonics SOUND-recognition ナゾ. Scaffold by the /s/
+      // sound's properties (snake「スー」, mouth + breath), never naming the answer
+      // ('s') or distractor ('a'); kept pure kana so no Latin 's'/'a' leaks
+      // (hintViolatesAnswerRail stays false; locked by nazo_hint_rail_test).
+      hints: const [
+        NazoHint(
+            tier: 1,
+            textJa: '【ヒント T1】ヘビが「スー」と ながく のばす おと だよ。'
+                '🔊を おして、その おと を さがそう。'),
+        NazoHint(
+            tier: 2,
+            textJa: '【ヒント T2】くちを よこに ひらいて、はと はの あいだから '
+                'いきを「スー」と ながく だす おと だよ。'),
+        NazoHint(
+            tier: 3,
+            textJa: '【ヒント T3】さっき セルが おしえてくれた さいしょの おと。'
+                '「スー」と きこえる ほう を えらぼう。'),
+      ],
       clueLineJa: '「かまどの ひが、まだ きえていない。'
           'まだ きける ひとを、まっていたんだ。」',
       framingJa: '灰守（はいもり）セルは、ずっと かまどを まもっていた。\n'
