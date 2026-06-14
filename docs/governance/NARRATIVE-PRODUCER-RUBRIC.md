@@ -32,7 +32,7 @@ modal. grey→colour restoration mechanic; assembling-bookmark mystery (5/7).
 |N5|Per-character dialogue volume/voice|55|70|now|~1.5k chars/scene; スラ recurs but lines are thin. Deepen authored dialogue + voice consistency per recurring character (in-scope authoring).|
 |N6|Cutscene/beat density at peaks|56|70|partly|Arrival + 解決 modal + ✅ NEW 対決 peak (1f5bd4c: the final ナゾ is framed as the confrontation). All 3 bible beats now present as scripted text. REMAINING: richer multi-beat 解決 reveal + per-scene authored 対決 lines (in-scope); full T2 animation = gated.|
 |N7|Recurring cast depth + arcs|60|70|now|スラ(one-step-behind), サイレント=アイラ, クワイエ(arc resolves 2級), ことのは. Arcs are seeded in canon; surface them in-scene (authoring).|
-|N8|Environmental storytelling / world reactivity|62|70|now|grey→colour per solve is strong; add secret hotspots + post-clear lore + scene-state reactivity (in-scope).|
+|N8|Environmental storytelling / world reactivity|67|70|now|grey→colour per solve is strong; ✅ a restored scene no longer replays its loss intro (f34f53b). REMAINING: secret hotspots + post-clear lore + richer revisit greetings (in-scope).|
 |N9|Opening hook / first-run|70|70|now|story-first prologue (🔊 c·a·t blend) → config → painted landing. At bar; surpass via a stronger emotional cold-open beat.|
 |N10|Pacing / 8-min session shape|68|65|now|home→ナゾ→colour→recap is tight. Tune beat spacing.|
 |N11|Audio immersion (voice/SFX/music)|40|70|**gated**|SFX wired; no character VO, no adaptive music. Needs audio/voice gen → CEO resource (ElevenLabs).|
