@@ -54,5 +54,40 @@ void main() {
           reason: 'the dashboard must scope its progress read to the linked '
               'child, not this parent device');
     });
+
+    // Honesty (Task#31): the read is child-scoped, but goal/reminder settings are
+    // device-local — a REMOTE parent must be told their edits don't reach the
+    // child, and must NOT be told that on the on-device path.
+    testWidgets('linked view: settings tab shows the device-local warning',
+        (tester) async {
+      SharedPreferences.setMockInitialValues({});
+      await tester.pumpWidget(MaterialApp(
+        home: ParentDashboardScreen(
+          childUid: 'child-xyz',
+          progressService: _RecordingProgressService(),
+        ),
+      ));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('設定'));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('とどきません'), findsOneWidget,
+          reason: 'a remote parent must be told their goal/reminder edits are '
+              'device-local and do not reach the child');
+    });
+
+    testWidgets('on-device view: NO device-local warning (it would be wrong)',
+        (tester) async {
+      SharedPreferences.setMockInitialValues({});
+      await tester.pumpWidget(MaterialApp(
+        home: ParentDashboardScreen(
+          progressService: _RecordingProgressService(),
+        ),
+      ));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('設定'));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('とどきません'), findsNothing,
+          reason: 'on the child device the settings DO apply — no warning');
+    });
   });
 }

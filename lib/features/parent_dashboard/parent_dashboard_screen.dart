@@ -279,6 +279,8 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
                       onNotifChanged: _setReminderTime,
                       // #67 — data deletion; parent-gated via this screen.
                       onDeleteData: _handleDeleteData,
+                      // Honest note when viewing a linked child remotely (Task#31).
+                      isLinkedChild: widget.childUid != null,
                     ),
                   ],
                 );
@@ -995,12 +997,20 @@ class _SettingsTab extends StatelessWidget {
   // #67 — data deletion callback; invoked after user confirms the dialog.
   final VoidCallback? onDeleteData;
 
+  /// True when this dashboard is the REMOTE linked-parent view (childUid set).
+  /// The goal/reminder settings are device-local (SharedPreferences) and do NOT
+  /// reach the linked child's device — so we tell the parent honestly rather than
+  /// let them think their edits apply remotely (the read is child-scoped, ffaa875;
+  /// the write isn't — Task#31).
+  final bool isLinkedChild;
+
   const _SettingsTab({
     required this.dailyGoal,
     required this.notifTime,
     required this.onGoalChanged,
     required this.onNotifChanged,
     this.onDeleteData,
+    this.isLinkedChild = false,
   });
 
   @override
@@ -1008,6 +1018,23 @@ class _SettingsTab extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
       children: [
+        if (isLinkedChild)
+          Container(
+            margin: const EdgeInsets.only(bottom: 12),
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: dqGold.withAlpha(28),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: dqGold.withAlpha(110)),
+            ),
+            child: Text(
+              '⚠️ ここでの「目標（もくひょう）」と「通知（つうち）」は、この たんまつ '
+              'だけに てきよう されます。\nれんけいした おこさんの たんまつ には とどきません。'
+              '（お子さんの たんまつ で せっていして ください。）\n'
+              '※ 進捗（しんちょく）の ひょうじは、ちゃんと おこさんの ものです。',
+              style: dqText(size: 12, color: dqInk).copyWith(height: 1.5),
+            ),
+          ),
         // ── Daily goal ────────────────────────────────────────────────────
         DqPanel(
           title: '1日の目標単語数 / Daily Goal',
