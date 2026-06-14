@@ -9,26 +9,37 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:engquest/features/explore/hotspot.dart';
 
 void main() {
+  // The authored chapters so far (CH.1–3). Each adds one assembling bookmark.
+  final authoredScenes = {
+    '5級': kTown5Scene,
+    '4級': kTown4Scene,
+    '3級': kTown3Scene,
+  };
+
   group('per-solve lore drip (§3)', () {
-    test('every 5級 ナゾ (NPC) carries a サイレント lore fragment', () {
-      final npcs =
-          kTown5Scene.hotspots.where((h) => h.kind == HotspotKind.npc).toList();
-      expect(npcs, isNotEmpty);
-      for (final h in npcs) {
-        expect(h.mysteryFragmentJa, isNotNull,
-            reason: 'a 5級 ナゾ has no per-solve lore → §3 drip gap (the case '
-                'arc goes unfelt for that solve)');
-        expect(h.mysteryFragmentJa!.trim(), isNotEmpty);
-      }
+    test('every ナゾ in an authored chapter carries a サイレント lore fragment', () {
+      authoredScenes.forEach((label, scene) {
+        final npcs =
+            scene.hotspots.where((h) => h.kind == HotspotKind.npc).toList();
+        expect(npcs, isNotEmpty, reason: '$label has no ナゾ');
+        for (final h in npcs) {
+          expect(h.mysteryFragmentJa, isNotNull,
+              reason: 'a $label ナゾ has no per-solve lore → §3 drip gap (the '
+                  'case arc goes unfelt for that solve)');
+          expect(h.mysteryFragmentJa!.trim(), isNotEmpty);
+        }
+      });
     });
 
-    test('5級 fragments read as a 探偵メモ beat (diegetic convention)', () {
-      for (final h
-          in kTown5Scene.hotspots.where((h) => h.kind == HotspotKind.npc)) {
-        expect(h.mysteryFragmentJa!.startsWith('たんていメモ'), isTrue,
-            reason: 'lore beats use the 探偵メモ framing so a clue reads as the '
-                'unfolding mystery, not スラ chatter: «${h.mysteryFragmentJa}»');
-      }
+    test('fragments read as a 探偵メモ beat (diegetic convention)', () {
+      authoredScenes.forEach((label, scene) {
+        for (final h
+            in scene.hotspots.where((h) => h.kind == HotspotKind.npc)) {
+          expect(h.mysteryFragmentJa!.startsWith('たんていメモ'), isTrue,
+              reason: '$label lore beats use 探偵メモ framing: '
+                  '«${h.mysteryFragmentJa}»');
+        }
+      });
     });
 
     test('the key season-mystery clue (centre→edge) is seeded in 5級', () {
@@ -42,11 +53,29 @@ void main() {
           reason: 'the centre→edge season-mystery clue must seed in ch.1');
     });
 
+    test('the bookmarks ASSEMBLE across chapters (the narrative payoff)', () {
+      // 5級→4級→3級 each reveals the next words of アイラ's torn sentence —
+      // STORY-BIBLE Bookmark seeds "Once, I / told a story, / and the whole".
+      // (5級's "Once, I" lands in its cleared finale; 4級/3級 drip per-solve.)
+      String fragJoin(scene) => scene.hotspots
+          .where((h) => h.kind == HotspotKind.npc)
+          .map((h) => h.mysteryFragmentJa ?? '')
+          .join('\n');
+      expect('${kTown5Scene.cleared}'.contains('Once, I'), isTrue,
+          reason: 'bookmark #1 "Once, I" (5級 finale)');
+      expect(fragJoin(kTown4Scene).contains('told a story,'), isTrue,
+          reason: 'bookmark #2 "told a story," (4級 drip)');
+      expect(fragJoin(kTown3Scene).contains('and the whole'), isTrue,
+          reason: 'bookmark #3 "and the whole" (3級 drip)');
+    });
+
     test('coins never carry lore (only ナゾ solves drip)', () {
-      for (final h
-          in kTown5Scene.hotspots.where((h) => h.kind == HotspotKind.coin)) {
-        expect(h.mysteryFragmentJa, isNull);
-      }
+      authoredScenes.forEach((label, scene) {
+        for (final h
+            in scene.hotspots.where((h) => h.kind == HotspotKind.coin)) {
+          expect(h.mysteryFragmentJa, isNull, reason: '$label coin has lore');
+        }
+      });
     });
   });
 }

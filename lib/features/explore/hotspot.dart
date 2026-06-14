@@ -866,6 +866,9 @@ final SceneDef kTown4Scene = SceneDef(
           'ことばが もどれば、また うみへ こぎだせる。',
       npcGreyAsset: 'assets/art/scenes_layton/npc_fisher_grey.webp',
       npcColorAsset: 'assets/art/scenes_layton/npc_fisher_color.webp',
+      // §3 lore drip — CH.2: the words are CARRIED off, not destroyed.
+      mysteryFragmentJa: 'たんていメモ：ことばは きえたんじゃない。\n'
+          'かぜに のって、どこかへ はこばれている。',
     ),
     // ── NPC 2: 灯台（とうだい）守（もり）の おじいさん / 未来 will ─────────────
     // Encounter index 4: 「I think it ___ rain soon.」(will).
@@ -884,6 +887,9 @@ final SceneDef kTown4Scene = SceneDef(
           '正（ただ）しく いえたら、おじいさんは かさを かしてくれる。',
       npcGreyAsset: 'assets/art/scenes_layton/npc_lampkeeper_grey.webp',
       npcColorAsset: 'assets/art/scenes_layton/npc_lampkeeper_color.webp',
+      // §3 lore drip — CH.2: the windmills all face the centre (はいいろの ひろば).
+      mysteryFragmentJa: 'たんていメモ：かざぐるまは みんな、\n'
+          'とおくの「はいいろの ひろば」の ほうを むいて まわっている。',
     ),
     // ── NPC 3: スラ — きみの いちほ うしろの なかま / 過去 -ed ────────────────
     // Encounter index 2: 「Where did you go?」→「I went to the zoo.」
@@ -902,6 +908,9 @@ final SceneDef kTown4Scene = SceneDef(
           'きみが いえたら、スラも いえる。いつものように、いちほ うしろで。',
       npcGreyAsset: 'assets/art/scenes_layton/npc_slime_grey.webp',
       npcColorAsset: 'assets/art/scenes_layton/npc_slime_color.webp',
+      // §3 lore drip — CH.2: Bookmark #2 ("told a story,") + the mercy motive.
+      mysteryFragmentJa: 'たんていメモ：かぜが しおりを はこんできた。「told a story,」\n'
+          'サイレントは、だれかを きずつけたくなかった だけ なのかも。',
     ),
     // ── Coin: hidden by the lighthouse lamp ─────────────────────────────────
     Hotspot.coin(
@@ -958,6 +967,9 @@ final SceneDef kTown3Scene = SceneDef(
           '「I have worked in this library ___ ten years.」— どの ことばが はいる？',
       npcGreyAsset: 'assets/art/scenes_layton/npc_librarian_grey.webp',
       npcColorAsset: 'assets/art/scenes_layton/npc_librarian_color.webp',
+      // §3 lore drip — CH.3: the one white book at the library's centre.
+      mysteryFragmentJa: 'たんていメモ：おおきな としょかんの まんなかの ほんだけ、'
+          'まっしろ。\nことばが ぜんぶ きえている。',
     ),
     // ── NPC 2: がくせい — まだ よみおえていない 学生 / 現在完了 yet ────────────
     // Encounter index 4: 「I have to return this book, but I haven't finished it ___.」(yet)
@@ -973,6 +985,9 @@ final SceneDef kTown3Scene = SceneDef(
           '「I haven\'t finished it ___.」— 否定（ひてい）の文（ぶん）に あう ことばは？',
       npcGreyAsset: 'assets/art/scenes_layton/npc_scholar_grey.webp',
       npcColorAsset: 'assets/art/scenes_layton/npc_scholar_color.webp',
+      // §3 lore drip — CH.3: the white book is someone's OWN torn story.
+      mysteryFragmentJa: 'たんていメモ：あの しろい ほんは、だれかの じぶんの ものがたり。\n'
+          'ページが やぶられて、7まいの しおりに なった。',
     ),
     // ── NPC 3: スラ — 都（みやこ）で 再会（さいかい）した なかま / 過去形 ────────
     // Encounter index 0: スラ reunion — 「Where did you sleep last night?」
@@ -987,6 +1002,9 @@ final SceneDef kTown3Scene = SceneDef(
           'この 都（みやこ）まで きた。\n'
           'いまでは「きのうの こと」を じぶんから 話（はな）せる。'
           'いちほ うしろの なかまが、すこし 大（おお）きくなった。',
+      // §3 lore drip — CH.3: Bookmark #3 ("and the whole") + サイレント's true name.
+      mysteryFragmentJa: 'たんていメモ：3まいめの しおり――「and the whole」。\n'
+          'サイレントの ほんとうの なまえは、アイラ というらしい。',
       npcGreyAsset: 'assets/art/scenes_layton/npc_slime_grey.webp',
       npcColorAsset: 'assets/art/scenes_layton/npc_slime_color.webp',
     ),
