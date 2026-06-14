@@ -94,6 +94,17 @@ void main() {
       reason: 'arrival banner text should contain スラ\'s line for kTown5Scene',
     );
 
+    // a11y: the banner must be a liveRegion so a screen reader ANNOUNCES スラ's
+    // line on appearance (a transient overlay is otherwise silent). Without this
+    // the companion/narrative beat is perceivable only by sighted children.
+    final handle = tester.ensureSemantics();
+    expect(
+      tester.getSemantics(find.bySemanticsLabel(RegExp(r'スラ。.*いろが'))),
+      isSemantics(isLiveRegion: true),
+      reason: 'arrival banner must announce via liveRegion for screen readers',
+    );
+    handle.dispose();
+
     // Tap the banner to dismiss.
     await tester.tap(find.textContaining('いろが'));
     await tester.pump();

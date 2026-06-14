@@ -829,66 +829,74 @@ class _SceneViewState extends State<SceneView> {
       left: 12,
       right: 12,
       bottom: 16,
-      child: GestureDetector(
-        onTap: _dismissArrival,
-        child: Container(
-          padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
-          decoration: BoxDecoration(
-            color: dqBox.withAlpha(235),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              // スラ's canonical dusty-teal #5DA9E9 (CHARACTER-BIBLE dominant hue)
-              color: const Color(0xFF5DA9E9),
-              width: 2,
-            ),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black54,
-                blurRadius: 10,
-                offset: Offset(0, 3),
+      // a11y: a transient overlay banner is SILENT to a screen reader unless it
+      // is a liveRegion — announce スラ's arrival line the moment it appears so a
+      // low-vision child perceives the companion beat (it auto-dismisses anyway).
+      child: Semantics(
+        liveRegion: true,
+        label: 'スラ。$text',
+        excludeSemantics: true,
+        child: GestureDetector(
+          onTap: _dismissArrival,
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+            decoration: BoxDecoration(
+              color: dqBox.withAlpha(235),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                // スラ's canonical dusty-teal #5DA9E9 (CHARACTER-BIBLE dominant hue)
+                color: const Color(0xFF5DA9E9),
+                width: 2,
               ),
-            ],
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // スラ slime icon
-              const Text('🟢', style: TextStyle(fontSize: 22)),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'スラ',
-                      style: dqText(
-                        size: 11,
-                        w: FontWeight.w700,
-                        color: const Color(0xFF5DA9E9),
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      text,
-                      style:
-                          dqText(size: 13, color: dqInk).copyWith(height: 1.55),
-                    ),
-                  ],
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black54,
+                  blurRadius: 10,
+                  offset: Offset(0, 3),
                 ),
-              ),
-              // Dismiss hint
-              const Padding(
-                padding: EdgeInsets.only(left: 4, top: 2),
-                child: Text(
-                  'タップで とばす',
-                  style: TextStyle(
-                    fontSize: 9,
-                    color: Color(0xFF8899AA),
+              ],
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // スラ slime icon
+                const Text('🟢', style: TextStyle(fontSize: 22)),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'スラ',
+                        style: dqText(
+                          size: 11,
+                          w: FontWeight.w700,
+                          color: const Color(0xFF5DA9E9),
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        text,
+                        style: dqText(size: 13, color: dqInk)
+                            .copyWith(height: 1.55),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            ],
+                // Dismiss hint
+                const Padding(
+                  padding: EdgeInsets.only(left: 4, top: 2),
+                  child: Text(
+                    'タップで とばす',
+                    style: TextStyle(
+                      fontSize: 9,
+                      color: Color(0xFF8899AA),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -903,39 +911,49 @@ class _SceneViewState extends State<SceneView> {
       left: 12,
       right: 12,
       bottom: 16,
-      child: GestureDetector(
-        onTap: _dismissLore,
-        child: Container(
-          key: const ValueKey('scene_lore_banner'),
-          padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
-          decoration: BoxDecoration(
-            color: dqBox.withAlpha(238),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: dqGold, width: 2),
-            boxShadow: const [
-              BoxShadow(
-                  color: Colors.black54, blurRadius: 10, offset: Offset(0, 3)),
-            ],
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text('🔖', style: TextStyle(fontSize: 20)),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  text,
-                  style: dqText(size: 13, color: dqInk).copyWith(height: 1.55),
+      // a11y: announce the 探偵メモ lore drip via a liveRegion so a low-vision
+      // child perceives the §3 サイレント mystery beat, not just the painted banner.
+      child: Semantics(
+        liveRegion: true,
+        label: '探偵メモ。$text',
+        excludeSemantics: true,
+        child: GestureDetector(
+          onTap: _dismissLore,
+          child: Container(
+            key: const ValueKey('scene_lore_banner'),
+            padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+            decoration: BoxDecoration(
+              color: dqBox.withAlpha(238),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: dqGold, width: 2),
+              boxShadow: const [
+                BoxShadow(
+                    color: Colors.black54,
+                    blurRadius: 10,
+                    offset: Offset(0, 3)),
+              ],
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('🔖', style: TextStyle(fontSize: 20)),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    text,
+                    style:
+                        dqText(size: 13, color: dqInk).copyWith(height: 1.55),
+                  ),
                 ),
-              ),
-              const Padding(
-                padding: EdgeInsets.only(left: 4, top: 2),
-                child: Text(
-                  'タップで とばす',
-                  style: TextStyle(fontSize: 9, color: Color(0xFF8899AA)),
+                const Padding(
+                  padding: EdgeInsets.only(left: 4, top: 2),
+                  child: Text(
+                    'タップで とばす',
+                    style: TextStyle(fontSize: 9, color: Color(0xFF8899AA)),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
