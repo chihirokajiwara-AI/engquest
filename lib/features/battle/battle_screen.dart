@@ -84,6 +84,39 @@ int masteredCardCount(Iterable<FSRSCard> deck) =>
 int practicedCardCount(Iterable<FSRSCard> deck) =>
     deck.where((c) => c.state != CardState.newCard).length;
 
+/// Split [sentence] into spans with each whole-word, case-insensitive occurrence
+/// of [word] emphasised, so the target word stands OUT in its example instead of
+/// being buried — the child sees it in use (acquisition aid; parity with the
+/// vocab-cloze in-context highlight). Underscore storage keys ("ice_cream") match
+/// the spaced display form. Always graceful: when the word is absent (e.g. it
+/// appears inflected — "run" vs "running"), the whole sentence is one plain span,
+/// so nothing breaks. Pure + public for unit tests.
+List<TextSpan> exampleHighlightSpans(
+  String sentence,
+  String word, {
+  required TextStyle base,
+  required TextStyle emphasis,
+}) {
+  final target = word.replaceAll('_', ' ').trim();
+  if (target.isEmpty) return [TextSpan(text: sentence, style: base)];
+  final re = RegExp('\\b${RegExp.escape(target)}\\b', caseSensitive: false);
+  final spans = <TextSpan>[];
+  var i = 0;
+  for (final m in re.allMatches(sentence)) {
+    if (m.start > i) {
+      spans.add(TextSpan(text: sentence.substring(i, m.start), style: base));
+    }
+    spans.add(
+        TextSpan(text: sentence.substring(m.start, m.end), style: emphasis));
+    i = m.end;
+  }
+  if (i < sentence.length) {
+    spans.add(TextSpan(text: sentence.substring(i), style: base));
+  }
+  if (spans.isEmpty) spans.add(TextSpan(text: sentence, style: base));
+  return spans;
+}
+
 /// Mid-session momentum pulse decision (studio build): returns (shouldShow,
 /// remaining) for the 「あと N問で きょうの目標！」 nudge. Fires on every 5th answer
 /// (5/10/15…) ONLY while the daily goal is still unmet (so the "あと N問" message
@@ -999,10 +1032,17 @@ class _BattleScreenState extends State<BattleScreen>
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(color: dqGoldDeep.withAlpha(120)),
               ),
-              child: Text(
-                example,
-                style: dqText(size: 15, w: FontWeight.w500, color: dqInk),
+              child: RichText(
                 textAlign: TextAlign.center,
+                text: TextSpan(
+                  children: exampleHighlightSpans(
+                    example,
+                    vocab.word,
+                    base: dqText(size: 15, w: FontWeight.w500, color: dqInk),
+                    emphasis:
+                        dqText(size: 15, w: FontWeight.w800, color: dqGold),
+                  ),
+                ),
               ),
             ),
           ],

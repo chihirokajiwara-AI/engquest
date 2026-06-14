@@ -5,6 +5,7 @@
 // never unlock; the Firestore record used the WHOLE grade vocab length,
 // over-reporting the other way. Both now use practicedCardCount.
 
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:engquest/core/fsrs/fsrs_card.dart';
 import 'package:engquest/features/battle/battle_screen.dart';
@@ -64,6 +65,45 @@ void main() {
       ];
       expect(practicedCardCount(deck), 60);
       expect(practicedCardCount(deck), greaterThanOrEqualTo(50));
+    });
+  });
+
+  group('exampleHighlightSpans (target word stands out in its example)', () {
+    const base = TextStyle(fontWeight: FontWeight.w500);
+    const hi = TextStyle(fontWeight: FontWeight.w800);
+    String hiText(List<TextSpan> spans) => spans
+        .where((s) => s.style?.fontWeight == FontWeight.w800)
+        .map((s) => s.text)
+        .join('|');
+    String allText(List<TextSpan> spans) =>
+        spans.map((s) => s.text ?? '').join();
+
+    test('emphasises the whole-word, case-insensitive occurrence', () {
+      final spans = exampleHighlightSpans('I have a Cat at home.', 'cat',
+          base: base, emphasis: hi);
+      expect(hiText(spans), 'Cat');
+      expect(allText(spans), 'I have a Cat at home.');
+    });
+
+    test('does not emphasise a substring inside another word', () {
+      final spans = exampleHighlightSpans('I can scatter seeds.', 'cat',
+          base: base, emphasis: hi);
+      expect(hiText(spans), isEmpty, reason: 'cat in "scatter" must not match');
+      expect(allText(spans), 'I can scatter seeds.');
+    });
+
+    test('underscore storage key matches the spaced form', () {
+      final spans = exampleHighlightSpans(
+          'I love ice cream so much.', 'ice_cream',
+          base: base, emphasis: hi);
+      expect(hiText(spans), 'ice cream');
+    });
+
+    test('absent (inflected) word → one plain span, never breaks', () {
+      final spans = exampleHighlightSpans('She is running fast.', 'run',
+          base: base, emphasis: hi);
+      expect(hiText(spans), isEmpty);
+      expect(allText(spans), 'She is running fast.');
     });
   });
 }
