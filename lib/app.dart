@@ -1098,6 +1098,16 @@ class _AppEntryPointState extends State<_AppEntryPoint> {
 // Global level-up celebration
 // ---------------------------------------------------------------------------
 
+/// Pop-in scale factor (0..1) for the celebration banners over the controller's
+/// time [t]. Under reduce-motion it returns 1.0 immediately — the easeOutBack
+/// overshoot (a scale-bounce) is the vestibular trigger, so motion-sensitive
+/// users get a plain opacity fade instead of a bouncing pop-in. Pure + public so
+/// the reduce-motion invariant is unit-tested. Shared by both celebration hosts.
+double celebrationBannerAppear(double t, {required bool reduceMotion}) =>
+    reduceMotion
+        ? 1.0
+        : Curves.easeOutBack.transform((t / 0.12).clamp(0.0, 1.0));
+
 /// Overlays a celebratory banner whenever ANY XP source crosses a level
 /// threshold — the vocab battle, every 英検 exam-practice section, scene ナゾ, and
 /// any future source. [XpService.awardXp] / [XpService.awardXpAmount] publish
@@ -1167,7 +1177,8 @@ class _LevelUpCelebrationHostState extends State<LevelUpCelebrationHost>
             child: IgnorePointer(
               child: AnimatedBuilder(
                 animation: _ctl,
-                builder: (context, _) => _banner(_profile!, _ctl.value),
+                builder: (context, _) => _banner(
+                    _profile!, _ctl.value, prefersReducedMotion(context)),
               ),
             ),
           ),
@@ -1175,9 +1186,9 @@ class _LevelUpCelebrationHostState extends State<LevelUpCelebrationHost>
     );
   }
 
-  Widget _banner(XpProfile profile, double t) {
+  Widget _banner(XpProfile profile, double t, bool reduceMotion) {
     // t runs 0→1 over 2.8s: pop-in 0–0.12, hold to 0.82, fade-out 0.82–1.0.
-    final appear = Curves.easeOutBack.transform((t / 0.12).clamp(0.0, 1.0));
+    final appear = celebrationBannerAppear(t, reduceMotion: reduceMotion);
     final fade = t < 0.82 ? 1.0 : (1.0 - (t - 0.82) / 0.18).clamp(0.0, 1.0);
     return Material(
       type: MaterialType.transparency,
@@ -1303,7 +1314,8 @@ class _AchievementUnlockHostState extends State<AchievementUnlockHost>
             child: IgnorePointer(
               child: AnimatedBuilder(
                 animation: _ctl,
-                builder: (context, _) => _banner(def, _ids.length, _ctl.value),
+                builder: (context, _) => _banner(def, _ids.length, _ctl.value,
+                    prefersReducedMotion(context)),
               ),
             ),
           ),
@@ -1311,8 +1323,8 @@ class _AchievementUnlockHostState extends State<AchievementUnlockHost>
     );
   }
 
-  Widget _banner(AchievementDef def, int count, double t) {
-    final appear = Curves.easeOutBack.transform((t / 0.12).clamp(0.0, 1.0));
+  Widget _banner(AchievementDef def, int count, double t, bool reduceMotion) {
+    final appear = celebrationBannerAppear(t, reduceMotion: reduceMotion);
     final fade = t < 0.82 ? 1.0 : (1.0 - (t - 0.82) / 0.18).clamp(0.0, 1.0);
     return Material(
       type: MaterialType.transparency,
