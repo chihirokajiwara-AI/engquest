@@ -229,3 +229,14 @@ RPG → phonics-from-zero → hardening) and implementation kept getting buried.
   - **Always form and MAINTAIN a top-tier agent team and run multiple tasks in
     PARALLEL** (Workflow / parallel Agent), keeping the team alive across the work —
     not solo single-threaded. Reserve the main Opus/Fable-5 model for judgment.
+  - **WHEN Fable 5 is warranted — objective triggers, NOT in-the-moment whim**
+    (CEO 2026-06-14 distrusts ad-hoc "this feels hard" judgment). Fable 5 is used
+    ONLY for: (1) architecture / system-design decisions; (2) multi-option
+    design-panel synthesis or adversarial judging; (3) root-cause of a FATAL /
+    data-loss / security bug; (4) reasoning where correctness directly gates 英検
+    pass or revenue at scale. Routine ticks, polish, a11y, content edits, refactors
+    → Opus 4.8 (main) / Sonnet-Haiku (impl). NB the running session's main model is
+    LAUNCH-FIXED — I cannot self-switch the loop to Fable 5 mid-session. So I do NOT
+    pretend to: I FLAG a trigger-matching task to the CEO and it runs in a dedicated
+    Fable-5 session. AUDITABLE: state which model each substantive decision used +
+    which trigger, so over/under-escalation is visible, not trusted-blind.
