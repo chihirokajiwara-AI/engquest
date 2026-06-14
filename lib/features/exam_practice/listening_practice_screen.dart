@@ -217,10 +217,16 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
     });
     // Game-feel (#51): a haptic tick + chime so answering feels responsive.
     PracticeFeedback.answered(correct: idx == item.correctIndex);
-    // a11y (WCAG 4.1.3): speak the verdict for assistive-tech users.
+    // a11y (WCAG 4.1.3): speak the verdict AND the teaching. The transcript and
+    // 解説 are revealed only VISUALLY below, so a screen-reader child would hear
+    // "ふせいかい" and miss the listening learning loop. Parity with vocab_grammar.
+    final correctChoice = item.choices[item.correctIndex];
+    final why = item.explanation ?? '';
     SemanticsService.sendAnnouncement(
       View.of(context),
-      idx == item.correctIndex ? 'せいかい' : 'ふせいかい',
+      idx == item.correctIndex
+          ? 'せいかい！ $why'.trim()
+          : 'ふせいかい。 ただしいこたえは、$correctChoice。 $why'.trim(),
       Directionality.of(context),
     );
     // Reveal the スクリプト (what was said) so the child can read what they

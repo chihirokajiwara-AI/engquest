@@ -168,12 +168,14 @@ class _WordOrderingPracticeScreenState
     });
     // Game-feel (#51): a haptic tick + chime so answering feels responsive.
     PracticeFeedback.answered(correct: isCorrect);
-    // a11y (WCAG 4.1.3): speak the verdict for assistive-tech users.
-    SemanticsService.sendAnnouncement(
-      View.of(context),
-      isCorrect ? 'せいかい' : 'ふせいかい',
-      Directionality.of(context),
-    );
+    // a11y (WCAG 4.1.3): speak the verdict AND the teaching. The correct order
+    // and the grammar rule (whyExplanation) are revealed only VISUALLY below, so
+    // a screen-reader child would hear "ふせいかい" and learn nothing. vocab_grammar
+    // already speaks its teaching — this brings 大問3 to parity.
+    final why = p.whyExplanation ?? '';
+    _announce(isCorrect
+        ? 'せいかい！ $why'.trim()
+        : 'ふせいかい。 ただしいじゅんばんは、${p.correctOrder.join(' ')}。 $why'.trim());
   }
 
   /// Records the completed session result into [SkillAccuracyStore].
