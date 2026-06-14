@@ -104,6 +104,15 @@ class Hotspot {
   /// or eliminates a distractor by text.
   final List<NazoHint>? hints;
 
+  /// One fragment of サイレント lore, dripped when THIS ナゾ is solved
+  /// (COMPOSITION-ARCHITECTURE.md §3: "every ナゾ solve drops one fragment of
+  /// サイレント lore"). Transcribed/adapted from STORY-BIBLE-KOTOBA-TANTEI.json
+  /// canon so the 7-case detective arc stays FELT, not a bare quiz wrapper. Null
+  /// → no beat (prior behaviour). Shown as a brief diegetic 探偵メモ banner,
+  /// EXCEPT on the scene-clearing solve where the colour-flood payoff (which
+  /// carries [SceneDef.cleared]'s finale text) subsumes it.
+  final String? mysteryFragmentJa;
+
   // Coin fields
   final int coinValue;
 
@@ -117,6 +126,7 @@ class Hotspot {
     this.npcColorAsset,
     this.teachCard,
     this.hints,
+    this.mysteryFragmentJa,
     this.coinValue = 0,
   }) : kind = HotspotKind.npc;
 
@@ -131,6 +141,7 @@ class Hotspot {
     this.npcColorAsset,
   })  : teachCard = null,
         hints = null,
+        mysteryFragmentJa = null,
         kind = HotspotKind.coin;
 }
 
@@ -747,6 +758,10 @@ final SceneDef kTown5Scene = SceneDef(
           'ヘビのように、ながく のばす音（おと）。きこえる？',
       npcGreyAsset: 'assets/art/scenes_layton/npc_clockmaker_grey.webp',
       npcColorAsset: 'assets/art/scenes_layton/npc_clockmaker_color.webp',
+      // §3 lore drip — CH.1 ember/listener canon (STORY-BIBLE: Cel kept the
+      // hearth lit "waiting for a listener").
+      mysteryFragmentJa: 'たんていメモ：かまどの ひは、きえなかった。\n'
+          'セル――「まだ きける ひとを、まっていたんだ。」',
     ),
     // ── NPC 2: スラ — きみの かがみ、いちほ うしろの なかま ─────────────────
     // Encounter index 12 = first QuestEncounter (「Hello!」greeting).
@@ -764,6 +779,10 @@ final SceneDef kTown5Scene = SceneDef(
           'スラは いつも、きみの いちほ うしろに いる。',
       npcGreyAsset: 'assets/art/scenes_layton/npc_slime_grey.webp',
       npcColorAsset: 'assets/art/scenes_layton/npc_slime_color.webp',
+      // §3 lore drip — CH.1 スラ "one step behind" canon (words return WITH
+      // someone, never alone).
+      mysteryFragmentJa: 'たんていメモ：きみが いえたから、スラも いえた。\n'
+          'ことばは、だれかと いっしょに もどってくる。',
     ),
     // ── NPC 3: 門番（もんばん） と 時計じい — be動詞 are (Quiz, cloze) ─────────
     // Encounter index 15 = be動詞 人称一致「You ___ a traveller.」cloze.
@@ -781,6 +800,10 @@ final SceneDef kTown5Scene = SceneDef(
           '正（ただ）しい ことばが もどれば、とけいも うごきだす かもしれない。',
       npcGreyAsset: 'assets/art/scenes_layton/npc_gatekeeper_grey.webp',
       npcColorAsset: 'assets/art/scenes_layton/npc_gatekeeper_color.webp',
+      // §3 lore drip — the KEY season-mystery clue (silence spread centre→edge),
+      // seeded here in ch.1 and paid off at 準1級. STORY-BIBLE Clue #1.
+      mysteryFragmentJa: 'たんていメモ：とまった とけいが、コチ…と ひとつ うごいた。\n'
+          'じいさん――「しずけさは そとからじゃない。まんなかから、あるいて きたんだ。」',
     ),
     // ── Coin: hidden on the lamppost ────────────────────────────────────────
     Hotspot.coin(

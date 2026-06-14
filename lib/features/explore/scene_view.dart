@@ -162,6 +162,12 @@ class _SceneViewState extends State<SceneView> {
   /// so no pending-timer leaks occur (important for widget tests).
   Timer? _arrivalTimer;
 
+  /// The サイレント lore fragment currently dripping (COMPOSITION §3) — set after a
+  /// non-clearing solve of a hotspot that carries [Hotspot.mysteryFragmentJa],
+  /// auto-dismissed like the arrival banner. Null → no beat visible.
+  String? _loreFragment;
+  Timer? _loreTimer;
+
   // Services
   final _cue = AudioCueService();
   final _sound = SoundService();
@@ -225,6 +231,7 @@ class _SceneViewState extends State<SceneView> {
   @override
   void dispose() {
     _arrivalTimer?.cancel();
+    _loreTimer?.cancel();
     _cue.dispose();
     super.dispose();
   }
@@ -305,10 +312,16 @@ class _SceneViewState extends State<SceneView> {
       // Completion payoff: when THIS solve restores the whole scene (grey→colour
       // flood), give a "case closed" beat so the world earns a return visit —
       // not just a silent saturation tween (#115). Only on the live transition.
-      if (!wasRestored && _sceneRestored) {
+      final justCleared = !wasRestored && _sceneRestored;
+      if (justCleared) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (mounted) _showSceneClearedPayoff();
         });
+      } else if (h.mysteryFragmentJa != null) {
+        // §3 per-solve lore drip — only when this solve did NOT clear the scene
+        // (the colour-flood payoff carries the chapter's finale lore instead, so
+        // we never stack a banner under the modal).
+        _showLore(h.mysteryFragmentJa!);
       }
       // Front-door 英検 puzzle solved → feed the home engagement spine (streak +
       // daily-goal), same as exam practice. Before this, scene play earned ZERO
@@ -365,6 +378,25 @@ class _SceneViewState extends State<SceneView> {
   /// When [widget.scene.cleared] is non-null, the authored story beat from
   /// kQuestTowns is shown verbatim (G2). A generic fallback covers scenes
   /// whose SceneDef has no authored cleared text.
+  /// Drip one サイレント lore fragment as a brief diegetic 探偵メモ banner after a
+  /// solve (COMPOSITION §3). Replaces any visible fragment so rapid solves don't
+  /// stack, and auto-dismisses on the same cadence as the arrival banner.
+  void _showLore(String fragment) {
+    _loreTimer?.cancel();
+    setState(() => _loreFragment = fragment);
+    _loreTimer = Timer(
+      const Duration(milliseconds: _kArrivalAutoDismissMs),
+      () {
+        if (mounted) setState(() => _loreFragment = null);
+      },
+    );
+  }
+
+  void _dismissLore() {
+    _loreTimer?.cancel();
+    if (_loreFragment != null) setState(() => _loreFragment = null);
+  }
+
   void _showSceneClearedPayoff() {
     // Multi-sensory "case closed" payoff for the moment the village fully wakes
     // up — the colour-flood used to land in SILENCE (studio game-feel/art
@@ -603,6 +635,11 @@ class _SceneViewState extends State<SceneView> {
               // interactive.
               if (_showArrival && widget.scene.companionArrivalJa != null)
                 _arrivalBanner(widget.scene.companionArrivalJa!, w, h),
+
+              // §3 per-solve サイレント lore drip — a 探偵メモ beat above the arrival
+              // slot. Gated so it never co-renders with the arrival banner.
+              if (_loreFragment != null && !_showArrival)
+                _loreBanner(_loreFragment!, w, h),
             ],
           );
         },
@@ -797,6 +834,53 @@ class _SceneViewState extends State<SceneView> {
                     fontSize: 9,
                     color: Color(0xFF8899AA),
                   ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// §3 per-solve lore beat. Same placement/cadence as the arrival banner but a
+  /// distinct 探偵メモ identity — gold (dqGold), 🔖 bookmark icon — so a clue reads
+  /// as the unfolding サイレント mystery, not スラ chatter. Tap anywhere to dismiss.
+  Widget _loreBanner(String text, double w, double h) {
+    return Positioned(
+      left: 12,
+      right: 12,
+      bottom: 16,
+      child: GestureDetector(
+        onTap: _dismissLore,
+        child: Container(
+          key: const ValueKey('scene_lore_banner'),
+          padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+          decoration: BoxDecoration(
+            color: dqBox.withAlpha(238),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: dqGold, width: 2),
+            boxShadow: const [
+              BoxShadow(
+                  color: Colors.black54, blurRadius: 10, offset: Offset(0, 3)),
+            ],
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('🔖', style: TextStyle(fontSize: 20)),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  text,
+                  style: dqText(size: 13, color: dqInk).copyWith(height: 1.55),
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.only(left: 4, top: 2),
+                child: Text(
+                  'タップで とばす',
+                  style: TextStyle(fontSize: 9, color: Color(0xFF8899AA)),
                 ),
               ),
             ],
