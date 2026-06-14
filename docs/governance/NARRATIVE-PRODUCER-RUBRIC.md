@@ -30,7 +30,7 @@ modal. grey→colour restoration mechanic; assembling-bookmark mystery (5/7).
 |N3|Per-solve story drip|100|65|now|✅ DONE (37fba51): all 7 案件簿 drip per-solve lore; 100% coverage. EXCEEDS Layton.|
 |N4|Scene/chapter density|35|70|**gated**|1 scene/grade = 7 total. Layton = many chapters/case. Needs background art-gen at scale → CEO resource.|
 |N5|Per-character dialogue volume/voice|55|70|now|~1.5k chars/scene; スラ recurs but lines are thin. Deepen authored dialogue + voice consistency per recurring character (in-scope authoring).|
-|N6|Cutscene/beat density at peaks|45|70|partly|arrival + clear-modal only. Bible specifies T2 cutscene beats (Arrival/対決/解決). Add scripted beats (in-scope text/motion); full animation = gated.|
+|N6|Cutscene/beat density at peaks|56|70|partly|Arrival + 解決 modal + ✅ NEW 対決 peak (1f5bd4c: the final ナゾ is framed as the confrontation). All 3 bible beats now present as scripted text. REMAINING: richer multi-beat 解決 reveal + per-scene authored 対決 lines (in-scope); full T2 animation = gated.|
 |N7|Recurring cast depth + arcs|60|70|now|スラ(one-step-behind), サイレント=アイラ, クワイエ(arc resolves 2級), ことのは. Arcs are seeded in canon; surface them in-scene (authoring).|
 |N8|Environmental storytelling / world reactivity|62|70|now|grey→colour per solve is strong; add secret hotspots + post-clear lore + scene-state reactivity (in-scope).|
 |N9|Opening hook / first-run|70|70|now|story-first prologue (🔊 c·a·t blend) → config → painted landing. At bar; surpass via a stronger emotional cold-open beat.|
