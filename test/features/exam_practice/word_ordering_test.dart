@@ -117,4 +117,22 @@ void main() {
     // correct, not just the answer. Every 5/4級 item carries a whyExplanation.
     expect(find.text('💡 ルール / なぜこの順番？'), findsOneWidget);
   });
+
+  // Teach-why completeness (flaw-hunt 2026-06-14): the 3級 (default) items used to
+  // ship with NO whyExplanation, so a child got no grammar teaching on them. Lock
+  // that EVERY word-ordering item, in every grade that has the section, teaches
+  // WHY — a future item added without an explanation must fail here.
+  for (final grade in ['5', '4', '3']) {
+    test('every 英検$grade word-ordering item has a non-empty whyExplanation',
+        () {
+      final whys = wordOrderingWhyForTest(grade);
+      expect(whys, isNotEmpty);
+      for (var i = 0; i < whys.length; i++) {
+        final w = whys[i];
+        expect(w != null && w.trim().isNotEmpty, isTrue,
+            reason: '英検$grade item #$i has no whyExplanation — it would teach '
+                'the child nothing about the grammar pattern');
+      }
+    });
+  }
 }

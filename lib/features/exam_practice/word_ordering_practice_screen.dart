@@ -747,26 +747,38 @@ class _WordOrderingPracticeScreenState
           _OrderingProblem(
             jpSentence: '彼女が作ったケーキは本当においしかった。',
             correctOrder: ['The cake', 'she made', 'was', 'really', 'good'],
+            whyExplanation:
+                '「彼女が作ったケーキ」は〈名詞＋主語＋動詞〉で後ろから名詞を説明する（関係代名詞の省略）。The cake (which) she made が主語。',
           ),
           _OrderingProblem(
             jpSentence: '私はあなたにこのパーティーに来てほしい。',
             correctOrder: ['I', 'want', 'you', 'to come', 'to this party'],
+            whyExplanation:
+                '「(人)に〜してほしい」は want＋人(you)＋〈to＋動詞の原形〉。want you to come。',
           ),
           _OrderingProblem(
             jpSentence: 'この本は多くの人々に読まれています。',
             correctOrder: ['This book', 'is', 'read', 'by', 'many people'],
+            whyExplanation:
+                '「〜される」は受動態〈be動詞＋過去分詞〉、「〜によって」は by。is read by many people。read の過去分詞も read。',
           ),
           _OrderingProblem(
             jpSentence: '彼の言葉は私をとても怒らせた。',
             correctOrder: ['His words', 'made', 'me', 'very', 'angry'],
+            whyExplanation:
+                'make＋人(me)＋形容詞(angry)で「(人)を〜にさせる」（第5文型 SVOC）。made me very angry。',
           ),
           _OrderingProblem(
             jpSentence: '英語を話すことはそんなに難しくない。',
             correctOrder: ['Speaking English', 'is', 'not', 'so', 'difficult'],
+            whyExplanation:
+                '「〜すること」が主語になるときは動名詞(〜ing)。Speaking English が主語で、単数あつかいなので is。',
           ),
           _OrderingProblem(
             jpSentence: '彼はちょうど駅に着いたところです。',
             correctOrder: ['He', 'has just', 'arrived', 'at', 'the station'],
+            whyExplanation:
+                '「ちょうど〜したところ」は現在完了〈have/has＋過去分詞〉。just は have/has と過去分詞の間に置く＝has just arrived。',
           ),
         ];
     }
@@ -823,4 +835,11 @@ class _WordChip extends StatelessWidget {
 List<List<String>> wordOrderingChunksForTest(String grade) =>
     _WordOrderingPracticeScreenState._generateProblems(grade)
         .map((p) => p.correctOrder)
+        .toList();
+
+/// Each item's whyExplanation (null if absent) — for the teach-why coverage gate.
+@visibleForTesting
+List<String?> wordOrderingWhyForTest(String grade) =>
+    _WordOrderingPracticeScreenState._generateProblems(grade)
+        .map((p) => p.whyExplanation)
         .toList();
