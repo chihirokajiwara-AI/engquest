@@ -84,6 +84,20 @@ int masteredCardCount(Iterable<FSRSCard> deck) =>
 int practicedCardCount(Iterable<FSRSCard> deck) =>
     deck.where((c) => c.state != CardState.newCard).length;
 
+/// Mid-session momentum pulse decision (studio build): returns (shouldShow,
+/// remaining) for the 「あと N問で きょうの目標！」 nudge. Fires on every 5th answer
+/// (5/10/15…) ONLY while the daily goal is still unmet (so the "あと N問" message
+/// is honest). Pure + public so the cadence/honesty is unit-tested.
+(bool shouldShow, int remaining) shouldShowMomentumPulse(
+  int answersThisSession,
+  int remainingToGoal,
+  bool goalMet,
+) {
+  final every5th = answersThisSession % 5 == 0 && answersThisSession > 0;
+  final goalUnmet = !goalMet && remainingToGoal > 0;
+  return (every5th && goalUnmet, remainingToGoal);
+}
+
 // ── Session result per card ───────────────────────────────────────────────────
 class _CardResult {
   final String word;
@@ -202,6 +216,7 @@ class _BattleScreenState extends State<BattleScreen>
   // ── Streak ─────────────────────────────────────────────────────────────────
   int _streak = 0; // consecutive Good/Easy answers
   int _totalXp = 0;
+  int _answersThisSession = 0; // track answers for mid-session momentum pulse
 
   // Daily-return snapshot, loaded AFTER this session is recorded, so the summary
   // can surface the day-streak + 「きょうの目標」 progress at peak engagement
@@ -359,6 +374,7 @@ class _BattleScreenState extends State<BattleScreen>
       _isFlipped = false;
       _streak = 0;
       _totalXp = 0;
+      _answersThisSession = 0;
       _xpPopups.clear();
       _starsCtrl.reset();
       _repoLoading = false;
@@ -454,6 +470,7 @@ class _BattleScreenState extends State<BattleScreen>
     final updated = _fsrs.schedule(_currentCard, grade, now);
     _deck[_currentDeckIdx] = updated;
     _sessionResults.add(_CardResult(_currentVocab.word, grade));
+    _answersThisSession++;
 
     // Persist updated card to Firestore (fire-and-forget; offline cache handles it)
     if (uid != null) {
@@ -479,6 +496,9 @@ class _BattleScreenState extends State<BattleScreen>
       _recordDailyHabit();
       return;
     }
+
+    // ── Mid-session momentum pulse: every 5th answer, if goal not met, show pulse
+    _showMomentumPulseIfReady();
 
     setState(() => _queueIdx = nextIdx);
     _resetFlip();
@@ -523,6 +543,36 @@ class _BattleScreenState extends State<BattleScreen>
         });
       }
     }());
+  }
+
+  /// Shows the momentum pulse SnackBar if conditions are met. Checks current
+  /// StreakState snapshot to decide whether to display. Display-only: no
+  /// Firestore, no new storage. 1.5s duration matches a typical message reveal.
+  void _showMomentumPulseIfReady() {
+    if (_streakSnapshot == null) return;
+
+    final (shouldShow, remaining) = shouldShowMomentumPulse(
+      _answersThisSession,
+      _streakSnapshot!.remainingToGoal,
+      _streakSnapshot!.goalMet,
+    );
+
+    if (!shouldShow) return;
+
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'あと $remaining 問 で きょうの目標！',
+          style: dqText(size: 16, w: FontWeight.w700, color: dqInk),
+          textAlign: TextAlign.center,
+        ),
+        backgroundColor: dqGold.withAlpha(220),
+        duration: const Duration(milliseconds: 1500),
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      ),
+    );
   }
 
   /// Records the daily-return habit: counts this review toward today's streak

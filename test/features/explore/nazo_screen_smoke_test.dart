@@ -198,4 +198,41 @@ void main() {
       expect(tester.takeException(), isNull);
     });
   });
+
+  // Studio build (2026-06-14, harsh-playtester-approved replacement for the
+  // rejected rule-card #2): on the FIRST wrong tap of a grammar/quiz ナゾ, スラ
+  // gives a FREE hint — "the game is helping me", not a school-y rule lecture.
+  // Only on penalizeWrong steps (teach steps replay audio instead), only once.
+  group('NazoScreen — free hint on first wrong', () {
+    testWidgets('first wrong tap on a penalizeWrong ナゾ auto-reveals a free hint',
+        (tester) async {
+      tester.view.physicalSize = const Size(440, 1600);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+      // A grammar/quiz ナゾ (penalizeWrong); teach steps don't penalize/hint.
+      final hotspot = kTown5Scene.hotspots.firstWhere(
+          (h) => h.kind == HotspotKind.npc && (h.step?.penalizeWrong ?? false));
+      await tester.pumpWidget(MaterialApp(
+        home: NazoScreen(hotspot: hotspot, eikenLevel: '5'),
+      ));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+      // Past the teach-first card if present.
+      final proceed = find.textContaining('こたえてみる');
+      if (proceed.evaluate().isNotEmpty) {
+        await tester.tap(proceed.first);
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 300));
+      }
+      // Tap a WRONG choice.
+      final correct = hotspot.step!.correctIndex;
+      final wrong = correct == 0 ? 1 : 0;
+      await tester.tap(find.byType(AudioOptionButton).at(wrong));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 200));
+      // The free hint cue appears (スラ helps — once, warm, not a rule lecture).
+      expect(find.textContaining('スラがヒントをくれた'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+  });
 }

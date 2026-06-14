@@ -85,6 +85,7 @@ class _NazoScreenState extends State<NazoScreen> {
   int _coinBalance = 0;
   int _hintsShown = 0; // 0 = none; 1/2/3 = tiers revealed so far
   bool _coinLoading = false;
+  bool _autoHintGiven = false;
   // True when this ナゾ references an audio clip that isn't bundled (e.g. the
   // founder-pending 5級 phonemes). We then hide the dead 🔊 button + show an
   // honest "準備中" note instead of leaving the child with silence (#43).
@@ -144,6 +145,7 @@ class _NazoScreenState extends State<NazoScreen> {
     if (!correct) {
       _picarat.onWrong();
       _sound.playWrong();
+      _autoRevealFirstWrongHint();
     }
     setState(() {
       _picked = i;
@@ -167,6 +169,22 @@ class _NazoScreenState extends State<NazoScreen> {
   }
 
   // ── Hint ladder ───────────────────────────────────────────────────────────
+
+  void _autoRevealFirstWrongHint() {
+    if (_autoHintGiven || _hintsShown >= 1) return;
+    setState(() {
+      _autoHintGiven = true;
+      _hintsShown = 1;
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content:
+            Text('スラがヒントをくれた。', style: dqText(size: 14, w: FontWeight.w600)),
+        backgroundColor: const Color(0xFF2A5A3A).withAlpha(210),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
 
   Future<void> _tryUnlockHint(int tier) async {
     if (_hintsShown >= tier) return; // already shown
