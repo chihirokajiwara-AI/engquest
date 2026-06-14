@@ -580,16 +580,6 @@ class _ProgressTab extends StatelessWidget {
   final LearningProgress progress;
   const _ProgressTab({required this.progress});
 
-  // Category mock data
-  static const _categories = [
-    _CategoryData('Animals 🐾', 0.82),
-    _CategoryData('Food 🍎', 0.65),
-    _CategoryData('Colors 🎨', 0.91),
-    _CategoryData('Numbers 🔢', 0.74),
-    _CategoryData('Family 👨‍👩‍👧', 0.55),
-    _CategoryData('Transport 🚗', 0.40),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -612,20 +602,31 @@ class _ProgressTab extends StatelessWidget {
         ),
         const SizedBox(height: 14),
 
-        // ── Category mastery ──────────────────────────────────────────────
+        // ── Category mastery (REAL data from the child's FSRS cards) ──────
+        // Was hardcoded mock percentages shown to a paying parent. Now the
+        // child's actual per-category 'review'-state mastery (or an honest
+        // empty-state before there's any study data).
         DqPanel(
           title: 'カテゴリ別習得 / By Category',
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: _categories
-                .map(
-                  (c) => Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 6),
-                    child: _CategoryBar(data: c),
-                  ),
+          child: progress.categoryMastery.isEmpty
+              ? Text(
+                  'まだ データが ありません。\n'
+                  'れんしゅうすると、カテゴリべつの しんちょくが ここに でます。',
+                  style: dqText(size: 12, color: dqInk.withAlpha(180)),
                 )
-                .toList(),
-          ),
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: progress.categoryMastery
+                      .map(
+                        (c) => Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          child: _CategoryBar(
+                            data: _CategoryData(c.name, c.ratio),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                ),
         ),
       ],
     );
@@ -799,10 +800,10 @@ class _ScheduleTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Mock review counts
-    const todayDue = 12;
-    const tomorrowDue = 8;
-    const weekDue = 45;
+    // Real review counts from the child's FSRS cards (was hardcoded mock).
+    final todayDue = progress.reviewSchedule.todayDue;
+    final tomorrowDue = progress.reviewSchedule.tomorrowDue;
+    final weekDue = progress.reviewSchedule.weekDue;
 
     final onTrack = progress.currentStreak >= 3;
 
@@ -835,15 +836,15 @@ class _ScheduleTab extends StatelessWidget {
         ),
 
         // ── Review schedule cards ─────────────────────────────────────────
-        const _ReviewCard(
+        _ReviewCard(
           period: '今日',
           periodEn: 'Today',
           count: todayDue,
           icon: Icons.menu_book,
-          color: Color(0xFFE89090),
+          color: const Color(0xFFE89090),
         ),
         const SizedBox(height: 10),
-        const _ReviewCard(
+        _ReviewCard(
           period: '明日',
           periodEn: 'Tomorrow',
           count: tomorrowDue,
@@ -851,12 +852,12 @@ class _ScheduleTab extends StatelessWidget {
           color: dqGold,
         ),
         const SizedBox(height: 10),
-        const _ReviewCard(
+        _ReviewCard(
           period: '今週',
           periodEn: 'This Week',
           count: weekDue,
           icon: Icons.calendar_month,
-          color: Color(0xFF8BBFE8),
+          color: const Color(0xFF8BBFE8),
         ),
         const SizedBox(height: 18),
 
