@@ -560,19 +560,23 @@ class _BattleScreenState extends State<BattleScreen>
     if (!shouldShow) return;
 
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          'あと $remaining 問 で きょうの目標！',
-          style: dqText(size: 16, w: FontWeight.w700, color: dqInk),
-          textAlign: TextAlign.center,
+    // Replace any still-visible pulse so a fast answerer (5 cards in <7.5s)
+    // never sees a backlog of stale 「あと N問」 nudges queue up.
+    ScaffoldMessenger.of(context)
+      ..clearSnackBars()
+      ..showSnackBar(
+        SnackBar(
+          content: Text(
+            'あと $remaining 問 で きょうの目標！',
+            style: dqText(size: 16, w: FontWeight.w700, color: dqInk),
+            textAlign: TextAlign.center,
+          ),
+          backgroundColor: dqGold.withAlpha(220),
+          duration: const Duration(milliseconds: 1500),
+          behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         ),
-        backgroundColor: dqGold.withAlpha(220),
-        duration: const Duration(milliseconds: 1500),
-        behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      ),
-    );
+      );
   }
 
   /// Records the daily-return habit: counts this review toward today's streak

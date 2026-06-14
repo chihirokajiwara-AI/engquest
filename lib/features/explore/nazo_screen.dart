@@ -176,14 +176,16 @@ class _NazoScreenState extends State<NazoScreen> {
       _autoHintGiven = true;
       _hintsShown = 1;
     });
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content:
-            Text('スラがヒントをくれた。', style: dqText(size: 14, w: FontWeight.w600)),
-        backgroundColor: const Color(0xFF2A5A3A).withAlpha(210),
-        duration: const Duration(seconds: 2),
-      ),
-    );
+    ScaffoldMessenger.of(context)
+      ..clearSnackBars()
+      ..showSnackBar(
+        SnackBar(
+          content:
+              Text('スラがヒントをくれた。', style: dqText(size: 14, w: FontWeight.w600)),
+          backgroundColor: const Color(0xFF2A5A3A).withAlpha(210),
+          duration: const Duration(seconds: 2),
+        ),
+      );
   }
 
   Future<void> _tryUnlockHint(int tier) async {
