@@ -67,6 +67,14 @@ jobs:
       - name: Verify native audio manifest
         run: python3 scripts/test_audio_manifest.py
 
+      # ── Audio-bundle budget (#48) ──────────────────────────────────────────
+      # Locks the cold-start fix: the ~925MB of per-word 英検 MP3s (eiken5…pre1,
+      # ~21k files) must NOT be bundled — a one-line pubspec re-add would re-bloat
+      # the build by hundreds of MB + thousands of AssetManifest entries, and only
+      # a real-browser/deploy audit would otherwise catch it.
+      - name: Verify pubspec audio budget
+        run: python3 scripts/verify_pubspec_audio_budget.py
+
       # ── Bundled JP font coverage ───────────────────────────────────────────
       # Asserts the committed assets/fonts/NotoSerifJP.ttf subset covers every
       # Japanese source character, so new JP text added without re-running
