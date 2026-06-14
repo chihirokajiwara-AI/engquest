@@ -97,6 +97,24 @@ double progressiveSaturation(int solved, int total, double floor) {
   return floor + frac * (1.0 - floor);
 }
 
+/// True when hotspot [idx] is the LAST unsolved NPC ナゾ in [scene] — the 対決
+/// (confrontation) peak. Pure + public so the climax trigger is unit-tested.
+bool isFinalNazoIndex(SceneDef scene, Map<int, bool> solved, int idx) {
+  if (idx < 0 ||
+      idx >= scene.hotspots.length ||
+      scene.hotspots[idx].kind != HotspotKind.npc ||
+      solved[idx] == true) {
+    return false;
+  }
+  var unsolved = 0;
+  for (var i = 0; i < scene.hotspots.length; i++) {
+    if (scene.hotspots[i].kind == HotspotKind.npc && solved[i] != true) {
+      unsolved++;
+    }
+  }
+  return unsolved == 1;
+}
+
 class SceneView extends StatefulWidget {
   final SceneDef scene;
 
@@ -743,8 +761,15 @@ class _SceneViewState extends State<SceneView> {
   /// The 「？」speech bubble for the active NPC, rendered at SCENE level (a direct
   /// child of the scene Stack) so its 「ナゾをみる」 button is inside the hit-test
   /// bounds. Positioned just above the NPC and clamped to stay on-screen.
+  /// True when [idx] is the LAST unsolved NPC ナゾ — the chapter's 対決
+  /// (confrontation) peak. The composition bible places a beat here (Arrival /
+  /// 対決 / 解決); we mark this ナゾ as the climax so the final mystery FEELS like
+  /// the confrontation, not just another tap (rubric N6).
+  bool isFinalNazo(int idx) => isFinalNazoIndex(widget.scene, _solved, idx);
+
   Widget _bubbleOverlay(int idx, double w, double h) {
     final hotspot = widget.scene.hotspots[idx];
+    final isFinal = isFinalNazo(idx);
     final cx = (hotspot.pos.x + 1) / 2 * w;
     final cy = (hotspot.pos.y + 1) / 2 * h;
     final size = hotspot.size * w.clamp(100.0, 480.0);
@@ -760,9 +785,18 @@ class _SceneViewState extends State<SceneView> {
         excludeSemantics: true,
         child: GestureDetector(
           onTap: () => _onBubbleTap(idx),
-          child: _speechBubble(hotspot.clueLineJa,
-              ctaLabel:
-                  hotspot.kind == HotspotKind.coin ? '✦ ひろう' : '「？」ナゾをみる'),
+          child: _speechBubble(
+            // 対決 beat: the final mystery is framed as the confrontation.
+            isFinal
+                ? '⚔️ さいごの ナゾ。この まちの しずけさの、いちばん ふかい ところ。\n'
+                    '${hotspot.clueLineJa ?? ''}'
+                : hotspot.clueLineJa,
+            ctaLabel: hotspot.kind == HotspotKind.coin
+                ? '✦ ひろう'
+                : isFinal
+                    ? '⚔️ 対決（たいけつ）する'
+                    : '「？」ナゾをみる',
+          ),
         ),
       ),
     );

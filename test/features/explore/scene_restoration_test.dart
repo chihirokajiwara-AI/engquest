@@ -139,4 +139,44 @@ void main() {
       expect(progressiveSaturation(5, 3, floor), lessThanOrEqualTo(1.0));
     });
   });
+
+  // 対決 (confrontation) peak — the LAST unsolved ナゾ is the chapter climax
+  // (rubric N6). Pure trigger logic, unit-locked.
+  group('isFinalNazoIndex', () {
+    final npcIdx = [
+      for (var i = 0; i < kTown5Scene.hotspots.length; i++)
+        if (kTown5Scene.hotspots[i].kind == HotspotKind.npc) i,
+    ];
+
+    test('not final while >1 ナゾ remain', () {
+      for (final i in npcIdx) {
+        expect(isFinalNazoIndex(kTown5Scene, const {}, i), isFalse);
+      }
+    });
+
+    test('the single remaining unsolved ナゾ IS the 対決 climax', () {
+      final last = npcIdx.last;
+      final solved = {
+        for (final i in npcIdx)
+          if (i != last) i: true
+      };
+      expect(isFinalNazoIndex(kTown5Scene, solved, last), isTrue);
+      // an already-solved ナゾ is never the climax.
+      expect(isFinalNazoIndex(kTown5Scene, solved, npcIdx.first), isFalse);
+    });
+
+    test('once all solved, nothing is the climax', () {
+      final all = {for (final i in npcIdx) i: true};
+      for (final i in npcIdx) {
+        expect(isFinalNazoIndex(kTown5Scene, all, i), isFalse);
+      }
+    });
+
+    test('a coin is never the 対決 climax', () {
+      final coinIdx =
+          kTown5Scene.hotspots.indexWhere((h) => h.kind == HotspotKind.coin);
+      final solved = {for (final i in npcIdx.sublist(1)) i: true};
+      expect(isFinalNazoIndex(kTown5Scene, solved, coinIdx), isFalse);
+    });
+  });
 }
