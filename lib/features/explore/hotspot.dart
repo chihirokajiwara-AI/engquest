@@ -771,6 +771,25 @@ final SceneDef kTown5Scene = SceneDef(
       size: 0.16,
       step: _kStep(12),
       teachCard: kGreetingTeach,
+      // Per-case hint ladder. The generic 5級 fallback is a SUBJECT-VERB word-
+      // order hint — meaningless for this greeting-RECOGNITION ナゾ. These scaffold
+      // the greeting recall toward the answer's MEANING/situation, never naming
+      // the answer ("Hello!") or the distractor ("cat"), so hintViolatesAnswerRail
+      // stays false (locked by nazo_hint_rail_test).
+      hints: const [
+        NazoHint(
+            tier: 1,
+            textJa: '【ヒント T1】であった ときに いう「あいさつ」の ことば を '
+                'えらぶ もんだい だよ。'),
+        NazoHint(
+            tier: 2,
+            textJa: '【ヒント T2】さっき スラに おしえた「あいさつ」だよ。ひとに '
+                'あった ときに いう ことば を おもいだそう。'),
+        NazoHint(
+            tier: 3,
+            textJa: '【ヒント T3】「こんにちは」と おなじ いみ の えいご の '
+                'あいさつ を えらぼう。'),
+      ],
       clueLineJa: 'ちいさなスライムが口（くち）をひらく… 「…ヘッ…ど…？」\n'
           'ことばが、もうすこしのところで 出（で）てこない。',
       framingJa: 'このスライムの名前（なまえ）は まだ ない。\n'
