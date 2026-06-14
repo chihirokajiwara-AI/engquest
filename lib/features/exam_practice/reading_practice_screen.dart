@@ -77,6 +77,65 @@ class _ComprehensionQuestion {
   });
 }
 
+/// Session-end "review these" list for 大問4 読解: one row per question the child
+/// got wrong, with its 解説 (which quotes the passage evidence) so the mistake
+/// closes into a concrete re-read prompt. Brings reading to parity with the
+/// 会話/語彙/リスニング missed-review lists. Pure + testable: takes (question, why)
+/// records, so a widget test can assert the rows + the 解説 without driving the
+/// whole passage screen.
+class ReadingReviewPanel extends StatelessWidget {
+  final List<({String question, String? why})> missed;
+  const ReadingReviewPanel({super.key, required this.missed});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      key: const ValueKey('reading_review_panel'),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: dqBox,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: dqGold.withAlpha(90)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'もう一度（いちど）よんでみよう / Review these',
+            style: dqText(size: 13, w: FontWeight.w800, color: dqGold),
+          ),
+          const SizedBox(height: 10),
+          for (final m in missed)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '・${m.question}',
+                    style: dqText(size: 12, w: FontWeight.w700, color: dqInk)
+                        .copyWith(height: 1.4),
+                  ),
+                  if (m.why != null && m.why!.isNotEmpty) ...[
+                    const SizedBox(height: 4),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 14),
+                      child: Text(
+                        m.why!,
+                        style: dqText(size: 11, color: dqInk.withAlpha(200))
+                            .copyWith(height: 1.5),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
 /// Post-answer teaching panel (#5): a 💡解説 box that points the learner at the
 /// passage evidence. Mirrors the vocab screen's れい: explanation so the whole
 /// exam-practice suite teaches "why", not just right/wrong.
@@ -146,6 +205,13 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
   bool _answered = false;
   int _correctCount = 0;
   StreakState? _earnedStreak; // shown on results via SessionEndHook
+
+  // Questions the child got WRONG this session — surfaced on the results screen
+  // as a "review these" list (question + its 解説, which quotes the passage
+  // evidence). Brings 大問4 読解 to parity with the 会話/語彙/リスニング missed-review
+  // lists (reading is the highest-points section, so closing the mistake loop
+  // here matters most). Text-only: no audio, so just (question, why) records.
+  final List<({String question, String? why})> _missedReading = [];
 
   // Struggling-child support (CEO 1135 / no-scold spine): a cold streak triggers
   // a gentle 探偵 encouragement (shared PracticeEncouragementBanner). Resets to 0
@@ -224,7 +290,15 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
     setState(() {
       _selectedAnswer = idx;
       _answered = true;
-      if (correct) _correctCount++;
+      if (correct) {
+        _correctCount++;
+      } else {
+        // Track the missed question for the session-end review list.
+        _missedReading.add((
+          question: _currentQuestion.question,
+          why: _currentQuestion.explanation,
+        ));
+      }
       _consecutiveWrong = correct ? 0 : _consecutiveWrong + 1;
       // A hinted answer is excluded from the by-comprehension 合格率 (honesty).
       if (measured && !_hintUsed) {
@@ -721,6 +795,10 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             ),
             const SizedBox(height: 16),
             PracticeResultStars(correct: _correctCount, total: _totalQuestions),
+            if (_missedReading.isNotEmpty) ...[
+              const SizedBox(height: 20),
+              ReadingReviewPanel(missed: _missedReading),
+            ],
             if (_earnedStreak != null) ...[
               const SizedBox(height: 20),
               SessionEndHook(streak: _earnedStreak!),
