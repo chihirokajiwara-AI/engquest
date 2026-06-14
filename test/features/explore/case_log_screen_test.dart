@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:engquest/features/explore/case_log_screen.dart';
 import 'package:engquest/features/explore/hotspot.dart';
+import 'package:engquest/features/explore/scene_solved_store.dart';
 
 void main() {
   setUpAll(() => GoogleFonts.config.allowRuntimeFetching = false);
@@ -67,6 +68,29 @@ void main() {
       // All-uncleared on a fresh store → the sentence is hidden.
       expect(find.textContaining('Once, I'), findsNothing);
       expect(find.textContaining('みかいふう'), findsWidgets);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets(
+        'a CLEARED chapter reveals its bookmark + the 解決 finale re-read',
+        (tester) async {
+      tester.view.physicalSize = const Size(440, 2400);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+      // Clear all 5級 ナゾ.
+      for (var i = 0; i < kTown5Scene.hotspots.length; i++) {
+        if (kTown5Scene.hotspots[i].kind == HotspotKind.npc) {
+          await SceneSolvedStore.markSolved('5', i);
+        }
+      }
+      await tester.pumpWidget(const MaterialApp(home: CaseLogScreen()));
+      await tester.pumpAndSettle();
+      // 5級's bookmark word is now revealed in the assembling sentence.
+      expect(find.textContaining('Once, I'), findsWidgets,
+          reason: '5級 cleared → its bookmark "Once, I" reveals');
+      // …and the case can be re-read in full (the 🎉 解決 finale shows).
+      expect(find.textContaining('🎉'), findsWidgets,
+          reason: 'a cleared chapter shows its 解決 finale for re-reading (N12)');
       expect(tester.takeException(), isNull);
     });
   });

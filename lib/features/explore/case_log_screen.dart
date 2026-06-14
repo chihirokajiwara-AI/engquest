@@ -229,6 +229,26 @@ class _CaseLogScreenState extends State<CaseLogScreen> {
                 style: dqText(size: 12, color: dqInk.withAlpha(220))
                     .copyWith(height: 1.5)),
           ],
+          // A SOLVED case can be re-read in full: show the 解決 finale (the
+          // chapter's resolution lore) so the 事件簿 is a complete re-experience,
+          // not just the per-solve drips (N12 replayability — pure display).
+          if (cleared && scene.cleared != null) ...[
+            const SizedBox(height: 8),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: dqGold.withAlpha(20),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: dqGold.withAlpha(70)),
+              ),
+              child: Text(
+                '🎉 ${scene.cleared!}',
+                style: dqText(size: 11, color: dqInk.withAlpha(220))
+                    .copyWith(height: 1.55),
+              ),
+            ),
+          ],
         ],
       ),
     );
