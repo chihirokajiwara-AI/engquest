@@ -43,4 +43,33 @@ void main() {
     await t.pump(const Duration(milliseconds: 300));
     expect(find.text('バッジ獲得！'), findsNothing);
   });
+
+  // A single session can cross several thresholds at once (checkAndUpdate
+  // returns ALL newly-unlocked ids). The banner shows the first badge AND a
+  // "+N more" note so the child is told about the others, not silently denied.
+  testWidgets('a batch unlock shows the first badge + a "+N more" note',
+      (t) async {
+    await t.pumpWidget(host());
+    AchievementService.unlockEvents.value = const [
+      'streak_3',
+      'mastery_10',
+      'practice_50'
+    ];
+    await t.pump();
+    await t.pump(const Duration(milliseconds: 300));
+
+    expect(find.text('バッジ獲得！'), findsOneWidget);
+    // 3 unlocked → first is shown, "+2個" acknowledges the other two.
+    expect(find.text('+2個のバッジも獲得！'), findsOneWidget);
+  });
+
+  testWidgets('a single unlock shows NO "+N more" note', (t) async {
+    await t.pumpWidget(host());
+    AchievementService.unlockEvents.value = const ['streak_3'];
+    await t.pump();
+    await t.pump(const Duration(milliseconds: 300));
+
+    expect(find.text('バッジ獲得！'), findsOneWidget);
+    expect(find.textContaining('個のバッジも獲得'), findsNothing);
+  });
 }
