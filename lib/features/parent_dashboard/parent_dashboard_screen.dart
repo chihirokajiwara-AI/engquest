@@ -30,7 +30,23 @@ const String kReminderDisclosureJa =
     '目安（めやす）にどうぞ。（自動（じどう）通知（つうち）は準備中（じゅんびちゅう）です）';
 
 class ParentDashboardScreen extends StatefulWidget {
-  const ParentDashboardScreen({super.key});
+  /// The LINKED CHILD's uid, when this dashboard is opened from the parent-login
+  /// (link-code) flow on the PARENT's own device. The progress read uses it so a
+  /// remote parent sees their CHILD's progress — Firestore rules already grant a
+  /// linked parent read access (isLinkedParent). Null on the on-device path
+  /// (Settings/world-map → dashboard), where the device's own uid IS the child's,
+  /// so behaviour there is unchanged.
+  ///
+  /// NOTE: the goal/reminder SETTINGS tab is still device-local (SharedPreferences)
+  /// — those don't sync to the child's device remotely; only the progress READ is
+  /// childUid-scoped here. Remote settings sync is a separate (larger) feature.
+  final String? childUid;
+
+  /// Test seam: inject a fake [ProgressService] so the uid-scoping is verifiable
+  /// without a live Firestore. Null → the real Firestore-backed service.
+  final ProgressService? progressService;
+
+  const ParentDashboardScreen({super.key, this.childUid, this.progressService});
 
   @override
   State<ParentDashboardScreen> createState() => _ParentDashboardScreenState();
@@ -54,7 +70,8 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
   @override
   void initState() {
     super.initState();
-    _service = ProgressService(repository: FirestoreProgressRepository());
+    _service = widget.progressService ??
+        ProgressService(repository: FirestoreProgressRepository());
     _tabController = TabController(length: 4, vsync: this);
     _loadProgress();
     _loadReminderTime();
@@ -174,7 +191,11 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
   }
 
   Future<LearningProgress> _fetchProgress() async {
-    final uid = await _auth.getOrCreateUid();
+    // Linked-parent (remote) view reads the CHILD's uid; on-device view falls
+    // back to this device's own uid (which IS the child's). Before this, the
+    // remote path ignored the redeemed childUid and showed the parent's own
+    // (empty) data — the dashboard's headline metrics were permanently zero.
+    final uid = widget.childUid ?? await _auth.getOrCreateUid();
     return _service.getProgress(uid);
   }
 

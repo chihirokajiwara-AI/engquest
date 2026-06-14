@@ -175,7 +175,10 @@ class _ParentLoginScreenState extends State<ParentLoginScreen>
   void _navigateToDashboard(String childUid) {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (_) => const ParentDashboardScreen(),
+        // Pass the redeemed childUid so the dashboard reads the LINKED CHILD's
+        // progress, not this parent device's own (empty) data. Before this the
+        // childUid was fetched then dropped → every metric showed zero.
+        builder: (_) => ParentDashboardScreen(childUid: childUid),
       ),
     );
   }
