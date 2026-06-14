@@ -22,6 +22,20 @@ const _emailPrompt = WritingPrompt(
   rubricPoints: ['内容 / Content', '語彙 / Vocabulary', '文法 / Grammar'],
 );
 
+// 準2級 ask-mode email (#41): the learner ASKS 2 questions about the topic.
+const _askEmailPrompt = WritingPrompt(
+  id: 't_ask_email',
+  type: WritingTaskType.email,
+  emailAsksQuestions: true,
+  instructionJa: '質問を2つしてください。',
+  instructionEn: 'Ask two questions.',
+  stimulus: 'Hi! I just joined 【a new dance club】 at school. It is so fun!',
+  underlinedTopic: 'a new dance club',
+  wordCountMin: 40,
+  wordCountMax: 50,
+  rubricPoints: ['内容 / Content', '語彙 / Vocabulary', '文法 / Grammar'],
+);
+
 const _opinionPrompt = WritingPrompt(
   id: 't_opinion',
   type: WritingTaskType.opinion,
@@ -132,6 +146,28 @@ void main() {
       final r = evaluateWritingReadiness(_emailPrompt, text);
       expect(_check(r, 'email_q1').status, WritingCheckStatus.warn);
       expect(_check(r, 'email_q1').kind, WritingCheckKind.hint);
+    });
+  });
+
+  group('ask-mode email completeness HINTs (準2級 #41)', () {
+    test('two on-topic questions mark both checks ok (advisory)', () {
+      final text = 'Hi! Thank you for your email. That sounds fun! '
+          'I have two questions about your dance club. '
+          'How many members are there? And what kind of dance do you do?';
+      final r = evaluateWritingReadiness(_askEmailPrompt, text);
+      expect(_check(r, 'email_asks_two').kind, WritingCheckKind.hint);
+      expect(_check(r, 'email_asks_two').status, WritingCheckStatus.ok);
+      expect(_check(r, 'email_topic').status, WritingCheckStatus.ok); // "dance"
+    });
+
+    test('answering instead of asking only WARNs (not a HARD fail)', () {
+      // A child who ANSWERS (the score-fatal 3級 habit) writes no questions —
+      // the engine must flag it advisory, never confirm completeness.
+      final text = 'Hi! My dance club is great. We have twenty members and we '
+          'practice hip hop every week after school. It is really a lot of fun.';
+      final r = evaluateWritingReadiness(_askEmailPrompt, text);
+      expect(_check(r, 'email_asks_two').status, WritingCheckStatus.warn);
+      expect(_check(r, 'email_asks_two').kind, WritingCheckKind.hint);
     });
   });
 

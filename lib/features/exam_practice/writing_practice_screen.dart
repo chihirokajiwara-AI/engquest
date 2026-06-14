@@ -52,8 +52,8 @@ enum WritingTaskType {
 /// four scored 観点, and a beginner facing a blank box needs the 型 most. Grounded
 /// in the 2024-reform structures (uguis.ai 2026 / edic.jp / eslclub.jp): 意見論述
 /// = opinion + 2 reasons + conclusion; 要約 = point-per-paragraph → paraphrase →
-/// connect; Eメール = answer both questions + a detail. Generic structure only —
-/// never the specific answer, so it teaches the 型 without leaking content.
+/// connect; Eメール準2級 = answer the friend's question + ASK 2 questions about the
+/// underlined topic. Generic 型 only — never the answer, teaching shape not content.
 class WritingStructureStep {
   final String labelJa;
   final String starter;
@@ -61,16 +61,27 @@ class WritingStructureStep {
 }
 
 /// The ordered structure scaffold for [type]. Pure + public so it is unit-tested.
-List<WritingStructureStep> writingStructureGuide(WritingTaskType type) {
+/// [emailAsksQuestions] selects the 準2級 ask-format email 型; without it the email
+/// case stays empty (the 3級 answer-format has no single safe shared 型).
+List<WritingStructureStep> writingStructureGuide(WritingTaskType type,
+    {bool emailAsksQuestions = false}) {
   switch (type) {
     case WritingTaskType.email:
-      // Intentionally EMPTY (no shared email scaffold). The 2024-reform email
-      // task differs by grade in a way this type-only signature can't express:
-      // 3級 answers the friend's 2 underlined questions, but 準2級 must ASK 2 of
-      // its OWN questions about the underlined part (+ respond). A single
-      // "answer both questions" 型 is score-fatal for 準2級 (content-qa verified
-      // vs gakken / 旺文社 / eiken.or.jp 2024-2026). A correct grade-aware email
-      // scaffold is deferred — better no scaffold than a wrong 型.
+      // 準2級 ask-format: react → ask question 1 → ask question 2 → close. This is
+      // a SAFE generic 型 (it names no answer; the learner supplies the actual
+      // questions about the underlined topic). The 3級 answer-format has no single
+      // safe shared 型 and stays empty (better none than a wrong one). #41 —
+      // verified vs gakken / 旺文社 / eiken.or.jp 2024-2026.
+      if (emailAsksQuestions) {
+        return const [
+          WritingStructureStep(
+              '① あいさつ＋友だちの質問に答える', '"Thank you for your email. Yes, I ..."'),
+          WritingStructureStep(
+              '② 下線部について 1つ目の質問', '"I have two questions. First, ...?"'),
+          WritingStructureStep('③ 2つ目の質問', '"Also, ...?" (「?」で おわる)'),
+          WritingStructureStep('④ むすび', '"I hope to hear from you soon."'),
+        ];
+      }
       return const [];
     case WritingTaskType.summary:
       return const [
@@ -102,8 +113,21 @@ class WritingPrompt {
   /// The email/passage body or discussion topic.
   final String stimulus;
 
-  /// For Eメール: the two underlined questions the reply must answer.
+  /// For 3級 Eメール (answer-mode): the two underlined questions the reply must
+  /// ANSWER. Empty for 準2級 ask-mode (see [emailAsksQuestions]).
   final List<String> underlinedQuestions;
+
+  /// Eメール format flips by grade under the 2024 reform:
+  ///   • 3級  — the friend asks 2 underlined questions; the reply ANSWERS them.
+  ///   • 準2級 — the friend's mail has an underlined topic; the reply must ASK 2
+  ///            of its OWN questions about that topic (+ respond appropriately).
+  /// Treating 準2級 like 3級 ("answer both questions") is score-fatal (verified vs
+  /// 旺文社 / gakken / eiken.or.jp 2024-2026). When true, this is the ask format.
+  final bool emailAsksQuestions;
+
+  /// For 準2級 ask-mode Eメール: the underlined phrase in the received mail that
+  /// the learner must ask TWO questions about. Null for answer-mode.
+  final String? underlinedTopic;
 
   /// Word count target range.
   final int wordCountMin;
@@ -125,6 +149,8 @@ class WritingPrompt {
     required this.instructionEn,
     required this.stimulus,
     this.underlinedQuestions = const [],
+    this.emailAsksQuestions = false,
+    this.underlinedTopic,
     required this.wordCountMin,
     required this.wordCountMax,
     required this.rubricPoints,
@@ -184,52 +210,58 @@ const List<WritingPrompt> kWritingPrompts = [
   ),
 
   // ── 準2級 Eメール (40-50語) ──────────────────────────────────────────────
+  // 2024-reform format (verified vs 旺文社 / gakken official sample / eiken.or.jp
+  // 2024-2026, content-qa 2026-06-15): the friend's mail closes with a question
+  // AND contains an underlined topic (【 】). The reply must BOTH (a) answer the
+  // friend's question and (b) ASK 2 questions about the underlined part — NOT
+  // merely answer 2 questions (that is the score-fatal 3級 format). (#41)
   WritingPrompt(
     id: 'pre2_email_1',
     type: WritingTaskType.email,
-    instructionJa: '英語で返信メールを書いてください。下線部の2つの質問に必ず答えてください。\n40語以上50語以内で書いてください。',
+    emailAsksQuestions: true,
+    instructionJa: '英語で返信メールを書いてください。\n'
+        '友だちの質問に答えてから、【　】の部分について あなたから2つ質問してください。\n'
+        '40語以上50語以内で書いてください。',
     instructionEn:
-        'Write a reply email in English. Answer BOTH underlined questions.\n'
+        'Write a reply email in English. First answer the question in the email, '
+        'then ask TWO questions about the underlined part (in 【 】).\n'
         'Use 40–50 words.',
-    stimulus: 'Hi! I am thinking of taking up a new hobby. '
-        'I heard that you play a musical instrument. '
-        'What instrument do you play? '
-        'How long did it take you to learn it?',
-    underlinedQuestions: [
-      'What instrument do you play?',
-      'How long did it take you to learn it?',
-    ],
+    stimulus: 'Hi! How are you? Last weekend my family and I went to '
+        '【a new aquarium】 that just opened near my house. We had a great time! '
+        'Do you like visiting aquariums?',
+    underlinedTopic: 'a new aquarium',
     wordCountMin: 40,
     wordCountMax: 50,
     rubricPoints: ['内容 / Content', '語彙 / Vocabulary', '文法 / Grammar'],
     modelAnswer:
-        'Hi! Thanks for your message. I play the piano. I started when I was six '
-        'years old. It took me about three years to play simple songs well, and I '
-        'am still practicing harder pieces today. I really hope you find a hobby '
-        'you enjoy too.',
+        'Hi! Thank you for your email. Yes, I really like visiting aquariums '
+        'because I love sea animals. I have two questions about the new aquarium. '
+        'How big is it? And what kind of fish can you see there? '
+        'I hope I can go someday!',
   ),
   WritingPrompt(
     id: 'pre2_email_2',
     type: WritingTaskType.email,
-    instructionJa: '英語で返信メールを書いてください。下線部の2つの質問に必ず答えてください。\n40語以上50語以内で書いてください。',
+    emailAsksQuestions: true,
+    instructionJa: '英語で返信メールを書いてください。\n'
+        '友だちの質問に答えてから、【　】の部分について あなたから2つ質問してください。\n'
+        '40語以上50語以内で書いてください。',
     instructionEn:
-        'Write a reply email in English. Answer BOTH underlined questions.\n'
+        'Write a reply email in English. First answer the question in the email, '
+        'then ask TWO questions about the underlined part (in 【 】).\n'
         'Use 40–50 words.',
-    stimulus: 'Hi! Our school is having an international food fair next month. '
-        'What traditional dish from your country would you recommend? '
-        'What are the main ingredients in it?',
-    underlinedQuestions: [
-      'What traditional dish would you recommend?',
-      'What are the main ingredients in it?',
-    ],
+    stimulus: 'Hi! I have some exciting news. Next month I am going to start '
+        '【a part-time job】 at a bakery in my town. '
+        'Do you think part-time jobs are good for students?',
+    underlinedTopic: 'a part-time job',
     wordCountMin: 40,
     wordCountMax: 50,
     rubricPoints: ['内容 / Content', '語彙 / Vocabulary', '文法 / Grammar'],
     modelAnswer:
-        'Hi! That sounds like a fun event. I would recommend okonomiyaki, a '
-        'popular dish from Japan. The main ingredients are flour, eggs, shredded '
-        'cabbage, and sliced pork. People often add a special sweet sauce on top. '
-        'It is easy to make and everyone at the fair will love it.',
+        'Hi! Thank you for your email. That is exciting! Yes, I think part-time '
+        'jobs are good for students because they teach responsibility. I have two '
+        'questions about your part-time job. How many days will you work? '
+        'And what will you do there?',
   ),
 
   // ── 2級 要約 (45-55語) ──────────────────────────────────────────────────
@@ -637,8 +669,15 @@ String _buildGradingSystemPrompt(WritingPrompt prompt) {
       .join('\n');
 
   final taskSpecific = switch (prompt.type) {
+    WritingTaskType.email when prompt.emailAsksQuestions => '''
+TASK-SPECIFIC CHECKS (Eメール — 準2級 answer+ask format):
+- Did the writer ANSWER the question asked in the friend's email (the closing question)?
+- Did the writer ASK at least TWO questions about the underlined topic "${prompt.underlinedTopic}"? Each question must end with "?".
+- Do the questions genuinely concern that underlined topic (not random questions)?
+- Word count: ${prompt.wordCountMin}–${prompt.wordCountMax} words (count the learner's word count honestly).
+If the friend's question is NOT answered, OR fewer than two questions about the underlined topic are asked, 内容/Content = 0.''',
     WritingTaskType.email => '''
-TASK-SPECIFIC CHECKS (Eメール):
+TASK-SPECIFIC CHECKS (Eメール — 3級 answer format):
 - Did the writer answer BOTH of these underlined questions?
   ${prompt.underlinedQuestions.map((q) => '  • "$q"').join('\n')}
 - Does the reply start with a greeting line (e.g. "Dear ...", "Hi ...")?
@@ -822,21 +861,36 @@ Widget _buildReadinessReport(WritingPrompt prompt, String text) {
 //     inoculate against over-confidence — the pedagogy panel's key safeguard.
 // Public so the honesty invariant (closure copy + no gauge feed) is unit-tested.
 class WritingSelfCheckCard extends StatefulWidget {
-  const WritingSelfCheckCard({super.key, required this.taskType});
+  const WritingSelfCheckCard({
+    super.key,
+    required this.taskType,
+    this.emailAsksQuestions = false,
+  });
 
   final WritingTaskType taskType;
+
+  /// 準2級 ask-format email → the self-check asks about ASKING 2 questions, not
+  /// answering them (the #41 grade-aware fix). Ignored for non-email types.
+  final bool emailAsksQuestions;
 
   @override
   State<WritingSelfCheckCard> createState() => _WritingSelfCheckCardState();
 }
 
 class _WritingSelfCheckCardState extends State<WritingSelfCheckCard> {
-  late final List<String> _items = _itemsFor(widget.taskType);
+  late final List<String> _items =
+      _itemsFor(widget.taskType, widget.emailAsksQuestions);
   final Set<int> _checked = {};
 
-  static List<String> _itemsFor(WritingTaskType t) => switch (t) {
+  static List<String> _itemsFor(WritingTaskType t, bool emailAsksQuestions) =>
+      switch (t) {
         // Objective, countable, verifiable-against-own-text facts only — never a
         // quality judgement ("理由はよかった？" is forbidden: it invites inflation).
+        WritingTaskType.email when emailAsksQuestions => const [
+            '友だちの しつもんに 答えた？',
+            '下線部について、しつもんを 2つ 書いた？',
+            'しつもんは ぜんぶ「?」で おわっている？',
+          ],
         WritingTaskType.email => const [
             '下線の しつもんに、2つとも 答えた？',
             '自分の 言葉で 書いた？',
@@ -1076,8 +1130,9 @@ class _WritingPracticeScreenState extends State<WritingPracticeScreen> {
   /// is a scored 観点, and a beginner facing a blank box needs the 型 most.
   /// Collapsible (default open); generic structure only, never the answer.
   Widget _buildStructureGuide() {
-    final steps = writingStructureGuide(_prompt.type);
-    // No scaffold for this task type (e.g. email — see writingStructureGuide):
+    final steps = writingStructureGuide(_prompt.type,
+        emailAsksQuestions: _prompt.emailAsksQuestions);
+    // No scaffold for this task type (e.g. 3級 email — see writingStructureGuide):
     // render nothing rather than an empty panel.
     if (steps.isEmpty) return const SizedBox.shrink();
     return Column(
@@ -1352,6 +1407,31 @@ class _WritingPracticeScreenState extends State<WritingPracticeScreen> {
                     style: dqText(size: 14, color: dqInk, spacing: 0.3),
                   ),
                 ),
+                if (_prompt.emailAsksQuestions &&
+                    _prompt.underlinedTopic != null) ...[
+                  const SizedBox(height: 10),
+                  Text(
+                    '下線部について、あなたから2つ質問しよう / Ask 2 questions about:',
+                    style: dqText(size: 11, color: dqGold, w: FontWeight.w700),
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('▶ ', style: dqText(size: 12, color: dqGold)),
+                      Expanded(
+                        child: Text(
+                          _prompt.underlinedTopic!,
+                          style: dqText(
+                            size: 13,
+                            color: const Color(0xFFB8F0B8),
+                            w: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
                 if (_prompt.underlinedQuestions.isNotEmpty) ...[
                   const SizedBox(height: 10),
                   Text(
@@ -1487,7 +1567,10 @@ class _WritingPracticeScreenState extends State<WritingPracticeScreen> {
             if (evaluateWritingReadiness(_prompt, _controller.text)
                 .formComplete) ...[
               const SizedBox(height: 12),
-              WritingSelfCheckCard(taskType: _prompt.type),
+              WritingSelfCheckCard(
+                taskType: _prompt.type,
+                emailAsksQuestions: _prompt.emailAsksQuestions,
+              ),
             ],
             // 見本解答: a content exemplar to compare against (reveal-on-demand).
             if (_prompt.modelAnswer != null) ...[

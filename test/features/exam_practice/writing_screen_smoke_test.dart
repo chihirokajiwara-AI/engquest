@@ -230,11 +230,48 @@ void main() {
       }
     });
 
-    test('all email prompts have exactly 2 underlined questions', () {
+    // 2024-reform email format differs by grade (#41):
+    //   • answer-mode (3級) → exactly 2 underlinedQuestions to ANSWER.
+    //   • ask-mode (準2級)  → an underlinedTopic to ASK 2 questions about, and
+    //                         NO underlinedQuestions (those would be a 3級 leak).
+    test('email prompts match their grade format (answer vs ask)', () {
       for (final p
           in kWritingPrompts.where((p) => p.type == WritingTaskType.email)) {
-        expect(p.underlinedQuestions.length, equals(2),
-            reason: '${p.id} must have 2 underlined questions');
+        if (p.emailAsksQuestions) {
+          expect(p.underlinedTopic, isNotNull,
+              reason: '${p.id} (ask-mode) must name an underlined topic');
+          expect(p.underlinedTopic!.trim(), isNotEmpty,
+              reason: '${p.id} (ask-mode) underlined topic must be non-empty');
+          expect(p.underlinedQuestions, isEmpty,
+              reason: '${p.id} (ask-mode) must NOT list answerable questions '
+                  '(that is the score-fatal 3級 format)');
+        } else {
+          expect(p.underlinedQuestions.length, equals(2),
+              reason: '${p.id} (answer-mode) must have 2 underlined questions');
+        }
+      }
+    });
+
+    // #41 regression: 準2級 email must be ask-mode (the bug shipped it as 3級
+    // answer-mode → a child practising the wrong task fails the real exam).
+    test('all 準2級 (pre2) email prompts are ask-mode', () {
+      final pre2Emails = kWritingPrompts.where(
+          (p) => p.type == WritingTaskType.email && p.id.startsWith('pre2_'));
+      expect(pre2Emails, isNotEmpty);
+      for (final p in pre2Emails) {
+        expect(p.emailAsksQuestions, isTrue,
+            reason: '${p.id}: 準2級 must ASK 2 questions, not answer them');
+      }
+    });
+
+    // 3級 email must remain answer-mode (do not over-correct the fix).
+    test('all 3級 email prompts are answer-mode', () {
+      final g3Emails = kWritingPrompts.where(
+          (p) => p.type == WritingTaskType.email && p.id.startsWith('3_'));
+      expect(g3Emails, isNotEmpty);
+      for (final p in g3Emails) {
+        expect(p.emailAsksQuestions, isFalse,
+            reason: '${p.id}: 3級 must ANSWER the 2 underlined questions');
       }
     });
 
@@ -327,11 +364,23 @@ void main() {
       });
     }
 
-    // Email is intentionally EMPTY: the 2024-reform email 型 differs by grade
-    // (3級 answers 2 questions; 準2級 must ASK 2) and a single shared scaffold is
-    // score-fatal for 準2級. Better no scaffold than a wrong one (content-qa).
-    test('email returns no shared scaffold (grade-dependent, deferred)', () {
+    // 3級 answer-mode email has no single safe shared 型 → empty (better none
+    // than a wrong one). 準2級 ask-mode has a SAFE generic 型 (answer friend's Q →
+    // ask Q1 → ask Q2 → close) that names no answer. #41 grade-aware.
+    test('email (answer-mode default) returns no shared scaffold', () {
       expect(writingStructureGuide(WritingTaskType.email), isEmpty);
+    });
+
+    test('email ask-mode (準2級) returns the answer→ask→ask→close scaffold', () {
+      final steps = writingStructureGuide(WritingTaskType.email,
+          emailAsksQuestions: true);
+      expect(steps.length, equals(4));
+      for (final s in steps) {
+        expect(s.labelJa.trim(), isNotEmpty);
+        expect(s.starter.trim(), isNotEmpty);
+      }
+      // Must cue ASKING (a question-mark starter), never an answer.
+      expect(steps.any((s) => s.starter.contains('?')), isTrue);
     });
 
     test('opinion essay has the full opinion→2 reasons→conclusion shape', () {

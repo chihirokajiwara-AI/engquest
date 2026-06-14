@@ -393,6 +393,35 @@ WritingReadiness evaluateWritingReadiness(WritingPrompt prompt, String text) {
 
   // 4) HINT — task-specific completeness.
   switch (prompt.type) {
+    case WritingTaskType.email when prompt.emailAsksQuestions:
+      // 準2級 ask-mode (#41): the learner must ASK ≥2 questions about the
+      // underlined topic. Count terminal question marks as the 目安 (advisory).
+      final questionCount = '?'.allMatches(text).length;
+      checks.add(WritingCheck(
+        id: 'email_asks_two',
+        kind: WritingCheckKind.hint,
+        status:
+            questionCount >= 2 ? WritingCheckStatus.ok : WritingCheckStatus.warn,
+        labelJa: '質問を 2つ したか（目安）',
+        detailJa: questionCount >= 2
+            ? '「?」で おわる 質問が $questionCount 個 あります。'
+            : '下線部について、自分から 質問を 2つ しましょう（「?」で おわる 文）。',
+      ));
+      final topicWords = _contentWords(prompt.underlinedTopic ?? '').toSet();
+      if (topicWords.isNotEmpty) {
+        final onTopic =
+            topicWords.intersection(_contentWords(text).toSet()).isNotEmpty;
+        checks.add(WritingCheck(
+          id: 'email_topic',
+          kind: WritingCheckKind.hint,
+          status: onTopic ? WritingCheckStatus.ok : WritingCheckStatus.warn,
+          labelJa: '下線部について 質問したか（目安）',
+          detailJa: onTopic
+              ? '下線部に 関係する 言葉が 使えています。'
+              : '下線部「${prompt.underlinedTopic}」について 質問しましょう。',
+        ));
+      }
+      break;
     case WritingTaskType.email:
       for (var i = 0; i < prompt.underlinedQuestions.length; i++) {
         final q = prompt.underlinedQuestions[i];
