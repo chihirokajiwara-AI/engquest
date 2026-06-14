@@ -18,6 +18,16 @@ import 'package:engquest/features/onboarding/onboarding_flow.dart';
 //  Slightly more restrained/adult than the child-facing quest screens.
 // ══════════════════════════════════════════════════════════════════════════════
 
+/// Parent reminder-time disclosure. HONESTY INVARIANT (#122, recurred): the
+/// notification plugin is removed and [NotificationService] is a no-op on EVERY
+/// platform, so NO reminder ever fires. This copy must NOT promise a
+/// notification/push (web or mobile) — it frames the saved time as a personal
+/// study-rhythm guide and labels auto-notifications as 準備中. Locked by
+/// reminder_disclosure_honesty_test.
+const String kReminderDisclosureJa =
+    '※ 時刻（じこく）は保存（ほぞん）されます。きまった時間（じかん）に学習（がくしゅう）する'
+    '目安（めやす）にどうぞ。（自動（じどう）通知（つうち）は準備中（じゅんびちゅう）です）';
+
 class ParentDashboardScreen extends StatefulWidget {
   const ParentDashboardScreen({super.key});
 
@@ -1039,13 +1049,16 @@ class _SettingsTab extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 6),
-        // Honest disclosure (#122): the time is now SAVED, but push reminders
-        // arrive with the スマホアプリ — don't let a parent think the web version
-        // will ping them (it can't). No fake "we'll remind you" promise.
+        // Honest disclosure (#122 → corrected 2026-06-14): the time is SAVED as a
+        // personal study-rhythm guide. The previous copy promised "通知はスマホ
+        // アプリ版でお知らせします" — but the notification plugin is removed and the
+        // service is a no-op on EVERY platform (web AND mobile), so no reminder
+        // ever fires. Promising mobile pushes that don't exist is the exact fake
+        // "we'll remind you" this feature was meant to avoid. State the truth.
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4),
           child: Text(
-            '※ 時刻（じこく）は保存（ほぞん）されます。通知（つうち）はスマホアプリ版（ばん）でお知（し）らせします。',
+            kReminderDisclosureJa,
             style: dqText(size: 11, color: dqInk.withAlpha(150)),
           ),
         ),
