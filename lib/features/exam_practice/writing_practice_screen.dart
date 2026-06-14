@@ -46,6 +46,50 @@ enum WritingTaskType {
   opinion,
 }
 
+/// One step of the canonical 英検 writing structure for a task type — a
+/// child-facing label + a short English sentence-starter (or JP cue). Shown as a
+/// "書き方のヒント" scaffold in the write phase: 構成 (organization) is one of the
+/// four scored 観点, and a beginner facing a blank box needs the 型 most. Grounded
+/// in the 2024-reform structures (uguis.ai 2026 / edic.jp / eslclub.jp): 意見論述
+/// = opinion + 2 reasons + conclusion; 要約 = point-per-paragraph → paraphrase →
+/// connect; Eメール = answer both questions + a detail. Generic structure only —
+/// never the specific answer, so it teaches the 型 without leaking content.
+class WritingStructureStep {
+  final String labelJa;
+  final String starter;
+  const WritingStructureStep(this.labelJa, this.starter);
+}
+
+/// The ordered structure scaffold for [type]. Pure + public so it is unit-tested.
+List<WritingStructureStep> writingStructureGuide(WritingTaskType type) {
+  switch (type) {
+    case WritingTaskType.email:
+      // Intentionally EMPTY (no shared email scaffold). The 2024-reform email
+      // task differs by grade in a way this type-only signature can't express:
+      // 3級 answers the friend's 2 underlined questions, but 準2級 must ASK 2 of
+      // its OWN questions about the underlined part (+ respond). A single
+      // "answer both questions" 型 is score-fatal for 準2級 (content-qa verified
+      // vs gakken / 旺文社 / eiken.or.jp 2024-2026). A correct grade-aware email
+      // scaffold is deferred — better no scaffold than a wrong 型.
+      return const [];
+    case WritingTaskType.summary:
+      return const [
+        WritingStructureStep(
+            '① 各段落の要点を見つける', '段落（だんらく）ごとに いちばん大事（だいじ）な ところを さがす'),
+        WritingStructureStep('② 自分のことばで1文に', 'コピーせず、自分（じぶん）の ことばで まとめる'),
+        WritingStructureStep(
+            '③ つなぎ言葉でつなぐ', '"First, ... Also, ... Finally, ..."'),
+      ];
+    case WritingTaskType.opinion:
+      return const [
+        WritingStructureStep('① 意見をはっきり', '"I think that ..." / "I agree ..."'),
+        WritingStructureStep('② 1つ目の理由', '"I have two reasons. First, ..."'),
+        WritingStructureStep('③ 2つ目の理由', '"Second, ..."'),
+        WritingStructureStep('④ まとめ', '"For these reasons, I think ..."'),
+      ];
+  }
+}
+
 /// One writing prompt with its rubric configuration.
 class WritingPrompt {
   final String id;
@@ -986,6 +1030,10 @@ class _WritingPracticeScreenState extends State<WritingPracticeScreen> {
   WritingRubricResult? _result;
   String? _gradingError;
 
+  /// Whether the 書き方のヒント structure scaffold is expanded. Default open so a
+  /// beginner sees the 型 before writing; collapsible to free space once learned.
+  bool _structureOpen = true;
+
   // Lazy-init to satisfy R4 (no network in build/initState)
   ClaudeClient? _claudeClient;
   ClaudeClient get _claude => _claudeClient ??= ClaudeClient(maxTokens: 400);
@@ -1023,6 +1071,73 @@ class _WritingPracticeScreenState extends State<WritingPracticeScreen> {
 
   bool get _canSubmit =>
       _wordCount >= _prompt.wordCountMin && _phase == _Phase.writing;
+
+  /// ✍️ 書き方のヒント — the canonical 英検 structure (型) for this task type. 構成
+  /// is a scored 観点, and a beginner facing a blank box needs the 型 most.
+  /// Collapsible (default open); generic structure only, never the answer.
+  Widget _buildStructureGuide() {
+    final steps = writingStructureGuide(_prompt.type);
+    // No scaffold for this task type (e.g. email — see writingStructureGuide):
+    // render nothing rather than an empty panel.
+    if (steps.isEmpty) return const SizedBox.shrink();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        DqPanel(
+          title: '✍️ 書き方（かきかた）のヒント / How to structure',
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Semantics(
+                button: true,
+                label: _structureOpen ? 'ヒントを とじる' : 'ヒントを ひらく',
+                child: GestureDetector(
+                  onTap: () => setState(() => _structureOpen = !_structureOpen),
+                  behavior: HitTestBehavior.opaque,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'この型（かた）で 書（か）くと まとまるよ',
+                          style: dqText(size: 12, color: dqInk.withAlpha(180)),
+                        ),
+                      ),
+                      Icon(
+                          _structureOpen
+                              ? Icons.expand_less
+                              : Icons.expand_more,
+                          color: dqGold,
+                          size: 22),
+                    ],
+                  ),
+                ),
+              ),
+              if (_structureOpen) ...[
+                const SizedBox(height: 8),
+                for (final s in steps)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(s.labelJa,
+                            style: dqText(
+                                size: 13, w: FontWeight.w800, color: dqGold)),
+                        const SizedBox(height: 2),
+                        Text(s.starter,
+                            style: dqText(size: 12.5, color: dqInk)
+                                .copyWith(height: 1.4)),
+                      ],
+                    ),
+                  ),
+              ],
+            ],
+          ),
+        ),
+        const SizedBox(height: 14),
+      ],
+    );
+  }
 
   Future<void> _submit() async {
     if (!_canSubmit) return;
@@ -1267,6 +1382,11 @@ class _WritingPracticeScreenState extends State<WritingPracticeScreen> {
             ),
           ),
           const SizedBox(height: 14),
+
+          // ✍️ Structure scaffold — 構成 is a scored 観点 and a beginner facing a
+          // blank box needs the 型 most. Generic structure only (never the answer).
+          // Empty for task types without a safe shared 型 (email) → no gap.
+          _buildStructureGuide(),
 
           // Text field
           DqPanel(

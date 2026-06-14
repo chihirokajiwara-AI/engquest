@@ -311,4 +311,39 @@ void main() {
       expect(tester.takeException(), isNull);
     });
   });
+
+  // 書き方のヒント structure scaffold (構成 is a scored 観点). Each task type must
+  // return a non-empty, canonical 型 — and the opinion essay must carry the full
+  // opinion→2-reasons→conclusion shape (4 steps).
+  group('writingStructureGuide', () {
+    for (final type in [WritingTaskType.summary, WritingTaskType.opinion]) {
+      test('$type returns a non-empty, well-formed structure scaffold', () {
+        final steps = writingStructureGuide(type);
+        expect(steps, isNotEmpty);
+        for (final s in steps) {
+          expect(s.labelJa.trim(), isNotEmpty);
+          expect(s.starter.trim(), isNotEmpty);
+        }
+      });
+    }
+
+    // Email is intentionally EMPTY: the 2024-reform email 型 differs by grade
+    // (3級 answers 2 questions; 準2級 must ASK 2) and a single shared scaffold is
+    // score-fatal for 準2級. Better no scaffold than a wrong one (content-qa).
+    test('email returns no shared scaffold (grade-dependent, deferred)', () {
+      expect(writingStructureGuide(WritingTaskType.email), isEmpty);
+    });
+
+    test('opinion essay has the full opinion→2 reasons→conclusion shape', () {
+      expect(writingStructureGuide(WritingTaskType.opinion).length, 4);
+    });
+
+    test('summary guide cues paraphrase, not copying', () {
+      final joined = writingStructureGuide(WritingTaskType.summary)
+          .map((s) => s.starter)
+          .join();
+      expect(joined.contains('コピー'), isTrue,
+          reason: 'summary must warn against copy-verbatim (官製 rubric)');
+    });
+  });
 }
