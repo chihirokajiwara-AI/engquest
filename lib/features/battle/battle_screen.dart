@@ -908,10 +908,24 @@ class _BattleScreenState extends State<BattleScreen>
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
       child: Stack(
         children: [
-          GestureDetector(
-            onTap: _isFlipped ? null : _flipCard,
-            child: _buildFlipCard(),
-          ),
+          // a11y: flipping the card to reveal the meaning is the core battle
+          // action — without Semantics a screen-reader child can't do it and the
+          // loop is unplayable for them. Front = ONE button announcing the word +
+          // "flip to reveal" (excludeSemantics collapses the raw Texts into the
+          // action); once flipped it is not a button and the back's word / meaning
+          // / example are read normally.
+          _isFlipped
+              ? GestureDetector(onTap: null, child: _buildFlipCard())
+              : Semantics(
+                  button: true,
+                  label: '${_currentVocab.word}。'
+                      'カードを めくって いみを みる / Flip to reveal the meaning',
+                  excludeSemantics: true,
+                  child: GestureDetector(
+                    onTap: _flipCard,
+                    child: _buildFlipCard(),
+                  ),
+                ),
           // Golden shimmer overlay on correct answer
           if (_showShimmer)
             Positioned.fill(
