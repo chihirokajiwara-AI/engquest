@@ -186,6 +186,13 @@ class _SceneViewState extends State<SceneView> {
   String? _loreFragment;
   Timer? _loreTimer;
 
+  /// The NPC hotspot index whose colour just returned — drives a one-shot gold
+  /// restore-glow so the game's defining verb ("ことばで世界に色が戻る") FEELS magical
+  /// at the moment of solving, not just a quiet cross-fade. Cleared after the
+  /// glow finishes. Null → no glow.
+  int? _restoringIdx;
+  Timer? _restoreTimer;
+
   // Services
   final _cue = AudioCueService();
   final _sound = SoundService();
@@ -257,6 +264,7 @@ class _SceneViewState extends State<SceneView> {
   void dispose() {
     _arrivalTimer?.cancel();
     _loreTimer?.cancel();
+    _restoreTimer?.cancel();
     _cue.dispose();
     super.dispose();
   }
@@ -330,7 +338,15 @@ class _SceneViewState extends State<SceneView> {
     if (!mounted) return;
     if (result != null && result.solved) {
       final wasRestored = _sceneRestored;
-      setState(() => _solved[idx] = true);
+      setState(() {
+        _solved[idx] = true;
+        _restoringIdx = idx; // one-shot gold glow on the restored NPC
+      });
+      // Clear the glow flag once it has played, so it never re-glows on rebuild.
+      _restoreTimer?.cancel();
+      _restoreTimer = Timer(const Duration(milliseconds: 900), () {
+        if (mounted) setState(() => _restoringIdx = null);
+      });
       // Persist so the restored colour survives the next session (#115).
       SceneSolvedStore.markSolved(widget.eikenLevel, idx);
       _sound.playCorrect();
@@ -1018,9 +1034,10 @@ class _SceneViewState extends State<SceneView> {
     final grey = hotspot.npcGreyAsset;
     final color = hotspot.npcColorAsset;
 
-    // If no art exists yet: fallback to emoji/icon portrait
+    final Widget portrait;
     if (grey == null && color == null) {
-      return Container(
+      // If no art exists yet: fallback to emoji/icon portrait.
+      portrait = Container(
         width: size,
         height: size,
         decoration: BoxDecoration(
@@ -1044,17 +1061,56 @@ class _SceneViewState extends State<SceneView> {
           ),
         ),
       );
+    } else {
+      // Grey→color cross-fade on solve.
+      portrait = AnimatedCrossFade(
+        duration: prefersReducedMotion(context)
+            ? Duration.zero
+            : const Duration(milliseconds: 600),
+        crossFadeState:
+            solved ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+        firstChild: _npcPortraitImage(grey ?? '', size),
+        secondChild: _npcPortraitImage(color ?? '', size),
+      );
     }
 
-    // Grey→color cross-fade on solve
-    return AnimatedCrossFade(
-      duration: prefersReducedMotion(context)
-          ? Duration.zero
-          : const Duration(milliseconds: 600),
-      crossFadeState:
-          solved ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-      firstChild: _npcPortraitImage(grey ?? '', size),
-      secondChild: _npcPortraitImage(color ?? '', size),
+    // Game-feel: a one-shot gold glow blooms outward the moment THIS NPC's colour
+    // returns — making the game's defining verb ("ことばで世界に色が戻る") feel magical,
+    // not a quiet cross-fade. Subtle + brief (fits the 本格 dark-RPG palette).
+    return Stack(
+      clipBehavior: Clip.none,
+      alignment: Alignment.center,
+      children: [
+        portrait,
+        if (idx == _restoringIdx)
+          Positioned.fill(
+            child: IgnorePointer(
+              child: TweenAnimationBuilder<double>(
+                key: const ValueKey('restore_glow'),
+                tween: Tween(begin: 0.0, end: 1.0),
+                duration: prefersReducedMotion(context)
+                    ? Duration.zero
+                    : const Duration(milliseconds: 850),
+                curve: Curves.easeOut,
+                builder: (_, t, __) => Opacity(
+                  opacity: (1.0 - t).clamp(0.0, 1.0),
+                  child: Transform.scale(
+                    scale: 1.0 + 0.6 * t,
+                    child: const DecoratedBox(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: RadialGradient(
+                          colors: [Color(0xB3F0D080), Color(0x00F0D080)],
+                          radius: 0.75,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+      ],
     );
   }
 
