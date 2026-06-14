@@ -710,7 +710,7 @@ class BlendWordCard extends StatelessWidget {
 /// answer is evaluated (via [onChoose]) — a [DqChoice] variant with a leading 🔊.
 /// Lets a non-reader pick by sound. [state] colours correct (green); wrong is
 /// only ever shown for penalized (Quiz) steps, handled by the caller.
-class AudioOptionButton extends StatelessWidget {
+class AudioOptionButton extends StatefulWidget {
   final String label;
   final DqChoiceState state;
 
@@ -728,7 +728,70 @@ class AudioOptionButton extends StatelessWidget {
   });
 
   @override
+  State<AudioOptionButton> createState() => AudioOptionButtonState();
+}
+
+/// Public so a caller (e.g. NazoScreen) can fire [triggerShake] imperatively via
+/// a `GlobalKey<AudioOptionButtonState>` the instant a WRONG option is tapped —
+/// the loop's only previously-dead interaction. (#59 game-feel; 2026 SOTA: a
+/// kinetic wrong-answer response within one frame is table-stakes — Duolingo /
+/// GameDev Academy 2025.) Critically this also gives feedback in the no-penalize
+/// branch, which used to swallow the tap silently (a child could not tell it
+/// registered).
+class AudioOptionButtonState extends State<AudioOptionButton>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _shakeCtrl;
+  late final Animation<double> _shakeAnim;
+
+  @override
+  void initState() {
+    super.initState();
+    _shakeCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 320),
+    );
+    // A damped left-right shudder that settles back to 0 (no residual offset).
+    _shakeAnim = TweenSequence<double>([
+      TweenSequenceItem(tween: Tween(begin: 0.0, end: -8.0), weight: 1),
+      TweenSequenceItem(tween: Tween(begin: -8.0, end: 8.0), weight: 2),
+      TweenSequenceItem(tween: Tween(begin: 8.0, end: -6.0), weight: 2),
+      TweenSequenceItem(tween: Tween(begin: -6.0, end: 6.0), weight: 2),
+      TweenSequenceItem(tween: Tween(begin: 6.0, end: 0.0), weight: 1),
+    ]).animate(CurvedAnimation(parent: _shakeCtrl, curve: Curves.easeInOut));
+  }
+
+  @override
+  void dispose() {
+    _shakeCtrl.dispose();
+    super.dispose();
+  }
+
+  /// Play the wrong-answer shudder once. No-op when "reduce motion" is on, so
+  /// vestibular/seizure-sensitive children never get the shake.
+  void triggerShake() {
+    if (prefersReducedMotion(context)) return;
+    _shakeCtrl
+      ..reset()
+      ..forward();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _shakeCtrl,
+      builder: (context, child) => Transform.translate(
+        offset: Offset(_shakeCtrl.isAnimating ? _shakeAnim.value : 0, 0),
+        child: child,
+      ),
+      child: _buildBody(context),
+    );
+  }
+
+  Widget _buildBody(BuildContext context) {
+    final label = widget.label;
+    final state = widget.state;
+    final onAudio = widget.onAudio;
+    final onChoose = widget.onChoose;
     Color border = dqBorder;
     Color fill = dqBox.withAlpha(210);
     if (state == DqChoiceState.correct) {

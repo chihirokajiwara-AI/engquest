@@ -99,6 +99,13 @@ class _NazoScreenState extends State<NazoScreen> {
   QuestStep get _step => widget.hotspot.step!;
   TeachCard? get _teachCard => widget.hotspot.teachCard;
 
+  // One key per option so a WRONG tap can shake exactly that tile (#59). Built
+  // once from the (fixed) option count for this ナゾ instance.
+  late final List<GlobalKey<AudioOptionButtonState>> _optionKeys = [
+    for (var i = 0; i < _step.options.length; i++)
+      GlobalKey<AudioOptionButtonState>(),
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -138,13 +145,16 @@ class _NazoScreenState extends State<NazoScreen> {
       _firstTryCorrect = correct;
     }
     if (!correct && !_step.penalizeWrong) {
-      // No-scold: replay the audio without advancing.
+      // No-scold: replay the audio without advancing. Shake the tapped tile so
+      // the child SEES their tap registered (it used to be swallowed silently).
+      _optionKeys[i].currentState?.triggerShake();
       _cue.play(_step.autoPlayAudio);
       return;
     }
     if (!correct) {
       _picarat.onWrong();
       _sound.playWrong();
+      _optionKeys[i].currentState?.triggerShake();
       _autoRevealFirstWrongHint();
     }
     setState(() {
@@ -618,6 +628,7 @@ class _NazoScreenState extends State<NazoScreen> {
           ? null
           : () => _cue.play(audioKey);
       return AudioOptionButton(
+        key: _optionKeys[i],
         label: o.label,
         state: st,
         onAudio: onAudio,
