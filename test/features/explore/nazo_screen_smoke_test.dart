@@ -204,7 +204,8 @@ void main() {
   // gives a FREE hint — "the game is helping me", not a school-y rule lecture.
   // Only on penalizeWrong steps (teach steps replay audio instead), only once.
   group('NazoScreen — free hint on first wrong', () {
-    testWidgets('first wrong tap on a penalizeWrong ナゾ auto-reveals a free hint',
+    testWidgets(
+        'first wrong tap on a penalizeWrong ナゾ auto-reveals a free hint',
         (tester) async {
       tester.view.physicalSize = const Size(440, 1600);
       tester.view.devicePixelRatio = 1.0;
