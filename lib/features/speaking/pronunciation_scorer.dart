@@ -79,6 +79,7 @@ abstract class PronunciationScorer {
 /// STUB BEHAVIOUR (no network, no Azure):
 ///   - Empty transcript → score 0.0, アティチュード coach triggered.
 ///   - Very short transcript (< 3 words) → score 0.35, gentle retry.
+///   - Transcript covers ≥ 85 % of reference words → score 0.9, excellent praise.
 ///   - Transcript covers ≥ 50 % of reference words → score 0.75, encouragement.
 ///   - Otherwise → score 0.5, coaching.
 ///
@@ -141,6 +142,22 @@ class StubPronunciationScorer implements PronunciationScorer {
     final overlap = refSet.intersection(transcriptSet).length;
     final coverage =
         referenceWords.isEmpty ? 0.0 : overlap / referenceWords.length;
+
+    // ── Near-complete coverage → reward the excellence ─────────────────────────
+    // A child who says ALL the words clearly should SEE a higher score + warmer
+    // praise than one who covered half — capping a perfect read at the same 0.75
+    // as a 50% read gives no encouragement for doing great (the engagement spine
+    // runs on celebrating effort that earns it, honestly).
+    if (coverage >= 0.85) {
+      return SpeakingScore(
+        referenceText: referenceText,
+        transcript: trimmed,
+        score: 0.9,
+        feedbackJa: 'すばらしい！はっきり 言（い）えたね！',
+        feedbackEn: 'Excellent! You said it clearly!',
+        showAttitudeCoach: false,
+      );
+    }
 
     if (coverage >= 0.5) {
       return SpeakingScore(
