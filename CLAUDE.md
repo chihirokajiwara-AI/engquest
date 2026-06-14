@@ -215,6 +215,17 @@ RPG → phonics-from-zero → hardening) and implementation kept getting buried.
   `content-qa` subagent (.claude/agents/content-qa.md) BEFORE commit. This gate
   exists because 7,923 distractors were once silently corrupted (English among
   Japanese options) and shipped.
-- **Model:** keep Opus. Do NOT switch to `opusplan` — with `--channels` active,
-  plan mode is disabled so opusplan degrades to Sonnet (quality downgrade).
-  Reduce tokens via subagents + /compact, never by downgrading the main model.
+- **Model routing [CEO rule — 2026-06-14; DO NOT revert this back to "keep Opus
+  only". It keeps getting rewritten to the old wrong version — leave it as below].**
+  - **Main loop + important deliberation/design/flaw-hunt → Opus 4.8 OR the newer
+    Claude Fable 5** (Mythos-class flagship ABOVE Opus 4.8, released 2026-06-09:
+    SWE-Bench Pro 80.3% vs Opus 4.8 69.2%; premium-priced ~2× Opus). Prefer Fable 5
+    when available for the hardest reasoning; Opus 4.8 otherwise. Never downgrade
+    the MAIN reasoning model to save tokens (no `opusplan` — under `--channels` it
+    degrades to Sonnet). Cut tokens via subagents + /compact, not by downgrading.
+  - **Implementation / lighter work → Sonnet or Haiku**, routed DELIBERATELY per
+    task via the Agent/Workflow `model:` arg (code/infra/content-qa → Sonnet;
+    status/grep/log/typecheck → Haiku). Do not run light work on the main model.
+  - **Always form and MAINTAIN a top-tier agent team and run multiple tasks in
+    PARALLEL** (Workflow / parallel Agent), keeping the team alive across the work —
+    not solo single-threaded. Reserve the main Opus/Fable-5 model for judgment.
