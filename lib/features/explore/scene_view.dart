@@ -196,25 +196,28 @@ class _SceneViewState extends State<SceneView> {
     super.initState();
     _coins = HintCoinService();
     _loadCoinBalance();
+    // _restoreSolved loads the cleared state THEN decides the arrival greeting —
+    // the "this place lost its words" intro must not replay on a restored scene.
     _restoreSolved();
-    // Show the スラ arrival banner after the first frame so the scene itself
-    // renders fully before the overlay appears.
-    if (widget.scene.companionArrivalJa != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          setState(() => _showArrival = true);
-          // Schedule auto-dismiss; tap dismissal is instant via _dismissArrival.
-          // Store the timer so dispose() can cancel it and avoid pending-timer
-          // leaks in widget tests.
-          _arrivalTimer = Timer(
-            const Duration(milliseconds: _kArrivalAutoDismissMs),
-            () {
-              if (mounted) setState(() => _showArrival = false);
-            },
-          );
-        }
-      });
-    }
+  }
+
+  /// Show スラ's arrival greeting, gated on scene state (N8 reactivity): the
+  /// "lost its words" intro plays only when the scene is NOT already restored —
+  /// re-entering a solved case would otherwise contradict its full colour.
+  void _maybeGreet() {
+    if (widget.scene.companionArrivalJa == null) return;
+    // A restored case stays in colour → no "lost its words" loss intro.
+    if (allNpcsSolved(widget.scene, _solved)) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      setState(() => _showArrival = true);
+      _arrivalTimer = Timer(
+        const Duration(milliseconds: _kArrivalAutoDismissMs),
+        () {
+          if (mounted) setState(() => _showArrival = false);
+        },
+      );
+    });
   }
 
   /// Dismiss the スラ arrival banner immediately (tap handler).
@@ -230,15 +233,19 @@ class _SceneViewState extends State<SceneView> {
     final solved = await SceneSolvedStore.solvedIndices(widget.eikenLevel);
     final coins =
         await SceneSolvedStore.collectedCoinIndices(widget.eikenLevel);
-    if (!mounted || (solved.isEmpty && coins.isEmpty)) return;
-    setState(() {
-      for (final idx in solved) {
-        _solved[idx] = true;
-      }
-      for (final idx in coins) {
-        _coinFound[idx] = true;
-      }
-    });
+    if (!mounted) return;
+    if (solved.isNotEmpty || coins.isNotEmpty) {
+      setState(() {
+        for (final idx in solved) {
+          _solved[idx] = true;
+        }
+        for (final idx in coins) {
+          _coinFound[idx] = true;
+        }
+      });
+    }
+    // Cleared-state is now known → decide スラ's arrival greeting (N8 reactivity).
+    _maybeGreet();
   }
 
   Future<void> _loadCoinBalance() async {

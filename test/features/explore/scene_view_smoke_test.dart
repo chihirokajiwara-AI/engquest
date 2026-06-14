@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:engquest/features/explore/scene_view.dart';
+import 'package:engquest/features/explore/hotspot.dart' show HotspotKind;
 import 'package:engquest/features/explore/scene_solved_store.dart';
 import 'package:engquest/features/explore/nazo_screen.dart';
 
@@ -103,6 +104,27 @@ void main() {
       findsAtLeastNWidgets(1),
       reason: 'scene title should remain after banner dismiss',
     );
+    expect(tester.takeException(), isNull);
+  });
+
+  // N8 scene-reactivity: a RESTORED (fully-solved) case must NOT replay スラ's
+  // "this place lost its colour" loss intro on revisit — it contradicts the
+  // scene's full restoration.
+  testWidgets('a restored (cleared) scene does not replay the loss intro',
+      (tester) async {
+    final npcIdx = [
+      for (var i = 0; i < kTown5Scene.hotspots.length; i++)
+        if (kTown5Scene.hotspots[i].kind == HotspotKind.npc) i,
+    ];
+    for (final i in npcIdx) {
+      await SceneSolvedStore.markSolved('5', i);
+    }
+    await tester.pumpWidget(
+      MaterialApp(home: SceneView(scene: kTown5Scene, eikenLevel: '5')),
+    );
+    await tester.pumpAndSettle();
+    expect(find.textContaining('いろが'), findsNothing,
+        reason: 'a solved case must not replay the loss intro (N8 reactivity)');
     expect(tester.takeException(), isNull);
   });
 
