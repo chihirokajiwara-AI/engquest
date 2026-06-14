@@ -58,15 +58,25 @@ class SpeakerButton extends StatelessWidget {
   final double size;
   final String semanticLabel;
 
+  /// Minimum tappable area. The icon stays visually small ([size]≈20) but a
+  /// non-reading 5yo — the exact user of this affordance — needs a finger-sized
+  /// target: 44px is the Apple-HIG / Material child-friendly minimum (WCAG 2.2
+  /// SC 2.5.8 only requires 24, but young motor skills want bigger). Was
+  /// BoxConstraints() (no min) → a ~32px target.
+  static const double _kMinTap = 44;
+
   @override
   Widget build(BuildContext context) {
     return IconButton(
       icon: Icon(Icons.volume_up_rounded, size: size, color: color),
       tooltip: semanticLabel,
       iconSize: size,
-      visualDensity: VisualDensity.compact,
+      // NOT VisualDensity.compact: it subtracts ~8px and would pull the hit area
+      // back under 44. The visual footprint is still small (20px icon centred).
       padding: const EdgeInsets.all(6),
-      constraints: const BoxConstraints(),
+      // Visual icon stays [size]; the HIT area is at least 44×44 for small hands.
+      constraints:
+          const BoxConstraints(minWidth: _kMinTap, minHeight: _kMinTap),
       splashRadius: size,
       onPressed: () => NavSpeak.speak(navKey),
     );

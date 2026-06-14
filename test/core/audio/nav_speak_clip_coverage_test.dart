@@ -6,6 +6,7 @@
 // a speaker button that does nothing when a pre-reader taps it (a silent-failure
 // regression). This locks the keys ↔ assets/audio/ui_ja/*.mp3 invariant.
 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:engquest/core/audio/nav_speak.dart';
@@ -25,4 +26,20 @@ void main() {
               'tap-to-speak would be silent for this nav element');
     });
   }
+
+  // Child-a11y (flaw-hunt 2026-06-14): the SpeakerButton is a non-reading 5yo's
+  // primary affordance — its visual icon is small (~20px) but the TAP area must
+  // be finger-sized (>=44, the Apple-HIG/Material child minimum). It used to
+  // strip IconButton's min constraints down to ~32px.
+  testWidgets('SpeakerButton has a >=44px tap target (small hands)',
+      (tester) async {
+    await tester.pumpWidget(const MaterialApp(
+      home: Scaffold(body: Center(child: SpeakerButton('exam'))),
+    ));
+    final size = tester.getSize(find.byType(SpeakerButton));
+    expect(size.width, greaterThanOrEqualTo(44),
+        reason: 'tap target too narrow for a small child: ${size.width}');
+    expect(size.height, greaterThanOrEqualTo(44),
+        reason: 'tap target too short for a small child: ${size.height}');
+  });
 }
