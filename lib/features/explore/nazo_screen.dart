@@ -339,6 +339,7 @@ class _NazoScreenState extends State<NazoScreen> {
               Row(
                 children: [
                   IconButton(
+                    tooltip: 'とじる / Close',
                     onPressed: _dismiss,
                     icon: const Icon(Icons.close, color: dqInk),
                   ),
@@ -426,6 +427,7 @@ class _NazoScreenState extends State<NazoScreen> {
   Widget _header() => Row(
         children: [
           IconButton(
+            tooltip: 'とじる / Close',
             onPressed: _dismiss,
             icon: const Icon(Icons.close, color: dqInk),
           ),

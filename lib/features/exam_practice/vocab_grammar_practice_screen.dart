@@ -445,6 +445,7 @@ class _VocabGrammarPracticeScreenState
             child: Row(
               children: [
                 IconButton(
+                  tooltip: 'とじる / Close',
                   icon: const Icon(Icons.close, color: dqInk),
                   onPressed: () => Navigator.of(context).pop(),
                 ),

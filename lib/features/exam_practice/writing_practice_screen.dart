@@ -1260,6 +1260,7 @@ class _WritingPracticeScreenState extends State<WritingPracticeScreen> {
                 child: Row(
                   children: [
                     IconButton(
+                      tooltip: 'もどる / Back',
                       icon: const Icon(Icons.arrow_back, color: dqInk),
                       onPressed: () => Navigator.of(context).pop(),
                     ),

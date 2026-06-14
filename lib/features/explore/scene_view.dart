@@ -554,6 +554,7 @@ class _SceneViewState extends State<SceneView> {
         child: Row(
           children: [
             IconButton(
+              tooltip: 'もどる / Back',
               onPressed: _popScene,
               icon: const Icon(Icons.arrow_back, color: dqInk),
             ),

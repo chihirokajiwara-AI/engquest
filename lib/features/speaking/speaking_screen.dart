@@ -338,6 +338,7 @@ class _SpeakingScreenState extends State<SpeakingScreen>
       child: Row(
         children: [
           IconButton(
+            tooltip: 'もどる / Back',
             icon: const Icon(Icons.arrow_back, color: dqInk),
             onPressed: () => Navigator.maybePop(context),
           ),

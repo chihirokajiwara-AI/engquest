@@ -117,6 +117,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
       child: Row(
         children: [
           IconButton(
+            tooltip: 'もどる / Back',
             icon: const Icon(Icons.arrow_back, color: dqInk),
             onPressed: () => Navigator.pop(context),
           ),

@@ -26,6 +26,7 @@ class TermsOfServiceScreen extends StatelessWidget {
         iconTheme: const IconThemeData(color: Colors.white),
         leading: showCloseButton
             ? IconButton(
+                tooltip: 'とじる / Close',
                 icon: const Icon(Icons.close),
                 onPressed: () => Navigator.of(context).pop(),
               )

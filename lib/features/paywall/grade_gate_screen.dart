@@ -112,6 +112,7 @@ class _GradeGateScreenState extends State<GradeGateScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
+          tooltip: 'もどる / Back',
           icon: Icon(
             Icons.arrow_back,
             color: colorScheme.onSurface,

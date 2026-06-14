@@ -28,6 +28,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
         iconTheme: const IconThemeData(color: Color(0xFF263238)),
         leading: showCloseButton
             ? IconButton(
+                tooltip: 'とじる / Close',
                 icon: const Icon(Icons.close),
                 onPressed: () => Navigator.of(context).pop(),
               )

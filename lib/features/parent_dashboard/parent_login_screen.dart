@@ -211,6 +211,7 @@ class _ParentLoginScreenState extends State<ParentLoginScreen>
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
+          tooltip: 'もどる / Back',
           icon: const Icon(Icons.arrow_back, color: Color(0xFF263238)),
           onPressed: () => Navigator.of(context).pop(),
         ),

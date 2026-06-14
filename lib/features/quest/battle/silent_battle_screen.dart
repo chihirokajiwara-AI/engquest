@@ -229,6 +229,7 @@ class _SilentBattleScreenState extends State<SilentBattleScreen> {
     return Row(
       children: [
         IconButton(
+          tooltip: 'もどる / Back',
           onPressed: () => Navigator.of(context).maybePop(),
           icon: const Icon(Icons.arrow_back, color: dqInk),
         ),
