@@ -37,6 +37,26 @@ void main() {
     });
   });
 
+  group('nextChapterTitleJa (episodic forward-pull, N6/N12)', () {
+    test('returns the NEXT chapter title in play order', () {
+      expect(nextChapterTitleJa('5'), kTown4Scene.titleJa);
+      expect(nextChapterTitleJa('pre2'), kTownPre2PlusScene.titleJa);
+    });
+
+    test('the final chapter (準1級) has no next → null (arc finale instead)', () {
+      expect(nextChapterTitleJa('pre1'), isNull);
+    });
+
+    test('an unknown grade has no next → null', () {
+      expect(nextChapterTitleJa('zzz'), isNull);
+    });
+
+    test('chapter order matches the 事件簿 order (no drift)', () {
+      expect(kChapterGradeOrder, kCaseLogGradeOrder,
+          reason: 'the scene-clear teaser and the 事件簿 must agree on order');
+    });
+  });
+
   group('isChapterCleared', () {
     final npcIdx = [
       for (var i = 0; i < kTown5Scene.hotspots.length; i++)

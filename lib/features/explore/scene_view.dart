@@ -488,6 +488,26 @@ class _SceneViewState extends State<SceneView> {
                 style: dqText(size: 11, color: dqGold.withAlpha(220))
                     .copyWith(height: 1.5),
               ),
+              // Episodic forward-pull (N6/N12): name the NEXT case so the chapter
+              // doesn't end in a vacuum — Layton's "to be continued" hook. On the
+              // final chapter (準1級) tease nothing; close the arc instead. Purely
+              // narrative — it does NOT navigate (the paywall still gates entry).
+              ...(() {
+                final next = nextChapterTitleJa(widget.eikenLevel);
+                return [
+                  const SizedBox(height: 12),
+                  Text(
+                    next != null
+                        ? '🗺️ どこかで、また ことばが きえはじめた——\n'
+                            'つぎの事件（じけん）：「$next」が きみを まっている。'
+                        : '🕯️ すべての事件（じけん）が つながった。\n'
+                            'やぶれた おはなしの さいごの 1ページへ——「じけんぼ」で たしかめよう。',
+                    textAlign: TextAlign.center,
+                    style: dqText(size: 11.5, color: dqInk.withAlpha(210))
+                        .copyWith(height: 1.5),
+                  ),
+                ];
+              })(),
               const SizedBox(height: 16),
               DqButton(
                 label: 'つづける',

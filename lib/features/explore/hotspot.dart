@@ -1454,3 +1454,27 @@ final Map<String, SceneDef> kScenesByGrade = {
 /// Returns the painted scene for [grade], or null when that grade has no scene
 /// yet (caller should route to the level-select map instead).
 SceneDef? sceneForGrade(String grade) => kScenesByGrade[grade];
+
+/// The 7 案件 (chapters) in canonical play order, edge→centre (5級→準1級). The
+/// 事件簿 ([kCaseLogGradeOrder]) mirrors this; a drift test keeps them identical.
+const List<String> kChapterGradeOrder = [
+  '5',
+  '4',
+  '3',
+  'pre2',
+  'pre2plus',
+  '2',
+  'pre1',
+];
+
+/// The title of the NEXT chapter's scene after [grade] in play order, for the
+/// "to be continued" forward-pull on a chapter-clear (episodic narrative hook —
+/// NARRATIVE-PRODUCER-RUBRIC N6/N12). Returns null when [grade] is the final
+/// chapter (準1級) or is not a known chapter — the caller then shows the arc
+/// finale instead of teasing a non-existent next case. Purely a narrative tease:
+/// it names the next town, it does NOT navigate (the paywall still gates entry).
+String? nextChapterTitleJa(String grade) {
+  final i = kChapterGradeOrder.indexOf(grade);
+  if (i < 0 || i + 1 >= kChapterGradeOrder.length) return null;
+  return kScenesByGrade[kChapterGradeOrder[i + 1]]?.titleJa;
+}
