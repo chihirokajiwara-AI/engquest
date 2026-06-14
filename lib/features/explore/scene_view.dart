@@ -1061,25 +1061,39 @@ class _SceneViewState extends State<SceneView> {
     return Container(
       width: size,
       height: size,
-      clipBehavior: Clip.antiAlias,
-      decoration: const BoxDecoration(shape: BoxShape.circle),
-      child: Image.asset(
-        asset,
-        fit: BoxFit.cover,
-        // Decode at ~3× the display size (covers high-DPR) instead of the WebP's
-        // native 525×768 — the portrait renders in a 52–96px circle, so the full
-        // decode wasted ~5-10× GPU/heap per NPC over a long explore session
-        // (flaw-hunt R7; sibling of #131).
-        cacheWidth: (size * 3).round().clamp(1, 1600),
-        cacheHeight: (size * 3).round().clamp(1, 1600),
-        errorBuilder: (_, __, ___) => Container(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: dqBox.withAlpha(200),
-            border: Border.all(color: dqGold, width: 2),
+      // Ground the portrait as a framed 探偵 case-file medallion in the scene,
+      // not a raw cut-out pasted on the painting (composition audit, CEO 1629):
+      // a soft drop-shadow lifts it off the background and a thin gold rim defines
+      // a clean edge + signals "tappable". The coin target and the no-art fallback
+      // already carry this framing — only the real-art portrait lacked it, so it
+      // read as a sticker. ClipOval keeps the image circular under the shadow
+      // (a clipping Container would swallow the boxShadow).
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(color: dqGold.withAlpha(170), width: 2),
+        boxShadow: const [
+          BoxShadow(color: Colors.black54, blurRadius: 8, offset: Offset(0, 2)),
+        ],
+      ),
+      child: ClipOval(
+        child: Image.asset(
+          asset,
+          fit: BoxFit.cover,
+          // Decode at ~3× the display size (covers high-DPR) instead of the WebP's
+          // native 525×768 — the portrait renders in a 52–96px circle, so the full
+          // decode wasted ~5-10× GPU/heap per NPC over a long explore session
+          // (flaw-hunt R7; sibling of #131).
+          cacheWidth: (size * 3).round().clamp(1, 1600),
+          cacheHeight: (size * 3).round().clamp(1, 1600),
+          errorBuilder: (_, __, ___) => Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: dqBox.withAlpha(200),
+              border: Border.all(color: dqGold, width: 2),
+            ),
+            child:
+                const Center(child: Text('👤', style: TextStyle(fontSize: 28))),
           ),
-          child:
-              const Center(child: Text('👤', style: TextStyle(fontSize: 28))),
         ),
       ),
     );
