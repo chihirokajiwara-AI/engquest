@@ -477,6 +477,17 @@ class _SceneViewState extends State<SceneView> {
                   ),
                 ),
               ),
+              const SizedBox(height: 10),
+              // Tie the per-case payoff to the meta-mystery collectible: a 解決 ど
+              // restores one bookmark — point the child to the 事件簿 (Settings →
+              // じけんぼ) where the 7-bookmark sentence assembles (N1/N12 loop).
+              Text(
+                '🔖 ことばの しおりが、1まい もどった。\n'
+                '「じけんぼ」で、つながっていく おはなしを たしかめよう。',
+                textAlign: TextAlign.center,
+                style: dqText(size: 11, color: dqGold.withAlpha(220))
+                    .copyWith(height: 1.5),
+              ),
               const SizedBox(height: 16),
               DqButton(
                 label: 'つづける',
