@@ -1478,64 +1478,74 @@ class _GradeButtonState extends State<_GradeButton>
     final interval = _intervalLabel();
     // A DQ command-window tile: cream-bordered navy fill, an accent dot for the
     // grade, bilingual JP/EN label, and the FSRS next-interval underneath.
-    return GestureDetector(
-      onTapDown: (_) => _scaleCtrl.forward(),
-      onTapUp: (_) {
-        _scaleCtrl.reverse();
-        widget.onTap();
-      },
-      onTapCancel: () => _scaleCtrl.reverse(),
-      child: AnimatedBuilder(
-        animation: _scaleAnim,
-        builder: (context, child) => Transform.scale(
-          scale: _scaleAnim.value,
-          child: child,
-        ),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
-          decoration: BoxDecoration(
-            color: dqBox.withAlpha(225),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: dqBorder, width: 2),
-            boxShadow: const [
-              BoxShadow(
-                  color: Colors.black54, blurRadius: 6, offset: Offset(0, 3)),
-            ],
+    // a11y: the recall-grade buttons are how the child completes a card — without
+    // Semantics a screen-reader child can flip the card but can't RATE it, so the
+    // loop is still blocked. Expose each as a button announcing the grade + the
+    // FSRS next-interval; onTap gives assistive tech the activation path.
+    return Semantics(
+      button: true,
+      label: '${_gradeJp(widget.grade)} ${widget.grade.label}。つぎは $interval',
+      onTap: widget.onTap,
+      excludeSemantics: true,
+      child: GestureDetector(
+        onTapDown: (_) => _scaleCtrl.forward(),
+        onTapUp: (_) {
+          _scaleCtrl.reverse();
+          widget.onTap();
+        },
+        onTapCancel: () => _scaleCtrl.reverse(),
+        child: AnimatedBuilder(
+          animation: _scaleAnim,
+          builder: (context, child) => Transform.scale(
+            scale: _scaleAnim.value,
+            child: child,
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 12,
-                height: 12,
-                decoration: BoxDecoration(
-                  color: widget.accent,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: dqBorder, width: 1),
-                  boxShadow: [
-                    BoxShadow(
-                        color: widget.accent.withAlpha(120), blurRadius: 6)
-                  ],
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
+            decoration: BoxDecoration(
+              color: dqBox.withAlpha(225),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: dqBorder, width: 2),
+              boxShadow: const [
+                BoxShadow(
+                    color: Colors.black54, blurRadius: 6, offset: Offset(0, 3)),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 12,
+                  height: 12,
+                  decoration: BoxDecoration(
+                    color: widget.accent,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: dqBorder, width: 1),
+                    boxShadow: [
+                      BoxShadow(
+                          color: widget.accent.withAlpha(120), blurRadius: 6)
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 6),
-              Text(
-                _gradeJp(widget.grade),
-                style: dqText(size: 12, w: FontWeight.w800, color: dqInk),
-                textAlign: TextAlign.center,
-              ),
-              Text(
-                widget.grade.label,
-                style: dqText(
-                    size: 9, w: FontWeight.w600, color: dqGold, spacing: 0.8),
-              ),
-              const SizedBox(height: 3),
-              Text(
-                interval,
-                style: dqText(size: 9, color: dqGoldDeep),
-                textAlign: TextAlign.center,
-              ),
-            ],
+                const SizedBox(height: 6),
+                Text(
+                  _gradeJp(widget.grade),
+                  style: dqText(size: 12, w: FontWeight.w800, color: dqInk),
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  widget.grade.label,
+                  style: dqText(
+                      size: 9, w: FontWeight.w600, color: dqGold, spacing: 0.8),
+                ),
+                const SizedBox(height: 3),
+                Text(
+                  interval,
+                  style: dqText(size: 9, color: dqGoldDeep),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
           ),
         ),
       ),
