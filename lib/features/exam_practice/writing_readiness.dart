@@ -400,8 +400,9 @@ WritingReadiness evaluateWritingReadiness(WritingPrompt prompt, String text) {
       checks.add(WritingCheck(
         id: 'email_asks_two',
         kind: WritingCheckKind.hint,
-        status:
-            questionCount >= 2 ? WritingCheckStatus.ok : WritingCheckStatus.warn,
+        status: questionCount >= 2
+            ? WritingCheckStatus.ok
+            : WritingCheckStatus.warn,
         labelJa: '質問を 2つ したか（目安）',
         detailJa: questionCount >= 2
             ? '「?」で おわる 質問が $questionCount 個 あります。'
