@@ -24,4 +24,23 @@ void main() {
               'never persist. Fix the id or widen the rule (keep them in sync).');
     }
   });
+
+  // Reward-runway depth: a committed learner used to exhaust each category early
+  // (streak capped at 10, mastery at 200, level at 5) and then had nothing left
+  // to chase — a retention dead-end. Lock an aspirational top tier per category
+  // so a future refactor can't silently shrink the runway. Grounded in 2026
+  // retention practice (e.g. Duolingo's first Streak-Society milestone = 30 days).
+  test('each category keeps an aspirational top tier (reward runway)', () {
+    int topTarget(AchievementCategory c) => kAchievements
+        .where((d) => d.category == c)
+        .map((d) => d.target)
+        .fold(0, (a, b) => a > b ? a : b);
+
+    expect(topTarget(AchievementCategory.streak), greaterThanOrEqualTo(30),
+        reason: 'a month-long streak milestone anchors the daily-return habit');
+    expect(topTarget(AchievementCategory.mastery), greaterThanOrEqualTo(500),
+        reason: 'grades carry 1,300–3,000 words; 200 ran out too early');
+    expect(topTarget(AchievementCategory.level), greaterThanOrEqualTo(10),
+        reason: 'XP progression must stay rewarding past the early game');
+  });
 }

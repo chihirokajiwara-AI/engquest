@@ -140,6 +140,19 @@ const List<AchievementDef> kAchievements = [
     target: 200,
     gradient: [Color(0xFFFF8F00), Color(0xFFE65100)],
   ),
+  // Aspirational top tier: 200 was the ceiling, so a committed learner ran out
+  // of mastery milestones long before finishing a grade (3級=1,300 words,
+  // 準1級=3,000). 500 keeps the reward runway open for serious study.
+  AchievementDef(
+    id: 'mastery_500',
+    titleJa: 'ことばのレジェンド',
+    titleEn: 'Word Legend',
+    descriptionJa: '500個の単語をマスターしよう',
+    icon: Icons.diamond,
+    category: AchievementCategory.mastery,
+    target: 500,
+    gradient: [Color(0xFF26C6DA), Color(0xFF00838F)],
+  ),
 
   // ── Streak ──
   AchievementDef(
@@ -171,6 +184,20 @@ const List<AchievementDef> kAchievements = [
     category: AchievementCategory.streak,
     target: 10,
     gradient: [Color(0xFFD50000), Color(0xFF9B0000)],
+  ),
+  // 1-month streak — the established next retention milestone after a week/10
+  // days (2026 practice: Duolingo's first Streak-Society tier is 30 days). The
+  // streak category previously capped at 10, so daily returners had nothing left
+  // to chase; a month-long goal is a far stronger habit anchor.
+  AchievementDef(
+    id: 'streak_30',
+    titleJa: '30日のヒーロー',
+    titleEn: 'Month Hero',
+    descriptionJa: '30日連続で練習しよう',
+    icon: Icons.auto_awesome,
+    category: AchievementCategory.streak,
+    target: 30,
+    gradient: [Color(0xFFFF6F00), Color(0xFFB71C1C)],
   ),
 
   // ── Practice ──
@@ -225,6 +252,18 @@ const List<AchievementDef> kAchievements = [
     category: AchievementCategory.level,
     target: 5,
     gradient: [Color(0xFFFFA726), Color(0xFFF57C00)],
+  ),
+  // Level 5 was the ceiling; a higher tier keeps XP progression rewarding past
+  // the early game.
+  AchievementDef(
+    id: 'level_10',
+    titleJa: 'レベル10到達',
+    titleEn: 'Level 10',
+    descriptionJa: 'レベル10に到達しよう',
+    icon: Icons.military_tech,
+    category: AchievementCategory.level,
+    target: 10,
+    gradient: [Color(0xFFFFD54F), Color(0xFFFF8F00)],
   ),
 ];
 
