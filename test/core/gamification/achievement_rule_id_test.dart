@@ -43,4 +43,40 @@ void main() {
     expect(topTarget(AchievementCategory.level), greaterThanOrEqualTo(10),
         reason: 'XP progression must stay rewarding past the early game');
   });
+
+  // Capstone = the top tier of a category; its unlock celebration is amplified
+  // (proportional reward). The newly-added top tiers must register as capstones,
+  // and an early badge must NOT — else a 30-day streak feels like a 3-day one.
+  group('isCapstoneAchievement (proportional reward)', () {
+    AchievementDef byId(String id) =>
+        kAchievements.firstWhere((d) => d.id == id);
+
+    test('the top tier of each category is a capstone', () {
+      for (final id in [
+        'streak_30',
+        'mastery_500',
+        'level_10',
+        'practice_500'
+      ]) {
+        expect(isCapstoneAchievement(byId(id)), isTrue,
+            reason: '$id is a top tier');
+      }
+    });
+
+    test('an early/mid badge is NOT a capstone', () {
+      for (final id in ['streak_3', 'mastery_10', 'level_3', 'practice_50']) {
+        expect(isCapstoneAchievement(byId(id)), isFalse,
+            reason: '$id is not the category top tier');
+      }
+    });
+
+    test('exactly one capstone per category', () {
+      for (final c in AchievementCategory.values) {
+        final caps = kAchievements
+            .where((d) => d.category == c && isCapstoneAchievement(d))
+            .length;
+        expect(caps, 1, reason: 'category $c should have a single capstone');
+      }
+    });
+  });
 }

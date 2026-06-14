@@ -274,3 +274,18 @@ AchievementDef? achievementDefById(String id) {
   }
   return null;
 }
+
+/// True when [def] is the highest-target achievement in its category — the
+/// "capstone" a learner works toward last (e.g. the 30-day streak, the 500-word
+/// mastery). The unlock celebration amplifies these so a major milestone FEELS
+/// bigger than an early one, instead of every badge landing identically. Pure +
+/// public so the magnitude rule is unit-tested.
+bool isCapstoneAchievement(AchievementDef def) {
+  var maxTarget = 0;
+  for (final d in kAchievements) {
+    if (d.category == def.category && d.target > maxTarget) {
+      maxTarget = d.target;
+    }
+  }
+  return def.target > 0 && def.target == maxTarget;
+}

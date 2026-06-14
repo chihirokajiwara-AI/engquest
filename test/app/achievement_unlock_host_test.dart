@@ -72,4 +72,20 @@ void main() {
     expect(find.text('バッジ獲得！'), findsOneWidget);
     expect(find.textContaining('個のバッジも獲得'), findsNothing);
   });
+
+  // Proportional reward: a CAPSTONE (top-tier) unlock amplifies the celebration —
+  // a distinct「だいきろく」header + a special subline — so a 30-day streak does
+  // NOT land identically to a 3-day one.
+  testWidgets('a capstone unlock shows the amplified milestone celebration',
+      (t) async {
+    await t.pumpWidget(host());
+    AchievementService.unlockEvents.value = const ['streak_30'];
+    await t.pump();
+    await t.pump(const Duration(milliseconds: 300));
+
+    expect(find.text('✨ だいきろく たっせい！'), findsOneWidget);
+    expect(find.text('バッジ獲得！'), findsNothing,
+        reason: 'a capstone uses the amplified header, not the default one');
+    expect(find.text('とくべつな バッジを てにいれた！'), findsOneWidget);
+  });
 }

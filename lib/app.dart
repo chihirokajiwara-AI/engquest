@@ -1326,6 +1326,12 @@ class _AchievementUnlockHostState extends State<AchievementUnlockHost>
   Widget _banner(AchievementDef def, int count, double t, bool reduceMotion) {
     final appear = celebrationBannerAppear(t, reduceMotion: reduceMotion);
     final fade = t < 0.82 ? 1.0 : (1.0 - (t - 0.82) / 0.18).clamp(0.0, 1.0);
+    // Proportional reward: a capstone (the top tier a learner works toward last —
+    // 30-day streak, 500 words) FEELS bigger than an early badge, instead of
+    // every unlock landing identically. Bigger badge + a distinct「だいきろく」
+    // header + a special subline; an early badge keeps the calm default.
+    final isCapstone = isCapstoneAchievement(def);
+    final badgeSize = isCapstone ? 80.0 : 64.0;
     return Material(
       type: MaterialType.transparency,
       child: Center(
@@ -1341,9 +1347,9 @@ class _AchievementUnlockHostState extends State<AchievementUnlockHost>
                 children: [
                   Center(
                     child: dqBilingual(
-                      'バッジ獲得！',
-                      'BADGE EARNED',
-                      jpSize: 20,
+                      isCapstone ? '✨ だいきろく たっせい！' : 'バッジ獲得！',
+                      isCapstone ? 'MAJOR MILESTONE' : 'BADGE EARNED',
+                      jpSize: isCapstone ? 22 : 20,
                       jpColor: dqGold,
                       stacked: true,
                       align: TextAlign.center,
@@ -1351,14 +1357,17 @@ class _AchievementUnlockHostState extends State<AchievementUnlockHost>
                   ),
                   const SizedBox(height: 16),
                   Container(
-                    width: 64,
-                    height: 64,
+                    width: badgeSize,
+                    height: badgeSize,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       gradient: LinearGradient(colors: def.gradient),
-                      border: Border.all(color: dqBorder, width: 2),
+                      border: Border.all(
+                          color: isCapstone ? dqGold : dqBorder,
+                          width: isCapstone ? 3 : 2),
                     ),
-                    child: Icon(def.icon, color: Colors.white, size: 32),
+                    child: Icon(def.icon,
+                        color: Colors.white, size: isCapstone ? 40 : 32),
                   ),
                   const SizedBox(height: 14),
                   Text(def.titleJa,
@@ -1369,6 +1378,13 @@ class _AchievementUnlockHostState extends State<AchievementUnlockHost>
                   Text(def.descriptionJa,
                       textAlign: TextAlign.center,
                       style: dqText(size: 14, color: dqInk)),
+                  if (isCapstone) ...[
+                    const SizedBox(height: 8),
+                    Text('とくべつな バッジを てにいれた！',
+                        textAlign: TextAlign.center,
+                        style: dqText(
+                            size: 12, w: FontWeight.w700, color: dqGoldDeep)),
+                  ],
                   if (count > 1) ...[
                     const SizedBox(height: 8),
                     Text('+${count - 1}個のバッジも獲得！',
