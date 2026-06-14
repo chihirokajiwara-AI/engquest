@@ -97,11 +97,18 @@ void main() {
   // + 会話空所 + 語句整序 + 長文内容一致). SETTLED grades 5/4/3 are locked here, plus
   // 準1級 (#137): 大問1=18 + 大問2=6 + 大問3=7 = 31, matching the official post-2024
   // count — 大問3 was a stale 10 (over-stating the section); fixing it to 7 settled
-  // the pre1 total. 準2級〜2級 reading sections still sum off official pending content
-  // re-author (#60/#108), tracked by mock_exam/reading-pool targets, not pinned here.
+  // the pre1 total. 準2級 is now ALSO pinned: Task#32 added the missing 大問3
+  // 長文の語句空所補充 (2 blanks, post-2024 reform), so 準2 sums to the official
+  // 15+5+2+7=29. (2級/準2プラス still pending their own content re-author, #108.)
   // 4級 was a stale 30 (大問4=5) — this guard would have caught it.
-  // Verified eiken.or.jp: 5級=25, 4級=35, 3級=30, 準1級=31 (post-2024). 2026-06-11.
-  const readingTotal = <String, int>{'5': 25, '4': 35, '3': 30, 'pre1': 31};
+  // Verified eiken.or.jp: 5級=25, 4級=35, 3級=30, 準2級=29, 準1級=31 (post-2024). 2026-06-14.
+  const readingTotal = <String, int>{
+    '5': 25,
+    '4': 35,
+    '3': 30,
+    'pre2': 29,
+    'pre1': 31,
+  };
   const readingTypes = {
     ExamSectionType.vocabGrammar,
     ExamSectionType.conversationComplete,
@@ -121,5 +128,21 @@ void main() {
           reason: '英検${entry.key} 筆記 reading total should be ${entry.value}問 '
               '(大問1〜4). 4級 was a stale 30 (大問4 was 5, should be 10).');
     }
+  });
+
+  // #60/Task#32: the 準2級 大問3 長文の語句空所補充 used to be MISSING — the config
+  // went vocab→conv→内容一致, skipping a whole 大問 a real test has. Lock that it
+  // exists with the post-2024-reform count (2 blanks; 大問3B 設問28-30 was removed).
+  test('準2級 has the 大問3 長文の語句空所補充 section (2 blanks, post-reform)', () {
+    final pre2 = kEikenExams['pre2']!;
+    final fillIn =
+        pre2.sections.where((s) => s.nameJa.contains('長文の語句空所補充')).toList();
+    expect(fillIn, hasLength(1),
+        reason: '準2 大問3 長文の語句空所補充 missing — a whole 大問 was unpracticeable');
+    expect(fillIn.first.questionCount, 2,
+        reason: 'post-2024 reform 準2 大問3 = 2 blanks (大問3B 設問28-30 removed)');
+    expect(fillIn.first.id, 'pre2_r3',
+        reason:
+            'sectionId drives the _pre2FillIn passage in the reading screen');
   });
 }

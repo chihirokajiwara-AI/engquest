@@ -387,7 +387,10 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
 
   bool get _isPassageFillIn {
     final id = widget.section.id;
-    return id == '2_r2' || id == 'p1_r2';
+    // All 長文の語句空所補充 (passage cloze) sections — drives the '長文語句空所補充'
+    // title. 'p2p_r2' was missing here (a pre-existing title-label bug: 準2プラス
+    // fill-in showed '長文読解'); 'pre2_r3' is the new 準2 大問3 (Task#32).
+    return id == 'pre2_r3' || id == 'p2p_r2' || id == '2_r2' || id == 'p1_r2';
   }
 
   @override
@@ -817,7 +820,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
   // ── Passage banks ─────────────────────────────────────────────────────────
 
   static List<_ReadingPassage> _getPassages(String grade, String sectionId) {
-    // Passage fill-in sections (準2級プラス / Grade 2 / Pre-1)
+    // Passage fill-in sections (準2級 / 準2級プラス / Grade 2 / Pre-1)
+    if (sectionId == 'pre2_r3') return _pre2FillIn;
     if (sectionId == 'p2p_r2') return _pre2PlusFillIn;
     if (sectionId == '2_r2') return _grade2FillIn;
     if (sectionId == 'p1_r2') return _pre1FillIn;
@@ -1747,6 +1751,41 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // 準2級 (A2–B1) — 大問3 長文の語句空所補充 (passage cloze).  #60/Task#32: the
+  // config previously SKIPPED 大問3 entirely (vocab→conv→内容一致). The 2024 reform
+  // (eiken.or.jp 2024renewal, verified 2026-06-14) removed 大問3B (設問28-30, −3),
+  // leaving 大問3 = ONE short passage with TWO blanks (29 = 15+5+2+7). NOT the
+  // pre-reform [A]2+[B]3=5 (that ei-navi description is stale). content-qa 2026-06-14.
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  static const _pre2FillIn = [
+    // One short daily-episode passage, 2 blanks (post-2024-reform format).
+    _ReadingPassage(
+      title: "Mika's Photographs",
+      type: 'story',
+      content:
+          'Last month, Mika started taking photographs of the flowers in her '
+          'neighborhood. At first, her pictures were not very good, but she did '
+          'not give up. She watched videos online to learn ( 1 ) to use her '
+          'camera better. After many weeks of practice, her photos became '
+          'beautiful. Her friends were so ( 2 ) with them that they asked her to '
+          'teach them, too.',
+      questions: [
+        _ComprehensionQuestion(
+          question: 'Which word best fits in blank ( 1 )?',
+          choices: ['how', 'what', 'which', 'where'],
+          correctIdx: 0,
+          explanation: '「how to ＋ 動詞の原形」で「〜の仕方」。カメラの「使い方」を学んだ流れ。',
+        ),
+        _ComprehensionQuestion(
+          question: 'Which word best fits in blank ( 2 )?',
+          choices: ['bored', 'impressed', 'angry', 'careful'],
+          correctIdx: 1,
+          explanation: '写真が上達し、友達は「感心した」。be impressed with 〜 で「〜に感心する」。',
+        ),
+      ],
+    ),
+  ];
+
   // 準2級プラス (A2–B1) — 大問2 長文の語句空所補充 (passage cloze)
   // Closes the standalone 準備中 gap: pre2plus reading was mock-only before.
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

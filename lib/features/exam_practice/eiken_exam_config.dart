@@ -248,12 +248,10 @@ const Map<String, EikenExamDef> kEikenExams = {
         nameJa: '筆記1: 短文の語句空所補充',
         nameEn: 'Reading 1: Vocabulary/Grammar',
         type: ExamSectionType.vocabGrammar,
-        // 2024 reform: 準2級 大問1 cut 20→15 (reading total 37→29; the 長文空所
-        // 大問3 also dropped 5→2). The stale 20 was the pre-reform value — it
-        // over-served the vocab screen and contradicted this app's own mock
-        // reading target (29 = 15+5+2+7). Verified eiken.or.jp grade_p2 +
-        // eslclub 2024renewal, 2026-06-09. (The missing 長文空所=2 section is a
-        // separate #60 structural re-author.)
+        // 2024 reform: 準2級 大問1 cut 20→15 (reading total 37→29; 大問3B 長文空所
+        // dropped −3 → 大問3 is now 2 blanks). Verified eiken.or.jp 2024renewal +
+        // eslclub, 2026-06-09/14. 29 = 15(大問1)+5(大問2)+2(大問3 語句空所)+7(大問4
+        // 内容一致). The 大問3 長文空所 section below resolves the long-open #60 gap.
         questionCount: 15,
         timeLimitMinutes: 12,
         description: '短い文の空所に入る適切な語句を4つの選択肢から選ぶ',
@@ -268,9 +266,21 @@ const Map<String, EikenExamDef> kEikenExams = {
         description: '会話の空所に入る適切な文を4つの選択肢から選ぶ',
       ),
       ExamSection(
+        // #60/Task#32: the missing 大問3. content = _pre2FillIn in
+        // reading_practice_screen (sectionId 'pre2_r3'). Post-2024-reform = one
+        // short passage, 2 blanks (大問3B 設問28-30 was removed).
+        id: 'pre2_r3',
+        nameJa: '筆記3: 長文の語句空所補充',
+        nameEn: 'Reading 3: Passage Cloze',
+        type: ExamSectionType.readingComprehension,
+        questionCount: 2,
+        timeLimitMinutes: 8,
+        description: '短い長文の空所2か所に入る適切な語句を選ぶ（2024年改定後）',
+      ),
+      ExamSection(
         id: 'p2_r3',
-        nameJa: '筆記3: 長文の内容一致選択',
-        nameEn: 'Reading 3: Reading Comprehension',
+        nameJa: '筆記4: 長文の内容一致選択',
+        nameEn: 'Reading 4: Reading Comprehension',
         type: ExamSectionType.readingComprehension,
         questionCount: 7,
         timeLimitMinutes: 20,
@@ -278,7 +288,7 @@ const Map<String, EikenExamDef> kEikenExams = {
       ),
       ExamSection(
         id: 'p2_w1',
-        nameJa: '筆記4: ライティング（Eメール＋意見）',
+        nameJa: '筆記5: ライティング（Eメール＋意見）',
         nameEn: 'Writing: Email + Opinion',
         type: ExamSectionType.writing,
         questionCount: 2,
