@@ -14,6 +14,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../core/audio/audio_cue_service.dart';
 import '../../core/gamification/hint_coin_service.dart';
@@ -85,6 +86,17 @@ bool allNpcsSolved(SceneDef scene, Map<int, bool> solved) {
   return (solved: done, total: total);
 }
 
+/// Scene saturation earned by progress: the muted [floor] when nothing is solved,
+/// rising linearly to full colour (1.0) as [solved]/[total] reaches 1 — so every
+/// ナゾ restored floods a little more colour in rather than one terminal flip.
+/// [total] <= 0 (a scene with no ナゾ) → already fully alive (1.0). Pure + public
+/// so the "world wakes up as you solve" formula is unit-tested.
+double progressiveSaturation(int solved, int total, double floor) {
+  if (total <= 0) return 1.0;
+  final frac = (solved / total).clamp(0.0, 1.0);
+  return floor + frac * (1.0 - floor);
+}
+
 class SceneView extends StatefulWidget {
   final SceneDef scene;
 
@@ -120,9 +132,22 @@ class _SceneViewState extends State<SceneView> {
   double _parallaxOffset = 0.0;
   static const _parallaxMaxShift = 0.04; // fraction of container width
 
-  /// Saturation of an unsolved scene — muted "the world lost its words" grade,
-  /// NOT dead grey (s=0 reads as a broken image). Floods to 1.0 on chapter clear.
-  static const _kMutedSaturation = 0.35;
+  /// Saturation FLOOR of an unsolved scene — muted "the world lost its words"
+  /// grade, NOT dead grey (s=0 reads as a broken image). Raised 0.35→0.48 (studio
+  /// art-direction): 0.35 read as washed-out/broken; 0.48 is unmistakably an
+  /// intentional "under-the-spell" grade while still leaving a felt colour gain.
+  static const _kMutedSaturation = 0.48;
+
+  /// Progressive saturation: the village regains colour as EACH ナゾ is solved,
+  /// not in one terminal all-or-nothing flip — every restored word brings the
+  /// world a bit back to life ("ことばで世界に色が戻る"). This was the convergent #1
+  /// recommendation of three studio experts (exploration, game-feel, art): the
+  /// app's defining verb becomes a felt, incremental reward arc. Floor = muted;
+  /// reaches full colour (1.0) only when every ナゾ is solved. No ナゾ → already alive.
+  double get _targetSaturation {
+    final p = nazoProgress(widget.scene, _solved);
+    return progressiveSaturation(p.solved, p.total, _kMutedSaturation);
+  }
 
   /// Whether the スラ companion arrival banner is currently visible.
   /// True on entry when [SceneDef.companionArrivalJa] is present; set to false
@@ -341,6 +366,14 @@ class _SceneViewState extends State<SceneView> {
   /// kQuestTowns is shown verbatim (G2). A generic fallback covers scenes
   /// whose SceneDef has no authored cleared text.
   void _showSceneClearedPayoff() {
+    // Multi-sensory "case closed" payoff for the moment the village fully wakes
+    // up — the colour-flood used to land in SILENCE (studio game-feel/art
+    // convergence: the app's biggest moment had no audio/haptic punctuation).
+    // The fanfare is mute-gated inside SoundService; the haptic respects
+    // reduce-motion (a heavy buzz is a motion cue for sensitive users).
+    _sound.playLevelUp();
+    if (!prefersReducedMotion(context)) HapticFeedback.heavyImpact();
+
     // Authored story beat sourced from kQuestTowns[n].cleared via SceneDef.
     // Generic fallback for any scene that has no authored cleared text yet.
     final storyBeat = widget.scene.cleared ??
@@ -520,13 +553,15 @@ class _SceneViewState extends State<SceneView> {
                   // very defect class the CEO flagged). A muted "under-the-spell"
                   // grade is unmistakably intentional and the colour-flood payoff
                   // still lands. Restored → full colour.
+                  // Progressive: animates to the saturation earned by the ナゾ
+                  // solved so far — each solve floods a little more colour in.
                   tween: Tween<double>(
                     begin: _kMutedSaturation,
-                    end: _sceneRestored ? 1.0 : _kMutedSaturation,
+                    end: _targetSaturation,
                   ),
                   duration: prefersReducedMotion(context)
                       ? Duration.zero
-                      : const Duration(milliseconds: 2000),
+                      : const Duration(milliseconds: 1400),
                   curve: Curves.easeInOut,
                   builder: (context, sat, _) => ColorFiltered(
                     colorFilter: ColorFilter.matrix(saturationMatrix(sat)),

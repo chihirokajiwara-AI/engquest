@@ -105,4 +105,38 @@ void main() {
       expect(nazoProgress(kTown5Scene, {}).total, greaterThanOrEqualTo(2));
     });
   });
+
+  // The world wakes up as you solve (studio build 2026-06-14): saturation rises
+  // from the muted floor to full colour PER ナゾ, not in one terminal flip.
+  group('progressiveSaturation', () {
+    const floor = 0.48;
+
+    test('nothing solved → the muted floor', () {
+      expect(progressiveSaturation(0, 3, floor), closeTo(floor, 1e-9));
+    });
+
+    test('all solved → full colour (1.0)', () {
+      expect(progressiveSaturation(3, 3, floor), closeTo(1.0, 1e-9));
+    });
+
+    test('partial solve → between the floor and full, monotonic per solve', () {
+      final s0 = progressiveSaturation(0, 3, floor);
+      final s1 = progressiveSaturation(1, 3, floor);
+      final s2 = progressiveSaturation(2, 3, floor);
+      final s3 = progressiveSaturation(3, 3, floor);
+      expect(s1, greaterThan(s0));
+      expect(s2, greaterThan(s1));
+      expect(s3, greaterThan(s2));
+      // 1 of 3 solved → floor + 1/3 of the remaining gap.
+      expect(s1, closeTo(floor + (1 / 3) * (1 - floor), 1e-9));
+    });
+
+    test('a scene with no ナゾ is already fully alive', () {
+      expect(progressiveSaturation(0, 0, floor), 1.0);
+    });
+
+    test('clamps — never exceeds 1.0 even on bad counts', () {
+      expect(progressiveSaturation(5, 3, floor), lessThanOrEqualTo(1.0));
+    });
+  });
 }
