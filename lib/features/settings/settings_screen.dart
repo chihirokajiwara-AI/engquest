@@ -35,6 +35,7 @@ import 'package:engquest/features/paywall/grade_gate_screen.dart';
 import 'package:engquest/features/quest/ui/dq_ui.dart';
 import 'package:engquest/features/parent_dashboard/parent_login_screen.dart';
 import 'package:engquest/features/achievements/achievements_screen.dart';
+import 'package:engquest/features/explore/case_log_screen.dart';
 import 'package:engquest/features/quest/prologue_screen.dart';
 
 // ── Platform URL helpers ──────────────────────────────────────────────────────
@@ -388,6 +389,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 onTap: () => Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (_) => const AchievementsScreen(),
+                                  ),
+                                ),
+                              ),
+                              _divider(),
+                              // 事件簿 — re-read solved cases + the assembling
+                              // bookmark mystery (post-clear replayability, N12).
+                              DqTile(
+                                jp: 'じけんぼ',
+                                en: 'Case File',
+                                icon: Icons.menu_book_rounded,
+                                onTap: () => Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => const CaseLogScreen(),
                                   ),
                                 ),
                               ),
