@@ -25,9 +25,9 @@ modal. grey→colour restoration mechanic; assembling-bookmark mystery (5/7).
 
 | # | Dimension | Score | Bar(Layton) | scope | Gap to surpass |
 |---|---|---|---|---|---|
-|N1|Mystery structure (clue-plant→payoff)|78|70|now|STRONG: 7-bookmark sentence assembles across cases (5/7 shipped); centre→edge clue pays off at 準1. Finish 2級+準1.|
+|N1|Mystery structure (clue-plant→payoff)|86|70|now|✅ 7-bookmark sentence assembles END-TO-END across all 7 cases (37fba51) + centre→edge clue resolves at 準1 + アイラ name reveal. EXCEEDS Layton.|
 |N2|Puzzle↔narrative integration|80|70|now|Every 英検 solve restores colour + drips lore — the puzzle IS the story beat. Already > Layton (Layton puzzles are often detached).|
-|N3|Per-solve story drip|72|65|now|5/7 scenes; finish 2級(#6 "colour.")+準1(finale). Then 100% coverage.|
+|N3|Per-solve story drip|100|65|now|✅ DONE (37fba51): all 7 案件簿 drip per-solve lore; 100% coverage. EXCEEDS Layton.|
 |N4|Scene/chapter density|35|70|**gated**|1 scene/grade = 7 total. Layton = many chapters/case. Needs background art-gen at scale → CEO resource.|
 |N5|Per-character dialogue volume/voice|55|70|now|~1.5k chars/scene; スラ recurs but lines are thin. Deepen authored dialogue + voice consistency per recurring character (in-scope authoring).|
 |N6|Cutscene/beat density at peaks|45|70|partly|arrival + clear-modal only. Bible specifies T2 cutscene beats (Arrival/対決/解決). Add scripted beats (in-scope text/motion); full animation = gated.|
@@ -38,10 +38,12 @@ modal. grey→colour restoration mechanic; assembling-bookmark mystery (5/7).
 |N11|Audio immersion (voice/SFX/music)|40|70|**gated**|SFX wired; no character VO, no adaptive music. Needs audio/voice gen → CEO resource (ElevenLabs).|
 |N12|Replayability / post-clear content|30|60|now|no post-clear lore/secrets/NG+. Add post-clear hotspots + a case-log review (in-scope).|
 
-**Weighted narrative score ≈ 58/100** (Layton bar 70). We **exceed** Layton on
-puzzle↔narrative integration (N2) and match on mystery structure (N1) + opening
-(N9) — those are the levers to lean into. We are **far below** on scene density
-(N4), audio (N11), replayability (N12).
+**Weighted narrative score ≈ 62/100** (Layton bar 70; was 58 — N1+N3 shipped to
+完成 2026-06-14, 37fba51). We now **exceed** Layton on mystery structure (N1),
+puzzle↔narrative integration (N2), and per-solve story drip (N3). Next lowest
+in-scope levers: replayability (N12=30), cutscene beats (N6=45), dialogue
+volume/voice (N5=55). We remain **far below** on scene density (N4, gated) and
+audio (N11, gated).
 
 ## The honest answer to "when do we surpass Layton?"
 
