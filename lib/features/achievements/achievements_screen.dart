@@ -203,6 +203,10 @@ class _BadgeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final isUnlocked = state.unlocked;
     final progress = (state.progress / def.target).clamp(0.0, 1.0);
+    // Capstone (top tier of its category) carries a small ✨ so the gallery shows
+    // the aspirational goals distinctly — consistent with the amplified unlock
+    // celebration. Visible locked (a goal to chase) and unlocked (a prize).
+    final isCapstone = isCapstoneAchievement(def);
 
     // Unlocked: gold-framed navy panel that glows. Locked: dim navy, faded ink.
     final Color frame = isUnlocked ? dqGold : dqGoldDeep.withAlpha(90);
@@ -236,23 +240,49 @@ class _BadgeCard extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Icon medallion
-            Container(
-              width: 54,
-              height: 54,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: dqNight0,
-                border: Border.all(color: frame, width: 2),
-                boxShadow: isUnlocked
-                    ? [BoxShadow(color: dqGold.withAlpha(80), blurRadius: 10)]
-                    : null,
-              ),
-              child: Icon(
-                isUnlocked ? def.icon : Icons.lock_outline,
-                color: iconColor,
-                size: 26,
-              ),
+            // Icon medallion (+ capstone ✨ corner marker)
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Container(
+                  width: 54,
+                  height: 54,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: dqNight0,
+                    border: Border.all(color: frame, width: 2),
+                    boxShadow: isUnlocked
+                        ? [
+                            BoxShadow(
+                                color: dqGold.withAlpha(80), blurRadius: 10)
+                          ]
+                        : null,
+                  ),
+                  child: Icon(
+                    isUnlocked ? def.icon : Icons.lock_outline,
+                    color: iconColor,
+                    size: 26,
+                  ),
+                ),
+                if (isCapstone)
+                  Positioned(
+                    top: -4,
+                    right: -4,
+                    child: Container(
+                      padding: const EdgeInsets.all(2),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: dqNight0,
+                        border: Border.all(color: dqGold, width: 1.5),
+                      ),
+                      child: Icon(
+                        Icons.auto_awesome,
+                        size: 12,
+                        color: isUnlocked ? dqGold : dqGold.withAlpha(150),
+                      ),
+                    ),
+                  ),
+              ],
             ),
             const SizedBox(height: 10),
             // Bilingual title (JP)
