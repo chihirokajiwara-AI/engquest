@@ -1235,6 +1235,9 @@ final SceneDef kTown2Scene = SceneDef(
           'せんせいの ことばに、ていねいに 共感（きょうかん）する こたえを えらべ。',
       npcGreyAsset: 'assets/art/scenes_layton/npc_librarian_grey.webp',
       npcColorAsset: 'assets/art/scenes_layton/npc_librarian_color.webp',
+      // §3 lore drip — CH.6: クワイエ's arc — she wants to apologise.
+      mysteryFragmentJa: 'たんていメモ：クワイエが、ずっと だれかに あやまりたがっている。\n'
+          'ことばが もどれば、その きもちを つたえられる。',
     ),
     // やくにん — passive voice (idx 2): "The new library ___ by the city council."
     Hotspot.npc(
@@ -1249,6 +1252,9 @@ final SceneDef kTown2Scene = SceneDef(
           '「The new library ___ by the city council two years ago.」',
       npcGreyAsset: 'assets/art/scenes_layton/npc_captain_grey.webp',
       npcColorAsset: 'assets/art/scenes_layton/npc_captain_color.webp',
+      // §3 lore drip — CH.6: Clue #6 — the King and the First Speaker are ONE.
+      mysteryFragmentJa: 'たんていメモ：がくしゃたちの ぎろんから、ひとつの こたえが みえた。\n'
+          '「おうさま」と「さいしょに はなした ひと」は、おなじ ひと らしい。',
     ),
     // がくせい — relative pronoun who (idx 3)
     Hotspot.npc(
@@ -1264,6 +1270,9 @@ final SceneDef kTown2Scene = SceneDef(
           '「The professor ___ wrote this book is giving a lecture tonight.」',
       npcGreyAsset: 'assets/art/scenes_layton/npc_scholar_grey.webp',
       npcColorAsset: 'assets/art/scenes_layton/npc_scholar_color.webp',
+      // §3 lore drip — CH.6: Bookmark #6 ("colour.") — one word left.
+      mysteryFragmentJa: 'たんていメモ：6まいめ――「colour.」。\n'
+          'しおりが あと ひとつで そろう。のこるは、たった ひとつの ことば。',
     ),
     Hotspot.coin(
       pos: const Alignment(-0.80, -0.48),
@@ -1332,6 +1341,9 @@ final SceneDef kTownPre1Scene = SceneDef(
       ],
       npcGreyAsset: 'assets/art/scenes_layton/npc_gatekeeper_grey.webp',
       npcColorAsset: 'assets/art/scenes_layton/npc_gatekeeper_color.webp',
+      // §3 lore drip — CH.7 finale: the grey heart, アイラ at the centre.
+      mysteryFragmentJa: 'たんていメモ：いろが ぜんぶ きえた、しずかな ひろば。\n'
+          'まんなかに、はいいろの ひとが しずかに すわっている。ここが、すべての はじまり。',
     ),
     // 元・宰相 — phrasal verb carry out (idx 2)
     Hotspot.npc(
@@ -1367,6 +1379,10 @@ final SceneDef kTownPre1Scene = SceneDef(
       ],
       npcGreyAsset: 'assets/art/scenes_layton/npc_chancellor_grey.webp',
       npcColorAsset: 'assets/art/scenes_layton/npc_chancellor_color.webp',
+      // §3 lore drip — CH.7: King = First Speaker; the last word is a NAME.
+      mysteryFragmentJa: 'たんていメモ：もと・さいしょうが おしえてくれた――\n'
+          '「おう」と「さいしょに はなした ひと」は おなじ。'
+          'のこる ことばは、その ひとの なまえ ひとつ。',
     ),
     // 城の治癒師 — abstract derivational noun resilience (idx 3)
     Hotspot.npc(
@@ -1400,6 +1416,13 @@ final SceneDef kTownPre1Scene = SceneDef(
       ],
       npcGreyAsset: 'assets/art/scenes_layton/npc_healer_grey.webp',
       npcColorAsset: 'assets/art/scenes_layton/npc_healer_color.webp',
+      // §3 lore drip — CH.7 PAYOFF: Bookmark #7 completes the sentence + the
+      // name; the centre→edge clue (seeded 5級) resolves — colour returns from
+      // the centre, mirroring how the silence once spread from it.
+      mysteryFragmentJa: 'たんていメモ：7まいめ。しおりが ぜんぶ つながった――\n'
+          '「Once, I told a story, and the whole grey world turned to colour.」\n'
+          'しずけさは まんなかから ひろがった。いま、いろが まんなかから もどっていく。'
+          'さいごの ことばは――「アイラ」。',
     ),
     Hotspot.coin(
       pos: const Alignment(-0.80, -0.50),

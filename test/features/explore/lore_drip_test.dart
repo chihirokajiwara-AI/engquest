@@ -10,12 +10,15 @@ import 'package:engquest/features/explore/hotspot.dart';
 
 void main() {
   // The authored chapters so far (CH.1–3). Each adds one assembling bookmark.
+  // §3 COMPLETE — all 7 案件簿 (chapters) drip per-solve lore.
   final authoredScenes = {
     '5級': kTown5Scene,
     '4級': kTown4Scene,
     '3級': kTown3Scene,
     '準2級': kTownPre2Scene,
     '準2級プラス': kTownPre2PlusScene,
+    '2級': kTown2Scene,
+    '準1級': kTownPre1Scene,
   };
 
   group('per-solve lore drip (§3)', () {
@@ -73,6 +76,17 @@ void main() {
           reason: 'bookmark #4 "grey world" (準2級 drip)');
       expect(fragJoin(kTownPre2PlusScene).contains('turned to'), isTrue,
           reason: 'bookmark #5 "turned to" (準2級プラス drip)');
+      expect(fragJoin(kTown2Scene).contains('colour.'), isTrue,
+          reason: 'bookmark #6 "colour." (2級 drip)');
+      // The 準1 finale carries the WHOLE assembled sentence + サイレント's true name.
+      final pre1 = fragJoin(kTownPre1Scene);
+      expect(
+          pre1.contains(
+              'Once, I told a story, and the whole grey world turned to colour.'),
+          isTrue,
+          reason: 'bookmark #7 = the complete assembled sentence (準1 finale)');
+      expect(pre1.contains('アイラ'), isTrue,
+          reason: "サイレント's true name (アイラ) is the last word returned");
     });
 
     test('coins never carry lore (only ナゾ solves drip)', () {
