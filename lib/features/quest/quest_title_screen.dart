@@ -256,42 +256,50 @@ class QuestTitleScreen extends StatelessWidget {
   // DQ-style command window: dark navy box, cream border, ▶ cursor when selected.
   Widget _menuItem(String label,
       {required bool selected, required VoidCallback onTap}) {
-    return GestureDetector(
+    // a11y: the title screen is the universal first interaction — without a
+    // Semantics node a VoiceOver/TalkBack user cannot start the game at all.
+    return Semantics(
+      button: true,
+      label: label,
       onTap: onTap,
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 36),
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 11),
-        decoration: BoxDecoration(
-          color: const Color(0xFF101A33).withAlpha(selected ? 235 : 180),
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: const Color(0xFFF5ECD0), width: 2),
-          boxShadow: selected
-              ? [BoxShadow(color: _gold.withAlpha(120), blurRadius: 14)]
-              : null,
-        ),
-        child: Row(
-          children: [
-            SizedBox(
-              width: 22,
-              child: selected
-                  ? const Icon(Icons.play_arrow, color: _gold, size: 18)
-                  : const SizedBox.shrink(),
-            ),
-            Expanded(
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                alignment: Alignment.centerLeft,
-                child: Text(label,
-                    maxLines: 1,
-                    style: notoSerifJp(
-                      color: selected ? Colors.white : _ink.withAlpha(190),
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 2,
-                    )),
+      excludeSemantics: true,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 36),
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 11),
+          decoration: BoxDecoration(
+            color: const Color(0xFF101A33).withAlpha(selected ? 235 : 180),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: const Color(0xFFF5ECD0), width: 2),
+            boxShadow: selected
+                ? [BoxShadow(color: _gold.withAlpha(120), blurRadius: 14)]
+                : null,
+          ),
+          child: Row(
+            children: [
+              SizedBox(
+                width: 22,
+                child: selected
+                    ? const Icon(Icons.play_arrow, color: _gold, size: 18)
+                    : const SizedBox.shrink(),
               ),
-            ),
-          ],
+              Expanded(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Text(label,
+                      maxLines: 1,
+                      style: notoSerifJp(
+                        color: selected ? Colors.white : _ink.withAlpha(190),
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 2,
+                      )),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
