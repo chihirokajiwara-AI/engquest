@@ -190,7 +190,7 @@ class DqChoice extends StatelessWidget {
             : showCursor
                 ? '$label、せんたくちゅう'
                 : label;
-    return Semantics(
+    final Widget node = Semantics(
       button: true,
       label: semanticsLabel,
       // Expose the cursor-selected state (e.g. a chosen mock answer marked by ▶)
@@ -230,6 +230,20 @@ class DqChoice extends StatelessWidget {
         ),
       ),
     );
+    // Correct-answer kinetic POP (#64) — same win-feel as AudioOptionButton, for
+    // DqChoice surfaces (exam practice: listening, mock exam). Reduced-motion → none.
+    if (state == DqChoiceState.correct && !prefersReducedMotion(context)) {
+      return TweenAnimationBuilder<double>(
+        key: const ValueKey('dqchoice_correct_pop'),
+        tween: Tween(begin: 0.85, end: 1.0),
+        duration: const Duration(milliseconds: 360),
+        curve: Curves.elasticOut,
+        builder: (_, scale, child) =>
+            Transform.scale(scale: scale, child: child),
+        child: node,
+      );
+    }
+    return node;
   }
 }
 
@@ -777,7 +791,7 @@ class AudioOptionButtonState extends State<AudioOptionButton>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
+    final shakable = AnimatedBuilder(
       animation: _shakeCtrl,
       builder: (context, child) => Transform.translate(
         offset: Offset(_shakeCtrl.isAnimating ? _shakeAnim.value : 0, 0),
@@ -785,6 +799,24 @@ class AudioOptionButtonState extends State<AudioOptionButton>
       ),
       child: _buildBody(context),
     );
+    // Correct-answer kinetic POP (#64): wins were a static colour swap while wrong
+    // answers shake (#59) — an inverted reward signal. On becoming correct, a brief
+    // elastic scale-pop (grows past 100% then settles) makes the win felt. The
+    // branch only exists in the correct state, so the freshly-inserted
+    // TweenAnimationBuilder animates from begin once. Reduced-motion → no pop.
+    if (widget.state == DqChoiceState.correct &&
+        !prefersReducedMotion(context)) {
+      return TweenAnimationBuilder<double>(
+        key: const ValueKey('dqaob_correct_pop'),
+        tween: Tween(begin: 0.85, end: 1.0),
+        duration: const Duration(milliseconds: 360),
+        curve: Curves.elasticOut,
+        builder: (_, scale, child) =>
+            Transform.scale(scale: scale, child: child),
+        child: shakable,
+      );
+    }
+    return shakable;
   }
 
   Widget _buildBody(BuildContext context) {

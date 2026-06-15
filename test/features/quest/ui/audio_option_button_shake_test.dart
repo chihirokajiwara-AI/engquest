@@ -60,4 +60,70 @@ void main() {
     // Reduce-motion → the tile never moves.
     expect(dxOf(tester), 0);
   });
+
+  // ── Correct-answer kinetic pop (#64) ───────────────────────────────────────
+
+  testWidgets('AudioOptionButton: correct state pops, reduce-motion suppresses',
+      (tester) async {
+    const popKey = ValueKey('dqaob_correct_pop');
+
+    // Motion on + correct → the pop wrapper is present and settles cleanly.
+    await tester.pumpWidget(const MaterialApp(
+      home: Scaffold(
+        body: AudioOptionButton(label: 'apple', state: DqChoiceState.correct),
+      ),
+    ));
+    await tester.pump();
+    expect(find.byKey(popKey), findsOneWidget);
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+
+    // Reduce-motion → no pop wrapper.
+    await tester.pumpWidget(const MaterialApp(
+      home: MediaQuery(
+        data: MediaQueryData(disableAnimations: true),
+        child: Scaffold(
+          body: AudioOptionButton(label: 'apple', state: DqChoiceState.correct),
+        ),
+      ),
+    ));
+    await tester.pump();
+    expect(find.byKey(popKey), findsNothing);
+  });
+
+  testWidgets('DqChoice: correct state pops, reduce-motion suppresses',
+      (tester) async {
+    const popKey = ValueKey('dqchoice_correct_pop');
+
+    await tester.pumpWidget(const MaterialApp(
+      home: Scaffold(
+        body: DqChoice(label: 'apple', state: DqChoiceState.correct),
+      ),
+    ));
+    await tester.pump();
+    expect(find.byKey(popKey), findsOneWidget);
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+
+    // Non-correct state → no pop.
+    await tester.pumpWidget(const MaterialApp(
+      home: Scaffold(
+        body: DqChoice(label: 'apple', state: DqChoiceState.wrong),
+      ),
+    ));
+    await tester.pump();
+    expect(find.byKey(popKey), findsNothing);
+
+    // Reduce-motion → no pop even when correct.
+    await tester.pumpWidget(const MaterialApp(
+      home: MediaQuery(
+        data: MediaQueryData(disableAnimations: true),
+        child: Scaffold(
+          body: DqChoice(label: 'apple', state: DqChoiceState.correct),
+        ),
+      ),
+    ));
+    await tester.pump();
+    expect(find.byKey(popKey), findsNothing);
+  });
 }
