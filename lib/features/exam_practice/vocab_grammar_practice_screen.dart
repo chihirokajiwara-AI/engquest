@@ -571,7 +571,10 @@ class _VocabGrammarPracticeScreenState
                           ? '${i + 1}. ${q.choices[i]}、ふせいかい'
                           : '${i + 1}. ${q.choices[i]}';
                   return Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
+                    // #68: wider gap so a young child does not mis-tap a
+                    // neighbouring option (a mis-tap = a FALSE wrong answer that
+                    // would corrupt the FSRS signal + the child's confidence).
+                    padding: const EdgeInsets.only(bottom: 14),
                     child: Semantics(
                       button: true,
                       label: semLabel,
@@ -585,8 +588,11 @@ class _VocabGrammarPracticeScreenState
                           onTap: () => _selectAnswer(i),
                           borderRadius: BorderRadius.circular(12),
                           child: Container(
+                            // #68: taller tap target for developing motor skills
+                            // (young kids need > the 44-48 adult floor).
+                            constraints: const BoxConstraints(minHeight: 60),
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 14),
+                                horizontal: 16, vertical: 16),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
                               border:
@@ -595,8 +601,8 @@ class _VocabGrammarPracticeScreenState
                             child: Row(
                               children: [
                                 Container(
-                                  width: 28,
-                                  height: 28,
+                                  width: 32,
+                                  height: 32,
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     color: borderColor.withAlpha(30),
@@ -607,7 +613,7 @@ class _VocabGrammarPracticeScreenState
                                       style: TextStyle(
                                         color: textColor,
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 14,
+                                        fontSize: 16,
                                       ),
                                     ),
                                   ),
@@ -623,7 +629,9 @@ class _VocabGrammarPracticeScreenState
                                         q.choices[i].replaceAll('_', ' '),
                                         style: TextStyle(
                                           color: textColor,
-                                          fontSize: 16,
+                                          // #68: larger choice text for child
+                                          // readability (was 16).
+                                          fontSize: 18,
                                           fontWeight: isSelected
                                               ? FontWeight.w600
                                               : FontWeight.normal,
