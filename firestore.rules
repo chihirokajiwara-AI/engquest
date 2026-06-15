@@ -169,9 +169,18 @@ service cloud.firestore {
     // ── Parent links ────────────────────────────────────────────────────
 
     // parent_links/{parentUid} — stores linked children array for parent.
-    // Only the parent can read/write their own link document.
+    // Only the parent can read their own link document. WRITE additionally
+    // requires an EMAIL/PASSWORD sign-in: without it an anonymous CHILD account
+    // could call Firestore directly (bypassing the app's client-side
+    // non-anonymous guard) and self-promote to "parent", then read any child's
+    // data via isLinkedParent — a COPPA isolation breach. Parent auth is
+    // email/password only (parent_auth_service), so legit parents are unaffected.
+    // (Full-audit security lens, 2026-06-15.) NOTE: deploy + rules-emulator test
+    // are CEO-gated; this repo edit does not deploy.
     match /parent_links/{parentUid} {
-      allow read, write: if isOwner(parentUid);
+      allow read: if isOwner(parentUid);
+      allow write: if isOwner(parentUid)
+        && request.auth.token.firebase.sign_in_provider == 'password';
     }
 
     // ── Shared vocabulary content ───────────────────────────────────────────
