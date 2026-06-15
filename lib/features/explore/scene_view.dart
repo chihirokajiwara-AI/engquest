@@ -1081,6 +1081,13 @@ class _SceneViewState extends State<SceneView> {
       clipBehavior: Clip.none,
       alignment: Alignment.center,
       children: [
+        // Idle-pulse halo (#60): an UNSOLVED NPC faintly "breathes" a brass-gold
+        // aura — the Layton exploration affordance ("this is alive, tap me") AND
+        // the ことばを失った metaphor (silenced villagers straining to speak). It
+        // sits BEHIND the portrait, stops the instant the ナゾ is solved (the widget
+        // leaves the tree → its controller disposes), and is reduced-motion gated.
+        if (!solved && !prefersReducedMotion(context))
+          _IdlePulseHalo(key: const ValueKey('npc_idle_pulse'), size: size),
         portrait,
         if (idx == _restoringIdx)
           Positioned.fill(
@@ -1198,6 +1205,79 @@ class _SceneViewState extends State<SceneView> {
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// A faint, continuously-breathing brass-gold aura placed BEHIND an unsolved NPC
+/// hotspot (#60). It is the Layton-style "this is alive, tap me" affordance and
+/// the ことばを失った metaphor (the silenced villager straining to speak). Self-
+/// contained: owns its own ticker, so it starts when an unsolved NPC mounts and
+/// stops/disposes the moment the ナゾ is solved (the widget leaves the tree).
+/// Only mounted when motion is allowed (the call site gates on
+/// prefersReducedMotion), so vestibular/seizure-sensitive children never see it.
+class _IdlePulseHalo extends StatefulWidget {
+  final double size;
+  const _IdlePulseHalo({super.key, required this.size});
+
+  @override
+  State<_IdlePulseHalo> createState() => _IdlePulseHaloState();
+}
+
+class _IdlePulseHaloState extends State<_IdlePulseHalo>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2200),
+    )..repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final ring = widget.size * 1.4;
+    return IgnorePointer(
+      child: AnimatedBuilder(
+        animation: _ctrl,
+        builder: (_, __) {
+          // Ease the breath so it lingers at the dim ends and glides through the
+          // peak — a calm pulse, not a strobe.
+          final t = Curves.easeInOut.transform(_ctrl.value);
+          return Opacity(
+            opacity:
+                t * 0.5, // max ~50% — present but never louder than the art
+            child: SizedBox(
+              width: ring,
+              height: ring,
+              child: const DecoratedBox(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: RadialGradient(
+                    // dqGoldDeep (0xB8923C): transparent core (don't wash the
+                    // portrait) → soft ring → transparent rim.
+                    colors: [
+                      Color(0x00B8923C),
+                      Color(0x66B8923C),
+                      Color(0x00B8923C),
+                    ],
+                    stops: [0.42, 0.70, 1.0],
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }

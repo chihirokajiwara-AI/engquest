@@ -247,4 +247,52 @@ void main() {
         reason: 'a collected coin must not reappear (would allow re-farming)');
     h2.dispose();
   });
+
+  // Idle-pulse halo (#60): unsolved NPC hotspots breathe a brass-gold aura (the
+  // Layton "tap me" affordance + ことばを失った metaphor). It must vanish once the
+  // ナゾ is solved, and never appear under reduce-motion.
+  const pulseKey = ValueKey('npc_idle_pulse');
+
+  testWidgets('unsolved NPCs show the idle-pulse halo', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(home: SceneView(scene: kTown5Scene, eikenLevel: '5')),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
+    // kTown5Scene has multiple unsolved NPCs → at least one breathing halo.
+    expect(find.byKey(pulseKey), findsWidgets,
+        reason: 'an unsolved NPC must show the affordance pulse');
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('solved NPCs show NO idle-pulse halo', (tester) async {
+    for (var i = 0; i < kTown5Scene.hotspots.length; i++) {
+      if (kTown5Scene.hotspots[i].kind == HotspotKind.npc) {
+        await SceneSolvedStore.markSolved('5', i);
+      }
+    }
+    await tester.pumpWidget(
+      MaterialApp(home: SceneView(scene: kTown5Scene, eikenLevel: '5')),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
+    expect(find.byKey(pulseKey), findsNothing,
+        reason: 'a solved NPC must not keep pulsing');
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('reduce-motion suppresses the idle-pulse halo', (tester) async {
+    await tester.pumpWidget(
+      MediaQuery(
+        data: const MediaQueryData(disableAnimations: true),
+        child:
+            MaterialApp(home: SceneView(scene: kTown5Scene, eikenLevel: '5')),
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
+    expect(find.byKey(pulseKey), findsNothing,
+        reason: 'no continuous motion under reduce-motion (a11y)');
+    expect(tester.takeException(), isNull);
+  });
 }
