@@ -32,3 +32,16 @@ assets/art/scenes/town_2.png | 2026-06-06 | T31 pending: 英検2級 town scene a
 # 英検 listening audio (l3/l4/l5/lp2/lpp/l2/lpre1) — all 108 referenced clips
 # generated via Kokoro TTS (scripts/generate_listening_audio.py), 2026-06-12.
 # No longer missing; entries removed.
+# ---------------------------------------------------------------------------
+# 準2級 第1部 (会話の応答文選択) — 10 new clips authored 2026-06-15 (#62 fix).
+# Generate via: scripts/safe-job.sh gen-pre2-resp 600 python3 scripts/generate_listening_audio.py
+audio/listening/lp2_resp_01.mp3 | 2026-06-15 | #62 pre2 第1部 new — Kokoro TTS generation pending
+audio/listening/lp2_resp_02.mp3 | 2026-06-15 | #62 pre2 第1部 new — Kokoro TTS generation pending
+audio/listening/lp2_resp_03.mp3 | 2026-06-15 | #62 pre2 第1部 new — Kokoro TTS generation pending
+audio/listening/lp2_resp_04.mp3 | 2026-06-15 | #62 pre2 第1部 new — Kokoro TTS generation pending
+audio/listening/lp2_resp_05.mp3 | 2026-06-15 | #62 pre2 第1部 new — Kokoro TTS generation pending
+audio/listening/lp2_resp_06.mp3 | 2026-06-15 | #62 pre2 第1部 new — Kokoro TTS generation pending
+audio/listening/lp2_resp_07.mp3 | 2026-06-15 | #62 pre2 第1部 new — Kokoro TTS generation pending
+audio/listening/lp2_resp_08.mp3 | 2026-06-15 | #62 pre2 第1部 new — Kokoro TTS generation pending
+audio/listening/lp2_resp_09.mp3 | 2026-06-15 | #62 pre2 第1部 new — Kokoro TTS generation pending
+audio/listening/lp2_resp_10.mp3 | 2026-06-15 | #62 pre2 第1部 new — Kokoro TTS generation pending

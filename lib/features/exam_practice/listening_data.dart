@@ -44,10 +44,11 @@
 //   regenerate, run that script via scripts/safe-job.sh (Kokoro is CPU-heavy).
 //   (Earlier this set was ALLOWED_MISSING-registered; that note is now obsolete.)
 //
-// NOTE: 5級/4級 structure per verified spec (EIKEN-MASTERY-AND-GAPS-2026-06-06.json):
+// NOTE: per-grade structure (verified eiken.or.jp 2024-reform + English EIKEN grade_p2 page):
 //   5級: 第1部10 (応答選択) + 第2部5 (会話内容一致) + 第3部10 (文内容一致) = 25
 //   4級: 第1部10 (応答選択) + 第2部10 (会話内容一致) + 第3部10 (文内容一致) = 30
 //   3級: 3部 = 30問
+//   準2級: 第1部10 (会話の応答文選択) + 第2部10 (会話の内容一致) + 第3部10 (文の内容一致) = 30
 //   準2級プラス/2級: 第1部15 (会話応答選択) + 第2部15 (文内容一致) = 30
 // Seed bank covers the VERIFIED per-grade 部 structure. Volume is being expanded
 // toward the real-exam per-part counts (#10): 英検3級 is COMPLETE at 10/10/10 = 30
@@ -1788,9 +1789,231 @@ const _grade3Part3 = <ListeningItem>[
 // ── 英検準2級 ────────────────────────────────────────────────────────────────
 
 const _gradePre2Part1 = <ListeningItem>[
-  // 準2級 第1部: 会話内容一致 — hear dialogue + spoken question
+  // 準2級 第1部: 会話の応答文選択 — short dialogue, choose best response to last turn.
+  // 10 items, dialogueQA style.  Audio keys lp2_resp_01.mp3 … lp2_resp_10.mp3.
   ListeningItem(
     part: 1,
+    grade: 'pre2',
+    audioKey: 'lp2_resp_01.mp3',
+    transcripts: [
+      'A: Excuse me, do you know if this bus goes to the train station?',
+      'B: I\'m not sure, but I think you need the number 12 bus.',
+      'A: Oh, really? Where can I catch that?',
+      'Question: What does the woman want to know?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What does the woman want to know?',
+    choices: [
+      'Where to catch the number 12 bus.',
+      'When the next train leaves.',
+      'How much the bus ticket costs.',
+      'Which platform to use at the station.',
+    ],
+    correctIndex: 0,
+    explanation: 'A は「where can I catch that（その12番はどこで乗れますか）」と12番バスの乗り場を尋ねている。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre2',
+    audioKey: 'lp2_resp_02.mp3',
+    transcripts: [
+      'A: I forgot to bring my lunch today.',
+      'B: Really? The school café is open. You could eat there.',
+      'A: Good idea. Is it expensive?',
+      'Question: What does the girl want to know about the school café?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What does the girl want to know about the school café?',
+    choices: [
+      'Whether the café has good food.',
+      'How much the café charges.',
+      'Where the café is located.',
+      'What time the café closes.',
+    ],
+    correctIndex: 1,
+    explanation: 'A の「Is it expensive?（高いですか）」がカフェの値段を尋ねている。how much = 値段の確認。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre2',
+    audioKey: 'lp2_resp_03.mp3',
+    transcripts: [
+      'A: You look tired today. Are you okay?',
+      'B: I stayed up late studying for the math test.',
+      'A: How did it go?',
+      'Question: What does the woman ask at the end?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What does the woman ask at the end?',
+    choices: [
+      'Whether the man is feeling sick.',
+      'How the man did on the math test.',
+      'When the man will go to sleep.',
+      'What subject the man is studying.',
+    ],
+    correctIndex: 1,
+    explanation:
+        'A の最後の「How did it go?」は数学のテストがどうだったかを尋ねている。B が「studying for the math test」と述べた直後の質問。A = 女性の声。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre2',
+    audioKey: 'lp2_resp_04.mp3',
+    transcripts: [
+      'A: Hi, I\'d like to return this jacket.',
+      'B: Of course. Do you have your receipt?',
+      'A: I think I left it at home.',
+      'Question: What is the problem?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What is the problem?',
+    choices: [
+      'The jacket is the wrong size.',
+      'The store is closed.',
+      'The woman does not have her receipt.',
+      'The man cannot find the jacket.',
+    ],
+    correctIndex: 2,
+    explanation:
+        'A が「I left it at home（家に置いてきた）」と述べており、領収書（receipt）を持っていないことが問題。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre2',
+    audioKey: 'lp2_resp_05.mp3',
+    transcripts: [
+      'A: Did you sign up for the science club?',
+      'B: Not yet. I want to, but the meetings are on Tuesdays, and I have cram school then.',
+      'A: Oh, that\'s a difficult time.',
+      'Question: What is the man\'s problem?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What is the man\'s problem?',
+    choices: [
+      'He does not like science.',
+      'He already joined another club.',
+      'He has a schedule conflict on Tuesdays.',
+      'He missed the sign-up deadline.',
+    ],
+    correctIndex: 2,
+    explanation:
+        'B（男性）は「I have cram school then（火曜は塾がある）」と述べており、club の集まりと塾の予定が重なる（schedule conflict）ことが問題。「別のクラブに入った」とは言っていない。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre2',
+    audioKey: 'lp2_resp_06.mp3',
+    transcripts: [
+      'A: Dad, can I go to Kenji\'s house after school?',
+      'B: Sure, but please be back by six.',
+      'A: What if we\'re still playing video games?',
+      'Question: What does the father tell the girl?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What does the father tell the girl?',
+    choices: [
+      'She cannot go to her friend\'s house.',
+      'She must return home by six o\'clock.',
+      'She should finish her homework first.',
+      'She can stay as long as she wants.',
+    ],
+    correctIndex: 1,
+    explanation:
+        'B（父）が「please be back by six（6時までに帰ってきて）」と伝えている。B = 男性の声。A は「Dad」と呼びかけており女の子。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre2',
+    audioKey: 'lp2_resp_07.mp3',
+    transcripts: [
+      'A: Have you decided what to do for your school project?',
+      'B: I was thinking about doing it on climate change.',
+      'A: That\'s a broad topic. Do you have a specific angle?',
+      'Question: What does the woman suggest the man do?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What does the woman suggest the man do?',
+    choices: [
+      'Choose a different topic entirely.',
+      'Focus on a more specific aspect of climate change.',
+      'Work with a partner on the project.',
+      'Make the project shorter.',
+    ],
+    correctIndex: 1,
+    explanation:
+        'A（女性）の「That\'s a broad topic. Do you have a specific angle?（テーマが広い。具体的な切り口は？）」は、テーマをより絞ることを示唆している。A = 女性の声。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre2',
+    audioKey: 'lp2_resp_08.mp3',
+    transcripts: [
+      'A: I\'m thinking of buying this dictionary, but it\'s quite heavy.',
+      'B: Have you considered the digital version? It\'s the same content.',
+      'A: Really? Is it cheaper?',
+      'Question: What does the woman want to know?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What does the woman want to know?',
+    choices: [
+      'Whether the dictionary has many words.',
+      'How heavy the digital version is.',
+      'Whether the digital version costs less.',
+      'Where to download the digital version.',
+    ],
+    correctIndex: 2,
+    explanation: 'A の「Is it cheaper?（それは安いですか）」がデジタル版の値段を尋ねている。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre2',
+    audioKey: 'lp2_resp_09.mp3',
+    transcripts: [
+      'A: You\'re good at cooking. Can you teach me how to make curry?',
+      'B: Of course! How about this Saturday morning?',
+      'A: Sounds great. What should I bring?',
+      'Question: What does the woman ask the man?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What does the woman ask the man?',
+    choices: [
+      'When they should meet to cook together.',
+      'Where the cooking lesson will take place.',
+      'What she should bring to the cooking lesson.',
+      'How long it takes to make curry.',
+    ],
+    correctIndex: 2,
+    explanation:
+        'A（女性）の「What should I bring?（何を持っていけばよいですか）」が持参するものを尋ねている。A = 女性の声。',
+  ),
+  ListeningItem(
+    part: 1,
+    grade: 'pre2',
+    audioKey: 'lp2_resp_10.mp3',
+    transcripts: [
+      'A: The next train was cancelled due to bad weather.',
+      'B: Oh no. How long do we have to wait?',
+      'A: The announcement said about forty minutes.',
+      'Question: What does the woman tell the man?',
+    ],
+    questionType: ListeningQuestionType.dialogueQA,
+    question: 'What does the woman tell the man?',
+    choices: [
+      'The train is on time.',
+      'They have to wait about forty minutes.',
+      'The station is closed.',
+      'They should take a bus instead.',
+    ],
+    correctIndex: 1,
+    explanation:
+        'A（女性）が「about forty minutes（約40分）」待つとアナウンスで言っていたと伝えている。A = 女性の声。',
+  ),
+];
+
+const _gradePre2Part2 = <ListeningItem>[
+  // 準2級 第2部: 会話の内容一致 — hear dialogue + spoken question
+  ListeningItem(
+    part: 2,
     grade: 'pre2',
     audioKey: 'lp2_p1_01.mp3',
     transcripts: [
@@ -1813,7 +2036,7 @@ const _gradePre2Part1 = <ListeningItem>[
         'A は「travel in Southeast Asia and volunteer at schools（東南アジアを旅して学校でボランティアをする）」と述べている。これが gap year の計画。',
   ),
   ListeningItem(
-    part: 1,
+    part: 2,
     grade: 'pre2',
     audioKey: 'lp2_p1_02.mp3',
     transcripts: [
@@ -1836,7 +2059,7 @@ const _gradePre2Part1 = <ListeningItem>[
         'B の「torn between environmental science and computer science」が答え。be torn between A and B＝AとBの間で迷う、の意味。',
   ),
   ListeningItem(
-    part: 1,
+    part: 2,
     grade: 'pre2',
     audioKey: 'lp2_p1_03.mp3',
     transcripts: [
@@ -1858,7 +2081,7 @@ const _gradePre2Part1 = <ListeningItem>[
     explanation: 'A が「Two weeks（2週間）。授業に出て、ホストファミリーに泊まる」と答えている。',
   ),
   ListeningItem(
-    part: 1,
+    part: 2,
     grade: 'pre2',
     audioKey: 'lp2_p1_04.mp3',
     transcripts: [
@@ -1880,9 +2103,9 @@ const _gradePre2Part1 = <ListeningItem>[
     explanation:
         'B が「the government plans to ban gasoline cars by 2035（政府は2035年までにガソリン車を禁止する予定）」と記事の内容を説明している。',
   ),
-  // ── Studio expansion 2026-06-13: 準2級 第1部 toward the 30-item target ──────────
+  // ── Studio expansion 2026-06-13: 準2級 第2部 — content items ──────────
   ListeningItem(
-    part: 1,
+    part: 2,
     grade: 'pre2',
     audioKey: 'lp2_p1_05.mp3',
     transcripts: [
@@ -1905,7 +2128,7 @@ const _gradePre2Part1 = <ListeningItem>[
         'B は最後に「I will go with drama after all（やっぱり演劇部にする）」と述べている。昨年の school play での活躍も後押し。',
   ),
   ListeningItem(
-    part: 1,
+    part: 2,
     grade: 'pre2',
     audioKey: 'lp2_p1_06.mp3',
     transcripts: [
@@ -1927,7 +2150,7 @@ const _gradePre2Part1 = <ListeningItem>[
     explanation: 'A は「only on weekends（週末だけ）」働き、平日は勉強を続けると述べている。',
   ),
   ListeningItem(
-    part: 1,
+    part: 2,
     grade: 'pre2',
     audioKey: 'lp2_p1_07.mp3',
     transcripts: [
@@ -1950,7 +2173,7 @@ const _gradePre2Part1 = <ListeningItem>[
         'B が「instead of Kyoto we are going to Hiroshima（京都の代わりに広島へ行く）」と述べている。',
   ),
   ListeningItem(
-    part: 1,
+    part: 2,
     grade: 'pre2',
     audioKey: 'lp2_p1_08.mp3',
     transcripts: [
@@ -1973,7 +2196,7 @@ const _gradePre2Part1 = <ListeningItem>[
         'A は「can I keep this book one more week（あと1週間借りていられますか）」と本の貸出延長を頼んでいる。',
   ),
   ListeningItem(
-    part: 1,
+    part: 2,
     grade: 'pre2',
     audioKey: 'lp2_p1_09.mp3',
     transcripts: [
@@ -1996,7 +2219,7 @@ const _gradePre2Part1 = <ListeningItem>[
         'A が「start early and come back before lunch（早く出発して昼前に戻る）」と提案し、B も同意。雨は午後の予報。',
   ),
   ListeningItem(
-    part: 1,
+    part: 2,
     grade: 'pre2',
     audioKey: 'lp2_p1_10.mp3',
     transcripts: [
@@ -2018,9 +2241,9 @@ const _gradePre2Part1 = <ListeningItem>[
     explanation:
         'B は「it reminds me to review words every day（毎日単語を復習するよう促してくれる）」と述べ、語彙が増えたと言っている。',
   ),
-  // ── Studio expansion 2026-06-13 (cont.): 準2級 第1部 to 15 (→30 total) ──────────
+  // ── Studio expansion 2026-06-13 (cont.): 準2級 第2部 to 15 ──────────
   ListeningItem(
-    part: 1,
+    part: 2,
     grade: 'pre2',
     audioKey: 'lp2_p1_11.mp3',
     transcripts: [
@@ -2042,7 +2265,7 @@ const _gradePre2Part1 = <ListeningItem>[
     explanation: 'B は「It is next to the post office（郵便局のとなり）」と図書館の場所を教えている。',
   ),
   ListeningItem(
-    part: 1,
+    part: 2,
     grade: 'pre2',
     audioKey: 'lp2_p1_12.mp3',
     transcripts: [
@@ -2064,7 +2287,7 @@ const _gradePre2Part1 = <ListeningItem>[
     explanation: 'A は「I will try them（それにします）」と blueberry pancakes を注文している。',
   ),
   ListeningItem(
-    part: 1,
+    part: 2,
     grade: 'pre2',
     audioKey: 'lp2_p1_13.mp3',
     transcripts: [
@@ -2086,7 +2309,7 @@ const _gradePre2Part1 = <ListeningItem>[
     explanation: 'B の助言を受け A は「I will go back and look（戻って探す）」＝教室へ戻ると述べている。',
   ),
   ListeningItem(
-    part: 1,
+    part: 2,
     grade: 'pre2',
     audioKey: 'lp2_p1_14.mp3',
     transcripts: [
@@ -2108,7 +2331,7 @@ const _gradePre2Part1 = <ListeningItem>[
     explanation: 'A は本は多いので「a nice bookmark instead（代わりに素敵なしおり）」を買うと述べている。',
   ),
   ListeningItem(
-    part: 1,
+    part: 2,
     grade: 'pre2',
     audioKey: 'lp2_p1_15.mp3',
     transcripts: [
@@ -2131,10 +2354,10 @@ const _gradePre2Part1 = <ListeningItem>[
   ),
 ];
 
-const _gradePre2Part2 = <ListeningItem>[
-  // 準2級 第2部: 文内容一致 — passage/monologue
+const _gradePre2Part3 = <ListeningItem>[
+  // 準2級 第3部: 文の内容一致 — passage/monologue
   ListeningItem(
-    part: 2,
+    part: 3,
     grade: 'pre2',
     audioKey: 'lp2_p2_01.mp3',
     transcripts: [
@@ -2158,7 +2381,7 @@ const _gradePre2Part2 = <ListeningItem>[
         '本文に「spend an average of three hours per day on social media（1日平均3時間SNSに費やす）」とある。',
   ),
   ListeningItem(
-    part: 2,
+    part: 3,
     grade: 'pre2',
     audioKey: 'lp2_p2_02.mp3',
     transcripts: [
@@ -2181,7 +2404,7 @@ const _gradePre2Part2 = <ListeningItem>[
         '本文が挙げる理由は plant-based diet・social connections・ikigai の3つ。high-intensity exercise（激しい運動）は述べられていない＝NOT問題の答え。',
   ),
   ListeningItem(
-    part: 2,
+    part: 3,
     grade: 'pre2',
     audioKey: 'lp2_p2_03.mp3',
     transcripts: [
@@ -2203,7 +2426,7 @@ const _gradePre2Part2 = <ListeningItem>[
         '本文に「reopen on Monday, June sixteenth（6月16日月曜に再開）」とある。改装休館は9日〜13日。',
   ),
   ListeningItem(
-    part: 2,
+    part: 3,
     grade: 'pre2',
     audioKey: 'lp2_p2_04.mp3',
     transcripts: [
@@ -2226,7 +2449,7 @@ const _gradePre2Part2 = <ListeningItem>[
   ),
   // ── Studio expansion 2026-06-13: 準2級 第2部 toward the 30-item target ──────────
   ListeningItem(
-    part: 2,
+    part: 3,
     grade: 'pre2',
     audioKey: 'lp2_p2_05.mp3',
     transcripts: [
@@ -2250,7 +2473,7 @@ const _gradePre2Part2 = <ListeningItem>[
         '本文に「learners can study at their own pace（自分のペースで学べる）」と利点が述べられている。',
   ),
   ListeningItem(
-    part: 2,
+    part: 3,
     grade: 'pre2',
     audioKey: 'lp2_p2_06.mp3',
     transcripts: [
@@ -2272,7 +2495,7 @@ const _gradePre2Part2 = <ListeningItem>[
         '放送に「collect plastic bottles every Tuesday instead of every other week（隔週でなく毎週火曜に回収）」とあり、回収の頻度が増える。',
   ),
   ListeningItem(
-    part: 2,
+    part: 3,
     grade: 'pre2',
     audioKey: 'lp2_p2_07.mp3',
     transcripts: [
@@ -2294,7 +2517,7 @@ const _gradePre2Part2 = <ListeningItem>[
         '本文に「avoiding screens before bedtime（就寝前に画面を避ける）」とよく眠るための助言がある。',
   ),
   ListeningItem(
-    part: 2,
+    part: 3,
     grade: 'pre2',
     audioKey: 'lp2_p2_08.mp3',
     transcripts: [
@@ -2316,7 +2539,7 @@ const _gradePre2Part2 = <ListeningItem>[
         '放送に「free for students with a valid school ID（有効な学生証を持つ生徒は無料）」とある。',
   ),
   ListeningItem(
-    part: 2,
+    part: 3,
     grade: 'pre2',
     audioKey: 'lp2_p2_09.mp3',
     transcripts: [
@@ -2339,7 +2562,7 @@ const _gradePre2Part2 = <ListeningItem>[
         '本文に「carry pollen, which helps plants produce fruits and seeds（花粉を運び、植物が実や種を作るのを助ける）」とある。',
   ),
   ListeningItem(
-    part: 2,
+    part: 3,
     grade: 'pre2',
     audioKey: 'lp2_p2_10.mp3',
     transcripts: [
@@ -2363,7 +2586,7 @@ const _gradePre2Part2 = <ListeningItem>[
   ),
   // ── Studio expansion 2026-06-13 (cont.): 準2級 第2部 to 15 (→30 total) ──────────
   ListeningItem(
-    part: 2,
+    part: 3,
     grade: 'pre2',
     audioKey: 'lp2_p2_11.mp3',
     transcripts: [
@@ -2384,7 +2607,7 @@ const _gradePre2Part2 = <ListeningItem>[
         '放送に「The local train on platform three will depart on time（3番線の普通列車は定刻に発車）」とある。急行は遅延。',
   ),
   ListeningItem(
-    part: 2,
+    part: 3,
     grade: 'pre2',
     audioKey: 'lp2_p2_12.mp3',
     transcripts: [
@@ -2406,7 +2629,7 @@ const _gradePre2Part2 = <ListeningItem>[
         '本文に「improve your heart health and reduce stress（心臓の健康を改善しストレスを減らす）」とある。',
   ),
   ListeningItem(
-    part: 2,
+    part: 3,
     grade: 'pre2',
     audioKey: 'lp2_p2_13.mp3',
     transcripts: [
@@ -2427,7 +2650,7 @@ const _gradePre2Part2 = <ListeningItem>[
     explanation: '放送に「wear a name tag at the entrance（入口で名札をつける）」と来場者への依頼がある。',
   ),
   ListeningItem(
-    part: 2,
+    part: 3,
     grade: 'pre2',
     audioKey: 'lp2_p2_14.mp3',
     transcripts: [
@@ -2449,7 +2672,7 @@ const _gradePre2Part2 = <ListeningItem>[
         '本文に「banning single-use plastic bags（使い捨てレジ袋を禁止する）」と一部の国の対策が述べられている。',
   ),
   ListeningItem(
-    part: 2,
+    part: 3,
     grade: 'pre2',
     audioKey: 'lp2_p2_15.mp3',
     transcripts: [
@@ -4551,7 +4774,7 @@ const Map<String, List<ListeningItem>> kListeningItems = {
   '5': [..._grade5Part1, ..._grade5Part2, ..._grade5Part3],
   '4': [..._grade4Part1, ..._grade4Part2, ..._grade4Part3],
   '3': [..._grade3Part1, ..._grade3Part2, ..._grade3Part3],
-  'pre2': [..._gradePre2Part1, ..._gradePre2Part2],
+  'pre2': [..._gradePre2Part1, ..._gradePre2Part2, ..._gradePre2Part3],
   'pre2plus': [..._gradePre2PlusPart1, ..._gradePre2PlusPart2],
   '2': [..._grade2Part1, ..._grade2Part2],
   'pre1': [..._gradePre1Part1, ..._gradePre1Part2, ..._gradePre1Part3],
