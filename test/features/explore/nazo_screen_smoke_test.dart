@@ -38,6 +38,28 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
+    // #61: every ナゾ opens with a NAMED case identity — whose mystery + which 英検
+    // grade — replacing the undifferentiated 「？」ナゾが あらわれた！.
+    testWidgets('header shows case identity (英検 grade + NPC name)',
+        (tester) async {
+      final hotspot = kTown5Scene.hotspots.firstWhere(
+        (h) => h.kind == HotspotKind.npc,
+      );
+      final npc = hotspot.step!.npcName;
+      expect(npc.isNotEmpty, isTrue, reason: 'test needs a named NPC');
+      await tester.pumpWidget(MaterialApp(
+        home: NazoScreen(hotspot: hotspot, eikenLevel: '5'),
+      ));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+      // The 英検 grade is surfaced at the moment of truth (commercial promise).
+      expect(find.text('英検5級'), findsOneWidget);
+      // The puzzle has a named identity, not the generic placeholder.
+      expect(find.text('$npc の ナゾ'), findsOneWidget);
+      expect(find.text('「？」ナゾが あらわれた！'), findsNothing);
+      expect(tester.takeException(), isNull);
+    });
+
     testWidgets(
         'audio ナゾ shows the muted-voice banner when Voice is muted (clip present)',
         (tester) async {

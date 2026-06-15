@@ -23,6 +23,7 @@ import '../../core/audio/audio_mute.dart';
 import '../../core/gamification/hint_coin_service.dart';
 import '../../core/gamification/picarat_controller.dart';
 import '../../core/sound/sound_service.dart';
+import '../exam_practice/eiken_exam_config.dart' show gradeLabelJa;
 import '../quest/quest_data.dart';
 import '../quest/quest_screen.dart' show QuestScreen;
 import '../quest/ui/dq_ui.dart';
@@ -434,35 +435,67 @@ class _NazoScreenState extends State<NazoScreen> {
         ),
       );
 
-  Widget _header() => Row(
-        children: [
-          IconButton(
-            tooltip: 'とじる / Close',
-            onPressed: _dismiss,
-            icon: const Icon(Icons.close, color: dqInk),
-          ),
-          Expanded(
-            child: Text(
-              '「？」ナゾが あらわれた！',
-              textAlign: TextAlign.center,
-              style: dqText(size: 16, w: FontWeight.w800, color: dqGold),
+  Widget _header() {
+    // Case-identity plate (#61): every ナゾ now opens with a NAMED identity — whose
+    // mystery + which 英検 grade — at the moment of truth, replacing the generic
+    // 「？」ナゾが あらわれた！ shown identically for every puzzle. This is the Layton /
+    // Golden-Idol "named case" convention + surfaces the commercial 英検 promise
+    // where it matters. framingJa stays in the body (it is multi-line flavour, not
+    // a title). Falls back to the generic line when an NPC has no name.
+    final npc = _step.npcName.trim();
+    final title = npc.isNotEmpty ? '$npc の ナゾ' : '「？」ナゾが あらわれた！';
+    return Column(
+      children: [
+        Row(
+          children: [
+            IconButton(
+              tooltip: 'とじる / Close',
+              onPressed: _dismiss,
+              icon: const Icon(Icons.close, color: dqInk),
             ),
+            const Spacer(),
+            // Coin balance display
+            const Text('✦',
+                style: TextStyle(color: Color(0xFFFFD700), fontSize: 16)),
+            const SizedBox(width: 3),
+            Text('$_coinBalance', style: dqText(size: 14, color: dqGold)),
+            const SizedBox(width: 8),
+          ],
+        ),
+        const SizedBox(height: 2),
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.fromLTRB(14, 8, 14, 10),
+          decoration: BoxDecoration(
+            color: dqBox.withAlpha(150),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: dqGoldDeep, width: 1.5),
           ),
-          // Coin balance display
-          Padding(
-            padding: const EdgeInsets.only(right: 8),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text('✦',
-                    style: TextStyle(color: Color(0xFFFFD700), fontSize: 16)),
-                const SizedBox(width: 3),
-                Text('$_coinBalance', style: dqText(size: 14, color: dqGold)),
-              ],
-            ),
+          child: Column(
+            children: [
+              Text(
+                gradeLabelJa(widget.eikenLevel),
+                textAlign: TextAlign.center,
+                style: dqText(
+                    size: 11,
+                    w: FontWeight.w600,
+                    color: dqGold.withAlpha(205),
+                    spacing: 1.5),
+              ),
+              const SizedBox(height: 3),
+              Text(
+                title,
+                textAlign: TextAlign.center,
+                style: dqText(size: 16, w: FontWeight.w800, color: dqGold),
+              ),
+              const SizedBox(height: 6),
+              Container(height: 1, width: 60, color: dqGoldDeep.withAlpha(160)),
+            ],
           ),
-        ],
-      );
+        ),
+      ],
+    );
+  }
 
   Widget _picaratRow() {
     final current = _picarat.currentValue;
