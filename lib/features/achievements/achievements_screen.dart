@@ -259,12 +259,32 @@ class _BadgeCard extends StatelessWidget {
                           ]
                         : null,
                   ),
+                  // #76: show each badge's OWN icon even when locked (dimmed),
+                  // not an identical padlock — so a child sees the distinct goal
+                  // to chase (aspiration), not a wall of interchangeable locks.
+                  // Locked-ness stays clear via the dim tint + progress bar + no
+                  // 「獲得」 nameplate; a small corner lock marks it unmistakably.
                   child: Icon(
-                    isUnlocked ? def.icon : Icons.lock_outline,
+                    def.icon,
                     color: iconColor,
                     size: 26,
                   ),
                 ),
+                if (!isUnlocked)
+                  Positioned(
+                    bottom: -2,
+                    right: -2,
+                    child: Container(
+                      padding: const EdgeInsets.all(2),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: dqNight0,
+                        border: Border.all(color: dqGoldDeep.withAlpha(120)),
+                      ),
+                      child: Icon(Icons.lock,
+                          size: 11, color: dqInk.withAlpha(110)),
+                    ),
+                  ),
                 if (isCapstone)
                   Positioned(
                     top: -4,
