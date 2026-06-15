@@ -928,7 +928,8 @@ class _BattleScreenState extends State<BattleScreen>
               : Semantics(
                   button: true,
                   label: '${_currentVocab.word}。'
-                      'カードを めくって いみを みる / Flip to reveal the meaning',
+                      'いみを 思い出してから、カードを めくって かくにん / '
+                      'Recall the meaning, then flip to check',
                   excludeSemantics: true,
                   child: GestureDetector(
                     onTap: _flipCard,
@@ -1022,8 +1023,17 @@ class _BattleScreenState extends State<BattleScreen>
               child: Text(vocab.pos.first.name,
                   style: dqText(size: 12, color: dqGold)),
             ),
-          const SizedBox(height: 28),
-          dqBilingual('タップしてめくる', 'Tap to flip',
+          const SizedBox(height: 24),
+          // Active recall (#65). 2026 evidence (Karpicke; testing effect g=0.50,
+          // 50-150% retention): flipping WITHOUT first attempting recall is passive
+          // RECOGNITION — benefit substantially reduced. 英検 大問1 demands
+          // production-recall. So reframe the flip from "tap to see" → "recall
+          // FIRST, then check", cueing the retrieval attempt at zero added friction.
+          dqBilingual(
+              'こころの中（なか）で いみを 思（おも）い出（だ）してから…', 'Recall the meaning first…',
+              jpSize: 12, jpColor: dqGold, enColor: dqGold),
+          const SizedBox(height: 6),
+          dqBilingual('タップして かくにん', 'tap to check',
               jpSize: 13, jpColor: dqGoldDeep, enColor: dqGoldDeep),
         ],
       ),
@@ -1098,7 +1108,8 @@ class _BattleScreenState extends State<BattleScreen>
   Widget _buildTapHint() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12),
-      child: dqBilingual('カードをタップして答えを確認', 'Tap the card to reveal',
+      child: dqBilingual(
+          'いみを 思（おも）い出（だ）してから タップ', 'Recall the meaning, then tap to check',
           jpSize: 13, jpColor: dqGoldDeep, enColor: dqGoldDeep),
     );
   }
