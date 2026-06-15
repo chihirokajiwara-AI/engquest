@@ -224,13 +224,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
             width: selected ? 2 : 1,
           ),
         ),
-        child: Text(
-          ReadabilityScale.labelJa(s),
-          textAlign: TextAlign.center,
-          style: dqText(
-            size: 12,
-            w: selected ? FontWeight.w800 : FontWeight.w600,
-            color: selected ? dqGold : dqInk,
+        // #77: shrink-to-fit so a long label (「とても大きい」) never wraps to two
+        // lines inside the equal-width chip (which read as a broken button).
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            ReadabilityScale.labelJa(s),
+            maxLines: 1,
+            softWrap: false,
+            textAlign: TextAlign.center,
+            style: dqText(
+              size: 12,
+              w: selected ? FontWeight.w800 : FontWeight.w600,
+              color: selected ? dqGold : dqInk,
+            ),
           ),
         ),
       ),
