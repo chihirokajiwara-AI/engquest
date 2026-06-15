@@ -459,10 +459,14 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ProgressTintedCharacter(
+                // #70: the child's detective is the brand's key "this is MY hero"
+                // asset; at 44x64 it read as a dark smudge in the readiness card.
+                // Enlarged (same aspect) so the character — and its grey→colour
+                // progress tint — is legible at the primary engagement surface.
                 asset: HeroChoice.asset,
                 readiness: readiness,
-                width: 44,
-                height: 64,
+                width: 60,
+                height: 88,
                 semanticLabel: 'あなたの たんてい。れんしゅうするほど 色（いろ）がつくよ。',
               ),
               const SizedBox(width: 12),
