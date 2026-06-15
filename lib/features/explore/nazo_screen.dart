@@ -555,7 +555,8 @@ class _NazoScreenState extends State<NazoScreen> {
       return Column(
         children: [
           DqPortrait(
-            imageAsset: QuestScreen.npcImage(step.npcName),
+            imageAsset: widget.hotspot.npcColorAsset ??
+                QuestScreen.npcImage(step.npcName),
             emoji: step.npcEmoji,
             size: 76,
           ),
@@ -599,7 +600,8 @@ class _NazoScreenState extends State<NazoScreen> {
     return Column(
       children: [
         DqPortrait(
-          imageAsset: QuestScreen.npcImage(step.npcName),
+          imageAsset: widget.hotspot.npcColorAsset ??
+              QuestScreen.npcImage(step.npcName),
           emoji: step.npcEmoji,
           size: 72,
         ),
