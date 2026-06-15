@@ -719,32 +719,43 @@ class _VocabGrammarPracticeScreenState
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(color: dqGold.withAlpha(110)),
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                        // #69: the 合格率 penalty must be ON the tap target, not a
+                        // dim note below it — a child used to tap before reading the
+                        // consequence. Now the sub-line states it inside the button.
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(Icons.translate_rounded,
-                                color: dqGold, size: 18),
-                            const SizedBox(width: 8),
-                            Flexible(
-                              child: Text(
-                                'いみを みる（読（よ）めないとき）',
-                                textAlign: TextAlign.center,
-                                style: dqText(
-                                    size: 13,
-                                    w: FontWeight.w700,
-                                    color: dqGold),
-                              ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.translate_rounded,
+                                    color: dqGold, size: 18),
+                                const SizedBox(width: 8),
+                                Flexible(
+                                  child: Text(
+                                    'いみを みる（読（よ）めないとき）',
+                                    textAlign: TextAlign.center,
+                                    style: dqText(
+                                        size: 13,
+                                        w: FontWeight.w700,
+                                        color: dqGold),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 3),
+                            Text(
+                              '※つかうと この問題（もんだい）は 合格率（ごうかくりつ）に 入（はい）らないよ',
+                              textAlign: TextAlign.center,
+                              style: dqText(
+                                  size: 10.5,
+                                  w: FontWeight.w600,
+                                  color: const Color(0xFFE0A050)),
                             ),
                           ],
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    jpBreak('ヒントを つかった問題（もんだい）は、合格率（ごうかくりつ）に 入（はい）れません。'),
-                    textAlign: TextAlign.center,
-                    style: dqText(size: 11, color: dqInk.withAlpha(150)),
                   ),
                 ],
                 const SizedBox(height: 24),
