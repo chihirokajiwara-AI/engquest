@@ -1138,15 +1138,17 @@ class _ChatBubble extends StatelessWidget {
                 width: isBlank ? 1.5 : 1,
               ),
             ),
-            child: Text(
-              text,
-              style: dqText(
-                size: 15,
-                w: FontWeight.w500,
-                color: isBlank ? dqGold : dqInk,
-              ).copyWith(
-                  fontStyle: isBlank ? FontStyle.italic : FontStyle.normal),
-            ),
+            // #73 (extended to 大問2): render B's blank as a gold underline gap,
+            // not a literal "(    )" that reads as parentheses (see clozeRich).
+            child: isBlank
+                ? clozeRich(
+                    text,
+                    dqText(size: 15, w: FontWeight.w500, color: dqInk),
+                  )
+                : Text(
+                    text,
+                    style: dqText(size: 15, w: FontWeight.w500, color: dqInk),
+                  ),
           ),
         ),
         if (!isLeft) ...[

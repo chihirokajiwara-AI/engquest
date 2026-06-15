@@ -33,6 +33,35 @@ TextStyle dqText(
       ],
     );
 
+/// Renders a cloze/fill-in stem with the blank shown as a continuous gold
+/// UNDERLINE gap (the print-英検 / mikan convention) instead of the literal
+/// "(    )" the cloze builders insert — children misread parentheses as
+/// punctuation, not a fill-in gap, and answer the format wrong rather than the
+/// knowledge (#73). Splits on the whitespace-padded parens; degrades to plain
+/// text when no blank marker is present. Shared by 大問1 vocab + 大問2 会話.
+Widget clozeRich(String cloze, TextStyle style) {
+  final m = RegExp(r'\(\s{2,}\)').firstMatch(cloze);
+  if (m == null) return Text(cloze, style: style);
+  return Text.rich(
+    TextSpan(
+      style: style,
+      children: [
+        TextSpan(text: cloze.substring(0, m.start)),
+        TextSpan(
+          text: '     ',
+          style: style.copyWith(
+            color: dqGold,
+            decoration: TextDecoration.underline,
+            decorationColor: dqGold,
+            decorationThickness: 2.5,
+          ),
+        ),
+        TextSpan(text: cloze.substring(m.end)),
+      ],
+    ),
+  );
+}
+
 /// Full-screen atmospheric scene: a background image (or a deep-night gradient
 /// fallback) under a darkening overlay for legibility.
 class DqScene extends StatelessWidget {

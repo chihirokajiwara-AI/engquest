@@ -76,37 +76,6 @@ bool hasCleanCloze(String sentence, String word) {
   return whole == 1 && anySub == 1;
 }
 
-/// Renders a cloze stem with the blank shown as a continuous gold UNDERLINE gap
-/// (the print-英検 / mikan convention) instead of the literal "(    )" the cloze
-/// builder inserts — children misread parentheses as punctuation, not a fill-in
-/// gap, and answer the format wrong rather than the knowledge (#73, real-render
-/// audit). Splits on the whitespace-padded parens; degrades to plain text if no
-/// blank marker is present. Pure + public so the substitution is unit-tested.
-@visibleForTesting
-Widget clozeRich(String cloze, TextStyle style) {
-  final m = RegExp(r'\(\s{2,}\)').firstMatch(cloze);
-  if (m == null) return Text(cloze, style: style);
-  return Text.rich(
-    TextSpan(
-      style: style,
-      children: [
-        TextSpan(text: cloze.substring(0, m.start)),
-        // A continuous gold underline reads unmistakably as "write the word here".
-        TextSpan(
-          text: '     ', // figure spaces = digit width
-          style: style.copyWith(
-            color: dqGold,
-            decoration: TextDecoration.underline,
-            decorationColor: dqGold,
-            decorationThickness: 2.5,
-          ),
-        ),
-        TextSpan(text: cloze.substring(m.end)),
-      ],
-    ),
-  );
-}
-
 class VocabGrammarPracticeScreen extends StatefulWidget {
   const VocabGrammarPracticeScreen({
     super.key,

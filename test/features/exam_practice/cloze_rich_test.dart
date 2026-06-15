@@ -5,7 +5,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:engquest/features/exam_practice/vocab_grammar_practice_screen.dart';
+import 'package:engquest/features/quest/ui/dq_ui.dart';
 
 void main() {
   const style = TextStyle(fontSize: 18);
