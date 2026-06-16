@@ -202,15 +202,20 @@ void main() {
 
   // ── Due-count display ─────────────────────────────────────────────────────
 
-  testWidgets('KotobaHomeScreen: empty due-state shows quiet館 message',
+  testWidgets(
+      'KotobaHomeScreen: first-run (no data) invites learning, not a passive "quiet" message',
       (tester) async {
     await tester.pumpWidget(_wrap(
       streakService: _MockStreakService(const StreakState.zero()),
-      cardRepository: InMemoryFsrsCardRepository(), // empty → 0 due
+      cardRepository: InMemoryFsrsCardRepository(), // empty → 0 due, brand new
     ));
     await _settle(tester);
-    // Empty state: "館は しずか……"
-    expect(find.textContaining('しずか'), findsOneWidget);
+    // A brand-new child (0 due, no estimate, no streak) has learned nothing yet,
+    // and tapping opens a fresh deck of NEW words — so the panel must INVITE them
+    // to start, not show the passive caught-up "館は しずか / Review" copy (which
+    // wrongly implies there's nothing to do and that it's "review", not learning).
+    expect(find.textContaining('さいしょの ことば'), findsOneWidget);
+    expect(find.textContaining('しずか'), findsNothing);
   });
 
   testWidgets('KotobaHomeScreen: N due items shows diegetic message',

@@ -833,6 +833,13 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
 
   Widget _buildNazoPanel() {
     final hasDue = _dueCount > 0;
+    // First-run beginner: no due cards, no 合格率 estimate, no streak yet — they
+    // have learned NOTHING, so tapping opens a fresh deck of NEW 5級 words to
+    // LEARN (battle_screen falls back to the full deck when nothing is due).
+    // The plain empty-state ("館は しずか…… / Review") is both passive AND wrong
+    // here (there is nothing to "review" — it's first learning), so it failed to
+    // invite the child to start. Show an active "learn your first words" call.
+    final firstRun = !hasDue && _estimate == null && _streak.currentStreak == 0;
 
     // Tappable → FSRS vocabulary review (#66): the panel announces the due-count
     // and now actually opens the review, instead of stranding the child.
@@ -865,6 +872,19 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
                       const SizedBox(height: 4),
                       Text(
                         'タップして たんごを ふくしゅうしよう / Review',
+                        style:
+                            dqText(size: 12, w: FontWeight.w500, color: dqGold),
+                      ),
+                    ] else if (firstRun) ...[
+                      // Brand-new child: invite them to LEARN, not "review".
+                      Text(
+                        'さいしょの ことばを おぼえよう！',
+                        style:
+                            dqText(size: 14, w: FontWeight.w600, color: dqInk),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'タップして スタート / Start learning',
                         style:
                             dqText(size: 12, w: FontWeight.w500, color: dqGold),
                       ),
