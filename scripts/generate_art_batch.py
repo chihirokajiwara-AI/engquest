@@ -72,7 +72,12 @@ def main() -> int:
     )
 
     if args.kind == "npc":
-        prompt = "{0}{1}, {2}".format(NPC_POS, args.subject, NPC_STYLE)
+        # FRONT-LOAD the critical コトバ探偵 palette + single-character cues so they
+        # survive CLIP's 77-token truncation even with a longer --subject (the tail
+        # is what gets cut). Style/consistency is the producer's #1 gate, so style
+        # leads, subject trails. Keep --subject SHORT for best fidelity.
+        # (memory: art-gen-pipeline-realities — CLIP-77 front-load.)
+        prompt = "{0}, {1}{2}".format(NPC_STYLE, NPC_POS, args.subject)
         neg = NPC_NEG
     else:
         prompt = "{0}, {1}".format(args.subject, POS)
