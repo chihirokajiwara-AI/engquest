@@ -1300,21 +1300,13 @@ class _SceneViewState extends State<SceneView>
   /// #90 observation point — a SUBTLE searchable spot (a faint magnifier dot), far
   /// quieter than the gold coin/NPC so it rewards a curious child who looks around
   /// (Layton density) without shouting. Re-tappable; reveals a 探偵メモ line.
-  Widget _observationTarget(double size) {
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: Colors.black.withAlpha(45),
-        border: Border.all(color: dqGold.withAlpha(85), width: 1.2),
-      ),
-      child: Center(
-        child:
-            Icon(Icons.search, color: dqGold.withAlpha(150), size: size * 0.5),
-      ),
-    );
-  }
+  // Observation hotspots are faint by design (Layton "not pre-marked"), but the
+  // real-render audit showed a child may never notice them on a busy painted
+  // scene → the 探偵メモ lore goes unseen. A SLOW, subtle breathing shimmer (clearly
+  // dimmer than the coin's bright glint) rewards a curious sweep without becoming
+  // a loud marker. Respects reduce-motion.
+  Widget _observationTarget(double size) => _ObservationShimmer(
+      size: size, reduceMotion: prefersReducedMotion(context));
 
   Widget _npcTarget(int idx, Hotspot hotspot, bool solved, double size) {
     final grey = hotspot.npcGreyAsset;
@@ -1601,6 +1593,73 @@ class _IdlePulseHaloState extends State<_IdlePulseHalo>
 /// wandering child notices "something shiny over there" (the scene's only discovery
 /// beat, #50). The glow blur/spread and the ✦ scale breathe in a calm, eased cycle
 /// (never a strobe). Reduced-motion → a static glint at the cycle's mid brightness.
+/// Subtle breathing shimmer for an observation hotspot — deliberately dimmer and
+/// slower than [_CoinTwinkle] so it stays SECONDARY to coins while still catching
+/// a curious sweep (the real-render audit showed static dots get missed on a busy
+/// painted scene, leaving the 探偵メモ lore undiscovered). Reduce-motion → static.
+class _ObservationShimmer extends StatefulWidget {
+  final double size;
+  final bool reduceMotion;
+  const _ObservationShimmer({required this.size, required this.reduceMotion});
+
+  @override
+  State<_ObservationShimmer> createState() => _ObservationShimmerState();
+}
+
+class _ObservationShimmerState extends State<_ObservationShimmer>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2600), // slow, calm breathing
+    );
+    if (!widget.reduceMotion) _ctrl.repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  Widget _dot(double t) {
+    // t: 0 (dim) → 1 (a touch brighter). Reduced-motion passes 0.45.
+    final borderAlpha = (70 + 60 * t).round(); // 70 → 130
+    final iconAlpha = (130 + 60 * t).round(); // 130 → 190
+    final glowAlpha = (10 + 45 * t).round(); // very soft halo, 10 → 55
+    final glowBlur = 4.0 + 5.0 * t; // 4 → 9
+    return Container(
+      width: widget.size,
+      height: widget.size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.black.withAlpha(45),
+        border: Border.all(color: dqGold.withAlpha(borderAlpha), width: 1.2),
+        boxShadow: [
+          BoxShadow(color: dqGold.withAlpha(glowAlpha), blurRadius: glowBlur),
+        ],
+      ),
+      child: Center(
+        child: Icon(Icons.search,
+            color: dqGold.withAlpha(iconAlpha), size: widget.size * 0.5),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.reduceMotion) return _dot(0.45);
+    return AnimatedBuilder(
+      animation: _ctrl,
+      builder: (_, __) => _dot(Curves.easeInOut.transform(_ctrl.value)),
+    );
+  }
+}
+
 class _CoinTwinkle extends StatefulWidget {
   final double size;
   final bool reduceMotion;
