@@ -1266,6 +1266,35 @@ final SceneDef kTownPre2Scene = SceneDef(
       clueLineJa: 'スラ：「…ぷる！ ふねの ロープの あいだで、なにかが ゆれて ひかってる。'
           'たかい ところだなぁ…！」',
     ),
+    // ── Coin 2: hidden on a harbour-side crane ──────────────────────────────
+    Hotspot.coin(
+      pos: const Alignment(0.58, 0.52),
+      size: 0.10,
+      coinValue: 1,
+      clueLineJa: 'スラ：「…ぷる！ にもつを つるす クレーンの さきっぽ… '
+          'あそこにも ひかるものが ぶらさがってる！」',
+    ),
+    // ── Observation points (#90 density): tap-to-look 探偵メモ, no puzzle ─────
+    Hotspot.observation(
+      pos: const Alignment(0.10, -0.62),
+      clueLineJa: 'たんていメモ：ふたつの ギルドの はたが、たがいに そっぽを '
+          'むいて かかげられている。ことばが ないと、せなかしか みえない。',
+    ),
+    Hotspot.observation(
+      pos: const Alignment(-0.35, 0.55),
+      clueLineJa: 'たんていメモ：せかいじゅうの こうしんりょうの はこ。'
+          'でも ラベルの もじが きえ、どこから きたのか だれにも わからない。',
+    ),
+    Hotspot.observation(
+      pos: const Alignment(0.32, 0.30),
+      clueLineJa: 'たんていメモ：はしらの かげに、ちいさな かげが ひとつ。'
+          'じっと こちらを みて、なにも いわない。…だれ？',
+    ),
+    Hotspot.observation(
+      pos: const Alignment(-0.62, 0.28),
+      clueLineJa: 'たんていメモ：かぜに とんできた しおり――「grey world」。'
+          '7まいの うちの、4まいめだ。',
+    ),
   ],
 );
 
