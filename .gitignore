@@ -106,3 +106,7 @@ tools/fonts/
 .claude/scheduled_tasks.json
 .claude/scheduled_tasks.lock
 .last_ceo_heartbeat
+
+# Transient art-gen candidate batches (curated by hand, never shipped from here;
+# the chosen image is committed under assets/ explicitly). Keeps WIP webp out.
+candidates/
