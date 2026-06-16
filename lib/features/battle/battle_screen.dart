@@ -1579,7 +1579,7 @@ class _GradeButtonState extends State<_GradeButton>
     return Semantics(
       button: true,
       label: widget.labelJpOverride != null
-          ? '${widget.labelJpOverride}。つぎは $interval'
+          ? widget.labelJpOverride!
           : '${_gradeJp(widget.grade)} ${widget.grade.label}。つぎは $interval',
       onTap: widget.onTap,
       excludeSemantics: true,
@@ -1638,12 +1638,17 @@ class _GradeButtonState extends State<_GradeButton>
                       size: 9, w: FontWeight.w600, color: dqGold, spacing: 0.8),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 3),
-                Text(
-                  interval,
-                  style: dqText(size: 9, color: dqGoldDeep),
-                  textAlign: TextAlign.center,
-                ),
+                // The FSRS next-interval ("つぎは 3日後") is adult SRS detail — useful
+                // on the legacy 4-grade tiles, but pure clutter under a child's 2
+                // choices (#84 re-audit, CEO 1748). Hide it when a child label is set.
+                if (widget.labelJpOverride == null) ...[
+                  const SizedBox(height: 3),
+                  Text(
+                    interval,
+                    style: dqText(size: 9, color: dqGoldDeep),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ],
             ),
           ),
