@@ -64,6 +64,15 @@ def build_cmd(args) -> list[str]:
     pre = "scale={0}:-2".format(w * 2)
     zp = _zoompan_expr(args.duration, fps, args.zoom, args.pan, w, h)
     vf = "{pre},{zp},vignette=PI/5".format(pre=pre, zp=zp)
+    # Optional very-light film grain for a painterly, less-digital feel.
+    if args.grain:
+        vf += ",noise=alls=7:allf=t+u"
+    # Cinematic fade from/to black — a Layton beat dissolves in, it never hard-cuts.
+    fade = max(0.3, min(0.8, args.duration / 12))
+    out_st = max(0.0, args.duration - fade)
+    vf += ",fade=t=in:st=0:d={f},fade=t=out:st={o}:d={f}".format(
+        f=round(fade, 2), o=round(out_st, 2)
+    )
     cmd = ["ffmpeg", "-y", "-loop", "1", "-i", args.input]
     if args.audio:
         cmd += ["-i", args.audio]
@@ -93,6 +102,8 @@ def main() -> int:
     p.add_argument("--pan", choices=["lr", "rl", "up", "down", "center"],
                    default="center")
     p.add_argument("--audio", default=None, help="optional leitmotif track")
+    p.add_argument("--grain", action="store_true",
+                   help="add very-light film grain (painterly feel)")
     args = p.parse_args()
 
     if not os.path.exists(args.input):
