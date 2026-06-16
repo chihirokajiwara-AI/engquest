@@ -917,8 +917,11 @@ class _BattleScreenState extends State<BattleScreen>
   }
 
   // Momentum nudge banner (studio #4): readable, above the card, a11y liveRegion.
+  // It ENTERS with a slide-down + pop (R2-#4) so the variable-ratio reward lands as
+  // a felt beat instead of appearing statically. Keyed to the text so each new nudge
+  // re-animates. Reduced-motion → instant.
   Widget _buildMomentumBanner() {
-    return Semantics(
+    final content = Semantics(
       liveRegion: true,
       label: _momentumText ?? '',
       excludeSemantics: true,
@@ -946,6 +949,21 @@ class _BattleScreenState extends State<BattleScreen>
           ],
         ),
       ),
+    );
+    if (prefersReducedMotion(context)) return content;
+    return TweenAnimationBuilder<double>(
+      key: ValueKey(_momentumText),
+      tween: Tween(begin: 0.0, end: 1.0),
+      duration: const Duration(milliseconds: 320),
+      curve: Curves.easeOutBack, // slight overshoot → a felt "pop"
+      builder: (_, t, child) => Opacity(
+        opacity: t.clamp(0.0, 1.0),
+        child: Transform.translate(
+          offset: Offset(0, (1 - t) * -10),
+          child: Transform.scale(scale: 0.92 + 0.08 * t, child: child),
+        ),
+      ),
+      child: content,
     );
   }
 
