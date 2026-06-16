@@ -146,6 +146,12 @@ class _SceneViewState extends State<SceneView> {
   // Coin balance (shown in HUD after collecting)
   int _coinBalance = 0;
 
+  /// Running ピカラット earned THIS scene session — accumulates [NazoResult.
+  /// picaratEarned] (previously discarded) and counts up in the header after each
+  /// solve. #86 (game-studio #6): the scene loop had no between-puzzle reward
+  /// accumulator, so no 「あと1問」 pull; this makes each solve visibly add up.
+  int _sessionPicarat = 0;
+
   // Parallax offset driven by pan gesture
   double _parallaxOffset = 0.0;
   static const _parallaxMaxShift = 0.04; // fraction of container width
@@ -375,6 +381,7 @@ class _SceneViewState extends State<SceneView> {
       setState(() {
         _solved[idx] = true;
         _restoringIdx = idx; // one-shot gold glow on the restored NPC
+        _sessionPicarat += result.picaratEarned; // #86 reward accumulator
       });
       // Clear the glow flag once it has played, so it never re-glows on rebuild.
       _restoreTimer?.cancel();
@@ -644,6 +651,8 @@ class _SceneViewState extends State<SceneView> {
                 style: dqText(size: 16, w: FontWeight.w800, color: dqGold),
               ),
             ),
+            // Running ピカラット earned this session — counts up per solve (#86).
+            _picaratPill(),
             // ナゾ progress pill — how many of the scene's mysteries are solved.
             // Makes progress visible instead of a binary all-done colour flood.
             _nazoProgressPill(),
@@ -663,6 +672,46 @@ class _SceneViewState extends State<SceneView> {
           ],
         ),
       );
+
+  /// Running ピカラット accumulator (#86): a count-up reward total in the header
+  /// that grows after each solve — the between-puzzle 「あと1問」 pull the scene loop
+  /// lacked (Battle already has streak/XP). Diamond-cyan to read distinct from the
+  /// gold ✦ coins. Hidden until the first ピカラット is earned (a reward reveal).
+  Widget _picaratPill() {
+    if (_sessionPicarat <= 0) return const SizedBox.shrink();
+    const cyan = Color(0xFFB8F0FF);
+    return Padding(
+      padding: const EdgeInsets.only(left: 4),
+      child: Semantics(
+        label: 'ピカラット $_sessionPicarat',
+        excludeSemantics: true,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+          decoration: BoxDecoration(
+            color: Colors.black.withAlpha(70),
+            borderRadius: BorderRadius.circular(11),
+            border: Border.all(color: cyan.withAlpha(120)),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.diamond, color: cyan, size: 12),
+              const SizedBox(width: 3),
+              TweenAnimationBuilder<int>(
+                tween: IntTween(begin: 0, end: _sessionPicarat),
+                duration: prefersReducedMotion(context)
+                    ? Duration.zero
+                    : const Duration(milliseconds: 600),
+                curve: Curves.easeOut,
+                builder: (_, v, __) => Text('$v',
+                    style: dqText(size: 13, w: FontWeight.w800, color: cyan)),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   /// Compact "ナゾ solved/total" pill shown in the header. Hidden for scenes with
   /// fewer than two ナゾ (a single puzzle needs no progress bar). Turns green with
