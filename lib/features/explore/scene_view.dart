@@ -1241,6 +1241,34 @@ class _SceneViewState extends State<SceneView>
         if (!solved && !prefersReducedMotion(context))
           _IdlePulseHalo(key: const ValueKey('npc_idle_pulse'), size: size),
         portrait,
+        // #87 re-audit (CEO 1748): a solved NPC lost its idle-pulse and looked
+        // inert, so a child had NO cue that tapping it re-opens the story they
+        // recovered (#3). A small gold 探偵メモ (book) badge on the restored villager
+        // is that affordance — distinct from the unsolved "tap me to solve" pulse,
+        // it reads "there's a story to re-read here". Decorative (taps fall through
+        // to the NPC's GestureDetector); the a11y label already says so.
+        if (solved)
+          Positioned(
+            right: size * 0.02,
+            bottom: size * 0.02,
+            child: Container(
+              width: size * 0.28,
+              height: size * 0.28,
+              decoration: BoxDecoration(
+                color: dqBox.withAlpha(235),
+                shape: BoxShape.circle,
+                border: Border.all(color: dqGold.withAlpha(210), width: 1.5),
+                boxShadow: [
+                  BoxShadow(color: dqGold.withAlpha(90), blurRadius: 5),
+                  const BoxShadow(color: Colors.black54, blurRadius: 3),
+                ],
+              ),
+              child: Center(
+                child: Icon(Icons.menu_book_rounded,
+                    color: dqGold, size: size * 0.16),
+              ),
+            ),
+          ),
         if (idx == _restoringIdx)
           Positioned.fill(
             child: IgnorePointer(
