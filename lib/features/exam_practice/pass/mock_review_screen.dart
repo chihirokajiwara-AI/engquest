@@ -267,9 +267,12 @@ class _ReviewCard extends StatelessWidget {
           ),
           if (item.questionText.trim().isNotEmpty) ...[
             const SizedBox(height: 8),
-            Text(
+            // #73: same as the live mock — render the cloze blank as an underline
+            // gap, not literal "( )". clozeRich degrades to plain text for non-cloze
+            // (reading/listening) stems, so the review reads exactly like the exam.
+            clozeRich(
               item.questionText.trim(),
-              style: dqText(size: 14).copyWith(height: 1.5),
+              dqText(size: 14).copyWith(height: 1.5),
             ),
           ],
           if (transcript != null) ...[
