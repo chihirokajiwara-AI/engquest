@@ -1018,7 +1018,10 @@ class _BattleScreenState extends State<BattleScreen>
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            vocab.word,
+            // Storage keys are underscore-joined (card_game, ice_cream); show them
+            // SPACED — the card front displayed the raw key ("card_game") like a
+            // code identifier. Every other surface already does this replace.
+            vocab.word.replaceAll('_', ' '),
             style: dqText(
               size: 48,
               w: FontWeight.w800,
@@ -1084,7 +1087,8 @@ class _BattleScreenState extends State<BattleScreen>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(vocab.word, style: dqText(size: 22, color: dqGoldDeep)),
+          Text(vocab.word.replaceAll('_', ' '),
+              style: dqText(size: 22, color: dqGoldDeep)),
           const SizedBox(height: 16),
           Text(
             vocab.jpTranslation,
