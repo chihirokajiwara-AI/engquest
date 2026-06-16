@@ -344,7 +344,7 @@ class _NazoScreenState extends State<NazoScreen> {
       child: Stack(
         children: [
           SafeArea(
-            child: SingleChildScrollView(
+            child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -353,79 +353,103 @@ class _NazoScreenState extends State<NazoScreen> {
                   const SizedBox(height: 12),
                   _picaratRow(),
                   const SizedBox(height: 12),
-                  // This ナゾ plays a phoneme/word the child must HEAR to answer —
-                  // if Voice is muted, warn + offer a one-tap unmute. Suppressed when
-                  // the clip is missing (unmuting wouldn't help → show 準備中 instead).
-                  if (AudioMute.voiceMuted &&
-                      _step.autoPlayAudio != null &&
-                      !_audioMissing) ...[
-                    MutedVoiceBanner(
-                      onUnmute: () => setState(() {}),
-                      message: kPhonicsMutedMessage,
-                    ),
-                    const SizedBox(height: 12),
-                  ],
-                  if (widget.hotspot.framingJa != null) ...[
-                    _framingBox(),
-                    const SizedBox(height: 10),
-                  ],
-                  _quizCard(),
-                  const SizedBox(height: 14),
-                  _promptLabel(),
-                  const SizedBox(height: 8),
-                  ..._optionTiles(),
-                  // Teach at the error moment (studio #3): the tapped word's
-                  // meaning, shown gently (info, not a scold) for ~2.4s.
-                  if (_wrongMeaning != null) ...[
-                    const SizedBox(height: 10),
-                    _wrongMeaningBanner(),
-                  ],
-                  if (_revealed) ...[
-                    const SizedBox(height: 12),
-                    // Solve-moment reward (game-feel #51): a detective-register
-                    // "the word resonated" stamp acknowledges the win BEFORE the
-                    // restoration dialog — so solving feels like a victory, not just
-                    // a correct/next. Static (no animation → reduced-motion-safe).
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: dqGold.withAlpha(34),
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: dqGold.withAlpha(140)),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text('✦', style: TextStyle(fontSize: 18)),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              'ことばが ひびいた！ ―― 色（いろ）が もどる。',
-                              style: dqText(
-                                  size: 14, w: FontWeight.w800, color: dqGold),
-                            ),
+                  // Body CENTRES in the remaining space (scrolls when tall) so a
+                  // short ナゾ fills the screen instead of clinging to the top over
+                  // a dead navy void (#112 / EIKEN5-LAYTON-NAZO-PLAN.md #4).
+                  Expanded(
+                    child: LayoutBuilder(
+                      builder: (context, c) => SingleChildScrollView(
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(minHeight: c.maxHeight),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              // This ナゾ plays a phoneme/word the child must HEAR to answer —
+                              // if Voice is muted, warn + offer a one-tap unmute. Suppressed when
+                              // the clip is missing (unmuting wouldn't help → show 準備中 instead).
+                              if (AudioMute.voiceMuted &&
+                                  _step.autoPlayAudio != null &&
+                                  !_audioMissing) ...[
+                                MutedVoiceBanner(
+                                  onUnmute: () => setState(() {}),
+                                  message: kPhonicsMutedMessage,
+                                ),
+                                const SizedBox(height: 12),
+                              ],
+                              if (widget.hotspot.framingJa != null) ...[
+                                _framingBox(),
+                                const SizedBox(height: 10),
+                              ],
+                              _quizCard(),
+                              const SizedBox(height: 14),
+                              _promptLabel(),
+                              const SizedBox(height: 8),
+                              ..._optionTiles(),
+                              // Teach at the error moment (studio #3): the tapped word's
+                              // meaning, shown gently (info, not a scold) for ~2.4s.
+                              if (_wrongMeaning != null) ...[
+                                const SizedBox(height: 10),
+                                _wrongMeaningBanner(),
+                              ],
+                              if (_revealed) ...[
+                                const SizedBox(height: 12),
+                                // Solve-moment reward (game-feel #51): a detective-register
+                                // "the word resonated" stamp acknowledges the win BEFORE the
+                                // restoration dialog — so solving feels like a victory, not just
+                                // a correct/next. Static (no animation → reduced-motion-safe).
+                                Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 8),
+                                  decoration: BoxDecoration(
+                                    color: dqGold.withAlpha(34),
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(
+                                        color: dqGold.withAlpha(140)),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Text('✦',
+                                          style: TextStyle(fontSize: 18)),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: Text(
+                                          'ことばが ひびいた！ ―― 色（いろ）が もどる。',
+                                          style: dqText(
+                                              size: 14,
+                                              w: FontWeight.w800,
+                                              color: dqGold),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 12),
+                                DqDialogBox(
+                                  speaker: _step.npcName,
+                                  child: Text(_step.onCorrect,
+                                      style: dqText(size: 15)),
+                                ),
+                                const SizedBox(height: 16),
+                                // Gated on _burstReady (after the read window) so a child
+                                // cannot skip past reading WHY it was right. Auto-advance also
+                                // fires, so this is an optional early-skip, not the only exit.
+                                if (_burstReady)
+                                  DqButton(
+                                      label: '▶ ナゾ、解（と）けた！', onTap: _finish),
+                              ] else ...[
+                                const SizedBox(height: 16),
+                                _hintLadder(),
+                              ],
+                              const SizedBox(height: 20),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 12),
-                    DqDialogBox(
-                      speaker: _step.npcName,
-                      child: Text(_step.onCorrect, style: dqText(size: 15)),
-                    ),
-                    const SizedBox(height: 16),
-                    // Gated on _burstReady (after the read window) so a child
-                    // cannot skip past reading WHY it was right. Auto-advance also
-                    // fires, so this is an optional early-skip, not the only exit.
-                    if (_burstReady)
-                      DqButton(label: '▶ ナゾ、解（と）けた！', onTap: _finish),
-                  ] else ...[
-                    const SizedBox(height: 16),
-                    _hintLadder(),
-                  ],
-                  const SizedBox(height: 20),
+                  ),
                 ],
               ),
             ),

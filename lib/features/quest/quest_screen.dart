@@ -226,85 +226,101 @@ class _QuestScreenState extends State<QuestScreen> {
   Widget _encounter() {
     final total = widget.town.encounters.length;
     final step = _enc;
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          _header('${_index + 1} / $total'),
-          const SizedBox(height: 4),
-          // This step plays a phoneme/word the child must HEAR — if Voice is
-          // muted, warn + offer a one-tap unmute.
-          if (AudioMute.voiceMuted && step.autoPlayAudio != null) ...[
-            MutedVoiceBanner(
-              onUnmute: () => setState(() {}),
-              message: kPhonicsMutedMessage,
+    // Header pinned to the top; the puzzle body CENTRES in the remaining space
+    // (scrolls when tall) so a short quiz fills the screen instead of clinging to
+    // the top over a dead navy void (#112 / EIKEN5-LAYTON-NAZO-PLAN.md #4).
+    return Column(
+      children: [
+        _header('${_index + 1} / $total'),
+        const SizedBox(height: 4),
+        Expanded(
+          child: LayoutBuilder(
+            builder: (context, c) => SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: c.maxHeight),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // This step plays a phoneme/word the child must HEAR — if Voice is
+                    // muted, warn + offer a one-tap unmute.
+                    if (AudioMute.voiceMuted && step.autoPlayAudio != null) ...[
+                      MutedVoiceBanner(
+                        onUnmute: () => setState(() {}),
+                        message: kPhonicsMutedMessage,
+                      ),
+                      const SizedBox(height: 8),
+                    ],
+                    // Kind-dispatch: phonics/blend/word/phrase get a teach card; Quiz keeps
+                    // the original NPC-dialogue layout.
+                    switch (step) {
+                      TeachSound s => PhonicsLetterCard(
+                          glyph: s.glyph,
+                          npcName: s.npcName,
+                          npcEmoji: s.npcEmoji,
+                          npcImage: _npcImage(s.npcName),
+                          teachJa: s.teachJa,
+                          onReplay: () => _cue.play(s.autoPlayAudio),
+                        ),
+                      BlendWord s => BlendWordCard(
+                          letters: s.letters,
+                          word: s.word,
+                          npcName: s.npcName,
+                          npcEmoji: s.npcEmoji,
+                          npcImage: _npcImage(s.npcName),
+                          teachJa: s.teachJa,
+                          activeLetter: _activeLetter,
+                          onReplay: () {
+                            _cue.play(s.autoPlayAudio);
+                            _sweepBlend();
+                          },
+                        ),
+                      TeachWord s => PhonicsLetterCard(
+                          glyph: s.word,
+                          npcName: s.npcName,
+                          npcEmoji: s.npcEmoji,
+                          npcImage: _npcImage(s.npcName),
+                          teachJa: s.teachJa,
+                          onReplay: () => _cue.play(s.autoPlayAudio),
+                        ),
+                      Phrase s => PhonicsLetterCard(
+                          glyph: s.text,
+                          npcName: s.npcName,
+                          npcEmoji: s.npcEmoji,
+                          npcImage: _npcImage(s.npcName),
+                          teachJa: s.teachJa,
+                          onReplay: () => _cue.play(s.autoPlayAudio),
+                        ),
+                      QuestEncounter q => _quizPrompt(q),
+                    },
+                    const SizedBox(height: 18),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                          step.practicePromptJa ?? '正（ただ）しい返事（へんじ）をえらぼう',
+                          style: dqText(size: 12, color: dqGold)),
+                    ),
+                    const SizedBox(height: 8),
+                    ..._options(step),
+                    if (_revealed) ...[
+                      const SizedBox(height: 8),
+                      DqDialogBox(
+                        speaker: step.npcName,
+                        child: Text(step.onCorrect, style: dqText(size: 15)),
+                      ),
+                      const SizedBox(height: 16),
+                      DqButton(
+                          label: _index < total - 1 ? '▶ つぎへ' : '▶ 街（まち）をクリア！',
+                          onTap: _next),
+                    ],
+                    const SizedBox(height: 20),
+                    _party(),
+                  ],
+                ),
+              ),
             ),
-            const SizedBox(height: 8),
-          ],
-          // Kind-dispatch: phonics/blend/word/phrase get a teach card; Quiz keeps
-          // the original NPC-dialogue layout.
-          switch (step) {
-            TeachSound s => PhonicsLetterCard(
-                glyph: s.glyph,
-                npcName: s.npcName,
-                npcEmoji: s.npcEmoji,
-                npcImage: _npcImage(s.npcName),
-                teachJa: s.teachJa,
-                onReplay: () => _cue.play(s.autoPlayAudio),
-              ),
-            BlendWord s => BlendWordCard(
-                letters: s.letters,
-                word: s.word,
-                npcName: s.npcName,
-                npcEmoji: s.npcEmoji,
-                npcImage: _npcImage(s.npcName),
-                teachJa: s.teachJa,
-                activeLetter: _activeLetter,
-                onReplay: () {
-                  _cue.play(s.autoPlayAudio);
-                  _sweepBlend();
-                },
-              ),
-            TeachWord s => PhonicsLetterCard(
-                glyph: s.word,
-                npcName: s.npcName,
-                npcEmoji: s.npcEmoji,
-                npcImage: _npcImage(s.npcName),
-                teachJa: s.teachJa,
-                onReplay: () => _cue.play(s.autoPlayAudio),
-              ),
-            Phrase s => PhonicsLetterCard(
-                glyph: s.text,
-                npcName: s.npcName,
-                npcEmoji: s.npcEmoji,
-                npcImage: _npcImage(s.npcName),
-                teachJa: s.teachJa,
-                onReplay: () => _cue.play(s.autoPlayAudio),
-              ),
-            QuestEncounter q => _quizPrompt(q),
-          },
-          const SizedBox(height: 18),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text(step.practicePromptJa ?? '正（ただ）しい返事（へんじ）をえらぼう',
-                style: dqText(size: 12, color: dqGold)),
           ),
-          const SizedBox(height: 8),
-          ..._options(step),
-          if (_revealed) ...[
-            const SizedBox(height: 8),
-            DqDialogBox(
-              speaker: step.npcName,
-              child: Text(step.onCorrect, style: dqText(size: 15)),
-            ),
-            const SizedBox(height: 16),
-            DqButton(
-                label: _index < total - 1 ? '▶ つぎへ' : '▶ 街（まち）をクリア！',
-                onTap: _next),
-          ],
-          const SizedBox(height: 20),
-          _party(),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
