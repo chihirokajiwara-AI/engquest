@@ -153,3 +153,20 @@ The 62 items above MISSED these. Added so the loop drives them too. Severity for
 ## Playtest-sweep findings (real-browser interact_audit, 2026-06-12)
 - VALIDATED interactive on live :8088: explore(5/3/準1), questmap, vocab — all "Real interaction CONFIRMED".
 - FINDING (a11y, real): the **mock + any DqChoice-with-cursor screen do NOT expose the *selected* state to the semantics tree** — choosing a mock answer marks only a visual ▶ cursor; a screen-reader user gets no "selected" feedback. (The audit false-negatived the mock route, which surfaced this.) Mock is visually/functionally fine (tests green). FIX (loop, buildable): add `Semantics(selected:)` to DqChoice's selected/cursor state. Tracks under item 60 a11y (which is why 60 was audit-corrected to 73). Also improve interact_audit to detect aria-selected so future sweeps don't false-negative cursor screens.
+
+## Session re-score (2026-06-16, after the 50-item whole-app audit + 19 verified commits)
+Honest, verified-shipped deltas this session (real-render + tests, default-REJECT):
+- **51 ゲームフィール/演出 42→56**: wrong-answer shake (#59), correct-answer elastic pop (#64), unsolved-NPC idle-pulse affordance (#60), named case-title plate (#61), flashcard centred/void-killed (#72). All re-rendered.
+- **60 a11y 73→80**: title-screen menu now exposes screen-reader buttons (#63, was the universal first-tap dead zone); reading/mock selected-state + numbering verified present (#74 — the "no selected state" finding was false).
+- **12 大問構造再現 86→90**: 準2級 listening corrected 2-part→official 3-part (#62, score-fatal format bug).
+- **54 視覚の本格バー 30→37**: ナゾ NPC portrait now uses the scene's cohesive anime art, not the old flat-comic set (#30, fixed by re-wiring — NO art-gen needed); exam-UX polish (underline cloze, tap-targets).
+- **50 探索の深さ 40→44**: idle-pulse "tap me" affordance + named-case identity.
+- **16 hint scaffold 90→91** (penalty now on the tap target, #69); **13 FSRS/想起 75→77** (flip reframed passive→active recall, #65, 2026 testing-effect evidence); **19 calibration 25→27** (recall-first cue); **23 模試 82→83** (underline cloze in mock too).
+- Plus child-UX polish that lifts presentation across content/assessment screens: exam tap-targets enlarged for young kids (#68), 大問1+大問2 cloze blanks rendered as underline not "( )" (#73), achievements show distinct goal icons not identical padlocks (#76), home detective avatar enlarged (#70), settings chip wrap fixed (#77a).
+
+**COMPLETION (honest, all 77 items incl. gated): ~53%.** Breakdown:
+- 英検 drill core (A content + B pedagogy + C assessment + I a11y/perf/test/QA): **~72%** — the part that works; the loop has driven it to a good bar.
+- GAME/RPG layer (H 48–58): **~48%** — the 本格 visual bar (#54) is art-gen-gated; world/character/exploration depth is mid.
+- Gated infra/AI/billing/legal/store (D, E, F, G, J): **~30%** — almost ALL the 0–30 scores. CANNOT self-advance: backend deploy (#44), AI proxy (#29–33), billing keys (#34–37), legal copy (#63,64,75), store assets/URLs (#69,72,73), art-gen (#54). CEO-domain.
+
+**Why the overall is "only" ~53% despite the buildable work being strong:** the average is dragged by ~25 GATE items that need CEO decisions (deploy GO, real keys, legal sign-off, store submission, art-gen setup). The loop has taken the BUILDABLE items as far as they go without those unblocks. Unblock the gates → the number jumps.
