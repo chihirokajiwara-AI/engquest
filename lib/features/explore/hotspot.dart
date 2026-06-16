@@ -747,6 +747,38 @@ const TeachCard kBeVerbTeach = TeachCard(
   ],
 );
 
+/// Teach-first lesson for 灰守セルの a/an ナゾ. Teach a vs an (an before a vowel
+/// SOUND) before asking. (CEO 1891/1893: the 5級 scene ナゾ are real 英検5級
+/// questions, not phonics — the 英検 item IS the puzzle, intrinsic integration.
+/// A 6+ 5級 candidate already decodes; the s·a·t blend was off-target.)
+const TeachCard kArticleTeach = TeachCard(
+  titleJa: 'まず、a と an の つかいわけを おぼえよう',
+  leadJa: 'ひとつの ものに つける「a／an」。つぎの ことばの おとで かたちが かわる。',
+  items: [
+    TeachItem('a cat', 'ねこ １ぴき', 'つぎが「し音（ぼいんで ない おと）」の とき'),
+    TeachItem('an apple', 'りんご １こ', 'つぎが「ぼいん（ア・イ・ウ・エ・オ）の おと」の とき'),
+    TeachItem('an egg', 'たまご １こ', 'エの おとで はじまる → an'),
+  ],
+);
+
+/// 灰守セルの a/an 大問1 ナゾ — AUTHORED for セル (NOT reused from the linear quest,
+/// which would put another villager's name/line on her hotspot and break the
+/// case-identity header). Real 英検5級 article grammar (an before a vowel sound),
+/// staged at セルの never-dying hearth. autoPlayAudio derives from npcLine; the
+/// cloze blank renders as a gap, so the line never gives away the answer.
+const QuestEncounter kCelArticleNazo = QuestEncounter(
+  npcName: '灰守（はいもり）セル',
+  npcEmoji: '🔥',
+  npcLine: 'The hearth still burns. Here — this is ___ apple. Eat, and listen.',
+  npcLineJa: 'かまどは まだ もえている。ほら、これは ___ りんご。たべて、きいて。',
+  choices: ['a', 'an', 'the', 'one'],
+  correctIndex: 1,
+  onCorrect:
+      "An apple — yes. 'apple' begins with a vowel sound, so it is AN, not A. "
+      "The ember flared bright as you spoke. Cel smiles: 'You can still hear. "
+      "I kept the fire for someone like you.'",
+);
+
 final SceneDef kTown5Scene = SceneDef(
   backgroundAsset: 'assets/art/scenes_layton/town5_lane.webp',
   // Single painted plate for now (parallax drifts the whole plate); sliced
@@ -765,39 +797,42 @@ final SceneDef kTown5Scene = SceneDef(
       'しずけさは、そとから きたんじゃない。まんなかから、あるいて きたんだよ。」\n'
       'しおりには、ほんの すこしだけ、ことばが のこっていた――「Once, I」',
   hotspots: [
-    // ── NPC 1: 灰守（はいもり）セル — the Ember-Keeper / first phonics step ──
-    // Encounter index 0 from kQuestTowns[0].encounters (TeachSound /s/).
-    // セル tends the village hearth — the only fire that never went out.
-    // Her mini-mystery: 「なぜ かまどの ひは きえないの？」→ she was waiting for a listener.
+    // ── NPC 1: 灰守（はいもり）セル — the Ember-Keeper / 大問1 article ナゾ ──
+    // step = kCelArticleNazo (a/an: 'this is ___ apple'), AUTHORED for セル so the
+    // case-identity header reads 「灰守（はいもり）セル の ナゾ」. CEO 1891/1893: the
+    // 5級 scene ナゾ are real 英検5級 questions, not phonics — the 英検 item IS the
+    // puzzle (intrinsic integration). A 6+ 5級 candidate already decodes.
+    // セル tends the village hearth and offers a roasted apple whose naming-word
+    // (a/an) the child restores. Her mystery: she waited for a listener.
     Hotspot.npc(
       pos: const Alignment(-0.45, 0.10),
       size: 0.20,
-      step: _kStep(0),
-      // Per-case hint ladder: the generic 5級 fallback is a grammar word-order
-      // tip — useless for this phonics SOUND-recognition ナゾ. Scaffold by the /s/
-      // sound's properties (snake「スー」, mouth + breath), never naming the answer
-      // ('s') or distractor ('a'); kept pure kana so no Latin 's'/'a' leaks
-      // (hintViolatesAnswerRail stays false; locked by nazo_hint_rail_test).
+      step: kCelArticleNazo,
+      teachCard: kArticleTeach,
+      // Per-case hint ladder for the a/an article cloze. Scaffold toward the rule
+      // (the next word starts with a vowel SOUND → the longer form), never naming
+      // the answer ('an') or a distractor ('a'/'the'/'one'); kept pure kana so no
+      // Latin leaks (hintViolatesAnswerRail stays false; nazo_hint_rail_test).
       hints: const [
         NazoHint(
             tier: 1,
-            textJa: '【ヒント T1】ヘビが「スー」と ながく のばす おと だよ。'
-                '🔊を おして、その おと を さがそう。'),
+            textJa: '【ヒント T1】ひとつの ものに つける ことば を えらぶ もんだい。'
+                '「りんご」を えいごで いう とき、どんな おとで はじまる？'),
         NazoHint(
             tier: 2,
-            textJa: '【ヒント T2】くちを よこに ひらいて、はと はの あいだから '
-                'いきを「スー」と ながく だす おと だよ。'),
+            textJa: '【ヒント T2】「ア・イ・ウ・エ・オ」の ような おと（ぼいん）で '
+                'はじまる ことばの まえでは、おとを つなぐ かたち を つかうよ。'),
         NazoHint(
             tier: 3,
-            textJa: '【ヒント T3】さっき セルが おしえてくれた さいしょの おと。'
-                '「スー」と きこえる ほう を えらぼう。'),
+            textJa: '【ヒント T3】「りんご」は『ア』の おとで はじまる。だから、'
+                'ぼいんの まえに つかう かたち を えらぼう。'),
       ],
-      clueLineJa: '「かまどの ひが、まだ きえていない。'
-          'まだ きける ひとを、まっていたんだ。」',
-      framingJa: '灰守（はいもり）セルは、ずっと かまどを まもっていた。\n'
-          'サイレントが きてから、村（むら）の ひとは「ひとつの おと」しか だせない。\n'
-          'セルの くちから もれる おとは… 「ssss…」\n'
-          'ヘビのように、ながく のばす音（おと）。きこえる？',
+      clueLineJa: '「かまどの ひで、りんごを やいた。'
+          'でも、これを よぶ ことばが、ひとつ たりないんだ。」',
+      framingJa: '灰守（はいもり）セルは、きえない かまどを まもってきた。\n'
+          'サイレントに ことばを うばわれても、まちつづけた――\n'
+          'まだ ことばを いれられる、きける ひとを。\n'
+          'セルが やきたての りんごを さしだす。ひとつ、ことばが たりない。',
       npcGreyAsset: 'assets/art/scenes_layton/npc_clockmaker_grey.webp',
       npcColorAsset: 'assets/art/scenes_layton/npc_clockmaker_color.webp',
       // §3 lore drip — CH.1 ember/listener canon (STORY-BIBLE: Cel kept the

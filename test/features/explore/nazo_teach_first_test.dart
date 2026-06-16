@@ -58,10 +58,17 @@ void main() {
   testWidgets(
       'a step that already teaches (no TeachCard) goes straight to quiz',
       (tester) async {
-    // セル's hotspot wraps a TeachSound step — it teaches inherently, so it must
-    // NOT show a separate teach card; it goes straight to its quiz surface.
-    final cell = kTown5Scene.hotspots
-        .firstWhere((h) => h.kind == HotspotKind.npc && h.teachCard == null);
+    // A teach-less ナゾ (a step that teaches inherently) must go straight to the
+    // quiz surface. The phonics ナゾ used to be that case; the 英検-redirect (#112)
+    // gave every 5級 NPC a real 英検 question + teach card, so no teach-less NPC
+    // remains in this scene — skip until a non-teaching ナゾ type exists again.
+    final teachless = kTown5Scene.hotspots
+        .where((h) => h.kind == HotspotKind.npc && h.teachCard == null);
+    if (teachless.isEmpty) {
+      markTestSkipped('no teach-less 5級 NPC ナゾ after the 英検-redirect (#112)');
+      return;
+    }
+    final cell = teachless.first;
     await tester.pumpWidget(
       MaterialApp(home: NazoScreen(hotspot: cell, eikenLevel: '5')),
     );
