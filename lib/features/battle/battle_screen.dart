@@ -1203,7 +1203,24 @@ class _BattleScreenState extends State<BattleScreen>
         ],
       ),
       padding: const EdgeInsets.all(28),
-      child: child,
+      // Overflow safety net (CI render_integrity, Linux font metrics): on a SHORT
+      // viewport the card can be given less height than its natural content
+      // (front face ~460px), which RenderFlex-overflowed by ~56px on CI and would
+      // clip the bottom recall-cue on a small phone. Wrap so the card CENTRES its
+      // content when there's room (minHeight = available → Column's center
+      // alignment fills it) and SCROLLS instead of overflowing when there isn't.
+      // Width stays bounded so text still wraps (FittedBox would unwrap it).
+      child: LayoutBuilder(
+        builder: (context, constraints) => SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight:
+                  constraints.maxHeight.isFinite ? constraints.maxHeight : 0,
+            ),
+            child: child,
+          ),
+        ),
+      ),
     );
   }
 

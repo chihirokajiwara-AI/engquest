@@ -111,6 +111,30 @@ void main() {
     expect(t.takeException(), isNull);
   });
 
+  testWidgets('flashcard does not RenderFlex-overflow on a short viewport',
+      (t) async {
+    // CI (Linux font metrics) hit a 56px bottom overflow when the card was given
+    // < its natural content height (~460px) on a short viewport — would clip the
+    // recall cue on a small phone. The card now scrolls/centres instead. Pump a
+    // deliberately SHORT surface and assert no overflow exception is thrown.
+    t.view.physicalSize = const Size(360, 460);
+    t.view.devicePixelRatio = 1.0;
+    addTearDown(t.view.resetPhysicalSize);
+    addTearDown(t.view.resetDevicePixelRatio);
+
+    await t.pumpWidget(MaterialApp(
+      home: BattleScreen(
+        repository: InMemoryFsrsCardRepository(),
+        vocabRepo: _seeded([_w('eiken5_001', 'cat'), _w('eiken5_002', 'dog')]),
+        childAge: 10,
+        eikenGrade: '5',
+      ),
+    ));
+    await _pumpLoad(t);
+    expect(t.takeException(), isNull,
+        reason: 'the flashcard must not overflow when height-constrained');
+  });
+
   testWidgets('an empty deck shows the calm empty-state, not a crash (#36)',
       (t) async {
     await t.pumpWidget(MaterialApp(
