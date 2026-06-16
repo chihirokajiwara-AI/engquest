@@ -24,7 +24,7 @@ const int kStruggleThreshold = 3;
 const int kMomentumThreshold = 3;
 
 /// The momentum banner — shown when a child is on a [kMomentumThreshold]+ correct
-/// streak. Diegetic 探偵 framing ("推理が冴えている"), positive + COPPA-safe (the
+/// streak. Diegetic 探偵 framing ("推理がさえている"), positive + COPPA-safe (the
 /// child's OWN run, no social). Shares the cold-streak banner's slot (a child is
 /// on a hot OR cold streak, never both), so it adds celebration, not clutter.
 class PracticeMomentumBanner extends StatelessWidget {
