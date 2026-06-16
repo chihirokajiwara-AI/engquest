@@ -747,22 +747,32 @@ class BlendWordCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Council S3: once every phoneme is sounded the word is restored — announce
+    // it so a screen-reader child hears "cat — できた" (liveRegion = on change).
+    final done = activeLetter >= letters.length - 1;
     return Column(
       children: [
         DqPortrait(imageAsset: npcImage, emoji: npcEmoji, size: 60),
         const SizedBox(height: 14),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            for (var i = 0; i < letters.length; i++) ...[
-              if (i > 0)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: Text('·', style: dqText(size: 40, color: dqGoldDeep)),
-                ),
-              _letterTile(letters[i], i == activeLetter),
+        Semantics(
+          liveRegion: true,
+          label: done
+              ? '$word、できた / $word complete'
+              : 'おとを つなげよう / blend the sounds',
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              for (var i = 0; i < letters.length; i++) ...[
+                if (i > 0)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child:
+                        Text('·', style: dqText(size: 40, color: dqGoldDeep)),
+                  ),
+                _letterTile(letters[i], i == activeLetter),
+              ],
             ],
-          ],
+          ),
         ),
         const SizedBox(height: 14),
         DqReplayButton(onTap: onReplay, label: '🔁 おとを つなげて きく'),
@@ -776,6 +786,13 @@ class BlendWordCard extends StatelessWidget {
   }
 
   Widget _letterTile(String letter, bool active) {
+    return Semantics(
+      label: active ? '$letter、おとが でた' : letter,
+      child: _letterTileBody(letter, active),
+    );
+  }
+
+  Widget _letterTileBody(String letter, bool active) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 180),
       width: 62,

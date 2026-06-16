@@ -42,4 +42,25 @@ void main() {
 
     handle.dispose();
   });
+
+  testWidgets('BlendWordCard announces the restored word + sounded tiles (S3)',
+      (tester) async {
+    final handle = tester.ensureSemantics();
+    // Final phoneme lit → the word is complete; a screen-reader child must hear
+    // "cat — できた", and the active tile must announce it was sounded.
+    await tester.pumpWidget(host(const BlendWordCard(
+      letters: ['c', 'a', 't'],
+      word: 'cat',
+      npcName: 'ランプ',
+      npcEmoji: '🪔',
+      activeLetter: 2,
+    )));
+    await tester.pump();
+    expect(find.bySemanticsLabel(RegExp('cat、できた')), findsOneWidget,
+        reason:
+            'the restored word must be announced (liveRegion) on completion');
+    expect(find.bySemanticsLabel(RegExp('t、おとが でた')), findsOneWidget,
+        reason: 'the just-sounded letter tile must announce its state');
+    handle.dispose();
+  });
 }
