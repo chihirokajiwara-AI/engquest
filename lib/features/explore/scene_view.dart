@@ -137,8 +137,7 @@ class SceneView extends StatefulWidget {
   State<SceneView> createState() => _SceneViewState();
 }
 
-class _SceneViewState extends State<SceneView>
-    with SingleTickerProviderStateMixin {
+class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
   // ── State ─────────────────────────────────────────────────────────────────
 
   /// One-shot scene-entry cinematic (#83 / game-studio #5): the painted scene
@@ -212,6 +211,13 @@ class _SceneViewState extends State<SceneView>
   /// glow finishes. Null → no glow.
   int? _restoringIdx;
   Timer? _restoreTimer;
+  // Witnessed restoration (studio re-audit #1): the colour-return is the game's
+  // thesis but was perceptually invisible (4 ambient anims, nothing directing the
+  // eye). _focusIdx + _restoreCtrl drive a brief CAMERA-PUSH on the just-restored
+  // NPC so the child's eye snaps to "THIS villager came alive because I answered".
+  int? _focusIdx;
+  late final AnimationController _restoreCtrl;
+  Timer? _focusTimer;
 
   /// Witnessed-victory beat (game-studio re-audit, CEO 1755 game⇄learning link):
   /// the colour-restoration is the moment the child's CORRECT ANSWER (learning)
@@ -230,6 +236,10 @@ class _SceneViewState extends State<SceneView>
   @override
   void initState() {
     super.initState();
+    _restoreCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 620),
+    );
     _entryCtrl = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1100),
@@ -311,6 +321,8 @@ class _SceneViewState extends State<SceneView>
 
   @override
   void dispose() {
+    _restoreCtrl.dispose();
+    _focusTimer?.cancel();
     _entryCtrl.dispose();
     _arrivalTimer?.cancel();
     _loreTimer?.cancel();
@@ -449,6 +461,7 @@ class _SceneViewState extends State<SceneView>
       setState(() {
         _solved[idx] = true;
         _restoringIdx = idx; // one-shot gold glow on the restored NPC
+        _focusIdx = idx; // studio #1: focal camera-push on THIS NPC
         _sessionPicarat += result.picaratEarned; // #86 reward accumulator
       });
       // Clear the glow flag once it has played, so it never re-glows on rebuild.
@@ -456,6 +469,17 @@ class _SceneViewState extends State<SceneView>
       _restoreTimer = Timer(const Duration(milliseconds: 900), () {
         if (mounted) setState(() => _restoringIdx = null);
       });
+      // Focal camera-push: snap the eye to the NPC the instant it comes alive.
+      // Reduced-motion → no push (the colour swap is instant; _focusIdx stays null).
+      if (prefersReducedMotion(context)) {
+        _focusIdx = null;
+      } else {
+        _restoreCtrl.forward(from: 0);
+        _focusTimer?.cancel();
+        _focusTimer = Timer(const Duration(milliseconds: 640), () {
+          if (mounted) setState(() => _focusIdx = null);
+        });
+      }
       // Persist so the restored colour survives the next session (#115).
       SceneSolvedStore.markSolved(widget.eikenLevel, idx);
       _sound.playCorrect();
@@ -1324,6 +1348,15 @@ class _SceneViewState extends State<SceneView>
   Widget _observationTarget(double size) => _ObservationShimmer(
       size: size, reduceMotion: prefersReducedMotion(context));
 
+  // Camera-push curve for the witnessed restoration: snap up to 1.28×, hold at
+  // peak briefly, then settle back to 1.0 — a felt "the eye is pulled here" beat.
+  double _focalPush(double t) {
+    if (t < 0.35) return 1.0 + 0.28 * Curves.easeOutCubic.transform(t / 0.35);
+    if (t < 0.55) return 1.28; // hold at peak so the change is registered
+    final s = (t - 0.55) / 0.45;
+    return 1.28 - 0.28 * Curves.easeInOut.transform(s);
+  }
+
   Widget _npcTarget(int idx, Hotspot hotspot, bool solved, double size) {
     final grey = hotspot.npcGreyAsset;
     final color = hotspot.npcColorAsset;
@@ -1382,7 +1415,18 @@ class _SceneViewState extends State<SceneView>
         // leaves the tree → its controller disposes), and is reduced-motion gated.
         if (!solved && !prefersReducedMotion(context))
           _IdlePulseHalo(key: const ValueKey('npc_idle_pulse'), size: size),
-        portrait,
+        // Witnessed restoration (studio #1): a brief camera-push (1.0→1.28→1.0)
+        // on the just-restored NPC so the child's eye snaps to it AS it comes
+        // alive — making the colour-return the felt payoff, not an unseen tween.
+        if (_focusIdx == idx)
+          AnimatedBuilder(
+            animation: _restoreCtrl,
+            builder: (_, child) => Transform.scale(
+                scale: _focalPush(_restoreCtrl.value), child: child),
+            child: portrait,
+          )
+        else
+          portrait,
         // #87 re-audit (CEO 1748): a solved NPC lost its idle-pulse and looked
         // inert, so a child had NO cue that tapping it re-opens the story they
         // recovered (#3). A small gold 探偵メモ (book) badge on the restored villager
