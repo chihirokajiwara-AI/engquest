@@ -27,6 +27,9 @@ import 'package:engquest/features/exam_practice/reading_practice_screen.dart';
 import 'package:engquest/features/battle/battle_screen.dart';
 import 'package:engquest/features/explore/scene_view.dart';
 import 'package:engquest/features/onboarding/onboarding_flow.dart';
+import 'package:engquest/features/settings/settings_screen.dart';
+import 'package:engquest/features/achievements/achievements_screen.dart';
+import 'package:engquest/features/parent_dashboard/parent_dashboard_screen.dart';
 import 'package:engquest/core/fsrs/fsrs_card_repository.dart';
 
 ExamSection _sec(ExamSectionType t) => ExamSection(
@@ -115,6 +118,13 @@ void main() {
         eikenGrade: '5', section: _sec(ExamSectionType.readingComprehension)),
     'battle': const BattleScreen(),
     'scene-view': SceneView(scene: kTown5Scene),
+    // User-facing non-exam screens with dense Rows (settings toggles, achievement
+    // tiles, parent stats, writing toolbar) — also must survive 200% font.
+    'settings': const SettingsScreen(),
+    'achievements': const AchievementsScreen(),
+    'parent-dashboard': const ParentDashboardScreen(),
+    // NOTE: 'writing' is tracked separately — it overflows ~399px at 2.0x (a
+    // structural row issue in the 1900-line screen), fixed in its own task.
   };
   subScreens.forEach((name, w) {
     testWidgets('$name OK @ textScaler 2.0 (WCAG SC 1.4.4)', (tester) async {

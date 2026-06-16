@@ -103,7 +103,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                 ? const Center(
                     child: CircularProgressIndicator(color: dqGold),
                   )
-                : _buildGrid(),
+                : _buildGrid(context),
           ),
         ],
       ),
@@ -136,7 +136,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
     );
   }
 
-  Widget _buildGrid() {
+  Widget _buildGrid(BuildContext context) {
     final unlocked =
         kAchievements.where((d) => _states[d.id]?.unlocked == true).toList();
     final locked =
@@ -173,11 +173,15 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
         Expanded(
           child: GridView.builder(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               mainAxisSpacing: 14,
               crossAxisSpacing: 14,
-              childAspectRatio: 0.82,
+              // #114/WCAG SC 1.4.4: fixed 0.82 tiles clipped their badge text by
+              // 23–53px at textScaler 2.0. Make tiles TALLER as the font grows
+              // (smaller ratio) so the content fits at any accessibility scale.
+              childAspectRatio: 0.82 /
+                  MediaQuery.textScalerOf(context).scale(1.0).clamp(1.0, 1.7),
             ),
             itemCount: sorted.length,
             itemBuilder: (context, i) {
