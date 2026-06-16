@@ -1052,38 +1052,15 @@ class _SceneViewState extends State<SceneView> {
     );
   }
 
-  Widget _coinTarget(double size) {
-    return TweenAnimationBuilder<double>(
-      tween: Tween(begin: 0.8, end: 1.0),
-      duration: prefersReducedMotion(context)
-          ? Duration.zero
-          : const Duration(milliseconds: 900),
-      curve: Curves.easeInOut,
-      builder: (_, t, __) => Transform.scale(
-        scale: t,
-        child: Container(
-          width: size,
-          height: size,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: const Color(0xFF2A1C00).withAlpha(180),
-            border: Border.all(color: const Color(0xFFFFD700), width: 2),
-            boxShadow: [
-              BoxShadow(
-                color: const Color(0xFFFFD700).withAlpha(160),
-                blurRadius: 12,
-                spreadRadius: 2,
-              ),
-            ],
-          ),
-          child: const Center(
-            child: Text('✦',
-                style: TextStyle(color: Color(0xFFFFD700), fontSize: 20)),
-          ),
-        ),
-      ),
-    );
-  }
+  // #50 探索の深さ: the hidden ひらめきコイン is a scene's ONLY discovery reward —
+  // and its own a11y label calls it a "ひかる てがかり" (shining clue). But it used
+  // to scale in once (0.8→1.0) then sit DEAD-STATIC, while the NPCs got a breathing
+  // idle-pulse (#60). A static orb doesn't catch a wandering child's eye, so the
+  // "find something" beat never fires. _CoinTwinkle gives it a continuous, gentle
+  // twinkle (glow + ✦ breathe) so it reads as alive treasure — findable for 4–8yo,
+  // not frustrating. Reduced-motion → static glint.
+  Widget _coinTarget(double size) =>
+      _CoinTwinkle(size: size, reduceMotion: prefersReducedMotion(context));
 
   Widget _npcTarget(int idx, Hotspot hotspot, bool solved, double size) {
     final grey = hotspot.npcGreyAsset;
@@ -1334,6 +1311,81 @@ class _IdlePulseHaloState extends State<_IdlePulseHalo>
           );
         },
       ),
+    );
+  }
+}
+
+/// The hidden ひらめきコイン's visual — a gold glint that twinkles continuously so a
+/// wandering child notices "something shiny over there" (the scene's only discovery
+/// beat, #50). The glow blur/spread and the ✦ scale breathe in a calm, eased cycle
+/// (never a strobe). Reduced-motion → a static glint at the cycle's mid brightness.
+class _CoinTwinkle extends StatefulWidget {
+  final double size;
+  final bool reduceMotion;
+  const _CoinTwinkle({required this.size, required this.reduceMotion});
+
+  @override
+  State<_CoinTwinkle> createState() => _CoinTwinkleState();
+}
+
+class _CoinTwinkleState extends State<_CoinTwinkle>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    );
+    if (!widget.reduceMotion) _ctrl.repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  static const _gold = Color(0xFFFFD700);
+
+  Widget _glint(double t) {
+    // t: 0 (dim) → 1 (bright). Reduced-motion passes 0.5 (mid glint).
+    final glowAlpha = (120 + 90 * t).round(); // 120 → 210
+    final glowBlur = 9.0 + 9.0 * t; // 9 → 18
+    final glowSpread = 1.0 + 2.5 * t; // 1 → 3.5
+    final starScale = 0.9 + 0.18 * t; // 0.90 → 1.08
+    return Container(
+      width: widget.size,
+      height: widget.size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: const Color(0xFF2A1C00).withAlpha(180),
+        border: Border.all(color: _gold, width: 2),
+        boxShadow: [
+          BoxShadow(
+            color: _gold.withAlpha(glowAlpha),
+            blurRadius: glowBlur,
+            spreadRadius: glowSpread,
+          ),
+        ],
+      ),
+      child: Center(
+        child: Transform.scale(
+          scale: starScale,
+          child: const Text('✦', style: TextStyle(color: _gold, fontSize: 20)),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.reduceMotion) return _glint(0.5);
+    return AnimatedBuilder(
+      animation: _ctrl,
+      builder: (_, __) => _glint(Curves.easeInOut.transform(_ctrl.value)),
     );
   }
 }

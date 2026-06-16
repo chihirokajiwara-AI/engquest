@@ -133,7 +133,11 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(home: SceneView(scene: kTown5Scene, eikenLevel: '5')),
     );
-    await tester.pumpAndSettle();
+    // Bounded pumps settle the one-shot intro cross-fades. (Not pumpAndSettle:
+    // an uncollected coin twinkles continuously by design — #50 — so the tree
+    // never fully settles; advance past the intro instead of waiting forever.)
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 900));
     expect(find.textContaining('いろが'), findsNothing,
         reason: 'a solved case must not replay the loss intro (N8 reactivity)');
     expect(tester.takeException(), isNull);
