@@ -365,27 +365,53 @@ class _PrologueScreenState extends State<PrologueScreen>
   /// to the end state.
   Widget _background() {
     final to = _beatSaturation;
-    Widget plate(double sat, double scale) => ClipRect(
-          child: Transform.scale(
-            scale: scale,
-            child: ColorFiltered(
-              colorFilter: ColorFilter.matrix(_saturationMatrix(sat)),
-              child: Image.asset(_squareAsset,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  height: double.infinity),
-            ),
-          ),
-        );
-    if (prefersReducedMotion(context)) return plate(to, 1.06);
+    if (prefersReducedMotion(context)) return _revealPlate(to, 1.06);
     return TweenAnimationBuilder<double>(
       // Re-keyed on beat AND blend state so the tween re-runs to the new target.
       key: ValueKey('bg$_index$_blendDone'),
       tween: Tween<double>(begin: 0.0, end: 1.0),
       duration: const Duration(milliseconds: 2400),
       curve: Curves.easeInOut,
-      builder: (_, t, __) => plate(to * t, 1.04 + 0.06 * t),
+      builder: (_, t, __) => _revealPlate(to * t, 1.04 + 0.06 * t),
     );
+  }
+
+  /// A scaled, saturation-graded plate of the square.
+  Widget _plate(double sat, double scale) => ClipRect(
+        child: Transform.scale(
+          scale: scale,
+          child: ColorFiltered(
+            colorFilter: ColorFilter.matrix(_saturationMatrix(sat)),
+            child: Image.asset(_squareAsset,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: double.infinity),
+          ),
+        ),
+      );
+
+  /// Colour returns by BLOOMING radially out from ランプ's lamp (frontier studio
+  /// wrf7umkta #2: SHOW the canon "his lamp made the square evening" through the
+  /// grey→colour mechanic itself, not a global fade a non-reader can't connect to
+  /// the lamp). [reveal] 0 = all grey, 1 = full colour; in between, a feathered
+  /// colour disc grows from the lamp at the composition's focal point. At rest
+  /// it's a single cheap plate (no mask / no extra decode).
+  Widget _revealPlate(double reveal, double scale) {
+    if (reveal <= 0.01) return _plate(0.0, scale);
+    if (reveal >= 0.99) return _plate(1.0, scale);
+    return Stack(fit: StackFit.expand, children: [
+      _plate(0.0, scale),
+      ShaderMask(
+        blendMode: BlendMode.dstIn,
+        shaderCallback: (rect) => RadialGradient(
+          center: const Alignment(0, 0.34), // the lamp (matches _lampkeeper)
+          radius: (reveal * 1.9).clamp(0.02, 2.0),
+          colors: const [Colors.white, Colors.white, Colors.transparent],
+          stops: const [0.0, 0.72, 1.0],
+        ).createShader(rect),
+        child: _plate(1.0, scale),
+      ),
+    ]);
   }
 
   /// ランプ — the lampkeeper, composited over the square: a grey (silenced) and a
