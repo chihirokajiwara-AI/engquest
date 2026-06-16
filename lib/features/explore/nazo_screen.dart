@@ -15,6 +15,8 @@
 //
 // NO dart:io. Firebase is never touched here.
 
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import '../../core/audio/audio_assets.dart';
@@ -815,33 +817,74 @@ class _SolveBurstState extends State<_SolveBurst>
     return IgnorePointer(
       child: AnimatedBuilder(
         animation: _c,
-        builder: (_, __) {
-          final t = Curves.easeOut.transform(_c.value);
-          final scale = 0.4 + 1.4 * t; // 0.4 → 1.8, blooming outward
-          final fade = (1.0 - t) * 0.85; // bright → gone
-          return Opacity(
-            opacity: fade,
-            child: Transform.scale(
-              scale: scale,
-              child: const SizedBox.expand(
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: RadialGradient(
-                      colors: [
-                        Color(0xCCFFD700), // gold core
-                        Color(0x55FFD700),
-                        Color(0x00FFD700), // transparent rim
-                      ],
-                      stops: [0.0, 0.45, 1.0],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
+        builder: (_, __) => CustomPaint(
+          size: Size.infinite,
+          painter: _SolveBurstPainter(Curves.easeOut.transform(_c.value)),
+        ),
       ),
     );
   }
+}
+
+/// A real "burst", not a flat flash (#88 re-audit): a radial gold BLOOM + 12
+/// radiating RAYS + 6 outward-flying SPARKLES, all blooming from centre and fading
+/// over the one-shot. The rays + sparkles are what make a correct 英検 answer FEEL
+/// like an impact, not a div fading. Pure CustomPaint; one-shot (parent gates it on
+/// reduced-motion).
+class _SolveBurstPainter extends CustomPainter {
+  final double t; // 0 → 1, eased
+  const _SolveBurstPainter(this.t);
+
+  static const _gold = Color(0xFFFFD700);
+  int _a(double o) => (o.clamp(0.0, 1.0) * 255).round();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = size.center(Offset.zero);
+    final maxR = size.shortestSide * 0.55;
+    final fade = (1.0 - t).clamp(0.0, 1.0);
+
+    // 1. Radial bloom.
+    final bloomR = maxR * (0.25 + 0.95 * t);
+    canvas.drawCircle(
+      center,
+      bloomR,
+      Paint()
+        ..shader = RadialGradient(
+          colors: [
+            _gold.withAlpha(_a(0.80 * fade)),
+            _gold.withAlpha(_a(0.32 * fade)),
+            _gold.withAlpha(0),
+          ],
+          stops: const [0.0, 0.45, 1.0],
+        ).createShader(Rect.fromCircle(center: center, radius: bloomR)),
+    );
+
+    // 2. Radiating rays — thin gold spokes that shoot out and recede.
+    final rayLen = maxR * (0.35 + 1.05 * t);
+    final rayInner = maxR * 0.10;
+    final rayPaint = Paint()
+      ..color = _gold.withAlpha(_a(0.85 * fade))
+      ..strokeWidth = 2.0
+      ..strokeCap = StrokeCap.round;
+    const rays = 12;
+    for (var i = 0; i < rays; i++) {
+      final ang = (i / rays) * 2 * math.pi + t * 0.25;
+      final dir = Offset(math.cos(ang), math.sin(ang));
+      canvas.drawLine(center + dir * rayInner, center + dir * rayLen, rayPaint);
+    }
+
+    // 3. Sparkles — small dots flung outward, shrinking as they go.
+    final dist = maxR * (0.18 + 1.1 * t);
+    final sparkPaint = Paint()..color = _gold.withAlpha(_a(fade));
+    const sparks = 6;
+    for (var i = 0; i < sparks; i++) {
+      final ang = (i / sparks) * 2 * math.pi + 0.4;
+      final dir = Offset(math.cos(ang), math.sin(ang));
+      canvas.drawCircle(center + dir * dist, 3.2 * (1.0 - t * 0.6), sparkPaint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(_SolveBurstPainter old) => old.t != t;
 }
