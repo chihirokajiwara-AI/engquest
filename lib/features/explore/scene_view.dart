@@ -348,6 +348,13 @@ class _SceneViewState extends State<SceneView>
       _cue.play(null); // best-effort discovery chirp (no asset yet → no-op)
     } else if (h.kind == HotspotKind.npc) {
       _tapNpc(idx, h);
+    } else if (h.kind == HotspotKind.observation) {
+      // #90 Layton "tap → something happens": an observation reveals a 探偵メモ line
+      // (no puzzle). Re-tappable; shown via the existing lore-banner beat.
+      if (h.clueLineJa != null) {
+        _cue.play(null);
+        _showLore(h.clueLineJa!);
+      }
     }
   }
 
@@ -998,9 +1005,11 @@ class _SceneViewState extends State<SceneView>
           // SCENE level (see _bubbleOverlay) so it stays hit-testable — nesting it
           // here overflowed this small GestureDetector's bounds and silently ate
           // the tap (the 「ナゾをみる」-does-nothing bug, CEO 2026-06-09).
-          child: hotspot.kind == HotspotKind.coin
-              ? _coinTarget(size)
-              : _npcTarget(idx, hotspot, isSolved, size),
+          child: switch (hotspot.kind) {
+            HotspotKind.coin => _coinTarget(size),
+            HotspotKind.observation => _observationTarget(size),
+            HotspotKind.npc => _npcTarget(idx, hotspot, isSolved, size),
+          },
         ),
       ),
     );
@@ -1012,6 +1021,9 @@ class _SceneViewState extends State<SceneView>
   String _hotspotSemanticLabel(Hotspot hotspot, bool isSolved) {
     if (hotspot.kind == HotspotKind.coin) {
       return 'ひかる てがかり。タップして しらべる / A shining clue — tap to investigate';
+    }
+    if (hotspot.kind == HotspotKind.observation) {
+      return 'なにか ありそう。タップして しらべる / Something here — tap to look';
     }
     return isSolved
         ? 'ナゾ クリアずみ。タップして おはなしを きく / Mystery solved — tap to hear their story'
@@ -1284,6 +1296,25 @@ class _SceneViewState extends State<SceneView>
   // not frustrating. Reduced-motion → static glint.
   Widget _coinTarget(double size) =>
       _CoinTwinkle(size: size, reduceMotion: prefersReducedMotion(context));
+
+  /// #90 observation point — a SUBTLE searchable spot (a faint magnifier dot), far
+  /// quieter than the gold coin/NPC so it rewards a curious child who looks around
+  /// (Layton density) without shouting. Re-tappable; reveals a 探偵メモ line.
+  Widget _observationTarget(double size) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.black.withAlpha(45),
+        border: Border.all(color: dqGold.withAlpha(85), width: 1.2),
+      ),
+      child: Center(
+        child:
+            Icon(Icons.search, color: dqGold.withAlpha(150), size: size * 0.5),
+      ),
+    );
+  }
 
   Widget _npcTarget(int idx, Hotspot hotspot, bool solved, double size) {
     final grey = hotspot.npcGreyAsset;

@@ -17,6 +17,12 @@ enum HotspotKind {
 
   /// A hidden ひらめきコイン in the scenery.
   coin,
+
+  /// An OBSERVATION point (#90 world-depth, Layton "tap everything → something
+  /// happens"): a non-puzzle spot in the scenery that, on tap, reveals a 探偵メモ
+  /// line — flavour, a clue, or サイレント micro-lore. Re-tappable; rewards the
+  /// curiosity-driven searching that makes a scene feel dense, not a 3-NPC skin.
+  observation,
 }
 
 // ── TeachCard — the "teach BEFORE you ask" card ────────────────────────────────
@@ -143,6 +149,23 @@ class Hotspot {
         hints = null,
         mysteryFragmentJa = null,
         kind = HotspotKind.coin;
+
+  /// An observation point (#90): tap reveals [clueLineJa] as a 探偵メモ beat, no
+  /// puzzle. Small + subtle (Layton-style); re-tappable. Reuses [clueLineJa] for
+  /// the line so no model field is added.
+  const Hotspot.observation({
+    required this.pos,
+    this.size = 0.09,
+    required this.clueLineJa,
+  })  : step = null,
+        framingJa = null,
+        npcGreyAsset = null,
+        npcColorAsset = null,
+        teachCard = null,
+        hints = null,
+        mysteryFragmentJa = null,
+        coinValue = 0,
+        kind = HotspotKind.observation;
 }
 
 // ── SceneDef ──────────────────────────────────────────────────────────────────
@@ -850,6 +873,34 @@ final SceneDef kTown5Scene = SceneDef(
       coinValue: 1,
       clueLineJa: 'スラ：「…ぷる？ ひかりが どこかに…！ ランプの ちかくかな？ '
           'ぼく、まだ うまく いえないけど… あっち！」',
+    ),
+    // ── Coin 2: hidden up on a rooftop ──────────────────────────────────────
+    Hotspot.coin(
+      pos: const Alignment(0.80, -0.58),
+      size: 0.10,
+      coinValue: 1,
+      clueLineJa: 'スラ：「…ぷる！ もう ひとつ、ひかってる… やねの うえ かな？」',
+    ),
+    // ── Observation points (#90 density): tap-to-look 探偵メモ, no puzzle ─────
+    Hotspot.observation(
+      pos: const Alignment(0.05, -0.46),
+      clueLineJa: 'たんていメモ：とじた まどの むこうで、だれかが ちいさく '
+          'うたっている。でも、ことばに なっていない。',
+    ),
+    Hotspot.observation(
+      pos: const Alignment(-0.62, 0.46),
+      clueLineJa: 'たんていメモ：やぶれた はりがみ。もじが かすれて、なにが '
+          'かいてあったか もう よめない。',
+    ),
+    Hotspot.observation(
+      pos: const Alignment(0.02, 0.62),
+      clueLineJa: 'たんていメモ：いしだたみに、ちいさな くつの あと。だれかが '
+          'ここで ことばを おとして いったのかな。',
+    ),
+    Hotspot.observation(
+      pos: const Alignment(0.58, 0.50),
+      clueLineJa: 'たんていメモ：からっぽの たる。なかから かすかに '
+          '「…す…」と きこえた きが した。',
     ),
   ],
 );

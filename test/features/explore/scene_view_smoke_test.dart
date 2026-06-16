@@ -212,8 +212,9 @@ void main() {
     // Unsolved NPC hotspots + the coin each carry a descriptive button label.
     expect(find.bySemanticsLabel(RegExp('ナゾの ぬし')), findsWidgets,
         reason: 'NPC hotspots must be labelled buttons for screen readers');
-    expect(find.bySemanticsLabel(RegExp('ひかる てがかり')), findsOneWidget,
-        reason: 'the coin hotspot must be a labelled button');
+    // Layton-density (#90): a scene now hides MULTIPLE coins → ≥1 labelled coin.
+    expect(find.bySemanticsLabel(RegExp('ひかる てがかり')), findsWidgets,
+        reason: 'the coin hotspots must be labelled buttons');
     handle.dispose();
     expect(tester.takeException(), isNull);
   });
@@ -264,14 +265,16 @@ void main() {
     );
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 50));
-    expect(find.bySemanticsLabel(coinLabel), findsOneWidget,
-        reason: 'an un-collected coin must be present on the first visit');
+    expect(find.bySemanticsLabel(coinLabel), findsWidgets,
+        reason: 'un-collected coins must be present on the first visit');
     h1.dispose();
     await tester.pumpWidget(const SizedBox());
     await tester.pump();
 
-    // Re-entry after the coin was collected in a prior session → it must be GONE.
-    await SceneSolvedStore.markCoinCollected('5', 3); // idx 3 = the 5級 coin
+    // Re-entry after BOTH coins were collected in a prior session → all GONE.
+    // (#90 Layton-density: kTown5Scene now hides 2 coins, idx 3 + idx 4.)
+    await SceneSolvedStore.markCoinCollected('5', 3); // idx 3 = lamppost coin
+    await SceneSolvedStore.markCoinCollected('5', 4); // idx 4 = rooftop coin
     final h2 = tester.ensureSemantics();
     await tester.pumpWidget(
       MaterialApp(home: SceneView(scene: kTown5Scene, eikenLevel: '5')),
