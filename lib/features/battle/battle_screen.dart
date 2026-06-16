@@ -68,6 +68,23 @@ String _gradeJp(Grade g) {
   }
 }
 
+/// #85 (game-studio #4): the diegetic サイレント word-rescue frame on the battle
+/// card front. Ties every flashcard review to the world's premise ("the Silence
+/// stole the words") instead of "Anki with a gold border", and varies by
+/// part-of-speech so it never reads as one repeated stock line. Pure kana → no
+/// glyph risk; child-register.
+String silentRescueLineJa(PartOfSpeech pos) {
+  final what = switch (pos) {
+    PartOfSpeech.verb => 'うごきの ことば',
+    PartOfSpeech.adjective || PartOfSpeech.adverb => 'ようすの ことば',
+    PartOfSpeech.number => 'かずの ことば',
+    PartOfSpeech.properNoun => 'なまえ',
+    PartOfSpeech.noun => 'ものの なまえ',
+    _ => 'ことば',
+  };
+  return 'この $what、サイレントに うばわれた。';
+}
+
 // ── Cumulative deck stats (achievement / progress inputs) ─────────────────────
 //
 // The deck merges every grade vocab id with the child's PERSISTED FSRS state, so
@@ -1039,16 +1056,20 @@ class _BattleScreenState extends State<BattleScreen>
                   style: dqText(size: 12, color: dqGold)),
             ),
           const SizedBox(height: 14),
-          // Active recall (#65). 2026 evidence (Karpicke; testing effect g=0.50,
-          // 50-150% retention): flipping WITHOUT first attempting recall is passive
-          // RECOGNITION — benefit substantially reduced. 英検 大問1 demands
-          // production-recall. So reframe the flip from "tap to see" → "recall
-          // FIRST, then check", cueing the retrieval attempt at zero added friction.
+          // #85 (game-studio #4): a per-POS サイレント word-rescue frame ties this
+          // review to the world's premise — the flashcard is a word you're bringing
+          // BACK from the Silence, not a context-free Anki card. The active-recall
+          // cue (#65) follows so retrieval is still cued (Karpicke testing effect).
           dqBilingual(
-              'こころの中（なか）で いみを 思（おも）い出（だ）してから…', 'Recall the meaning first…',
-              jpSize: 12, jpColor: dqGold, enColor: dqGold),
+              silentRescueLineJa(vocab.pos.isNotEmpty
+                  ? vocab.pos.first
+                  : PartOfSpeech.unknown),
+              'The Silence took this word.',
+              jpSize: 12,
+              jpColor: dqGold,
+              enColor: dqGold),
           const SizedBox(height: 6),
-          dqBilingual('タップして かくにん', 'tap to check',
+          dqBilingual('こころの中（なか）で おもいだして、タップ', 'Recall it, then tap to check',
               jpSize: 13, jpColor: dqGoldDeep, enColor: dqGoldDeep),
         ],
       ),
