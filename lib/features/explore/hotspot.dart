@@ -1009,6 +1009,35 @@ final SceneDef kTown4Scene = SceneDef(
       clueLineJa: 'スラ：「…ぷる！ とうだいの あかりの ちかくで、'
           'なにかが きらっと… あそこ、たかいところ！」',
     ),
+    // ── Coin 2: hidden among the moored boats ───────────────────────────────
+    Hotspot.coin(
+      pos: const Alignment(-0.18, 0.60),
+      size: 0.10,
+      coinValue: 1,
+      clueLineJa: 'スラ：「…ぷる！ ふねの ほばしらの うえ… '
+          'あそこにも、ちいさく ひかってる！」',
+    ),
+    // ── Observation points (#90 density): tap-to-look 探偵メモ, no puzzle ─────
+    Hotspot.observation(
+      pos: const Alignment(0.10, -0.62),
+      clueLineJa: 'たんていメモ：とけいの はりが ぜんぶ、おなじ じこくで '
+          'とまっている。とき までも かぜに さらわれたのか。',
+    ),
+    Hotspot.observation(
+      pos: const Alignment(-0.70, -0.10),
+      clueLineJa: 'たんていメモ：ほされた あみは からっぽ。'
+          'なにも とれない うみに なって、どれくらい たつのだろう。',
+    ),
+    Hotspot.observation(
+      pos: const Alignment(0.40, 0.40),
+      clueLineJa: 'たんていメモ：かざぐるまが ぎいっと きしむ。'
+          'やはり とおくの「はいいろの ひろば」の ほうを むいている。',
+    ),
+    Hotspot.observation(
+      pos: const Alignment(-0.40, 0.58),
+      clueLineJa: 'たんていメモ：くいに ひっかかった しおり。'
+          'かぜに ふるえて、かすかに「…story,」と よめた。',
+    ),
   ],
 );
 
