@@ -273,3 +273,30 @@ reminder:
 
 Principle: the loop never stalls on a detached job — it always produces value in
 parallel, reacts to completion events, and ships only style-coherent, verified work.
+
+## STANDING STUDIO ENGINE [CEO 1741 — 2026-06-16, MANDATORY]
+
+The loop's super-strict audit→verify→fix→improve is **run BY a top-tier, latest-
+2026-updated expert game-app studio team**, not solo polish. This is structural,
+not occasional.
+
+- **Engine** = `.claude/workflows/game-studio-panel.js` (invoke `Workflow({name:
+  "game-studio-panel"})`). It convenes, in PARALLEL: 5 discipline experts
+  (game-feel/juice, world/narrative, reward psychology, art-direction-via-motion,
+  level/encounter) — each WebSearching CURRENT 2026 SOTA FIRST and adversarially
+  auditing the LIVE game — plus 3 harsh playtesters (a bored 6-year-old, a skeptical
+  paying parent, a Layton/Ghibli purist), then a director who ranks an in-scope,
+  buildable plan and specs the #1.
+- **Cadence**: on game-quality ticks, convene the studio (or build the next item
+  from its last ranked plan) rather than inventing solo polish. Pass already-shipped
+  items via `args.alreadyBuilt` so the panel keeps finding NEW gaps, never re-surfaces
+  shipped work. Rotate `args.focus` across surfaces (scene, battle, home, mock).
+- **Build contract**: take the director's #1 (or a clearly-justified divergence —
+  e.g. protecting the 解説 teaching reveal over auto-advance), 8-phase it, HARD GATE
+  (analyze 0 + tests), real-render where visible, SHIP, then re-score. Queue runners-up
+  as backlog tasks so nothing is lost.
+- **Recovery**: if the workflow dies mid-run, the experts' conclusions live in their
+  `agent-*.jsonl` journals — extract + synthesise manually; do NOT re-run the fan-out.
+- **Latest-first is non-negotiable**: every discipline agent cites dated 2026 sources
+  before judging; training-cutoff knowledge and the current codebase are both
+  stale-until-verified.
