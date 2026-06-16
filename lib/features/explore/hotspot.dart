@@ -1486,6 +1486,35 @@ final SceneDef kTown2Scene = SceneDef(
       clueLineJa: 'スラ：「…ぷる！ 城（しろ）への かいだんの うえで、'
           'なにか きらっと ひかった！」',
     ),
+    // ── Coin 2: hidden in a high castle-tower window ────────────────────────
+    Hotspot.coin(
+      pos: const Alignment(0.74, -0.42),
+      size: 0.10,
+      coinValue: 1,
+      clueLineJa: 'スラ：「…ぷる！ たかい とうの まどの おくで、'
+          'なにかが きらっと… あんな たかいところ、どうやって…！」',
+    ),
+    // ── Observation points (#90 density): tap-to-look 探偵メモ, no puzzle ─────
+    Hotspot.observation(
+      pos: const Alignment(0.18, -0.60),
+      clueLineJa: 'たんていメモ：たかい もんの まえ。えいへいも はたも、'
+          'こおりついたように うごかない。だまることが、ここでは ルールなのだ。',
+    ),
+    Hotspot.observation(
+      pos: const Alignment(-0.62, 0.35),
+      clueLineJa: 'たんていメモ：がくしゃの メモが おちている。'
+          '「王（おう）＝さいしょに はなした ひと？」と、なんども かきなおした あと。',
+    ),
+    Hotspot.observation(
+      pos: const Alignment(-0.25, -0.45),
+      clueLineJa: 'たんていメモ：フードの クワイエが、もんの かげから みている。'
+          'なにか いいたげに くちを ひらいて――また、とじた。',
+    ),
+    Hotspot.observation(
+      pos: const Alignment(0.40, 0.52),
+      clueLineJa: 'たんていメモ：かいだんに おちた しおり――「colour.」。'
+          'これで 6まい。のこるは、たった ひとつの ことばだけ。',
+    ),
   ],
 );
 
