@@ -558,6 +558,24 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
                   style: dqText(size: 10.5, color: dqGold.withAlpha(210))
                       .copyWith(height: 1.35),
                 ),
+              ]
+              // game⇄learning direction (CEO 1755; 2026 SOTA — direct review to the
+              // WEAK area, not a generic deck): once every skill has been tried, the
+              // daily hub names the LIMITING skill (the one holding the 合格率 down) so
+              // the diagnostic becomes a concrete next action, not just a number.
+              else if (!thin &&
+                  !est.isPredictedPass &&
+                  est.limitingSkill != null) ...[
+                const SizedBox(height: 3),
+                Builder(builder: (_) {
+                  final weak = CseEstimator.skillLabelJa(est.limitingSkill!);
+                  return Text(
+                    'いま いちばん よわいのは $weak。\n'
+                    'そこを れんしゅうすると 合格率（ごうかくりつ）が ぐっと あがるよ',
+                    style: dqText(size: 10.5, color: dqGold.withAlpha(210))
+                        .copyWith(height: 1.35),
+                  );
+                }),
               ],
               const SizedBox(height: 3),
               Text('タップで くわしく / Details',
