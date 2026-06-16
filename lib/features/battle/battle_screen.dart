@@ -1132,24 +1132,50 @@ class _BattleScreenState extends State<BattleScreen>
   // ── Grade buttons ──────────────────────────────────────────────────────────
 
   Widget _buildGradeButtons() {
+    // #84 (game-studio director #3): TWO child-facing choices, not four FSRS
+    // grades. 2026 SRS-for-kids evidence (Migaku/Mathbuilders) + FSRS-6 (which
+    // TRUSTS grades): a young child can't honestly self-grade Again/Hard/Good/Easy,
+    // so the noise pollutes the model and the 8yo freezes & picks randomly (the
+    // playtest complaint). わからなかった→Again, わかった！→Good, auto-upgraded to Easy
+    // on a 3rd+ consecutive correct (a BEHAVIOURAL fluency signal — a child on a
+    // roll clearly knows these — not another self-assessment the child can't make).
+    final knewGrade = _streak >= 2 ? Grade.easy : Grade.good;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: Grade.values.map((g) {
-          return Expanded(
+        children: [
+          Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4),
               child: _GradeButton(
-                grade: g,
-                accent: _gradeColors[g]!,
+                grade: Grade.again,
+                accent: _gradeColors[Grade.again]!,
                 fsrs: _fsrs,
                 card: _currentCard,
-                onTap: () => _gradeCard(g),
+                labelJpOverride: '？ わからなかった',
+                labelEnOverride: 'Didn’t know',
+                onTap: () => _gradeCard(Grade.again),
               ),
             ),
-          );
-        }).toList(),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: _GradeButton(
+                grade: knewGrade,
+                // Fixed green regardless of the auto-easy upgrade, so わかった！ never
+                // changes colour mid-session (the upgrade is invisible to the child).
+                accent: _gradeColors[Grade.good]!,
+                fsrs: _fsrs,
+                card: _currentCard,
+                labelJpOverride: '✓ わかった！',
+                labelEnOverride: 'Knew it!',
+                onTap: () => _gradeCard(knewGrade),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -1461,12 +1487,20 @@ class _GradeButton extends StatefulWidget {
   final FSRSCard card;
   final VoidCallback onTap;
 
+  /// Child-facing label overrides (#84): the recall UI presents 2 plain choices
+  /// (わからなかった / わかった！) instead of the 4 FSRS grades a young child can't
+  /// self-assess. When set, these replace the grade's JP/EN label.
+  final String? labelJpOverride;
+  final String? labelEnOverride;
+
   const _GradeButton({
     required this.grade,
     required this.accent,
     required this.fsrs,
     required this.card,
     required this.onTap,
+    this.labelJpOverride,
+    this.labelEnOverride,
   });
 
   @override
@@ -1519,7 +1553,9 @@ class _GradeButtonState extends State<_GradeButton>
     // FSRS next-interval; onTap gives assistive tech the activation path.
     return Semantics(
       button: true,
-      label: '${_gradeJp(widget.grade)} ${widget.grade.label}。つぎは $interval',
+      label: widget.labelJpOverride != null
+          ? '${widget.labelJpOverride}。つぎは $interval'
+          : '${_gradeJp(widget.grade)} ${widget.grade.label}。つぎは $interval',
       onTap: widget.onTap,
       excludeSemantics: true,
       child: GestureDetector(
@@ -1564,14 +1600,18 @@ class _GradeButtonState extends State<_GradeButton>
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  _gradeJp(widget.grade),
-                  style: dqText(size: 12, w: FontWeight.w800, color: dqInk),
+                  widget.labelJpOverride ?? _gradeJp(widget.grade),
+                  style: dqText(
+                      size: widget.labelJpOverride != null ? 15 : 12,
+                      w: FontWeight.w800,
+                      color: dqInk),
                   textAlign: TextAlign.center,
                 ),
                 Text(
-                  widget.grade.label,
+                  widget.labelEnOverride ?? widget.grade.label,
                   style: dqText(
                       size: 9, w: FontWeight.w600, color: dqGold, spacing: 0.8),
+                  textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 3),
                 Text(

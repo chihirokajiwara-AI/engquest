@@ -59,6 +59,35 @@ void main() {
     expect(t.takeException(), isNull);
   });
 
+  testWidgets(
+      'after flip, recall is TWO child choices, not four FSRS grades (#84)',
+      (t) async {
+    final h = t.ensureSemantics();
+    await t.pumpWidget(MaterialApp(
+      home: BattleScreen(
+        repository: InMemoryFsrsCardRepository(),
+        vocabRepo: _seeded([_w('eiken5_001', 'cat'), _w('eiken5_002', 'dog')]),
+        childAge: 10,
+        eikenGrade: '5',
+      ),
+    ));
+    await _pumpLoad(t);
+
+    // Flip the card to reveal the meaning → the recall grade buttons appear.
+    await t.tap(find.bySemanticsLabel(RegExp('めくって')).first);
+    for (var i = 0; i < 6; i++) {
+      await t.pump(const Duration(milliseconds: 100));
+    }
+
+    // Two plain child choices — NOT the four FSRS grades a young child can't grade.
+    expect(find.textContaining('わかった'), findsOneWidget);
+    expect(find.textContaining('わからな'), findsOneWidget);
+    expect(find.textContaining('むずかしい'), findsNothing,
+        reason: 'the 4-grade FSRS UI (Hard/むずかしい) must be gone — #84');
+    h.dispose();
+    expect(t.takeException(), isNull);
+  });
+
   testWidgets('an empty deck shows the calm empty-state, not a crash (#36)',
       (t) async {
     await t.pumpWidget(MaterialApp(
