@@ -172,6 +172,14 @@ class _OnboardingFlowState extends State<OnboardingFlow>
   // Step 1 — age
   int _age = 8;
 
+  // Step 1 — self-report ("how much English do you know?"), asked on the same
+  // warm first screen as age, BEFORE any test (CEO 1841: 自己申告させてから診断).
+  // 0 = はじめて (never studied) → skip the test entirely and start at the 5級
+  // floor (an MCQ test feels too hard before learning anything); 1 = すこし →
+  // adaptive test, no seed shift; 2 = とくい → adaptive test, +1 seed so a
+  // confident child climbs faster. Default すこし = the safe middle.
+  int _selfReport = 1;
+
   // Step 2 — adaptive placement
   PlacementEngine? _engine; // created once age is committed
   PlacementItem? _currentItem; // item being shown
@@ -208,16 +216,28 @@ class _OnboardingFlowState extends State<OnboardingFlow>
         _step++;
         // Entering placement step.
         if (_step == 1 && _engine == null && _outcome == null) {
-          if (_age <= kPreReaderMaxAge) {
-            // Pre-reader: the placement quiz is English reading MCQs a non-reader
-            // CANNOT answer — gating first value behind an unanswerable text test
-            // (2026 onboarding anti-pattern). Skip it: place at the 5級 floor and
-            // go straight to avatar — first value in a few taps.
+          if (_age <= kPreReaderMaxAge || _selfReport == 0) {
+            // Skip the placement quiz for either a pre-reader OR a self-reported
+            // true beginner (はじめて). In both cases an English-reading MCQ test
+            // — even at the 5級 floor — is too hard and discouraging before the
+            // child has learned anything: a 2026 onboarding anti-pattern is
+            // gating first value behind an unanswerable test. Place at the 5級
+            // floor and go straight to avatar — first value in a few taps. The
+            // adaptive diagnostic is reserved for children who report they
+            // already know some English (CEO 1841: 診断は自己申告のあとに、
+            // いきなり高レベルから始めない).
             _outcome = kPreReaderPlacement;
             _step = 2; // skip the placement quiz entirely
           } else {
-            // Reader: run the adaptive quiz, seeded by age. Pure Dart, no async.
-            _engine = PlacementEngine.fromAge(_age);
+            // Reader who knows some English: run the adaptive quiz, seeded by
+            // age AND the self-report (とくい → +1 so a confident child climbs
+            // faster; すこし → 0). The gentle staircase still opens at 5級 and
+            // a wrong answer still steps down — this only sets the ceiling
+            // search start. Pure Dart, no async.
+            _engine = PlacementEngine.fromAge(
+              _age,
+              selfReportShift: _selfReport == 2 ? 1 : 0,
+            );
             _pickNextItem();
           }
         }
@@ -302,6 +322,8 @@ class _OnboardingFlowState extends State<OnboardingFlow>
         return _StepAge(
           age: _age,
           onAgeChanged: (v) => setState(() => _age = v),
+          selfReport: _selfReport,
+          onSelfReportChanged: (v) => setState(() => _selfReport = v),
           onNext: _nextStep,
         );
       case 1:
@@ -387,11 +409,15 @@ class _ProgressBar extends StatelessWidget {
 class _StepAge extends StatelessWidget {
   final int age;
   final ValueChanged<int> onAgeChanged;
+  final int selfReport; // 0=はじめて, 1=すこし, 2=とくい
+  final ValueChanged<int> onSelfReportChanged;
   final VoidCallback onNext;
 
   const _StepAge({
     required this.age,
     required this.onAgeChanged,
+    required this.selfReport,
+    required this.onSelfReportChanged,
     required this.onNext,
   });
 
@@ -429,7 +455,8 @@ class _StepAge extends StatelessWidget {
                     'ようこそ、コトバ探偵（たんてい）へ。\n'
                     'しごとを はじめる まえに、\n'
                     'すこし おしえてほしい。\n'
-                    'きみは 何才（なんさい）？',
+                    'きみは 何才（なんさい）？ そして\n'
+                    'えいごは どれくらい やったかな？',
                     style: dqText(size: 15, color: dqInk),
                   ),
                 ),
@@ -484,6 +511,41 @@ class _StepAge extends StatelessWidget {
               ],
             ),
           ),
+          const SizedBox(height: 16),
+          // Self-report (CEO 1841): ask how much English the child knows BEFORE
+          // any test. はじめて skips the diagnostic (starts gentle); とくい seeds
+          // it higher. This is the "自己申告させてから診断" mechanism, on the
+          // same warm first screen so onboarding stays short for a 4-year-old.
+          DqPanel(
+            title: 'えいごは どれくらい？ / Your English',
+            child: Row(
+              children: [
+                _SelfReportChip(
+                  emoji: '🌱',
+                  label: 'はじめて',
+                  hint: 'えいごは はじめて、と こたえる',
+                  selected: selfReport == 0,
+                  onTap: () => onSelfReportChanged(0),
+                ),
+                const SizedBox(width: 8),
+                _SelfReportChip(
+                  emoji: '📖',
+                  label: 'すこし',
+                  hint: 'えいごを すこし しっている、と こたえる',
+                  selected: selfReport == 1,
+                  onTap: () => onSelfReportChanged(1),
+                ),
+                const SizedBox(width: 8),
+                _SelfReportChip(
+                  emoji: '⭐',
+                  label: 'とくい',
+                  hint: 'えいごが とくい、と こたえる',
+                  selected: selfReport == 2,
+                  onTap: () => onSelfReportChanged(2),
+                ),
+              ],
+            ),
+          ),
           const Spacer(),
           DqButton(label: 'つぎへ / Next ▶', onTap: onNext),
         ],
@@ -529,6 +591,74 @@ class _AgeStepButton extends StatelessWidget {
           child: Icon(icon,
               color: enabled ? const Color(0xFF2A1C00) : dqInk.withAlpha(80),
               size: 30),
+        ),
+      ),
+    );
+  }
+}
+
+/// One of the three "how much English?" self-report options on the first
+/// onboarding screen. Large (≥56dp tall) tappable card with a selected ring;
+/// exposed to screen readers as a selectable button (a11y — a low-vision parent
+/// answers for a young child).
+class _SelfReportChip extends StatelessWidget {
+  final String emoji;
+  final String label;
+  final String hint;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _SelfReportChip({
+    required this.emoji,
+    required this.label,
+    required this.hint,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Semantics(
+        button: true,
+        selected: selected,
+        label: hint,
+        excludeSemantics: true,
+        child: GestureDetector(
+          onTap: onTap,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 150),
+            constraints: const BoxConstraints(minHeight: 72),
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              gradient: selected
+                  ? const LinearGradient(colors: [dqGold, dqGoldDeep])
+                  : null,
+              color: selected ? null : dqNight1,
+              border: Border.all(
+                color: selected ? dqGold : dqBorder,
+                width: selected ? 2.5 : 2,
+              ),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(emoji, style: const TextStyle(fontSize: 26)),
+                const SizedBox(height: 4),
+                Text(
+                  label,
+                  textAlign: TextAlign.center,
+                  style: dqText(
+                    size: 13,
+                    w: FontWeight.w700,
+                    color: selected ? const Color(0xFF2A1C00) : dqInk,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

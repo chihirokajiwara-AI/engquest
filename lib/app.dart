@@ -431,8 +431,10 @@ Widget _previewFor(String? name) {
     case 'onboarding':
       return OnboardingFlow(onComplete: (_) {});
     case 'placement':
-      // Preview route: renders the full OnboardingFlow starting at the
-      // placement step (age pre-set to 13 so the engine seeds at 準2級).
+      // Preview route: renders the full OnboardingFlow (age + self-report →
+      // adaptive diagnostic). The gentle staircase (CEO 721) opens EVERY child
+      // at the 5級 floor regardless of age, and a self-reported beginner skips
+      // the test entirely — so this never starts at a high level.
       return OnboardingFlow(onComplete: (_) {});
     case 'worldmap':
       return const WorldMapScreen(childAge: 8);
