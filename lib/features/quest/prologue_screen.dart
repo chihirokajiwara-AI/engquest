@@ -28,9 +28,13 @@ class _Panel {
   final String en;
   final String? audio; // best-effort cue key (graceful no-op if unrecorded)
   final bool interactive; // panel 5: the s·a·t blend demo
+  final bool tappable; // 起: child taps 🔊 to sound the keeper's broken す… first
   final bool isLast;
   const _Panel(this.jp, this.en,
-      {this.audio, this.interactive = false, this.isLast = false});
+      {this.audio,
+      this.interactive = false,
+      this.tappable = false,
+      this.isLast = false});
 }
 
 // The opening as 6 kishōtenketsu (起承転結) beats — one protagonist: ランプ the
@@ -46,6 +50,7 @@ const _panels = <_Panel>[
     'ランプばんの ランプが、\nつかない。\n「す…」',
     "The lamplighter's lamp won't catch. \"s…\"",
     audio: 'audio/phonics/phoneme_s.mp3',
+    tappable: true, // agency in the first ~10s: the child sounds the broken す…
   ),
   // 承 — ONE named nightly ritual (his lamp told the square "it's evening"),
   //      then colour. mono-no-aware on a specific lost habit, not just "colour".
@@ -108,6 +113,7 @@ class _PrologueScreenState extends State<PrologueScreen>
   static const _blendLetters = <String>['s', 'a', 't'];
   int _activeLetter = -1; // -1 none lit; 0=s, 1=a, 2=t
   bool _blendDone = false; // true once all three are sounded → join + restore
+  bool _heard = false; // 起: child has tapped to hear す… (agency gate, per panel)
 
   // Council S3 — non-reader gate: a 4-7yo who can't read 「つぎへ」 needs a VISUAL
   // cue for what to tap. If the panel sits untapped ~4s, pulse the advance/🔊
@@ -130,7 +136,10 @@ class _PrologueScreenState extends State<PrologueScreen>
     // the idle pulse + the child's first tap then start the audio).
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      if (!_p.interactive && _p.audio != null) _cue.play(_p.audio);
+      // Tappable 起 does NOT auto-voice — the child's tap IS the agency.
+      if (!_p.interactive && !_p.tappable && _p.audio != null) {
+        _cue.play(_p.audio);
+      }
       _armIdle();
     });
   }
@@ -168,10 +177,13 @@ class _PrologueScreenState extends State<PrologueScreen>
       _index++;
       _activeLetter = -1;
       _blendDone = false;
+      _heard = false;
     });
     // This runs from a tap (user gesture) → safe to fire audio on web, except on
-    // the interactive panel where the child taps 🔊 themselves.
-    if (!_p.interactive && _p.audio != null) _cue.play(_p.audio);
+    // the interactive blend / tappable 起 panels where the child taps 🔊 itself.
+    if (!_p.interactive && !_p.tappable && _p.audio != null) {
+      _cue.play(_p.audio);
+    }
     _armIdle();
   }
 
@@ -179,6 +191,16 @@ class _PrologueScreenState extends State<PrologueScreen>
   /// blend, not an auto-animation). Each 🔊 tap lights the next phoneme s→a→t;
   /// the third tap joins them into "sat" and restores ランプ. Errorless — there
   /// is no wrong tap, only "not yet complete" (the no-scold spine).
+  /// 起 agency (frontier studio wrf7umkta #2): the child TAPS to sound the
+  /// keeper's broken 「す…」 in the first ~10s, rather than it auto-playing while
+  /// the first real agency waits until the blend on panel 4. The idle pulse
+  /// draws a non-reader's eye to the 🔊; tapping reveals ▶ つぎへ.
+  void _hearPanel() {
+    _cue.play(_p.audio);
+    setState(() => _heard = true);
+    _armIdle();
+  }
+
   void _playBlend() {
     if (_activeLetter < _blendLetters.length - 1) {
       final next = _activeLetter + 1;
@@ -459,7 +481,10 @@ class _PrologueScreenState extends State<PrologueScreen>
   Widget _advanceControl() {
     final Widget control = (_p.interactive && !_blendDone)
         ? DqReplayButton(onTap: _playBlend, label: '🔊 おして、きいてみよう')
-        : DqButton(label: _p.isLast ? '▶ はじめる / Begin' : '▶ つぎへ', onTap: _next);
+        : (_p.tappable && !_heard)
+            ? DqReplayButton(onTap: _hearPanel, label: '🔊 きいてみよう')
+            : DqButton(
+                label: _p.isLast ? '▶ はじめる / Begin' : '▶ つぎへ', onTap: _next);
     // Council S3: pulse the control when the child has gone idle, so a non-reader
     // sees WHERE to tap. Reduce-motion → no pulse (the control still stands out).
     final reduceMotion =

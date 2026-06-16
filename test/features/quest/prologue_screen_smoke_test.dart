@@ -71,12 +71,19 @@ void main() {
         home: PrologueScreen(onDone: () {}),
       ));
       await tester.pump();
-      // Sit idle past the 4s threshold → the non-reader pulse cue fires; the
-      // advance control must stay present and the screen must not throw.
+      // Sit idle past the 4s threshold → the non-reader pulse cue fires. On the
+      // first (起) panel the agency control is 🔊「きいてみよう」 (#110: the child
+      // sounds the keeper's broken す… before advancing); it must stay present
+      // under the pulse and the screen must not throw.
       await tester.pump(const Duration(seconds: 5));
-      expect(find.textContaining('つぎへ'), findsOneWidget,
-          reason: 'the advance control stays usable while the idle pulse runs');
+      expect(find.textContaining('きいてみよう'), findsOneWidget,
+          reason: 'the 起 tap-to-hear agency control stays usable under the pulse');
       expect(tester.takeException(), isNull);
+      // Tapping it satisfies the agency gate → ▶ つぎへ appears.
+      await tester.tap(find.textContaining('きいてみよう'));
+      await tester.pump();
+      expect(find.textContaining('つぎへ'), findsOneWidget,
+          reason: 'after hearing す…, the advance control appears');
     });
   });
 }
