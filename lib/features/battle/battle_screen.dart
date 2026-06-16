@@ -921,7 +921,11 @@ class _BattleScreenState extends State<BattleScreen>
     // consistent front/back since both faces use _cardContainer.)
     return Center(
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxHeight: 460),
+        // 480 (was 460): the #65 active-recall cue added ~2 lines to the front
+        // face, which overflowed the 460 cap by ~2px on some layout frames (an
+        // intermittent RenderFlex overflow). 480 keeps the tight flashcard
+        // proportion (#72 — not the old full-height void) with real headroom.
+        constraints: const BoxConstraints(maxHeight: 480),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
           child: Stack(
@@ -1034,7 +1038,7 @@ class _BattleScreenState extends State<BattleScreen>
               child: Text(vocab.pos.first.name,
                   style: dqText(size: 12, color: dqGold)),
             ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 14),
           // Active recall (#65). 2026 evidence (Karpicke; testing effect g=0.50,
           // 50-150% retention): flipping WITHOUT first attempting recall is passive
           // RECOGNITION — benefit substantially reduced. 英検 大問1 demands

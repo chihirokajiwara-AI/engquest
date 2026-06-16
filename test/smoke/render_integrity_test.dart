@@ -46,12 +46,18 @@ void main() {
 
       await tester.pumpWidget(MaterialApp(home: previewWidgetForTest(name)));
       await tester.pump();
-      // Let real async (asset loads / in-memory repo futures) complete.
-      await tester.runAsync(() async {
-        await Future<void>.delayed(const Duration(milliseconds: 700));
-      });
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 500));
+      // POLL until the loading state resolves. Each step advances BOTH real async
+      // (runAsync — in-memory repo / asset futures) AND fake time (pump(Duration)
+      // — internal Timer/Future.delayed in the load chain). A single fixed window
+      // flaked (~40%) when a screen's load (e.g. battle's FSRS getDueCards) ran
+      // long; polling breaks the instant the spinner clears and tolerates timing.
+      for (var i = 0; i < 16; i++) {
+        await tester.runAsync(() async {
+          await Future<void>.delayed(const Duration(milliseconds: 200));
+        });
+        await tester.pump(const Duration(milliseconds: 200));
+        if (find.byType(CircularProgressIndicator).evaluate().isEmpty) break;
+      }
 
       expect(
         find.byType(CircularProgressIndicator),
