@@ -88,6 +88,29 @@ void main() {
     expect(t.takeException(), isNull);
   });
 
+  testWidgets(
+      'the flashcard front exposes a tap-to-hear speaker for non-readers',
+      (t) async {
+    await t.pumpWidget(MaterialApp(
+      home: BattleScreen(
+        repository: InMemoryFsrsCardRepository(),
+        vocabRepo: _seeded([_w('eiken5_001', 'cat'), _w('eiken5_002', 'dog')]),
+        childAge: 10,
+        eikenGrade: '5',
+      ),
+    ));
+    await _pumpLoad(t);
+
+    // The core target user is a 4-7yo NON-READER: the learning card MUST let
+    // them HEAR the English word — they cannot read it. The card front exposes
+    // a tap-to-hear speaker (発音を聞く). Lock it so a refactor cannot silently
+    // strip the non-reader's only way into a new word. (Audio uses the bundled
+    // 5級 MP3 pronunciation via WordAudioPlayerService, not synthetic TTS.)
+    expect(find.byTooltip('発音を聞く'), findsOneWidget,
+        reason: 'the flashcard front must expose audio for non-readers');
+    expect(t.takeException(), isNull);
+  });
+
   testWidgets('an empty deck shows the calm empty-state, not a crash (#36)',
       (t) async {
     await t.pumpWidget(MaterialApp(
