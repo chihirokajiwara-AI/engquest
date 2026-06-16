@@ -17,6 +17,8 @@
 
 import 'dart:math' as math;
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../core/audio/audio_assets.dart';
@@ -81,6 +83,15 @@ class _NazoScreenState extends State<NazoScreen> {
 
   int? _picked;
   bool _revealed = false;
+  // Choreographed reward (studio #1): on a correct answer the learning text shows
+  // FIRST (_revealed), then after a ~550ms read window the gold burst + continue
+  // fire (_burstReady) — so the climax PUNCTUATES the answer instead of burying it
+  // during the form-meaning encoding window. Auto-advance (~1.4s) carries non-
+  // readers past the unreadable CTA. Reduced-motion collapses to the old instant.
+  bool _burstReady = false;
+  Timer? _burstTimer;
+  Timer? _finishTimer;
+  bool _finished = false;
   // First-answer tracking for an honest 合格率 signal (#89): record whether the
   // child's very first choice was correct, regardless of later retries.
   bool _firstAttempted = false;
@@ -133,6 +144,8 @@ class _NazoScreenState extends State<NazoScreen> {
 
   @override
   void dispose() {
+    _burstTimer?.cancel();
+    _finishTimer?.cancel();
     _cue.dispose();
     super.dispose();
   }
@@ -165,9 +178,33 @@ class _NazoScreenState extends State<NazoScreen> {
       _revealed = correct;
       if (_revealed) _sound.playCorrect();
     });
+    if (!correct) return;
+    // Read FIRST, celebrate SECOND. After a short window the burst + continue
+    // appear; the moment also auto-advances so a non-reader is carried to the
+    // restoration. Reduced-motion shows everything at once (old behaviour).
+    if (prefersReducedMotion(context)) {
+      setState(() => _burstReady = true);
+      _scheduleAutoFinish();
+    } else {
+      _burstTimer = Timer(const Duration(milliseconds: 550), () {
+        if (!mounted) return;
+        setState(() => _burstReady = true);
+        _scheduleAutoFinish();
+      });
+    }
+  }
+
+  void _scheduleAutoFinish() {
+    _finishTimer = Timer(const Duration(milliseconds: 1400), () {
+      if (mounted) _finish();
+    });
   }
 
   void _finish() {
+    if (_finished) return; // idempotent: the auto-timer and the CTA can race
+    _finished = true;
+    _burstTimer?.cancel();
+    _finishTimer?.cancel();
     final earned = _picarat.earn();
     Navigator.of(context).pop(NazoResult(
       solved: true,
@@ -308,7 +345,11 @@ class _NazoScreenState extends State<NazoScreen> {
                       child: Text(_step.onCorrect, style: dqText(size: 15)),
                     ),
                     const SizedBox(height: 16),
-                    DqButton(label: '▶ ナゾ、解（と）けた！', onTap: _finish),
+                    // Gated on _burstReady (after the read window) so a child
+                    // cannot skip past reading WHY it was right. Auto-advance also
+                    // fires, so this is an optional early-skip, not the only exit.
+                    if (_burstReady)
+                      DqButton(label: '▶ ナゾ、解（と）けた！', onTap: _finish),
                   ] else ...[
                     const SizedBox(height: 16),
                     _hintLadder(),
@@ -324,7 +365,7 @@ class _NazoScreenState extends State<NazoScreen> {
           // one-shot full-screen gold burst makes the win VISCERAL. The teaching
           // reveal + 「ナゾ、解けた！」 button stay (a child must read why it was right),
           // so the burst celebrates without skipping the lesson. Reduced-motion → none.
-          if (_revealed && !prefersReducedMotion(context))
+          if (_burstReady && !prefersReducedMotion(context))
             const Positioned.fill(
               child: IgnorePointer(child: _SolveBurst()),
             ),

@@ -429,6 +429,22 @@ class _SceneViewState extends State<SceneView>
     );
     if (!mounted) return;
     if (result != null && result.solved) {
+      // Witnessed restoration (studio #1): apply the grey→colour restore AFTER the
+      // ナゾ exit transition (220ms) finishes, so the child is back in the scene to
+      // SEE the signature colour-return — today it fired during the unseen
+      // transition. Reduced-motion keeps the instant restore.
+      if (prefersReducedMotion(context)) {
+        _applyRestore(idx, h, result);
+      } else {
+        Future.delayed(const Duration(milliseconds: 250), () {
+          if (mounted) _applyRestore(idx, h, result);
+        });
+      }
+    }
+  }
+
+  void _applyRestore(int idx, Hotspot h, NazoResult result) {
+    {
       final wasRestored = _sceneRestored;
       setState(() {
         _solved[idx] = true;

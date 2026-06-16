@@ -145,7 +145,10 @@ void main() {
         await tester.tap(find.byType(AudioOptionButton).at(i));
         await tester.pump();
       }
-      // The reveal shows the「▶ ナゾ、解けた！」finish button.
+      // Choreographed reveal (studio #1): the learning text shows immediately, but
+      // the burst + 「▶ ナゾ、解けた！」 finish button appear only after a ~550ms read
+      // window. Pump past it, then tap the early-skip button.
+      await tester.pump(const Duration(milliseconds: 600));
       await tester.tap(find.textContaining('解'));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 400));
