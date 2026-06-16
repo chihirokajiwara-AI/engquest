@@ -319,3 +319,26 @@ teacher playtester. The director weighs BOTH layers and prefers a #1 that makes 
 and the 英検 LEARNING better at the same time (a reward that also strengthens retention; a
 narrative beat that also teaches a 英検 pattern) over a pure-polish or pure-pedagogy tweak.
 Engine: `.claude/workflows/game-studio-panel.js` (now hybrid).
+
+## MACRO STRUCTURE AUDIT — the loop must catch whole-game inadequacy [CEO 1769 — 2026-06-16]
+
+The loop's single biggest failure to date: it polished micro game-feel (bursts,
+badges, juice) for many ticks while NEVER flagging that the WORLD is structurally too
+thin to be the game we claim — 7 single-room scenes, 3 ナゾ each, 21 ナゾ total, no
+multi-location chapters, no cutscene slots. Every per-screen audit passed; the macro
+structure was a blind spot. A loop whose whole purpose is to catch fatal flaws that
+missed THIS is, in the CEO's words, near-meaningless.
+
+**Standing fix — a whole-game structural audit, distinct from per-screen audits:**
+- On a regular cadence (and whenever a pillar is "done"), step back and judge the
+  ENTIRE product against its ambition, not one screen: world SCALE (locations,
+  navigation), content VOLUME (total puzzles/items vs the benchmark — Layton has 100+;
+  we have 21), exploration DENSITY (interactive spots per scene — Layton dozens; we
+  have 3+1), loop DEPTH, and whether the architecture anticipates known-coming needs
+  (e.g. video/cutscene slots, CEO 1768).
+- The diverse-persona flaw-hunt MUST include at least one persona whose lens is
+  MACRO/structural ("is this even a real game at this scale, vs a thin skin over a
+  quiz?"), not only screen-level polish. Benchmark against the genre leader with REAL
+  research (see LAYTON-MECHANICS-STUDY.md), not vibes.
+- "Every screen is polished" is NOT "the game is good." Report structural inadequacy
+  to the CEO honestly and prioritise fixing it over more micro-polish.
