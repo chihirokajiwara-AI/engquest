@@ -913,50 +913,61 @@ class _BattleScreenState extends State<BattleScreen>
   }
 
   Widget _buildFlipCardWithShimmer() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-      child: Stack(
-        children: [
-          // a11y: flipping the card to reveal the meaning is the core battle
-          // action — without Semantics a screen-reader child can't do it and the
-          // loop is unplayable for them. Front = ONE button announcing the word +
-          // "flip to reveal" (excludeSemantics collapses the raw Texts into the
-          // action); once flipped it is not a button and the back's word / meaning
-          // / example are read normally.
-          _isFlipped
-              ? GestureDetector(onTap: null, child: _buildFlipCard())
-              : Semantics(
-                  button: true,
-                  label: '${_currentVocab.word}。'
-                      'いみを 思い出してから、カードを めくって かくにん / '
-                      'Recall the meaning, then flip to check',
-                  excludeSemantics: true,
-                  child: GestureDetector(
-                    onTap: _flipCard,
-                    child: _buildFlipCard(),
-                  ),
-                ),
-          // Golden shimmer overlay on correct answer
-          if (_showShimmer)
-            Positioned.fill(
-              child: AnimatedOpacity(
-                opacity: _showShimmer ? 1.0 : 0.0,
-                duration: const Duration(milliseconds: 300),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    gradient: RadialGradient(
-                      colors: [
-                        dqGold.withAlpha(110),
-                        dqGold.withAlpha(0),
-                      ],
-                      radius: 1.2,
+    // #72: the card sat in an Expanded with width:infinity, so it stretched to
+    // fill ALL vertical space — the word floated in a huge dead void. Cap it to a
+    // proper flashcard proportion and CENTRE it in the available space, so the
+    // dark scene reads above/below the card instead of an empty navy panel.
+    // (The card's own content drives its height ~320-460; flip + shimmer stay
+    // consistent front/back since both faces use _cardContainer.)
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxHeight: 460),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+          child: Stack(
+            children: [
+              // a11y: flipping the card to reveal the meaning is the core battle
+              // action — without Semantics a screen-reader child can't do it and the
+              // loop is unplayable for them. Front = ONE button announcing the word +
+              // "flip to reveal" (excludeSemantics collapses the raw Texts into the
+              // action); once flipped it is not a button and the back's word / meaning
+              // / example are read normally.
+              _isFlipped
+                  ? GestureDetector(onTap: null, child: _buildFlipCard())
+                  : Semantics(
+                      button: true,
+                      label: '${_currentVocab.word}。'
+                          'いみを 思い出してから、カードを めくって かくにん / '
+                          'Recall the meaning, then flip to check',
+                      excludeSemantics: true,
+                      child: GestureDetector(
+                        onTap: _flipCard,
+                        child: _buildFlipCard(),
+                      ),
+                    ),
+              // Golden shimmer overlay on correct answer
+              if (_showShimmer)
+                Positioned.fill(
+                  child: AnimatedOpacity(
+                    opacity: _showShimmer ? 1.0 : 0.0,
+                    duration: const Duration(milliseconds: 300),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        gradient: RadialGradient(
+                          colors: [
+                            dqGold.withAlpha(110),
+                            dqGold.withAlpha(0),
+                          ],
+                          radius: 1.2,
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ),
-        ],
+            ],
+          ),
+        ),
       ),
     );
   }
