@@ -51,16 +51,24 @@ NPC_STYLE = ("コトバ探偵 dusty-teal and brass-amber palette, warm even ligh
 # (crowd/chibi/glossy) — note we do NOT negate sharp outlines/cel shading (that
 # pushed the first batch soft); we ADD anti-watercolour/storybook to lock the
 # mains' crisp look, plus crowd/sheet/frame and child-safety terms.
-NPC_NEG = ("crowd, chibi, multiple people, group, 2girls, 2boys, multiple views, "
+NPC_NEG = (  # CHILD-SAFETY FRONT-LOADED — CLIP truncates the negative at 77 tokens,
+           # so these MUST lead. The character-producer (2026-06-16) caught 4/6 baker
+           # candidates sexualized BECAUSE the safety terms sat past the truncation
+           # point in the old ordering (composition-first) and were never applied. The
+           # anime base model defaults to young sexualized females + wrong (smirk/glare)
+           # expressions — negate those, and the wrong-age young-woman prior, first.
+           "sexualized, sexy, sultry, seductive, cleavage, large breasts, breasts, "
+           "busty, bust emphasis, large chest, hourglass figure, fanservice, pin-up, "
+           "gravure, revealing clothing, bare skin, bare shoulders, midriff, suggestive, "
+           "swimsuit, lingerie, young, youthful, young woman, teen, attractive woman, "
+           "smirk, glare, angry, hostile, scowl, suspicious look, "
+           "crowd, chibi, multiple people, group, 2girls, 2boys, multiple views, "
            "character sheet, reference sheet, model sheet, grid, collage, montage, "
            "border, frame, ornate frame, many faces, town full of people, busy background, "
            "watercolour, gouache, storybook illustration, soft painterly, washed out, "
            "photo, 3d, 3dcg, flat vector, textbox, ui, hud, text, watermark, signature, "
            "glossy, neon, lowres, blurry, jpeg artifacts, bad anatomy, extra limbs, deformed, "
            "white coat, lab coat, "
-           "cleavage, large breasts, breasts, busty, large chest, hourglass figure, "
-           "sexualized, sexy, sultry, seductive, fanservice, revealing clothing, "
-           "bare skin, midriff, suggestive, swimsuit, lingerie, gravure, "
            "shadowed face, hidden eyes, eyes covered by shadow, face in shadow, dark face, "
            # 2026-06-12 (CEO 本格 check): the prior batch output blank glowing-white
            # pupilless eyes (eerie, off the mains' detailed coloured eyes + the
