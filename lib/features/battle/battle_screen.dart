@@ -134,18 +134,24 @@ List<TextSpan> exampleHighlightSpans(
   return spans;
 }
 
-/// Mid-session momentum pulse decision (studio build): returns (shouldShow,
-/// remaining) for the 「あと N問で きょうの目標！」 nudge. Fires on every 5th answer
-/// (5/10/15…) ONLY while the daily goal is still unmet (so the "あと N問" message
-/// is honest). Pure + public so the cadence/honesty is unit-tested.
+/// Cadence for the mid-session momentum pulse. VARIABLE-ratio (3,7,12,18), not a
+/// fixed every-5th — a variable schedule sustains engagement far better than a
+/// predictable one (the reward-psych standard), and front-loading the first nudge
+/// at 3 catches the child while they're still deciding whether to continue.
+const Set<int> kMomentumCadence = {3, 7, 12, 18};
+
+/// Mid-session momentum pulse decision (studio #4): returns (shouldShow,
+/// remaining) for the 「あと N問で きょうの目標！」 nudge. Fires at the variable cadence
+/// above ONLY while the daily goal is still unmet (so "あと N問" stays honest).
+/// Pure + public so the cadence/honesty is unit-tested.
 (bool shouldShow, int remaining) shouldShowMomentumPulse(
   int answersThisSession,
   int remainingToGoal,
   bool goalMet,
 ) {
-  final every5th = answersThisSession % 5 == 0 && answersThisSession > 0;
+  final atCadence = kMomentumCadence.contains(answersThisSession);
   final goalUnmet = !goalMet && remainingToGoal > 0;
-  return (every5th && goalUnmet, remainingToGoal);
+  return (atCadence && goalUnmet, remainingToGoal);
 }
 
 // ── Session result per card ───────────────────────────────────────────────────
@@ -274,6 +280,10 @@ class _BattleScreenState extends State<BattleScreen>
   int _streak = 0; // consecutive Good/Easy answers
   int _totalXp = 0;
   int _answersThisSession = 0; // track answers for mid-session momentum pulse
+  // In-card momentum nudge (studio #4): a readable banner ABOVE the card, not a
+  // 1.5s SnackBar under the answer thumb-zone where it was unreadable. Null = none.
+  String? _momentumText;
+  Timer? _momentumTimer;
 
   // Daily-return snapshot, loaded AFTER this session is recorded, so the summary
   // can surface the day-streak + 「きょうの目標」 progress at peak engagement
@@ -329,6 +339,15 @@ class _BattleScreenState extends State<BattleScreen>
     _sound.loadPreferences().then((_) {
       if (mounted) setState(() {});
     });
+    // Eager-load the streak/goal snapshot so the MID-session momentum pulse can
+    // actually fire (studio #4): it used to be loaded only at session END, so the
+    // mid-session check always saw null and the 「あと N問」 nudge never appeared.
+    unawaited(() async {
+      try {
+        final s = await StreakService().load();
+        if (mounted) setState(() => _streakSnapshot ??= s);
+      } catch (_) {/* prefs failure is non-fatal */}
+    }());
     _initDeckAsync();
   }
 
@@ -346,6 +365,7 @@ class _BattleScreenState extends State<BattleScreen>
 
   @override
   void dispose() {
+    _momentumTimer?.cancel();
     _flipCtrl.dispose();
     _starsCtrl.dispose();
     _wordAudio.dispose();
@@ -616,25 +636,15 @@ class _BattleScreenState extends State<BattleScreen>
     );
 
     if (!shouldShow) return;
-
     if (!mounted) return;
-    // Replace any still-visible pulse so a fast answerer (5 cards in <7.5s)
-    // never sees a backlog of stale 「あと N問」 nudges queue up.
-    ScaffoldMessenger.of(context)
-      ..clearSnackBars()
-      ..showSnackBar(
-        SnackBar(
-          content: Text(
-            'あと $remaining 問 で きょうの目標！',
-            style: dqText(size: 16, w: FontWeight.w700, color: dqInk),
-            textAlign: TextAlign.center,
-          ),
-          backgroundColor: dqGold.withAlpha(220),
-          duration: const Duration(milliseconds: 1500),
-          behavior: SnackBarBehavior.floating,
-          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        ),
-      );
+    // Show a readable in-card banner ABOVE the card (not a SnackBar under the
+    // answer thumb-zone), auto-dismissing after ~2s. Replaces any still-showing
+    // nudge so a fast answerer never stacks stale 「あと N問」 messages.
+    _momentumTimer?.cancel();
+    setState(() => _momentumText = 'あと $remaining 問 で きょうの目標！');
+    _momentumTimer = Timer(const Duration(milliseconds: 2000), () {
+      if (mounted) setState(() => _momentumText = null);
+    });
   }
 
   /// Records the daily-return habit: counts this review toward today's streak
@@ -888,6 +898,7 @@ class _BattleScreenState extends State<BattleScreen>
         Column(
           children: [
             _buildProgressBar(),
+            if (_momentumText != null) _buildMomentumBanner(),
             Expanded(
               child: _buildFlipCardWithShimmer(),
             ),
@@ -902,6 +913,39 @@ class _BattleScreenState extends State<BattleScreen>
               xp: popup.xp,
             )),
       ],
+    );
+  }
+
+  // Momentum nudge banner (studio #4): readable, above the card, a11y liveRegion.
+  Widget _buildMomentumBanner() {
+    return Semantics(
+      liveRegion: true,
+      label: _momentumText ?? '',
+      excludeSemantics: true,
+      child: Container(
+        margin: const EdgeInsets.fromLTRB(24, 0, 24, 4),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        decoration: BoxDecoration(
+          color: dqGold.withAlpha(230),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: dqBorder, width: 1.2),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('🔥', style: TextStyle(fontSize: 16)),
+            const SizedBox(width: 8),
+            Flexible(
+              child: Text(
+                _momentumText ?? '',
+                style: dqText(size: 15, w: FontWeight.w800, color: dqInk),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
