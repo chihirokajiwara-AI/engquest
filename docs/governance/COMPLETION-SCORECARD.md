@@ -144,6 +144,23 @@ The 62 items above MISSED these. Added so the loop drives them too. Severity for
 |76|reduced-motion / a11y OS信号|85|BUILD|MINOR✓|respect disableAnimations/reduceMotion (none); dyslexia/tap-target audit|
 |77|i18n/localization 枠組み|20|BUILD|MINOR|no intl/l10n; strings hardcoded (T15)|
 
+### Real-render visual audit (2026-06-16, #67/CEO 1681 — actual pixels, not code)
+Built `flutter build web --release`, served `build/web`, shot battle + explore at
+phone widths 320/390/430. Verified on the REAL render (not flutter_test):
+- **battle 50→52 (#72/#65/overflow)**: card centred + capped, the dead navy void
+  is gone, the active-recall cue fits inside the card with headroom — **no overflow
+  stripe** at any width (the 460→480 fix holds visually, confirming the 2px-overflow
+  root-cause was real and resolved). 0 horizontal overflow (scrollW==vw).
+- **explore #50 (coin twinkle)**: the hidden ひらめきコイン now renders as a live gold
+  ✦ glint (captured mid-twinkle) — clearly reads as "something shiny over there".
+  Scene is Layton-grade; JP renders clean (no tofu); idle-pulse NPC medallions present.
+- Standing note (doubt-every-screen): スラ slime is still a plain teal blob vs the two
+  detailed anime NPCs — mild art-cohesion gap, but that's GATE:art-gen #54, not a regression.
+- Pedagogy re-audit (this tick): vocab_grammar 大問1 AND word_ordering 大問3 BOTH teach
+  richly after answering (correct word+reading+meaning+in-context example+all-4-choice
+  glosses / post-answer grammar-rule reveal). Two keyword-grep "gaps" were false
+  positives — verified against real code (§VII rule4). Teaching pillar is solid.
+
 ### Honest re-score of OVERSTATED existing items (audit-corrected)
 |60|a11y|76|BUILD|—|was 88; no reduced-motion, unverified tap-target, no dyslexia/cognitive test|
 |41|privacy/ToS|50|GATE:legal|—|was 70; missing 特商法 screen + hosted URLs + COPPA2026 consent + retention|
