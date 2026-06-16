@@ -51,20 +51,19 @@ NPC_STYLE = ("コトバ探偵 dusty-teal and brass-amber palette, warm even ligh
 # (crowd/chibi/glossy) — note we do NOT negate sharp outlines/cel shading (that
 # pushed the first batch soft); we ADD anti-watercolour/storybook to lock the
 # mains' crisp look, plus crowd/sheet/frame and child-safety terms.
-NPC_NEG = (  # CHILD-SAFETY FRONT-LOADED — CLIP truncates the negative at 77 tokens,
-           # so these MUST lead. The character-producer (2026-06-16) caught 4/6 baker
-           # candidates sexualized BECAUSE the safety terms sat past the truncation
-           # point in the old ordering (composition-first) and were never applied. The
-           # anime base model defaults to young sexualized females + wrong (smirk/glare)
-           # expressions — negate those, and the wrong-age young-woman prior, first.
-           "sexualized, sexy, sultry, seductive, cleavage, large breasts, breasts, "
-           "busty, bust emphasis, large chest, hourglass figure, fanservice, pin-up, "
-           "gravure, revealing clothing, bare skin, bare shoulders, midriff, suggestive, "
-           "swimsuit, lingerie, young, youthful, young woman, teen, attractive woman, "
-           "smirk, glare, angry, hostile, scowl, suspicious look, "
-           "crowd, chibi, multiple people, group, 2girls, 2boys, multiple views, "
-           "character sheet, reference sheet, model sheet, grid, collage, montage, "
-           "border, frame, ornate frame, many faces, town full of people, busy background, "
+NPC_NEG = (  # The TWO gates that MUST survive CLIP's 77-token negative truncation are
+           # front-loaded: SINGULARITY (the checkpoint is grid/model-sheet-prone — the
+           # character-producer caught 6/6 as multi-figure grids once the anti-grid
+           # terms got pushed past 77) and CHILD-SAFETY (4/6 were sexualized when these
+           # sat past 77). Singularity leads because it is the current blocker.
+           "multiple views, character sheet, reference sheet, model sheet, turnaround, "
+           "grid, collage, montage, contact sheet, multiple panels, multiple people, "
+           "two people, group, crowd, duplicate, many faces, full body, "
+           "sexualized, sexy, sultry, cleavage, large breasts, bust emphasis, "
+           "young, youthful, young woman, teen, attractive woman, smirk, glare, scowl, "
+           "fanservice, pin-up, revealing clothing, bare shoulders, suggestive, lingerie, "
+           "seductive, busty, hourglass figure, swimsuit, midriff, bare skin, "
+           "chibi, 2girls, 2boys, border, frame, ornate frame, busy background, "
            "watercolour, gouache, storybook illustration, soft painterly, washed out, "
            "photo, 3d, 3dcg, flat vector, textbox, ui, hud, text, watermark, signature, "
            "glossy, neon, lowres, blurry, jpeg artifacts, bad anatomy, extra limbs, deformed, "

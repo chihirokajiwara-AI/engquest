@@ -48,9 +48,11 @@ def main() -> int:
 
     out = args.out or os.path.join(ROOT, "candidates", args.name)
     seeds = [args.base_seed + i for i in range(args.count)]
-    # Default dims by kind: scenes are tall plates, characters are portraits.
-    w = args.width or (1024 if args.kind == "scene" else 832)
-    h = args.height or (1536 if args.kind == "scene" else 1216)
+    # Default dims by kind: scenes are tall plates; characters are SQUARE (a tall
+    # canvas encourages the checkpoint to stack multiple figures into a model-sheet
+    # grid — the character-producer caught 6/6 grids at 832x1216).
+    w = args.width or (1024 if args.kind == "scene" else 1024)
+    h = args.height or (1536 if args.kind == "scene" else 1024)
 
     if args.dry_run:
         print("[gen-batch] PLAN: {0} {1} candidates of '{2}', seeds {3}..{4} @ {5}x{6}"
@@ -80,10 +82,11 @@ def main() -> int:
         # detailed anime, detailed eyes, fully clothed) so style stays cohesive.
         # (memory: art-gen-pipeline-realities — CLIP-77 front-load critical terms.)
         prompt = (
-            "コトバ探偵 dusty-teal and brass-amber anime, single character, "
+            "solo, single character, one person, head and shoulders portrait, "
+            f"centered, plain background, コトバ探偵 dusty-teal and brass-amber anime, "
             f"{args.subject}, refined detailed anime, sharp clean linework, "
             "detailed eyes with dark pupils, kind mature face, fully clothed, "
-            "simple background, warm even lighting, masterpiece, best quality"
+            "warm even lighting, masterpiece, best quality"
         )
         neg = NPC_NEG
     else:
