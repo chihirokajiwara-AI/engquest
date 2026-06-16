@@ -301,8 +301,11 @@ class _SceneViewState extends State<SceneView> {
   }
 
   void _tapNpc(int idx, Hotspot h) {
-    if (_solved[idx] == true) return; // already solved — no re-trigger
-    // Play clue audio best-effort
+    // A colour-restored NPC is NOT a dead end (game-studio finding): tapping a
+    // villager you already helped re-opens their bubble so the child can re-hear
+    // the story fragment they recovered — the world stays responsive and the
+    // authored lore (shown once as a fleeting banner) becomes re-readable. Both
+    // solved and unsolved NPCs toggle a bubble; the bubble's CONTENT differs.
     if (h.clueLineJa != null) {
       // Audio asset not available yet (generated separately); best-effort no-op.
       _cue.play(null);
@@ -320,7 +323,12 @@ class _SceneViewState extends State<SceneView> {
       _collectCoin(idx, h);
       return;
     }
-    if (h.step == null) return;
+    // A solved NPC's bubble is a re-readable memory, not a puzzle — tapping it
+    // (or its 「とじる」) just dismisses; there is no ナゾ to re-open.
+    if (_solved[idx] == true || h.step == null) {
+      setState(() => _bubbleIndex = null);
+      return;
+    }
     setState(() => _bubbleIndex = null);
     _openNazo(idx, h);
   }
@@ -864,7 +872,7 @@ class _SceneViewState extends State<SceneView> {
       return 'ひかる てがかり。タップして しらべる / A shining clue — tap to investigate';
     }
     return isSolved
-        ? 'ナゾ クリアずみ / Mystery solved'
+        ? 'ナゾ クリアずみ。タップして おはなしを きく / Mystery solved — tap to hear their story'
         : 'ナゾの ぬし。タップして はなしかける / A mystery to solve — tap to talk';
   }
 
@@ -879,6 +887,7 @@ class _SceneViewState extends State<SceneView> {
 
   Widget _bubbleOverlay(int idx, double w, double h) {
     final hotspot = widget.scene.hotspots[idx];
+    final solvedNpc = hotspot.kind == HotspotKind.npc && _solved[idx] == true;
     final isFinal = isFinalNazo(idx);
     final cx = (hotspot.pos.x + 1) / 2 * w;
     final cy = (hotspot.pos.y + 1) / 2 * h;
@@ -891,22 +900,27 @@ class _SceneViewState extends State<SceneView> {
         button: true,
         label: hotspot.kind == HotspotKind.coin
             ? 'てがかりを ひろう / Pick up the clue'
-            : 'ナゾを みる / Open the mystery',
+            : solvedNpc
+                ? 'おはなしを とじる / Close their story'
+                : 'ナゾを みる / Open the mystery',
         excludeSemantics: true,
         child: GestureDetector(
           onTap: () => _onBubbleTap(idx),
-          child: _speechBubble(
-            // 対決 beat: the final mystery is framed as the confrontation.
-            isFinal
-                ? '⚔️ さいごの ナゾ。この まちの しずけさの、いちばん ふかい ところ。\n'
-                    '${hotspot.clueLineJa ?? ''}'
-                : hotspot.clueLineJa,
-            ctaLabel: hotspot.kind == HotspotKind.coin
-                ? '✦ ひろう'
-                : isFinal
-                    ? '⚔️ 対決（たいけつ）する'
-                    : '「？」ナゾをみる',
-          ),
+          child: solvedNpc
+              // A restored villager re-shares the memory you recovered — the lore
+              // fragment (shown once as a banner) is re-readable here, on demand.
+              ? _speechBubble(
+                  hotspot.mysteryFragmentJa ?? 'ありがとう、たんていさん。\nことばが もどってきたよ。',
+                  ctaLabel: '✓ とじる',
+                )
+              : _speechBubble(
+                  // 対決 beat: the final mystery is framed as the confrontation.
+                  isFinal
+                      ? '⚔️ さいごの ナゾ。この まちの しずけさの、いちばん ふかい ところ。\n'
+                          '${hotspot.clueLineJa ?? ''}'
+                      : hotspot.clueLineJa,
+                  ctaLabel: isFinal ? '⚔️ 対決（たいけつ）する' : '「？」ナゾをみる',
+                ),
         ),
       ),
     );

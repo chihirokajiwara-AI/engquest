@@ -143,6 +143,38 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('a restored NPC is not a dead end — tapping re-opens its story',
+      (tester) async {
+    final handle = tester.ensureSemantics();
+    final npcIdx = [
+      for (var i = 0; i < kTown5Scene.hotspots.length; i++)
+        if (kTown5Scene.hotspots[i].kind == HotspotKind.npc) i,
+    ];
+    for (final i in npcIdx) {
+      await SceneSolvedStore.markSolved('5', i);
+    }
+    await tester.pumpWidget(
+      MaterialApp(home: SceneView(scene: kTown5Scene, eikenLevel: '5')),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 900));
+
+    // A solved NPC is now interactive (game-studio finding): it announces it can
+    // be tapped to hear its story, and tapping re-opens the recovered lore memo
+    // — the world stays responsive instead of going inert.
+    final solved = find.bySemanticsLabel(RegExp(r'クリアずみ'));
+    expect(solved, findsWidgets);
+    await tester.tap(solved.first);
+    await tester.pump();
+
+    // The restored villager's lore fragment (mysteryFragmentJa) is re-readable,
+    // with a close affordance — and NO NazoScreen quiz is pushed.
+    expect(find.textContaining('たんていメモ'), findsOneWidget);
+    expect(find.textContaining('とじる'), findsOneWidget);
+    expect(find.byType(NazoScreen), findsNothing);
+    handle.dispose();
+  });
+
   testWidgets('scene with no companionArrivalJa shows no arrival banner',
       (tester) async {
     const sceneNoArrival = SceneDef(
