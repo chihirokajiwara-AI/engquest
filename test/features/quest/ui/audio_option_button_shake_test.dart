@@ -9,12 +9,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:engquest/features/quest/ui/dq_ui.dart';
 
 void main() {
+  // The tile now has TWO Transforms (the press-down scale + the shake translate,
+  // #95). The scale Transform has zero translation, so summing translation.x over
+  // all of them recovers the shake displacement regardless of order.
   double dxOf(WidgetTester tester) {
-    final t = tester.widget<Transform>(find.descendant(
+    final ts = tester.widgetList<Transform>(find.descendant(
       of: find.byType(AudioOptionButton),
       matching: find.byType(Transform),
     ));
-    return t.transform.getTranslation().x;
+    return ts.fold<double>(0, (s, t) => s + t.transform.getTranslation().x);
   }
 
   testWidgets('triggerShake displaces the tile, then settles back to 0',

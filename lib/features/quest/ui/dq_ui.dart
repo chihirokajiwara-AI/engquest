@@ -839,13 +839,23 @@ class AudioOptionButton extends StatefulWidget {
 /// branch, which used to swallow the tap silently (a child could not tell it
 /// registered).
 class AudioOptionButtonState extends State<AudioOptionButton>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late final AnimationController _shakeCtrl;
   late final Animation<double> _shakeAnim;
+  // Press-down compression (studio #5): the game's MOST-tapped widget had zero
+  // finger-down feedback → a 4-8yo got no confirmation their tap registered until
+  // the answer resolved, training double-taps. Fire on press-DOWN (not release),
+  // same proven pattern as DqButton. Reduced-motion skips it.
+  late final AnimationController _press;
 
   @override
   void initState() {
     super.initState();
+    _press = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 80),
+      reverseDuration: const Duration(milliseconds: 200),
+    );
     _shakeCtrl = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 320),
@@ -862,8 +872,18 @@ class AudioOptionButtonState extends State<AudioOptionButton>
 
   @override
   void dispose() {
+    _press.dispose();
     _shakeCtrl.dispose();
     super.dispose();
+  }
+
+  void _pressDown() {
+    if (prefersReducedMotion(context)) return;
+    _press.forward();
+  }
+
+  void _pressUp() {
+    if (_press.value > 0) _press.reverse();
   }
 
   /// Play the wrong-answer shudder once. No-op when "reduce motion" is on, so
@@ -890,9 +910,10 @@ class AudioOptionButtonState extends State<AudioOptionButton>
     // elastic scale-pop (grows past 100% then settles) makes the win felt. The
     // branch only exists in the correct state, so the freshly-inserted
     // TweenAnimationBuilder animates from begin once. Reduced-motion → no pop.
+    final Widget content;
     if (widget.state == DqChoiceState.correct &&
         !prefersReducedMotion(context)) {
-      return TweenAnimationBuilder<double>(
+      content = TweenAnimationBuilder<double>(
         key: const ValueKey('dqaob_correct_pop'),
         tween: Tween(begin: 0.85, end: 1.0),
         duration: const Duration(milliseconds: 360),
@@ -901,8 +922,20 @@ class AudioOptionButtonState extends State<AudioOptionButton>
             Transform.scale(scale: scale, child: child),
         child: shakable,
       );
+    } else {
+      content = shakable;
     }
-    return shakable;
+    // Press-down compression on top (studio #5): the tile dips to 0.93 the instant
+    // the finger lands, springs back on release. Under reduced-motion _press never
+    // advances, so this is a no-op scale of 1.0.
+    return AnimatedBuilder(
+      animation: _press,
+      builder: (_, child) => Transform.scale(
+        scale: 1.0 - 0.07 * Curves.easeOut.transform(_press.value),
+        child: child,
+      ),
+      child: content,
+    );
   }
 
   Widget _buildBody(BuildContext context) {
@@ -946,6 +979,13 @@ class AudioOptionButtonState extends State<AudioOptionButton>
                   onAudio?.call();
                   onChoose?.call();
                 },
+          // Press-down compression (studio #5): only when the tile is answerable.
+          onTapDown: (onAudio == null && onChoose == null)
+              ? null
+              : (_) => _pressDown(),
+          onTapUp:
+              (onAudio == null && onChoose == null) ? null : (_) => _pressUp(),
+          onTapCancel: (onAudio == null && onChoose == null) ? null : _pressUp,
           child: Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
