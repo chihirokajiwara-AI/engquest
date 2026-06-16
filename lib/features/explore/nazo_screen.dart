@@ -92,6 +92,11 @@ class _NazoScreenState extends State<NazoScreen> {
   Timer? _burstTimer;
   Timer? _finishTimer;
   bool _finished = false;
+  // Teach at the error moment (studio #3): a wrong tap briefly surfaces the tapped
+  // word's meaning (from the TeachCard) under the options, so the same tap that is
+  // the game's "wrong" beat also teaches. Null = nothing shown.
+  String? _wrongMeaning;
+  Timer? _wrongMeaningTimer;
   // First-answer tracking for an honest 合格率 signal (#89): record whether the
   // child's very first choice was correct, regardless of later retries.
   bool _firstAttempted = false;
@@ -146,6 +151,7 @@ class _NazoScreenState extends State<NazoScreen> {
   void dispose() {
     _burstTimer?.cancel();
     _finishTimer?.cancel();
+    _wrongMeaningTimer?.cancel();
     _cue.dispose();
     super.dispose();
   }
@@ -160,6 +166,7 @@ class _NazoScreenState extends State<NazoScreen> {
       _firstAttempted = true;
       _firstTryCorrect = correct;
     }
+    if (!correct) _showWrongMeaning(i); // teach at the error moment (studio #3)
     if (!correct && !_step.penalizeWrong) {
       // No-scold: replay the audio without advancing. Shake the tapped tile so
       // the child SEES their tap registered (it used to be swallowed silently).
@@ -194,10 +201,68 @@ class _NazoScreenState extends State<NazoScreen> {
     }
   }
 
+  /// The Japanese meaning of an option's word from the TeachCard, or null if this
+  /// ナゾ has no card or the word isn't taught. Tolerant match (case/punctuation).
+  String? _meaningFor(String label) {
+    final card = _teachCard;
+    if (card == null) return null;
+    String norm(String s) => s.toLowerCase().replaceAll(RegExp('[^a-z]'), '');
+    final key = norm(label);
+    if (key.isEmpty) return null;
+    for (final it in card.items) {
+      if (norm(it.en) == key) return it.ja;
+    }
+    return null;
+  }
+
+  /// Surface the tapped wrong word's meaning for ~2.4s (studio #3 — the error
+  /// moment is the highest-salience encoding moment; teach, don't just shake).
+  void _showWrongMeaning(int i) {
+    final meaning = _meaningFor(_step.options[i].label);
+    if (meaning == null) return;
+    final word = _step.options[i].label;
+    _wrongMeaningTimer?.cancel();
+    setState(() => _wrongMeaning = '$word = $meaning');
+    _wrongMeaningTimer = Timer(const Duration(milliseconds: 2400), () {
+      if (mounted) setState(() => _wrongMeaning = null);
+    });
+  }
+
   void _scheduleAutoFinish() {
     _finishTimer = Timer(const Duration(milliseconds: 1400), () {
       if (mounted) _finish();
     });
+  }
+
+  // Gentle teaching note (info teal, NOT a red scold) — surfaces the tapped wrong
+  // word's meaning at the error moment. liveRegion so a screen-reader child hears
+  // the teaching, not just feels the shake.
+  Widget _wrongMeaningBanner() {
+    const teal = Color(0xFF4FC3F7);
+    return Semantics(
+      liveRegion: true,
+      label: 'ヒント。${_wrongMeaning ?? ''}',
+      excludeSemantics: true,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+        decoration: BoxDecoration(
+          color: teal.withAlpha(28),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: teal.withAlpha(150)),
+        ),
+        child: Row(
+          children: [
+            const Text('💡', style: TextStyle(fontSize: 16)),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(_wrongMeaning ?? '',
+                  style: dqText(size: 14, w: FontWeight.w700)),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   void _finish() {
@@ -309,6 +374,12 @@ class _NazoScreenState extends State<NazoScreen> {
                   _promptLabel(),
                   const SizedBox(height: 8),
                   ..._optionTiles(),
+                  // Teach at the error moment (studio #3): the tapped word's
+                  // meaning, shown gently (info, not a scold) for ~2.4s.
+                  if (_wrongMeaning != null) ...[
+                    const SizedBox(height: 10),
+                    _wrongMeaningBanner(),
+                  ],
                   if (_revealed) ...[
                     const SizedBox(height: 12),
                     // Solve-moment reward (game-feel #51): a detective-register

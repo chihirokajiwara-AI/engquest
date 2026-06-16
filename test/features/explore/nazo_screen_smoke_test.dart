@@ -260,5 +260,44 @@ void main() {
       expect(find.textContaining('スラがヒントをくれた'), findsOneWidget);
       expect(tester.takeException(), isNull);
     });
+
+    // Studio #3: the error moment teaches — a wrong tap surfaces the tapped word's
+    // meaning (from the TeachCard) instead of only shaking.
+    testWidgets('wrong tap surfaces the tapped word meaning (studio #3)',
+        (t) async {
+      t.view.physicalSize = const Size(440, 1600);
+      t.view.devicePixelRatio = 1.0;
+      addTearDown(t.view.reset);
+      final hotspot = kTown5Scene.hotspots.firstWhere((h) =>
+          h.kind == HotspotKind.npc && h.step != null && h.teachCard != null);
+      final step = hotspot.step!;
+      final card = hotspot.teachCard!;
+      String norm(String s) => s.toLowerCase().replaceAll(RegExp('[^a-z]'), '');
+      final meanings = {for (final it in card.items) norm(it.en): it.ja};
+      int? wrong;
+      for (var k = 0; k < step.options.length; k++) {
+        if (k != step.correctIndex &&
+            meanings.containsKey(norm(step.options[k].label))) {
+          wrong = k;
+          break;
+        }
+      }
+      expect(wrong, isNotNull,
+          reason: 'need a wrong option with a taught meaning');
+
+      await t.pumpWidget(MaterialApp(
+        home: NazoScreen(hotspot: hotspot, eikenLevel: '5'),
+      ));
+      await t.pump();
+      await t.pump(const Duration(milliseconds: 300));
+      await t.tap(find.textContaining('こたえてみる')); // dismiss teach-first card
+      await t.pump();
+      expect(find.textContaining(' = '),
+          findsNothing); // nothing before a wrong tap
+      await t.tap(find.byType(AudioOptionButton).at(wrong!));
+      await t.pump();
+      expect(find.textContaining(meanings[norm(step.options[wrong].label)]!),
+          findsWidgets);
+    });
   });
 }
