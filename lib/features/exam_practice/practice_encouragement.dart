@@ -77,29 +77,58 @@ class SessionEndHook extends StatelessWidget {
   final StreakState streak;
   const SessionEndHook({super.key, required this.streak});
 
+  // スラ companion blue for the calm "keep going" state.
+  static const _slaBlue = Color(0xFF5DA9E9);
+
   @override
   Widget build(BuildContext context) {
     final s = streak;
-    final String line = s.goalMet
+    final met = s.goalMet;
+    final String line = met
         ? '${s.currentStreak}日（にち）れんぞく！ きょうの目標（もくひょう）たっせい！'
         : 'あと ${s.remainingToGoal}問（もん）で きょうの目標（もくひょう）！';
-    final String tomorrow =
-        s.goalMet ? 'また あした、つづきを しらべよう！' : 'もう少（すこ）し やってみる？';
-    return Container(
+    final String tomorrow = met ? 'また あした、つづきを しらべよう！' : 'もう少（すこ）し やってみる？';
+
+    // The goal-met moment is the strongest daily-return reinforcement, so it must
+    // FEEL distinct from the calm "keep going" box — not the same blue panel with
+    // only different words. Met → a gold-framed, glowing 「目標 達成」 stamp that pops
+    // in once (reduced-motion → static). Not-met stays calm スラ-blue, no juice.
+    final box = Container(
       key: const ValueKey('session_end_hook'),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: dqBox,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: const Color(0xFF5DA9E9), width: 2),
+        border:
+            Border.all(color: met ? dqGold : _slaBlue, width: met ? 2.5 : 2),
+        boxShadow: met
+            ? [
+                BoxShadow(
+                    color: dqGold.withAlpha(90),
+                    blurRadius: 18,
+                    spreadRadius: 1),
+              ]
+            : null,
       ),
       child: Column(
         children: [
-          Text('🔵 スラ',
-              style: dqText(
-                  size: 12,
-                  w: FontWeight.w800,
-                  color: const Color(0xFF5DA9E9))),
+          if (met)
+            // A diegetic gold achievement stamp — the same celebratory vocabulary
+            // as the case-clear 「事件 解決」 plate, so a met goal reads as a WIN.
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
+              decoration: BoxDecoration(
+                color: dqGold.withAlpha(28),
+                borderRadius: BorderRadius.circular(6),
+                border: Border.all(color: dqGold, width: 1.5),
+              ),
+              child: Text('✦ もくひょう 達成（たっせい）✦',
+                  style: dqText(
+                      size: 12, w: FontWeight.w900, color: dqGold, spacing: 1)),
+            )
+          else
+            Text('🔵 スラ',
+                style: dqText(size: 12, w: FontWeight.w800, color: _slaBlue)),
           const SizedBox(height: 6),
           Text(line,
               textAlign: TextAlign.center,
@@ -111,5 +140,17 @@ class SessionEndHook extends StatelessWidget {
         ],
       ),
     );
+
+    if (met && !prefersReducedMotion(context)) {
+      return TweenAnimationBuilder<double>(
+        key: const ValueKey('session_end_hook_pop'),
+        tween: Tween(begin: 0.9, end: 1.0),
+        duration: const Duration(milliseconds: 520),
+        curve: Curves.elasticOut,
+        builder: (_, t, child) => Transform.scale(scale: t, child: child),
+        child: box,
+      );
+    }
+    return box;
   }
 }
