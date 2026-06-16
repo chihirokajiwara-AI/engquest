@@ -211,10 +211,12 @@ void main() {
     ));
     await _settle(tester);
     // A brand-new child (0 due, no estimate, no streak) has learned nothing yet,
-    // and tapping opens a fresh deck of NEW words — so the panel must INVITE them
+    // and tapping opens a fresh deck of NEW words — so the home must INVITE them
     // to start, not show the passive caught-up "館は しずか / Review" copy (which
     // wrongly implies there's nothing to do and that it's "review", not learning).
-    expect(find.textContaining('さいしょの ことば'), findsOneWidget);
+    // Council S1: BOTH the primary gold CTA and the ナゾ panel now say it on
+    // first run → findsWidgets (≥1).
+    expect(find.textContaining('さいしょの ことば'), findsWidgets);
     expect(find.textContaining('しずか'), findsNothing);
   });
 
@@ -251,19 +253,23 @@ void main() {
   });
 
   testWidgets(
-      'KotobaHomeScreen: 英検 practice CTA navigates to ExamPracticeScreen',
+      'KotobaHomeScreen: RETURNING-user 英検 CTA navigates to ExamPracticeScreen',
       (tester) async {
     // The exam-practice hub (大問/模試/合格メーター) was previously reachable only
     // from the orphaned WorldMapScreen hub. This CTA is the live entry point —
     // tap-and-assert-navigation (not just text presence) so the core 合格 surface
     // cannot silently become unreachable again (a dropped onTap would pass a
-    // text-only check).
+    // text-only check). Council S1: the gold CTA is the 英検 hub only for a
+    // RETURNING user (has data) — a streak makes firstRun==false, so use one.
     await tester.pumpWidget(_wrap(
-      streakService: _MockStreakService(const StreakState.zero()),
+      streakService: _MockStreakService(
+        const StreakState(currentStreak: 7, weeklyBits: 63, todayCount: 1),
+      ),
       cardRepository: InMemoryFsrsCardRepository(),
     ));
     await _settle(tester);
-    // #66: 英検 practice is now the PRIMARY (gold) CTA — fact_check_rounded.
+    // #66: 英検 practice is the PRIMARY (gold) CTA for a returning user —
+    // fact_check_rounded.
     final cta = find.byIcon(Icons.fact_check_rounded);
     expect(cta, findsOneWidget);
     await tester.ensureVisible(cta);
@@ -271,6 +277,36 @@ void main() {
     await tester.tap(cta);
     await tester.pumpAndSettle();
     expect(find.byType(ExamPracticeScreen), findsOneWidget);
+  });
+
+  testWidgets(
+      'KotobaHomeScreen: first-run gold CTA leads to LEARN (battle), not the exam hub (council S1/#102)',
+      (tester) async {
+    // The #1 unanimous council finding: a no-data beginner's primary gold button
+    // must NOT route to the 英検 mock-exam hub before they learn a word. On first
+    // run the gold CTA shows the auto_stories icon and opens the FSRS vocab battle
+    // (which IS 英検 — #66 honoured), never ExamPracticeScreen.
+    await tester.pumpWidget(_wrap(
+      streakService: _MockStreakService(const StreakState.zero()),
+      cardRepository: InMemoryFsrsCardRepository(), // brand new → firstRun
+    ));
+    await _settle(tester);
+    final cta = find.byIcon(Icons.auto_stories_rounded);
+    expect(cta, findsOneWidget,
+        reason: 'first-run gold CTA is the LEARN variant, not 英検 hub');
+    expect(find.byIcon(Icons.fact_check_rounded), findsNothing);
+    await tester.ensureVisible(cta);
+    await tester.pump();
+    await tester.tap(cta);
+    // BattleScreen has continuously-animating widgets → fixed pumps, not
+    // pumpAndSettle (which times out).
+    for (var i = 0; i < 15; i++) {
+      await tester.pump(const Duration(milliseconds: 100));
+    }
+    expect(find.byType(BattleScreen), findsOneWidget);
+    expect(find.byType(ExamPracticeScreen), findsNothing,
+        reason:
+            'a beginner must never be dropped into the test before learning');
   });
 
   testWidgets('KotobaHomeScreen: きょうの ナゾ panel navigates to FSRS review (#66)',

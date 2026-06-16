@@ -315,6 +315,13 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
     );
   }
 
+  /// A brand-new child with no practice data yet: no due cards, no 合格率
+  /// estimate, no streak. Used to lead a first-run beginner to LEARN rather than
+  /// the 英検 mock-exam hub (council wf w4cnnw8ho S1 / #102 — the same flag the
+  /// ナゾ panel already uses).
+  bool get _isFirstRun =>
+      _dueCount == 0 && _estimate == null && _streak.currentStreak == 0;
+
   /// Open the full 合格メーター from the home readiness card. With no data yet,
   /// send the child to practice (so a meter can be produced). If the meter pops
   /// a weak skill ("practise X"), route to the exam hub to do so. #66/#68.
@@ -917,6 +924,13 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
   // the product's primary daily path — the prominent gold action.
 
   Widget _buildExamCta() {
+    // S1 (council wf w4cnnw8ho — unanimous #102): a no-data first-run beginner
+    // must NOT be sent into the 英検 mock-exam/合格率 hub before learning a word
+    // (the #1 cancel-trigger). When firstRun, the primary gold CTA leads to LEARN
+    // (the FSRS vocab battle, which IS 英検 — so CEO #66 is honoured: 英検-LEARN
+    // foregrounded, not the demoted RPG). 英検/合格率 stays reachable via the
+    // readiness card above; this reverts to the 模試/合格率 hub once data exists.
+    final firstRun = _isFirstRun;
     // a11y (T14): the primary action must announce as a BUTTON to screen
     // readers / switch access — a bare GestureDetector exposes only a 'group',
     // so a non-visual user can't tell it's tappable. The nested SpeakerButton
@@ -924,9 +938,11 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
     // tree (scripts/smoke_flow.mjs probe): this flips role group→button.
     return Semantics(
       button: true,
-      label: '英検（えいけん）れんしゅう。合格率（ごうかくりつ）をみる',
+      label: firstRun
+          ? 'さいしょの ことばを おぼえよう。まなびを はじめる'
+          : '英検（えいけん）れんしゅう。合格率（ごうかくりつ）をみる',
       child: GestureDetector(
-        onTap: _goToExamPractice,
+        onTap: firstRun ? _goToReview : _goToExamPractice,
         child: Container(
           width: double.infinity,
           alignment: Alignment.center,
@@ -949,15 +965,21 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.fact_check_rounded,
-                  color: Color(0xFF2A1C00), size: 26),
+              Icon(
+                  firstRun
+                      ? Icons.auto_stories_rounded
+                      : Icons.fact_check_rounded,
+                  color: const Color(0xFF2A1C00),
+                  size: 26),
               const SizedBox(width: 8),
               Flexible(
                 // jpBreak gives CanvasKit CJK break points so this long label wraps
                 // within the button instead of clipping at the edge (the FittedBox
                 // scaleDown was not shrinking it — real web clip, flutter#74742).
                 child: Text(
-                  jpBreak('英検（えいけん）れんしゅう　／　合格率（ごうかくりつ）'),
+                  firstRun
+                      ? 'さいしょの ことばを おぼえよう'
+                      : jpBreak('英検（えいけん）れんしゅう　／　合格率（ごうかくりつ）'),
                   textAlign: TextAlign.center,
                   style: dqText(
                     size: 16,
@@ -968,9 +990,12 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
                 ),
               ),
               // #133 pre-literacy: a non-reader taps this speaker to HEAR the label.
-              // Additive — tapping the button itself still navigates to practice.
+              // Additive — tapping the button itself still navigates. firstRun uses
+              // the generic 'hint' cue (no misleading 'exam' for a beginner; an
+              // exact 'learn' clip is a deferred audio-gen follow-up).
               const SizedBox(width: 4),
-              const SpeakerButton('exam', color: Color(0xFF2A1C00), size: 22),
+              SpeakerButton(firstRun ? 'hint' : 'exam',
+                  color: const Color(0xFF2A1C00), size: 22),
             ],
           ),
         ),
