@@ -38,6 +38,7 @@ import 'package:engquest/features/parent_dashboard/parent_login_screen.dart';
 import 'package:engquest/core/storage/preferences_service.dart';
 import 'package:engquest/features/quest/ui/dq_ui.dart';
 import 'package:engquest/features/explore/scene_view.dart';
+import 'package:engquest/features/explore/case_log_screen.dart';
 import 'package:engquest/features/home/kotoba_home_screen.dart';
 import 'package:engquest/features/exam_practice/pass/pass_meter_screen.dart';
 import 'package:engquest/features/exam_practice/pass/pass_progress_card.dart';
@@ -395,6 +396,7 @@ const List<String> kPreviewRouteNames = [
   'achievements',
   'parent',
   'parentlogin',
+  'caselog',
   'wordorder',
   'conversation',
   'conversation5',
@@ -929,6 +931,8 @@ Widget _previewFor(String? name) {
       return const ParentDashboardScreen();
     case 'parentlogin':
       return const ParentLoginScreen();
+    case 'caselog':
+      return const CaseLogScreen();
     default:
       return const _AppEntryPoint();
   }

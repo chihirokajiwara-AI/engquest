@@ -111,9 +111,14 @@ class _CaseLogScreenState extends State<CaseLogScreen> {
                           onPressed: () => Navigator.of(context).pop(),
                         ),
                       ),
-                      Text('事件簿（じけんぼ）',
-                          style: dqText(
-                              size: 20, w: FontWeight.w900, color: dqGold)),
+                      // Expanded so the title wraps instead of overflowing the
+                      // back button at textScaler 2.0 (#114/WCAG SC 1.4.4 — it
+                      // clipped ~85px on the right at 200% font).
+                      Expanded(
+                        child: Text('事件簿（じけんぼ）',
+                            style: dqText(
+                                size: 20, w: FontWeight.w900, color: dqGold)),
+                      ),
                     ],
                   ),
                 ),

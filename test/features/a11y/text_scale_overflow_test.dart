@@ -26,6 +26,7 @@ import 'package:engquest/features/exam_practice/pass/cse_model.dart';
 import 'package:engquest/features/exam_practice/reading_practice_screen.dart';
 import 'package:engquest/features/battle/battle_screen.dart';
 import 'package:engquest/features/explore/scene_view.dart';
+import 'package:engquest/features/explore/case_log_screen.dart';
 import 'package:engquest/features/onboarding/onboarding_flow.dart';
 import 'package:engquest/features/settings/settings_screen.dart';
 import 'package:engquest/features/achievements/achievements_screen.dart';
@@ -126,6 +127,7 @@ void main() {
     'parent-dashboard': const ParentDashboardScreen(),
     'writing': WritingPracticeScreen(
         eikenGrade: '3', section: _sec(ExamSectionType.writing)),
+    'case-log': const CaseLogScreen(),
   };
   subScreens.forEach((name, w) {
     testWidgets('$name OK @ textScaler 2.0 (WCAG SC 1.4.4)', (tester) async {
