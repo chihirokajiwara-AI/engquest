@@ -72,12 +72,19 @@ def main() -> int:
     )
 
     if args.kind == "npc":
-        # FRONT-LOAD the critical コトバ探偵 palette + single-character cues so they
-        # survive CLIP's 77-token truncation even with a longer --subject (the tail
-        # is what gets cut). Style/consistency is the producer's #1 gate, so style
-        # leads, subject trails. Keep --subject SHORT for best fidelity.
-        # (memory: art-gen-pipeline-realities — CLIP-77 front-load.)
-        prompt = "{0}, {1}{2}".format(NPC_STYLE, NPC_POS, args.subject)
+        # CLIP-77 budget: full NPC_POS + NPC_STYLE alone nearly fills 77 tokens, so
+        # either the palette OR the subject gets truncated. Pack BOTH critical
+        # elements — palette AND subject AND single-character — into the first ~22
+        # tokens, then the rest of the detail (which may safely truncate). Keeps the
+        # frozen key terms (コトバ探偵 dusty-teal/brass, single character, refined
+        # detailed anime, detailed eyes, fully clothed) so style stays cohesive.
+        # (memory: art-gen-pipeline-realities — CLIP-77 front-load critical terms.)
+        prompt = (
+            "コトバ探偵 dusty-teal and brass-amber anime, single character, "
+            "{0}, refined detailed anime, sharp clean linework, detailed eyes with "
+            "dark pupils, kind mature face, fully clothed, simple background, "
+            "warm even lighting, masterpiece, best quality".format(args.subject)
+        )
         neg = NPC_NEG
     else:
         prompt = "{0}, {1}".format(args.subject, POS)
