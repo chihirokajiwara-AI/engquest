@@ -74,20 +74,16 @@ def main() -> int:
     )
 
     if args.kind == "npc":
-        # CLIP-77 budget: full NPC_POS + NPC_STYLE alone nearly fills 77 tokens, so
-        # either the palette OR the subject gets truncated. Pack BOTH critical
-        # elements — palette AND subject AND single-character — into the first ~22
-        # tokens, then the rest of the detail (which may safely truncate). Keeps the
-        # frozen key terms (コトバ探偵 dusty-teal/brass, single character, refined
-        # detailed anime, detailed eyes, fully clothed) so style stays cohesive.
-        # (memory: art-gen-pipeline-realities — CLIP-77 front-load critical terms.)
-        prompt = (
-            "solo, single character, one person, head and shoulders portrait, "
-            f"centered, plain background, コトバ探偵 dusty-teal and brass-amber anime, "
-            f"{args.subject}, refined detailed anime, sharp clean linework, "
-            "detailed eyes with dark pupils, kind mature face, fully clothed, "
-            "warm even lighting, masterpiece, best quality"
-        )
+        # Use the SAME front-loaded NPC prompt as generate_scene_art.py (the
+        # canonical, CLIP-77-tuned path) — NOT a divergent hand-rolled order.
+        # NPC_POS front-loads the non-negotiables (single character + sharp anime
+        # + detailed OPEN eyes + mature face + fully clothed) BEFORE the subject so
+        # they survive the 77-token cut; the subject (the role) follows; NPC_STYLE
+        # is the short truncatable tail. The previous inline template here put
+        # eyes/face/clothed LAST, so they were silently dropped (96>77) — the
+        # character-producer caught the baker batch as closed-eye, off-role,
+        # off-style precisely because of that. (memory: art-gen-pipeline-realities.)
+        prompt = f"{NPC_POS}{args.subject}, {NPC_STYLE}"
         neg = NPC_NEG
     else:
         prompt = "{0}, {1}".format(args.subject, POS)
