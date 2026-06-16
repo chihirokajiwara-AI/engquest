@@ -36,21 +36,25 @@ def main() -> int:
     ap = argparse.ArgumentParser(description="Generate N art candidates of one asset.")
     ap.add_argument("--name", required=True, help="asset id (output dir name)")
     ap.add_argument("--subject", required=True, help="subject prompt (style added)")
+    ap.add_argument("--kind", choices=["scene", "npc"], default="scene",
+                    help="scene plate (POS/NEG) or character portrait (NPC suffix)")
     ap.add_argument("--count", type=int, default=12)
     ap.add_argument("--base-seed", type=int, default=7000)
-    ap.add_argument("--width", type=int, default=1024)
-    ap.add_argument("--height", type=int, default=1536, help="scene plates are tall")
+    ap.add_argument("--width", type=int, default=None, help="default by --kind")
+    ap.add_argument("--height", type=int, default=None, help="default by --kind")
     ap.add_argument("--out", default=None, help="default candidates/<name>")
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
 
     out = args.out or os.path.join(ROOT, "candidates", args.name)
     seeds = [args.base_seed + i for i in range(args.count)]
+    # Default dims by kind: scenes are tall plates, characters are portraits.
+    w = args.width or (1024 if args.kind == "scene" else 832)
+    h = args.height or (1536 if args.kind == "scene" else 1216)
 
     if args.dry_run:
-        print("[gen-batch] PLAN: {0} candidates of '{1}', seeds {2}..{3} @ {4}x{5}"
-              .format(args.count, args.name, seeds[0], seeds[-1],
-                      args.width, args.height))
+        print("[gen-batch] PLAN: {0} {1} candidates of '{2}', seeds {3}..{4} @ {5}x{6}"
+              .format(args.count, args.kind, args.name, seeds[0], seeds[-1], w, h))
         print("[gen-batch] out: {0}".format(out))
         print("[gen-batch] subject: {0}".format(args.subject))
         return 0
@@ -63,7 +67,16 @@ def main() -> int:
         StableDiffusionXLPipeline,
         DPMSolverMultistepScheduler,
     )
-    from generate_scene_art import POS, NEG  # frozen style — no drift  # noqa: E402
+    from generate_scene_art import (  # frozen style — no drift  # noqa: E402
+        POS, NEG, NPC_POS, NPC_STYLE, NPC_NEG,
+    )
+
+    if args.kind == "npc":
+        prompt = "{0}{1}, {2}".format(NPC_POS, args.subject, NPC_STYLE)
+        neg = NPC_NEG
+    else:
+        prompt = "{0}, {1}".format(args.subject, POS)
+        neg = NEG
 
     model = "cagliostrolab/animagine-xl-4.0"
     print("[gen-batch] loading {0} on MPS…".format(model))
@@ -76,15 +89,13 @@ def main() -> int:
     pipe.to("mps")
     pipe.set_progress_bar_config(disable=True)
 
-    prompt = "{0}, {1}".format(args.subject, POS)
     done = 0
     for i, seed in enumerate(seeds):
         g = torch.Generator(device="mps").manual_seed(seed)
         print("[gen-batch] {0}/{1} seed {2}…".format(i + 1, args.count, seed))
         img = pipe(
-            prompt=prompt, negative_prompt=NEG, width=args.width,
-            height=args.height, num_inference_steps=28, guidance_scale=6.5,
-            generator=g,
+            prompt=prompt, negative_prompt=neg, width=w, height=h,
+            num_inference_steps=28, guidance_scale=6.5, generator=g,
         ).images[0]
         fp = os.path.join(out, "cand_{0:02d}_seed{1}.webp".format(i, seed))
         img.save(fp, format="WEBP", quality=88, method=6)
