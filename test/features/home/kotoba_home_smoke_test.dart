@@ -220,6 +220,28 @@ void main() {
     expect(find.textContaining('しずか'), findsNothing);
   });
 
+  testWidgets(
+      'KotobaHomeScreen: a returning caught-up child sees a completion WIN, not the old empty "しずか"',
+      (tester) async {
+    // D7+ retention flaw-hunt: a returning child (has a streak) who has cleared
+    // today's reviews (0 due) is NOT firstRun. The old copy framed this normal
+    // day as a passive "館は しずか / Review" that dumped them into the full deck.
+    // It must now be an honest, calm completion win.
+    await tester.pumpWidget(_wrap(
+      streakService: _MockStreakService(
+        const StreakState(currentStreak: 7, weeklyBits: 63, todayCount: 1),
+      ),
+      cardRepository: InMemoryFsrsCardRepository(), // 0 due, but has a streak
+    ));
+    await _settle(tester);
+    expect(find.textContaining('ぜんぶ おわった'), findsOneWidget,
+        reason: 'caught-up returning child must get a completion win');
+    expect(find.textContaining('しずか'), findsNothing,
+        reason: 'the misleading empty-room copy must be gone');
+    expect(find.textContaining('さいしょの ことば'), findsNothing,
+        reason: 'a returning child is not first-run');
+  });
+
   testWidgets('KotobaHomeScreen: N due items shows diegetic message',
       (tester) async {
     final repo = await _repoWithDue(3);

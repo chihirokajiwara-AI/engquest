@@ -847,6 +847,13 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
     // here (there is nothing to "review" — it's first learning), so it failed to
     // invite the child to start. Show an active "learn your first words" call.
     final firstRun = !hasDue && _estimate == null && _streak.currentStreak == 0;
+    // RETURNING child who has CLEARED today's reviews (has data, 0 due). This is
+    // the NORMAL day-7+ state, not an edge case. The old "館は しずか…… / Review"
+    // copy hid the win and, on tap, dumped them into the WHOLE deck (battle's
+    // 0-due fallback) — a drag that pads the daily goal with already-mastered
+    // words (D7/D30 retention flaw-hunt). FSRS's value is "the gap": show a
+    // calm completion + an HONESTLY-labelled optional bonus, not fake "review".
+    final caughtUp = !hasDue && !firstRun;
 
     // Tappable → FSRS vocabulary review (#66): the panel announces the due-count
     // and now actually opens the review, instead of stranding the child.
@@ -861,7 +868,8 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Icon(Icons.search_rounded, color: dqGold, size: 28),
+              Icon(caughtUp ? Icons.task_alt_rounded : Icons.search_rounded,
+                  color: dqGold, size: 28),
               const SizedBox(width: 14),
               Expanded(
                 child: Column(
@@ -896,14 +904,18 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
                             dqText(size: 12, w: FontWeight.w500, color: dqGold),
                       ),
                     ] else ...[
+                      // Caught up: a calm WIN, not an empty room. FSRS chose to
+                      // rest these words — say so honestly, and offer extra
+                      // practice only as a clearly-labelled おまけ (bonus).
                       Text(
-                        '館（やかた）は しずか……',
+                        'きょうの ふくしゅう、ぜんぶ おわった！',
                         style:
                             dqText(size: 14, w: FontWeight.w600, color: dqInk),
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'タップして たんごを ふくしゅうしよう / Review',
+                        'あした また あたらしい ナゾが とどくよ'
+                        '（おまけ：タップで もういちど）',
                         style:
                             dqText(size: 12, w: FontWeight.w500, color: dqGold),
                       ),
