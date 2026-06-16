@@ -1134,6 +1134,35 @@ final SceneDef kTown3Scene = SceneDef(
       clueLineJa: 'スラ：「…ぷる！ たかい たなの うえで、なにかが ひかってる。'
           'あんなところ、どうやって とるの…？」',
     ),
+    // ── Coin 2: hidden on a high reading lamp ───────────────────────────────
+    Hotspot.coin(
+      pos: const Alignment(0.68, -0.42),
+      size: 0.10,
+      coinValue: 1,
+      clueLineJa: 'スラ：「…ぷる！ よみかけランプの かさの うえ… '
+          'そこにも、ちいさく ひかるものが あるよ！」',
+    ),
+    // ── Observation points (#90 density): tap-to-look 探偵メモ, no puzzle ─────
+    Hotspot.observation(
+      pos: const Alignment(-0.20, -0.55),
+      clueLineJa: 'たんていメモ：ほんを ひらいても、もじが ひとつも ない。'
+          'だれかが、ことばだけを つれさったのだ。',
+    ),
+    Hotspot.observation(
+      pos: const Alignment(-0.65, 0.35),
+      clueLineJa: 'たんていメモ：よみかけの にっきが ひらいたまま。'
+          'インクが かすれ、ぶんが とちゅうで とまっている。',
+    ),
+    Hotspot.observation(
+      pos: const Alignment(0.35, 0.55),
+      clueLineJa: 'たんていメモ：ゆかに おちた しおり。「and the whole」――'
+          '7まいの うちの、1まいだ。',
+    ),
+    Hotspot.observation(
+      pos: const Alignment(0.10, -0.60),
+      clueLineJa: 'たんていメモ：ほんだなの すみに、ちいさな らくがき。'
+          '「アイラ、ここに いた」。サイレントは、もとは ここの ひと…？',
+    ),
   ],
 );
 
