@@ -906,21 +906,29 @@ class _SceneViewState extends State<SceneView> {
         excludeSemantics: true,
         child: GestureDetector(
           onTap: () => _onBubbleTap(idx),
-          child: solvedNpc
-              // A restored villager re-shares the memory you recovered — the lore
-              // fragment (shown once as a banner) is re-readable here, on demand.
-              ? _speechBubble(
-                  hotspot.mysteryFragmentJa ?? 'ありがとう、たんていさん。\nことばが もどってきたよ。',
-                  ctaLabel: '✓ とじる',
-                )
-              : _speechBubble(
-                  // 対決 beat: the final mystery is framed as the confrontation.
-                  isFinal
-                      ? '⚔️ さいごの ナゾ。この まちの しずけさの、いちばん ふかい ところ。\n'
-                          '${hotspot.clueLineJa ?? ''}'
-                      : hotspot.clueLineJa,
-                  ctaLabel: isFinal ? '⚔️ 対決（たいけつ）する' : '「？」ナゾをみる',
-                ),
+          // #82 game-feel: the bubble used to POP in (bare if in the Stack). It now
+          // materialises — rises + fades + settles — so "tap NPC → clue appears"
+          // reads as a detective beat, not a div toggling. Keyed by idx so switching
+          // NPC re-triggers it; reduced-motion → instant.
+          child: _EntryAnim(
+            key: ValueKey('bubble_$idx'),
+            reduceMotion: prefersReducedMotion(context),
+            child: solvedNpc
+                // A restored villager re-shares the memory you recovered — the lore
+                // fragment (shown once as a banner) is re-readable here, on demand.
+                ? _speechBubble(
+                    hotspot.mysteryFragmentJa ?? 'ありがとう、たんていさん。\nことばが もどってきたよ。',
+                    ctaLabel: '✓ とじる',
+                  )
+                : _speechBubble(
+                    // 対決 beat: the final mystery is framed as the confrontation.
+                    isFinal
+                        ? '⚔️ さいごの ナゾ。この まちの しずけさの、いちばん ふかい ところ。\n'
+                            '${hotspot.clueLineJa ?? ''}'
+                        : hotspot.clueLineJa,
+                    ctaLabel: isFinal ? '⚔️ 対決（たいけつ）する' : '「？」ナゾをみる',
+                  ),
+          ),
         ),
       ),
     );
@@ -938,70 +946,74 @@ class _SceneViewState extends State<SceneView> {
       // a11y: a transient overlay banner is SILENT to a screen reader unless it
       // is a liveRegion — announce スラ's arrival line the moment it appears so a
       // low-vision child perceives the companion beat (it auto-dismisses anyway).
-      child: Semantics(
-        liveRegion: true,
-        label: 'スラ。$text',
-        excludeSemantics: true,
-        child: GestureDetector(
-          onTap: _dismissArrival,
-          child: Container(
-            padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
-            decoration: BoxDecoration(
-              color: dqBox.withAlpha(235),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                // スラ's canonical dusty-teal #5DA9E9 (CHARACTER-BIBLE dominant hue)
-                color: const Color(0xFF5DA9E9),
-                width: 2,
-              ),
-              boxShadow: const [
-                BoxShadow(
-                  color: Colors.black54,
-                  blurRadius: 10,
-                  offset: Offset(0, 3),
+      child: _EntryAnim(
+        key: const ValueKey('arrival_banner'),
+        reduceMotion: prefersReducedMotion(context),
+        child: Semantics(
+          liveRegion: true,
+          label: 'スラ。$text',
+          excludeSemantics: true,
+          child: GestureDetector(
+            onTap: _dismissArrival,
+            child: Container(
+              padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+              decoration: BoxDecoration(
+                color: dqBox.withAlpha(235),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  // スラ's canonical dusty-teal #5DA9E9 (CHARACTER-BIBLE dominant hue)
+                  color: const Color(0xFF5DA9E9),
+                  width: 2,
                 ),
-              ],
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // スラ slime icon
-                const Text('🟢', style: TextStyle(fontSize: 22)),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'スラ',
-                        style: dqText(
-                          size: 11,
-                          w: FontWeight.w700,
-                          color: const Color(0xFF5DA9E9),
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        text,
-                        style: dqText(size: 13, color: dqInk)
-                            .copyWith(height: 1.55),
-                      ),
-                    ],
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black54,
+                    blurRadius: 10,
+                    offset: Offset(0, 3),
                   ),
-                ),
-                // Dismiss hint
-                const Padding(
-                  padding: EdgeInsets.only(left: 4, top: 2),
-                  child: Text(
-                    'タップで とばす',
-                    style: TextStyle(
-                      fontSize: 9,
-                      color: Color(0xFF8899AA),
+                ],
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // スラ slime icon
+                  const Text('🟢', style: TextStyle(fontSize: 22)),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'スラ',
+                          style: dqText(
+                            size: 11,
+                            w: FontWeight.w700,
+                            color: const Color(0xFF5DA9E9),
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          text,
+                          style: dqText(size: 13, color: dqInk)
+                              .copyWith(height: 1.55),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-              ],
+                  // Dismiss hint
+                  const Padding(
+                    padding: EdgeInsets.only(left: 4, top: 2),
+                    child: Text(
+                      'タップで とばす',
+                      style: TextStyle(
+                        fontSize: 9,
+                        color: Color(0xFF8899AA),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -1019,46 +1031,50 @@ class _SceneViewState extends State<SceneView> {
       bottom: 16,
       // a11y: announce the 探偵メモ lore drip via a liveRegion so a low-vision
       // child perceives the §3 サイレント mystery beat, not just the painted banner.
-      child: Semantics(
-        liveRegion: true,
-        label: '探偵メモ。$text',
-        excludeSemantics: true,
-        child: GestureDetector(
-          onTap: _dismissLore,
-          child: Container(
-            key: const ValueKey('scene_lore_banner'),
-            padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
-            decoration: BoxDecoration(
-              color: dqBox.withAlpha(238),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: dqGold, width: 2),
-              boxShadow: const [
-                BoxShadow(
-                    color: Colors.black54,
-                    blurRadius: 10,
-                    offset: Offset(0, 3)),
-              ],
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text('🔖', style: TextStyle(fontSize: 20)),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    text,
-                    style:
-                        dqText(size: 13, color: dqInk).copyWith(height: 1.55),
+      child: _EntryAnim(
+        key: const ValueKey('lore_banner'),
+        reduceMotion: prefersReducedMotion(context),
+        child: Semantics(
+          liveRegion: true,
+          label: '探偵メモ。$text',
+          excludeSemantics: true,
+          child: GestureDetector(
+            onTap: _dismissLore,
+            child: Container(
+              key: const ValueKey('scene_lore_banner'),
+              padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+              decoration: BoxDecoration(
+                color: dqBox.withAlpha(238),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: dqGold, width: 2),
+                boxShadow: const [
+                  BoxShadow(
+                      color: Colors.black54,
+                      blurRadius: 10,
+                      offset: Offset(0, 3)),
+                ],
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('🔖', style: TextStyle(fontSize: 20)),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      text,
+                      style:
+                          dqText(size: 13, color: dqInk).copyWith(height: 1.55),
+                    ),
                   ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(left: 4, top: 2),
-                  child: Text(
-                    'タップで とばす',
-                    style: TextStyle(fontSize: 9, color: Color(0xFF8899AA)),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 4, top: 2),
+                    child: Text(
+                      'タップで とばす',
+                      style: TextStyle(fontSize: 9, color: Color(0xFF8899AA)),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -1400,6 +1416,66 @@ class _CoinTwinkleState extends State<_CoinTwinkle>
     return AnimatedBuilder(
       animation: _ctrl,
       builder: (_, __) => _glint(Curves.easeInOut.transform(_ctrl.value)),
+    );
+  }
+}
+
+/// One-shot entry animation for scene overlays (#82 game-feel): the speech bubble
+/// and banners used to POP in via a bare `if` in the Stack. _EntryAnim makes them
+/// rise + fade + settle on mount (~240ms easeOutCubic) so a clue "materialises"
+/// instead of a div toggling visibility. Reduced-motion → static (no movement).
+class _EntryAnim extends StatefulWidget {
+  final Widget child;
+  final bool reduceMotion;
+  const _EntryAnim(
+      {super.key, required this.child, required this.reduceMotion});
+
+  @override
+  State<_EntryAnim> createState() => _EntryAnimState();
+}
+
+class _EntryAnimState extends State<_EntryAnim>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _c;
+
+  @override
+  void initState() {
+    super.initState();
+    _c = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 240),
+    );
+    if (widget.reduceMotion) {
+      _c.value = 1.0;
+    } else {
+      _c.forward();
+    }
+  }
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _c,
+      builder: (_, child) {
+        final t = Curves.easeOutCubic.transform(_c.value);
+        return Opacity(
+          // Floor just above 0: Opacity(0.0) EXCLUDES the subtree from semantics,
+          // which would make these liveRegion banners a11y-invisible during the
+          // fade-in (a screen-reader child must hear スラ / the 探偵メモ immediately).
+          opacity: t.clamp(0.04, 1.0),
+          child: Transform.translate(
+            offset: Offset(0, (1 - t) * 14),
+            child: Transform.scale(scale: 0.96 + 0.04 * t, child: child),
+          ),
+        );
+      },
+      child: widget.child,
     );
   }
 }
