@@ -207,6 +207,15 @@ class _SceneViewState extends State<SceneView>
   int? _restoringIdx;
   Timer? _restoreTimer;
 
+  /// Witnessed-victory beat (game-studio re-audit, CEO 1755 game⇄learning link):
+  /// the colour-restoration is the moment the child's CORRECT ANSWER (learning)
+  /// becomes the GAME payoff — but it fired silently behind their attention. A
+  /// named restoration line ("〈NPC〉：ことばが… もどってきた！") now pops in when they
+  /// return from the solved ナゾ, so the win is SEEN and tied to the person they
+  /// helped. Lingers ~2.2s (long enough to read), then clears. Null → none.
+  String? _restoreLabel;
+  Timer? _restoreLabelTimer;
+
   // Services
   final _cue = AudioCueService();
   final _sound = SoundService();
@@ -293,6 +302,7 @@ class _SceneViewState extends State<SceneView>
     _arrivalTimer?.cancel();
     _loreTimer?.cancel();
     _restoreTimer?.cancel();
+    _restoreLabelTimer?.cancel();
     _cue.dispose();
     super.dispose();
   }
@@ -426,6 +436,19 @@ class _SceneViewState extends State<SceneView>
         // (the colour-flood payoff carries the chapter's finale lore instead, so
         // we never stack a banner under the modal).
         _showLore(h.mysteryFragmentJa!);
+      }
+      // Witnessed victory: name the restoration so the child SEES their correct
+      // answer restore THIS villager (the game⇄learning link, CEO 1755). Skipped on
+      // a chapter-clear — the colour-flood modal carries that beat instead.
+      if (!justCleared) {
+        final name =
+            h.kind == HotspotKind.npc ? (h.step?.npcName.trim() ?? '') : '';
+        final line = name.isNotEmpty ? '$name：ことばが… もどってきた！' : 'ことばが… もどってきた！';
+        setState(() => _restoreLabel = line);
+        _restoreLabelTimer?.cancel();
+        _restoreLabelTimer = Timer(const Duration(milliseconds: 2200), () {
+          if (mounted) setState(() => _restoreLabel = null);
+        });
       }
       // Front-door 英検 puzzle solved → feed the home engagement spine (streak +
       // daily-goal), same as exam practice. Before this, scene play earned ZERO
@@ -866,6 +889,10 @@ class _SceneViewState extends State<SceneView>
               // slot. Gated so it never co-renders with the arrival banner.
               if (_loreFragment != null && !_showArrival)
                 _loreBanner(_loreFragment!, w, h),
+
+              // Witnessed-victory restoration beat (top-centre, pops in) — names the
+              // villager the child's correct answer just brought back to colour.
+              if (_restoreLabel != null) _restorationBanner(_restoreLabel!, w),
             ],
           );
         },
@@ -1101,6 +1128,57 @@ class _SceneViewState extends State<SceneView>
                         color: Color(0xFF8899AA),
                       ),
                     ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Witnessed-victory restoration beat: a top-centre gold banner that pops in
+  /// naming the villager the child's correct answer just restored — the moment the
+  /// LEARNING outcome becomes the visible GAME payoff (game⇄learning, CEO 1755).
+  /// liveRegion so a low-vision child hears the win. Auto-clears after ~2.2s.
+  Widget _restorationBanner(String text, double w) {
+    return Positioned(
+      top: 12,
+      left: 16,
+      right: 16,
+      child: _EntryAnim(
+        key: ValueKey('restore_$text'),
+        reduceMotion: prefersReducedMotion(context),
+        child: Semantics(
+          liveRegion: true,
+          label: text,
+          excludeSemantics: true,
+          child: Center(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              decoration: BoxDecoration(
+                color: dqBox.withAlpha(240),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: dqGold, width: 2),
+                boxShadow: [
+                  BoxShadow(color: dqGold.withAlpha(80), blurRadius: 14),
+                  const BoxShadow(
+                      color: Colors.black54,
+                      blurRadius: 8,
+                      offset: Offset(0, 3)),
+                ],
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text('✨', style: TextStyle(fontSize: 18)),
+                  const SizedBox(width: 8),
+                  Flexible(
+                    child: Text(text,
+                        textAlign: TextAlign.center,
+                        style: dqText(
+                            size: 14, w: FontWeight.w800, color: dqGold)),
                   ),
                 ],
               ),
