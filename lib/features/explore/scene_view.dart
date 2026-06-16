@@ -443,7 +443,15 @@ class _SceneViewState extends State<SceneView>
       if (!justCleared) {
         final name =
             h.kind == HotspotKind.npc ? (h.step?.npcName.trim() ?? '') : '';
-        final line = name.isNotEmpty ? '$name：ことばが… もどってきた！' : 'ことばが… もどってきた！';
+        final who = name.isNotEmpty ? '$name：' : '';
+        // Mastery-reflected reward (2026 SOTA — the game reward must reflect REAL
+        // mastery, not mere activity, or the point-economy decouples from learning):
+        // a FIRST-TRY solve (the child actually KNEW it) earns a 「かんぺき！」 flourish.
+        // No-scold: a retried/guessed solve still earns the FULL restoration, just
+        // without the perfect badge — the game payoff now tracks the learning signal.
+        const tail = 'ことばが… もどってきた！';
+        final line =
+            result.firstTryCorrect ? '🌟 かんぺき！ $who$tail' : '$who$tail';
         setState(() => _restoreLabel = line);
         _restoreLabelTimer?.cancel();
         _restoreLabelTimer = Timer(const Duration(milliseconds: 2200), () {
