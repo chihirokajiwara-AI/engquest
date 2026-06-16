@@ -247,12 +247,20 @@ class _ReviewCard extends StatelessWidget {
                 style: dqText(size: 13, w: FontWeight.w800, color: dqGold),
               ),
               const SizedBox(width: 8),
-              Text(
-                CseEstimator.skillLabelJa(item.skill),
-                style: dqText(size: 11, w: FontWeight.w600, color: dqInk)
-                    .copyWith(color: dqInk.withAlpha(160)),
+              // Expanded (not a fixed Text + Spacer): at textScaler 2.0 the skill
+              // label + Q + verdict overflowed the row by ~39px (WCAG SC 1.4.4).
+              // Expanded absorbs the squeeze (ellipsis) and still pushes the
+              // verdict to the right edge.
+              Expanded(
+                child: Text(
+                  CseEstimator.skillLabelJa(item.skill),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: dqText(size: 11, w: FontWeight.w600, color: dqInk)
+                      .copyWith(color: dqInk.withAlpha(160)),
+                ),
               ),
-              const Spacer(),
+              const SizedBox(width: 8),
               Icon(
                 correct ? Icons.check_circle : Icons.cancel,
                 size: 18,

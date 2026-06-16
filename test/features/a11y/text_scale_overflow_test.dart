@@ -1,12 +1,11 @@
 // #114 / WCAG 2.2 SC 1.4.4 — text must resize to 200% (2.0x) without clipping.
-// 実測 (never assume), 2026-06-11: swept screens at textScaler 2.0 and hardened the
-// culprits. VERIFIED-SAFE & LOCKED below at 2.0x: home (after the daily-goal ring
-// got a FittedBox(scaleDown) — it was the 62px culprit), pass-meter, onboarding.
-// STILL OVERFLOWING (tracked #114, not yet locked): ExamPracticeScreen (~88px
-// horizontal at 2.0x) + the reading/listening/mock screens (untested). The global
-// text-scale cap in app.dart stays 1.6x until EVERY high-traffic screen passes 2.0x
-// here — then it rises to 2.0 in one honest step. Raising the cap before that would
-// clip content (a false WCAG claim); this test is the gate that prevents it.
+// 実測 (never assume): swept the high-traffic screens at textScaler 2.0 and hardened
+// the culprits (e.g. the home daily-goal ring got a FittedBox(scaleDown) — it was a
+// 62px clipper). STATUS NOW: ALL high-traffic screens below pass at 2.0x, so the
+// global text-scale cap in app.dart is already 2.0 (clamp(0.85, 2.0)) — full WCAG
+// SC 1.4.4 200%. This test is the gate that keeps it honest: any new dense screen
+// must be added here and pass 2.0x before relying on the cap. (Earlier this header
+// said the cap "stays 1.6x" with reading/listening/mock untested — both now false.)
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -21,6 +20,9 @@ import 'package:engquest/features/exam_practice/listening_practice_screen.dart';
 import 'package:engquest/features/exam_practice/word_ordering_practice_screen.dart';
 import 'package:engquest/features/exam_practice/conversation_practice_screen.dart';
 import 'package:engquest/features/exam_practice/mock_exam_screen.dart';
+import 'package:engquest/features/exam_practice/pass/mock_review_screen.dart';
+import 'package:engquest/features/exam_practice/pass/mock_exam.dart';
+import 'package:engquest/features/exam_practice/pass/cse_model.dart';
 import 'package:engquest/features/exam_practice/reading_practice_screen.dart';
 import 'package:engquest/features/battle/battle_screen.dart';
 import 'package:engquest/features/explore/scene_view.dart';
@@ -93,6 +95,22 @@ void main() {
     'conversation': ConversationPracticeScreen(
         eikenGrade: '5', section: _sec(ExamSectionType.conversationComplete)),
     'mock-exam': const MockExamScreen(eikenGrade: '5'),
+    // The post-mock review re-renders each stem (incl. cloze blanks via clozeRich)
+    // + choices + verdict in a dense list — guard it at 2.0x like the live mock.
+    'mock-review': const MockReviewScreen(
+      items: [
+        MockMcqItem(
+          id: 'rev1',
+          questionText: 'He ( ) to school by bus every day.',
+          choices: ['goes', 'go', 'going', 'gone'],
+          correctIdx: 0,
+          skill: EikenSkill.reading,
+          sectionId: 's1',
+        ),
+      ],
+      answers: {}, // unanswered → shown under the screen's default wrong-only
+      gradeLabel: '英検5級',
+    ),
     'reading': ReadingPracticeScreen(
         eikenGrade: '5', section: _sec(ExamSectionType.readingComprehension)),
     'battle': const BattleScreen(),
