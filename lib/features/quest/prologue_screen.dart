@@ -9,10 +9,10 @@
 // is restored grey→colour → 結 his lamp lights, "…ありがとう", a quiet road ahead.
 // The blend is a guaranteed win (no-scold). The win is restoration, not conquest.
 //
-// Plays once-ever (the caller persists that); skippable from panel 1. Built to
-// stand WITHOUT the not-yet-recorded phoneme audio: the one real audio moment is
-// the blend on panel 5 (blend_sat.mp3 exists); phoneme keys are wired so they
-// light up the instant the founder records them.
+// Plays once-ever (the caller persists that); skippable from panel 1. The blend
+// beat sounds each phoneme on its OWN tap (phoneme_s/a/t.mp3, all recorded) and
+// the joined word (blend_sat.mp3) on the 🔁「つなげて きく」 replay — so the child
+// HEARS the segments, then the blend (independent judge panel wmlj5x22c #1).
 
 import 'dart:async';
 
@@ -100,7 +100,10 @@ class _PrologueScreenState extends State<PrologueScreen>
   final _cue = AudioCueService();
   late int _index = widget.startIndex.clamp(0, _panels.length - 1);
 
-  // The blend beat: each 🔊 tap lights the next phoneme s→a→t (tap-driven).
+  // The blend beat: each 🔊 tap lights + SOUNDS the next phoneme s→a→t (tap-
+  // driven). Single source of truth for the letters (shared with the
+  // BlendWordCard in _foregroundElement).
+  static const _blendLetters = <String>['s', 'a', 't'];
   int _activeLetter = -1; // -1 none lit; 0=s, 1=a, 2=t
   bool _blendDone = false; // true once all three are sounded → join + restore
 
@@ -175,12 +178,22 @@ class _PrologueScreenState extends State<PrologueScreen>
   /// the third tap joins them into "sat" and restores ランプ. Errorless — there
   /// is no wrong tap, only "not yet complete" (the no-scold spine).
   void _playBlend() {
-    _cue.play(_p.audio);
-    setState(() {
-      _activeLetter++;
-      // s·a·t all sounded → join into the word + restore ランプ.
-      if (_activeLetter >= 2) _blendDone = true;
-    });
+    if (_activeLetter < _blendLetters.length - 1) {
+      // Segmenting: light + SOUND the next phoneme on its OWN (s→a→t). The
+      // independent judge panel (wf wmlj5x22c, finding #1) found every tap was
+      // replaying the WHOLE word, so the child never heard the segments — the
+      // entire point of a blend. Now each tap sounds that one phoneme; the lamp
+      // + colour still restore the moment all three are done (_blendDone).
+      setState(() {
+        _activeLetter++;
+        if (_activeLetter >= _blendLetters.length - 1) _blendDone = true;
+      });
+      _cue.play('audio/phonics/phoneme_${_blendLetters[_activeLetter]}.mp3');
+    } else {
+      // All three sounded → tapping the 🔁「つなげて きく」 plays the JOINED word
+      // (the blend payoff). Colour + the lamp already restored on _blendDone.
+      _cue.play(_p.audio); // blend_sat.mp3 — the segments joined into one word
+    }
     _armIdle();
   }
 
@@ -428,7 +441,7 @@ class _PrologueScreenState extends State<PrologueScreen>
   Widget _foregroundElement() {
     if (_p.interactive) {
       return BlendWordCard(
-        letters: const ['s', 'a', 't'],
+        letters: _blendLetters,
         word: 'sat',
         npcName: 'ランプ',
         npcEmoji: '🪔',
