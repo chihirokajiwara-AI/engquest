@@ -355,6 +355,7 @@ const List<String> kPreviewRouteNames = [
   'prologue4',
   'prologue5',
   'explore',
+  'exploresolved',
   'explore4',
   'explore3',
   'explorepre2',
@@ -460,6 +461,10 @@ Widget _previewFor(String? name) {
     case 'explore':
       // Wave 1 — Layton-style SceneView for the 英検5級 town.
       return SceneView(scene: kTown5Scene, eikenLevel: '5');
+    case 'exploresolved':
+      // Design-audit: the 5級 scene fully restored (colour + 探偵メモ re-read badges).
+      return SceneView(
+          scene: kTown5Scene, eikenLevel: '5', previewAllSolved: true);
     case 'explore4':
       // Wave 2 — Layton-style SceneView for the 英検4級 harbour town.
       return SceneView(scene: kTown4Scene, eikenLevel: '4');

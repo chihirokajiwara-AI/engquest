@@ -121,10 +121,16 @@ class SceneView extends StatefulWidget {
   /// The 英検 level string for this scene (drives ピカラット + hint text).
   final String eikenLevel;
 
+  /// Design-audit only (?preview=exploresolved): start with every NPC ナゾ solved so
+  /// the restored/colour state + the 探偵メモ re-read badge can be screenshot-audited
+  /// (the live solved-state otherwise needs a play-through). No effect on real play.
+  final bool previewAllSolved;
+
   const SceneView({
     super.key,
     required this.scene,
     this.eikenLevel = '5',
+    this.previewAllSolved = false,
   });
 
   @override
@@ -239,9 +245,16 @@ class _SceneViewState extends State<SceneView>
     });
     _coins = HintCoinService();
     _loadCoinBalance();
-    // _restoreSolved loads the cleared state THEN decides the arrival greeting —
-    // the "this place lost its words" intro must not replay on a restored scene.
-    _restoreSolved();
+    if (widget.previewAllSolved) {
+      // Design-audit: seed every NPC ナゾ as solved (full-colour + memo badges).
+      for (var i = 0; i < widget.scene.hotspots.length; i++) {
+        if (widget.scene.hotspots[i].kind == HotspotKind.npc) _solved[i] = true;
+      }
+    } else {
+      // _restoreSolved loads the cleared state THEN decides the arrival greeting —
+      // the "this place lost its words" intro must not replay on a restored scene.
+      _restoreSolved();
+    }
   }
 
   /// Show スラ's arrival greeting, gated on scene state (N8 reactivity): the
