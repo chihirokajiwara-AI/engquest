@@ -74,6 +74,10 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
   // 探偵-framed nudge to replay / turn on captions, never a scold. Resets to 0
   // on any correct answer.
   int _consecutiveWrong = 0;
+
+  /// Consecutive CORRECT answers — positive mirror; drives the momentum banner
+  /// (shares the cold-streak slot; the two are mutually exclusive).
+  int _consecutiveCorrect = 0;
   bool _sessionDone = false;
   bool _partHeaderShown = false;
 
@@ -209,6 +213,7 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
         _missedItems.add(item);
       }
       _consecutiveWrong = correct ? 0 : _consecutiveWrong + 1;
+      _consecutiveCorrect = correct ? _consecutiveCorrect + 1 : 0;
       // Only audible items feed the 合格率 (honest listening measurement).
       if (measurable) {
         _measuredTotal++;
@@ -560,6 +565,13 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
                   const SizedBox(height: 14),
                   const PracticeEncouragementBanner(
                       message: kListeningEncourageMsg),
+                ]
+                // Positive mirror: celebrate a correct streak (same slot).
+                else if (_answered &&
+                    _selectedAnswer == item.correctIndex &&
+                    _consecutiveCorrect >= kMomentumThreshold) ...[
+                  const SizedBox(height: 14),
+                  PracticeMomentumBanner(streak: _consecutiveCorrect),
                 ],
 
                 if (_answered) ...[

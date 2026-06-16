@@ -100,6 +100,10 @@ class _ConversationPracticeScreenState
   // a gentle 探偵 encouragement (shared PracticeEncouragementBanner). Resets to 0
   // on any correct answer.
   int _consecutiveWrong = 0;
+
+  /// Consecutive CORRECT answers — positive mirror; drives the momentum banner
+  /// (shares the cold-streak slot; the two are mutually exclusive).
+  int _consecutiveCorrect = 0;
   bool _sessionDone = false;
   final Random _rng = Random();
 
@@ -156,6 +160,7 @@ class _ConversationPracticeScreenState
         }
       }
       _consecutiveWrong = correct ? 0 : _consecutiveWrong + 1;
+      _consecutiveCorrect = correct ? _consecutiveCorrect + 1 : 0;
     });
     // Game-feel (#51): a haptic tick + chime so answering feels responsive.
     final correct = idx == _problems[_currentIdx].correctIdx;
@@ -507,6 +512,15 @@ class _ConversationPracticeScreenState
                       padding: EdgeInsets.only(top: 12),
                       child: PracticeEncouragementBanner(
                           message: kConversationEncourageMsg),
+                    )
+                  // Positive mirror: celebrate a correct streak (same slot).
+                  else if (_answered &&
+                      _selectedAnswer == p.correctIdx &&
+                      _consecutiveCorrect >= kMomentumThreshold)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12),
+                      child:
+                          PracticeMomentumBanner(streak: _consecutiveCorrect),
                     ),
                   if (_answered && p.explanation != null)
                     Padding(

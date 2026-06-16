@@ -217,6 +217,10 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
   // a gentle 探偵 encouragement (shared PracticeEncouragementBanner). Resets to 0
   // on any correct answer.
   int _consecutiveWrong = 0;
+
+  /// Consecutive CORRECT answers — the positive mirror; drives the momentum
+  /// banner (shares the cold-streak slot, the two are mutually exclusive).
+  int _consecutiveCorrect = 0;
   int _totalQuestions = 0;
   bool _sessionDone = false;
 
@@ -300,6 +304,7 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
         ));
       }
       _consecutiveWrong = correct ? 0 : _consecutiveWrong + 1;
+      _consecutiveCorrect = correct ? _consecutiveCorrect + 1 : 0;
       // A hinted answer is excluded from the by-comprehension 合格率 (honesty).
       if (measured && !_hintUsed) {
         _measuredTotal++;
@@ -746,6 +751,15 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
                             padding: EdgeInsets.only(top: 12),
                             child: PracticeEncouragementBanner(
                                 message: kReadingEncourageMsg),
+                          )
+                        // Positive mirror: celebrate a correct streak (same slot).
+                        else if (_answered &&
+                            _selectedAnswer == question.correctIdx &&
+                            _consecutiveCorrect >= kMomentumThreshold)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 12),
+                            child: PracticeMomentumBanner(
+                                streak: _consecutiveCorrect),
                           ),
                         if (_answered && question.explanation != null)
                           Padding(
