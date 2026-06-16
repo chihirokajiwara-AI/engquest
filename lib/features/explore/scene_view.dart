@@ -325,10 +325,36 @@ class _SceneViewState extends State<SceneView> {
     _openNazo(idx, h);
   }
 
+  /// A thematic "enter the mystery" route: the ナゾ fades in with a subtle
+  /// zoom — a deliberate beat that frames the puzzle as a case to investigate,
+  /// instead of the abrupt default page push (#51 game-feel). Reduced-motion →
+  /// instant (no transition) for vestibular/seizure-sensitive children.
+  Route<NazoResult> _nazoRoute(Widget child) {
+    final reduce = prefersReducedMotion(context);
+    return PageRouteBuilder<NazoResult>(
+      transitionDuration:
+          reduce ? Duration.zero : const Duration(milliseconds: 320),
+      reverseTransitionDuration:
+          reduce ? Duration.zero : const Duration(milliseconds: 220),
+      pageBuilder: (_, __, ___) => child,
+      transitionsBuilder: (_, anim, __, c) {
+        final curved =
+            CurvedAnimation(parent: anim, curve: Curves.easeOutCubic);
+        return FadeTransition(
+          opacity: curved,
+          child: ScaleTransition(
+            scale: Tween<double>(begin: 0.96, end: 1.0).animate(curved),
+            child: c,
+          ),
+        );
+      },
+    );
+  }
+
   Future<void> _openNazo(int idx, Hotspot h) async {
     final result = await Navigator.of(context).push<NazoResult>(
-      MaterialPageRoute(
-        builder: (_) => NazoScreen(
+      _nazoRoute(
+        NazoScreen(
           hotspot: h,
           eikenLevel: widget.eikenLevel,
           hintCoinService: _coins,
