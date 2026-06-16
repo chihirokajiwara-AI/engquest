@@ -427,7 +427,14 @@ class _MockExamScreenState extends State<MockExamScreen> {
                             ),
                           ),
                       ],
-                      DqDialogBox(child: Text(item.questionText)),
+                      // #73 in the full mock: render the cloze blank as an
+                      // underline gap, not literal "( )" parens (children misread
+                      // parens as punctuation). clozeRich degrades to plain text
+                      // for non-cloze stems (reading/listening questions).
+                      DqDialogBox(
+                        child: clozeRich(item.questionText,
+                            dqText(size: 15).copyWith(height: 1.45)),
+                      ),
                       const SizedBox(height: 14),
                       ...List.generate(item.choices.length, (i) {
                         return Padding(

@@ -38,9 +38,11 @@ TextStyle dqText(
 /// "(    )" the cloze builders insert — children misread parentheses as
 /// punctuation, not a fill-in gap, and answer the format wrong rather than the
 /// knowledge (#73). Splits on the whitespace-padded parens; degrades to plain
-/// text when no blank marker is present. Shared by 大問1 vocab + 大問2 会話.
+/// text when no blank marker is present. Shared by 大問1 vocab + 大問2 会話 + the
+/// full mock. Matches 1+ inner spaces: the vocab builder inserts "(        )" but
+/// the hand-authored reading/mock pool uses a single-space "( )" — both are blanks.
 Widget clozeRich(String cloze, TextStyle style) {
-  final m = RegExp(r'\(\s{2,}\)').firstMatch(cloze);
+  final m = RegExp(r'\(\s+\)').firstMatch(cloze);
   if (m == null) return Text(cloze, style: style);
   return Text.rich(
     TextSpan(

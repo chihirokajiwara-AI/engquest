@@ -32,6 +32,23 @@ void main() {
     expect(shown.contains(')'), isFalse);
   });
 
+  testWidgets('a single-space blank "( )" is also replaced (mock/reading pool)',
+      (tester) async {
+    // The hand-authored reading/mock pool uses "( )" (one space), not the vocab
+    // builder's "(        )". Both must render as the underline gap, never literal
+    // parens — the full mock previously showed raw "( )" (#73 follow-through).
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+        body: clozeRich('My sister likes to ( ) pictures.', style),
+      ),
+    ));
+    final shown = plainTextOf(tester);
+    expect(shown, contains('My sister likes to '));
+    expect(shown, contains(' pictures.'));
+    expect(shown.contains('('), isFalse);
+    expect(shown.contains(')'), isFalse);
+  });
+
   testWidgets('a stem with no blank marker degrades to plain text',
       (tester) async {
     await tester.pumpWidget(const MaterialApp(
