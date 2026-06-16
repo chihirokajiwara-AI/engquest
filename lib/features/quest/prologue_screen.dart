@@ -5,13 +5,13 @@
 // protagonist, ランプ the lampkeeper (diverse-team redesign, CEO 1372/1375; the
 // 英検5級 phonics story, CEO 1385): 起 his lamp won't catch ("す…") → 承 his memory
 // blooms the grey square to colour → 転 the サイレント drains it back, but きみ can
-// still hear → the BLEND beat: the child taps 🔊, joins c·a·t, and the lampkeeper
+// still hear → the BLEND beat: the child taps 🔊, joins s·a·t, and the lampkeeper
 // is restored grey→colour → 結 his lamp lights, "…ありがとう", a quiet road ahead.
 // The blend is a guaranteed win (no-scold). The win is restoration, not conquest.
 //
 // Plays once-ever (the caller persists that); skippable from panel 1. Built to
 // stand WITHOUT the not-yet-recorded phoneme audio: the one real audio moment is
-// the blend on panel 5 (blend_cat.mp3 exists); phoneme keys are wired so they
+// the blend on panel 5 (blend_sat.mp3 exists); phoneme keys are wired so they
 // light up the instant the founder records them.
 
 import 'dart:async';
@@ -25,43 +25,60 @@ class _Panel {
   final String jp;
   final String en;
   final String? audio; // best-effort cue key (graceful no-op if unrecorded)
-  final bool interactive; // panel 5: the c·a·t blend demo
+  final bool interactive; // panel 5: the s·a·t blend demo
   final bool isLast;
   const _Panel(this.jp, this.en,
       {this.audio, this.interactive = false, this.isLast = false});
 }
 
-// The opening as 5 kishōtenketsu (起承転結) beats — one protagonist: ランプ the
-// lampkeeper. The child rescues ONE man's voice, not "the world" (diverse-team
-// redesign, CEO 1372/1375; scoped to the 英検5級 phonics story, CEO 1385).
+// The opening as 6 kishōtenketsu (起承転結) beats — one protagonist: ランプ the
+// lampkeeper (diverse-team redesign, CEO 1372/1375; 英検5級 phonics story, CEO 1385).
+// Deepened per CEO 1870/1872/1873 (iterated design wf wme3rp4q8, 3 critique→redesign
+// rounds): the first blend is "sat" — the child COMPLETES the keeper's own lost /s/
+// sound 「す…」 (was the disconnected "cat"); 承 grieves ONE named nightly ritual
+// (mono-no-aware); 転 (loss) breathes on its own beat; 結 plants WORLD-BIBLE §2's
+// inward spiral VISUALLY (the relit flame leans toward the centre — no English needed).
 const _panels = <_Panel>[
-  // 起 — one mute man, reaching for a lamp that won't catch
+  // 起 — the lamplighter's lamp won't catch; his one surviving sound is /s/.
   _Panel(
     'ランプばんの ランプが、\nつかない。\n「す…」',
     "The lamplighter's lamp won't catch. \"s…\"",
     audio: 'audio/phonics/phoneme_s.mp3',
   ),
-  // 承 — his memory: the square once overflowed with colour
+  // 承 — ONE named nightly ritual (his lamp told the square "it's evening"),
+  //      then colour. mono-no-aware on a specific lost habit, not just "colour".
   _Panel(
-    'むかし、この ひろばは\nいろで あふれてた。',
-    'Once, this square overflowed with colour.',
+    'むかし、まいばん。\nランプばんが この ランプを ともすと、\nひろばは「もう よるだ」と わかった。\nそして、いろで あふれた。',
+    'Every night, when the lamplighter lit this lamp, the square knew '
+        '"it\'s evening now." And it overflowed with colour.',
   ),
-  // 転 — the Silence eats it back, but きみ can still hear
+  // 転 — the loss, on its own beat. Faceless Silence; colour and voice SLEEP
+  //      (ねむった, not die); his lamp goes out too.
   _Panel(
-    'でも、サイレントが\nことばを たべてしまう。\nきみの こえは、まだ きこえる。',
-    'But the Silence eats the words. Your voice can still be heard.',
+    'でも、サイレントが きて、\nことばを たべてしまった。\nいろも、こえも、しずかに ねむった。\nランプの ひも、きえた。',
+    'But the Silence came and ate the words. Colour and voice fell quietly '
+        'asleep. The lamp went out too.',
   ),
-  // the turn, made playable — tap to join the sounds and give him a voice
+  // 転→結 — the hope-turn (you can still hear + speak) joined to the playable
+  //         errorless blend. "sat" completes the keeper's lost /s/ — motivated,
+  //         not arbitrary; it also rehearses 5級 case-1's first blend.
   _Panel(
-    'タップして、\nおとを つなげてみよう。',
-    'Tap, and join the sounds.',
-    audio: 'audio/phonics/blend_cat.mp3',
+    'でも、きみには まだ きこえる。\nそして、まだ こえに だせる。\nタップして、おとを つなげてみよう。',
+    'But you can still hear. And you can still speak. Tap, and join the sounds.',
+    audio: 'audio/phonics/blend_sat.mp3',
     interactive: true,
   ),
-  // 結 — his lamp catches, his thanks, a quiet road ahead
+  // 結 — payoff + mystery-plant: the relit flame leans toward the CENTRE,
+  //      seeding WORLD-BIBLE §2's inward spiral visually (a non-reader reads it).
   _Panel(
-    'ランプに、ひが ともった。\n「…ありがとう。」\nさあ、ことばを とりもどしに いこう。',
-    'The lamp is lit. "…thank you." Let\'s go and bring the words back.',
+    'ランプに、ひが ともった。\n「…ありがとう。」\nでも その ほのおは、\nまんなかへ かたむいてる。\nしずけさは、そとから きたんじゃない。\nまんなかから、あるいて きたんだ。',
+    'The lamp is lit. "…thank you." But its flame leans toward the centre. '
+        'The quiet didn\'t come from outside — it walked out from the middle.',
+  ),
+  // 結 — the clean single hook.
+  _Panel(
+    'きえた ことばを、ひとつずつ、\nとりもどしに いこう。',
+    "Let's bring back the words, one by one.",
     isLast: true,
   ),
 ];
@@ -83,8 +100,8 @@ class _PrologueScreenState extends State<PrologueScreen>
   final _cue = AudioCueService();
   late int _index = widget.startIndex.clamp(0, _panels.length - 1);
 
-  // The blend beat: each 🔊 tap lights the next phoneme c→a→t (tap-driven).
-  int _activeLetter = -1; // -1 none lit; 0=c, 1=a, 2=t
+  // The blend beat: each 🔊 tap lights the next phoneme s→a→t (tap-driven).
+  int _activeLetter = -1; // -1 none lit; 0=s, 1=a, 2=t
   bool _blendDone = false; // true once all three are sounded → join + restore
 
   // Council S3 — non-reader gate: a 4-7yo who can't read 「つぎへ」 needs a VISUAL
@@ -154,14 +171,14 @@ class _PrologueScreenState extends State<PrologueScreen>
   }
 
   /// TAP-DRIVEN blend (the diverse-team design's core: the CHILD performs the
-  /// blend, not an auto-animation). Each 🔊 tap lights the next phoneme c→a→t;
-  /// the third tap joins them into "cat" and restores ランプ. Errorless — there
+  /// blend, not an auto-animation). Each 🔊 tap lights the next phoneme s→a→t;
+  /// the third tap joins them into "sat" and restores ランプ. Errorless — there
   /// is no wrong tap, only "not yet complete" (the no-scold spine).
   void _playBlend() {
     _cue.play(_p.audio);
     setState(() {
       _activeLetter++;
-      // c·a·t all sounded → join into the word + restore ランプ.
+      // s·a·t all sounded → join into the word + restore ランプ.
       if (_activeLetter >= 2) _blendDone = true;
     });
     _armIdle();
@@ -301,7 +318,9 @@ class _PrologueScreenState extends State<PrologueScreen>
         return 1.0;
       case 3: // the blend — colour returns only when the child completes it
         return _blendDone ? 1.0 : 0.0;
-      case 4: // 結 — restored
+      case 4: // 結 — restored (lamp lit, flame leans inward)
+        return 1.0;
+      case 5: // 結 — the CTA hook, stays in colour
         return 1.0;
       default: // 起 (0), 転 (2) — grey
         return 0.0;
@@ -404,13 +423,13 @@ class _PrologueScreenState extends State<PrologueScreen>
   }
 
   // ── Foreground element over the full-bleed background. Only the blend beat has
-  //    one (the c·a·t card the child taps); every other beat lets the grey square
+  //    one (the s·a·t card the child taps); every other beat lets the grey square
   //    + the lampkeeper carry the moment.
   Widget _foregroundElement() {
     if (_p.interactive) {
       return BlendWordCard(
-        letters: const ['c', 'a', 't'],
-        word: 'cat',
+        letters: const ['s', 'a', 't'],
+        word: 'sat',
         npcName: 'ランプ',
         npcEmoji: '🪔',
         npcImage: 'assets/art/scenes_layton/npc_lampkeeper_grey.webp',
