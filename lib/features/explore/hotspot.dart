@@ -1367,6 +1367,35 @@ final SceneDef kTownPre2PlusScene = SceneDef(
       clueLineJa: 'スラ：「この橋（はし）、たかいね…！ でも、らんかんの うえで '
           'なにか ひかってる。きみが いくなら、ぼくも いく。いちほ うしろで。」',
     ),
+    // ── Coin 2: hidden on a far lantern post in the fog ─────────────────────
+    Hotspot.coin(
+      pos: const Alignment(-0.68, 0.40),
+      size: 0.10,
+      coinValue: 1,
+      clueLineJa: 'スラ：「…ぷる！ きりの むこうの ランプの ねもとで、'
+          'ちいさく ひかるものが ある… みえる？」',
+    ),
+    // ── Observation points (#90 density): tap-to-look 探偵メモ, no puzzle ─────
+    Hotspot.observation(
+      pos: const Alignment(0.30, -0.58),
+      clueLineJa: 'たんていメモ：きりの なかに、ランプが いくつも ならんでいる。'
+          'ともっているのは、まだ ほんの すこしだけ。',
+    ),
+    Hotspot.observation(
+      pos: const Alignment(0.32, 0.52),
+      clueLineJa: 'たんていメモ：らんかんから したを のぞくと、ふかい きりの たに。'
+          'おちたら もどれない、と わたしもりが いっていた。',
+    ),
+    Hotspot.observation(
+      pos: const Alignment(-0.22, -0.50),
+      clueLineJa: 'たんていメモ：はしの ずっと さきに、はいいろの ひとかげが ひとつ。'
+          'たたかう かまえも なく、ただ しずかに うごかない。',
+    ),
+    Hotspot.observation(
+      pos: const Alignment(0.70, -0.28),
+      clueLineJa: 'たんていメモ：らんかんに ひっかかった しおり――「turned to」。'
+          '7まいの うちの、5まいめだ。',
+    ),
   ],
 );
 
