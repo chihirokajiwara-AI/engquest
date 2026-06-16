@@ -496,8 +496,37 @@ class _SceneViewState extends State<SceneView> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text('🎉', style: TextStyle(fontSize: 48)),
-              const SizedBox(height: 8),
+              // A diegetic "case closed" stamp instead of a generic 🎉 — the
+              // game's biggest moment now reads as a detective solving the case
+              // (本格 feel + 事件→英検 fusion, #51/#52). Slightly rotated like a
+              // real case-file stamp.
+              Transform.rotate(
+                angle: -0.06,
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: dqGold.withAlpha(20),
+                    borderRadius: BorderRadius.circular(6),
+                    border: Border.all(color: dqGold, width: 3),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('事件（じけん） 解決（かいけつ）',
+                          style: dqText(
+                              size: 20, w: FontWeight.w900, color: dqGold)),
+                      Text('CASE CLOSED',
+                          style: dqText(
+                              size: 9,
+                              w: FontWeight.w700,
+                              color: dqGold.withAlpha(210),
+                              spacing: 3)),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
               Text(
                 'この まちに、ことばと いろが もどった！',
                 textAlign: TextAlign.center,
