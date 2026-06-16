@@ -230,8 +230,14 @@ class _PrologueScreenState extends State<PrologueScreen> {
     );
   }
 
-  static const _squareAsset =
-      'assets/art/scenes_layton/town_pre1_grey_square.webp';
+  // Council S2 (wf w4cnnw8ho, art-director canon catch): the prologue is the 5級
+  // ENTRY, so it must open on the 5級 town plate — NOT town_pre1_grey_square (the
+  // 準1級 FINALE, "full palette stripped" plate), which broke WORLD-BIBLE §2's
+  // inward spiral (5級 misty edge → 準1 grey centre) and the colour-script (5級 =
+  // near-monochrome ash + one lamp). town5_lane is a full-colour source; the
+  // runtime _saturationMatrix greys it when silenced and restores colour as the
+  // child earns it. Also keeps the cold-open intimate (5級 lane), not apocalyptic.
+  static const _squareAsset = 'assets/art/scenes_layton/town5_lane.webp';
 
   /// Target colour saturation for the current beat (0 = grey/silenced, 1 = full
   /// colour): 起 grey → 承 his memory blooms → 転 the Silence drains it → blend
