@@ -279,13 +279,54 @@ class DqChoice extends StatelessWidget {
 }
 
 /// Gold action button (はじめる / つぎへ).
-class DqButton extends StatelessWidget {
+class DqButton extends StatefulWidget {
   final String label;
   final VoidCallback? onTap;
   const DqButton({super.key, required this.label, this.onTap});
 
   @override
+  State<DqButton> createState() => _DqButtonState();
+}
+
+class _DqButtonState extends State<DqButton>
+    with SingleTickerProviderStateMixin {
+  // Press-down spring (game-studio re-audit, CEO 1748): DqButton is the primary CTA
+  // across the whole app but was a flat GestureDetector with NO tactile feedback —
+  // a child pressed it and felt nothing. It now compresses on tap-down and springs
+  // back (the same proven pattern as the Battle grade tiles). Reduced-motion → none.
+  late final AnimationController _press;
+
+  @override
+  void initState() {
+    super.initState();
+    _press = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 90),
+      reverseDuration: const Duration(milliseconds: 220),
+      lowerBound: 0.0,
+      upperBound: 1.0,
+    );
+  }
+
+  @override
+  void dispose() {
+    _press.dispose();
+    super.dispose();
+  }
+
+  void _down(TapDownDetails _) {
+    if (widget.onTap == null || prefersReducedMotion(context)) return;
+    _press.forward();
+  }
+
+  void _up([dynamic _]) {
+    if (_press.value > 0) _press.reverse();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final onTap = widget.onTap;
+    final label = widget.label;
     return Semantics(
       button: true,
       enabled: onTap != null,
@@ -294,27 +335,41 @@ class DqButton extends StatelessWidget {
       excludeSemantics: true,
       child: GestureDetector(
         onTap: onTap,
-        child: Container(
-          width: double.infinity,
-          alignment: Alignment.center,
-          padding: const EdgeInsets.symmetric(vertical: 15),
-          decoration: BoxDecoration(
-            gradient: onTap == null
-                ? const LinearGradient(
-                    colors: [Color(0xFF5A5448), Color(0xFF3E3A32)])
-                : const LinearGradient(colors: [dqGold, dqGoldDeep]),
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: dqBorder, width: 1.5),
-            boxShadow: onTap == null
-                ? null
-                : [BoxShadow(color: dqGoldDeep.withAlpha(120), blurRadius: 14)],
+        onTapDown: _down,
+        onTapUp: _up,
+        onTapCancel: _up,
+        child: AnimatedBuilder(
+          animation: _press,
+          builder: (context, child) {
+            // 0 → 1 compresses 1.0 → 0.95; the elastic reverse overshoots back.
+            final scale = 1.0 - 0.05 * Curves.easeOut.transform(_press.value);
+            return Transform.scale(scale: scale, child: child);
+          },
+          child: Container(
+            width: double.infinity,
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            decoration: BoxDecoration(
+              gradient: onTap == null
+                  ? const LinearGradient(
+                      colors: [Color(0xFF5A5448), Color(0xFF3E3A32)])
+                  : const LinearGradient(colors: [dqGold, dqGoldDeep]),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: dqBorder, width: 1.5),
+              boxShadow: onTap == null
+                  ? null
+                  : [
+                      BoxShadow(
+                          color: dqGoldDeep.withAlpha(120), blurRadius: 14)
+                    ],
+            ),
+            child: Text(label,
+                style: notoSerifJp(
+                    color: const Color(0xFF2A1C00),
+                    fontSize: 17,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 2)),
           ),
-          child: Text(label,
-              style: notoSerifJp(
-                  color: const Color(0xFF2A1C00),
-                  fontSize: 17,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 2)),
         ),
       ),
     );
