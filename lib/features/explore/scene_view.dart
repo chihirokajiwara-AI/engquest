@@ -232,7 +232,7 @@ class _SceneViewState extends State<SceneView>
     super.initState();
     _entryCtrl = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1400),
+      duration: const Duration(milliseconds: 1100),
     );
     // Forward after the first frame so MediaQuery (reduced-motion) is available.
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -698,13 +698,17 @@ class _SceneViewState extends State<SceneView>
                   child: AnimatedBuilder(
                     animation: _entryCtrl,
                     builder: (_, child) {
-                      final e = Curves.easeOutCubic.transform(_entryCtrl.value);
+                      // #89 re-audit: 3.5% over easeOutCubic was below the
+                      // perceptual threshold (~a hard cut). easeOutExpo FRONT-LOADS
+                      // the motion and 7% is clearly felt — a camera pushing in then
+                      // settling — while ClipRect contains the overscan.
+                      final e = Curves.easeOutExpo.transform(_entryCtrl.value);
                       return Opacity(
                         // Floor at 0.2 so the scene (and its hotspots) are never
                         // fully semantics-excluded during the fade.
                         opacity: (0.2 + 0.8 * e).clamp(0.0, 1.0),
                         child: Transform.scale(
-                          scale: 1.0 + (1 - e) * 0.035, // 1.035 → 1.0 settle
+                          scale: 1.0 + (1 - e) * 0.07, // 1.07 → 1.0 settle
                           child: child,
                         ),
                       );
