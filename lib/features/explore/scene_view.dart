@@ -131,8 +131,16 @@ class SceneView extends StatefulWidget {
   State<SceneView> createState() => _SceneViewState();
 }
 
-class _SceneViewState extends State<SceneView> {
+class _SceneViewState extends State<SceneView>
+    with SingleTickerProviderStateMixin {
   // ── State ─────────────────────────────────────────────────────────────────
+
+  /// One-shot scene-entry cinematic (#83 / game-studio #5): the painted scene
+  /// used to HARD-CUT in. It now settles in — a subtle scale-down (1.035→1.0) +
+  /// fade over ~1.4s — so each case opens like a camera arriving, not a jump cut.
+  /// Scale (not a parallax drift) so it stays coherent with the hotspots and never
+  /// reveals an edge gap on the full-bleed background. Reduced-motion → instant.
+  late final AnimationController _entryCtrl;
 
   // NPC solve state: hotspot index → solved bool
   final Map<int, bool> _solved = {};
@@ -207,6 +215,19 @@ class _SceneViewState extends State<SceneView> {
   @override
   void initState() {
     super.initState();
+    _entryCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1400),
+    );
+    // Forward after the first frame so MediaQuery (reduced-motion) is available.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      if (prefersReducedMotion(context)) {
+        _entryCtrl.value = 1.0; // skip the entry settle
+      } else {
+        _entryCtrl.forward();
+      }
+    });
     _coins = HintCoinService();
     _loadCoinBalance();
     // _restoreSolved loads the cleared state THEN decides the arrival greeting —
@@ -268,6 +289,7 @@ class _SceneViewState extends State<SceneView> {
 
   @override
   void dispose() {
+    _entryCtrl.dispose();
     _arrivalTimer?.cancel();
     _loreTimer?.cancel();
     _restoreTimer?.cancel();
@@ -627,7 +649,26 @@ class _SceneViewState extends State<SceneView> {
           child: Column(
             children: [
               _header(),
-              Expanded(child: _sceneStack()),
+              Expanded(
+                child: ClipRect(
+                  child: AnimatedBuilder(
+                    animation: _entryCtrl,
+                    builder: (_, child) {
+                      final e = Curves.easeOutCubic.transform(_entryCtrl.value);
+                      return Opacity(
+                        // Floor at 0.2 so the scene (and its hotspots) are never
+                        // fully semantics-excluded during the fade.
+                        opacity: (0.2 + 0.8 * e).clamp(0.0, 1.0),
+                        child: Transform.scale(
+                          scale: 1.0 + (1 - e) * 0.035, // 1.035 → 1.0 settle
+                          child: child,
+                        ),
+                      );
+                    },
+                    child: _sceneStack(),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
