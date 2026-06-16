@@ -540,10 +540,16 @@ class _NazoScreenState extends State<NazoScreen> {
 
   /// In-world framing line above the stem — exam content is UNCHANGED below it.
   Widget _framingBox() => DqPanel(
-        title: 'じょうきょう / Scene',
+        // #52 diegetic bridge: this case-briefing is what turns the 英検 stem into
+        // a detective scene ("門番が立ちはだかる… 正しい言葉がもどれば、とけいも
+        // うごきだす"). It was rendered at 13sp — smaller than the stem (19) and
+        // barely above the fine-print gloss (12) — so a child skimmed past the very
+        // text that makes it a GAME, not a quiz. Raise it to 15sp (clear hierarchy
+        // below the stem) and mark the panel 🔍 so it reads as on-scene investigation.
+        title: '🔍 げんば / The Scene',
         child: Text(
           widget.hotspot.framingJa!,
-          style: dqText(size: 13, w: FontWeight.w500, color: dqInk)
+          style: dqText(size: 15, w: FontWeight.w500, color: dqInk)
               .copyWith(height: 1.7),
         ),
       );
