@@ -288,9 +288,15 @@ not occasional.
   paying parent, a Layton/Ghibli purist), then a director who ranks an in-scope,
   buildable plan and specs the #1.
 - **Cadence**: on game-quality ticks, convene the studio (or build the next item
-  from its last ranked plan) rather than inventing solo polish. Pass already-shipped
-  items via `args.alreadyBuilt` so the panel keeps finding NEW gaps, never re-surfaces
-  shipped work. Rotate `args.focus` across surfaces (scene, battle, home, mock).
+  from its last ranked plan) rather than inventing solo polish. Rotate `args.focus`
+  across surfaces (scene, battle, home, mock).
+- **Re-audit shipped work super-strictly [CEO 1748]**: already-built features are IN
+  audit scope — built ≠ good. The experts RE-EXPERIENCE shipped game-feel on a real
+  render and judge HARSHLY whether it hits the world-class bar; a "deepen/fix an
+  existing feature" finding is fully valid (often higher-leverage than greenfield).
+  `args.alreadyBuilt` lists recent ships only so the panel doesn't propose building the
+  SAME thing from scratch — it does NOT exempt them from criticism. Never treat
+  "shipped" as "done".
 - **Build contract**: take the director's #1 (or a clearly-justified divergence —
   e.g. protecting the 解説 teaching reveal over auto-advance), 8-phase it, HARD GATE
   (analyze 0 + tests), real-render where visible, SHIP, then re-score. Queue runners-up

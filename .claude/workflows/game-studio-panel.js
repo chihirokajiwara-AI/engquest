@@ -41,12 +41,19 @@ story, and the whole grey world turned to colour. — アイラ". Other surfaces
 spaced-repetition flashcards), full MOCK exam, a daily-return HOME hub (streak, きょうの ナゾ due
 count, live 合格率, daily-goal ring).
 
-GAME-FEEL ALREADY BUILT — do NOT re-propose: progressive grey→colour saturation per solve;
-idle-pulse halo on unsolved NPCs; twinkling hidden coin; answer juice (wrong-answer shake +
-correct-answer elastic pop); diegetic CASE-CLOSED stamp; fade+zoom transition into a ナゾ;
-correct-answer full-screen gold burst in NazoScreen; momentum banner on a correct streak;
-restored NPCs respond when re-tapped (re-readable lore); achievements gallery w/ capstone
-celebration; case-log assembling the bookmark sentence; "to be continued" hook.${extraBuilt.length ? '\nALSO already built: ' + extraBuilt.join('; ') + '.' : ''}
+ALREADY BUILT — these are IN AUDIT SCOPE. RE-AUDIT them SUPER-STRICTLY at the world-class bar:
+built is NOT the same as good. Experience each on a REAL render and name where it actually falls
+short (too brief? janky timing? not felt? incoherent? a child wouldn't notice?). You MAY propose
+DEEPENING or FIXING one of these if it isn't world-class — that is exactly the job. The ONLY thing
+off-limits is proposing to build from scratch something that already exists. The built set:
+progressive grey→colour saturation per solve; idle-pulse halo on unsolved NPCs; twinkling hidden
+coin; answer juice (wrong-answer shake + correct-answer elastic pop); diegetic CASE-CLOSED stamp;
+fade+zoom transition into a ナゾ; correct-answer full-screen gold burst in NazoScreen; momentum
+banner on a correct streak; restored NPCs respond when re-tapped (re-readable lore); achievements
+gallery w/ capstone celebration; case-log assembling the bookmark sentence; "to be continued" hook;
+recent game-studio ships: NazoScreen correct-answer gold burst, scene bubble/banner entry motion,
+restored-NPC responsiveness, Battle 2-choice child recall (auto-easy on streak), Battle per-POS
+サイレント word-rescue frame, scene session-ピカラット accumulator, cinematic scene-entry settle.${extraBuilt.length ? '\nAlso recently built: ' + extraBuilt.join('; ') + '.' : ''}
 
 HARD SCOPE — propose ONLY things buildable NOW in pure Flutter/Dart, OFFLINE, with NO new art
 generation, NO new audio/voice generation, NO backend/server, NO Claude/AI runtime, NO billing,
@@ -114,10 +121,14 @@ const experts = (await parallel(DISCIPLINES.map((d) => () =>
     `LATEST-FIRST MANDATE: before judging, use WebSearch (load via ToolSearch "select:WebSearch") for CURRENT ` +
     `2026 state-of-the-art in your discipline for children's educational / detective / cozy-mystery games; cite ` +
     `dated sources. Then audit THIS game (reason from the brief; you MAY read files under ` +
-    `~/dev/engquest-flutter/lib/features/ — explore/, battle/, home/, exam_practice/, quest/ — to ground evidence, ` +
-    `but do NOT merely confirm what exists). Output your SINGLE highest-leverage gap that makes it feel less like ` +
-    `a world-class GAME than it should, and ONE concrete IN-SCOPE fix (pure Flutter/Dart, offline, no art-gen/` +
-    `audio/backend/AI/billing). Be specific + buildable. Reject your own idea if it needs new art or audio.`,
+    `~/dev/engquest-flutter/lib/features/ — explore/, battle/, home/, exam_practice/, quest/ — to ground evidence). ` +
+    `CRITICAL: the ALREADY-BUILT features are IN SCOPE — RE-AUDIT them super-strictly (built ≠ good). Pick at least ` +
+    `one recently-shipped game-feel feature and judge HARSHLY whether it actually hits the world-class bar (timing, ` +
+    `feel, coherence, would-a-child-notice); a "deepen/fix an existing feature" finding is fully valid and often ` +
+    `higher-leverage than a greenfield one. Do NOT exempt shipped work from criticism, and do NOT merely confirm ` +
+    `what exists. Output your SINGLE highest-leverage gap (new OR a shortfall in something already built) that ` +
+    `makes it feel less like a world-class GAME, and ONE concrete IN-SCOPE fix (pure Flutter/Dart, offline, no ` +
+    `art-gen/audio/backend/AI/billing). Be specific + buildable. Reject your own idea if it needs new art or audio.`,
     { label: `expert:${d.key}`, phase: 'Studio', schema: EXPERT_SCHEMA, model: 'sonnet', agentType: 'Explore' }
   ).then((r) => ({ discipline: d.key, ...r })).catch(() => null)
 ))).filter(Boolean)
