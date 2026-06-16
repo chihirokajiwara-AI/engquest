@@ -30,6 +30,7 @@ import 'package:engquest/features/onboarding/onboarding_flow.dart';
 import 'package:engquest/features/settings/settings_screen.dart';
 import 'package:engquest/features/achievements/achievements_screen.dart';
 import 'package:engquest/features/parent_dashboard/parent_dashboard_screen.dart';
+import 'package:engquest/features/exam_practice/writing_practice_screen.dart';
 import 'package:engquest/core/fsrs/fsrs_card_repository.dart';
 
 ExamSection _sec(ExamSectionType t) => ExamSection(
@@ -123,8 +124,8 @@ void main() {
     'settings': const SettingsScreen(),
     'achievements': const AchievementsScreen(),
     'parent-dashboard': const ParentDashboardScreen(),
-    // NOTE: 'writing' is tracked separately — it overflows ~399px at 2.0x (a
-    // structural row issue in the 1900-line screen), fixed in its own task.
+    'writing': WritingPracticeScreen(
+        eikenGrade: '3', section: _sec(ExamSectionType.writing)),
   };
   subScreens.forEach((name, w) {
     testWidgets('$name OK @ textScaler 2.0 (WCAG SC 1.4.4)', (tester) async {

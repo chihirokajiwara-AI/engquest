@@ -1845,16 +1845,26 @@ class _WordCountBar extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // #114/WCAG SC 1.4.4: these two labels together exceeded the width at
+        // textScaler 2.0 (overflowed ~399px — spaceBetween can't shrink fixed
+        // Texts). Flexible lets each wrap within its half instead of clipping.
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              '語数 / Word count: $count語',
-              style: dqText(size: 12, color: inRange ? barColor : dqInk),
+            Flexible(
+              child: Text(
+                '語数 / Word count: $count語',
+                style: dqText(size: 12, color: inRange ? barColor : dqInk),
+              ),
             ),
-            Text(
-              '目標: $min〜$max語',
-              style: dqText(size: 11, color: dqGoldDeep),
+            const SizedBox(width: 8),
+            Flexible(
+              child: Text(
+                '目標: $min〜$max語',
+                textAlign: TextAlign.end,
+                style: dqText(size: 11, color: dqGoldDeep),
+              ),
             ),
           ],
         ),
