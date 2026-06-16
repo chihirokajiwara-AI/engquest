@@ -141,6 +141,12 @@ class _VocabGrammarPracticeScreenState
   // resilience instead of shame. Resets to 0 on any correct answer.
   int _consecutiveWrong = 0;
 
+  /// Consecutive CORRECT answers — the positive mirror of [_consecutiveWrong].
+  /// Drives a brief momentum banner at [kMomentumThreshold] so a child on a roll
+  /// FEELS the flow (engagement spine), not just per-answer feedback. Resets on
+  /// any wrong answer. Mutually exclusive with the cold-streak banner.
+  int _consecutiveCorrect = 0;
+
   @override
   void initState() {
     super.initState();
@@ -324,8 +330,11 @@ class _VocabGrammarPracticeScreenState
       } else if (!_missedWords.contains(q.word)) {
         _missedWords.add(q.word);
       }
-      // Track a cold streak to trigger gentle encouragement (no-scold spine).
+      // Track a cold streak to trigger gentle encouragement (no-scold spine) and
+      // a HOT streak for the positive counterpart — momentum (this 調子！). They
+      // are mutually exclusive, so they share one banner slot below.
       _consecutiveWrong = correct ? 0 : _consecutiveWrong + 1;
+      _consecutiveCorrect = correct ? _consecutiveCorrect + 1 : 0;
       // Honest measurement: only UNAIDED answers count toward 合格率. A hinted
       // question is recorded as assisted and excluded from the readiness signal.
       if (_hintShown) {
@@ -737,6 +746,13 @@ class _VocabGrammarPracticeScreenState
                       _consecutiveWrong >= kStruggleThreshold) ...[
                     const PracticeEncouragementBanner(
                         message: kVocabEncourageMsg),
+                    const SizedBox(height: 10),
+                  ]
+                  // Positive mirror: on a correct streak, celebrate the momentum
+                  // (same slot — hot/cold streaks are mutually exclusive).
+                  else if (_selectedAnswer == q.correctIdx &&
+                      _consecutiveCorrect >= kMomentumThreshold) ...[
+                    PracticeMomentumBanner(streak: _consecutiveCorrect),
                     const SizedBox(height: 10),
                   ],
                   Container(

@@ -18,6 +18,49 @@ import '../home/streak_service.dart';
 /// Consecutive wrong answers before the gentle encouragement appears.
 const int kStruggleThreshold = 3;
 
+/// Consecutive CORRECT answers before the momentum banner appears — the positive
+/// mirror of [kStruggleThreshold]. The app supported struggling children but never
+/// celebrated a roll; momentum (flow) is half the engagement spine (CEO 951).
+const int kMomentumThreshold = 3;
+
+/// The momentum banner — shown when a child is on a [kMomentumThreshold]+ correct
+/// streak. Diegetic 探偵 framing ("推理が冴えている"), positive + COPPA-safe (the
+/// child's OWN run, no social). Shares the cold-streak banner's slot (a child is
+/// on a hot OR cold streak, never both), so it adds celebration, not clutter.
+class PracticeMomentumBanner extends StatelessWidget {
+  final int streak;
+  const PracticeMomentumBanner({super.key, required this.streak});
+
+  static const _green = Color(0xFF8BE08B);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      key: const ValueKey('practice_momentum_banner'),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: _green.withAlpha(26),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: _green.withAlpha(120)),
+      ),
+      child: Row(
+        children: [
+          const Text('🔥', style: TextStyle(fontSize: 20)),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              '$streak問（もん）れんぞく 正解（せいかい）！ 推理（すいり）が '
+              'さえているね。この調子（ちょうし）！',
+              style: dqText(size: 13, w: FontWeight.w700, color: _green)
+                  .copyWith(height: 1.5),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 /// The gentle, non-scolding cold-streak banner. [message] is screen-specific so
 /// the nudge matches that screen's available support.
 class PracticeEncouragementBanner extends StatelessWidget {
