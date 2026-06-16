@@ -114,6 +114,7 @@ class _PrologueScreenState extends State<PrologueScreen>
   int _activeLetter = -1; // -1 none lit; 0=s, 1=a, 2=t
   bool _blendDone = false; // true once all three are sounded → join + restore
   bool _heard = false; // 起: child has tapped to hear す… (agency gate, per panel)
+  double _revealFrom = 0.0; // the LEAVING beat's saturation → bloom/drain origin
 
   // Council S3 — non-reader gate: a 4-7yo who can't read 「つぎへ」 needs a VISUAL
   // cue for what to tap. If the panel sits untapped ~4s, pulse the advance/🔊
@@ -173,7 +174,9 @@ class _PrologueScreenState extends State<PrologueScreen>
       widget.onDone();
       return;
     }
+    final leaving = _beatSaturation; // origin for the next beat's bloom/drain
     setState(() {
+      _revealFrom = leaving;
       _index++;
       _activeLetter = -1;
       _blendDone = false;
@@ -389,12 +392,18 @@ class _PrologueScreenState extends State<PrologueScreen>
     final to = _beatSaturation;
     if (prefersReducedMotion(context)) return _revealPlate(to, 1.06);
     return TweenAnimationBuilder<double>(
-      // Re-keyed on beat AND blend state so the tween re-runs to the new target.
+      // Re-keyed on beat AND blend state so the tween re-runs. Animates reveal
+      // from the LEAVING beat's saturation (_revealFrom) to this beat's target:
+      // colour BLOOMS outward from the lamp when it returns (起→承, blend done)
+      // and DRAINS back toward the lamp when the Silence eats it (承→転) — the
+      // loss is SHOWN through the mechanic, not just narrated (studio wrf7umkta
+      // #2). Seamless under the outer 450ms switcher: each beat starts at the
+      // previous beat's end saturation, so the cross-fade has nothing to jump.
       key: ValueKey('bg$_index$_blendDone'),
-      tween: Tween<double>(begin: 0.0, end: 1.0),
+      tween: Tween<double>(begin: _revealFrom, end: to),
       duration: const Duration(milliseconds: 2400),
       curve: Curves.easeInOut,
-      builder: (_, t, __) => _revealPlate(to * t, 1.04 + 0.06 * t),
+      builder: (_, reveal, __) => _revealPlate(reveal, 1.04 + 0.06 * reveal),
     );
   }
 
