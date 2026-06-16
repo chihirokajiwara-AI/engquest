@@ -237,82 +237,96 @@ class _NazoScreenState extends State<NazoScreen> {
     if (_teaching) return _teachScaffold();
     return DqScene(
       contentMaxWidth: 600, // #144: centre on tablet, full-width on phone
-      child: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _header(),
-              const SizedBox(height: 12),
-              _picaratRow(),
-              const SizedBox(height: 12),
-              // This ナゾ plays a phoneme/word the child must HEAR to answer —
-              // if Voice is muted, warn + offer a one-tap unmute. Suppressed when
-              // the clip is missing (unmuting wouldn't help → show 準備中 instead).
-              if (AudioMute.voiceMuted &&
-                  _step.autoPlayAudio != null &&
-                  !_audioMissing) ...[
-                MutedVoiceBanner(
-                  onUnmute: () => setState(() {}),
-                  message: kPhonicsMutedMessage,
-                ),
-                const SizedBox(height: 12),
-              ],
-              if (widget.hotspot.framingJa != null) ...[
-                _framingBox(),
-                const SizedBox(height: 10),
-              ],
-              _quizCard(),
-              const SizedBox(height: 14),
-              _promptLabel(),
-              const SizedBox(height: 8),
-              ..._optionTiles(),
-              if (_revealed) ...[
-                const SizedBox(height: 12),
-                // Solve-moment reward (game-feel #51): a detective-register
-                // "the word resonated" stamp acknowledges the win BEFORE the
-                // restoration dialog — so solving feels like a victory, not just
-                // a correct/next. Static (no animation → reduced-motion-safe).
-                Container(
-                  width: double.infinity,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: dqGold.withAlpha(34),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: dqGold.withAlpha(140)),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Text('✦', style: TextStyle(fontSize: 18)),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          'ことばが ひびいた！ ―― 色（いろ）が もどる。',
-                          style: dqText(
-                              size: 14, w: FontWeight.w800, color: dqGold),
-                        ),
+      child: Stack(
+        children: [
+          SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _header(),
+                  const SizedBox(height: 12),
+                  _picaratRow(),
+                  const SizedBox(height: 12),
+                  // This ナゾ plays a phoneme/word the child must HEAR to answer —
+                  // if Voice is muted, warn + offer a one-tap unmute. Suppressed when
+                  // the clip is missing (unmuting wouldn't help → show 準備中 instead).
+                  if (AudioMute.voiceMuted &&
+                      _step.autoPlayAudio != null &&
+                      !_audioMissing) ...[
+                    MutedVoiceBanner(
+                      onUnmute: () => setState(() {}),
+                      message: kPhonicsMutedMessage,
+                    ),
+                    const SizedBox(height: 12),
+                  ],
+                  if (widget.hotspot.framingJa != null) ...[
+                    _framingBox(),
+                    const SizedBox(height: 10),
+                  ],
+                  _quizCard(),
+                  const SizedBox(height: 14),
+                  _promptLabel(),
+                  const SizedBox(height: 8),
+                  ..._optionTiles(),
+                  if (_revealed) ...[
+                    const SizedBox(height: 12),
+                    // Solve-moment reward (game-feel #51): a detective-register
+                    // "the word resonated" stamp acknowledges the win BEFORE the
+                    // restoration dialog — so solving feels like a victory, not just
+                    // a correct/next. Static (no animation → reduced-motion-safe).
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: dqGold.withAlpha(34),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: dqGold.withAlpha(140)),
                       ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 12),
-                DqDialogBox(
-                  speaker: _step.npcName,
-                  child: Text(_step.onCorrect, style: dqText(size: 15)),
-                ),
-                const SizedBox(height: 16),
-                DqButton(label: '▶ ナゾ、解（と）けた！', onTap: _finish),
-              ] else ...[
-                const SizedBox(height: 16),
-                _hintLadder(),
-              ],
-              const SizedBox(height: 20),
-            ],
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text('✦', style: TextStyle(fontSize: 18)),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              'ことばが ひびいた！ ―― 色（いろ）が もどる。',
+                              style: dqText(
+                                  size: 14, w: FontWeight.w800, color: dqGold),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    DqDialogBox(
+                      speaker: _step.npcName,
+                      child: Text(_step.onCorrect, style: dqText(size: 15)),
+                    ),
+                    const SizedBox(height: 16),
+                    DqButton(label: '▶ ナゾ、解（と）けた！', onTap: _finish),
+                  ] else ...[
+                    const SizedBox(height: 16),
+                    _hintLadder(),
+                  ],
+                  const SizedBox(height: 20),
+                ],
+              ),
+            ),
           ),
-        ),
+          // Solve climax (game-studio director's #1): the correct answer is the
+          // game's most frequent core verb, but it used to land as a static
+          // reveal ("nothing moves" — the 6yo playtester's "broken button"). A
+          // one-shot full-screen gold burst makes the win VISCERAL. The teaching
+          // reveal + 「ナゾ、解けた！」 button stay (a child must read why it was right),
+          // so the burst celebrates without skipping the lesson. Reduced-motion → none.
+          if (_revealed && !prefersReducedMotion(context))
+            const Positioned.fill(
+              child: IgnorePointer(child: _SolveBurst()),
+            ),
+        ],
       ),
     );
   }
@@ -761,6 +775,72 @@ class _NazoScreenState extends State<NazoScreen> {
               ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// The solve-moment climax: a one-shot full-screen gold radial bloom that scales
+/// up and fades out (~680ms) the instant a ナゾ is answered correctly — the
+/// visceral "you cracked it" flash the game's core verb was missing. IgnorePointer
+/// so it never eats the continue tap; only mounted when motion is allowed.
+class _SolveBurst extends StatefulWidget {
+  const _SolveBurst();
+
+  @override
+  State<_SolveBurst> createState() => _SolveBurstState();
+}
+
+class _SolveBurstState extends State<_SolveBurst>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _c;
+
+  @override
+  void initState() {
+    super.initState();
+    _c = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 680),
+    )..forward();
+  }
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return IgnorePointer(
+      child: AnimatedBuilder(
+        animation: _c,
+        builder: (_, __) {
+          final t = Curves.easeOut.transform(_c.value);
+          final scale = 0.4 + 1.4 * t; // 0.4 → 1.8, blooming outward
+          final fade = (1.0 - t) * 0.85; // bright → gone
+          return Opacity(
+            opacity: fade,
+            child: Transform.scale(
+              scale: scale,
+              child: const SizedBox.expand(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: RadialGradient(
+                      colors: [
+                        Color(0xCCFFD700), // gold core
+                        Color(0x55FFD700),
+                        Color(0x00FFD700), // transparent rim
+                      ],
+                      stops: [0.0, 0.45, 1.0],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
