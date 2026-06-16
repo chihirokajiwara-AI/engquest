@@ -10,9 +10,11 @@
 // The blend is a guaranteed win (no-scold). The win is restoration, not conquest.
 //
 // Plays once-ever (the caller persists that); skippable from panel 1. The blend
-// beat sounds each phoneme on its OWN tap (phoneme_s/a/t.mp3, all recorded) and
-// the joined word (blend_sat.mp3) on the 🔁「つなげて きく」 replay — so the child
-// HEARS the segments, then the blend (independent judge panel wmlj5x22c #1).
+// beat sounds the clean continuant/vowel segments per tap (phoneme_s, phoneme_a)
+// and on the COMPLETING tap plays the CONNECTED joined word (blend_sat.mp3):
+// connected phonation (Gonzalez-Frey & Ehri 2020) beats detached segments for
+// age-5 non-readers, and it keeps the schwa-prone isolated /t/ stop out of the
+// live flow (phoneme_t is HAND-RECORD-pending per generate_phonemes_elevenlabs.py).
 
 import 'dart:async';
 
@@ -179,20 +181,30 @@ class _PrologueScreenState extends State<PrologueScreen>
   /// is no wrong tap, only "not yet complete" (the no-scold spine).
   void _playBlend() {
     if (_activeLetter < _blendLetters.length - 1) {
-      // Segmenting: light + SOUND the next phoneme on its OWN (s→a→t). The
-      // independent judge panel (wf wmlj5x22c, finding #1) found every tap was
-      // replaying the WHOLE word, so the child never heard the segments — the
-      // entire point of a blend. Now each tap sounds that one phoneme; the lamp
-      // + colour still restore the moment all three are done (_blendDone).
+      final next = _activeLetter + 1;
+      final isLast = next >= _blendLetters.length - 1;
       setState(() {
-        _activeLetter++;
-        if (_activeLetter >= _blendLetters.length - 1) _blendDone = true;
+        _activeLetter = next;
+        if (isLast) _blendDone = true;
       });
-      _cue.play('audio/phonics/phoneme_${_blendLetters[_activeLetter]}.mp3');
+      if (isLast) {
+        // CONNECTED phonation on the climax (frontier studio wrf7umkta). The
+        // completing tap plays the HELD, joined word — never the isolated final
+        // stop. Two evidenced reasons: (1) Gonzalez-Frey & Ehri (2020) found
+        // connected blending ("ssssaaat") beats detached segments for age-5
+        // non-readers; (2) the isolated /t/ clip (phoneme_t.mp3) is the
+        // schwa-prone stop the repo's OWN generate_phonemes_elevenlabs.py header
+        // says "Do NOT wire into the live flow until ear-verified" (it wasn't).
+        // So /t/ is only ever heard inside the clean joined word, not as "tuh".
+        _cue.play(_p.audio); // blend_sat.mp3 — the connected, joined word
+      } else {
+        // Earlier taps sound the clean LOW-RISK segment as its tile lights
+        // (s = continuant, a = vowel — both ear-QA'd / lower-risk per the script).
+        _cue.play('audio/phonics/phoneme_${_blendLetters[next]}.mp3');
+      }
     } else {
-      // All three sounded → tapping the 🔁「つなげて きく」 plays the JOINED word
-      // (the blend payoff). Colour + the lamp already restored on _blendDone.
-      _cue.play(_p.audio); // blend_sat.mp3 — the segments joined into one word
+      // Already complete → the 🔁「つなげて きく」 replays the connected word.
+      _cue.play(_p.audio); // blend_sat.mp3
     }
     _armIdle();
   }
