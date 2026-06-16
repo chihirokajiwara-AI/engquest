@@ -38,6 +38,8 @@ import 'package:engquest/features/parent_dashboard/parent_login_screen.dart';
 import 'package:engquest/core/storage/preferences_service.dart';
 import 'package:engquest/features/quest/ui/dq_ui.dart';
 import 'package:engquest/features/explore/scene_view.dart';
+import 'package:engquest/features/explore/chapter.dart';
+import 'package:engquest/features/explore/chapter_map_screen.dart';
 import 'package:engquest/features/explore/case_log_screen.dart';
 import 'package:engquest/features/home/kotoba_home_screen.dart';
 import 'package:engquest/features/exam_practice/pass/pass_meter_screen.dart';
@@ -356,6 +358,7 @@ const List<String> kPreviewRouteNames = [
   'prologue5',
   'explore',
   'exploresolved',
+  'chaptermap',
   'explore4',
   'explore3',
   'explorepre2',
@@ -465,6 +468,30 @@ Widget _previewFor(String? name) {
       // Design-audit: the 5級 scene fully restored (colour + 探偵メモ re-read badges).
       return SceneView(
           scene: kTown5Scene, eikenLevel: '5', previewAllSolved: true);
+    case 'chaptermap':
+      // Design-audit: the 案内図 with a SYNTHETIC 2-location chapter so the
+      // reveal-1-ahead states (cleared → current → locked) + the trail render
+      // before real 2nd locations land. #92 world-depth.
+      return ChapterMapScreen(
+        chapter: Chapter(
+          grade: '5',
+          titleJa: 'ことばを失（うしな）った村（むら）',
+          locations: [
+            Location(
+                scene: kTown5Scene,
+                gate: const MasteryGate(requiredFirstTryNazo: 3)),
+            Location(
+                scene: kTown4Scene,
+                gate: const MasteryGate(requiredFirstTryNazo: 3)),
+          ],
+          map: const ChapterMap(nodes: [
+            MapNode(locationIndex: 0, x: 0.30, y: 0.64),
+            MapNode(locationIndex: 1, x: 0.72, y: 0.34),
+          ]),
+          beats: const [],
+        ),
+        firstTryCorrectPerLocation: const [3, 1], // loc0 cleared, loc1 current
+      );
     case 'explore4':
       // Wave 2 — Layton-style SceneView for the 英検4級 harbour town.
       return SceneView(scene: kTown4Scene, eikenLevel: '4');
