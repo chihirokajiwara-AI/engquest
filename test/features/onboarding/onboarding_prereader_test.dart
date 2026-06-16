@@ -13,6 +13,13 @@ void main() {
     expect(kPreReaderMaxAge, 7);
   });
 
+  test('onboarding age floor is 6 (CEO 1889: target 6+, not 4-5)', () {
+    // The picker offers 6..18 (decrement guarded by `age > kMinSelectableAge`).
+    // Drift guard: if this reverts to 4, we are over-accommodating a low age
+    // that shrinks the 母数. The pre-reader quiz-skip stays separate (≤7).
+    expect(kMinSelectableAge, 6);
+  });
+
   test('pre-reader is placed at the 5級 floor (honest, level-up later)', () {
     expect(kPreReaderPlacement.grade, 0);
     expect(kPreReaderPlacement.eikenLevel, '5');

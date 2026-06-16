@@ -12,6 +12,14 @@ import 'placement_item_bank.dart';
 /// the 5級 floor instead. Public so the contract is unit-testable.
 const int kPreReaderMaxAge = 7;
 
+/// Minimum selectable age in onboarding. CEO 1889: the target floor is 6+ (年長
+/// turning 6 / 小1+); offering 4-5 over-accommodates a low age that shrinks the
+/// 母数 (the CEO explicitly questioned age 5 being in scope). The pre-reader
+/// quiz-skip (≤[kPreReaderMaxAge]) is a SEPARATE, sensible UX and stays — a 6-7yo
+/// beginner is still seeded to the 5級 floor rather than facing an English
+/// placement MCQ.
+const int kMinSelectableAge = 6;
+
 /// The placement a pre-reader (age ≤ [kPreReaderMaxAge]) gets without the quiz:
 /// the 5級 floor — the kindest start; they can level up later via the grade
 /// selector. Low confidence (age-seeded, not measured).
@@ -494,7 +502,9 @@ class _StepAge extends StatelessWidget {
                     _AgeStepButton(
                       icon: Icons.remove_rounded,
                       semanticLabel: 'ねんれいを へらす / decrease age',
-                      onTap: age > 4 ? () => onAgeChanged(age - 1) : null,
+                      onTap: age > kMinSelectableAge
+                          ? () => onAgeChanged(age - 1)
+                          : null,
                     ),
                     const SizedBox(width: 44),
                     _AgeStepButton(
@@ -505,7 +515,7 @@ class _StepAge extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 8),
-                Text('（4さい 〜 18さい）',
+                Text('（6さい 〜 18さい）',
                     textAlign: TextAlign.center,
                     style: dqText(size: 11, color: dqInk.withAlpha(150))),
               ],
