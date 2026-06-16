@@ -1665,6 +1665,36 @@ final SceneDef kTownPre1Scene = SceneDef(
       clueLineJa: 'スラ：「…ぷる。ここ、さむいね。でも きみが ことばを もどすたび、'
           'すこしずつ あたたかくなる。あそこにも、ひとつ…！」',
     ),
+    // ── Coin 2: hidden by a colour-drained archway ──────────────────────────
+    Hotspot.coin(
+      pos: const Alignment(0.72, 0.42),
+      size: 0.10,
+      coinValue: 1,
+      clueLineJa: 'スラ：「…ぷる。はいいろの アーチの したで、ひとつだけ '
+          'いろを なくさずに ひかってる。きみと いっしょに、とりに いこう。」',
+    ),
+    // ── Observation points (#90 density): tap-to-look 探偵メモ, no puzzle. The
+    //    climax — reverent, non-combat; the 7th bookmark stays the healer's payoff.
+    Hotspot.observation(
+      pos: const Alignment(-0.22, -0.58),
+      clueLineJa: 'たんていメモ：いしだたみも、そらも、ぜんぶ はいいろ。'
+          'けれど きみが ことばを もどすたび、あしもとから ほんの すこし、いろが にじむ。',
+    ),
+    Hotspot.observation(
+      pos: const Alignment(0.28, 0.18),
+      clueLineJa: 'たんていメモ：ひびわれた いしの えんたく。むかし ここで、'
+          'くにの だいじな ことが きめられた…と もと・さいしょうが いっていた。',
+    ),
+    Hotspot.observation(
+      pos: const Alignment(-0.38, 0.48),
+      clueLineJa: 'たんていメモ：かれた ふんすい。みずも こえも、とまって ひさしい。'
+          'でも いしの すきまに、ちいさな めが ひとつ だけ のびていた。',
+    ),
+    Hotspot.observation(
+      pos: const Alignment(-0.10, -0.22),
+      clueLineJa: 'たんていメモ：ひろばの まんなかに、はいいろの ひとが ひとり。'
+          'ひざを かかえ、うつむいている。…ずっと、ひとりだったんだ。',
+    ),
   ],
 );
 
