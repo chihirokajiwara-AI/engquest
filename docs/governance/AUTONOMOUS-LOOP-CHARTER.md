@@ -306,3 +306,16 @@ not occasional.
 - **Latest-first is non-negotiable**: every discipline agent cites dated 2026 sources
   before judging; training-cutoff knowledge and the current codebase are both
   stale-until-verified.
+
+## HYBRID STUDIO — game × 英検-learning, interconnected [CEO 1755 — 2026-06-16]
+
+The bar is a street-level world-class GAME **and** a rigorous 英検-pass English-LEARNING
+process, SIMULTANEOUSLY and INTERCONNECTED — game systems and learning systems must
+serve each other, not run in parallel. The studio panel is therefore CROSS-DOMAIN:
+alongside the game disciplines (feel/world/reward/level) it now includes 英検/English-
+acquisition pedagogy, learning-science/cognition, and a hybrid-systems-integration expert
+whose whole job is finding the biggest game⇄learning DISCONNECT; plus a veteran 英検/児童英語
+teacher playtester. The director weighs BOTH layers and prefers a #1 that makes the GAME
+and the 英検 LEARNING better at the same time (a reward that also strengthens retention; a
+narrative beat that also teaches a 英検 pattern) over a pure-polish or pure-pedagogy tweak.
+Engine: `.claude/workflows/game-studio-panel.js` (now hybrid).

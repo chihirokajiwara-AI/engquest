@@ -15,8 +15,8 @@
 
 export const meta = {
   name: 'game-studio-panel',
-  description: 'Standing game studio: latest-2026 discipline experts + harsh playtesters → ranked buildable game-feel plan for コトバ探偵 (英検 detective RPG)',
-  whenToUse: 'Each loop tick that targets game-as-a-game quality — convene the expert studio rather than solo-polishing.',
+  description: 'Standing HYBRID studio (CEO 1755): latest-2026 game + 英検-pedagogy + learning-science experts & harsh playtesters → ranked buildable plan that raises GAME quality AND 英検 learning, interconnected, for コトバ探偵',
+  whenToUse: 'Each loop tick that targets game/learning quality — convene the cross-domain expert studio rather than solo-polishing; it re-audits shipped work super-strictly.',
   phases: [
     { title: 'Studio', detail: '5 discipline experts audit the live game vs 2026 SOTA' },
     { title: 'Critique', detail: '3 harsh playtesters find what is not fun' },
@@ -31,6 +31,13 @@ const BRIEF = `
 APP: "コトバ探偵" (Kotoba Tantei / Word Detective) — a Flutter web/mobile RPG that teaches
 英検 (Eiken English proficiency, 5級→準1級) to Japanese children ages 4–18. Premium dark-RPG
 (Dragon-Quest-grade) aesthetic: deep navy + gold, painterly desaturated scenes.
+
+THE HYBRID MANDATE (CEO 1755, the actual bar): this must be BOTH a street-level world-class
+GAME and a rigorous 英検-pass English-LEARNING process — simultaneously, and INTERCONNECTED.
+Not a quiz with game polish bolted on, and not a fun toy that doesn't teach. The game systems
+and the learning systems must SERVE EACH OTHER: juice/reward/world should reinforce encoding and
+retention; the 英検 learning should be what makes the game meaningful. Judge BOTH layers and,
+above all, whether they actually interconnect across domains.
 
 CORE LOOP: the world lost its words to "the サイレント (Silence)"; colour drained out. The child
 is a rookie word-detective. Each 英検 grade = a town/chapter. In a painted SCENE you tap NPCs
@@ -101,17 +108,24 @@ const SYNTH_SCHEMA = {
   },
 }
 
+// HYBRID panel (CEO 1755): world-class GAME quality AND a rigorous 英検-English-
+// learning process must BOTH be true and INTERCONNECTED — game mechanics must
+// serve the learning, and the learning must be genuinely fun. So the panel spans
+// BOTH domains; the director scores cross-domain interconnection, not either alone.
 const DISCIPLINES = [
   { key: 'game-feel/juice', lens: 'moment-to-moment juice: motion, easing, anticipation, follow-through, sound-free screen feedback, tactile micro-interactions (Vlambeer "juice it or lose it" lineage + 2026 mobile feel).' },
   { key: 'world/narrative', lens: 'environmental storytelling, mystery pacing, curiosity gaps, the サイレント lore drip, a living world that responds (Layton/Ghibli-grade).' },
   { key: 'reward/progression psychology', lens: 'reward scheduling, flow, variable-but-fair reward, session shape, the "あと1問" pull, kid-appropriate (COPPA, no dark patterns).' },
-  { key: 'art-direction (motion/composition, NOT new art)', lens: 'using EXISTING assets better via motion/parallax/lighting/composition/colour-grade to hit the premium dark-RPG bar. No new image generation.' },
   { key: 'level/encounter design', lens: 'the detective case-loop depth: hotspot variety, puzzle pacing, the tap-NPC→ナゾ→restore rhythm, difficulty curve, avoiding "a quiz with a skin".' },
+  { key: '英検/English-acquisition pedagogy', lens: 'does playing this actually build 英検 competence? CEFR A1→B2 progression, exam-format fidelity (大問 structure, listening/reading/writing/speaking), comprehensible input, the recognition→production pipeline, whether the difficulty is exam-aligned. Judge the LEARNING, harshly.' },
+  { key: 'learning science / cognition', lens: 'retention + transfer: spaced-repetition validity (FSRS grade honesty), retrieval practice / testing effect, desirable difficulties, interleaving, dual-coding, whether feedback corrects misconceptions, whether the fun REINFORCES encoding or distracts from it.' },
+  { key: 'hybrid systems integration (game ⇄ learning)', lens: 'CROSS-DOMAIN: do the game systems and the learning systems actually serve each other and interconnect, or run in parallel? e.g. does the gold burst reinforce the correct answer\'s encoding? does the picarat reward pull toward learning or away? does the サイレント world frame aid retention? does narrative progression track 英検 mastery? Find the biggest DISCONNECT between the game layer and the 英検-pass layer.' },
 ]
 const CRITICS = [
   { persona: 'a literal 6-year-old who cannot read much English and gets bored fast' },
-  { persona: 'a paying parent who wants to SEE it is a real game worth ¥, not a worksheet' },
+  { persona: 'a paying parent who will only keep paying if their child MEASURABLY moves toward passing 英検 — and who can tell a real game from a worksheet' },
   { persona: 'a hardcore Professor Layton / Ghibli fan judging it as a premium adventure game' },
+  { persona: 'a veteran 英検 / 児童英語 teacher judging whether a child actually LEARNS English here, not just taps and earns points' },
 ]
 
 phase('Studio')
@@ -148,14 +162,17 @@ log(`Critique: ${critics.length}/${CRITICS.length} playtesters reported`)
 
 phase('Synthesize')
 const synthesis = await agent(
-  `You are the game director. Synthesize the studio panel + harsh playtests into a buildable plan to raise the ` +
-  `GAME-as-a-game quality of コトバ探偵.\n${BRIEF}\n\nEXPERT FINDINGS:\n${JSON.stringify(experts, null, 1)}\n\n` +
-  `PLAYTESTER COMPLAINTS:\n${JSON.stringify(critics, null, 1)}\n\nProduce a ranked list (3–6) of the highest-` +
-  `leverage IN-SCOPE improvements (dedupe overlaps; weight what MULTIPLE people hit; reject anything needing new ` +
-  `art/audio/backend/AI/billing or already-built). Pick the SINGLE #1 to build NOW with a precise implementation ` +
-  `spec a senior Flutter engineer could execute in one focused session, concrete acceptance criteria, and likely ` +
-  `files (lib/features/explore, battle, home, exam_practice, quest/ui/dq_ui.dart). Favour something that changes ` +
-  `how the game FEELS, is verifiable, and is genuinely fun — not another utility/polish tweak.`,
+  `You are the studio director for a HYBRID product: a world-class GAME that is simultaneously a rigorous ` +
+  `英検-pass English-LEARNING process, the two INTERCONNECTED (CEO 1755).\n${BRIEF}\n\n` +
+  `EXPERT FINDINGS:\n${JSON.stringify(experts, null, 1)}\n\nPLAYTESTER COMPLAINTS:\n${JSON.stringify(critics, null, 1)}\n\n` +
+  `Produce a ranked list (3–6) of the highest-leverage IN-SCOPE improvements (dedupe overlaps; weight what MULTIPLE ` +
+  `people hit; reject anything needing new art/audio/backend/AI/billing). Weigh BOTH layers AND their interconnection: ` +
+  `the very best findings make the GAME better and the 英検 LEARNING better AT THE SAME TIME (e.g. a reward that also ` +
+  `strengthens retention, a narrative beat that also teaches a 英検 pattern). Explicitly prefer a #1 that closes a ` +
+  `game⇄learning DISCONNECT over a pure-polish or pure-pedagogy tweak. Pick the SINGLE #1 to build NOW with a precise ` +
+  `implementation spec a senior Flutter engineer could execute in one focused session, concrete acceptance criteria, ` +
+  `and likely files (lib/features/explore, battle, home, exam_practice, quest/ui/dq_ui.dart). Verifiable + genuinely ` +
+  `fun + genuinely teaches.`,
   { label: 'director:synthesis', phase: 'Synthesize', schema: SYNTH_SCHEMA }
 )
 
