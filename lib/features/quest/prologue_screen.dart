@@ -14,6 +14,8 @@
 // the blend on panel 5 (blend_cat.mp3 exists); phoneme keys are wired so they
 // light up the instant the founder records them.
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../core/audio/audio_cue_service.dart';
@@ -76,7 +78,8 @@ class PrologueScreen extends StatefulWidget {
   State<PrologueScreen> createState() => _PrologueScreenState();
 }
 
-class _PrologueScreenState extends State<PrologueScreen> {
+class _PrologueScreenState extends State<PrologueScreen>
+    with SingleTickerProviderStateMixin {
   final _cue = AudioCueService();
   late int _index = widget.startIndex.clamp(0, _panels.length - 1);
 
@@ -84,12 +87,54 @@ class _PrologueScreenState extends State<PrologueScreen> {
   int _activeLetter = -1; // -1 none lit; 0=c, 1=a, 2=t
   bool _blendDone = false; // true once all three are sounded → join + restore
 
+  // Council S3 — non-reader gate: a 4-7yo who can't read 「つぎへ」 needs a VISUAL
+  // cue for what to tap. If the panel sits untapped ~4s, pulse the advance/🔊
+  // control to draw the eye. Reset on any interaction; suppressed under
+  // reduce-motion.
+  bool _idleHint = false;
+  Timer? _idleTimer;
+  late final AnimationController _pulse = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 750),
+  );
+
   _Panel get _p => _panels[_index];
 
   @override
+  void initState() {
+    super.initState();
+    // Auto-voice the FIRST panel's instruction for a non-reader (best-effort:
+    // web autoplay may defer it to the first tap — AudioCueService swallows that;
+    // the idle pulse + the child's first tap then start the audio).
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      if (!_p.interactive && _p.audio != null) _cue.play(_p.audio);
+      _armIdle();
+    });
+  }
+
+  @override
   void dispose() {
+    _idleTimer?.cancel();
+    _pulse.dispose();
     _cue.dispose();
     super.dispose();
+  }
+
+  /// (Re)start the idle countdown: clear the hint now, and if the child hasn't
+  /// touched anything in 4s, raise it so the advance control pulses.
+  void _armIdle() {
+    _idleTimer?.cancel();
+    if (_idleHint) setState(() => _idleHint = false);
+    _pulse.stop();
+    _pulse.value = 0;
+    _idleTimer = Timer(const Duration(seconds: 4), () {
+      if (!mounted) return;
+      setState(() => _idleHint = true);
+      // Only animate while actually idle — keeps the controller (and the test
+      // clock) quiet until the hint is needed.
+      _pulse.repeat(reverse: true);
+    });
   }
 
   void _next() {
@@ -105,6 +150,7 @@ class _PrologueScreenState extends State<PrologueScreen> {
     // This runs from a tap (user gesture) → safe to fire audio on web, except on
     // the interactive panel where the child taps 🔊 themselves.
     if (!_p.interactive && _p.audio != null) _cue.play(_p.audio);
+    _armIdle();
   }
 
   /// TAP-DRIVEN blend (the diverse-team design's core: the CHILD performs the
@@ -118,6 +164,7 @@ class _PrologueScreenState extends State<PrologueScreen> {
       // c·a·t all sounded → join into the word + restore ランプ.
       if (_activeLetter >= 2) _blendDone = true;
     });
+    _armIdle();
   }
 
   @override
@@ -184,13 +231,19 @@ class _PrologueScreenState extends State<PrologueScreen> {
                   // clipping at the screen edge.
                   SizedBox(
                     width: double.infinity,
-                    child: Text(_p.jp,
-                        textAlign: TextAlign.center,
-                        style: dqText(size: 16).copyWith(
-                            height: 1.7,
-                            shadows: const [
-                              Shadow(color: Colors.black, blurRadius: 8)
-                            ])),
+                    // Council S3: liveRegion so a screen reader ANNOUNCES each
+                    // beat's line when the panel changes (not only when focused),
+                    // keeping a non-visual child in step with the cutscene.
+                    child: Semantics(
+                      liveRegion: true,
+                      child: Text(_p.jp,
+                          textAlign: TextAlign.center,
+                          style: dqText(size: 16).copyWith(
+                              height: 1.7,
+                              shadows: const [
+                                Shadow(color: Colors.black, blurRadius: 8)
+                              ])),
+                    ),
                   ),
                   const SizedBox(height: 6),
                   SizedBox(
@@ -334,11 +387,20 @@ class _PrologueScreenState extends State<PrologueScreen> {
   /// The interactive panel gates "next" behind one 🔊 tap; others show "▶ つぎへ"
   /// (or "▶ はじめる" on the last panel).
   Widget _advanceControl() {
-    if (_p.interactive && !_blendDone) {
-      return DqReplayButton(onTap: _playBlend, label: '🔊 おして、きいてみよう');
-    }
-    return DqButton(
-        label: _p.isLast ? '▶ はじめる / Begin' : '▶ つぎへ', onTap: _next);
+    final Widget control = (_p.interactive && !_blendDone)
+        ? DqReplayButton(onTap: _playBlend, label: '🔊 おして、きいてみよう')
+        : DqButton(label: _p.isLast ? '▶ はじめる / Begin' : '▶ つぎへ', onTap: _next);
+    // Council S3: pulse the control when the child has gone idle, so a non-reader
+    // sees WHERE to tap. Reduce-motion → no pulse (the control still stands out).
+    final reduceMotion =
+        MediaQuery.maybeOf(context)?.disableAnimations ?? false;
+    if (!_idleHint || reduceMotion) return control;
+    return AnimatedBuilder(
+      animation: _pulse,
+      builder: (context, child) =>
+          Transform.scale(scale: 1.0 + 0.06 * _pulse.value, child: child),
+      child: control,
+    );
   }
 
   // ── Foreground element over the full-bleed background. Only the blend beat has

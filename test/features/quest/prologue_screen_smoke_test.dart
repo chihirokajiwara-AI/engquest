@@ -16,6 +16,9 @@ void main() {
 
   group('PrologueScreen — smoke tests (R3)', () {
     testWidgets('pumps without exception', (tester) async {
+      // Dispose the screen before teardown so the S3 idle Timer is cancelled
+      // (a pending Timer fails the test otherwise).
+      addTearDown(() => tester.pumpWidget(const SizedBox()));
       await tester.pumpWidget(MaterialApp(
         home: PrologueScreen(onDone: () {}),
       ));
@@ -27,6 +30,7 @@ void main() {
     });
 
     testWidgets('startIndex offset pumps without exception', (tester) async {
+      addTearDown(() => tester.pumpWidget(const SizedBox()));
       await tester.pumpWidget(MaterialApp(
         home: PrologueScreen(onDone: () {}, startIndex: 1),
       ));
@@ -37,6 +41,7 @@ void main() {
     testWidgets(
         'opens on the 5級 town plate, NOT the 準1級 finale (council S2 canon)',
         (tester) async {
+      addTearDown(() => tester.pumpWidget(const SizedBox()));
       // WORLD-BIBLE §2 inward spiral: the OPENING is the 5級 misty edge, the 準1級
       // grey centre is the FINALE. The background must be the 5級 plate; opening on
       // town_pre1_grey_square (the palette-stripped 準1 finale) is the canon defect
@@ -56,6 +61,22 @@ void main() {
       expect(assets.any((a) => a.contains('town_pre1')), isFalse,
           reason:
               'must NOT open on the 準1級 finale plate (inward-spiral canon)');
+    });
+
+    testWidgets(
+        'S3: idle ~4s pulses the advance cue without breaking the screen',
+        (tester) async {
+      addTearDown(() => tester.pumpWidget(const SizedBox()));
+      await tester.pumpWidget(MaterialApp(
+        home: PrologueScreen(onDone: () {}),
+      ));
+      await tester.pump();
+      // Sit idle past the 4s threshold → the non-reader pulse cue fires; the
+      // advance control must stay present and the screen must not throw.
+      await tester.pump(const Duration(seconds: 5));
+      expect(find.textContaining('つぎへ'), findsOneWidget,
+          reason: 'the advance control stays usable while the idle pulse runs');
+      expect(tester.takeException(), isNull);
     });
   });
 }
