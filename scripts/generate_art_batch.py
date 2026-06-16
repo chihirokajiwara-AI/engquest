@@ -81,9 +81,9 @@ def main() -> int:
         # (memory: art-gen-pipeline-realities — CLIP-77 front-load critical terms.)
         prompt = (
             "コトバ探偵 dusty-teal and brass-amber anime, single character, "
-            "{0}, refined detailed anime, sharp clean linework, detailed eyes with "
-            "dark pupils, kind mature face, fully clothed, simple background, "
-            "warm even lighting, masterpiece, best quality".format(args.subject)
+            f"{args.subject}, refined detailed anime, sharp clean linework, "
+            "detailed eyes with dark pupils, kind mature face, fully clothed, "
+            "simple background, warm even lighting, masterpiece, best quality"
         )
         neg = NPC_NEG
     else:
