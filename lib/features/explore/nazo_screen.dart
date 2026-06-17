@@ -346,6 +346,7 @@ class _NazoScreenState extends State<NazoScreen> {
   Widget build(BuildContext context) {
     if (_teaching) return _teachScaffold();
     return DqScene(
+      warm: kNazoWarmTheme,
       contentMaxWidth: 600, // #144: centre on tablet, full-width on phone
       child: Stack(
         children: [
@@ -498,6 +499,7 @@ class _NazoScreenState extends State<NazoScreen> {
   Widget _teachScaffold() {
     final card = _teachCard!;
     return DqScene(
+      warm: kNazoWarmTheme,
       contentMaxWidth: 600, // #144: centre on tablet, full-width on phone
       child: SafeArea(
         child: SingleChildScrollView(
@@ -602,6 +604,7 @@ class _NazoScreenState extends State<NazoScreen> {
     // a title). Falls back to the generic line when an NPC has no name.
     final npc = _step.npcName.trim();
     final title = npc.isNotEmpty ? '$npc の ナゾ' : '「？」ナゾが あらわれた！';
+    const warm = kNazoWarmTheme;
     return Column(
       children: [
         Row(
@@ -609,14 +612,17 @@ class _NazoScreenState extends State<NazoScreen> {
             IconButton(
               tooltip: 'とじる / Close',
               onPressed: _dismiss,
-              icon: const Icon(Icons.close, color: dqInk),
+              icon: Icon(warm ? Icons.menu_book : Icons.close,
+                  color: warm ? pcInkSoft : dqInk),
             ),
             const Spacer(),
-            // Coin balance display
             const Text('✦',
-                style: TextStyle(color: Color(0xFFFFD700), fontSize: 16)),
+                style: TextStyle(color: Color(0xFFE0A030), fontSize: 16)),
             const SizedBox(width: 3),
-            Text('$_coinBalance', style: dqText(size: 14, color: dqGold)),
+            Text('$_coinBalance',
+                style: warm
+                    ? dqInkText(size: 14, w: FontWeight.w800, color: pcInkSoft)
+                    : dqText(size: 14, color: dqGold)),
             const SizedBox(width: 8),
           ],
         ),
@@ -625,29 +631,41 @@ class _NazoScreenState extends State<NazoScreen> {
           width: double.infinity,
           padding: const EdgeInsets.fromLTRB(14, 8, 14, 10),
           decoration: BoxDecoration(
-            color: dqBox.withAlpha(150),
+            color: warm ? pcParchment1 : dqBox.withAlpha(150),
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: dqGoldDeep, width: 1.5),
+            border: Border.all(
+                color: warm ? pcFrameBrown : dqGoldDeep, width: warm ? 2 : 1.5),
           ),
           child: Column(
             children: [
               Text(
                 gradeLabelJa(widget.eikenLevel),
                 textAlign: TextAlign.center,
-                style: dqText(
-                    size: 11,
-                    w: FontWeight.w600,
-                    color: dqGold.withAlpha(205),
-                    spacing: 1.5),
+                style: warm
+                    ? dqInkText(
+                        size: 11,
+                        w: FontWeight.w700,
+                        color: pcInkSoft,
+                        spacing: 1.5)
+                    : dqText(
+                        size: 11,
+                        w: FontWeight.w600,
+                        color: dqGold.withAlpha(205),
+                        spacing: 1.5),
               ),
               const SizedBox(height: 3),
               Text(
                 title,
                 textAlign: TextAlign.center,
-                style: dqText(size: 16, w: FontWeight.w800, color: dqGold),
+                style: warm
+                    ? dqInkText(size: 17, w: FontWeight.w800, color: pcInk)
+                    : dqText(size: 16, w: FontWeight.w800, color: dqGold),
               ),
               const SizedBox(height: 6),
-              Container(height: 1, width: 60, color: dqGoldDeep.withAlpha(160)),
+              Container(
+                  height: 1,
+                  width: 60,
+                  color: warm ? pcFrameGold : dqGoldDeep.withAlpha(160)),
             ],
           ),
         ),
@@ -659,7 +677,9 @@ class _NazoScreenState extends State<NazoScreen> {
     final current = _picarat.currentValue;
     final max = picaratMaxForGrade(widget.eikenLevel);
     final isFull = _picarat.wrongCount == 0;
+    const warm = kNazoWarmTheme;
     return DqPanel(
+      warm: warm,
       padding: const EdgeInsets.fromLTRB(14, 8, 14, 10),
       child: Row(
         children: [
@@ -671,17 +691,30 @@ class _NazoScreenState extends State<NazoScreen> {
               children: [
                 Text(
                   'ピカラット',
-                  style: dqText(
-                      size: 11, color: dqGold, w: FontWeight.w800, spacing: 1),
+                  style: warm
+                      ? dqInkText(
+                          size: 11,
+                          color: pcInkSoft,
+                          w: FontWeight.w800,
+                          spacing: 1)
+                      : dqText(
+                          size: 11,
+                          color: dqGold,
+                          w: FontWeight.w800,
+                          spacing: 1),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   '$current / $max',
-                  style: dqText(
-                    size: 18,
-                    w: FontWeight.w800,
-                    color: isFull ? dqGold : const Color(0xFFE89090),
-                  ),
+                  style: warm
+                      ? dqInkText(
+                          size: 18,
+                          w: FontWeight.w800,
+                          color: isFull ? pcInk : pcInkSoft)
+                      : dqText(
+                          size: 18,
+                          w: FontWeight.w800,
+                          color: isFull ? dqGold : const Color(0xFFE89090)),
                 ),
               ],
             ),
@@ -689,7 +722,9 @@ class _NazoScreenState extends State<NazoScreen> {
           if (_picarat.wrongCount > 0)
             Text(
               '↓ まちがい × ${_picarat.wrongCount}',
-              style: dqText(size: 11, color: const Color(0xFFE89090)),
+              style: warm
+                  ? dqInkText(size: 11, color: pcInkSoft)
+                  : dqText(size: 11, color: const Color(0xFFE89090)),
             ),
         ],
       ),
@@ -698,16 +733,16 @@ class _NazoScreenState extends State<NazoScreen> {
 
   /// In-world framing line above the stem — exam content is UNCHANGED below it.
   Widget _framingBox() => DqPanel(
-        // #52 diegetic bridge: this case-briefing is what turns the 英検 stem into
-        // a detective scene ("門番が立ちはだかる… 正しい言葉がもどれば、とけいも
-        // うごきだす"). It was rendered at 13sp — smaller than the stem (19) and
-        // barely above the fine-print gloss (12) — so a child skimmed past the very
-        // text that makes it a GAME, not a quiz. Raise it to 15sp (clear hierarchy
-        // below the stem) and mark the panel 🔍 so it reads as on-scene investigation.
+        // #52 diegetic bridge: this case-briefing turns the 英検 stem into a
+        // detective scene. 15sp = clear hierarchy below the stem; 🔍 marks it as
+        // on-scene investigation. Warm = the Layton casebook "現場" note (#113).
+        warm: kNazoWarmTheme,
         title: '🔍 げんば / The Scene',
         child: Text(
           widget.hotspot.framingJa!,
-          style: dqText(size: 15, w: FontWeight.w500, color: dqInk)
+          style: (kNazoWarmTheme
+                  ? dqInkText(size: 15, w: FontWeight.w500, color: pcInk)
+                  : dqText(size: 15, w: FontWeight.w500, color: dqInk))
               .copyWith(height: 1.7),
         ),
       );
@@ -726,16 +761,22 @@ class _NazoScreenState extends State<NazoScreen> {
           ),
           const SizedBox(height: 16),
           DqDialogBox(
+            warm: kNazoWarmTheme,
             speaker: step.npcName,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(step.npcLine, style: dqText(size: 19, w: FontWeight.w700)),
+                Text(step.npcLine,
+                    style: kNazoWarmTheme
+                        ? dqInkText(size: 19, w: FontWeight.w700, color: pcInk)
+                        : dqText(size: 19, w: FontWeight.w700)),
                 if (step.npcLineJa != null) ...[
                   const SizedBox(height: 8),
                   Text(step.npcLineJa!,
-                      style:
-                          dqText(size: 12, color: dqInk, w: FontWeight.w400)),
+                      style: kNazoWarmTheme
+                          ? dqInkText(
+                              size: 12, color: pcInkSoft, w: FontWeight.w500)
+                          : dqText(size: 12, color: dqInk, w: FontWeight.w400)),
                 ],
               ],
             ),
@@ -804,7 +845,9 @@ class _NazoScreenState extends State<NazoScreen> {
         alignment: Alignment.centerLeft,
         child: Text(
           _step.practicePromptJa ?? '正（ただ）しい答（こた）えをえらぼう',
-          style: dqText(size: 12, color: dqGold),
+          style: kNazoWarmTheme
+              ? dqInkText(size: 12, w: FontWeight.w700, color: pcInkSoft)
+              : dqText(size: 12, color: dqGold),
         ),
       );
 

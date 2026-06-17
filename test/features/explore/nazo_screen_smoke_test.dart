@@ -182,7 +182,12 @@ void main() {
       // the burst + 「▶ ナゾ、解けた！」 finish button appear only after a ~550ms read
       // window. Pump past it, then tap the early-skip button.
       await tester.pump(const Duration(milliseconds: 600));
-      await tester.tap(find.textContaining('解'));
+      // The warm casebook panels (#113) make the content taller, so the finish
+      // button can sit below the fold — scroll it into view before tapping.
+      final finish = find.textContaining('解');
+      await tester.ensureVisible(finish);
+      await tester.pump();
+      await tester.tap(finish);
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 400));
       return captured;
