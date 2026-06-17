@@ -43,6 +43,7 @@ import 'practice_encouragement.dart';
 import '../quest/ui/muted_voice_banner.dart';
 import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
+import 'vocab_review_store.dart';
 
 class ListeningPracticeScreen extends StatefulWidget {
   const ListeningPracticeScreen({
@@ -95,9 +96,11 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
   // skill would inflate the 合格率 with un-heard answers. We therefore (a) mark
   // each item's audio availability, (b) show an honest 準備中 note instead of a
   // dead 🔊, and (c) feed 合格率 ONLY the items the child could actually hear.
-  // [_audioOk] defaults true (AudioAssets.exists degrades to "present" if the
-  // manifest can't be read) so a real clip is never wrongly excluded.
-  List<bool> _audioOk = const [];
+  // Tracked by audioKey (not list index) so the #118 due-reorder of [_items]
+  // can't desync it — an item is "missing" only if its clip is genuinely not
+  // bundled. Defaults empty = everything present (AudioAssets.exists degrades to
+  // "present" if the manifest can't be read), so a real clip is never excluded.
+  final Set<String> _audioMissing = {};
   int _measuredTotal = 0; // items answered with real, audible audio
   int _measuredCorrect = 0; // correct among those
 
@@ -120,17 +123,39 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
       return it.copyWith(choices: s.choices, correctIndex: s.correctIdx);
     }).toList();
     _partHeaderShown = _items.isEmpty;
-    // Probe each item's audio availability (manifest-based, no byte load). Starts
-    // optimistic (all true) so an item is never wrongly excluded before the check
-    // resolves; flips an item false only if its clip is genuinely not bundled.
-    _audioOk = List<bool>.filled(_items.length, true);
-    for (var i = 0; i < _items.length; i++) {
-      final idx = i;
-      AudioAssets.exists('audio/listening/${_items[i].audioKey}').then((ok) {
-        if (mounted && !ok) setState(() => _audioOk[idx] = false);
+    // Probe each item's audio availability (manifest-based, no byte load). Keyed
+    // by audioKey so the result survives the #118 due-reorder; flips an item to
+    // "missing" only if its clip is genuinely not bundled.
+    for (final it in _items) {
+      final key = it.audioKey;
+      AudioAssets.exists('audio/listening/$key').then((ok) {
+        if (mounted && !ok) setState(() => _audioMissing.add(key));
       });
     }
     _loadCaptionPref();
+    _applyDueOrder();
+  }
+
+  /// #118: FSRS error-corrective re-testing — a listening item the child got
+  /// WRONG is rescheduled and surfaced FIRST next session, not just counted.
+  /// Keyed by audioKey (stable per item).
+  final _reviewStore = VocabReviewStore(section: 'listening');
+
+  Future<void> _applyDueOrder() async {
+    try {
+      final due = await _reviewStore.dueReviewKeys(widget.eikenGrade);
+      if (due.isEmpty || !mounted || _currentIdx != 0 || _answered) return;
+      setState(() {
+        _items.sort((a, b) {
+          final ad = due.contains(VocabReviewStore.keyFor(a.audioKey)) ? 0 : 1;
+          final bd = due.contains(VocabReviewStore.keyFor(b.audioKey)) ? 0 : 1;
+          return ad - bd; // previously-missed clips first
+        });
+        _partHeaderShown = _items.isEmpty;
+      });
+    } catch (_) {
+      // Non-fatal — keep the load order.
+    }
   }
 
   /// Deaf/HoH "read the script" mode (#125): when ON, the スクリプト is shown
@@ -164,8 +189,8 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
   /// A muted/captioned/un-played child did not actually HEAR it, so it stays out
   /// of the by-ear 合格率 (#112/#125/#R5).
   bool get _currentMeasurable =>
-      _currentIdx < _audioOk.length &&
-      _audioOk[_currentIdx] &&
+      _current != null &&
+      !_audioMissing.contains(_current!.audioKey) &&
       !AudioMute.voiceMuted &&
       !_captionsOn &&
       _playedCurrent;
@@ -221,7 +246,17 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
       }
     });
     // Game-feel (#51): a haptic tick + chime so answering feels responsive.
-    PracticeFeedback.answered(correct: idx == item.correctIndex);
+    final correct = idx == item.correctIndex;
+    PracticeFeedback.answered(correct: correct);
+    // #118: reschedule this clip via FSRS — wrong → comes back soon; a correct
+    // answer that wasn't a clean by-ear result (captioned / not played) is "hard"
+    // (not mastered), a clean by-ear correct is "good". Fire-and-forget.
+    _reviewStore.recordAnswer(
+      grade: widget.eikenGrade,
+      word: item.audioKey,
+      correct: correct,
+      hinted: !measurable,
+    );
     // a11y (WCAG 4.1.3): speak the verdict AND the teaching. The transcript and
     // 解説 are revealed only VISUALLY below, so a screen-reader child would hear
     // "ふせいかい" and miss the listening learning loop. Parity with vocab_grammar.
@@ -482,13 +517,13 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
                 // toward 合格率 (#112). [_audioOk] starts true so the button is the
                 // default; the note only appears for a genuinely-missing clip.
                 Center(
-                  child:
-                      (_currentIdx < _audioOk.length && !_audioOk[_currentIdx])
-                          ? _missingAudioNote()
-                          : DqReplayButton(
-                              label: '🔊 もう いちど きく',
-                              onTap: _playAudio,
-                            ),
+                  child: (_current != null &&
+                          _audioMissing.contains(_current!.audioKey))
+                      ? _missingAudioNote()
+                      : DqReplayButton(
+                          label: '🔊 もう いちど きく',
+                          onTap: _playAudio,
+                        ),
                 ),
                 const SizedBox(height: 8),
                 // Deaf/HoH inclusion (#125): read the script instead of hearing it.
