@@ -902,7 +902,10 @@ class _BattleScreenState extends State<BattleScreen>
             Expanded(
               child: _buildFlipCardWithShimmer(),
             ),
-            if (!_isFlipped) _buildTapHint(),
+            // The pre-flip recall cue ("recall the meaning, then tap") lives in
+            // the card itself (after the サイレント rescue frame) — a separate
+            // footer hint here just duplicated it on the most-used screen
+            // (real-render 2026-06-17). The grade buttons take this slot post-flip.
             if (_isFlipped) _buildGradeButtons(),
             const SizedBox(height: 24),
           ],
@@ -1221,15 +1224,6 @@ class _BattleScreenState extends State<BattleScreen>
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildTapHint() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: dqBilingual(
-          'いみを 思（おも）い出（だ）してから タップ', 'Recall the meaning, then tap to check',
-          jpSize: 13, jpColor: dqGoldDeep, enColor: dqGoldDeep),
     );
   }
 
