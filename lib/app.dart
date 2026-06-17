@@ -334,10 +334,13 @@ ThemeData _dqTheme() {
 
 /// Checks SharedPreferences (via [OnboardingStorage]) on first render:
 /// - [OnboardingStorage.isComplete] == false → show [OnboardingFlow]
-/// - [OnboardingStorage.isComplete] == true  → show [WorldMapScreen]
+/// - [OnboardingStorage.isComplete] == true  → show [KotobaHomeScreen]
 ///
 /// On onboarding completion, [OnboardingResult] is persisted via
-/// [OnboardingStorage.save] and the user is forwarded to the world map.
+/// [OnboardingStorage.save] and the user is forwarded to the コトバ探偵 home
+/// ([KotobaHomeScreen], wired at the complete-branch below). NB [WorldMapScreen]
+/// is the now-orphaned legacy hub (only the `/world` fallback route + ?preview),
+/// NOT the live home — this doc previously said WorldMapScreen and was stale.
 /// Every `?preview=<name>` route name, in switch order. Kept beside
 /// [_previewFor] so the offline-render smoke test (test/smoke/preview_routes_
 /// offline_test.dart) can assert EVERY route renders without Firebase — the
