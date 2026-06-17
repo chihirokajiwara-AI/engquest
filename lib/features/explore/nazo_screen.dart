@@ -105,6 +105,11 @@ class _NazoScreenState extends State<NazoScreen> {
   // the game's "wrong" beat also teaches. Null = nothing shown.
   String? _wrongMeaning;
   Timer? _wrongMeaningTimer;
+  // Anchors the wrong-answer teach banner so a wrong tap can scroll it into view
+  // (#100): on a phone the banner sits below the option tiles, so the child who
+  // taps wrong never sees the teaching — the actual learning moment — unless we
+  // bring it on-screen.
+  final GlobalKey _wrongBannerKey = GlobalKey();
   // First-answer tracking for an honest 合格率 signal (#89): record whether the
   // child's very first choice was correct, regardless of later retries.
   bool _firstAttempted = false;
@@ -231,6 +236,22 @@ class _NazoScreenState extends State<NazoScreen> {
     final word = _step.options[i].label;
     _wrongMeaningTimer?.cancel();
     setState(() => _wrongMeaning = '$word = $meaning');
+    // Bring the teach on-screen — it renders below the tiles, so on a phone the
+    // child who just tapped wrong wouldn't otherwise see it (#100). Post-frame so
+    // the banner is laid out before we scroll. Reduced-motion-safe: a near-instant
+    // scroll when the OS asks for less motion, a gentle ease otherwise.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final ctx = _wrongBannerKey.currentContext;
+      if (ctx == null) return;
+      final reduceMotion = MediaQuery.maybeOf(ctx)?.disableAnimations ?? false;
+      Scrollable.ensureVisible(
+        ctx,
+        alignment: 0.5,
+        duration:
+            reduceMotion ? Duration.zero : const Duration(milliseconds: 320),
+        curve: Curves.easeOut,
+      );
+    });
     _wrongMeaningTimer = Timer(const Duration(milliseconds: 2400), () {
       if (mounted) setState(() => _wrongMeaning = null);
     });
@@ -404,7 +425,10 @@ class _NazoScreenState extends State<NazoScreen> {
                               // meaning, shown gently (info, not a scold) for ~2.4s.
                               if (_wrongMeaning != null) ...[
                                 const SizedBox(height: 10),
-                                _wrongMeaningBanner(),
+                                KeyedSubtree(
+                                  key: _wrongBannerKey,
+                                  child: _wrongMeaningBanner(),
+                                ),
                               ],
                               if (_revealed) ...[
                                 const SizedBox(height: 12),
