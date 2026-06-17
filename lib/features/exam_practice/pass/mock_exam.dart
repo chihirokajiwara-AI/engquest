@@ -249,7 +249,7 @@ class MockExamAssembler {
       final s = shuffledChoiceSet(it.choices, it.correctIndex, rng);
       return MockMcqItem(
         id: it.audioKey,
-        questionText: it.question,
+        questionText: listeningPromptJa(it),
         choices: s.choices,
         correctIdx: s.correctIdx,
         skill: EikenSkill.listening,

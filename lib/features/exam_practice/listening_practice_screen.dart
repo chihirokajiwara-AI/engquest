@@ -529,7 +529,7 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
                 DqDialogBox(
                   speaker: '問${_currentIdx + 1}',
                   child: Text(
-                    item.question,
+                    listeningPromptJa(item),
                     style: dqText(size: 15, color: dqInk),
                   ),
                 ),
@@ -813,6 +813,9 @@ class ListeningReviewPanel extends StatelessWidget {
                       ),
                       const SizedBox(width: 10),
                       Expanded(
+                        // Review list: keep the item's own question (distinguishes
+                        // rows); the JP task-instruction swap applies to the live
+                        // answering surface, not this recap. See listeningPromptJa.
                         child: Text(
                           item.question,
                           style:

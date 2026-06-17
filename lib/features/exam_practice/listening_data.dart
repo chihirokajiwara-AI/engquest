@@ -115,6 +115,18 @@ enum ListeningQuestionType {
   dialogueQA,
 }
 
+/// The learner-facing question prompt for a listening item. Every 第1部 応答選択
+/// item carries the same generic English instruction "What is the best response?"
+/// — printed only (the audio is just the utterance, see [ListeningItem.transcripts]),
+/// so the youngest learners (年長/小1, CEO 1889) cannot read it. Show it in
+/// Japanese instead — matching the reading screen's instructionJa. A real
+/// comprehension question (dialogue/passage content, often spoken and at higher
+/// grades) is genuine content the learner must answer, so it passes through.
+String listeningPromptJa(ListeningItem item) =>
+    item.questionType == ListeningQuestionType.responseSelect
+        ? 'あう おへんじを えらぼう。'
+        : item.question;
+
 // ── 英検5級 ─────────────────────────────────────────────────────────────────
 
 const _grade5Part1 = <ListeningItem>[
