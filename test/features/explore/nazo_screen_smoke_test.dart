@@ -56,6 +56,8 @@ void main() {
       // Past the teach-first card if present (the case-title is on the quiz).
       final proceed = find.textContaining('こたえてみる');
       if (proceed.evaluate().isNotEmpty) {
+        await tester.ensureVisible(proceed.first);
+        await tester.pump();
         await tester.tap(proceed.first);
         await tester.pump();
         await tester.pump(const Duration(milliseconds: 100));
@@ -170,6 +172,8 @@ void main() {
       // Past the teach-first card if present (the 英検 ナゾ teach before asking).
       final proceed = find.textContaining('こたえてみる');
       if (proceed.evaluate().isNotEmpty) {
+        await tester.ensureVisible(proceed.first);
+        await tester.pump();
         await tester.tap(proceed.first);
         await tester.pump();
         await tester.pump(const Duration(milliseconds: 300));
@@ -302,6 +306,8 @@ void main() {
       // Past the teach-first card if present.
       final proceed = find.textContaining('こたえてみる');
       if (proceed.evaluate().isNotEmpty) {
+        await tester.ensureVisible(proceed.first);
+        await tester.pump();
         await tester.tap(proceed.first);
         await tester.pump();
         await tester.pump(const Duration(milliseconds: 300));
@@ -362,7 +368,10 @@ void main() {
       ));
       await t.pump();
       await t.pump(const Duration(milliseconds: 300));
-      await t.tap(find.textContaining('こたえてみる')); // dismiss teach-first card
+      final teachBtn = find.textContaining('こたえてみる'); // dismiss teach-first card
+      await t.ensureVisible(teachBtn);
+      await t.pump();
+      await t.tap(teachBtn);
       await t.pump();
       expect(find.textContaining(' = '),
           findsNothing); // nothing before a wrong tap

@@ -498,6 +498,7 @@ class _NazoScreenState extends State<NazoScreen> {
 
   Widget _teachScaffold() {
     final card = _teachCard!;
+    const warm = kNazoWarmTheme;
     return DqScene(
       warm: kNazoWarmTheme,
       contentMaxWidth: 600, // #144: centre on tablet, full-width on phone
@@ -512,14 +513,17 @@ class _NazoScreenState extends State<NazoScreen> {
                   IconButton(
                     tooltip: 'とじる / Close',
                     onPressed: _dismiss,
-                    icon: const Icon(Icons.close, color: dqInk),
+                    icon: Icon(warm ? Icons.menu_book : Icons.close,
+                        color: warm ? pcInkSoft : dqInk),
                   ),
                   Expanded(
                     child: Text(
                       'まなびのとき',
                       textAlign: TextAlign.center,
-                      style:
-                          dqText(size: 16, w: FontWeight.w800, color: dqGold),
+                      style: warm
+                          ? dqInkText(
+                              size: 16, w: FontWeight.w800, color: pcInk)
+                          : dqText(size: 16, w: FontWeight.w800, color: dqGold),
                     ),
                   ),
                   const SizedBox(width: 48), // balance the close button
@@ -527,6 +531,7 @@ class _NazoScreenState extends State<NazoScreen> {
               ),
               const SizedBox(height: 8),
               DqPanel(
+                warm: warm,
                 title: card.titleJa,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -534,9 +539,12 @@ class _NazoScreenState extends State<NazoScreen> {
                     if (card.leadJa != null) ...[
                       Text(
                         card.leadJa!,
-                        style:
-                            dqText(size: 13, color: dqInk, w: FontWeight.w500)
-                                .copyWith(height: 1.6),
+                        style: (warm
+                                ? dqInkText(
+                                    size: 13, color: pcInk, w: FontWeight.w500)
+                                : dqText(
+                                    size: 13, color: dqInk, w: FontWeight.w500))
+                            .copyWith(height: 1.6),
                       ),
                       const SizedBox(height: 12),
                     ],
@@ -553,7 +561,10 @@ class _NazoScreenState extends State<NazoScreen> {
               Center(
                 child: Text(
                   'おぼえてから、こたえよう。',
-                  style: dqText(size: 11, color: dqGold),
+                  style: warm
+                      ? dqInkText(
+                          size: 11, w: FontWeight.w600, color: pcInkSoft)
+                      : dqText(size: 11, color: dqGold),
                 ),
               ),
             ],
@@ -563,37 +574,48 @@ class _NazoScreenState extends State<NazoScreen> {
     );
   }
 
-  Widget _teachItemTile(TeachItem it) => Container(
-        width: double.infinity,
-        margin: const EdgeInsets.only(bottom: 10),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-        decoration: BoxDecoration(
-          color: dqBox.withAlpha(230),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: dqGoldDeep.withAlpha(120)),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+  Widget _teachItemTile(TeachItem it) {
+    const warm = kNazoWarmTheme;
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      decoration: BoxDecoration(
+        color: warm ? pcParchment0 : dqBox.withAlpha(230),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+            color: warm ? pcFrameBrown : dqGoldDeep.withAlpha(120),
+            width: warm ? 1.5 : 1),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            it.en,
+            style: warm
+                ? dqInkText(size: 22, w: FontWeight.w800, color: pcInk)
+                : dqText(size: 22, w: FontWeight.w800, color: dqGold),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            it.ja,
+            style: warm
+                ? dqInkText(size: 18, w: FontWeight.w700, color: pcInkSoft)
+                : dqText(size: 18, w: FontWeight.w700, color: dqInk),
+          ),
+          if (it.whenJa != null) ...[
+            const SizedBox(height: 4),
             Text(
-              it.en,
-              style: dqText(size: 22, w: FontWeight.w800, color: dqGold),
+              '・${it.whenJa!}',
+              style: warm
+                  ? dqInkText(size: 12, color: pcInkSoft, w: FontWeight.w400)
+                  : dqText(size: 12, color: dqInk, w: FontWeight.w400),
             ),
-            const SizedBox(height: 2),
-            Text(
-              it.ja,
-              style: dqText(size: 18, w: FontWeight.w700, color: dqInk),
-            ),
-            if (it.whenJa != null) ...[
-              const SizedBox(height: 4),
-              Text(
-                '・${it.whenJa!}',
-                style: dqText(size: 12, color: dqInk, w: FontWeight.w400),
-              ),
-            ],
           ],
-        ),
-      );
+        ],
+      ),
+    );
+  }
 
   Widget _header() {
     // Case-identity plate (#61): every ナゾ now opens with a NAMED identity — whose
