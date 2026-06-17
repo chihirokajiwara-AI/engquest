@@ -1101,8 +1101,13 @@ class _SolveBurstPainter extends CustomPainter {
     final maxR = size.shortestSide * 0.55;
     final fade = (1.0 - t).clamp(0.0, 1.0);
 
-    // 1. Radial bloom.
-    final bloomR = maxR * (0.25 + 0.95 * t);
+    // 1. Radial bloom — originates from a POINT and punches outward (#98 R2-#3:
+    // the easeOut curve made it spring into existence already at 25% radius = a
+    // ghost that fades in, not a hit that lands). Starting at ~0 + easeOut's fast
+    // early rise reads as an impact; peak radius (1.20·maxR) is preserved. The
+    // burst mounts AFTER the 550ms read window, so a sharper punch only helps it
+    // re-connect to the solve (the reconcile #98 flagged).
+    final bloomR = maxR * (0.02 + 1.18 * t);
     canvas.drawCircle(
       center,
       bloomR,
@@ -1117,9 +1122,11 @@ class _SolveBurstPainter extends CustomPainter {
         ).createShader(Rect.fromCircle(center: center, radius: bloomR)),
     );
 
-    // 2. Radiating rays — thin gold spokes that shoot out and recede.
-    final rayLen = maxR * (0.35 + 1.05 * t);
-    final rayInner = maxR * 0.10;
+    // 2. Radiating rays — thin gold spokes that shoot out and recede. Also
+    // shoot from near-centre (#98) so they read as thrown FROM the impact point,
+    // not as pre-existing spokes; peak length (1.40·maxR) preserved.
+    final rayLen = maxR * (0.05 + 1.35 * t);
+    final rayInner = maxR * 0.06;
     final rayPaint = Paint()
       ..color = _gold.withAlpha(_a(0.85 * fade))
       ..strokeWidth = 2.0
