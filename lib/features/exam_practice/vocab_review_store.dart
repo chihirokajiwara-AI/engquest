@@ -20,13 +20,28 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/fsrs/fsrs_algorithm.dart';
 import '../../core/fsrs/fsrs_card.dart';
 
+/// Per-section FSRS error-corrective review store. Originally vocab-only (大問1);
+/// now generic so reading / listening / conversation / word-order / scene ナゾ can
+/// each re-test what the child MISSED, not just count it (#118 — the testing
+/// effect + spacing is the most-replicated route to actually raising 合格率).
+/// One JSON map of {itemKey → FSRSCard} per (section, grade) in SharedPreferences.
+/// [section] namespaces the store; the default 'vocab' keeps the original prefs
+/// key so existing 大問1 review data is preserved. (Class name kept for now to
+/// avoid churning the working vocab path; a rename to ExamReviewStore is queued.)
 class VocabReviewStore {
-  VocabReviewStore({FSRSAlgorithm? algorithm})
+  VocabReviewStore({this.section = 'vocab', FSRSAlgorithm? algorithm})
       : _fsrs = algorithm ?? FSRSAlgorithm();
 
   final FSRSAlgorithm _fsrs;
 
-  static String _prefsKey(String grade) => 'vocab_fsrs_$grade';
+  /// Storage namespace (e.g. 'vocab', 'reading', 'listening'). Keeps each
+  /// section's review schedule independent so a missed listening item doesn't
+  /// collide with a vocab word that happens to share a key.
+  final String section;
+
+  String _prefsKey(String grade) => section == 'vocab'
+      ? 'vocab_fsrs_$grade'
+      : 'fsrs_review_${section}_$grade';
 
   /// Normalise a word to a stable per-grade key.
   static String keyFor(String word) => word.trim().toLowerCase();

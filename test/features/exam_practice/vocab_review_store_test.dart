@@ -63,4 +63,25 @@ void main() {
     final prefs = await SharedPreferences.getInstance();
     expect(prefs.getString('vocab_fsrs_4'), isNull);
   });
+
+  test(
+      'sections are namespaced — wordorder uses its own key, no vocab collision',
+      () async {
+    // #118: each exam section gets an independent FSRS review schedule, so a
+    // missed 語句整序 sentence can re-test without colliding with a vocab word.
+    final wo = VocabReviewStore(section: 'wordorder');
+    await wo.recordAnswer(grade: '5', word: '彼は古い写真を見せてくれた。', correct: false);
+    final prefs = await SharedPreferences.getInstance();
+    expect(prefs.getString('fsrs_review_wordorder_5'), isNotNull,
+        reason: 'wordorder writes to its own namespace');
+    expect(prefs.getString('vocab_fsrs_5'), isNull,
+        reason: 'and must NOT leak into the legacy vocab key');
+    // The default section still uses the ORIGINAL key — existing 大問1 review
+    // data is preserved, not orphaned under a new scheme.
+    await VocabReviewStore()
+        .recordAnswer(grade: '5', word: 'apple', correct: false);
+    expect(prefs.getString('vocab_fsrs_5'), isNotNull);
+    expect(prefs.getString('fsrs_review_vocab_5'), isNull,
+        reason: 'default section keeps the legacy key for backward compat');
+  });
 }

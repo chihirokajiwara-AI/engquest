@@ -15,6 +15,7 @@ import 'choice_shuffle.dart';
 import 'eiken_exam_config.dart';
 import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
+import 'vocab_review_store.dart';
 import '../home/streak_service.dart';
 import '../../core/gamification/xp_service.dart';
 import 'exam_session_rewards.dart';
@@ -80,6 +81,10 @@ class WordOrderingPracticeScreen extends StatefulWidget {
 class _WordOrderingPracticeScreenState
     extends State<WordOrderingPracticeScreen> {
   late List<_OrderingProblem> _problems;
+  // #118: FSRS error-corrective re-testing — a 語句整序 the child got WRONG (or
+  // needed the rule for) is rescheduled and surfaced FIRST next session, instead
+  // of only ticking the 合格メーター. Keyed by the JP sentence (stable per item).
+  final _reviewStore = VocabReviewStore(section: 'wordorder');
   int _currentIdx = 0;
   List<String> _selectedWords = [];
   List<String> _remainingWords = [];
@@ -105,6 +110,30 @@ class _WordOrderingPracticeScreenState
     super.initState();
     _problems = _generateProblems(widget.eikenGrade);
     _resetProblem();
+    _applyDueOrder();
+  }
+
+  /// #118: bias this session so previously-MISSED sentences (FSRS-due) come first
+  /// — the testing effect needs the failed item to actually come back. Async
+  /// (SharedPreferences) and only reorders before the child has started, so it
+  /// never yanks a mid-session item. No due cards (first visit) → keep the order.
+  Future<void> _applyDueOrder() async {
+    try {
+      final due = await _reviewStore.dueReviewKeys(widget.eikenGrade);
+      if (due.isEmpty || !mounted || _currentIdx != 0 || _answered) return;
+      setState(() {
+        _problems.sort((a, b) {
+          final ad =
+              due.contains(VocabReviewStore.keyFor(a.jpSentence)) ? 0 : 1;
+          final bd =
+              due.contains(VocabReviewStore.keyFor(b.jpSentence)) ? 0 : 1;
+          return ad - bd; // previously-missed sentences first
+        });
+        _resetProblem(); // rebuild the now-first problem's scramble state
+      });
+    } catch (_) {
+      // Non-fatal — keep the generated order.
+    }
   }
 
   void _resetProblem() {
@@ -166,6 +195,14 @@ class _WordOrderingPracticeScreenState
         if (isCorrect) _unaidedCorrect++;
       }
     });
+    // #118: reschedule this sentence via FSRS — wrong → comes back soon, rule-
+    // assisted → "hard" (not mastered), clean correct → "good". Fire-and-forget.
+    _reviewStore.recordAnswer(
+      grade: widget.eikenGrade,
+      word: p.jpSentence,
+      correct: isCorrect,
+      hinted: _hintShown,
+    );
     // Game-feel (#51): a haptic tick + chime so answering feels responsive.
     PracticeFeedback.answered(correct: isCorrect);
     // a11y (WCAG 4.1.3): speak the verdict AND the teaching. The correct order
