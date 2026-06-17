@@ -122,18 +122,21 @@ class QuestTitleScreen extends StatelessWidget {
           ),
           errorBuilder: (_, __, ___) => const SizedBox.shrink(),
         ),
-        // darken for logo/menu legibility
+        // Legibility scrim — kept light so the painted title_bg reads as the
+        // STAR (Layton's title is its painterly scene, not a near-black field).
+        // The logo is stroke-outlined + shadowed and the menu items are boxed, so
+        // they stay readable over the lighter map (CEO 1904 quality bar).
         DecoratedBox(
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Colors.black.withAlpha(150),
-                Colors.black.withAlpha(70),
-                Colors.black.withAlpha(190)
+                Colors.black.withAlpha(85),
+                Colors.black.withAlpha(20),
+                Colors.black.withAlpha(140)
               ],
-              stops: const [0.0, 0.5, 1.0],
+              stops: const [0.0, 0.45, 1.0],
             ),
           ),
         ),
