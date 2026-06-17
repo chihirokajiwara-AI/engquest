@@ -33,6 +33,26 @@ class ReadingMockItem extends MockMcqItem {
   }) : super(skill: EikenSkill.reading);
 }
 
+/// Map an English *instruction* line (e.g. "Choose the best word for the blank.")
+/// to a child-readable Japanese one. The target audience floor is 6 (年長/小1,
+/// CEO 1889) and real 英検 prints its instructions in Japanese — an English
+/// imperative the learner cannot read is a usability + authenticity defect. Only
+/// the closed set of INSTRUCTION strings is translated; an actual comprehension
+/// QUESTION ("Why was Kenji nervous?") is genuine English content and passes
+/// through unchanged. Pure hiragana keeps every glyph inside the bundled font
+/// subset (no tofu) and readable by the youngest learners.
+String instructionJa(String en) {
+  switch (en.trim()) {
+    case 'Choose the best word for the blank.':
+    case 'Choose the best phrase for the blank.':
+      return 'ぶんに あう ことばを えらぼう。';
+    case 'Choose the best response.':
+      return 'あう おへんじを えらぼう。';
+    default:
+      return en; // a real English comprehension question — leave it.
+  }
+}
+
 // ── Seed items (public, R1-compliant) ────────────────────────────────────────
 
 /// Returns reading mock items for [grade].
@@ -52,7 +72,7 @@ List<MockMcqItem> readingItemsFor(String grade) => (_kReadingPool[grade] ??
     // "Choose the best word for the blank." with no sentence to answer.
     .map((r) => MockMcqItem(
           id: r.id,
-          questionText: '${r.passageText}\n\n${r.questionText}',
+          questionText: '${r.passageText}\n\n${instructionJa(r.questionText)}',
           choices: r.choices,
           correctIdx: r.correctIdx,
           skill: EikenSkill.reading,
