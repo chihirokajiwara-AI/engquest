@@ -1,4 +1,4 @@
-// lib/features/exam_practice/vocab_review_store.dart
+// lib/features/exam_practice/exam_review_store.dart
 //
 // Spaced-repetition memory for the 英検 vocab practice flow (flaw-hunt #119).
 // The exam vocab screen used to re-shuffle a fresh RANDOM set every session, so
@@ -28,8 +28,8 @@ import '../../core/fsrs/fsrs_card.dart';
 /// [section] namespaces the store; the default 'vocab' keeps the original prefs
 /// key so existing 大問1 review data is preserved. (Class name kept for now to
 /// avoid churning the working vocab path; a rename to ExamReviewStore is queued.)
-class VocabReviewStore {
-  VocabReviewStore({this.section = 'vocab', FSRSAlgorithm? algorithm})
+class ExamReviewStore {
+  ExamReviewStore({this.section = 'vocab', FSRSAlgorithm? algorithm})
       : _fsrs = algorithm ?? FSRSAlgorithm();
 
   final FSRSAlgorithm _fsrs;

@@ -157,7 +157,7 @@ class InMemoryFsrsCardRepository implements FsrsCardRepository {
 /// as one JSON map per user, so a child's spaced-repetition memory SURVIVES a
 /// page reload — including OFFLINE, where Firestore is unreachable and the deck
 /// would otherwise live only in a wiped-on-reload in-memory Map (flaw-hunt
-/// 2026-06-13). Mirrors VocabReviewStore's prefs pattern. The other progress
+/// 2026-06-13). Mirrors ExamReviewStore's prefs pattern. The other progress
 /// stores (streak / 合格率 / scene-solved / review) already persist this way;
 /// this gives the FSRS deck — the spaced-repetition core — the same durability.
 class PrefsFsrsCardRepository implements FsrsCardRepository {

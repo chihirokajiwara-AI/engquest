@@ -22,7 +22,7 @@ import 'eiken_exam_config.dart';
 import 'practice_encouragement.dart';
 import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
-import 'vocab_review_store.dart';
+import 'exam_review_store.dart';
 import '../quest/ui/dq_ui.dart';
 import '../home/streak_service.dart';
 import '../../core/gamification/xp_service.dart';
@@ -94,7 +94,7 @@ class VocabGrammarPracticeScreen extends StatefulWidget {
 class _VocabGrammarPracticeScreenState
     extends State<VocabGrammarPracticeScreen> {
   final _vocabRepo = VocabRepository();
-  final _reviewStore = VocabReviewStore();
+  final _reviewStore = ExamReviewStore();
   final _rng = Random();
 
   // Tap-to-hear the answer word in feedback (CEO 1132 non-reader lens): a true
@@ -217,8 +217,8 @@ class _VocabGrammarPracticeScreenState
         final due = await _reviewStore.dueReviewKeys(widget.eikenGrade);
         if (due.isNotEmpty) {
           eligible.sort((a, b) {
-            final ad = due.contains(VocabReviewStore.keyFor(a.word)) ? 0 : 1;
-            final bd = due.contains(VocabReviewStore.keyFor(b.word)) ? 0 : 1;
+            final ad = due.contains(ExamReviewStore.keyFor(a.word)) ? 0 : 1;
+            final bd = due.contains(ExamReviewStore.keyFor(b.word)) ? 0 : 1;
             return ad - bd; // due words first; stable within each tier
           });
         }

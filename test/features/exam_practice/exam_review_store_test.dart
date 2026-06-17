@@ -1,4 +1,4 @@
-// test/features/exam_practice/vocab_review_store_test.dart
+// test/features/exam_practice/exam_review_store_test.dart
 // #119: spaced repetition in the 英検 vocab flow. Locks that answers are
 // scheduled via FSRS and that DUE (previously-missed, now-forgotten) words are
 // the ones surfaced — so a session re-teaches what was missed, not random recall.
@@ -8,14 +8,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:engquest/core/fsrs/fsrs_card.dart';
-import 'package:engquest/features/exam_practice/vocab_review_store.dart';
+import 'package:engquest/features/exam_practice/exam_review_store.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   setUp(() => SharedPreferences.setMockInitialValues({}));
 
   test('recordAnswer persists a scheduled card (reps incremented)', () async {
-    final store = VocabReviewStore();
+    final store = ExamReviewStore();
     await store.recordAnswer(grade: '5', word: 'Apple', correct: false);
     // A wrong answer schedules the word; it now exists in the deck with reps>0.
     final prefs = await SharedPreferences.getInstance();
@@ -41,7 +41,7 @@ void main() {
     };
     SharedPreferences.setMockInitialValues({'vocab_fsrs_5': jsonEncode(seed)});
 
-    final due = await VocabReviewStore().dueReviewKeys('5');
+    final due = await ExamReviewStore().dueReviewKeys('5');
     expect(due, contains('forgot'));
     expect(due, isNot(contains('fresh')), reason: 'future due-date not yet');
     expect(due, isNot(contains('newword')), reason: 'never-seen = fill pool');
@@ -49,7 +49,7 @@ void main() {
 
   test('a correct unaided answer is NOT immediately due again (good schedule)',
       () async {
-    final store = VocabReviewStore();
+    final store = ExamReviewStore();
     await store.recordAnswer(grade: '5', word: 'dog', correct: true);
     final due = await store.dueReviewKeys('5');
     expect(due, isNot(contains('dog')),
@@ -58,7 +58,7 @@ void main() {
   });
 
   test('grades are namespaced — 5級 reviews do not leak into 4級', () async {
-    final store = VocabReviewStore();
+    final store = ExamReviewStore();
     await store.recordAnswer(grade: '5', word: 'cat', correct: false);
     final prefs = await SharedPreferences.getInstance();
     expect(prefs.getString('vocab_fsrs_4'), isNull);
@@ -69,7 +69,7 @@ void main() {
       () async {
     // #118: each exam section gets an independent FSRS review schedule, so a
     // missed 語句整序 sentence can re-test without colliding with a vocab word.
-    final wo = VocabReviewStore(section: 'wordorder');
+    final wo = ExamReviewStore(section: 'wordorder');
     await wo.recordAnswer(grade: '5', word: '彼は古い写真を見せてくれた。', correct: false);
     final prefs = await SharedPreferences.getInstance();
     expect(prefs.getString('fsrs_review_wordorder_5'), isNotNull,
@@ -78,7 +78,7 @@ void main() {
         reason: 'and must NOT leak into the legacy vocab key');
     // The default section still uses the ORIGINAL key — existing 大問1 review
     // data is preserved, not orphaned under a new scheme.
-    await VocabReviewStore()
+    await ExamReviewStore()
         .recordAnswer(grade: '5', word: 'apple', correct: false);
     expect(prefs.getString('vocab_fsrs_5'), isNotNull);
     expect(prefs.getString('fsrs_review_vocab_5'), isNull,

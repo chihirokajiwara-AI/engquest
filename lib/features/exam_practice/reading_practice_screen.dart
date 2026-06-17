@@ -22,7 +22,7 @@ import 'practice_encouragement.dart';
 import 'choice_shuffle.dart';
 import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
-import 'vocab_review_store.dart';
+import 'exam_review_store.dart';
 
 /// Returns [q] with its choices shuffled and [correctIdx] remapped. The authored
 /// reading keys cluster at idx 1–2 (93%); shuffling at load removes that
@@ -203,7 +203,7 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
   // #118: FSRS error-corrective re-testing — a passage holding a question the
   // child got WRONG is surfaced FIRST next session (re-read → re-answer), not
   // just counted. Keyed by the question text (stable per item).
-  final _reviewStore = VocabReviewStore(section: 'reading');
+  final _reviewStore = ExamReviewStore(section: 'reading');
   int _passageIdx = 0;
   int _questionIdx = 0;
   int? _selectedAnswer;
@@ -276,7 +276,7 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
         return;
       }
       bool hasDue(_ReadingPassage p) => p.questions
-          .any((q) => due.contains(VocabReviewStore.keyFor(q.question)));
+          .any((q) => due.contains(ExamReviewStore.keyFor(q.question)));
       setState(() {
         _passages.sort((a, b) => (hasDue(a) ? 0 : 1) - (hasDue(b) ? 0 : 1));
         _questionShownAt = DateTime.now(); // restart the read clock for new Q1

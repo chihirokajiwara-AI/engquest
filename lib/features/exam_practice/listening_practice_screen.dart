@@ -43,7 +43,7 @@ import 'practice_encouragement.dart';
 import '../quest/ui/muted_voice_banner.dart';
 import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
-import 'vocab_review_store.dart';
+import 'exam_review_store.dart';
 
 class ListeningPracticeScreen extends StatefulWidget {
   const ListeningPracticeScreen({
@@ -139,7 +139,7 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
   /// #118: FSRS error-corrective re-testing — a listening item the child got
   /// WRONG is rescheduled and surfaced FIRST next session, not just counted.
   /// Keyed by audioKey (stable per item).
-  final _reviewStore = VocabReviewStore(section: 'listening');
+  final _reviewStore = ExamReviewStore(section: 'listening');
 
   Future<void> _applyDueOrder() async {
     try {
@@ -147,8 +147,8 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
       if (due.isEmpty || !mounted || _currentIdx != 0 || _answered) return;
       setState(() {
         _items.sort((a, b) {
-          final ad = due.contains(VocabReviewStore.keyFor(a.audioKey)) ? 0 : 1;
-          final bd = due.contains(VocabReviewStore.keyFor(b.audioKey)) ? 0 : 1;
+          final ad = due.contains(ExamReviewStore.keyFor(a.audioKey)) ? 0 : 1;
+          final bd = due.contains(ExamReviewStore.keyFor(b.audioKey)) ? 0 : 1;
           return ad - bd; // previously-missed clips first
         });
         _partHeaderShown = _items.isEmpty;

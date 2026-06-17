@@ -13,7 +13,7 @@ import 'practice_encouragement.dart';
 import 'choice_shuffle.dart';
 import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
-import 'vocab_review_store.dart';
+import 'exam_review_store.dart';
 import '../quest/ui/dq_ui.dart';
 import '../../core/sound/practice_feedback.dart';
 import 'practice_result_stars.dart';
@@ -80,7 +80,7 @@ class _ConversationPracticeScreenState
   // #118: FSRS error-corrective re-testing — a 会話 the child answered WRONG is
   // rescheduled and surfaced FIRST next session, not just counted. Keyed by the
   // conversation text (speakerA+speakerB), stable per item.
-  final _reviewStore = VocabReviewStore(section: 'conversation');
+  final _reviewStore = ExamReviewStore(section: 'conversation');
   int _currentIdx = 0;
   int? _selectedAnswer;
   bool _answered = false;
@@ -126,7 +126,7 @@ class _ConversationPracticeScreenState
 
   /// Stable per-item key for FSRS review — the conversation text itself.
   static String _itemKey(_ConversationProblem p) =>
-      VocabReviewStore.keyFor('${p.speakerA} ${p.speakerB}');
+      ExamReviewStore.keyFor('${p.speakerA} ${p.speakerB}');
 
   /// #118: surface previously-MISSED conversations (FSRS-due) first this session,
   /// so the failed item actually comes back. Async (SharedPreferences); only

@@ -15,7 +15,7 @@ import 'choice_shuffle.dart';
 import 'eiken_exam_config.dart';
 import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
-import 'vocab_review_store.dart';
+import 'exam_review_store.dart';
 import '../home/streak_service.dart';
 import '../../core/gamification/xp_service.dart';
 import 'exam_session_rewards.dart';
@@ -84,7 +84,7 @@ class _WordOrderingPracticeScreenState
   // #118: FSRS error-corrective re-testing — a 語句整序 the child got WRONG (or
   // needed the rule for) is rescheduled and surfaced FIRST next session, instead
   // of only ticking the 合格メーター. Keyed by the JP sentence (stable per item).
-  final _reviewStore = VocabReviewStore(section: 'wordorder');
+  final _reviewStore = ExamReviewStore(section: 'wordorder');
   int _currentIdx = 0;
   List<String> _selectedWords = [];
   List<String> _remainingWords = [];
@@ -123,10 +123,8 @@ class _WordOrderingPracticeScreenState
       if (due.isEmpty || !mounted || _currentIdx != 0 || _answered) return;
       setState(() {
         _problems.sort((a, b) {
-          final ad =
-              due.contains(VocabReviewStore.keyFor(a.jpSentence)) ? 0 : 1;
-          final bd =
-              due.contains(VocabReviewStore.keyFor(b.jpSentence)) ? 0 : 1;
+          final ad = due.contains(ExamReviewStore.keyFor(a.jpSentence)) ? 0 : 1;
+          final bd = due.contains(ExamReviewStore.keyFor(b.jpSentence)) ? 0 : 1;
           return ad - bd; // previously-missed sentences first
         });
         _resetProblem(); // rebuild the now-first problem's scramble state
