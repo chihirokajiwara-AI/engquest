@@ -244,7 +244,10 @@ class _NazoScreenState extends State<NazoScreen> {
   // word's meaning at the error moment. liveRegion so a screen-reader child hears
   // the teaching, not just feels the shake.
   Widget _wrongMeaningBanner() {
-    const teal = Color(0xFF4FC3F7);
+    const warm = kNazoWarmTheme;
+    // Warm casebook note (terracotta on parchment) instead of the cold teal that
+    // clashes with the Layton palette (#113). Still a gentle teach, not a scold.
+    final accent = warm ? const Color(0xFFB5683C) : const Color(0xFF4FC3F7);
     return Semantics(
       liveRegion: true,
       label: 'ヒント。${_wrongMeaning ?? ''}',
@@ -253,9 +256,9 @@ class _NazoScreenState extends State<NazoScreen> {
         width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
         decoration: BoxDecoration(
-          color: teal.withAlpha(28),
+          color: warm ? pcParchment0 : accent.withAlpha(28),
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: teal.withAlpha(150)),
+          border: Border.all(color: accent.withAlpha(warm ? 170 : 150)),
         ),
         child: Row(
           children: [
@@ -263,7 +266,9 @@ class _NazoScreenState extends State<NazoScreen> {
             const SizedBox(width: 8),
             Expanded(
               child: Text(_wrongMeaning ?? '',
-                  style: dqText(size: 14, w: FontWeight.w700)),
+                  style: warm
+                      ? dqInkText(size: 14, w: FontWeight.w700, color: pcInk)
+                      : dqText(size: 14, w: FontWeight.w700)),
             ),
           ],
         ),
@@ -915,6 +920,7 @@ class _NazoScreenState extends State<NazoScreen> {
         : defaultHintsForLevel(widget.eikenLevel);
 
     return DqPanel(
+      warm: kNazoWarmTheme,
       title: 'ひらめきコイン ヒント',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -934,6 +940,7 @@ class _NazoScreenState extends State<NazoScreen> {
   Widget _hintTile(int tier, NazoHint hint) {
     final unlocked = _hintsShown >= tier;
     final cost = HintCoinService.costForTier(tier);
+    const warm = kNazoWarmTheme;
     return GestureDetector(
       onTap: (unlocked || _coinLoading || _revealed)
           ? null
@@ -943,11 +950,15 @@ class _NazoScreenState extends State<NazoScreen> {
         padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
         decoration: BoxDecoration(
           color: unlocked
-              ? const Color(0xFF1A3522).withAlpha(210)
-              : dqBox.withAlpha(200),
+              ? (warm
+                  ? const Color(0xFFE4EFD0)
+                  : const Color(0xFF1A3522).withAlpha(210))
+              : (warm ? pcParchment0 : dqBox.withAlpha(200)),
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: unlocked ? const Color(0xFF8BE08B) : dqGoldDeep,
+            color: unlocked
+                ? (warm ? const Color(0xFF6FAE6F) : const Color(0xFF8BE08B))
+                : (warm ? pcFrameBrown : dqGoldDeep),
             width: 1.5,
           ),
         ),
@@ -958,29 +969,41 @@ class _NazoScreenState extends State<NazoScreen> {
               style: TextStyle(
                 fontSize: 18,
                 color: unlocked
-                    ? const Color(0xFFFFD700)
-                    : const Color(0xFFB8923C),
+                    ? const Color(0xFFE0A030)
+                    : (warm ? pcFrameGold : const Color(0xFFB8923C)),
               ),
             ),
             const SizedBox(width: 8),
             Expanded(
               child: unlocked
                   ? Text(hint.textJa,
-                      style: dqText(size: 13, w: FontWeight.w500, color: dqInk)
+                      style: (warm
+                              ? dqInkText(
+                                  size: 13, w: FontWeight.w500, color: pcInk)
+                              : dqText(
+                                  size: 13, w: FontWeight.w500, color: dqInk))
                           .copyWith(height: 1.6))
                   : Text(
                       'T$tier ヒント — コイン $cost 枚（まい）',
-                      style: dqText(size: 13, color: dqGold),
+                      style: warm
+                          ? dqInkText(
+                              size: 13, w: FontWeight.w600, color: pcInkSoft)
+                          : dqText(size: 13, color: dqGold),
                     ),
             ),
             if (!unlocked)
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text('✦',
-                      style: TextStyle(color: Color(0xFFFFD700), fontSize: 13)),
+                  Text('✦',
+                      style: TextStyle(
+                          color: warm ? pcFrameGold : const Color(0xFFE0A030),
+                          fontSize: 13)),
                   const SizedBox(width: 2),
-                  Text('$cost', style: dqText(size: 13, color: dqGold)),
+                  Text('$cost',
+                      style: warm
+                          ? dqInkText(size: 13, color: pcInkSoft)
+                          : dqText(size: 13, color: dqGold)),
                 ],
               ),
           ],
