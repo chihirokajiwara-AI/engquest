@@ -67,3 +67,30 @@ fun; real 合格 = answering REAL 英検 items correctly.
 
 ## Audience guardrail (CEO 1889, memory target-audience-age-6plus)
 5級 candidate is 6+ (年長/小1+) and already decodes → phonics fully OUT of the 5級 core.
+
+## Item 5 — execution scoping (2026-06-17, verified)
+Goal: add a real 英検5級 **大問2 (会話文の文空所補充)** ナゾ to the 5級 scene so the
+detective core covers 大問2, not only 大問1 (lodestar: the 英検 item IS the ナゾ).
+
+**Engineering: NONE needed (verified).** A 大問2 item maps cleanly onto the existing
+`QuestEncounter` that `NazoScreen` already renders — exactly like kCelArticleNazo:
+- `npcLine`  ← the A/B conversation stem with the blank (e.g. "A: Do you like music?  B: ___")
+- `npcLineJa` ← child 日本語 gloss of the situation
+- `choices` / `correctIndex` ← the 4 verified options + key, pulled from the EXISTING
+  verified 5級 会話 bank (`conversationItemsForTest('5')`, already content-QA'd & shuffled),
+  NOT newly authored → no distractor-corruption risk.
+- `onCorrect` ← the bank item's 解説 (teach-why), reworded in-character.
+So this is a CONTENT + framing task, not a rendering task. No new NazoScreen capability,
+no new test infra. Reuses hints/teachCard/framingJa exactly as セル does.
+
+**The ONE open decision — the NPC identity (CEO character-domain).** The case-identity
+header (「<NPC> の ナゾ」) + diegetic framing need a NEW named 5級 villager who diegetically
+presents an overheard/relayed conversation to "restore". Per the CEO's hands-on character
+ownership (タロ 1943, mains 1173), a NEW named character is NOT solo-shipped — it goes
+through the character/world studio + CEO sign-off. The plan's "decide+execute" covers the
+英検-pedagogy wiring (settled above); the *character* is the gated part.
+→ Next action on GO: studio designs the villager (name + 1-line role + secret hook, dusty
+   -teal/brass cohesion) → art via safe-job (grey+colour like セル) → wire the QuestEncounter
+   from a chosen verified 会話 item → content-QA the framing prose → analyze/test → ship.
+大問3 (語句整序) is a SEPARATE follow-up: it is NOT a plain MCQ, so it WOULD need a tile-drag
+ナゾ renderer in NazoScreen (real engineering) — sequence it after 大問2.
