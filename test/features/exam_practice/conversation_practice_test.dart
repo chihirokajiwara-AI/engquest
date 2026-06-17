@@ -162,4 +162,23 @@ void main() {
     expect(find.textContaining('合格率に 入りません'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('#121 no horizontal overflow at a 360px phone width',
+      (tester) async {
+    // Render audit (2026-06-17) flagged the bubble/option tiles reaching the
+    // right edge at 430px. 360 is the smallest common phone (SE-class); a
+    // RenderFlex overflow throws during layout, so a clean pump proves the
+    // exam screen fits the narrowest real device.
+    tester.view.physicalSize = const Size(360, 800);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(const MaterialApp(
+      home: ConversationPracticeScreen(
+        eikenGrade: '5',
+        section: grade5Section,
+      ),
+    ));
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+  });
 }
