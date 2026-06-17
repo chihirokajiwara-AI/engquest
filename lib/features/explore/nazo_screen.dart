@@ -926,6 +926,7 @@ class _NazoScreenState extends State<NazoScreen> {
         label: o.label,
         state: st,
         warm: kNazoWarmTheme,
+        index: i + 1, // #115: numbered answer tiles vs the ✦-coin hint rows
         onAudio: onAudio,
         onChoose: _revealed ? null : () => _choose(i),
       );

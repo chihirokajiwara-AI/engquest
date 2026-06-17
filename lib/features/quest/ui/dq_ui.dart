@@ -947,6 +947,13 @@ class AudioOptionButton extends StatefulWidget {
 
   /// Layton "casebook" warm parchment tile (CEO 1904). Default false = navy.
   final bool warm;
+
+  /// 1-based choice number. When set, a circled digit badge leads the tile so a
+  /// 6歳 non-reader can tell THESE numbered cards are the answer choices — distinct
+  /// from the ✦-coin hint rows below them (#115 affordance). Null = no badge
+  /// (every non-ナゾ caller is unchanged). Arabic digit, not ①②③④, to avoid a
+  /// subset-font tofu.
+  final int? index;
   const AudioOptionButton({
     super.key,
     required this.label,
@@ -954,6 +961,7 @@ class AudioOptionButton extends StatefulWidget {
     this.onAudio,
     this.onChoose,
     this.warm = false,
+    this.index,
   });
 
   @override
@@ -1091,11 +1099,12 @@ class AudioOptionButtonState extends State<AudioOptionButton>
     // Body tap = choose (and play, so the child hears their pick). The leading
     // 🔊 is its OWN tap target that only auditions the clip — so a learner can
     // hear each option before committing (no accidental wrong-answer on a listen).
+    final numPrefix = widget.index != null ? '${widget.index}ばん、' : '';
     final semanticsLabel = state == DqChoiceState.correct
-        ? '$label、せいかい'
+        ? '$numPrefix$label、せいかい'
         : state == DqChoiceState.wrong
-            ? '$label、ふせいかい'
-            : '$label。きくこともできます';
+            ? '$numPrefix$label、ふせいかい'
+            : '$numPrefix$label。きくこともできます';
     return Semantics(
       button: true,
       label: semanticsLabel,
@@ -1132,6 +1141,29 @@ class AudioOptionButtonState extends State<AudioOptionButton>
             ),
             child: Row(
               children: [
+                // Choice-number badge (#115): the unmistakable "pick one of these"
+                // signal that separates answer tiles from the ✦-coin hint rows for
+                // a non-reader. Only when an index was supplied (ナゾ).
+                if (widget.index != null) ...[
+                  Container(
+                    width: 26,
+                    height: 26,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: (warm ? pcFrameGold : dqGold).withAlpha(38),
+                      border: Border.all(
+                          color: warm ? pcFrameGold : dqGold, width: 1.5),
+                    ),
+                    child: Text('${widget.index}',
+                        style: warm
+                            ? dqInkText(
+                                size: 14, w: FontWeight.w800, color: pcInk)
+                            : dqText(
+                                size: 14, w: FontWeight.w800, color: dqGold)),
+                  ),
+                  const SizedBox(width: 10),
+                ],
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: onAudio,
