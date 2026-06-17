@@ -85,6 +85,27 @@ String silentRescueLineJa(PartOfSpeech pos) {
   return 'この $what、サイレントに うばわれた。';
 }
 
+/// Clean human English label for the POS chip on the battle card. The raw enum
+/// `.name` leaks camelCase (`properNoun`) and a meaningless `unknown` onto the
+/// card — neither is world-class. The 6歳 reader gets the kana category from
+/// [silentRescueLineJa] below; this chip is the grammatical term older 英検
+/// learners use (POS-matched 大問1 distractors). Returns '' for unknown so the
+/// caller hides the chip rather than rendering noise.
+String posLabelEn(PartOfSpeech pos) => switch (pos) {
+      PartOfSpeech.noun => 'noun',
+      PartOfSpeech.verb => 'verb',
+      PartOfSpeech.adjective => 'adjective',
+      PartOfSpeech.adverb => 'adverb',
+      PartOfSpeech.number => 'number',
+      PartOfSpeech.phrase => 'phrase',
+      PartOfSpeech.interjection => 'interjection',
+      PartOfSpeech.preposition => 'preposition',
+      PartOfSpeech.conjunction => 'conjunction',
+      PartOfSpeech.pronoun => 'pronoun',
+      PartOfSpeech.properNoun => 'proper noun',
+      PartOfSpeech.unknown => '',
+    };
+
 // ── Cumulative deck stats (achievement / progress inputs) ─────────────────────
 //
 // The deck merges every grade vocab id with the child's PERSISTED FSRS state, so
@@ -1113,14 +1134,14 @@ class _BattleScreenState extends State<BattleScreen>
           const SizedBox(height: 4),
           Text(vocab.reading, style: dqText(size: 18, color: dqGoldDeep)),
           const SizedBox(height: 10),
-          if (vocab.pos.isNotEmpty)
+          if (vocab.pos.isNotEmpty && posLabelEn(vocab.pos.first).isNotEmpty)
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               decoration: BoxDecoration(
                 border: Border.all(color: dqGold.withAlpha(150), width: 1.5),
                 borderRadius: BorderRadius.circular(6),
               ),
-              child: Text(vocab.pos.first.name,
+              child: Text(posLabelEn(vocab.pos.first),
                   style: dqText(size: 12, color: dqGold)),
             ),
           const SizedBox(height: 14),
