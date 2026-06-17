@@ -55,6 +55,12 @@ class NazoResult {
 
 // ── NazoScreen ────────────────────────────────────────────────────────────────
 
+/// Layton "casebook" re-skin flag (CEO 1904 redesign, Phase 2). When true the ナゾ
+/// screen renders on warm parchment with framed panels (the dark world/scene is
+/// unchanged). Const so it tree-shakes; flip to false to A/B back to navy. The
+/// app-wide palette stays CEO-gated (see LAYTON-QUALITY-REDESIGN-SPEC.md Phase 3).
+const bool kNazoWarmTheme = true;
+
 class NazoScreen extends StatefulWidget {
   final Hotspot hotspot;
 

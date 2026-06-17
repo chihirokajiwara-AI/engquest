@@ -106,15 +106,56 @@ class DqScene extends StatelessWidget {
   /// (#144 responsive — opt in on content screens.)
   final double? contentMaxWidth;
 
+  /// Layton "casebook" surface (CEO 1904): when true, the scene is a warm
+  /// parchment page (no dark backdrop/overlay) for the puzzle content screens.
+  /// Default false keeps the dark 本格 world for exploration/scene screens.
+  final bool warm;
+
   const DqScene({
     super.key,
     this.backgroundAsset,
     required this.child,
     this.contentMaxWidth,
+    this.warm = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    if (warm) {
+      return Scaffold(
+        backgroundColor: pcParchment0,
+        body: Stack(
+          fit: StackFit.expand,
+          children: [
+            const DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [pcParchment0, Color(0xFFEAD3A8)],
+                ),
+              ),
+            ),
+            // Subtle aged-paper vignette at the edges (warm brown, very light).
+            const DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: RadialGradient(
+                  center: Alignment.center,
+                  radius: 1.1,
+                  colors: [Color(0x00000000), Color(0x18000000)],
+                  stops: [0.7, 1.0],
+                ),
+              ),
+            ),
+            SafeArea(
+              child: contentMaxWidth != null
+                  ? ResponsiveCenter(maxWidth: contentMaxWidth!, child: child)
+                  : child,
+            ),
+          ],
+        ),
+      );
+    }
     return Scaffold(
       backgroundColor: dqNight0,
       body: Stack(
@@ -165,10 +206,15 @@ class DqScene extends StatelessWidget {
 class DqDialogBox extends StatelessWidget {
   final Widget child;
   final String? speaker;
-  const DqDialogBox({super.key, required this.child, this.speaker});
+
+  /// Layton "casebook" warm parchment skin (CEO 1904). Default false = navy.
+  final bool warm;
+  const DqDialogBox(
+      {super.key, required this.child, this.speaker, this.warm = false});
 
   @override
   Widget build(BuildContext context) {
+    if (warm) return DqParchPanel(speaker: speaker, child: child);
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -526,15 +572,45 @@ class DqPanel extends StatelessWidget {
   final Widget child;
   final String? title;
   final EdgeInsetsGeometry padding;
+
+  /// Layton "casebook" warm parchment skin (CEO 1904). Default false = navy.
+  final bool warm;
   const DqPanel({
     super.key,
     required this.child,
     this.title,
     this.padding = const EdgeInsets.fromLTRB(16, 14, 16, 16),
+    this.warm = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    if (warm) {
+      return DqParchPanel(
+        padding: padding is EdgeInsets
+            ? padding as EdgeInsets
+            : const EdgeInsets.fromLTRB(16, 14, 16, 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (title != null) ...[
+              Text(title!.toUpperCase(),
+                  style: dqInkText(
+                      size: 12,
+                      w: FontWeight.w800,
+                      color: pcInkSoft,
+                      spacing: 2)),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 8),
+                child: Divider(color: pcFrameGold, height: 1, thickness: 1),
+              ),
+            ],
+            child,
+          ],
+        ),
+      );
+    }
     return Container(
       width: double.infinity,
       padding: padding,
