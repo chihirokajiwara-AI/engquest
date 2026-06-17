@@ -39,7 +39,11 @@ def main() -> int:
     ap.add_argument("--input", required=True, help="base image (webp/png) to refine")
     ap.add_argument("--subject", required=True, help="creature subject (style added)")
     ap.add_argument("--out", default=None, help="output dir (default candidates/refined)")
-    ap.add_argument("--scale", type=float, default=1.5, help="upscale factor before refine")
+    # NOTE: on MPS, img2img diffusion at >1024 (e.g. 1536) memory-swaps and crawls
+    # (verified 2026-06-17: a 1.5x run made ~no progress in 18 min). Keep scale 1.0
+    # on MPS and add detail via the img2img re-paint + a separate cheap upscaler;
+    # raise this only on high-VRAM CUDA.
+    ap.add_argument("--scale", type=float, default=1.0, help="upscale factor before refine (keep 1.0 on MPS)")
     ap.add_argument("--strength", type=float, default=0.42,
                     help="img2img strength for pass 1 (lower = keep composition)")
     ap.add_argument("--steps", type=int, default=44)
