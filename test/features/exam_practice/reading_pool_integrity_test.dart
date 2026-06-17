@@ -98,6 +98,33 @@ void main() {
     }
   });
 
+  group('reading pool — instructions render in Japanese (6yo+ floor, CEO 1889)',
+      () {
+    // Real 英検 prints its instructions in Japanese; an English imperative the
+    // youngest learners (年長/小1) cannot read is a usability + authenticity
+    // defect. Every INSTRUCTION-style questionText ("Choose …") MUST be mapped
+    // by instructionJa(); a real comprehension QUESTION ("Why …?") passes through
+    // unchanged. Guards against a new English instruction silently slipping past
+    // — one did (2026-06-17: 'Choose the best response for the blank.' was added
+    // after the helper and rendered raw English to the learner).
+    final ascii = RegExp(r'[A-Za-z]');
+    for (final g in grades) {
+      test('英検$g instruction lines are translated', () {
+        for (final it in rawReadingItemsFor(g)) {
+          final q = it.questionText.trim();
+          // Skip real comprehension questions ("Why …?"); only prompts translate.
+          if (!q.startsWith('Choose ')) continue;
+          final ja = instructionJa(q);
+          expect(ja, isNot(q),
+              reason: '${it.id}: instruction left in English: "$q"');
+          expect(ascii.hasMatch(ja), isFalse,
+              reason:
+                  '${it.id}: translated instruction still has English: "$ja"');
+        }
+      });
+    }
+  });
+
   group('reading pool — teach-why 解説 coverage + shuffle-safety', () {
     // The post-mock reading review renders item.explanation. Every pool item must
     // (a) carry a non-empty 解説 (mock review teaches, not just marks), and (b)

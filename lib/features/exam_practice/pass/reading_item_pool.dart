@@ -47,6 +47,7 @@ String instructionJa(String en) {
     case 'Choose the best phrase for the blank.':
       return 'ぶんに あう ことばを えらぼう。';
     case 'Choose the best response.':
+    case 'Choose the best response for the blank.':
       return 'あう おへんじを えらぼう。';
     default:
       return en; // a real English comprehension question — leave it.
