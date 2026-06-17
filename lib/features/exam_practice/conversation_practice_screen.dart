@@ -21,6 +21,40 @@ import '../home/streak_service.dart';
 import '../../core/gamification/xp_service.dart';
 import 'exam_session_rewards.dart';
 
+/// Bilingual gloss for the scene-setting label (#117). The authored [context] is
+/// English-only ("At school") — unreadable for the 6歳 floor (CEO 1889), who can
+/// read ひらがな but not yet English. Prepend a hiragana setting so the child knows
+/// WHERE the conversation happens; keep the English as incidental exposure. Pure +
+/// total: an unmapped label falls back to the raw English (never blanks). Mirrors
+/// the reading `instructionJa` / listening `listeningPromptJa` bilingual pattern.
+String sceneContextJa(String en) {
+  const map = <String, String>{
+    'At school': 'がっこうで',
+    'In the classroom': 'きょうしつで',
+    'At lunchtime': 'おひるの じかんに',
+    'After class': 'じゅぎょうの あとで',
+    'After school': 'ほうかごに',
+    'At home': 'いえで',
+    "At a friend's house": 'ともだちの いえで',
+    'In the park': 'こうえんで',
+    'At a restaurant': 'レストランで',
+    'At the store': 'おみせで',
+    'At a store': 'おみせで',
+    'At a clothing shop': 'ようふくやさんで',
+    'Shopping': 'かいものちゅう',
+    'At the station': 'えきで',
+    'At the office': 'かいしゃで',
+    'At the library': 'としょかんで',
+    'On the phone': 'でんわで',
+    'Making plans': 'よていを きめる',
+    'Talking about the weekend': 'しゅうまつの はなし',
+    'Catching up': 'ひさしぶりの はなし',
+    'Asking a favor': 'おねがいごと',
+  };
+  final ja = map[en.trim()];
+  return ja == null ? en : '$ja / $en';
+}
+
 /// Returns [p] with its choices shuffled and [correctIdx] remapped. The authored
 /// data is 92% correctIdx:0, which let a child score ~92% by always tapping
 /// choice 1 — inflating 合格率 with no real comprehension. See [shuffledChoiceSet].
@@ -353,7 +387,7 @@ class _ConversationPracticeScreenState
             Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: Text(
-                p.context,
+                sceneContextJa(p.context),
                 style: dqText(
                         size: 13,
                         w: FontWeight.w500,
