@@ -76,6 +76,29 @@ NPC_NEG = (  # The TWO gates that MUST survive CLIP's 77-token negative truncati
            "pupilless, no pupils, empty eyes, blank stare, soulless eyes, dead eyes, "
            "childish, infantile, cutesy, baby face, deformed eyes, asymmetrical eyes")
 
+# ── Non-humanoid MASCOT / creature path (#114 タロ) ──────────────────────────
+# The NPC_* prompts above are tuned for HUMAN characters (mature face, dark
+# pupils, fully clothed) and even hard-NEGATE glowing eyes — all WRONG for a
+# small mascot creature like タロ (a bronze automaton with ONE glowing cyan eye,
+# no human face / clothes). This path keeps the singularity + grid + crisp-anime
+# gates but drops the human-face/clothing requirement and the anti-glow negatives,
+# so the subject's own creature design (bronze body + cyan glow) survives. The
+# PALETTE comes from the SUBJECT (each タロ concept carries its own), not the
+# dusty-teal detective brand. Square canvas (set by --kind) avoids the grid lean.
+CREATURE_POS = ("masterpiece, best quality, solo, single small mascot creature, "
+                "one creature, centered, full shot, refined detailed anime, "
+                "sharp clean linework, cute, plain simple background, ")
+CREATURE_STYLE = "refined detailed anime, soft glow, cinematic light, best quality"
+CREATURE_NEG = (  # singularity (grid-prone checkpoint) front-loaded; NO anti-glow /
+                # human-face terms (a glowing-eyed automaton needs them ALLOWED)
+                "multiple views, character sheet, model sheet, turnaround, grid, "
+                "collage, contact sheet, multiple panels, two creatures, duplicate, "
+                "human, person, realistic human, human face, girl, boy, child, "
+                "clothing, clothes, slime, blob, gel, "
+                "border, frame, busy background, watercolour, storybook, soft painterly, "
+                "photo, 3d, flat vector, text, ui, watermark, signature, "
+                "lowres, blurry, jpeg artifacts, bad anatomy, extra limbs, deformed")
+
 # Optional overrides (used for verified test runs before touching committed art):
 #   ART_FILTER  — only generate jobs whose filename contains this substring
 #   ART_OUTDIR  — write to this dir instead of assets/art/scenes_layton

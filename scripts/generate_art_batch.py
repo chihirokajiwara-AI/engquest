@@ -36,8 +36,9 @@ def main() -> int:
     ap = argparse.ArgumentParser(description="Generate N art candidates of one asset.")
     ap.add_argument("--name", required=True, help="asset id (output dir name)")
     ap.add_argument("--subject", required=True, help="subject prompt (style added)")
-    ap.add_argument("--kind", choices=["scene", "npc"], default="scene",
-                    help="scene plate (POS/NEG) or character portrait (NPC suffix)")
+    ap.add_argument("--kind", choices=["scene", "npc", "creature"], default="scene",
+                    help="scene plate (POS/NEG), human character (NPC suffix), or "
+                         "non-humanoid mascot/creature (CREATURE suffix — タロ #114)")
     ap.add_argument("--count", type=int, default=12)
     ap.add_argument("--base-seed", type=int, default=7000)
     ap.add_argument("--width", type=int, default=None, help="default by --kind")
@@ -71,9 +72,16 @@ def main() -> int:
     )
     from generate_scene_art import (  # frozen style — no drift  # noqa: E402
         POS, NEG, NPC_POS, NPC_STYLE, NPC_NEG,
+        CREATURE_POS, CREATURE_STYLE, CREATURE_NEG,
     )
 
-    if args.kind == "npc":
+    if args.kind == "creature":
+        # Non-humanoid mascot (タロ #114): keeps the singularity + crisp-anime gates
+        # but NOT the human-face/clothing/anti-glow NPC terms, so a bronze automaton
+        # with a glowing eye survives. Palette comes from the subject.
+        prompt = f"{CREATURE_POS}{args.subject}, {CREATURE_STYLE}"
+        neg = CREATURE_NEG
+    elif args.kind == "npc":
         # Use the SAME front-loaded NPC prompt as generate_scene_art.py (the
         # canonical, CLIP-77-tuned path) — NOT a divergent hand-rolled order.
         # NPC_POS front-loads the non-negotiables (single character + sharp anime
