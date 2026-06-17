@@ -7,10 +7,10 @@
 //
 // Added envelope:
 //   • Optional [framingJa] line above the stem (in-world flavour, exam unchanged).
-//   • ピカラット decay display (PicaratController) — wrong tap decays, no fail.
+//   • ミノス decay display (MinosController) — wrong tap decays, no fail.
 //   • 3-tier ひらめきコイン hint ladder (HintCoinService + NazoHint) — teaches,
 //     never reveals the answer.
-//   • On correct: reports [NazoResult] with earned ピカラット + solved flag back
+//   • On correct: reports [NazoResult] with earned ミノス + solved flag back
 //     to the caller (SceneView cross-fades grey→color).
 //
 // NO dart:io. Firebase is never touched here.
@@ -25,7 +25,7 @@ import '../../core/audio/audio_assets.dart';
 import '../../core/audio/audio_cue_service.dart';
 import '../../core/audio/audio_mute.dart';
 import '../../core/gamification/hint_coin_service.dart';
-import '../../core/gamification/picarat_controller.dart';
+import '../../core/gamification/minos_controller.dart';
 import '../../core/sound/sound_service.dart';
 import '../exam_practice/eiken_exam_config.dart' show gradeLabelJa;
 import '../quest/quest_data.dart';
@@ -38,7 +38,7 @@ import 'hotspot.dart';
 
 class NazoResult {
   final bool solved;
-  final int picaratEarned;
+  final int minosEarned;
 
   /// Whether the learner's FIRST answer was correct. Feeds 合格率 honestly: a
   /// ナゾ can be retried until solved, so [solved] alone would record every
@@ -48,7 +48,7 @@ class NazoResult {
 
   const NazoResult({
     required this.solved,
-    required this.picaratEarned,
+    required this.minosEarned,
     this.firstTryCorrect = false,
   });
 }
@@ -66,7 +66,7 @@ const bool kNazoWarmTheme = true;
 class NazoScreen extends StatefulWidget {
   final Hotspot hotspot;
 
-  /// The 英検 level string for the town (drives hint text + ピカラット max).
+  /// The 英検 level string for the town (drives hint text + ミノス max).
   final String eikenLevel;
 
   /// Hint coin service (injected for testability; defaults to shared instance).
@@ -84,7 +84,7 @@ class NazoScreen extends StatefulWidget {
 }
 
 class _NazoScreenState extends State<NazoScreen> {
-  late final PicaratController _picarat;
+  late final MinosController _minos;
   late final HintCoinService _coins;
   final _cue = AudioCueService();
   final _sound = SoundService();
@@ -142,8 +142,8 @@ class _NazoScreenState extends State<NazoScreen> {
   void initState() {
     super.initState();
     _teaching = _teachCard != null;
-    _picarat = PicaratController(
-      maxValue: picaratMaxForGrade(widget.eikenLevel),
+    _minos = MinosController(
+      maxValue: minosMaxForGrade(widget.eikenLevel),
     );
     _coins = widget.hintCoinService ?? HintCoinService();
     _loadCoinBalance();
@@ -188,7 +188,7 @@ class _NazoScreenState extends State<NazoScreen> {
       return;
     }
     if (!correct) {
-      _picarat.onWrong();
+      _minos.onWrong();
       _sound.playWrong();
       _optionKeys[i].currentState?.triggerShake();
       _autoRevealFirstWrongHint();
@@ -304,17 +304,16 @@ class _NazoScreenState extends State<NazoScreen> {
     _finished = true;
     _burstTimer?.cancel();
     _finishTimer?.cancel();
-    final earned = _picarat.earn();
+    final earned = _minos.earn();
     Navigator.of(context).pop(NazoResult(
       solved: true,
-      picaratEarned: earned,
+      minosEarned: earned,
       firstTryCorrect: _firstTryCorrect,
     ));
   }
 
   void _dismiss() {
-    Navigator.of(context)
-        .pop(const NazoResult(solved: false, picaratEarned: 0));
+    Navigator.of(context).pop(const NazoResult(solved: false, minosEarned: 0));
   }
 
   // ── Hint ladder ───────────────────────────────────────────────────────────
@@ -386,7 +385,7 @@ class _NazoScreenState extends State<NazoScreen> {
                 children: [
                   _header(),
                   const SizedBox(height: 12),
-                  _picaratRow(),
+                  _minosRow(),
                   const SizedBox(height: 12),
                   // Body CENTRES in the remaining space (scrolls when tall) so a
                   // short ナゾ fills the screen instead of clinging to the top over
@@ -726,10 +725,10 @@ class _NazoScreenState extends State<NazoScreen> {
     );
   }
 
-  Widget _picaratRow() {
-    final current = _picarat.currentValue;
-    final max = picaratMaxForGrade(widget.eikenLevel);
-    final isFull = _picarat.wrongCount == 0;
+  Widget _minosRow() {
+    final current = _minos.currentValue;
+    final max = minosMaxForGrade(widget.eikenLevel);
+    final isFull = _minos.wrongCount == 0;
     const warm = kNazoWarmTheme;
     return DqPanel(
       warm: warm,
@@ -743,7 +742,7 @@ class _NazoScreenState extends State<NazoScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'ピカラット',
+                  'ミノス',
                   style: warm
                       ? dqInkText(
                           size: 11,
@@ -772,9 +771,9 @@ class _NazoScreenState extends State<NazoScreen> {
               ],
             ),
           ),
-          if (_picarat.wrongCount > 0)
+          if (_minos.wrongCount > 0)
             Text(
-              '↓ まちがい × ${_picarat.wrongCount}',
+              '↓ まちがい × ${_minos.wrongCount}',
               style: warm
                   ? dqInkText(size: 11, color: pcInkSoft)
                   : dqText(size: 11, color: const Color(0xFFE89090)),

@@ -37,8 +37,8 @@ void main() {
     expect(find.text('ありがとう'), findsOneWidget);
     expect(find.text('ごめんなさい'), findsOneWidget);
 
-    // The quiz must NOT be reachable yet — no ピカラット meter, no advance to it.
-    expect(find.text('ピカラット'), findsNothing);
+    // The quiz must NOT be reachable yet — no ミノス meter, no advance to it.
+    expect(find.text('ミノス'), findsNothing);
 
     // Tap 「わかった！」 → the quiz appears.
     final advance = find.text('わかった！ こたえてみる ▶');
@@ -48,8 +48,8 @@ void main() {
     await tester.tap(advance);
     await tester.pumpAndSettle();
 
-    // Now the quiz is shown (ピカラット meter + the greeting choices).
-    expect(find.text('ピカラット'), findsOneWidget);
+    // Now the quiz is shown (ミノス meter + the greeting choices).
+    expect(find.text('ミノス'), findsOneWidget);
     expect(
         find.text('Hello!'), findsWidgets); // the correct reply is selectable
     expect(tester.takeException(), isNull);
@@ -73,7 +73,7 @@ void main() {
       MaterialApp(home: NazoScreen(hotspot: cell, eikenLevel: '5')),
     );
     await tester.pumpAndSettle();
-    expect(find.text('ピカラット'), findsOneWidget);
+    expect(find.text('ミノス'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 }

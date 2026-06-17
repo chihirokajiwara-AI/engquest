@@ -1,5 +1,5 @@
-// lib/core/gamification/picarat_controller.dart
-// Wave 1 — ピカラット (Picarat) per-ナゾ value + decay controller.
+// lib/core/gamification/minos_controller.dart
+// Wave 1 — ミノス (Minos) per-ナゾ value + decay controller.
 //
 // Pure-Dart, no Flutter import, unit-testable.
 // Design (from LAYTON-CLASS-REDESIGN-2026-06-05.json):
@@ -9,19 +9,20 @@
 //     the floor value — never zero.
 //   • On correct: call [earn()] to bank the current value. Returns banked int.
 
-class PicaratController {
+class MinosController {
   /// Create a controller for one ナゾ item.
   ///
-  /// [maxValue] — the starting Picarat value for this item (e.g. 10 for 5級
-  /// vocab, 50 for 準1級 reading — see [picaratMaxForGrade]).
-  PicaratController({required int maxValue})
+  /// [maxValue] — the starting Minos value for this item (e.g. 10 for 5級
+  /// vocab, 50 for 準1級 reading — see [minosMaxForGrade]).
+  MinosController({required int maxValue})
       : _maxValue = maxValue,
         _wrongCount = 0;
 
   final int _maxValue;
   int _wrongCount;
 
-  // Decay table (Layton canon: full → ⅔ → ⅓ → floor at 40%).
+  // Decay table: full → ⅔ → ⅓ → floor at 40% (a generic decay-on-wrong scoring
+  // curve — the mechanic is unprotectable; the ミノス name/world is ours).
   // Index == number of wrong taps, capped at the last entry.
   static const _decaySteps = [1.0, 2 / 3, 1 / 3, 0.4];
 
@@ -47,7 +48,7 @@ class PicaratController {
     // Already at floor — stays there.
   }
 
-  /// Register a correct answer. Returns the earned Picarat value and locks the
+  /// Register a correct answer. Returns the earned Minos value and locks the
   /// controller (subsequent calls are no-ops and return 0).
   int earn() {
     if (_solved) return 0;
@@ -64,9 +65,9 @@ class PicaratController {
 
 // ── Grade-based starting values ───────────────────────────────────────────────
 
-/// Return the Picarat starting value appropriate for an 英検 grade string and
+/// Return the Minos starting value appropriate for an 英検 grade string and
 /// step kind. Maps to the design's scale (5級 vocab = 10 … 準1級 reading = 50).
-int picaratMaxForGrade(String eikenLevel) {
+int minosMaxForGrade(String eikenLevel) {
   switch (eikenLevel) {
     case '5':
       return 10;

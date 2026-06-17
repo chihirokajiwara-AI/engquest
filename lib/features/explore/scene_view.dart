@@ -118,7 +118,7 @@ bool isFinalNazoIndex(SceneDef scene, Map<int, bool> solved, int idx) {
 class SceneView extends StatefulWidget {
   final SceneDef scene;
 
-  /// The 英検 level string for this scene (drives ピカラット + hint text).
+  /// The 英検 level string for this scene (drives ミノス + hint text).
   final String eikenLevel;
 
   /// Design-audit only (?preview=exploresolved): start with every NPC ナゾ solved so
@@ -159,11 +159,11 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
   // Coin balance (shown in HUD after collecting)
   int _coinBalance = 0;
 
-  /// Running ピカラット earned THIS scene session — accumulates [NazoResult.
-  /// picaratEarned] (previously discarded) and counts up in the header after each
+  /// Running ミノス earned THIS scene session — accumulates [NazoResult.
+  /// minosEarned] (previously discarded) and counts up in the header after each
   /// solve. #86 (game-studio #6): the scene loop had no between-puzzle reward
   /// accumulator, so no 「あと1問」 pull; this makes each solve visibly add up.
-  int _sessionPicarat = 0;
+  int _sessionMinos = 0;
 
   // Parallax offset driven by pan gesture
   double _parallaxOffset = 0.0;
@@ -462,7 +462,7 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
         _solved[idx] = true;
         _restoringIdx = idx; // one-shot gold glow on the restored NPC
         _focusIdx = idx; // studio #1: focal camera-push on THIS NPC
-        _sessionPicarat += result.picaratEarned; // #86 reward accumulator
+        _sessionMinos += result.minosEarned; // #86 reward accumulator
       });
       // Clear the glow flag once it has played, so it never re-glows on rebuild.
       _restoreTimer?.cancel();
@@ -787,8 +787,8 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
                 style: dqText(size: 16, w: FontWeight.w800, color: dqGold),
               ),
             ),
-            // Running ピカラット earned this session — counts up per solve (#86).
-            _picaratPill(),
+            // Running ミノス earned this session — counts up per solve (#86).
+            _minosPill(),
             // ナゾ progress pill — how many of the scene's mysteries are solved.
             // Makes progress visible instead of a binary all-done colour flood.
             _nazoProgressPill(),
@@ -809,17 +809,17 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
         ),
       );
 
-  /// Running ピカラット accumulator (#86): a count-up reward total in the header
+  /// Running ミノス accumulator (#86): a count-up reward total in the header
   /// that grows after each solve — the between-puzzle 「あと1問」 pull the scene loop
   /// lacked (Battle already has streak/XP). Diamond-cyan to read distinct from the
-  /// gold ✦ coins. Hidden until the first ピカラット is earned (a reward reveal).
-  Widget _picaratPill() {
-    if (_sessionPicarat <= 0) return const SizedBox.shrink();
+  /// gold ✦ coins. Hidden until the first ミノス is earned (a reward reveal).
+  Widget _minosPill() {
+    if (_sessionMinos <= 0) return const SizedBox.shrink();
     const cyan = Color(0xFFB8F0FF);
     return Padding(
       padding: const EdgeInsets.only(left: 4),
       child: Semantics(
-        label: 'ピカラット $_sessionPicarat',
+        label: 'ミノス $_sessionMinos',
         excludeSemantics: true,
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
@@ -834,7 +834,7 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
               const Icon(Icons.diamond, color: cyan, size: 12),
               const SizedBox(width: 3),
               TweenAnimationBuilder<int>(
-                tween: IntTween(begin: 0, end: _sessionPicarat),
+                tween: IntTween(begin: 0, end: _sessionMinos),
                 duration: prefersReducedMotion(context)
                     ? Duration.zero
                     : const Duration(milliseconds: 600),
