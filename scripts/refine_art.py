@@ -67,12 +67,18 @@ def main() -> int:
         StableDiffusionXLImg2ImgPipeline,
         DPMSolverMultistepScheduler,
     )
-    from generate_scene_art import (  # frozen style — no drift  # noqa: E402
-        CREATURE_POS, CREATURE_STYLE, CREATURE_NEG,
-    )
+    from generate_scene_art import CREATURE_NEG  # frozen neg gate  # noqa: E402
 
-    prompt = f"{CREATURE_POS}{args.subject}, {CREATURE_STYLE}, intricate detail, " \
-             "refined shading, clean confident linework, polished, high quality"
+    # FRONT-LOAD the craft terms (CLIP truncates at 77 tokens — a long CREATURE_POS
+    # prefix + subject pushed the detail terms off the end, so they did nothing the
+    # first run). Lead with quality/detail + single-creature gate, THEN the subject,
+    # THEN the short truncatable style tail. img2img preserves the base composition,
+    # so the heavy anti-grid CREATURE_POS prefix isn't needed here.
+    prompt = (
+        "masterpiece, best quality, intricate detail, refined cel shading, "
+        "clean confident linework, polished, single small mascot creature, "
+        f"{args.subject}, refined detailed anime, soft glow, cinematic light"
+    )
     neg = CREATURE_NEG
 
     img = Image.open(args.input).convert("RGB")
