@@ -38,6 +38,8 @@ import 'package:engquest/features/parent_dashboard/parent_login_screen.dart';
 import 'package:engquest/core/storage/preferences_service.dart';
 import 'package:engquest/features/quest/ui/dq_ui.dart';
 import 'package:engquest/features/explore/scene_view.dart';
+import 'package:engquest/features/explore/nazo_screen.dart';
+import 'package:engquest/features/explore/hotspot.dart' show HotspotKind;
 import 'package:engquest/features/explore/chapter.dart';
 import 'package:engquest/features/explore/chapter_map_screen.dart';
 import 'package:engquest/features/explore/case_log_screen.dart';
@@ -358,6 +360,7 @@ const List<String> kPreviewRouteNames = [
   'prologue5',
   'explore',
   'exploresolved',
+  'nazo',
   'chaptermap',
   'explore4',
   'explore3',
@@ -470,6 +473,16 @@ Widget _previewFor(String? name) {
       // Design-audit: the 5級 scene fully restored (colour + 探偵メモ re-read badges).
       return SceneView(
           scene: kTown5Scene, eikenLevel: '5', previewAllSolved: true);
+    case 'nazo':
+      // Design-audit: the LIVE 5級 front-door ナゾ (灰守セルの a/an 大問1) in isolation,
+      // so the core puzzle screen — numbered answer tiles (#115), framed casebook
+      // skin (#113), real 英検 swap (#112) — is screenshot-able for the standing
+      // real-render audit (#67) without driving the whole scene to reach it.
+      return NazoScreen(
+        hotspot: kTown5Scene.hotspots
+            .firstWhere((h) => h.kind == HotspotKind.npc && h.step != null),
+        eikenLevel: '5',
+      );
     case 'chaptermap':
       // Design-audit: the 案内図 with a SYNTHETIC 2-location chapter so the
       // reveal-1-ahead states (cleared → current → locked) + the trail render
