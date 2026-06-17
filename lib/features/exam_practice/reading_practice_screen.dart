@@ -22,6 +22,7 @@ import 'practice_encouragement.dart';
 import 'choice_shuffle.dart';
 import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
+import 'vocab_review_store.dart';
 
 /// Returns [q] with its choices shuffled and [correctIdx] remapped. The authored
 /// reading keys cluster at idx 1–2 (93%); shuffling at load removes that
@@ -199,6 +200,10 @@ class ReadingPracticeScreen extends StatefulWidget {
 
 class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
   late List<_ReadingPassage> _passages;
+  // #118: FSRS error-corrective re-testing — a passage holding a question the
+  // child got WRONG is surfaced FIRST next session (re-read → re-answer), not
+  // just counted. Keyed by the question text (stable per item).
+  final _reviewStore = VocabReviewStore(section: 'reading');
   int _passageIdx = 0;
   int _questionIdx = 0;
   int? _selectedAnswer;
@@ -253,6 +258,32 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
     _totalQuestions = _passages.fold(0, (sum, p) => sum + p.questions.length);
     _questionShownAt =
         DateTime.now(); // start the read-time clock for question 1
+    _applyDueOrder();
+  }
+
+  /// #118: bring passages holding a previously-MISSED question (FSRS-due) to the
+  /// front this session, so the failed comprehension item actually comes back
+  /// (re-read the passage → re-answer). Async (SharedPreferences); only reorders
+  /// before the child has started. No due cards (first visit) → keep the order.
+  Future<void> _applyDueOrder() async {
+    try {
+      final due = await _reviewStore.dueReviewKeys(widget.eikenGrade);
+      if (due.isEmpty ||
+          !mounted ||
+          _passageIdx != 0 ||
+          _questionIdx != 0 ||
+          _answered) {
+        return;
+      }
+      bool hasDue(_ReadingPassage p) => p.questions
+          .any((q) => due.contains(VocabReviewStore.keyFor(q.question)));
+      setState(() {
+        _passages.sort((a, b) => (hasDue(a) ? 0 : 1) - (hasDue(b) ? 0 : 1));
+        _questionShownAt = DateTime.now(); // restart the read clock for new Q1
+      });
+    } catch (_) {
+      // Non-fatal — keep the generated order.
+    }
   }
 
   @override
@@ -313,6 +344,15 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
     });
     // Game-feel (#51): a haptic tick + chime so answering feels responsive.
     PracticeFeedback.answered(correct: correct);
+    // #118: reschedule this question via FSRS — wrong → comes back soon; a correct
+    // answer that wasn't a clean comprehension result (hinted, or too fast to have
+    // read it) is "hard"; a clean unaided correct is "good". Fire-and-forget.
+    _reviewStore.recordAnswer(
+      grade: widget.eikenGrade,
+      word: _currentQuestion.question,
+      correct: correct,
+      hinted: _hintUsed || !measured,
+    );
     // a11y (WCAG 4.1.3): speak the verdict for assistive-tech users.
     SemanticsService.sendAnnouncement(
       View.of(context),
