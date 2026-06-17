@@ -533,8 +533,8 @@ class _NazoScreenState extends State<NazoScreen> {
       warm: kNazoWarmTheme,
       contentMaxWidth: 600, // #144: centre on tablet, full-width on phone
       child: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -560,41 +560,66 @@ class _NazoScreenState extends State<NazoScreen> {
                 ],
               ),
               const SizedBox(height: 8),
-              DqPanel(
-                warm: warm,
-                title: card.titleJa,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (card.leadJa != null) ...[
-                      Text(
-                        card.leadJa!,
-                        style: (warm
-                                ? dqInkText(
-                                    size: 13, color: pcInk, w: FontWeight.w500)
-                                : dqText(
-                                    size: 13, color: dqInk, w: FontWeight.w500))
-                            .copyWith(height: 1.6),
+              // Card + CTA CENTRE in the remaining space (scrolls when tall) so
+              // the teach card sits balanced instead of clinging to the top over
+              // a dead navy void (render audit 2026-06-17; mirrors the quiz body
+              // — #112 plan item 4 / #113).
+              Expanded(
+                child: LayoutBuilder(
+                  builder: (context, c) => SingleChildScrollView(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(minHeight: c.maxHeight),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          DqPanel(
+                            warm: warm,
+                            title: card.titleJa,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (card.leadJa != null) ...[
+                                  Text(
+                                    card.leadJa!,
+                                    style: (warm
+                                            ? dqInkText(
+                                                size: 13,
+                                                color: pcInk,
+                                                w: FontWeight.w500)
+                                            : dqText(
+                                                size: 13,
+                                                color: dqInk,
+                                                w: FontWeight.w500))
+                                        .copyWith(height: 1.6),
+                                  ),
+                                  const SizedBox(height: 12),
+                                ],
+                                for (final it in card.items) _teachItemTile(it),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          DqButton(
+                            label: 'わかった！ こたえてみる ▶',
+                            onTap: () => setState(() => _teaching = false),
+                          ),
+                          const SizedBox(height: 10),
+                          Center(
+                            child: Text(
+                              'おぼえてから、こたえよう。',
+                              style: warm
+                                  ? dqInkText(
+                                      size: 11,
+                                      w: FontWeight.w600,
+                                      color: pcInkSoft)
+                                  : dqText(size: 11, color: dqGold),
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 12),
-                    ],
-                    for (final it in card.items) _teachItemTile(it),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              DqButton(
-                label: 'わかった！ こたえてみる ▶',
-                onTap: () => setState(() => _teaching = false),
-              ),
-              const SizedBox(height: 10),
-              Center(
-                child: Text(
-                  'おぼえてから、こたえよう。',
-                  style: warm
-                      ? dqInkText(
-                          size: 11, w: FontWeight.w600, color: pcInkSoft)
-                      : dqText(size: 11, color: dqGold),
+                    ),
+                  ),
                 ),
               ),
             ],
