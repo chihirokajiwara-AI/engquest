@@ -55,10 +55,12 @@ class NazoResult {
 
 // ── NazoScreen ────────────────────────────────────────────────────────────────
 
-/// Layton "casebook" re-skin flag (CEO 1904 redesign, Phase 2). When true the ナゾ
-/// screen renders on warm parchment with framed panels (the dark world/scene is
-/// unchanged). Const so it tree-shakes; flip to false to A/B back to navy. The
-/// app-wide palette stays CEO-gated (see LAYTON-QUALITY-REDESIGN-SPEC.md Phase 3).
+/// Casebook "framed ledger" re-skin flag (CEO 1904 craft bar + 1933/1934 de-Layton).
+/// When true the ナゾ screen renders the premium FRAMED craft (double-rule panels,
+/// framed preview, structured case layout) on OUR distinct dark navy+gold "ink
+/// ledger" — NOT Layton's signature parchment (which "世界観を寄せすぎ"). The pc*
+/// tokens in dq_ui.dart now resolve to dark navy/cream/gold. Const so it tree-shakes;
+/// flip to false to A/B back to the plain navy boxes (loses the framed craft).
 const bool kNazoWarmTheme = true;
 
 class NazoScreen extends StatefulWidget {
@@ -245,8 +247,8 @@ class _NazoScreenState extends State<NazoScreen> {
   // the teaching, not just feels the shake.
   Widget _wrongMeaningBanner() {
     const warm = kNazoWarmTheme;
-    // Warm casebook note (terracotta on parchment) instead of the cold teal that
-    // clashes with the Layton palette (#113). Still a gentle teach, not a scold.
+    // Casebook note: warm amber accent on our dark navy ledger (#114 de-Layton),
+    // not the cold teal. Still a gentle teach, not a scold.
     final accent = warm ? const Color(0xFFB5683C) : const Color(0xFF4FC3F7);
     return Semantics(
       liveRegion: true,
@@ -951,13 +953,13 @@ class _NazoScreenState extends State<NazoScreen> {
         decoration: BoxDecoration(
           color: unlocked
               ? (warm
-                  ? const Color(0xFFE4EFD0)
+                  ? const Color(0xFF14361F)
                   : const Color(0xFF1A3522).withAlpha(210))
               : (warm ? pcParchment0 : dqBox.withAlpha(200)),
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
             color: unlocked
-                ? (warm ? const Color(0xFF6FAE6F) : const Color(0xFF8BE08B))
+                ? (warm ? const Color(0xFF7BD08B) : const Color(0xFF8BE08B))
                 : (warm ? pcFrameBrown : dqGoldDeep),
             width: 1.5,
           ),

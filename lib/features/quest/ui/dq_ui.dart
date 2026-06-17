@@ -17,18 +17,21 @@ const dqGold = Color(0xFFF0D080);
 const dqGoldDeep = Color(0xFFB8923C);
 const dqInk = Color(0xFFEDE3C8);
 
-// ── Layton "casebook" warm-parchment tokens (CEO 1904 redesign). ADDED alongside
-// the navy tokens — the dark scene/world keeps navy; only the puzzle CONTENT
-// PANELS go warm parchment (like Layton's dark-town + warm-puzzle-screen split).
-// See docs/governance/LAYTON-QUALITY-REDESIGN-SPEC.md. Contrast verified:
-// pcInk on pcParchment0 ≈ 9:1 (AAA), pcInkSoft ≈ 6:1 (AA).
-const pcParchment0 = Color(0xFFF3E3C0); // page / tile base (lightest)
-const pcParchment1 = Color(0xFFEBD9B8); // panel fill
-const pcSepiaPanel = Color(0xFFE1C9A2); // raised card / framed-preview mat
-const pcInk = Color(0xFF3B2417); // primary text on parchment
-const pcInkSoft = Color(0xFF5B3B1F); // labels / secondary
-const pcFrameBrown = Color(0xFF7A5A2E); // fine outer border rule
-const pcFrameGold = Color(0xFFB8923C); // inner gilt rule
+// ── コトバ探偵 "casebook / 捜査ledger" tokens — our DISTINCT dark navy+gold skin.
+// CEO 1933/1934: the earlier warm PARCHMENT version copied Layton's signature
+// trade dress ("世界観も寄せすぎ"). We keep the premium FRAMED CRAFT (double-rule
+// frame, framed-exhibit, name-tab — generic book-binding vocabulary) but re-skin
+// the surface to OUR dark navy/gold (CEO 947 — intrinsically more distinct than
+// parchment, and it matches the home/scene). The pc* names persist as "premium
+// casebook"; the values are now the dark ink-ledger. cream-on-navy ≈ 9:1 (AAA).
+// See memory distinct-identity-not-ip-copy; LAYTON-QUALITY-REDESIGN-SPEC.md.
+const pcParchment0 = Color(0xFF0B1130); // page / tile base (deep navy)
+const pcParchment1 = Color(0xFF15203E); // panel fill (navy)
+const pcSepiaPanel = Color(0xFF1C2848); // raised card / framed-preview mat
+const pcInk = Color(0xFFEDE3C8); // primary text (cream on navy)
+const pcInkSoft = Color(0xFFBDB291); // labels / secondary (dim cream)
+const pcFrameBrown = Color(0xFF6E5320); // fine outer border rule (dark gold)
+const pcFrameGold = Color(0xFFF0D080); // inner gilt rule (bright gold)
 
 TextStyle dqText(
         {double size = 16,
@@ -132,18 +135,18 @@ class DqScene extends StatelessWidget {
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [pcParchment0, Color(0xFFEAD3A8)],
+                  colors: [Color(0xFF0A0E24), Color(0xFF161F3C)],
                 ),
               ),
             ),
-            // Subtle aged-paper vignette at the edges (warm brown, very light).
+            // Subtle vignette at the edges so the page reads as a deep field.
             const DecoratedBox(
               decoration: BoxDecoration(
                 gradient: RadialGradient(
                   center: Alignment.center,
                   radius: 1.1,
-                  colors: [Color(0x00000000), Color(0x18000000)],
-                  stops: [0.7, 1.0],
+                  colors: [Color(0x00000000), Color(0x30000000)],
+                  stops: [0.65, 1.0],
                 ),
               ),
             ),
@@ -1069,19 +1072,20 @@ class AudioOptionButtonState extends State<AudioOptionButton>
     final state = widget.state;
     final onAudio = widget.onAudio;
     final onChoose = widget.onChoose;
-    final warm = widget.warm;
-    Color border = warm ? pcFrameBrown : dqBorder;
-    Color fill = warm ? pcParchment0 : dqBox.withAlpha(210);
+    final warm =
+        widget.warm; // "warm" = the framed casebook skin (now dark navy)
+    Color border = warm ? pcFrameGold : dqBorder;
+    Color fill = warm ? pcParchment1 : dqBox.withAlpha(210);
     final audioIcon = warm ? pcFrameGold : dqGold;
     if (state == DqChoiceState.correct) {
-      border = warm ? const Color(0xFF6FAE6F) : const Color(0xFF8BE08B);
+      border = const Color(0xFF7BD08B);
       fill = warm
-          ? const Color(0xFFE4EFD0)
+          ? const Color(0xFF14361F)
           : const Color(0xFF15351B).withAlpha(235);
     } else if (state == DqChoiceState.wrong) {
-      border = warm ? const Color(0xFFB5683C) : const Color(0xFFE89090);
+      border = const Color(0xFFD9886A);
       fill = warm
-          ? const Color(0xFFF0DCC8)
+          ? const Color(0xFF3A1A14)
           : const Color(0xFF3A1414).withAlpha(235);
     }
     // Body tap = choose (and play, so the child hears their pick). The leading
@@ -1144,17 +1148,9 @@ class AudioOptionButtonState extends State<AudioOptionButton>
                                 size: 20, w: FontWeight.w700, color: pcInk)
                             : dqText(size: 20, w: FontWeight.w700))),
                 if (state == DqChoiceState.correct)
-                  Icon(Icons.check,
-                      color: warm
-                          ? const Color(0xFF4A7A3A)
-                          : const Color(0xFF8BE08B),
-                      size: 22)
+                  const Icon(Icons.check, color: Color(0xFF7BD08B), size: 22)
                 else if (state == DqChoiceState.wrong)
-                  Icon(Icons.close,
-                      color: warm
-                          ? const Color(0xFFB5683C)
-                          : const Color(0xFFE89090),
-                      size: 22),
+                  const Icon(Icons.close, color: Color(0xFFD9886A), size: 22),
               ],
             ),
           ),
