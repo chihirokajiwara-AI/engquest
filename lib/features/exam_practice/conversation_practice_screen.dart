@@ -13,6 +13,7 @@ import 'practice_encouragement.dart';
 import 'choice_shuffle.dart';
 import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
+import 'vocab_review_store.dart';
 import '../quest/ui/dq_ui.dart';
 import '../../core/sound/practice_feedback.dart';
 import 'practice_result_stars.dart';
@@ -76,6 +77,10 @@ class ConversationPracticeScreen extends StatefulWidget {
 class _ConversationPracticeScreenState
     extends State<ConversationPracticeScreen> {
   late List<_ConversationProblem> _problems;
+  // #118: FSRS error-corrective re-testing — a 会話 the child answered WRONG is
+  // rescheduled and surfaced FIRST next session, not just counted. Keyed by the
+  // conversation text (speakerA+speakerB), stable per item.
+  final _reviewStore = VocabReviewStore(section: 'conversation');
   int _currentIdx = 0;
   int? _selectedAnswer;
   bool _answered = false;
@@ -116,6 +121,30 @@ class _ConversationPracticeScreenState
     _problems = _getProblems(widget.eikenGrade)
         .map((p) => _shuffleConversationChoices(p, _rng))
         .toList();
+    _applyDueOrder();
+  }
+
+  /// Stable per-item key for FSRS review — the conversation text itself.
+  static String _itemKey(_ConversationProblem p) =>
+      VocabReviewStore.keyFor('${p.speakerA} ${p.speakerB}');
+
+  /// #118: surface previously-MISSED conversations (FSRS-due) first this session,
+  /// so the failed item actually comes back. Async (SharedPreferences); only
+  /// reorders before the child has started. No due cards → keep the order.
+  Future<void> _applyDueOrder() async {
+    try {
+      final due = await _reviewStore.dueReviewKeys(widget.eikenGrade);
+      if (due.isEmpty || !mounted || _currentIdx != 0 || _answered) return;
+      setState(() {
+        _problems.sort((a, b) {
+          final ad = due.contains(_itemKey(a)) ? 0 : 1;
+          final bd = due.contains(_itemKey(b)) ? 0 : 1;
+          return ad - bd; // previously-missed conversations first
+        });
+      });
+    } catch (_) {
+      // Non-fatal — keep the generated order.
+    }
   }
 
   @override
@@ -165,6 +194,15 @@ class _ConversationPracticeScreenState
     // Game-feel (#51): a haptic tick + chime so answering feels responsive.
     final correct = idx == _problems[_currentIdx].correctIdx;
     PracticeFeedback.answered(correct: correct);
+    // #118: reschedule this conversation via FSRS — wrong → comes back soon,
+    // hinted → "hard" (not mastered), clean correct → "good". Fire-and-forget.
+    _reviewStore.recordAnswer(
+      grade: widget.eikenGrade,
+      word: '${_problems[_currentIdx].speakerA} '
+          '${_problems[_currentIdx].speakerB}',
+      correct: correct,
+      hinted: _hintUsed,
+    );
     // a11y (WCAG 4.1.3): speak the verdict so AT users get the feedback the
     // colour/icon swap only shows sighted users.
     SemanticsService.sendAnnouncement(
