@@ -77,7 +77,8 @@ void main() {
       // under the pulse and the screen must not throw.
       await tester.pump(const Duration(seconds: 5));
       expect(find.textContaining('きいてみよう'), findsOneWidget,
-          reason: 'the 起 tap-to-hear agency control stays usable under the pulse');
+          reason:
+              'the 起 tap-to-hear agency control stays usable under the pulse');
       expect(tester.takeException(), isNull);
       // Tapping it satisfies the agency gate → ▶ つぎへ appears.
       await tester.tap(find.textContaining('きいてみよう'));

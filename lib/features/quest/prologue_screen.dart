@@ -113,8 +113,10 @@ class _PrologueScreenState extends State<PrologueScreen>
   static const _blendLetters = <String>['s', 'a', 't'];
   int _activeLetter = -1; // -1 none lit; 0=s, 1=a, 2=t
   bool _blendDone = false; // true once all three are sounded → join + restore
-  bool _heard = false; // 起: child has tapped to hear す… (agency gate, per panel)
-  double _revealFrom = 0.0; // the LEAVING beat's saturation → bloom/drain origin
+  bool _heard =
+      false; // 起: child has tapped to hear す… (agency gate, per panel)
+  double _revealFrom =
+      0.0; // the LEAVING beat's saturation → bloom/drain origin
 
   // Council S3 — non-reader gate: a 4-7yo who can't read 「つぎへ」 needs a VISUAL
   // cue for what to tap. If the panel sits untapped ~4s, pulse the advance/🔊

@@ -335,7 +335,9 @@ void main() {
       // under test) — e.g. スラ's greeting (Hello/Goodbye…), NOT セル's a/an article
       // ナゾ whose a/an/the/one options aren't vocab words with meanings.
       bool hasTaughtWrong(Hotspot h) {
-        if (h.kind != HotspotKind.npc || h.step == null || h.teachCard == null) {
+        if (h.kind != HotspotKind.npc ||
+            h.step == null ||
+            h.teachCard == null) {
           return false;
         }
         final m = {for (final it in h.teachCard!.items) norm(it.en): it.ja};
@@ -368,7 +370,8 @@ void main() {
       ));
       await t.pump();
       await t.pump(const Duration(milliseconds: 300));
-      final teachBtn = find.textContaining('こたえてみる'); // dismiss teach-first card
+      final teachBtn =
+          find.textContaining('こたえてみる'); // dismiss teach-first card
       await t.ensureVisible(teachBtn);
       await t.pump();
       await t.tap(teachBtn);
