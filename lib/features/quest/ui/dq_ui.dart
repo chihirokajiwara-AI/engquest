@@ -941,12 +941,16 @@ class AudioOptionButton extends StatefulWidget {
 
   /// Evaluates the choice (call the screen's _choose).
   final VoidCallback? onChoose;
+
+  /// Layton "casebook" warm parchment tile (CEO 1904). Default false = navy.
+  final bool warm;
   const AudioOptionButton({
     super.key,
     required this.label,
     this.state = DqChoiceState.normal,
     this.onAudio,
     this.onChoose,
+    this.warm = false,
   });
 
   @override
@@ -1065,14 +1069,20 @@ class AudioOptionButtonState extends State<AudioOptionButton>
     final state = widget.state;
     final onAudio = widget.onAudio;
     final onChoose = widget.onChoose;
-    Color border = dqBorder;
-    Color fill = dqBox.withAlpha(210);
+    final warm = widget.warm;
+    Color border = warm ? pcFrameBrown : dqBorder;
+    Color fill = warm ? pcParchment0 : dqBox.withAlpha(210);
+    final audioIcon = warm ? pcFrameGold : dqGold;
     if (state == DqChoiceState.correct) {
-      border = const Color(0xFF8BE08B);
-      fill = const Color(0xFF15351B).withAlpha(235);
+      border = warm ? const Color(0xFF6FAE6F) : const Color(0xFF8BE08B);
+      fill = warm
+          ? const Color(0xFFE4EFD0)
+          : const Color(0xFF15351B).withAlpha(235);
     } else if (state == DqChoiceState.wrong) {
-      border = const Color(0xFFE89090);
-      fill = const Color(0xFF3A1414).withAlpha(235);
+      border = warm ? const Color(0xFFB5683C) : const Color(0xFFE89090);
+      fill = warm
+          ? const Color(0xFFF0DCC8)
+          : const Color(0xFF3A1414).withAlpha(235);
     }
     // Body tap = choose (and play, so the child hears their pick). The leading
     // 🔊 is its OWN tap target that only auditions the clip — so a learner can
@@ -1121,19 +1131,30 @@ class AudioOptionButtonState extends State<AudioOptionButton>
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: onAudio,
-                  child: const Padding(
-                    padding: EdgeInsets.only(right: 12),
-                    child:
-                        Icon(Icons.volume_up_rounded, color: dqGold, size: 22),
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 12),
+                    child: Icon(Icons.volume_up_rounded,
+                        color: audioIcon, size: 22),
                   ),
                 ),
                 Expanded(
                     child: Text(label,
-                        style: dqText(size: 20, w: FontWeight.w700))),
+                        style: warm
+                            ? dqInkText(
+                                size: 20, w: FontWeight.w700, color: pcInk)
+                            : dqText(size: 20, w: FontWeight.w700))),
                 if (state == DqChoiceState.correct)
-                  const Icon(Icons.check, color: Color(0xFF8BE08B), size: 22)
+                  Icon(Icons.check,
+                      color: warm
+                          ? const Color(0xFF4A7A3A)
+                          : const Color(0xFF8BE08B),
+                      size: 22)
                 else if (state == DqChoiceState.wrong)
-                  const Icon(Icons.close, color: Color(0xFFE89090), size: 22),
+                  Icon(Icons.close,
+                      color: warm
+                          ? const Color(0xFFB5683C)
+                          : const Color(0xFFE89090),
+                      size: 22),
               ],
             ),
           ),

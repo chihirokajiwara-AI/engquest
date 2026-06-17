@@ -873,6 +873,7 @@ class _NazoScreenState extends State<NazoScreen> {
         key: _optionKeys[i],
         label: o.label,
         state: st,
+        warm: kNazoWarmTheme,
         onAudio: onAudio,
         onChoose: _revealed ? null : () => _choose(i),
       );
