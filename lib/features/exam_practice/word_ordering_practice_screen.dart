@@ -91,6 +91,12 @@ class _WordOrderingPracticeScreenState
   bool _answered = false;
   bool _correct = false;
   int _correctCount = 0;
+  // Sentences the child got WRONG this session — surfaced on the results screen
+  // as a "review these" list (the JP sentence + its grammar rule), closing the
+  // mistake loop like the 読解/会話/リスニング/語彙 screens already do. Pairs with
+  // the #118 FSRS re-test (these come back next session); this is the immediate
+  // in-session study aid.
+  final List<({String jp, String? why})> _missedOrdering = [];
   StreakState? _earnedStreak; // shown on results via SessionEndHook
   bool _sessionDone = false;
 
@@ -191,6 +197,9 @@ class _WordOrderingPracticeScreenState
       } else {
         _unaidedTotal++;
         if (isCorrect) _unaidedCorrect++;
+      }
+      if (!isCorrect && !_missedOrdering.any((m) => m.jp == p.jpSentence)) {
+        _missedOrdering.add((jp: p.jpSentence, why: p.whyExplanation));
       }
     });
     // #118: reschedule this sentence via FSRS — wrong → comes back soon, rule-
@@ -661,6 +670,57 @@ class _WordOrderingPracticeScreenState
                 'ルールをみた $_assistedCount問（もん）は、\n合格率（ごうかくりつ）に 入（い）れていません。',
                 textAlign: TextAlign.center,
                 style: dqText(color: dqInk.withAlpha(160), size: 12),
+              ),
+            ],
+            if (_missedOrdering.isNotEmpty) ...[
+              const SizedBox(height: 20),
+              Container(
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: dqBox,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: dqGold.withAlpha(90)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'ふくしゅうする ぶん / Review these',
+                      style:
+                          dqText(size: 13, w: FontWeight.w800, color: dqGold),
+                    ),
+                    const SizedBox(height: 8),
+                    ..._missedOrdering.map(
+                      (m) => Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '・${m.jp}',
+                              style: dqText(
+                                      size: 12,
+                                      w: FontWeight.w600,
+                                      color: dqInk.withAlpha(220))
+                                  .copyWith(height: 1.5),
+                            ),
+                            if (m.why != null && m.why!.isNotEmpty)
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 12, top: 2),
+                                child: Text(
+                                  m.why!,
+                                  style: dqText(
+                                          size: 11, color: dqInk.withAlpha(160))
+                                      .copyWith(height: 1.4),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
             if (_earnedStreak != null) ...[
