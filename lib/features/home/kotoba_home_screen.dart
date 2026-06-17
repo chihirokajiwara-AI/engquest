@@ -42,6 +42,7 @@ import 'package:engquest/features/battle/battle_screen.dart';
 import 'package:engquest/features/exam_practice/pass/cse_model.dart';
 import 'package:engquest/features/exam_practice/pass/mastery_advisor.dart';
 import 'package:engquest/features/exam_practice/pass/skill_accuracy_store.dart';
+import 'package:engquest/features/exam_practice/exam_review_store.dart';
 import 'package:engquest/features/exam_practice/pass/pass_meter_screen.dart';
 import 'package:engquest/features/exam_practice/pass/pass_gauge.dart';
 import 'package:engquest/features/quest/quest_map_screen.dart';
@@ -130,6 +131,12 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
   // ── State ────────────────────────────────────────────────────────────────
   StreakState _streak = const StreakState.zero();
   int _dueCount = 0; // FSRS due items today
+  // #120: are any EXAM-section reviews (reading/listening/conversation/word-order/
+  // vocab — the #118 ExamReviewStore) due? A BOOLEAN, not a count: aggregating a
+  // count across sections and routing to the hub would over-promise vs any single
+  // section's deck (stranding). The nudge just says "reviews are waiting" → the
+  // hub, where #118 surfaces each section's misses first.
+  bool _examReviewDue = false;
   String _eikenLevel = '5'; // used to route to the right scene
   int _childAge = 8; // used to age-filter the FSRS review deck
   CseEstimate? _estimate; // live 合格率, null until the child has practice data
@@ -217,6 +224,8 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
     final estimate = await liveCseEstimate(_eikenLevel);
     // Mastery-based progression advice (#14), from the same accuracy data.
     final advice = await liveMasteryAdvice(_eikenLevel);
+    // #120: any EXAM-section misses due for re-test? (boolean — see field doc.)
+    final examReviewDue = await _hasExamReviewDue(_eikenLevel);
 
     if (!mounted) return;
     setState(() {
@@ -224,8 +233,30 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
       _dueCount = dueCount;
       _estimate = estimate;
       _advice = advice;
+      _examReviewDue = examReviewDue;
       _loading = false;
     });
+  }
+
+  /// #120: true if ANY exam-practice section has a previously-missed item the
+  /// FSRS review schedule now marks due for [grade]. Short-circuits on the first
+  /// hit; every read is guarded so a prefs failure never blocks the home.
+  Future<bool> _hasExamReviewDue(String grade) async {
+    for (final s in const [
+      'vocab',
+      'reading',
+      'listening',
+      'conversation',
+      'wordorder',
+    ]) {
+      try {
+        final due = await ExamReviewStore(section: s).dueReviewKeys(grade);
+        if (due.isNotEmpty) return true;
+      } catch (_) {
+        // Non-fatal — skip this section.
+      }
+    }
+    return false;
   }
 
   // ── Routing ───────────────────────────────────────────────────────────────
@@ -380,6 +411,7 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
             // 合格率 is built on — not the RPG world (which is now an optional
             // reward below).
             _buildExamCta(), // PRIMARY: 英検れんしゅう / 合格率
+            _buildExamReviewNudge(), // #120: "misses are waiting" → exam hub
             const SizedBox(height: 12),
             _buildNazoPanel(), // tappable → FSRS vocabulary review
             const SizedBox(height: 14),
@@ -837,6 +869,53 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
   }
 
   // ── Section: きょうの ナゾ (FSRS due-count) ───────────────────────────────
+
+  /// #120: when the child has previously-missed EXAM items now due for re-test,
+  /// a subtle nudge under the primary CTA pulls them back to close the loop (the
+  /// testing effect needs the failed item to actually come back). Routes to the
+  /// exam HUB — where #118 surfaces each section's misses first — so there is NO
+  /// count that could mismatch a single section's deck (no stranding). Hidden
+  /// (zero-size) when nothing is due, so first-run / caught-up homes are unchanged.
+  Widget _buildExamReviewNudge() {
+    if (!_examReviewDue) return const SizedBox.shrink();
+    return Semantics(
+      button: true,
+      label: 'まちがえた 英検（えいけん）もんだいの ふくしゅうが あるよ',
+      excludeSemantics: true,
+      child: GestureDetector(
+        onTap: _goToExamPractice,
+        child: Container(
+          width: double.infinity,
+          margin: const EdgeInsets.only(top: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          decoration: BoxDecoration(
+            color: dqBox,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: dqGold.withAlpha(110)),
+          ),
+          child: Row(
+            children: [
+              const Text('✦', style: TextStyle(fontSize: 16, color: dqGold)),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('まちがえた もんだいが まってるよ',
+                        style:
+                            dqText(size: 13, w: FontWeight.w600, color: dqInk)),
+                    const SizedBox(height: 2),
+                    Text('タップして ふくしゅう / Review your misses',
+                        style: dqText(size: 11, color: dqGold)),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   Widget _buildNazoPanel() {
     final hasDue = _dueCount > 0;
