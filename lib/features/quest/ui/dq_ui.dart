@@ -17,6 +17,19 @@ const dqGold = Color(0xFFF0D080);
 const dqGoldDeep = Color(0xFFB8923C);
 const dqInk = Color(0xFFEDE3C8);
 
+// ── Layton "casebook" warm-parchment tokens (CEO 1904 redesign). ADDED alongside
+// the navy tokens — the dark scene/world keeps navy; only the puzzle CONTENT
+// PANELS go warm parchment (like Layton's dark-town + warm-puzzle-screen split).
+// See docs/governance/LAYTON-QUALITY-REDESIGN-SPEC.md. Contrast verified:
+// pcInk on pcParchment0 ≈ 9:1 (AAA), pcInkSoft ≈ 6:1 (AA).
+const pcParchment0 = Color(0xFFF3E3C0); // page / tile base (lightest)
+const pcParchment1 = Color(0xFFEBD9B8); // panel fill
+const pcSepiaPanel = Color(0xFFE1C9A2); // raised card / framed-preview mat
+const pcInk = Color(0xFF3B2417); // primary text on parchment
+const pcInkSoft = Color(0xFF5B3B1F); // labels / secondary
+const pcFrameBrown = Color(0xFF7A5A2E); // fine outer border rule
+const pcFrameGold = Color(0xFFB8923C); // inner gilt rule
+
 TextStyle dqText(
         {double size = 16,
         FontWeight w = FontWeight.w600,
@@ -31,6 +44,22 @@ TextStyle dqText(
       shadows: const [
         Shadow(color: Colors.black, blurRadius: 4, offset: Offset(0, 2))
       ],
+    );
+
+/// Text on the warm parchment "casebook" surface (CEO 1904): [pcInk] by default
+/// and NO drop shadow — ink on paper has no glow (the navy [dqText] uses a black
+/// shadow for legibility over dark art; on cream that same shadow reads as grime).
+TextStyle dqInkText(
+        {double size = 16,
+        FontWeight w = FontWeight.w600,
+        Color color = pcInk,
+        double spacing = 0.5}) =>
+    notoSerifJp(
+      color: color,
+      fontSize: size,
+      fontWeight: w,
+      letterSpacing: spacing,
+      height: 1.6,
     );
 
 /// Renders a cloze/fill-in stem with the blank shown as a continuous gold
@@ -1043,3 +1072,136 @@ class AudioOptionButtonState extends State<AudioOptionButton>
 /// get the END state instantly instead of a transition. (#76 a11y, 2026-06-12)
 bool prefersReducedMotion(BuildContext context) =>
     MediaQuery.maybeOf(context)?.disableAnimations ?? false;
+
+// ── Layton "casebook" panels (CEO 1904 redesign — Phase 1 additive widgets;
+//    not wired until the flagged ナゾ re-skin). See LAYTON-QUALITY-REDESIGN-SPEC.md.
+
+/// A Layton casebook panel: warm parchment fill with a DOUBLE border (outer brown
+/// rule + inset gilt rule) and a soft warm shadow — the core craft primitive the
+/// dark navy boxes lack. Mirrors [DqDialogBox]'s optional gilt name-tab.
+class DqParchPanel extends StatelessWidget {
+  final Widget child;
+  final String? speaker;
+  final EdgeInsets padding;
+  const DqParchPanel({
+    super.key,
+    required this.child,
+    this.speaker,
+    this.padding = const EdgeInsets.fromLTRB(16, 16, 16, 14),
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: pcParchment1,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: pcFrameBrown, width: 2.5),
+            boxShadow: const [
+              BoxShadow(
+                  color: Color(0x33000000), blurRadius: 8, offset: Offset(0, 3))
+            ],
+          ),
+          child: Container(
+            margin: const EdgeInsets.all(3),
+            padding: padding,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(7),
+              border: Border.all(color: pcFrameGold, width: 1.2),
+            ),
+            child: child,
+          ),
+        ),
+        if (speaker != null)
+          Positioned(
+            top: -13,
+            left: 14,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(colors: [dqGold, dqGoldDeep]),
+                borderRadius: BorderRadius.circular(6),
+                border: Border.all(color: pcFrameBrown, width: 1.2),
+              ),
+              child: Text(speaker!,
+                  style: notoSerifJp(
+                      color: const Color(0xFF2A1C00),
+                      fontSize: 13,
+                      fontWeight: FontWeight.w800)),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+/// A Layton gold-framed "exhibit" preview — the framed puzzle thumbnail our ナゾ
+/// screen is missing (the single most Layton-defining element). A sepia mat holds
+/// [child] (art) inset, wrapped in the double brown+gold frame, with an optional
+/// engraved [caption] strip (e.g. the puzzle genre).
+class DqFramedPreview extends StatelessWidget {
+  final Widget child;
+  final String? caption;
+  final double aspectRatio;
+  const DqFramedPreview({
+    super.key,
+    required this.child,
+    this.caption,
+    this.aspectRatio = 16 / 10,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: pcSepiaPanel,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: pcFrameBrown, width: 2.5),
+        boxShadow: const [
+          BoxShadow(
+              color: Color(0x33000000), blurRadius: 8, offset: Offset(0, 3))
+        ],
+      ),
+      child: Container(
+        margin: const EdgeInsets.all(3),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          border: Border.all(color: pcFrameGold, width: 1.2),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(6),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(3),
+                child: AspectRatio(aspectRatio: aspectRatio, child: child),
+              ),
+            ),
+            if (caption != null)
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: const BoxDecoration(
+                  color: pcParchment0,
+                  border:
+                      Border(top: BorderSide(color: pcFrameGold, width: 0.8)),
+                ),
+                child: Text(caption!,
+                    textAlign: TextAlign.center,
+                    style: dqInkText(
+                        size: 12,
+                        w: FontWeight.w800,
+                        color: pcInkSoft,
+                        spacing: 1.5)),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
