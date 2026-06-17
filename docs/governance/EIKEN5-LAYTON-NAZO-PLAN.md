@@ -94,3 +94,18 @@ through the character/world studio + CEO sign-off. The plan's "decide+execute" c
    from a chosen verified 会話 item → content-QA the framing prose → analyze/test → ship.
 大問3 (語句整序) is a SEPARATE follow-up: it is NOT a plain MCQ, so it WOULD need a tile-drag
 ナゾ renderer in NazoScreen (real engineering) — sequence it after 大問2.
+
+### 大問3 engineering scope (2026-06-18, scoped — GATED, do not start solo while CEO away)
+Concretely the 大問3 inscription ナゾ needs (verified by reading the code):
+- a NEW subtype in the **sealed `QuestStep`** hierarchy (quest_data.dart:75) — e.g.
+  `WordOrderStep(chunks, correctOrder, whyExplanation)`; sealed → every exhaustive
+  `switch (step)` (nazo_screen.dart:875, quest_screen, etc.) must add a branch (ripple).
+- a **tile-drag render mode** in NazoScreen (arrange 5 chunks → check), reusing the chip
+  UI from word_ordering_practice_screen.dart, + a first-try-correct → NazoResult signal.
+- a **new Hotspot kind** (object-puzzle "broken inscription") — today object hotspots are
+  COINS only; this adds a puzzle-object kind to the Hotspot model + scene_view tap routing.
+- a **5級-scene content change** (place the inscription) — this is world-structure, ADJACENT
+  to the CEO-GATED world-depth (#91/#92), so it is NOT a safe solo-autonomous build.
+NET: ~3-4 focused ticks touching the sealed model + Hotspot model + scene. Approved in
+principle (this plan) but the world-structure + model ripple warrant CEO GO before building.
+The 大問2 (NPC, MCQ — no model change) is the smaller/earlier of the two once its NPC is picked.
