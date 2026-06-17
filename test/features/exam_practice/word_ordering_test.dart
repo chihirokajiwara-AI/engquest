@@ -7,10 +7,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:engquest/features/exam_practice/word_ordering_practice_screen.dart';
 import 'package:engquest/features/exam_practice/eiken_exam_config.dart';
 
 void main() {
+  // #118: the screen reads the FSRS review store (SharedPreferences) at start;
+  // reset it before each test so a prior test's review writes can't reorder items
+  // (CI-only flake class — see reading_practice_screen_test).
+  setUp(() => SharedPreferences.setMockInitialValues({}));
+
   // 語句整序 (大問3) exists only at 英検 5級 / 4級 / 3級.
   for (final grade in ['5', '4', '3']) {
     test('英検$grade級 word-ordering items are authentic 大問3 (5 chunks, unique)',

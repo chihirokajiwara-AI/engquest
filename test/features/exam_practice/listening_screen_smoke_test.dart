@@ -8,6 +8,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:engquest/features/exam_practice/listening_practice_screen.dart';
 import 'package:engquest/features/exam_practice/listening_data.dart';
@@ -32,6 +33,11 @@ Widget _wrap(Widget child) => MaterialApp(home: child);
 // ── Tests ─────────────────────────────────────────────────────────────────────
 
 void main() {
+  // #118: the screen reads the FSRS review store (SharedPreferences) at start;
+  // reset it before each test so a prior test's review writes can't reorder items
+  // (CI-only flake class — see reading_practice_screen_test).
+  setUp(() => SharedPreferences.setMockInitialValues({}));
+
   group('ListeningPracticeScreen — muted guard', () {
     testWidgets('shows a "sound off" banner + unmute when Voice is muted',
         (tester) async {

@@ -8,6 +8,18 @@ import 'package:engquest/core/storage/preferences_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
+  // #118: the reading screen now reads the FSRS review store (SharedPreferences)
+  // at session start to surface previously-missed passages first. Reset that
+  // store before EVERY test so review data written by a PRIOR test can't reorder
+  // the passages and break the fixed answer-by-text sequence — a CI-only timing
+  // flake ('results show pass when >= 60%', 2026-06-17) where the prior test's
+  // fire-and-forget recordAnswer had landed before this test read the store.
+  setUp(() {
+    SharedPreferences.setMockInitialValues({});
+    PreferencesService.resetInstance();
+    SkillAccuracyStore.resetInstance();
+  });
+
   const grade5Section = ExamSection(
     id: '5_r3',
     nameJa: '筆記3: 長文読解',

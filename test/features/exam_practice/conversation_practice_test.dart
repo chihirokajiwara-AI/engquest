@@ -8,10 +8,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:engquest/features/exam_practice/conversation_practice_screen.dart';
 import 'package:engquest/features/exam_practice/eiken_exam_config.dart';
 
 void main() {
+  // #118: the screen reads the FSRS review store (SharedPreferences) at start;
+  // reset it before each test so a prior test's review writes can't reorder items
+  // (CI-only flake class — see reading_practice_screen_test).
+  setUp(() => SharedPreferences.setMockInitialValues({}));
+
   const grade5Section = ExamSection(
     id: '5_p2',
     nameJa: '筆記2: 会話文の文空所補充',
