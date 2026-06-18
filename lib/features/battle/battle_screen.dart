@@ -1323,7 +1323,16 @@ class _BattleScreenState extends State<BattleScreen>
     // playtest complaint). わからなかった→Again, わかった！→Good, auto-upgraded to Easy
     // on a 3rd+ consecutive correct (a BEHAVIOURAL fluency signal — a child on a
     // roll clearly knows these — not another self-assessment the child can't make).
-    final knewGrade = _streak >= 2 ? Grade.easy : Grade.good;
+    //
+    // GUARD: the fluency upgrade applies ONLY to cards the child has seen before
+    // (state != newCard). A session-wide streak says nothing about a BRAND-NEW
+    // word's difficulty — promoting a never-tested word to Easy would stamp it
+    // with FSRS's initial-Easy stability (~15-day first interval, w[3]≈15.5 vs
+    // Good's w[2]≈3.1), scheduling it far past the child's real forgetting curve
+    // before its first true review. A new word's honest first signal is Good.
+    final canFluencyUpgrade = _currentCard.state != CardState.newCard;
+    final knewGrade =
+        (_streak >= 2 && canFluencyUpgrade) ? Grade.easy : Grade.good;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
