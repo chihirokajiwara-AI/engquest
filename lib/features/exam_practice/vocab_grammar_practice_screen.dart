@@ -122,6 +122,7 @@ class _VocabGrammarPracticeScreenState
   // child feels their progress at the moment that pulls them back (SessionEndHook).
   StreakState? _earnedStreak;
   bool _loading = true;
+  bool _loadError = false; // question generation threw → show a retry state
   bool _sessionDone = false;
 
   // Teach-first scaffold (CEO 1132 cont. / flaw-hunt #111): a true beginner
@@ -281,12 +282,15 @@ class _VocabGrammarPracticeScreenState
       _questions = questions;
 
       if (mounted) setState(() => _loading = false);
-    } catch (e) {
+    } catch (_) {
+      // Show a child-friendly retry state — NOT a raw Dart exception in a
+      // SnackBar (a 6yo can't read 'FirebaseException…') and NOT the "準備中"
+      // empty state (a wrong reason: the content exists, the load failed).
       if (mounted) {
-        setState(() => _loading = false);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('問題の読み込みに失敗: $e')),
-        );
+        setState(() {
+          _loading = false;
+          _loadError = true;
+        });
       }
     }
   }
@@ -507,23 +511,60 @@ class _VocabGrammarPracticeScreenState
                 ? const Center(child: CircularProgressIndicator(color: dqGold))
                 : _sessionDone
                     ? _buildResults()
-                    : _questions.isEmpty
-                        ? Center(
-                            child: Padding(
-                              padding: const EdgeInsets.all(24),
-                              child: Text(
-                                'この級（きゅう）の問題（もんだい）は\n準備中（じゅんびちゅう）です。',
-                                textAlign: TextAlign.center,
-                                style: dqText(size: 15, color: dqInk),
-                              ),
-                            ),
-                          )
-                        : _buildQuestion(),
+                    : _loadError
+                        ? _buildLoadError()
+                        : _questions.isEmpty
+                            ? Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(24),
+                                  child: Text(
+                                    'この級（きゅう）の問題（もんだい）は\n準備中（じゅんびちゅう）です。',
+                                    textAlign: TextAlign.center,
+                                    style: dqText(size: 15, color: dqInk),
+                                  ),
+                                ),
+                              )
+                            : _buildQuestion(),
           ),
         ],
       ),
     );
   }
+
+  /// Child-friendly state when question generation throws (vs the 準備中 empty
+  /// state, which is a DIFFERENT reason — no content authored). Gives a ひらがな
+  /// explanation + a RETRY (the failure is usually transient) + a labelled もどる.
+  Widget _buildLoadError() => Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'もんだいの よみこみに しっぱいしました。\nもういちど ためしてみてね。',
+                textAlign: TextAlign.center,
+                style: dqText(size: 15, color: dqInk),
+              ),
+              const SizedBox(height: 20),
+              DqButton(
+                label: 'もういちど',
+                onTap: () {
+                  setState(() {
+                    _loadError = false;
+                    _loading = true;
+                  });
+                  _loadQuestions();
+                },
+              ),
+              const SizedBox(height: 10),
+              DqButton(
+                label: 'もどる / Back',
+                onTap: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+        ),
+      );
 
   Widget _buildQuestion() {
     final q = _questions[_currentIdx];
