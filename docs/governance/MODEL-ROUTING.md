@@ -53,14 +53,21 @@ Empirically probed in the running session (not assumed):
   partially-tiered script (one tiered + several un-tiered agents) is caught too.
   Re-tested 8 cases (block/allow/fail-open) all correct.
 
-KNOWN RESIDUAL LIMITATIONS (honest — not yet enforced):
-1. The gate enforces that a tier is CHOSEN, not that it is the RIGHT one — tagging
-   everything `opus` passes the gate while still bloating. Mitigation = this table
-   + stating the tier per task; NOT machine-enforced.
-2. Fail-open: a broken guard script silently reverts to no enforcement (chosen so a
-   parser bug can't halt all delegation). A heavy guard bug would re-open the bloat.
-3. The Workflow count check is heuristic — `agent(`/`model:` inside comments or
-   strings can miscount (errs toward under-blocking, never false-blocks a fully
-   tiered script).
-4. This prevents FUTURE bloat only; spend already incurred (earlier character
-   workflows + flaw-hunts that ran Opus-by-default) is not refunded.
+## Audit findings — ADDRESSED (CEO 2060, 2026-06-18)
+The self-audit's 4 residual limitations were acted on, not just noted:
+1. **"Choice not correctness" (all-opus passed) → FIXED.** `model:opus` on a
+   delegated Agent/Task is now BLOCKED unless the prompt/description carries a
+   judgment justification (judg|synthes|adjudicat|root-cause|triage|architect|
+   design|decision|deliberat|flaw-hunt). So opus is enforced as judgment-only;
+   lazily tagging a grep/research task opus is rejected. (Lenient direction: a
+   genuine opus task just states its judgment nature.)
+2. **Fail-open silent breakage → DECIDED + made DETECTABLE.** Fail-open is kept
+   deliberately (fail-closed would halt ALL delegation = worse). Detectability
+   added via `scripts/test-model-routing-gate.sh` (11 cases, exits non-zero if the
+   gate stops blocking) — run it to confirm the gate is healthy; a silent
+   regression now shows up as a test failure instead of invisible bloat.
+3. **Heuristic count → IMPROVED.** `//` line-comments are stripped before counting
+   `agent(`/`model:`, so commented-out calls no longer miscount.
+4. **No refund of past spend → unfixable** (tokens already spent); future bloat is
+   what the gate prevents. Acknowledged, not papered over.
+Self-test: `scripts/test-model-routing-gate.sh` → "ALL PASS — gate healthy".
