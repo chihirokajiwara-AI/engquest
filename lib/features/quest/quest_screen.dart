@@ -149,7 +149,11 @@ class _QuestScreenState extends State<QuestScreen> {
     final correct = i == _enc.correctIndex;
     if (!correct && !_enc.penalizeWrong) {
       // No-scold (teach/blend/word/phrase): a wrong tap replays the audio and
-      // keeps the card active — never red, never advancing.
+      // keeps the card active — never red, never advancing. The wrong-chime +
+      // haptic confirm the tap REGISTERED (it used to be silent here, so a wrong
+      // tap felt broken on a phone). Mirrors nazo_screen; respects the SFX mute.
+      _sound.playWrong();
+      HapticFeedback.selectionClick();
       _cue.play(_enc.autoPlayAudio);
       return;
     }

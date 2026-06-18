@@ -182,8 +182,13 @@ class _NazoScreenState extends State<NazoScreen> {
     }
     if (!correct) _showWrongMeaning(i); // teach at the error moment (studio #3)
     if (!correct && !_step.penalizeWrong) {
-      // No-scold: replay the audio without advancing. Shake the tapped tile so
-      // the child SEES their tap registered (it used to be swallowed silently).
+      // No-scold: replay the audio without advancing. The wrong-chime + haptic
+      // CONFIRM the tap registered — this default path (TeachSound/BlendWord/
+      // TeachWord/Phrase all land here) used to fire only a silent shake + voice
+      // replay, so a wrong tap felt broken/unregistered on a phone. Mirrors the
+      // penalizeWrong path's feedback below; both respect the SFX mute.
+      _sound.playWrong();
+      HapticFeedback.selectionClick();
       _optionKeys[i].currentState?.triggerShake();
       _cue.play(_step.autoPlayAudio);
       return;
