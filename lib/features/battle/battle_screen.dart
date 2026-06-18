@@ -306,6 +306,17 @@ class _BattleScreenState extends State<BattleScreen>
   List<int> _queue = const [];
   int _queueIdx = 0;
 
+  // Re-entrancy guard for _gradeCard. A rapid double-tap on a grade button fires
+  // two tap events before the advancing setState(_queueIdx) rebuilds and removes
+  // the buttons — without this, the second event double-applies the whole grade:
+  // duplicate _CardResult, double _totalXp, the SAME FSRSCard scheduled twice
+  // (corrupting its stability/dueDate), and a second SkillAccuracyStore record
+  // that inflates the live 合格率 meter. Held until the post-frame reset (after the
+  // rebuild has cleared the buttons), NOT reset synchronously — the second tap is
+  // a separate event that would otherwise see `false` again. Mirrors the `_finished`
+  // / `_revealed` guards in nazo_screen.dart.
+  bool _grading = false;
+
   // ── Session stats ──────────────────────────────────────────────────────────
   final List<_CardResult> _sessionResults = [];
   bool _sessionDone = false;
@@ -542,6 +553,11 @@ class _BattleScreenState extends State<BattleScreen>
   // ── Grade ──────────────────────────────────────────────────────────────────
 
   void _gradeCard(Grade grade) {
+    // Block a re-entrant double-tap (see [_grading] above). The session-end branch
+    // leaves _grading set (no further grading on the summary); the normal path
+    // releases it post-frame, once the rebuild has removed the grade buttons.
+    if (_grading) return;
+    _grading = true;
     HapticFeedback.mediumImpact();
 
     final isCorrect = grade == Grade.good || grade == Grade.easy;
@@ -624,6 +640,14 @@ class _BattleScreenState extends State<BattleScreen>
 
     setState(() => _queueIdx = nextIdx);
     _resetFlip();
+    // Release the guard only AFTER this frame paints — by then the rebuild has
+    // swapped in the next card (grade buttons gone), so any second tap from the
+    // same burst was already dropped above. Resetting synchronously here would
+    // not help: the second tap is a separate event that runs after this method
+    // returns and would see `false` again.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _grading = false;
+    });
   }
 
   // ── Session persistence ────────────────────────────────────────────────────
