@@ -146,8 +146,13 @@ class _MockExamScreenState extends State<MockExamScreen> {
         correct[item.skill] = (correct[item.skill] ?? 0) + 1;
       }
     }
-    // A completed 模試 is a big study session — feed the home streak + daily-goal.
-    recordExamHabit(_items.length);
+    // A completed 模試 is a big study session — feed the home streak + daily-goal,
+    // and CAPTURE the resulting StreakState so the results screen can celebrate it
+    // at the completion peak (SessionEndHook). The flagship mock previously ended
+    // with only a score, missing the at-completion daily-return reinforcement that
+    // every other exam section already shows (#151). recordExamHabitAndGet records
+    // the same habit as the void recordExamHabit — it just also returns the state.
+    final earnedStreak = await recordExamHabitAndGet(_items.length);
     recordExamXp(_items.length);
     recordExamAchievements();
     // The mock has no writing UI, and live AI essay grading needs the (not-yet-
@@ -214,6 +219,7 @@ class _MockExamScreenState extends State<MockExamScreen> {
       MaterialPageRoute(
         builder: (_) => PassMeterScreen(
           estimate: estimate,
+          earnedStreak: earnedStreak,
           onReviewBuilder: reviewItems.isEmpty
               ? null
               : (_) => MockReviewScreen(
@@ -299,6 +305,12 @@ class _MockExamScreenState extends State<MockExamScreen> {
         if (didPop || _leaving) return;
         final navigator = Navigator.of(context);
         final leave = await _confirmLeave();
+        // If the 30-min timer auto-submitted while the confirm dialog was open,
+        // _submit() has already pushReplaced the results (PassMeterScreen). Popping
+        // now would discard that results route — and the score + 合格率 update with
+        // it. _submitting latches true for the rest of this screen's life, so this
+        // guard also covers a manual submit racing the dialog.
+        if (_submitting) return;
         if (leave && mounted) {
           setState(() => _leaving = true);
           navigator.pop();

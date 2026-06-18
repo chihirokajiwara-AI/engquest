@@ -33,6 +33,8 @@ import '../../../core/storage/preferences_service.dart';
 import '../../character/progress_tinted_character.dart';
 import '../../paywall/grade_gate_screen.dart';
 import '../../quest/ui/dq_ui.dart';
+import '../../home/streak_service.dart';
+import '../practice_encouragement.dart';
 import 'cse_model.dart';
 import 'mastery_advisor.dart';
 import 'pass_gauge.dart';
@@ -70,11 +72,19 @@ class PassMeterScreen extends StatelessWidget {
   /// suggests advancing / keeping practising / reviewing easier material.
   final MasteryRecommendation? recommendation;
 
+  /// The streak/daily-goal state earned by the session that pushed this screen
+  /// (the フル模試). When non-null a [SessionEndHook] celebrates the daily-return
+  /// progress at the completion peak — the flagship mock previously ended with a
+  /// score only, missing the at-completion reinforcement every other exam section
+  /// already shows (#151). Null for the live 合格メーター (no session to credit).
+  final StreakState? earnedStreak;
+
   const PassMeterScreen({
     super.key,
     this.estimate,
     this.onReviewBuilder,
     this.recommendation,
+    this.earnedStreak,
   });
 
   @override
@@ -115,6 +125,16 @@ class PassMeterScreen extends StatelessWidget {
 
             // ── Hero meter ──────────────────────────────────────────────────
             _PassHero(est: est),
+
+            // ── Daily-return reward at the completion peak (#151) ───────────
+            // The mock is the highest-investment session; surface the streak /
+            // daily-goal it just earned right after the 合格率 result, the way
+            // every other exam section shows it at session end. Present only when
+            // a session pushed this screen (the live 合格メーター has no earnedStreak).
+            if (earnedStreak != null) ...[
+              const SizedBox(height: 16),
+              SessionEndHook(streak: earnedStreak!),
+            ],
 
             // ── Mastery-based progression advice (#14) ──────────────────────
             if (recommendation != null) ...[
