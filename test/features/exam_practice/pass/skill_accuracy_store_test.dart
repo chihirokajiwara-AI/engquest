@@ -188,6 +188,44 @@ void main() {
     expect(r.itemsAttempted, equals(0));
   });
 
+  // ── 9b. Migration: legacy two-int keys are read, then upgraded atomically ────
+
+  test('migration: legacy ..._correct/_total keys survive the format change',
+      () async {
+    // Seed pre-migration data under the OLD two-int keys (as an existing
+    // learner's device would have). The new code must keep this 合格率.
+    SharedPreferences.setMockInitialValues({
+      'pass_acc_3_reading_correct': 6,
+      'pass_acc_3_reading_total': 10,
+    });
+    PreferencesService.resetInstance();
+    SkillAccuracyStore.resetInstance();
+
+    final store = await SkillAccuracyStore.getInstance();
+
+    // Legacy data is visible before any new write — not silently lost.
+    final before = store
+        .readAccuracies('3')
+        .firstWhere((a) => a.skill == EikenSkill.reading);
+    expect(before.itemsAttempted, equals(10));
+    expect(before.accuracy, closeTo(0.6, 0.001));
+    expect(store.hasAnyData('3'), isTrue);
+
+    // A new session accumulates ON TOP of the migrated legacy counts.
+    await store.record(
+        grade: '3', skill: EikenSkill.reading, correct: 4, total: 5);
+
+    final after = store
+        .readAccuracies('3')
+        .firstWhere((a) => a.skill == EikenSkill.reading);
+    expect(after.itemsAttempted, equals(15)); // 10 + 5
+    expect(after.accuracy, closeTo(10 / 15, 0.001)); // (6+4)/15
+
+    // The combined atomic key now holds the data (single-write, can't tear).
+    final prefs = await PreferencesService.getInstance();
+    expect(prefs.getString('pass_acc_3_reading'), isNotNull);
+  });
+
   // ── 9. CseEstimator integration: store output feeds CseEstimator cleanly ─────
 
   test('readAccuracies output is valid input for CseEstimator.estimate()',

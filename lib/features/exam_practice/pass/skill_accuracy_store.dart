@@ -7,10 +7,18 @@
 //   for passing directly to CseEstimator.estimate().
 //
 // STORAGE:
-//   PreferencesService-backed (SharedPreferences under the hood). Keys:
-//     pass_acc_<grade>_<skill>_correct  → int (running correct count)
-//     pass_acc_<grade>_<skill>_total    → int (running total count)
-//   e.g. "pass_acc_pre1_reading_correct", "pass_acc_pre1_reading_total".
+//   PreferencesService-backed (SharedPreferences under the hood). One ATOMIC key
+//   per (grade, skill) holding both counters as JSON:
+//     pass_acc_<grade>_<skill>  → {"c": <correct>, "t": <total>}
+//   e.g. "pass_acc_pre1_reading" → {"c":15,"t":20}.
+//
+//   This is a single setString (one localStorage write) so correct + total can
+//   never tear apart. The PREVIOUS layout used two independent int keys
+//   (..._correct / ..._total) and updated them with two separate awaited writes;
+//   a tab-close/crash between the two left correct advanced but total stale,
+//   silently INFLATING the 合格率 meter (correct/total with a too-low total).
+//   Those legacy int keys are still READ as a migration fallback so existing
+//   learners keep their accumulated 合格率 across the format change.
 //
 // SECTION → SKILL MAPPING (英検 一次試験):
 //   ExamSectionType.vocabGrammar       → EikenSkill.reading
@@ -29,6 +37,8 @@
 //
 // NO dart:io. No Firebase. No network (R4).
 
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 
 import '../../../core/storage/preferences_service.dart';
@@ -37,10 +47,16 @@ import 'mastery_advisor.dart';
 
 // ── Key helpers ───────────────────────────────────────────────────────────────
 
-String _correctKey(String grade, EikenSkill skill) =>
+/// Atomic combined key: holds {"c":correct,"t":total} as a single JSON string.
+String _key(String grade, EikenSkill skill) =>
+    'pass_acc_${grade}_${_skillId(skill)}';
+
+// Legacy two-int keys — READ ONLY (migration fallback for data written before the
+// atomic-key change). New writes never touch these.
+String _legacyCorrectKey(String grade, EikenSkill skill) =>
     'pass_acc_${grade}_${_skillId(skill)}_correct';
 
-String _totalKey(String grade, EikenSkill skill) =>
+String _legacyTotalKey(String grade, EikenSkill skill) =>
     'pass_acc_${grade}_${_skillId(skill)}_total';
 
 String _skillId(EikenSkill skill) {
@@ -116,17 +132,41 @@ class SkillAccuracyStore {
   }) async {
     if (total <= 0) return; // Nothing to record for empty sessions.
     try {
-      final ck = _correctKey(grade, skill);
-      final tk = _totalKey(grade, skill);
-      final prevCorrect = _prefs.getInt(ck);
-      final prevTotal = _prefs.getInt(tk);
-      await _prefs.setInt(ck, prevCorrect + correct.clamp(0, total));
-      await _prefs.setInt(tk, prevTotal + total);
+      final prev = _readCounts(grade, skill);
+      final newCorrect = prev.correct + correct.clamp(0, total);
+      final newTotal = prev.total + total;
+      // SINGLE atomic write: both counters live in one JSON value, so a
+      // tab-close/crash mid-write can never leave correct advanced but total
+      // stale (which used to inflate the live 合格率 meter).
+      await _prefs.setString(
+        _key(grade, skill),
+        jsonEncode({'c': newCorrect, 't': newTotal}),
+      );
     } catch (e) {
       if (kDebugMode) {
         debugPrint('[SkillAccuracyStore] record failed: $e');
       }
     }
+  }
+
+  /// Reads the accumulated (correct, total) for a (grade, skill). Prefers the
+  /// atomic combined key; falls back to the legacy two-int keys so learners who
+  /// recorded data before the format change keep their accumulated 合格率.
+  ({int correct, int total}) _readCounts(String grade, EikenSkill skill) {
+    final raw = _prefs.getString(_key(grade, skill));
+    if (raw != null && raw.isNotEmpty) {
+      try {
+        final m = jsonDecode(raw) as Map<String, dynamic>;
+        final c = (m['c'] as num?)?.toInt() ?? 0;
+        final t = (m['t'] as num?)?.toInt() ?? 0;
+        return (correct: c, total: t);
+      } catch (_) {
+        // Corrupt JSON → fall through to legacy / zero rather than throw.
+      }
+    }
+    final c = _prefs.getInt(_legacyCorrectKey(grade, skill));
+    final t = _prefs.getInt(_legacyTotalKey(grade, skill));
+    return (correct: c, total: t);
   }
 
   // ── readAccuracies ───────────────────────────────────────────────────────────
@@ -148,14 +188,13 @@ class SkillAccuracyStore {
 
   SkillAccuracy _readSkill(String grade, EikenSkill skill) {
     try {
-      final correct = _prefs.getInt(_correctKey(grade, skill));
-      final total = _prefs.getInt(_totalKey(grade, skill));
-      if (total <= 0) {
+      final counts = _readCounts(grade, skill);
+      if (counts.total <= 0) {
         return SkillAccuracy(skill: skill, accuracy: 0.0, itemsAttempted: 0);
       }
-      final accuracy = (correct / total).clamp(0.0, 1.0);
+      final accuracy = (counts.correct / counts.total).clamp(0.0, 1.0);
       return SkillAccuracy(
-          skill: skill, accuracy: accuracy, itemsAttempted: total);
+          skill: skill, accuracy: accuracy, itemsAttempted: counts.total);
     } catch (e) {
       if (kDebugMode) {
         debugPrint('[SkillAccuracyStore] readSkill failed: $e');
@@ -171,8 +210,11 @@ class SkillAccuracyStore {
   Future<void> resetGrade(String grade) async {
     for (final skill in EikenSkill.values) {
       try {
-        await _prefs.setInt(_correctKey(grade, skill), 0);
-        await _prefs.setInt(_totalKey(grade, skill), 0);
+        // Remove all three keys (combined + both legacy) so neither the atomic
+        // value nor a stale legacy pair can resurrect the count after a reset.
+        await _prefs.remove(_key(grade, skill));
+        await _prefs.remove(_legacyCorrectKey(grade, skill));
+        await _prefs.remove(_legacyTotalKey(grade, skill));
       } catch (e) {
         if (kDebugMode) {
           debugPrint('[SkillAccuracyStore] resetGrade failed: $e');
@@ -187,7 +229,7 @@ class SkillAccuracyStore {
   bool hasAnyData(String grade) {
     for (final skill in EikenSkill.values) {
       try {
-        if (_prefs.getInt(_totalKey(grade, skill)) > 0) return true;
+        if (_readCounts(grade, skill).total > 0) return true;
       } catch (_) {}
     }
     return false;
