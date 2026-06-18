@@ -267,6 +267,12 @@ class _NazoScreenState extends State<NazoScreen> {
   }
 
   void _scheduleAutoFinish() {
+    // When the reveal carries a grammar RULE to READ (onCorrectJa rule-card), do
+    // NOT auto-dismiss — a 6yo needs time to read it, and 1.4s is far too short.
+    // The "▶ ナゾ、解けた！" CTA (shown once _burstReady) lets the child advance at
+    // their own pace. Auto-advance stays for story-only reveals, where it carries
+    // a non-reader to the colour-restoration without stranding them on a read.
+    if (_step.onCorrectJa != null) return;
     _finishTimer = Timer(const Duration(milliseconds: 1400), () {
       if (mounted) _finish();
     });
