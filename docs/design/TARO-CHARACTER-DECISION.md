@@ -87,6 +87,29 @@ cap タロ's OWN (a custom brass letter/コトバ charm, not a stock deerstalker
 (front/3-4/back), flat 1-colour mark, 16px favicon crop, brave↔startled expression sheet — and a
 char-anchor/LoRA so the design stops drifting. Revised Grok prompt: see CEO msg 2025.
 
+## Grok-prompt mastery audit + 2nd-render re-eval = REVISE (near-miss, 2026-06-18)
+`taro-grok-prompt-audit` (3 Grok/Aurora mastery engineers + strict 2026 kids-IP critic →
+director), auditing the prompt AND re-judging the CEO's two new renders vs the 3-part ART GATE.
+VERDICT **REVISE — gate FAIL, near-miss.** IMG1 = the keeper base (~70%, defined cel linework);
+**IMG2 discarded** (airbrushed soft fur + the EXPLICITLY-FORBIDDEN symmetric pink cheek-dots +
+babyish proportion = proof Grok dropped the scattered inline negatives). The two renders are NOT
+the same character (age/proportion/finish/blush/tail-side differ) — itself a turnaround fail.
+THREE gate misses remain:
+1. **Q-mark TAIL must be SOLID anatomy, not a glow** — today it's rendered as a light effect (which
+   Gate-1 orders removed) so it vanishes in the 16px black silhouette. Highest-leverage fix.
+2. **Cap actually OVER ONE eye** — both renders left both eyes visible (the comedic beat was buried
+   in the prompt); phrase as a command "brim pulled LOW covering his left eye."
+3. **Silhouette-ownable anatomy beyond the lone asymmetric ear** — exaggerate (one big floppy + one
+   sharp perky ear), a committed puppy muzzle, + the solid Q-tail, so cap+glow stripped still reads
+   "this specific pup," not a generic chibi blob.
+Also: kill airbrush (lead with medium/linework nouns + ONE trailing `Avoid:` block, Grok ignores
+inline NOs); brass charm = a legible "T" letter or drop it; drop hex codes (Aurora honours named
+colours, hex burns tokens). **Refined Grok prompt + reference-locked production workflow** (lock 1
+master from ~6-8 rolls → fixed Brand-Kit anchor clause → @image1 reference-upload for turnaround +
+expression sheet → cohesion check beside M5/M6 → 16px silhouette gate) are in the audit result
+(`tasks/w31s2pepb.output`). Text-only prompting will NOT hold タロ across a turnaround — reference
+upload is mandatory. → handed to CEO; タロ does NOT lock until a render clears all 3 gates.
+
 ## Execution on the CEO's Grok image (per [[distinct-identity-not-ip-copy]])
 Import → `assets/art/masters/slime.webp` (`'スラ'→` map quest_screen.dart:330/497) +
 `assets/art/scenes_layton/npc_slime_{color,grey}.webp` (scene grey⇄colour pair; derive grey from a
