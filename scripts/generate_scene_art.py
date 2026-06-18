@@ -109,6 +109,12 @@ FORCE = os.environ.get("ART_FORCE", "") not in ("", "0", "false")
 
 DISTRICT_SEED = 5050
 CLOCKMAKER = "an elderly kind clockmaker, round spectacles, leather apron, white moustache, gentle"
+# Shared base so ホシオ's grey and colour renders are the SAME person (only the
+# drain/restore tail differs). Elderly + long white eyebrows front-loaded so they
+# survive; teal hood + brass buttons = the dusty-teal/brass world palette.
+HOSHIO = ("a very old stooped elderly kind village stargazer, deeply wrinkled gentle face, "
+          "long bushy white eyebrows, round spectacles, a hooded teal coat with simple brass "
+          "buttons, holding a rolled paper star-chart")
 
 # (filename, prompt, width, height, seed)
 JOBS = [
@@ -140,6 +146,17 @@ JOBS = [
      "a kind elderly town gatekeeper, simple cap and coat, lantern, smiling warmly, full "
      "warm colour restored, hopeful, single character, simple soft background", 832, 1216,
      DISTRICT_SEED + 33),
+    # ホシオ（星緒）— 5級 大問2 stargazer (HOSHIO-5KYU-DAIMON2.md). Elderly former
+    # postman of star-charts. SHARED base description (like CLOCKMAKER) so the grey
+    # and colour renders are the SAME character — only the drain/restore tail differs
+    # (a divergent first pass made two different people; restoration mechanic needs one).
+    # No "telescope-lens buttons" (it grew a mechanical contraption) — plain brass buttons.
+    ("npc_hoshio_grey.png",
+     f"{HOSHIO}, desaturated muted greyscale, colour drained away, sorrowful quiet, "
+     "single character, simple soft night background", 832, 1216, DISTRICT_SEED + 44),
+    ("npc_hoshio_color.png",
+     f"{HOSHIO}, smiling warmly, full warm colour restored, hopeful, single character, "
+     "simple soft starry night background", 832, 1216, DISTRICT_SEED + 44),
 
     # ── 英検4級 district — 風（かぜ）の港町（みなとまち） ──────────────────────
     # The second コトバ探偵 district: a windy harbour town where the words for
