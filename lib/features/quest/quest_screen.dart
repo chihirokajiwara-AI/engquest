@@ -6,6 +6,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../character/progress_tinted_character.dart';
 
 import '../../core/audio/audio_cue_service.dart';
@@ -155,7 +156,11 @@ class _QuestScreenState extends State<QuestScreen> {
     setState(() {
       _picked = i;
       _revealed = correct;
-      if (_revealed) _sound.playCorrect();
+      if (_revealed) {
+        _sound.playCorrect();
+        HapticFeedback
+            .lightImpact(); // pair the chime with a tick (mirror nazo)
+      }
     });
   }
 

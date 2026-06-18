@@ -20,6 +20,7 @@ import 'dart:math' as math;
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../core/audio/audio_assets.dart';
 import '../../core/audio/audio_cue_service.dart';
@@ -190,13 +191,21 @@ class _NazoScreenState extends State<NazoScreen> {
     if (!correct) {
       _minos.onWrong();
       _sound.playWrong();
+      // Pair the chime with a haptic tick — the ナゾ is the core loop (英検
+      // question == puzzle) yet it was the ONLY answer path firing sound with no
+      // haptic, while exam/battle/level-up all pair them (PracticeFeedback). On a
+      // phone/tablet the tick is a primary "registered" signal. No-op on web/desktop.
+      HapticFeedback.selectionClick();
       _optionKeys[i].currentState?.triggerShake();
       _autoRevealFirstWrongHint();
     }
     setState(() {
       _picked = i;
       _revealed = correct;
-      if (_revealed) _sound.playCorrect();
+      if (_revealed) {
+        _sound.playCorrect();
+        HapticFeedback.lightImpact();
+      }
     });
     if (!correct) return;
     // Read FIRST, celebrate SECOND. After a short window the burst + continue
