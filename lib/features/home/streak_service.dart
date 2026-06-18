@@ -142,6 +142,22 @@ class StreakService {
     return db.difference(da).inDays;
   }
 
+  /// Whether [now] is in a different ISO week than [last] — i.e. their Mondays
+  /// differ. Used by BOTH the display (`load`) and write (`recordStudySession`)
+  /// paths so the weekly dots can never reset on one but not the other (#125: the
+  /// two paths previously encoded the same "new week" rule with two different
+  /// constants — `!= 0` vs `>= 7`). Compares the Monday DATES directly rather
+  /// than a day-count, so a DST week (where `Duration.inDays` can read a 7-day
+  /// gap as 6) can't desync the two paths or leave stale weekday dots showing.
+  static bool _isNewWeek(DateTime last, DateTime now) {
+    DateTime monday(DateTime d) {
+      final m = d.subtract(Duration(days: d.weekday - 1));
+      return DateTime(m.year, m.month, m.day);
+    }
+
+    return monday(last) != monday(now);
+  }
+
   /// Load the current streak state without modifying storage.
   ///
   /// [now] is injectable for tests; production uses the wall clock. The daily
@@ -179,10 +195,7 @@ class StreakService {
     // would show last week's weekday dots as this week's, and yesterday's session
     // count as today's. Reset them for display so the engagement spine is honest.
     if (lastDate != null) {
-      final lastMonday =
-          lastDate.subtract(Duration(days: lastDate.weekday - 1));
-      final nowMonday = nowDt.subtract(Duration(days: nowDt.weekday - 1));
-      if (_daysBetween(lastMonday, nowMonday) != 0) bits = 0; // a new week
+      if (_isNewWeek(lastDate, nowDt)) bits = 0; // a new week
       if (lastDateStr != todayKey) today = 0; // no sessions TODAY yet
     } else {
       bits = 0;
@@ -237,10 +250,7 @@ class StreakService {
     if (lastDateStr != null) {
       final lastDate = DateTime.tryParse(lastDateStr);
       if (lastDate != null) {
-        final lastMonday =
-            lastDate.subtract(Duration(days: lastDate.weekday - 1));
-        final nowMonday = now.subtract(Duration(days: now.weekday - 1));
-        if (_daysBetween(lastMonday, nowMonday) >= 7) {
+        if (_isNewWeek(lastDate, now)) {
           bits = 0;
           todayCount = 0;
         }

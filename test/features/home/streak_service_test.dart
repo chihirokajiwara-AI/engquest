@@ -239,6 +239,28 @@ void main() {
     expect(state.todayCount, 0, reason: 'no sessions today yet');
   });
 
+  test('recordStudySession in a NEW week clears last week\'s dots (#125)',
+      () async {
+    // Two-weeks-ago last study with a full dot row; studying TODAY must reset the
+    // dots to only today — never OR last week\'s 127 into this week. Pre-#125 the
+    // write path used a different constant (`>= 7`) than the display path (`!= 0`)
+    // for the same "new week" rule; both now share _isNewWeek so they cannot
+    // diverge (and it compares Monday DATES, so a DST week can\'t desync them).
+    // This locks the write-path reset, which previously had no test.
+    final now = DateTime.now();
+    SharedPreferences.setMockInitialValues({
+      'streak_current': 5,
+      'streak_weekly_bits': 127, // all 7 days "studied" two weeks ago
+      'streak_today_count': 4,
+      'streak_last_study_date': iso(now.subtract(const Duration(days: 14))),
+    });
+    PreferencesService.resetInstance();
+    final state = await StreakService().recordStudySession();
+    expect(state.weeklyBits, 1 << (now.weekday - 1),
+        reason:
+            'a new-week study session must clear last week, not OR into it');
+  });
+
   test('load() a NEW day in the SAME week keeps the dots, resets today-count',
       () async {
     // Last study: Tue 06-09; now: Wed 06-10 — same week (Mon 06-08).
