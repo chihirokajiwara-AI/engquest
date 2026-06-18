@@ -184,14 +184,19 @@ class FSRSAlgorithm {
       case CardState.review:
         final r = retrievability(card, now);
         newDifficulty = _nextDifficulty(card.difficulty, grade);
+        // FSRS-4.5: the stability update S'_r / S'_f takes the card's CURRENT
+        // (pre-review) difficulty, NOT the just-updated D'. Passing newDifficulty
+        // inflated S' on Good/Easy (D drops → (11−D) grows), stretching intervals
+        // past the 90%-retention target → the child forgot "mastered" words.
         if (grade == Grade.again) {
           lapses = lapses + 1;
-          newStability = _nextStabilityForget(newDifficulty, card.stability, r);
+          newStability =
+              _nextStabilityForget(card.difficulty, card.stability, r);
           newState = CardState.relearning;
           interval = 0;
         } else {
           newStability =
-              _nextStabilityRecall(newDifficulty, card.stability, r, grade);
+              _nextStabilityRecall(card.difficulty, card.stability, r, grade);
           newState = CardState.review;
           interval = nextInterval(newStability);
         }
