@@ -26,17 +26,19 @@ try:
     tool=d.get('tool_name','') or '-'
     model=str(ti.get('model','') or '').strip() or '-'
     body=str(ti.get('script','') or '')+str(ti.get('scriptPath','') or '')
-    hasagent='1' if 'agent(' in body else '0'
-    hasmodel='1' if ('model:' in body or 'model :' in body or \"model'\" in body) else '0'
-    print(tool, model, hasagent, hasmodel)
+    nagent=body.count('agent(')
+    nmodel=body.count('model:')+body.count('model :')
+    # untiered = at least one agent() call without a matching model: tier.
+    untiered='1' if nagent>nmodel else '0'
+    print(tool, model, nagent, untiered)
 except Exception:
     print('- - 0 0')
 " 2>/dev/null || echo "- - 0 0")
 
 TOOL=$(printf '%s' "$PARSED" | awk '{print $1}')
 MODEL=$(printf '%s' "$PARSED" | awk '{print $2}')
-HASAGENT=$(printf '%s' "$PARSED" | awk '{print $3}')
-HASMODEL=$(printf '%s' "$PARSED" | awk '{print $4}')
+NAGENT=$(printf '%s' "$PARSED" | awk '{print $3}')
+UNTIERED=$(printf '%s' "$PARSED" | awk '{print $4}')
 
 case "$TOOL" in
   Agent|Task)
@@ -46,8 +48,8 @@ case "$TOOL" in
     fi
     ;;
   Workflow)
-    if [ "$HASAGENT" = "1" ] && [ "$HASMODEL" = "0" ]; then
-      echo "BLOCKED — this Workflow's agent() calls set NO model tier (CEO 2056). Per docs/governance/MODEL-ROUTING.md set opts.model on each agent(): sonnet for the research/impl bulk, haiku for grep/status, opus ONLY for the director/synthesis. Add model: and re-run." >&2
+    if [ "$UNTIERED" = "1" ]; then
+      echo "BLOCKED — this Workflow has agent() call(s) with NO model tier (CEO 2056): agent() count exceeds model: count. Per docs/governance/MODEL-ROUTING.md set opts.model on EVERY agent() — sonnet for the research/impl bulk, haiku for grep/status, opus ONLY for the director/synthesis. Add the missing model: and re-run." >&2
       exit 2
     fi
     ;;

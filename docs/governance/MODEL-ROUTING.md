@@ -40,3 +40,27 @@ Fable 5 is a session-launch model, not an Agent/Workflow option — not selectab
   subagents rather than doing it inline on Opus.
 
 Audit: state which tier each delegated task used so over/under-spend is visible.
+
+## Self-audit (CEO 2058, 2026-06-18) — VERIFIED LIVE + honest limitations
+Empirically probed in the running session (not assumed):
+- **Agent spawn with no model → BLOCKED** (live probe hit the gate). Disproves the
+  worry that PreToolUse might not fire on the Agent tool (cf. anthropics/claude-code
+  #34692) and confirms the settings.json edit is active this session + the matcher
+  matches the real tool name "Agent".
+- **Workflow with an un-tiered agent() → BLOCKED** (live probe).
+- Strengthened after the audit: the Workflow check was too lenient (any single
+  `model:` passed); now blocks when `agent(` count > `model:` count, so a
+  partially-tiered script (one tiered + several un-tiered agents) is caught too.
+  Re-tested 8 cases (block/allow/fail-open) all correct.
+
+KNOWN RESIDUAL LIMITATIONS (honest — not yet enforced):
+1. The gate enforces that a tier is CHOSEN, not that it is the RIGHT one — tagging
+   everything `opus` passes the gate while still bloating. Mitigation = this table
+   + stating the tier per task; NOT machine-enforced.
+2. Fail-open: a broken guard script silently reverts to no enforcement (chosen so a
+   parser bug can't halt all delegation). A heavy guard bug would re-open the bloat.
+3. The Workflow count check is heuristic — `agent(`/`model:` inside comments or
+   strings can miscount (errs toward under-blocking, never false-blocks a fully
+   tiered script).
+4. This prevents FUTURE bloat only; spend already incurred (earlier character
+   workflows + flaw-hunts that ran Opus-by-default) is not refunded.
