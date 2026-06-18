@@ -47,10 +47,18 @@ class NazoResult {
   /// real comprehension signal. Defaults to false (e.g. an abandoned puzzle).
   final bool firstTryCorrect;
 
+  /// Highest hint tier the learner unlocked in this ナゾ. Hint reveals are PAID
+  /// (coins spent durably) but were in-memory only, so closing an unsolved puzzle
+  /// and reopening it relocked the paid hint and demanded payment again. The
+  /// caller (scene_view) carries this back so a reopened ナゾ restores what was
+  /// already bought.
+  final int hintsShown;
+
   const NazoResult({
     required this.solved,
     required this.minosEarned,
     this.firstTryCorrect = false,
+    this.hintsShown = 0,
   });
 }
 
@@ -73,11 +81,17 @@ class NazoScreen extends StatefulWidget {
   /// Hint coin service (injected for testability; defaults to shared instance).
   final HintCoinService? hintCoinService;
 
+  /// Hint tier already unlocked for this hotspot (paid for earlier in the scene
+  /// session). Seeds [_NazoScreenState._hintsShown] so a reopened ナゾ shows the
+  /// hints the child already bought instead of relocking them. Defaults to 0.
+  final int initialHintsShown;
+
   const NazoScreen({
     super.key,
     required this.hotspot,
     required this.eikenLevel,
     this.hintCoinService,
+    this.initialHintsShown = 0,
   });
 
   @override
@@ -143,6 +157,9 @@ class _NazoScreenState extends State<NazoScreen> {
   void initState() {
     super.initState();
     _teaching = _teachCard != null;
+    // Restore the hint tier the child already paid for (relocking it on reopen
+    // would charge them twice for the same hint — the spend is durable).
+    _hintsShown = widget.initialHintsShown;
     _minos = MinosController(
       maxValue: minosMaxForGrade(widget.eikenLevel),
     );
@@ -329,11 +346,16 @@ class _NazoScreenState extends State<NazoScreen> {
       solved: true,
       minosEarned: earned,
       firstTryCorrect: _firstTryCorrect,
+      hintsShown: _hintsShown,
     ));
   }
 
   void _dismiss() {
-    Navigator.of(context).pop(const NazoResult(solved: false, minosEarned: 0));
+    // Carry the unlocked hint tier back so reopening this unsolved ナゾ restores
+    // the hints the child already paid for (the coin spend is durable).
+    Navigator.of(context).pop(
+      NazoResult(solved: false, minosEarned: 0, hintsShown: _hintsShown),
+    );
   }
 
   // ── Hint ladder ───────────────────────────────────────────────────────────

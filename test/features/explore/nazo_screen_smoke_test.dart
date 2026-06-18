@@ -39,6 +39,25 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
+    // #155: a reopened ナゾ must restore the hint tier the child already PAID for
+    // (the coin spend is durable; the reveal lived only in NazoScreen state and
+    // was lost on close+reopen). Seeding initialHintsShown is the restore path —
+    // it must render cleanly with the previously-bought tiers pre-unlocked.
+    testWidgets('reopen with initialHintsShown restores without exception',
+        (tester) async {
+      final hotspot = kTown5Scene.hotspots.firstWhere(
+        (h) => h.kind == HotspotKind.npc,
+      );
+      await tester.pumpWidget(MaterialApp(
+        home:
+            NazoScreen(hotspot: hotspot, eikenLevel: '5', initialHintsShown: 2),
+      ));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(find.byType(NazoScreen), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+
     // #61: every ナゾ opens with a NAMED case identity — whose mystery + which 英検
     // grade — replacing the undifferentiated 「？」ナゾが あらわれた！.
     testWidgets('header shows case identity (英検 grade + NPC name)',

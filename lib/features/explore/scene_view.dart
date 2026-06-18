@@ -447,6 +447,12 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
     );
   }
 
+  /// Hint tier already unlocked per hotspot THIS scene session (idx → tier). A
+  /// reopened ナゾ is seeded with this so the child keeps the hints they already
+  /// paid for (#155): the coin spend is durable, but the reveal lived only in the
+  /// NazoScreen State and was lost when an unsolved puzzle was closed + reopened.
+  final Map<int, int> _hintTierByHotspot = {};
+
   Future<void> _openNazo(int idx, Hotspot h) async {
     final result = await Navigator.of(context).push<NazoResult>(
       _nazoRoute(
@@ -454,10 +460,15 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
           hotspot: h,
           eikenLevel: widget.eikenLevel,
           hintCoinService: _coins,
+          initialHintsShown: _hintTierByHotspot[idx] ?? 0,
         ),
       ),
     );
     if (!mounted) return;
+    // Remember the paid-for hint tier so a reopen restores it instead of charging
+    // again. idx is stable for the scene session; a solved hotspot short-circuits
+    // before it can reopen, so this only matters for unsolved (dismissed) puzzles.
+    if (result != null) _hintTierByHotspot[idx] = result.hintsShown;
     if (result != null && result.solved) {
       // Witnessed restoration (studio #1): apply the grey→colour restore AFTER the
       // ナゾ exit transition (220ms) finishes, so the child is back in the scene to
