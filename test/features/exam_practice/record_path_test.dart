@@ -132,6 +132,16 @@ void main() {
 
   testWidgets('語句整序 (大問3) records reading accuracy for the right grade',
       (tester) async {
+    // Tall viewport: the word-bank chips are in a SingleChildScrollView; with the
+    // default 800×600 the bottom chips can land just outside the hittable area
+    // (offset ~499px) depending on the random scramble order, causing an
+    // intermittent tap-miss → "次の問題へ" never appears.  Match the viewport
+    // used by the RULE-HINTED sibling test so all chip taps are guaranteed
+    // on-screen regardless of scramble order.
+    tester.view.physicalSize = const Size(800, 1600);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+
     const grade = '5';
     final chunkSets = wordOrderingChunksForTest(grade);
     expect(chunkSets, isNotEmpty);
