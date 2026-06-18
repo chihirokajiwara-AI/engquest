@@ -1,15 +1,30 @@
 # タロ (Taro) — companion character DECISION (v2, standalone)
 
-> ⚠️ **FORM UNDER CEO RE-REVIEW (2026-06-18, CEO 2033/2034).** The CEO is
-> re-questioning the *cute-puppy premise itself* ("子犬が良いのか？ ラブブもバズった
-> よね。最新でこれからバズりそうなキャラは？"). The `next-breakout-character-direction`
-> team (5 latest-2026 experts → director: toy-IP market / kimo-kawaii aesthetic /
-> plush-blindbox producibility / 6yo-learning / distinctiveness critic) is deciding
-> whether to KEEP the refined puppy, EVOLVE it, or PIVOT to an original ugly-cute
-> creature — explicitly decoding the Labubu(The Monsters/Pop Mart) breakout. **Do
-> NOT treat the puppy FORM below as locked** until the CEO adjudicates that team's
-> ranked recommendation. The VOICE/bible (besotted word-detective sidekick, ひらがな,
-> never-wrong-about-words, pride-glow, 「…どう?」) is form-agnostic and stays valid.
+> ⚠️ **FORM — panel verdict in, awaiting CEO adjudication (2026-06-18, CEO 2033/2034).**
+> The CEO re-questioned the cute-puppy premise ("子犬が良いのか？ ラブブもバズったよね。
+> 最新でこれからバズりそうなキャラは？"). The `next-breakout-character-direction` team (5
+> latest-2026 experts → director, run wf_ffdf737c-83e) concluded with dated evidence:
+> - **Labubu has PEAKED** (Bloomberg 2026-03-15 "Labubu mania is over"; search 86→8;
+>   resale −50%+). Successors (Twinkle Twinkle, Mirumi, Crybaby, ちいかわ) won by getting
+>   **WARMER + story-embedded, NOT uglier**. Labubu's real lesson = the **METHOD** (one
+>   ownable silhouette + story-per-feature + strong palette + merch-able shape), NOT the
+>   kimo-kawaii face (adult-collector + blind-box-gambling register = wrong for a 6yo).
+> - **A literal cute PUPPY is rejected by all 5** (un-trademarkable; reads as pet/follower
+>   not clever partner; no franchise moat). A Labubu clone is also rejected.
+> - **The winning form = an ORIGINAL warm creature + ONE ownable signature (the cap) +
+>   pride-glow inner state — i.e. THIS v2 spec.** The panel **independently validates v2**
+>   (confirmation, not churn). タロ is therefore NOT a literal puppy; the legacy puppy
+>   bible is to be formally retired.
+> - **NEW execution-discipline HARD GATE the panel adds (fold into v2):** exactly **ONE**
+>   signature feature (the cap — NOT cap+tail+glow+monocle = the "committee creature"
+>   self-failure all 5 named); a **1-bit 24px silhouette test** + a **real 6yo + parent
+>   read-test** BEFORE any further art spend / the Grok import / the #116 wiring.
+> - **Two open calls are the CEO's (brand + spec-freeze):** (A) lock v2 (retire puppy)
+>   vs Option-2 (faint dog-adjacent warmth for faster bonding, slightly lower ceiling);
+>   (B) palette — warm honey/amber accent (#E0A85A) as the friendly focal node vs cool
+>   dusty-teal cohesion. Loop recommendation: A = lock v2 + gate; B = warm accent.
+> The VOICE/bible is form-agnostic and stays valid regardless. **Do not import art or wire
+> #116 until the CEO answers A/B and the silhouette/read-test gate passes.**
 
 Decided 2026-06-18 by the diverse latest-researching team (`taro-standalone-redecide`: 3 experts
 + 2 critics incl. the **story-portability critic** + Opus director), per CEO 2013/2016/2018
