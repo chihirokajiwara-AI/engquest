@@ -16,6 +16,7 @@ class SceneSolvedStore {
 
   static const _prefsKey = 'scene_solved_v1';
   static const _coinsKey = 'scene_coins_v1';
+  static const _observedKey = 'scene_observed_v1';
 
   /// The solved-hotspot keys for [sceneKey] (e.g. '5') as a set of indices.
   /// Returns an empty set on any error so exploration always works.
@@ -79,10 +80,47 @@ class SceneSolvedStore {
     }
   }
 
-  /// Test seam: clear all persisted solve- AND coin-state.
+  // ── Investigated observations ──────────────────────────────────────────────
+  // The observation hotspots carry the サイレント lore + ことばのしおり fragments
+  // (the Layton density beat). Their lore banner is a 4.5s one-shot, so a child
+  // who looks away misses it with no trace and no way to know a spot is unread.
+  // Persist "seen" so the dot can settle to a 探偵メモ marker (?→✓) and the world
+  // reads as responsive across sessions (#124).
+
+  /// The investigated-observation hotspot indices for [sceneKey]. Empty on error.
+  static Future<Set<int>> seenObservationIndices(String sceneKey) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final all = prefs.getStringList(_observedKey) ?? const [];
+      final prefix = '$sceneKey:';
+      return all
+          .where((e) => e.startsWith(prefix))
+          .map((e) => int.tryParse(e.substring(prefix.length)))
+          .whereType<int>()
+          .toSet();
+    } catch (_) {
+      return <int>{};
+    }
+  }
+
+  /// Mark observation hotspot [idx] of [sceneKey] investigated (idempotent).
+  static Future<void> markObservationSeen(String sceneKey, int idx) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final all =
+          (prefs.getStringList(_observedKey) ?? const <String>[]).toSet();
+      all.add('$sceneKey:$idx');
+      await prefs.setStringList(_observedKey, all.toList());
+    } catch (_) {
+      // Non-fatal: at worst the dot stays "unread" (degrades to the old beat).
+    }
+  }
+
+  /// Test seam: clear all persisted solve-, coin- AND observation-state.
   static Future<void> clearForTest() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_prefsKey);
     await prefs.remove(_coinsKey);
+    await prefs.remove(_observedKey);
   }
 }

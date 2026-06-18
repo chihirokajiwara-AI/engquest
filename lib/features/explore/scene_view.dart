@@ -152,6 +152,9 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
 
   // Coin found state: hotspot index → found bool
   final Map<int, bool> _coinFound = {};
+  // Investigated observation hotspots (#124): persisted so the lore dot settles
+  // to a 探偵メモ marker (?→✓) and stays read across sessions.
+  final Map<int, bool> _observed = {};
 
   // Which NPC index currently shows a 「？」speech-bubble (null = none)
   int? _bubbleIndex;
@@ -299,14 +302,19 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
     final solved = await SceneSolvedStore.solvedIndices(widget.eikenLevel);
     final coins =
         await SceneSolvedStore.collectedCoinIndices(widget.eikenLevel);
+    final observed =
+        await SceneSolvedStore.seenObservationIndices(widget.eikenLevel);
     if (!mounted) return;
-    if (solved.isNotEmpty || coins.isNotEmpty) {
+    if (solved.isNotEmpty || coins.isNotEmpty || observed.isNotEmpty) {
       setState(() {
         for (final idx in solved) {
           _solved[idx] = true;
         }
         for (final idx in coins) {
           _coinFound[idx] = true;
+        }
+        for (final idx in observed) {
+          _observed[idx] = true;
         }
       });
     }
@@ -362,8 +370,14 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
       _tapNpc(idx, h);
     } else if (h.kind == HotspotKind.observation) {
       // #90 Layton "tap → something happens": an observation reveals a 探偵メモ line
-      // (no puzzle). Re-tappable; shown via the existing lore-banner beat.
+      // (no puzzle). Re-tappable; shown via the existing lore-banner beat. On the
+      // FIRST investigation persist "seen" so the dot settles to a marker and the
+      // child can tell read from unread spots across sessions (#124).
       if (h.clueLineJa != null) {
+        if (_observed[idx] != true) {
+          setState(() => _observed[idx] = true);
+          SceneSolvedStore.markObservationSeen(widget.eikenLevel, idx);
+        }
         _cue.play(null);
         _showLore(h.clueLineJa!);
       }
@@ -1017,6 +1031,7 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
     final hotspot = widget.scene.hotspots[idx];
     final isSolved = _solved[idx] == true;
     final isCoinFound = _coinFound[idx] == true;
+    final isObserved = _observed[idx] == true;
 
     if (hotspot.kind == HotspotKind.coin && isCoinFound) {
       return const SizedBox.shrink(); // Vanished after collection
@@ -1037,7 +1052,7 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
       // Mark it a named button so it is announced and activatable.
       child: Semantics(
         button: true,
-        label: _hotspotSemanticLabel(hotspot, isSolved),
+        label: _hotspotSemanticLabel(hotspot, isSolved, isObserved),
         excludeSemantics: true,
         child: GestureDetector(
           onTap: () => _onHotspotTap(idx),
@@ -1047,7 +1062,7 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
           // the tap (the 「ナゾをみる」-does-nothing bug, CEO 2026-06-09).
           child: switch (hotspot.kind) {
             HotspotKind.coin => _coinTarget(size),
-            HotspotKind.observation => _observationTarget(size),
+            HotspotKind.observation => _observationTarget(size, isObserved),
             HotspotKind.npc => _npcTarget(idx, hotspot, isSolved, size),
           },
         ),
@@ -1058,12 +1073,17 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
   /// a11y label for a scene hotspot — describes the interactive target by kind +
   /// solved state (the Hotspot model carries no per-NPC name, so labels are
   /// generic but clear). Child-facing ひらがな + English.
-  String _hotspotSemanticLabel(Hotspot hotspot, bool isSolved) {
+  String _hotspotSemanticLabel(
+      Hotspot hotspot, bool isSolved, bool isObserved) {
     if (hotspot.kind == HotspotKind.coin) {
       return 'ひかる てがかり。タップして しらべる / A shining clue — tap to investigate';
     }
     if (hotspot.kind == HotspotKind.observation) {
-      return 'なにか ありそう。タップして しらべる / Something here — tap to look';
+      // ?→✓ once investigated so a screen-reader child can tell read from unread
+      // spots (the label used to never change — #124).
+      return isObserved
+          ? 'しらべた メモ。もういちど よめる / A noted clue — tap to re-read'
+          : 'なにか ありそう。タップして しらべる / Something here — tap to look';
     }
     return isSolved
         ? 'ナゾ クリアずみ。タップして おはなしを きく / Mystery solved — tap to hear their story'
@@ -1345,8 +1365,27 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
   // scene → the 探偵メモ lore goes unseen. A SLOW, subtle breathing shimmer (clearly
   // dimmer than the coin's bright glint) rewards a curious sweep without becoming
   // a loud marker. Respects reduce-motion.
-  Widget _observationTarget(double size) => _ObservationShimmer(
-      size: size, reduceMotion: prefersReducedMotion(context));
+  Widget _observationTarget(double size, bool seen) {
+    if (seen) {
+      // Investigated: a STATIC 探偵メモ marker (a settled しおり), dimmer than the
+      // active shimmer and animation-free — so the world reads as responsive
+      // (?→✓) and a child can see which spots remain to explore (#124). No
+      // controller here keeps it off the per-frame budget (cf. #123).
+      return Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.black.withAlpha(28),
+          border: Border.all(color: dqGold.withAlpha(85), width: 1.0),
+        ),
+        child: Icon(Icons.bookmark_rounded,
+            color: dqGold.withAlpha(150), size: size * 0.5),
+      );
+    }
+    return _ObservationShimmer(
+        size: size, reduceMotion: prefersReducedMotion(context));
+  }
 
   // Camera-push curve for the witnessed restoration: snap up to 1.28×, hold at
   // peak briefly, then settle back to 1.0 — a felt "the eye is pulled here" beat.

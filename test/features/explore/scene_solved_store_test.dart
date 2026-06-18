@@ -63,4 +63,31 @@ void main() {
     await SceneSolvedStore.markCoinCollected('5', 3);
     expect(await SceneSolvedStore.collectedCoinIndices('4'), isEmpty);
   });
+
+  // ── Investigated observations (#124: lore beat must leave a trace) ──────────
+
+  test('markObservationSeen persists and seenObservationIndices reads it back',
+      () async {
+    expect(await SceneSolvedStore.seenObservationIndices('5'), isEmpty);
+    await SceneSolvedStore.markObservationSeen('5', 7);
+    await SceneSolvedStore.markObservationSeen('5', 7); // idempotent
+    expect(
+        await SceneSolvedStore.seenObservationIndices('5'), equals(<int>{7}));
+  });
+
+  test('observation-state is independent of solve- and coin-state', () async {
+    await SceneSolvedStore.markObservationSeen('5', 2);
+    await SceneSolvedStore.markCoinCollected('5', 2);
+    await SceneSolvedStore.markSolved('5', 2);
+    // Same index, three different stores — must not bleed across kinds.
+    expect(
+        await SceneSolvedStore.seenObservationIndices('5'), equals(<int>{2}));
+    expect(await SceneSolvedStore.collectedCoinIndices('5'), equals(<int>{2}));
+    expect(await SceneSolvedStore.solvedIndices('5'), equals(<int>{2}));
+  });
+
+  test('seen observations are per-scene namespaced (5級 ≠ 4級)', () async {
+    await SceneSolvedStore.markObservationSeen('5', 7);
+    expect(await SceneSolvedStore.seenObservationIndices('4'), isEmpty);
+  });
 }
