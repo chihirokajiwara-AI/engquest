@@ -695,7 +695,7 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
           const SizedBox(height: 14),
           // Weekly dots — subtle, no red "missed day" highlight.
           _buildWeekDots(),
-          // スラ companion reacts to the child's actual progress (greets a
+          // タロ companion reacts to the child's actual progress (greets a
           // returner, celebrates a met goal / long streak, encourages mid-way).
           // A companion that responds to YOUR growth is the parasocial-bonding
           // retention mechanic (2026 kids-EdTech best practice; CEO 1320
@@ -706,7 +706,7 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
     );
   }
 
-  /// スラ's in-character line for the current progress state. Mirrors the
+  /// タロ's in-character line for the current progress state. Mirrors the
   /// research-backed mascot modes: greet/welcome-back, celebrate, encourage.
   String _companionLine() {
     final s = _streak;
@@ -721,13 +721,13 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
     }
     if (s.problemsToday > 0) {
       // No 「あと N問」 here — the goal caption right above already says it;
-      // スラ adds encouragement, not a repeat.
+      // タロ adds encouragement, not a repeat.
       return 'その ちょうし！ いっしょに なぞを ときつづけよう！';
     }
     return 'きょうも なぞとき、いってみよう！';
   }
 
-  /// スラ companion card — same dusty-teal #5DA9E9 identity as the scene-entry
+  /// タロ companion card — same dusty-teal #5DA9E9 identity as the scene-entry
   /// arrival banner (CHARACTER-BIBLE §3), so the sidekick feels like one
   /// character across the hub and the exploration scenes.
   Widget _buildCompanionCard() {
@@ -750,7 +750,7 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('スラ',
+                Text('タロ',
                     style: dqText(
                         size: 11,
                         w: FontWeight.w700,

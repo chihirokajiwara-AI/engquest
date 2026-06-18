@@ -1,6 +1,6 @@
 // The session-end retention hook must make the goal-MET moment FEEL distinct from
 // the calm "keep going" state — not the same blue box with different words. A met
-// goal shows a gold 「達成」 achievement stamp; a not-met state shows the calm スラ
+// goal shows a gold 「達成」 achievement stamp; a not-met state shows the calm タロ
 // header and no stamp. (Engagement spine, CEO 951 — the daily-goal crossing is the
 // strongest daily-return reinforcement and must read as a win.)
 
@@ -29,11 +29,11 @@ void main() {
 
     expect(find.text(stamp), findsOneWidget);
     expect(find.textContaining('たっせい'), findsWidgets);
-    // The calm スラ header is replaced by the achievement stamp when met.
-    expect(find.text('🔵 スラ'), findsNothing);
+    // The calm タロ header is replaced by the achievement stamp when met.
+    expect(find.text('🔵 タロ'), findsNothing);
   });
 
-  testWidgets('goal NOT met shows calm スラ header, no 達成 stamp', (tester) async {
+  testWidgets('goal NOT met shows calm タロ header, no 達成 stamp', (tester) async {
     const notMet = StreakState(
       currentStreak: 1,
       weeklyBits: 0,
@@ -46,7 +46,7 @@ void main() {
     await tester.pump();
 
     expect(find.text(stamp), findsNothing);
-    expect(find.text('🔵 スラ'), findsOneWidget);
+    expect(find.text('🔵 タロ'), findsOneWidget);
     expect(find.textContaining('あと'), findsWidgets); // "あと N問で…"
   });
 }

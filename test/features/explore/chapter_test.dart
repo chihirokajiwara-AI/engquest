@@ -36,7 +36,7 @@ void main() {
               ch.beats.where((b) => b.trigger == BeatTrigger.chapterIntro);
           expect(intro, hasLength(1));
           expect(intro.first.narrationJa, scene.companionArrivalJa);
-          expect(intro.first.speaker, 'スラ');
+          expect(intro.first.speaker, 'タロ');
         }
       }
     });

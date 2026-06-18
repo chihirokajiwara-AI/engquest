@@ -33,7 +33,7 @@ final _royaltyEn = RegExp(
 );
 
 /// All player-facing narrative strings of a scene (where a royalty leak would
-/// surface): the case title, the cleared line, スラ's arrival, and per-ナゾ the
+/// surface): the case title, the cleared line, タロ's arrival, and per-ナゾ the
 /// clue / framing lines and the teach card.
 Iterable<String> _sceneStrings(SceneDef s) sync* {
   yield s.titleJa;

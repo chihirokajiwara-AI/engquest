@@ -285,7 +285,7 @@ void main() {
   });
 
   // Studio build (2026-06-14, harsh-playtester-approved replacement for the
-  // rejected rule-card #2): on the FIRST wrong tap of a grammar/quiz ナゾ, スラ
+  // rejected rule-card #2): on the FIRST wrong tap of a grammar/quiz ナゾ, タロ
   // gives a FREE hint — "the game is helping me", not a school-y rule lecture.
   // Only on penalizeWrong steps (teach steps replay audio instead), only once.
   group('NazoScreen — free hint on first wrong', () {
@@ -318,8 +318,8 @@ void main() {
       await tester.tap(find.byType(AudioOptionButton).at(wrong));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 200));
-      // The free hint cue appears (スラ helps — once, warm, not a rule lecture).
-      expect(find.textContaining('スラがヒントをくれた'), findsOneWidget);
+      // The free hint cue appears (タロ helps — once, warm, not a rule lecture).
+      expect(find.textContaining('タロがヒントをくれた'), findsOneWidget);
       expect(tester.takeException(), isNull);
     });
 
@@ -332,7 +332,7 @@ void main() {
       addTearDown(t.view.reset);
       String norm(String s) => s.toLowerCase().replaceAll(RegExp('[^a-z]'), '');
       // Pick a ナゾ where a WRONG option's label has a taught meaning (the feature
-      // under test) — e.g. スラ's greeting (Hello/Goodbye…), NOT セル's a/an article
+      // under test) — e.g. タロ's greeting (Hello/Goodbye…), NOT セル's a/an article
       // ナゾ whose a/an/the/one options aren't vocab words with meanings.
       bool hasTaughtWrong(Hotspot h) {
         if (h.kind != HotspotKind.npc ||

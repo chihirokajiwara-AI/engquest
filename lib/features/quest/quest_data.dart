@@ -345,7 +345,7 @@ const List<QuestTown> kQuestTowns = [
         'まず、その音（おと）をよく聞（き）こう。🔊をおして、音（おと）をまねしてみて。'
         '音（おと）をつなげば、ことばがよみがえる。',
     cleared: '村（むら）に声（こえ）がもどった！ 最初（さいしょ）の〈声（こえ）の石（いし）〉が、あたたかく ひかる。\n'
-        'スラが「Hello！」と、はじめて言（い）えた。あおい 光（ひかり）が、スラの からだを つつんだ。\n'
+        'タロが「Hello！」と、はじめて言（い）えた。あおい 光（ひかり）が、タロの からだを つつんだ。\n'
         '灰守（はいもり）セルが、きみの てに 小（ちい）さな しおりを おしつけた。'
         '「これは…むかし、やさしい ひとが かいた おはなしの さいしょの 1ページ。'
         '〈サイレント〉は、ずっと まえは やさしい ひとだった。'
@@ -413,13 +413,13 @@ const List<QuestTown> kQuestTowns = [
       ),
       // ── Phase A′: nonsense blend (sat). Blending mechanic BEFORE real words
       //    (katakana-contaminated real words are harder → come later).
-      // 4 — blend s-a-t (スラ teaches blending with a nonsense syllable).
+      // 4 — blend s-a-t (タロ teaches blending with a nonsense syllable).
       BlendWord(
-        npcName: 'スラ',
+        npcName: 'タロ',
         npcEmoji: '🟢',
         letters: ['s', 'a', 't'],
         word: 'sat',
-        teachJa: 'スラが言（い）った。「音（おと）を、はやく つなげてみて！ s…a…t… → "sat"！」'
+        teachJa: 'タロが言（い）った。「音（おと）を、はやく つなげてみて！ s…a…t… → "sat"！」'
             'これは いみのない れんしゅうの音（おと）。つなげる かんじを つかもう。🔊で きこう。',
         autoPlayAudio: 'audio/phonics/blend_sat.mp3',
         practicePromptJa: 's→a→t を つなげると？ 🔊をおして えらぼう。',
@@ -430,7 +430,7 @@ const List<QuestTown> kQuestTowns = [
               isCorrect: true),
           QuestOption(label: 's', audioAsset: 'audio/phonics/phoneme_s.mp3'),
         ],
-        onCorrect: '"sat"！ つながった！ スラが はねた。「…ぷる、"sat"！ きみが いえたから、ぼくも いえた！'
+        onCorrect: '"sat"！ つながった！ タロが はねた。「…"sat"！ きみが いえたから、ぼくも いえた！'
             'ぼく、きみの あとを おいかける。もうすこし、おしえて。」',
       ),
       // ── Phase B: real 英検5級 CVC words. New sounds /c/, /o/, /g/ introduced
@@ -567,10 +567,10 @@ const List<QuestTown> kQuestTowns = [
       ),
       // 12 — Hello! (Sura's first sentence). Hands into the existing grammar arc.
       Phrase(
-        npcName: 'スラ',
+        npcName: 'タロ',
         npcEmoji: '🟢',
         text: 'Hello!',
-        teachJa: 'スラが むねを はった。「ぼくも、いってみる…！」 さいしょの あいさつ「Hello!」。'
+        teachJa: 'タロが むねを はった。「ぼくも、いってみる…！」 さいしょの あいさつ「Hello!」。'
             '🔊で きいて、いっしょに いってみよう。',
         autoPlayAudio: 'audio/phonics/phrase_hello.mp3',
         practicePromptJa: 'あいさつの ことばは、どっち？',
@@ -581,7 +581,7 @@ const List<QuestTown> kQuestTowns = [
               isCorrect: true),
           QuestOption(label: 'cat', audioAsset: 'audio/phonics/blend_cat.mp3'),
         ],
-        onCorrect: 'Hello！ スラが はじめて あいさつを いえた。あおい 光（ひかり）が、スラを やさしく つつんだ。'
+        onCorrect: 'Hello！ タロが はじめて あいさつを いえた。あおい 光（ひかり）が、タロを やさしく つつんだ。'
             '「H…Hello！ きみが おしえてくれたから、いえた！ ぼく、きみの いう ことば、'
             'ぜんぶ おぼえていく。さあ、村（むら）の おくへ いこう！」',
       ),
@@ -589,13 +589,13 @@ const List<QuestTown> kQuestTowns = [
       // Phase C (cont.) — the existing 20-encounter grammar arc. The child can
       // now decode the option labels, so these quizzes are fair.
       // ──────────────────────────────────────────────────────────────────────
-      // 1 — Greeting. スラ re-learns 'Hello'. (大問2型)
+      // 1 — Greeting. タロ re-learns 'Hello'. (大問2型)
       QuestEncounter(
-        npcName: 'スラ',
+        npcName: 'タロ',
         npcEmoji: '🟢',
         npcLine:
             '... ... (A small slime opens its mouth, but no word comes out.)',
-        npcLineJa: 'ちいさなスライムが口（くち）をひらくけれど、ことばが出（で）てこない…',
+        npcLineJa: 'ちいさな たんていの こいぬが口（くち）をひらくけれど、ことばが出（で）てこない…',
         choices: ['Goodbye.', 'Hello!', 'Thank you.', 'I am sorry.'],
         correctIndex: 1,
         onCorrect:
@@ -745,10 +745,10 @@ const List<QuestTown> kQuestTowns = [
       ),
       // 13 — 疑問詞 what + be動詞. (大問2型)
       QuestEncounter(
-        npcName: 'こどものスラ',
+        npcName: 'こどものタロ',
         npcEmoji: '🟢',
         npcLine: '(Sura points at a strange fruit) ___ is this?',
-        npcLineJa: '（スラがふしぎな果物（くだもの）を指（ゆび）さして）これは ___ ？ ___ は？',
+        npcLineJa: '（タロがふしぎな果物（くだもの）を指（ゆび）さして）これは ___ ？ ___ は？',
         choices: ['Who', 'Where', 'What', 'How'],
         correctIndex: 2,
         onCorrect:
@@ -881,7 +881,7 @@ const List<QuestTown> kQuestTowns = [
     cleared: 'トックの時計（とけい）が、コチコチと動（うご）き出（だ）した――'
         '「きのう、ありがとう。あした、また会（あ）おう」。\n'
         '街（まち）に毎日（まいにち）のおしゃべりがもどった。二（ふた）つ目（め）の〈声（こえ）の石（いし）〉を手（て）に。'
-        '「サイレントは、しずけさを“へいわ”だと思（おも）っているらしい」とスラがつぶやく。',
+        '「サイレントは、しずけさを“へいわ”だと思（おも）っているらしい」とタロがつぶやく。',
     encounters: [
       // 1 — be動詞 過去 was/were. 5級の現在から「昨日」へ。(大問1 文法型)
       QuestEncounter(
@@ -1163,9 +1163,9 @@ const List<QuestTown> kQuestTowns = [
         '三（みっ）つ目（め）の〈声（こえ）の石（いし）〉を手（て）に。'
         '人々（ひとびと）が、また自分（じぶん）の物語（ものがたり）を語（かた）り出（だ）した。',
     encounters: [
-      // 1 — スラ再会。過去形での応答（4級の復習）。手がかり語 last night。(大問2 会話応答型)
+      // 1 — タロ再会。過去形での応答（4級の復習）。手がかり語 last night。(大問2 会話応答型)
       QuestEncounter(
-        npcName: "スラ",
+        npcName: "タロ",
         npcEmoji: "🟢",
         npcLine:
             "We made it to the city! I practiced my words all night. Where did you sleep last night?",
@@ -1476,7 +1476,7 @@ const List<QuestTown> kQuestTowns = [
         '港町（みなとまち）の人々（ひとびと）も、また「自分（じぶん）はこう思（おも）う」と言（い）えるようになった。四（よっ）つ目（め）の〈声（こえ）の石（いし）〉。'
         'クワイエは、ことばが二人（ふたり）を仲直（なかなお）りさせるのを見（み）て、ちいさくふるえた――'
         '「…ことばで、きずを なおせるの…？」 そっと、きみのあとを ついてくる。\n'
-        'スラが しずかに つぶやいた――「サイレントも、むかし ことばで だれかを '
+        'タロが しずかに つぶやいた――「サイレントも、むかし ことばで だれかを '
         'きずつけて しまって、もう だれも きずつけたくなくて、だまる ことを '
         'えらんだのかな…」。〈サイレント〉の なぞが、また ひとつ ふかくなった。',
     encounters: [
@@ -2507,7 +2507,7 @@ const List<QuestTown> kQuestTowns = [
       ),
       // 6 — Mixed conditional (past condition → present result). (大問1 文法型)
       QuestEncounter(
-        npcName: 'スラ',
+        npcName: 'タロ',
         npcEmoji: '🟢',
         npcLine:
             'If アイラ had never gone silent, the world ___ full of voices right now.',
@@ -2597,7 +2597,7 @@ const List<QuestTown> kQuestTowns = [
       ),
       // 13 — Discourse connective: contrast (Nevertheless). (長文の語句空所補充型)
       QuestEncounter(
-        npcName: 'スラ',
+        npcName: 'タロ',
         npcEmoji: '🟢',
         npcLine:
             'We are small and tired, you and I. ___, we will walk all the way in to アイラ tonight — turning back is not a word we keep.',
@@ -2623,7 +2623,7 @@ const List<QuestTown> kQuestTowns = [
       ),
       // 15 — Discourse connective: concessive result (Even so). (長文の語句空所補充型)
       QuestEncounter(
-        npcName: 'スラ',
+        npcName: 'タロ',
         npcEmoji: '🟢',
         npcLine:
             'I know the centre of the square is where the quiet is deepest, and my voice might go small. ___, I\'m coming with you. I won\'t let you face アイラ alone.',
@@ -2690,7 +2690,7 @@ const List<QuestTown> kQuestTowns = [
       ),
       // 19 — Opinion essay: the reason that actually supports the claim. (意見論述型)
       QuestEncounter(
-        npcName: 'スラ',
+        npcName: 'タロ',
         npcEmoji: '🟢',
         npcLine:
             'Before you reach アイラ, say what you believe: "Words should be free." Which reason best SUPPORTS that claim in an essay?',

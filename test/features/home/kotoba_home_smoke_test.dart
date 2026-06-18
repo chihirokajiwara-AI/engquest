@@ -523,9 +523,9 @@ void main() {
     expect(find.byIcon(Icons.check_rounded), findsOneWidget);
   });
 
-  // ── スラ companion (progress-reactive retention mechanic) ───────────────────
+  // ── タロ companion (progress-reactive retention mechanic) ───────────────────
 
-  testWidgets('KotobaHomeScreen: スラ companion celebrates a met daily goal',
+  testWidgets('KotobaHomeScreen: タロ companion celebrates a met daily goal',
       (tester) async {
     await tester.pumpWidget(_wrap(
       streakService: _MockStreakService(
@@ -545,7 +545,7 @@ void main() {
     expect(find.textContaining('きみと いると たのしいよ'), findsOneWidget);
   });
 
-  testWidgets('KotobaHomeScreen: スラ companion warmly welcomes a returner',
+  testWidgets('KotobaHomeScreen: タロ companion warmly welcomes a returner',
       (tester) async {
     await tester.pumpWidget(_wrap(
       streakService: _MockStreakService(

@@ -68,11 +68,11 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  // スラ companion arrival banner: #49 character presence / light #55 arrival hook.
-  // A scene whose SceneDef.companionArrivalJa is set should show スラ's line on
+  // タロ companion arrival banner: #49 character presence / light #55 arrival hook.
+  // A scene whose SceneDef.companionArrivalJa is set should show タロ's line on
   // entry, and the scene must still be reachable (title visible) after the banner
   // is dismissed.
-  testWidgets('arrival banner shows スラ line; scene reachable after dismiss',
+  testWidgets('arrival banner shows タロ line; scene reachable after dismiss',
       (tester) async {
     // kTown5Scene has companionArrivalJa set.
     await tester.pumpWidget(
@@ -82,24 +82,24 @@ void main() {
     await tester.pump();
     await tester.pump();
 
-    // The banner must be present and show part of スラ's arrival line.
+    // The banner must be present and show part of タロ's arrival line.
     expect(
-      find.textContaining('スラ'),
+      find.textContaining('タロ'),
       findsAtLeastNWidgets(1),
-      reason: 'arrival banner should show the スラ speaker label',
+      reason: 'arrival banner should show the タロ speaker label',
     );
     expect(
       find.textContaining('いろが'),
       findsOneWidget,
-      reason: 'arrival banner text should contain スラ\'s line for kTown5Scene',
+      reason: 'arrival banner text should contain タロ\'s line for kTown5Scene',
     );
 
-    // a11y: the banner must be a liveRegion so a screen reader ANNOUNCES スラ's
+    // a11y: the banner must be a liveRegion so a screen reader ANNOUNCES タロ's
     // line on appearance (a transient overlay is otherwise silent). Without this
     // the companion/narrative beat is perceivable only by sighted children.
     final handle = tester.ensureSemantics();
     expect(
-      tester.getSemantics(find.bySemanticsLabel(RegExp(r'スラ。.*いろが'))),
+      tester.getSemantics(find.bySemanticsLabel(RegExp(r'タロ。.*いろが'))),
       isSemantics(isLiveRegion: true),
       reason: 'arrival banner must announce via liveRegion for screen readers',
     );
@@ -118,7 +118,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  // N8 scene-reactivity: a RESTORED (fully-solved) case must NOT replay スラ's
+  // N8 scene-reactivity: a RESTORED (fully-solved) case must NOT replay タロ's
   // "this place lost its colour" loss intro on revisit — it contradicts the
   // scene's full restoration.
   testWidgets('a restored (cleared) scene does not replay the loss intro',
@@ -188,7 +188,7 @@ void main() {
     await tester.pump();
     await tester.pump();
 
-    // No banner label; 'スラ' speaker tag should not appear.
+    // No banner label; 'タロ' speaker tag should not appear.
     expect(
       find.textContaining('タップで とばす'),
       findsNothing,
@@ -235,7 +235,7 @@ void main() {
     );
     await tester.pump();
 
-    // Open the スラ NPC bubble — its hotspot is at Alignment(0.30, 0.30)
+    // Open the タロ NPC bubble — its hotspot is at Alignment(0.30, 0.30)
     // → (0.65·w, 0.65·h) in pixels.
     await tester.tapAt(const Offset(440 * 0.65, 900 * 0.65));
     await tester.pump();

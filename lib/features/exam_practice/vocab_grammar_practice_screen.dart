@@ -980,7 +980,7 @@ class _VocabGrammarPracticeScreenState
                 ),
               ),
             ],
-            // Session-end retention hook: the streak/goal just earned, in スラ's
+            // Session-end retention hook: the streak/goal just earned, in タロ's
             // voice — felt at the peak, closing the loop with the home spine.
             if (_earnedStreak != null) ...[
               const SizedBox(height: 20),

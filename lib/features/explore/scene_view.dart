@@ -186,7 +186,7 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
     return progressiveSaturation(p.solved, p.total, _kMutedSaturation);
   }
 
-  /// Whether the スラ companion arrival banner is currently visible.
+  /// Whether the タロ companion arrival banner is currently visible.
   /// True on entry when [SceneDef.companionArrivalJa] is present; set to false
   /// immediately on tap or after [_kArrivalAutoDismissMs] milliseconds.
   bool _showArrival = false;
@@ -267,7 +267,7 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
     }
   }
 
-  /// Show スラ's arrival greeting, gated on scene state (N8 reactivity): the
+  /// Show タロ's arrival greeting, gated on scene state (N8 reactivity): the
   /// "lost its words" intro plays only when the scene is NOT already restored —
   /// re-entering a solved case would otherwise contradict its full colour.
   void _maybeGreet() {
@@ -286,7 +286,7 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
     });
   }
 
-  /// Dismiss the スラ arrival banner immediately (tap handler).
+  /// Dismiss the タロ arrival banner immediately (tap handler).
   void _dismissArrival() {
     if (_showArrival) setState(() => _showArrival = false);
   }
@@ -310,7 +310,7 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
         }
       });
     }
-    // Cleared-state is now known → decide スラ's arrival greeting (N8 reactivity).
+    // Cleared-state is now known → decide タロ's arrival greeting (N8 reactivity).
     _maybeGreet();
   }
 
@@ -353,7 +353,7 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
     final h = widget.scene.hotspots[idx];
     if (h.kind == HotspotKind.coin) {
       if (_coinFound[idx] == true) return;
-      // Discovery beat (not a silent pickup): show スラ's authored clue first —
+      // Discovery beat (not a silent pickup): show タロ's authored clue first —
       // notice → discover → collect, the only real "find something" verb in the
       // world. Collection happens on the bubble's 「ひろう」 tap (_onBubbleTap).
       setState(() => _bubbleIndex = (_bubbleIndex == idx) ? null : idx);
@@ -605,7 +605,7 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
     // Generic fallback for any scene that has no authored cleared text yet.
     final storyBeat = widget.scene.cleared ??
         'たんていメモ：さいしょの「こえの いし」を とりもどした。\n'
-            'スラ：「きみと いっしょなら、つぎの まちも きっと いける！」';
+            'タロ：「きみと いっしょなら、つぎの まちも きっと いける！」';
 
     showDialog<void>(
       context: context,
@@ -948,7 +948,7 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
               // ── Active NPC speech bubble (scene-level so it is TAPPABLE) ────
               if (_bubbleIndex != null) _bubbleOverlay(_bubbleIndex!, w, h),
 
-              // ── スラ companion arrival banner ─────────────────────────────
+              // ── タロ companion arrival banner ─────────────────────────────
               // Shown on first entry when SceneDef.companionArrivalJa is set.
               // Tap anywhere on the banner to dismiss; auto-dismissed after
               // _kArrivalAutoDismissMs.  Must not block the scene: it is
@@ -1128,9 +1128,9 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
     );
   }
 
-  /// Companion arrival banner: スラ speaks a short in-character line on scene
+  /// Companion arrival banner: タロ speaks a short in-character line on scene
   /// entry.  Positioned at the bottom of the scene, full-width but short, with
-  /// a teal accent border matching スラ's dominant hue (CHARACTER-BIBLE §3 —
+  /// a teal accent border matching タロ's dominant hue (CHARACTER-BIBLE §3 —
   /// dusty teal #5DA9E9).  Tap anywhere to dismiss.
   Widget _arrivalBanner(String text, double w, double h) {
     return Positioned(
@@ -1138,14 +1138,14 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
       right: 12,
       bottom: 16,
       // a11y: a transient overlay banner is SILENT to a screen reader unless it
-      // is a liveRegion — announce スラ's arrival line the moment it appears so a
+      // is a liveRegion — announce タロ's arrival line the moment it appears so a
       // low-vision child perceives the companion beat (it auto-dismisses anyway).
       child: _EntryAnim(
         key: const ValueKey('arrival_banner'),
         reduceMotion: prefersReducedMotion(context),
         child: Semantics(
           liveRegion: true,
-          label: 'スラ。$text',
+          label: 'タロ。$text',
           excludeSemantics: true,
           child: GestureDetector(
             onTap: _dismissArrival,
@@ -1155,7 +1155,7 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
                 color: dqBox.withAlpha(235),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  // スラ's canonical dusty-teal #5DA9E9 (CHARACTER-BIBLE dominant hue)
+                  // タロ's canonical dusty-teal #5DA9E9 (CHARACTER-BIBLE dominant hue)
                   color: const Color(0xFF5DA9E9),
                   width: 2,
                 ),
@@ -1170,7 +1170,7 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // スラ slime icon
+                  // タロ slime icon
                   const Text('🟢', style: TextStyle(fontSize: 22)),
                   const SizedBox(width: 8),
                   Expanded(
@@ -1179,7 +1179,7 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          'スラ',
+                          'タロ',
                           style: dqText(
                             size: 11,
                             w: FontWeight.w700,
@@ -1268,7 +1268,7 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
 
   /// §3 per-solve lore beat. Same placement/cadence as the arrival banner but a
   /// distinct 探偵メモ identity — gold (dqGold), 🔖 bookmark icon — so a clue reads
-  /// as the unfolding サイレント mystery, not スラ chatter. Tap anywhere to dismiss.
+  /// as the unfolding サイレント mystery, not タロ chatter. Tap anywhere to dismiss.
   Widget _loreBanner(String text, double w, double h) {
     return Positioned(
       left: 12,
@@ -1838,7 +1838,7 @@ class _EntryAnimState extends State<_EntryAnim>
         return Opacity(
           // Floor just above 0: Opacity(0.0) EXCLUDES the subtree from semantics,
           // which would make these liveRegion banners a11y-invisible during the
-          // fade-in (a screen-reader child must hear スラ / the 探偵メモ immediately).
+          // fade-in (a screen-reader child must hear タロ / the 探偵メモ immediately).
           opacity: t.clamp(0.04, 1.0),
           child: Transform.translate(
             offset: Offset(0, (1 - t) * 14),

@@ -327,7 +327,7 @@ class _QuestScreenState extends State<QuestScreen> {
   /// The Quiz step's NPC portrait + dialogue (unchanged from the original).
   static String? _npcImage(String name) {
     const m = {
-      'スラ': 'assets/art/masters/slime.webp',
+      'タロ': 'assets/art/masters/slime.webp',
       'サイレント': 'assets/art/npc/silentus.webp',
       '賢者': 'assets/art/npc/sage.webp',
       '灰守': 'assets/art/npc/sage.webp',
@@ -498,7 +498,7 @@ class _QuestScreenState extends State<QuestScreen> {
                 emoji: '🟢',
                 size: 44),
             const SizedBox(height: 2),
-            Text('スラ',
+            Text('タロ',
                 style: dqText(size: 10, color: dqInk, w: FontWeight.w400)),
           ]),
         ],

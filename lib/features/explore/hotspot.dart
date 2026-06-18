@@ -180,9 +180,9 @@ class Hotspot {
 /// [titleJa] — displayed in the scene header bar (JP town name).
 /// [cleared] — story payoff shown when the last ナゾ is solved (sourced from the
 ///   matching [QuestTown.cleared] in kQuestTowns). Null → generic fallback text.
-/// [companionArrivalJa] — optional short スラ line (1–2 sentences) shown as a
+/// [companionArrivalJa] — optional short タロ line (1–2 sentences) shown as a
 ///   brief dismissible banner when the player ENTERS this scene.  Null → no banner.
-///   Purpose: gives each case a small in-media-res hook and makes スラ a recurring
+///   Purpose: gives each case a small in-media-res hook and makes タロ a recurring
 ///   companion rather than a passive hotspot.  Canon-consistent; no アイラ name.
 class SceneDef {
   final String backgroundAsset;
@@ -191,7 +191,7 @@ class SceneDef {
   final String titleJa;
   final String? cleared;
 
-  /// Optional スラ arrival line — shown once on scene entry, skippable via tap
+  /// Optional タロ arrival line — shown once on scene entry, skippable via tap
   /// or auto-dismissed after a short delay.  Null → no arrival banner.
   final String? companionArrivalJa;
 
@@ -217,12 +217,12 @@ class SceneDef {
 /// Background + NPC art is generated separately via scripts/safe-job.sh.
 /// Image.asset in SceneView uses errorBuilder → dq night-gradient fallback
 /// so the scene renders gracefully before art exists.
-/// Teach-first lesson for スラ's greeting ナゾ (_kStep(12), choices Goodbye /
+/// Teach-first lesson for タロ's greeting ナゾ (_kStep(12), choices Goodbye /
 /// Hello! / Thank you / I am sorry). A true beginner can't pick こんにちは out of
 /// four untaught English phrases — so we teach all four meanings first.
 const TeachCard kGreetingTeach = TeachCard(
   titleJa: 'まず、4つの あいさつを おぼえよう',
-  leadJa: 'スラに ことばを かえす まえに、いみを たしかめよう。',
+  leadJa: 'タロに ことばを かえす まえに、いみを たしかめよう。',
   items: [
     TeachItem('Hello!', 'こんにちは', 'ひとに であった ときの あいさつ'),
     TeachItem('Goodbye.', 'さようなら', 'わかれる ときの あいさつ'),
@@ -233,7 +233,7 @@ const TeachCard kGreetingTeach = TeachCard(
 
 // ── 英検4級 teach-cards ───────────────────────────────────────────────────────
 
-/// Teach-first lesson for スラ's irregular-past ナゾ (_kStep4(2),
+/// Teach-first lesson for タロ's irregular-past ナゾ (_kStep4(2),
 /// 「Where did you go?」 → 「I ___ to the zoo.」, choices goed / go / went /
 /// am go). Teaches the concept that some verbs change shape completely in the
 /// past — WITHOUT naming "went" as the answer. The child learns the rule
@@ -387,7 +387,7 @@ const TeachCard kPerfectYetAlreadyTeach = TeachCard(
   ],
 );
 
-/// Teach-first lesson for スラ's past-tense reunion ナゾ (_kStep3(0),
+/// Teach-first lesson for タロ's past-tense reunion ナゾ (_kStep3(0),
 /// 「Where did you sleep last night?」, choices including "I slept…").
 /// Teaches that "last night / yesterday" is the cue to use the simple past,
 /// NOT the present perfect or present tense. Uses verbs eat/walk/read
@@ -785,12 +785,12 @@ final SceneDef kTown5Scene = SceneDef(
   // far/mid/near bands are a later generation pass.
   parallaxLayers: const [],
   titleJa: 'ことばを失（うしな）った村（むら）',
-  // スラ arrival line — 5級, case 1: bright/curious newcomer, one word just won.
-  companionArrivalJa: 'ぷる…！ この村（むら）、いろが うすいね。\n'
+  // タロ arrival line — 5級, case 1: bright/curious newcomer, one word just won.
+  companionArrivalJa: '…あっ。この むら、いろが うすい…っ。\n'
       'なにかが、ことばを とっていった みたい……',
   // Sourced from kQuestTowns[0].cleared (英検5級 — ことばを失った村).
   cleared: '村（むら）に声（こえ）がもどった！ 最初（さいしょ）の〈声（こえ）の石（いし）〉が、あたたかく ひかる。\n'
-      'スラが「Hello！」と、はじめて言（い）えた。あおい 光（ひかり）が、スラの からだを つつんだ。\n'
+      'タロが「Hello！」と、はじめて言（い）えた。あおい 光（ひかり）が、タロの からだを つつんだ。\n'
       '灰守（はいもり）セルが、きみの てに 小（ちい）さな しおりを おしつけた。'
       '「これは…むかし、やさしい ひとが かいた おはなしの さいしょの 1ページ。'
       '〈サイレント〉は、ずっと まえは やさしい ひとだった。'
@@ -840,9 +840,9 @@ final SceneDef kTown5Scene = SceneDef(
       mysteryFragmentJa: 'たんていメモ：かまどの ひは、きえなかった。\n'
           'セル――「まだ きける ひとを、まっていたんだ。」',
     ),
-    // ── NPC 2: スラ — きみの かがみ、いちほ うしろの なかま ─────────────────
+    // ── NPC 2: タロ — きみの かがみ、いちほ うしろの なかま ─────────────────
     // Encounter index 12 = first QuestEncounter (「Hello!」greeting).
-    // スラ is always one step behind: きみが いえたから、ぼくも いえる。
+    // タロ is always one step behind: きみが いえたから、ぼくも いえる。
     Hotspot.npc(
       pos: const Alignment(0.30, 0.30),
       size: 0.16,
@@ -860,24 +860,24 @@ final SceneDef kTown5Scene = SceneDef(
                 'えらぶ もんだい だよ。'),
         NazoHint(
             tier: 2,
-            textJa: '【ヒント T2】さっき スラに おしえた「あいさつ」だよ。ひとに '
+            textJa: '【ヒント T2】さっき タロに おしえた「あいさつ」だよ。ひとに '
                 'あった ときに いう ことば を おもいだそう。'),
         NazoHint(
             tier: 3,
             textJa: '【ヒント T3】「こんにちは」と おなじ いみ の えいご の '
                 'あいさつ を えらぼう。'),
       ],
-      clueLineJa: 'ちいさなスライムが口（くち）をひらく… 「…ヘッ…ど…？」\n'
+      clueLineJa: 'ちいさな たんていの こいぬが口（くち）をひらく… 「…ヘッ…ど…？」\n'
           'ことばが、もうすこしのところで 出（で）てこない。',
-      framingJa: 'このスライムの名前（なまえ）は まだ ない。\n'
+      framingJa: 'この こいぬの名前（なまえ）は まだ ない。\n'
           'きみが いえたとき、はじめて ぼくも いえる。\n'
           'あいさつの ことばを、きみから おしえてあげよう。\n'
-          'スラは いつも、きみの いちほ うしろに いる。',
+          'タロは いつも、きみの いちほ うしろに いる。',
       npcGreyAsset: 'assets/art/scenes_layton/npc_slime_grey.webp',
       npcColorAsset: 'assets/art/scenes_layton/npc_slime_color.webp',
-      // §3 lore drip — CH.1 スラ "one step behind" canon (words return WITH
+      // §3 lore drip — CH.1 タロ "one step behind" canon (words return WITH
       // someone, never alone).
-      mysteryFragmentJa: 'たんていメモ：きみが いえたから、スラも いえた。\n'
+      mysteryFragmentJa: 'たんていメモ：きみが いえたから、タロも いえた。\n'
           'ことばは、だれかと いっしょに もどってくる。',
     ),
     // ── NPC 3: 門番（もんばん） と 時計じい — be動詞 are (Quiz, cloze) ─────────
@@ -906,7 +906,7 @@ final SceneDef kTown5Scene = SceneDef(
       pos: const Alignment(-0.75, -0.35),
       size: 0.11,
       coinValue: 1,
-      clueLineJa: 'スラ：「…ぷる？ ひかりが どこかに…！ ランプの ちかくかな？ '
+      clueLineJa: 'タロ：「…あれ？ ひかりが どこかに…！ ランプの ちかくかな？ '
           'ぼく、まだ うまく いえないけど… あっち！」',
     ),
     // ── Coin 2: hidden up on a rooftop ──────────────────────────────────────
@@ -914,7 +914,7 @@ final SceneDef kTown5Scene = SceneDef(
       pos: const Alignment(0.80, -0.58),
       size: 0.10,
       coinValue: 1,
-      clueLineJa: 'スラ：「…ぷる！ もう ひとつ、ひかってる… やねの うえ かな？」',
+      clueLineJa: 'タロ：「…あっ、みつけたっ！ もう ひとつ、ひかってる… やねの うえ かな？」',
     ),
     // ── Observation points (#90 density): tap-to-look 探偵メモ, no puzzle ─────
     Hotspot.observation(
@@ -957,21 +957,21 @@ QuestStep _kStep(int i) => kQuestTowns[0].encounters[i];
 /// framingJa only adds in-world flavour above the stem.
 ///
 /// Art: town4_harbor.webp + the fisher/lampkeeper grey→colour pairs (generated by
-/// scripts/generate_scene_art.py). スラ the companion reuses the 5級 slime art —
+/// scripts/generate_scene_art.py). タロ the companion reuses the 5級 slime art —
 /// she travels with the player across every district. SceneView's errorBuilder
 /// falls back to the dq night-gradient so the scene renders before art exists.
 final SceneDef kTown4Scene = SceneDef(
   backgroundAsset: 'assets/art/scenes_layton/town4_harbor.webp',
   parallaxLayers: const [],
   titleJa: '風（かぜ）の街（まち）',
-  // スラ arrival line — 4級, case 2: notices time is wrong, still eager.
+  // タロ arrival line — 4級, case 2: notices time is wrong, still eager.
   companionArrivalJa: 'かぜが つめたい…！ でも とけいが ぜんぶ、とまってる。\n'
       '「きのう」も「あした」も、この街（まち）から きえちゃったのかな？',
   // Sourced from kQuestTowns[1].cleared (英検4級 — 風の街).
   cleared: 'トックの時計（とけい）が、コチコチと動（うご）き出（だ）した――'
       '「きのう、ありがとう。あした、また会（あ）おう」。\n'
       '街（まち）に毎日（まいにち）のおしゃべりがもどった。二（ふた）つ目（め）の〈声（こえ）の石（いし）〉を手（て）に。'
-      '「サイレントは、しずけさを"へいわ"だと思（おも）っているらしい」とスラがつぶやく。',
+      '「サイレントは、しずけさを"へいわ"だと思（おも）っているらしい」とタロがつぶやく。',
   hotspots: [
     // ── NPC 1: りょうし — 川（かわ）べりの漁師（りょうし） / to不定詞 ──────────
     // Encounter index 9: 「Did you come here ___ fish?」(to catch).
@@ -1015,21 +1015,21 @@ final SceneDef kTown4Scene = SceneDef(
       mysteryFragmentJa: 'たんていメモ：かざぐるまは みんな、\n'
           'とおくの「はいいろの ひろば」の ほうを むいて まわっている。',
     ),
-    // ── NPC 3: スラ — きみの いちほ うしろの なかま / 過去 -ed ────────────────
+    // ── NPC 3: タロ — きみの いちほ うしろの なかま / 過去 -ed ────────────────
     // Encounter index 2: 「Where did you go?」→「I went to the zoo.」
-    // スラ has travelled with you from 5級. Now she tries to tell you where SHE
+    // タロ has travelled with you from 5級. Now she tries to tell you where SHE
     // went yesterday — learning the past tense one step behind you, as always.
     Hotspot.npc(
       pos: const Alignment(0.05, 0.34),
       size: 0.15,
       step: _kStep4(2),
       teachCard: kIrregularPastTeach,
-      clueLineJa: 'スラ：「…きのう、ぼく、どこかへ いった。'
+      clueLineJa: 'タロ：「…きのう、ぼく、どこかへ いった。'
           'でも それを いう ことばが… きみ、おしえて？」',
-      framingJa: 'スラは 5級（きゅう）の村（むら）から ずっと きみと あるいてきた。\n'
+      framingJa: 'タロは 5級（きゅう）の村（むら）から ずっと きみと あるいてきた。\n'
           'いまは「きのう」を かたる ことば — 過去（かこ）の かたち — を'
           'おぼえようとしている。\n'
-          'きみが いえたら、スラも いえる。いつものように、いちほ うしろで。',
+          'きみが いえたら、タロも いえる。いつものように、いちほ うしろで。',
       npcGreyAsset: 'assets/art/scenes_layton/npc_slime_grey.webp',
       npcColorAsset: 'assets/art/scenes_layton/npc_slime_color.webp',
       // §3 lore drip — CH.2: Bookmark #2 ("told a story,") + the mercy motive.
@@ -1041,7 +1041,7 @@ final SceneDef kTown4Scene = SceneDef(
       pos: const Alignment(0.78, -0.55),
       size: 0.11,
       coinValue: 1,
-      clueLineJa: 'スラ：「…ぷる！ とうだいの あかりの ちかくで、'
+      clueLineJa: 'タロ：「…あっ、みつけたっ！ とうだいの あかりの ちかくで、'
           'なにかが きらっと… あそこ、たかいところ！」',
     ),
     // ── Coin 2: hidden among the moored boats ───────────────────────────────
@@ -1049,7 +1049,7 @@ final SceneDef kTown4Scene = SceneDef(
       pos: const Alignment(-0.18, 0.60),
       size: 0.10,
       coinValue: 1,
-      clueLineJa: 'スラ：「…ぷる！ ふねの ほばしらの うえ… '
+      clueLineJa: 'タロ：「…あっ、みつけたっ！ ふねの ほばしらの うえ… '
           'あそこにも、ちいさく ひかってる！」',
     ),
     // ── Observation points (#90 density): tap-to-look 探偵メモ, no puzzle ─────
@@ -1088,13 +1088,13 @@ QuestStep _kStep4(int i) => kQuestTowns[1].encounters[i];
 /// NPC ナゾ steps are REFERENCED from kQuestTowns[2].encounters, so the exam
 /// content is byte-identical; framingJa only adds in-world flavour.
 ///
-/// Art: town3_academy.webp + the librarian/scholar grey→colour pairs. スラ the
+/// Art: town3_academy.webp + the librarian/scholar grey→colour pairs. タロ the
 /// companion reuses the slime art (she has travelled here from 5級→4級→3級).
 final SceneDef kTown3Scene = SceneDef(
   backgroundAsset: 'assets/art/scenes_layton/town3_academy.webp',
   parallaxLayers: const [],
   titleJa: '学（まな）びの都（みやこ）',
-  // スラ arrival line — 3級, case 3: archives silent, スラ notices memory fading.
+  // タロ arrival line — 3級, case 3: archives silent, タロ notices memory fading.
   companionArrivalJa: 'としょかんの たなが、ぜんぶ しずか……\n'
       'ここの ひとたち、「ずっと まえから」を つたえる ことばを なくしたのかも。',
   // Sourced from kQuestTowns[2].cleared (英検3級 — 学びの都).
@@ -1142,16 +1142,16 @@ final SceneDef kTown3Scene = SceneDef(
       mysteryFragmentJa: 'たんていメモ：あの しろい ほんは、だれかの じぶんの ものがたり。\n'
           'ページが やぶられて、7まいの しおりに なった。',
     ),
-    // ── NPC 3: スラ — 都（みやこ）で 再会（さいかい）した なかま / 過去形 ────────
-    // Encounter index 0: スラ reunion — 「Where did you sleep last night?」
+    // ── NPC 3: タロ — 都（みやこ）で 再会（さいかい）した なかま / 過去形 ────────
+    // Encounter index 0: タロ reunion — 「Where did you sleep last night?」
     Hotspot.npc(
       pos: const Alignment(0.02, 0.40),
       size: 0.15,
       step: _kStep3(0),
       teachCard: kSimplePastCuedTeach,
-      clueLineJa: 'スラ：「やっと 都（みやこ）に ついた！ ぼく、ひとばんじゅう '
+      clueLineJa: 'タロ：「やっと 都（みやこ）に ついた！ ぼく、ひとばんじゅう '
           'ことばの れんしゅうを したんだ。きみは どこで ねた？」',
-      framingJa: 'スラは 風（かぜ）の街（まち）から きみを おいかけて、'
+      framingJa: 'タロは 風（かぜ）の街（まち）から きみを おいかけて、'
           'この 都（みやこ）まで きた。\n'
           'いまでは「きのうの こと」を じぶんから 話（はな）せる。'
           'いちほ うしろの なかまが、すこし 大（おお）きくなった。',
@@ -1166,7 +1166,7 @@ final SceneDef kTown3Scene = SceneDef(
       pos: const Alignment(-0.78, -0.48),
       size: 0.11,
       coinValue: 1,
-      clueLineJa: 'スラ：「…ぷる！ たかい たなの うえで、なにかが ひかってる。'
+      clueLineJa: 'タロ：「…あっ、みつけたっ！ たかい たなの うえで、なにかが ひかってる。'
           'あんなところ、どうやって とるの…？」',
     ),
     // ── Coin 2: hidden on a high reading lamp ───────────────────────────────
@@ -1174,7 +1174,7 @@ final SceneDef kTown3Scene = SceneDef(
       pos: const Alignment(0.68, -0.42),
       size: 0.10,
       coinValue: 1,
-      clueLineJa: 'スラ：「…ぷる！ よみかけランプの かさの うえ… '
+      clueLineJa: 'タロ：「…あっ、みつけたっ！ よみかけランプの かさの うえ… '
           'そこにも、ちいさく ひかるものが あるよ！」',
     ),
     // ── Observation points (#90 density): tap-to-look 探偵メモ, no puzzle ─────
@@ -1219,8 +1219,8 @@ final SceneDef kTownPre2Scene = SceneDef(
   backgroundAsset: 'assets/art/scenes_layton/town_pre2_port.webp',
   parallaxLayers: const [],
   titleJa: '社会（しゃかい）の港町（みなとまち）',
-  // スラ arrival line — 準2, case 4: big port but two guilds won't talk to each
-  // other; スラ is bolder now, frames the social problem.
+  // タロ arrival line — 準2, case 4: big port but two guilds won't talk to each
+  // other; タロ is bolder now, frames the social problem.
   companionArrivalJa: 'でっかい 港（みなと）だ… でも あっちと こっちで、'
       'みんな そっぽを むいてる。「じぶんはこう思（おも）う」が、きえちゃったのかな。',
   // Sourced from kQuestTowns[3].cleared (英検準2級 — 社会の港町).
@@ -1229,7 +1229,7 @@ final SceneDef kTownPre2Scene = SceneDef(
       '港町（みなとまち）の人々（ひとびと）も、また「自分（じぶん）はこう思（おも）う」と言（い）えるようになった。四（よっ）つ目（め）の〈声（こえ）の石（いし）〉。'
       'クワイエは、ことばが二人（ふたり）を仲直（なかなお）りさせるのを見（み）て、ちいさくふるえた――'
       '「…ことばで、きずを なおせるの…？」 そっと、きみのあとを ついてくる。\n'
-      'スラが しずかに つぶやいた――「サイレントも、むかし ことばで だれかを '
+      'タロが しずかに つぶやいた――「サイレントも、むかし ことばで だれかを '
       'きずつけて しまって、もう だれも きずつけたくなくて、だまる ことを '
       'えらんだのかな…」。〈サイレント〉の なぞが、また ひとつ ふかくなった。',
   hotspots: [
@@ -1298,7 +1298,7 @@ final SceneDef kTownPre2Scene = SceneDef(
       pos: const Alignment(-0.80, -0.50),
       size: 0.11,
       coinValue: 1,
-      clueLineJa: 'スラ：「…ぷる！ ふねの ロープの あいだで、なにかが ゆれて ひかってる。'
+      clueLineJa: 'タロ：「…あっ、みつけたっ！ ふねの ロープの あいだで、なにかが ゆれて ひかってる。'
           'たかい ところだなぁ…！」',
     ),
     // ── Coin 2: hidden on a harbour-side crane ──────────────────────────────
@@ -1306,7 +1306,7 @@ final SceneDef kTownPre2Scene = SceneDef(
       pos: const Alignment(0.58, 0.52),
       size: 0.10,
       coinValue: 1,
-      clueLineJa: 'スラ：「…ぷる！ にもつを つるす クレーンの さきっぽ… '
+      clueLineJa: 'タロ：「…あっ、みつけたっ！ にもつを つるす クレーンの さきっぽ… '
           'あそこにも ひかるものが ぶらさがってる！」',
     ),
     // ── Observation points (#90 density): tap-to-look 探偵メモ, no puzzle ─────
@@ -1345,7 +1345,7 @@ final SceneDef kTownPre2PlusScene = SceneDef(
   backgroundAsset: 'assets/art/scenes_layton/town_pre2plus_bridge.webp',
   parallaxLayers: const [],
   titleJa: '試練（しれん）の橋（はし）',
-  // スラ arrival line — 準2プラス, case 5: fog on the bridge, スラ steadier now,
+  // タロ arrival line — 準2プラス, case 5: fog on the bridge, タロ steadier now,
   // understands meaning must carry across.
   companionArrivalJa: 'むこう岸（ぎし）が… みえない。きりが ぜんぶ おおってる。\n'
       'ことばを ちゃんと わたせたら、きりも はれると おもう。',
@@ -1394,12 +1394,12 @@ final SceneDef kTownPre2PlusScene = SceneDef(
       mysteryFragmentJa: 'たんていメモ：はしの まんなかに、はいいろの ひとが すわっている。\n'
           '「ここまで きたの…つかれたら、すわっても いいんだよ。」 5まいめ――「turned to」。',
     ),
-    // Coin — スラ (the companion) voices the hint here, as in every district.
+    // Coin — タロ (the companion) voices the hint here, as in every district.
     Hotspot.coin(
       pos: const Alignment(0.04, 0.42),
       size: 0.12,
       coinValue: 1,
-      clueLineJa: 'スラ：「この橋（はし）、たかいね…！ でも、らんかんの うえで '
+      clueLineJa: 'タロ：「この橋（はし）、たかいね…！ でも、らんかんの うえで '
           'なにか ひかってる。きみが いくなら、ぼくも いく。いちほ うしろで。」',
     ),
     // ── Coin 2: hidden on a far lantern post in the fog ─────────────────────
@@ -1407,7 +1407,7 @@ final SceneDef kTownPre2PlusScene = SceneDef(
       pos: const Alignment(-0.68, 0.40),
       size: 0.10,
       coinValue: 1,
-      clueLineJa: 'スラ：「…ぷる！ きりの むこうの ランプの ねもとで、'
+      clueLineJa: 'タロ：「…あっ、みつけたっ！ きりの むこうの ランプの ねもとで、'
           'ちいさく ひかるものが ある… みえる？」',
     ),
     // ── Observation points (#90 density): tap-to-look 探偵メモ, no puzzle ─────
@@ -1445,7 +1445,7 @@ final SceneDef kTown2Scene = SceneDef(
   backgroundAsset: 'assets/art/scenes_layton/town_2_castle.webp',
   parallaxLayers: const [],
   titleJa: '学者（がくしゃ）の城下町（じょうかまち）',
-  // スラ arrival line — 2級, case 6: formal castle gates, スラ senses power
+  // タロ arrival line — 2級, case 6: formal castle gates, タロ senses power
   // behind the silence, speaks for the first time about speaking FOR someone.
   companionArrivalJa: 'たかい 門（もん）…。なんか、しずかすぎて こわい。\n'
       'ここの ひとたち、「だまっていれば あんぜん」と おもって いるのかも。',
@@ -1518,7 +1518,7 @@ final SceneDef kTown2Scene = SceneDef(
       pos: const Alignment(-0.80, -0.48),
       size: 0.11,
       coinValue: 1,
-      clueLineJa: 'スラ：「…ぷる！ 城（しろ）への かいだんの うえで、'
+      clueLineJa: 'タロ：「…あっ、みつけたっ！ 城（しろ）への かいだんの うえで、'
           'なにか きらっと ひかった！」',
     ),
     // ── Coin 2: hidden in a high castle-tower window ────────────────────────
@@ -1526,7 +1526,7 @@ final SceneDef kTown2Scene = SceneDef(
       pos: const Alignment(0.74, -0.42),
       size: 0.10,
       coinValue: 1,
-      clueLineJa: 'スラ：「…ぷる！ たかい とうの まどの おくで、'
+      clueLineJa: 'タロ：「…あっ、みつけたっ！ たかい とうの まどの おくで、'
           'なにかが きらっと… あんな たかいところ、どうやって…！」',
     ),
     // ── Observation points (#90 density): tap-to-look 探偵メモ, no puzzle ─────
@@ -1566,7 +1566,7 @@ final SceneDef kTownPre1Scene = SceneDef(
   backgroundAsset: 'assets/art/scenes_layton/town_pre1_grey_square.webp',
   parallaxLayers: const [],
   titleJa: '灰色（はいいろ）の ひろば',
-  // スラ arrival line — 準1, case 7: the grey heart of the world; スラ is steady
+  // タロ arrival line — 準1, case 7: the grey heart of the world; タロ is steady
   // and brave, acknowledges what's at stake, stands beside きみ.
   companionArrivalJa: 'ここが… まんなか。いろが、ぜんぶ きえてる。\n'
       'ぼく、こわいけど── きみの となりに いる。',
@@ -1697,7 +1697,7 @@ final SceneDef kTownPre1Scene = SceneDef(
       pos: const Alignment(-0.80, -0.50),
       size: 0.11,
       coinValue: 1,
-      clueLineJa: 'スラ：「…ぷる。ここ、さむいね。でも きみが ことばを もどすたび、'
+      clueLineJa: 'タロ：「…ここ、さむいね。でも きみが ことばを もどすたび、'
           'すこしずつ あたたかくなる。あそこにも、ひとつ…！」',
     ),
     // ── Coin 2: hidden by a colour-drained archway ──────────────────────────
@@ -1705,7 +1705,7 @@ final SceneDef kTownPre1Scene = SceneDef(
       pos: const Alignment(0.72, 0.42),
       size: 0.10,
       coinValue: 1,
-      clueLineJa: 'スラ：「…ぷる。はいいろの アーチの したで、ひとつだけ '
+      clueLineJa: 'タロ：「…はいいろの アーチの したで、ひとつだけ '
           'いろを なくさずに ひかってる。きみと いっしょに、とりに いこう。」',
     ),
     // ── Observation points (#90 density): tap-to-look 探偵メモ, no puzzle. The

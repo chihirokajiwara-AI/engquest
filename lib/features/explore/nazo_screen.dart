@@ -329,7 +329,7 @@ class _NazoScreenState extends State<NazoScreen> {
       ..showSnackBar(
         SnackBar(
           content:
-              Text('スラがヒントをくれた。', style: dqText(size: 14, w: FontWeight.w600)),
+              Text('タロがヒントをくれた。', style: dqText(size: 14, w: FontWeight.w600)),
           backgroundColor: const Color(0xFF2A5A3A).withAlpha(210),
           duration: const Duration(seconds: 2),
         ),

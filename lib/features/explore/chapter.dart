@@ -27,7 +27,7 @@ class Beat {
   final BeatTrigger trigger;
   final String? videoAsset;
   final String narrationJa;
-  final String? speaker; // 'スラ' / NPC id, or null
+  final String? speaker; // 'タロ' / NPC id, or null
 
   const Beat({
     required this.trigger,
@@ -134,7 +134,7 @@ Chapter _wrapSingle(String grade, SceneDef scene) {
       Beat(
         trigger: BeatTrigger.chapterIntro,
         narrationJa: scene.companionArrivalJa!,
-        speaker: 'スラ',
+        speaker: 'タロ',
       ),
     if (scene.cleared != null)
       Beat(trigger: BeatTrigger.chapterClear, narrationJa: scene.cleared!),
