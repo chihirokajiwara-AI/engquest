@@ -275,7 +275,7 @@ class QuestEncounter extends QuestStep {
   // QuestStep contract: a Quiz teaches nothing up-front; it carries its line in
   // [npcLine] (the screen renders that directly). The English line is read aloud
   // (auto + replay) via a clip derived from the line text — cloze blanks render
-  // as a gap, so the question never gives away the answer; the silent slime line
+  // as a gap, so the question never gives away the answer; the silent タロ line
   // (`... ...`) resolves to null and stays quiet.
   @override
   String? get teachJa => npcLineJa;
@@ -594,7 +594,7 @@ const List<QuestTown> kQuestTowns = [
         npcName: 'タロ',
         npcEmoji: '🟢',
         npcLine:
-            '... ... (A small slime opens its mouth, but no word comes out.)',
+            '... ... (The small detective pup opens its mouth, but no word comes out.)',
         npcLineJa: 'ちいさな たんていの こいぬが口（くち）をひらくけれど、ことばが出（で）てこない…',
         choices: ['Goodbye.', 'Hello!', 'Thank you.', 'I am sorry.'],
         correctIndex: 1,
@@ -2515,7 +2515,7 @@ const List<QuestTown> kQuestTowns = [
         choices: ['would be', 'would have been', 'will be', 'had been'],
         correctIndex: 0,
         onCorrect:
-            '"would be" — a past cause, a present result. A mixed conditional. Even I, a little slime, feel that sadness for アイラ.',
+            '"would be" — a past cause, a present result. A mixed conditional. Even I, a little detective, feel that sadness for アイラ.',
       ),
       // 7 — Inversion after negative adverbial (Hardly had…when). (大問1 文法型)
       QuestEncounter(

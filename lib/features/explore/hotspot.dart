@@ -79,7 +79,7 @@ class TeachCard {
 /// [npcGreyAsset] / [npcColorAsset] (the grey→color restoration pair).
 ///
 /// For [HotspotKind.coin]: supply [coinValue] (usually 1) and optionally
-/// [clueLineJa] for the slime-companion word-clue toward this coin.
+/// [clueLineJa] for タロ the companion's word-clue toward this coin.
 class Hotspot {
   final Alignment pos;
   final double size;
