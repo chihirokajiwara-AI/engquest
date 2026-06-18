@@ -124,10 +124,15 @@ class _MockExamScreenState extends State<MockExamScreen> {
       _index++;
       _selected = _answers[_current.id];
     });
-    // Auto-play the next listening clip after the frame settles.
-    if (_current.skill == EikenSkill.listening) {
-      WidgetsBinding.instance.addPostFrameCallback((_) => _playCurrentAudio());
-    }
+    // Auto-play the new item's listening clip INSIDE the Next-tap gesture. A
+    // deferred addPostFrameCallback fires after the frame, outside the user-
+    // gesture activation window, where the web autoplay policy can silently block
+    // playback — and audio_cue_service's own contract says "play only from a tap
+    // handler", which a post-frame callback is not. _advance() is invoked from the
+    // Next button's onTap, and _playCurrentAudio reads _current (which the setState
+    // above already advanced), so no rebuilt frame is needed; it self-guards on the
+    // listening skill, so the previous `if (skill == listening)` wrapper is redundant.
+    _playCurrentAudio();
   }
 
   Future<void> _submit() async {
