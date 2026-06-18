@@ -90,4 +90,40 @@ void main() {
     await SceneSolvedStore.markObservationSeen('5', 7);
     expect(await SceneSolvedStore.seenObservationIndices('4'), isEmpty);
   });
+
+  // ── Unlocked hint tiers (#155: paid hints must survive a cold restart) ──────
+
+  test('markHintTier persists and hintTiers reads it back', () async {
+    expect(await SceneSolvedStore.hintTiers('5'), isEmpty);
+    await SceneSolvedStore.markHintTier('5', 2, 1);
+    expect(await SceneSolvedStore.hintTiers('5'), equals({2: 1}));
+  });
+
+  test('markHintTier keeps the HIGHEST tier per hotspot (one entry per idx)',
+      () async {
+    await SceneSolvedStore.markHintTier('5', 3, 1);
+    await SceneSolvedStore.markHintTier('5', 3, 3); // upgrade
+    await SceneSolvedStore.markHintTier('5', 3, 2); // lower
+    final got = await SceneSolvedStore.hintTiers('5');
+    expect(got[3], equals(3),
+        reason: 'must not regress a paid-for higher tier');
+  });
+
+  test('markHintTier with tier <= 0 is a no-op', () async {
+    await SceneSolvedStore.markHintTier('5', 4, 0);
+    expect(await SceneSolvedStore.hintTiers('5'), isEmpty);
+  });
+
+  test('hint tiers are per-scene namespaced (5級 ≠ 4級)', () async {
+    await SceneSolvedStore.markHintTier('5', 1, 2);
+    expect(await SceneSolvedStore.hintTiers('4'), isEmpty);
+  });
+
+  test('hint-state is independent of solve/coin/observation namespaces',
+      () async {
+    await SceneSolvedStore.markHintTier('5', 6, 2);
+    expect(await SceneSolvedStore.solvedIndices('5'), isEmpty);
+    expect(await SceneSolvedStore.collectedCoinIndices('5'), isEmpty);
+    expect(await SceneSolvedStore.seenObservationIndices('5'), isEmpty);
+  });
 }

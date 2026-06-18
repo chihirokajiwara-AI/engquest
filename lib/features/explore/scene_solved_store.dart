@@ -17,6 +17,7 @@ class SceneSolvedStore {
   static const _prefsKey = 'scene_solved_v1';
   static const _coinsKey = 'scene_coins_v1';
   static const _observedKey = 'scene_observed_v1';
+  static const _hintsKey = 'scene_hints_v1';
 
   /// The solved-hotspot keys for [sceneKey] (e.g. '5') as a set of indices.
   /// Returns an empty set on any error so exploration always works.
@@ -116,11 +117,67 @@ class SceneSolvedStore {
     }
   }
 
-  /// Test seam: clear all persisted solve-, coin- AND observation-state.
+  // ── Unlocked hint tiers ────────────────────────────────────────────────────
+  // Hint reveals are PAID (coins spent durably). The reveal used to live only in
+  // NazoScreen state, so a child who bought a hint, closed the unsolved puzzle and
+  // reopened it was charged again for the same hint (#155). Scene-session state
+  // fixed the within-session reopen; persisting the unlocked tier here closes the
+  // same finite-economy fairness hole across a full app-restart (symmetric with
+  // the collected-coin persistence above — both protect a paid/finite resource).
+
+  /// Map of hotspot idx → highest unlocked hint tier for [sceneKey]. Empty on error.
+  static Future<Map<int, int>> hintTiers(String sceneKey) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final all = prefs.getStringList(_hintsKey) ?? const [];
+      final prefix = '$sceneKey:';
+      final out = <int, int>{};
+      for (final e in all) {
+        if (!e.startsWith(prefix)) continue;
+        final parts = e.substring(prefix.length).split(':'); // "idx:tier"
+        if (parts.length != 2) continue;
+        final idx = int.tryParse(parts[0]);
+        final tier = int.tryParse(parts[1]);
+        if (idx == null || tier == null) continue;
+        if (tier > (out[idx] ?? 0)) out[idx] = tier;
+      }
+      return out;
+    } catch (_) {
+      return <int, int>{};
+    }
+  }
+
+  /// Persist that hotspot [idx] of [sceneKey] has [tier] hints unlocked. The
+  /// HIGHEST tier wins — a paid-for reveal must never regress, even if a lower
+  /// tier is reported later. No-op for tier <= 0. Best-effort.
+  static Future<void> markHintTier(String sceneKey, int idx, int tier) async {
+    if (tier <= 0) return;
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final all = (prefs.getStringList(_hintsKey) ?? const <String>[]).toList();
+      final entryPrefix = '$sceneKey:$idx:';
+      var existing = 0;
+      for (final e in all) {
+        if (e.startsWith(entryPrefix)) {
+          existing = int.tryParse(e.substring(entryPrefix.length)) ?? 0;
+          break;
+        }
+      }
+      if (tier <= existing) return; // keep the higher paid-for tier
+      all.removeWhere((e) => e.startsWith(entryPrefix)); // one entry per idx
+      all.add('$entryPrefix$tier');
+      await prefs.setStringList(_hintsKey, all);
+    } catch (_) {
+      // Non-fatal: at worst the paid hint relocks on the next cold start.
+    }
+  }
+
+  /// Test seam: clear all persisted solve-, coin-, observation- AND hint-state.
   static Future<void> clearForTest() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_prefsKey);
     await prefs.remove(_coinsKey);
     await prefs.remove(_observedKey);
+    await prefs.remove(_hintsKey);
   }
 }

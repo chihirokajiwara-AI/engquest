@@ -307,6 +307,11 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
         await SceneSolvedStore.collectedCoinIndices(widget.eikenLevel);
     final observed =
         await SceneSolvedStore.seenObservationIndices(widget.eikenLevel);
+    // Restore hint tiers the child already PAID for so a reopened ナゾ keeps them
+    // even across a full app-restart (#155). Not part of the render, so it needs
+    // no setState — it only seeds the next NazoScreen on open.
+    _hintTierByHotspot
+        .addAll(await SceneSolvedStore.hintTiers(widget.eikenLevel));
     if (!mounted) return;
     if (solved.isNotEmpty || coins.isNotEmpty || observed.isNotEmpty) {
       setState(() {
@@ -468,7 +473,11 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
     // Remember the paid-for hint tier so a reopen restores it instead of charging
     // again. idx is stable for the scene session; a solved hotspot short-circuits
     // before it can reopen, so this only matters for unsolved (dismissed) puzzles.
-    if (result != null) _hintTierByHotspot[idx] = result.hintsShown;
+    // Persist it too (#155) so it survives a full app-restart, not just this session.
+    if (result != null && result.hintsShown > (_hintTierByHotspot[idx] ?? 0)) {
+      _hintTierByHotspot[idx] = result.hintsShown;
+      SceneSolvedStore.markHintTier(widget.eikenLevel, idx, result.hintsShown);
+    }
     if (result != null && result.solved) {
       // Witnessed restoration (studio #1): apply the grey→colour restore AFTER the
       // ナゾ exit transition (220ms) finishes, so the child is back in the scene to
