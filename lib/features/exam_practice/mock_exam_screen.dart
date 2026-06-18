@@ -160,6 +160,15 @@ class _MockExamScreenState extends State<MockExamScreen> {
     try {
       final store = await SkillAccuracyStore.getInstance();
       for (final skill in total.keys) {
+        // Captions mode: the child READ the script instead of hearing it, so a
+        // captioned listening result is NOT a by-ear measurement. Skip persisting
+        // it — exactly as MockExamScorer excludes it from the one-time estimate
+        // (listeningCaptioned) and the standalone listening screen guards it
+        // (_currentMeasurable). Otherwise the persistent 合格メーター + parent
+        // dashboard inflate リスニング readiness from script-reading and can show
+        // 合格圏 when by-ear listening is untested — a child stops practising and
+        // then fails the real 英検 listening (honesty invariant, cf. #49/#118).
+        if (skill == EikenSkill.listening && _captionsUsed) continue;
         await store.record(
           grade: widget.eikenGrade,
           skill: skill,
