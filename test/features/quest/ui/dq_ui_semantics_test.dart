@@ -4,6 +4,7 @@
 // Semantics, so the whole app's tap targets were invisible to assistive tech.
 
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:engquest/features/quest/ui/dq_ui.dart';
 
@@ -61,6 +62,33 @@ void main() {
       expect(find.bySemanticsLabel('もう いちど きく'), findsOneWidget);
       // The audio option hints that it can also be heard.
       expect(find.bySemanticsLabel(RegExp('cat')), findsOneWidget);
+      handle.dispose();
+    });
+
+    testWidgets(
+        'AudioOptionButton exposes a LISTEN action so AT users can preview without committing',
+        (tester) async {
+      // a11y core-loop guarantee: with excludeSemantics hiding the inner 🔊
+      // GestureDetector, a screen-reader / switch child previously had NO way to
+      // hear an option without committing. The label must announce the listen
+      // affordance AND a separate custom action must back it (the default activate
+      // commits; this action only previews).
+      final handle = tester.ensureSemantics();
+      await tester.pumpWidget(MaterialApp(
+        home: Scaffold(
+          body:
+              AudioOptionButton(label: 'cat', onAudio: () {}, onChoose: () {}),
+        ),
+      ));
+      // The label announces the listen affordance — only when audio exists.
+      expect(find.bySemanticsLabel(RegExp('おとを きく')), findsOneWidget);
+      // …backed by a distinct custom action on the same node.
+      final node = tester.getSemantics(find.bySemanticsLabel(RegExp('cat')));
+      final listenId = CustomSemanticsAction.getIdentifier(
+          const CustomSemanticsAction(label: 'おとを きく'));
+      expect(node.getSemanticsData().customSemanticsActionIds ?? const <int>[],
+          contains(listenId),
+          reason: 'a screen-reader child needs LISTEN separate from choose');
       handle.dispose();
     });
   });

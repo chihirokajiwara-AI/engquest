@@ -5,6 +5,7 @@
 // command windows. Replaces the bright pastel card UI.
 
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:engquest/core/ui/app_fonts.dart';
 import 'package:engquest/core/ui/responsive.dart';
 
@@ -1100,11 +1101,20 @@ class AudioOptionButtonState extends State<AudioOptionButton>
     // 🔊 is its OWN tap target that only auditions the clip — so a learner can
     // hear each option before committing (no accidental wrong-answer on a listen).
     final numPrefix = widget.index != null ? '${widget.index}ばん、' : '';
+    // a11y: the inner 🔊 GestureDetector (its own preview-only tap for sighted
+    // users) is hidden by excludeSemantics, so a screen-reader / switch child had
+    // NO way to hear an option without committing — every activation was a blind
+    // committed guess. Expose the preview as a SEPARATE custom action ("おとを きく")
+    // so listen and choose are distinct in the a11y tree. Only promise listening
+    // when an audio clip actually exists.
+    final audioCb = onAudio; // local so the null-check promotes it for the map
     final semanticsLabel = state == DqChoiceState.correct
         ? '$numPrefix$label、せいかい'
         : state == DqChoiceState.wrong
             ? '$numPrefix$label、ふせいかい'
-            : '$numPrefix$label。きくこともできます';
+            : audioCb != null
+                ? '$numPrefix$label。おとを きくこともできます'
+                : '$numPrefix$label';
     return Semantics(
       button: true,
       label: semanticsLabel,
@@ -1114,6 +1124,9 @@ class AudioOptionButtonState extends State<AudioOptionButton>
               onAudio?.call();
               onChoose?.call();
             },
+      customSemanticsActions: audioCb == null
+          ? null
+          : {const CustomSemanticsAction(label: 'おとを きく'): audioCb},
       excludeSemantics: true,
       child: Padding(
         padding: const EdgeInsets.only(bottom: 9),
