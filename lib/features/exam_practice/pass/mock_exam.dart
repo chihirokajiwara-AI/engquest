@@ -194,7 +194,7 @@ class MockExamAssembler {
     // ── Reading ───────────────────────────────────────────────────────────────
     final readingTarget = targets[EikenSkill.reading] ?? 0;
     if (readingTarget > 0) {
-      final rawItems = _readingMcqItems(grade);
+      final rawItems = _readingMcqItems(grade, rng);
       final drawn = _drawItems(rawItems, readingTarget, rng);
       mcqItems.addAll(drawn);
       available[EikenSkill.reading] = drawn.length;
@@ -265,8 +265,26 @@ class MockExamAssembler {
   }
 
   /// Pull reading comprehension items from [readingItemsFor] and convert.
-  static List<MockMcqItem> _readingMcqItems(String grade) {
-    return readingItemsFor(grade);
+  static List<MockMcqItem> _readingMcqItems(String grade, Random rng) {
+    return readingItemsFor(grade).map((it) {
+      // Shuffle each item's choices — the authored reading keys carry a strong
+      // position bias (e.g. 準1級 idx0 = 17/31 ≈ 55%, 3級 idx0 = 13/30), so an
+      // always-tap-1 child banks most of the reading 合格圏 with no comprehension,
+      // inflating the CSE 合格率 that a parent reads as "near-ready". Choices are
+      // on-screen text (no audio/passage dependency), so reordering is safe.
+      // Mirrors the listening path above + reading_practice_screen (#79).
+      if (it.choices.length < 2) return it;
+      final s = shuffledChoiceSet(it.choices, it.correctIdx, rng);
+      return MockMcqItem(
+        id: it.id,
+        questionText: it.questionText,
+        choices: s.choices,
+        correctIdx: s.correctIdx,
+        skill: it.skill,
+        sectionId: it.sectionId,
+        explanation: it.explanation,
+      );
+    }).toList();
   }
 
   // ── Draw helper ─────────────────────────────────────────────────────────────
