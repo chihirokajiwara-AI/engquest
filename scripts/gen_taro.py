@@ -16,21 +16,23 @@ from diffusers import StableDiffusionXLPipeline, DPMSolverMultistepScheduler
 
 OUT = pathlib.Path(__file__).resolve().parent.parent / "art_candidates" / "taro"
 OUT.mkdir(parents=True, exist_ok=True)
+PREFIX = "v2_"   # v1 batch REJECTED by character-producer QA (0/6 had the ears);
+N = 3            # surgery pass: front-load the ear anatomy, fewer rolls (QA: ≤2-3).
 
-# CLIP-77 fix (run 1 truncated at 77 tokens, dropping colour/bg): front-load the
-# critical, scoring terms — singularity, the ONE signature (mismatched ears),
-# cap-over-one-eye, the LOCKED deep-teal colour, then style — within ~77 tokens.
-POS = ("1 creature, solo, a small round teal detective creature, "
-       "deep saturated teal-green body, "
-       "TWO MISMATCHED ears one pricked up one folded down, "
-       "oversized brass-band cap tilted low over one eye, "
-       "big worried-hopeful eyes, cream belly patch, "
-       "flat cel anime, bold clean ink linework, matte, plain pale-cream background")
-NEG = ("grid, sprite sheet, sticker sheet, character sheet, multiple creatures, two creatures, "
-       "duplicate, rows, tiled, collage, contact sheet, set of, pattern, "
-       "symmetric matching ears, both ears identical, bunny, cat, human, person, clothes, robe, "
-       "hands, fingers, crowd, border, frame, airbrushed, soft gradient bloom, glossy 3d render, "
-       "photo, pastel washed-out, watermark, text, lowres, blurry, bad anatomy, deformed, extra limbs")
+# Surgery pass (v1 REJECTED: 0/6 had ears — SDXL omitted/symmetrized them). Per
+# character-producer QA: front-load the EAR ANATOMY as the very first tokens (the
+# failed gate), then cap-over-LEFT-eye as a hard positional command, deep teal
+# (NOT mint), warm expression (NOT grumpy) — all within CLIP-77.
+POS = ("1 creature, solo, ONE EAR STANDING STRAIGHT UP, ONE EAR FOLDED FLAT DOWN, "
+       "asymmetric ears, a small round teal detective puppy-creature, "
+       "deep jewel teal body, brass cap brim pulled low over the LEFT eye, "
+       "right eye visible, worried-hopeful gentle face, cream belly, "
+       "flat cel anime, bold clean ink linework, matte, plain background")
+NEG = ("angular fins, spiky fins, symmetric ears, both ears the same, no ears, "
+       "grumpy, angry brows, bared teeth, slime, blob, puddle, melting, ghost, robot, helmet, "
+       "human, person, clothes, hands, two creatures, duplicate, grid, sticker sheet, "
+       "mint green, pastel washed-out, airbrushed, glossy 3d, photo, border, frame, "
+       "watermark, text, lowres, blurry, bad anatomy, deformed, extra limbs")
 
 def main():
     pipe = StableDiffusionXLPipeline.from_pretrained(
@@ -38,8 +40,8 @@ def main():
     pipe.scheduler = DPMSolverMultistepScheduler.from_config(
         pipe.scheduler.config, use_karras_sigmas=True, algorithm_type="dpmsolver++")
     pipe.to("mps"); pipe.set_progress_bar_config(disable=True)
-    for seed in range(6):
-        out = OUT / f"taro_{seed:02d}.webp"
+    for seed in range(N):
+        out = OUT / f"{PREFIX}{seed:02d}.webp"
         if out.exists():
             print(f"skip {out.name}"); continue
         g = torch.Generator(device="mps").manual_seed(seed)
