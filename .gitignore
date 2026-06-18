@@ -110,3 +110,4 @@ tools/fonts/
 # Transient art-gen candidate batches (curated by hand, never shipped from here;
 # the chosen image is committed under assets/ explicitly). Keeps WIP webp out.
 candidates/
+art_candidates/
