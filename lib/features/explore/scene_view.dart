@@ -234,6 +234,24 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
   String? _restoreLabel;
   Timer? _restoreLabelTimer;
 
+  // ── Held-restoration hero frame (game-studio #2) ─────────────────────────
+  // When a ナゾ is solved (non-reduced-motion), a HELD RESTORATION FRAME plays:
+  //   1. Full-bleed dim overlay (0→0.6→0 alpha) so the busy scene recedes.
+  //   2. The just-restored NPC's colour portrait scales up to 2.2× at screen
+  //      centre (easeOutBack 420ms), holds 900ms, then settles back (easeInOut
+  //      380ms) — ~1700ms total.
+  //   3. The restoration text appears centred below the hero portrait during hold.
+  //   4. The §3 lore fragment fires ONLY AFTER the hero settles (~1700ms delay).
+  // Reduced-motion → none of this; existing instant restore + top banner kept.
+  late final AnimationController _heroCtrl;
+
+  /// The hotspot index whose COLOUR portrait is currently the hero.
+  /// Null → no hero frame running.
+  int? _heroNpcIdx;
+
+  /// Whether the full-bleed dim overlay is visible.
+  bool _dimActive = false;
+
   // Services
   final _cue = AudioCueService();
   final _sound = SoundService();
@@ -245,6 +263,12 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
     _restoreCtrl = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 620),
+    );
+    // Hero-frame controller: 420ms up + 900ms hold + 380ms down = 1700ms total.
+    // The Animation curve logic lives in _heroScaleCurve (driven by value 0→1).
+    _heroCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1700),
     );
     _entryCtrl = AnimationController(
       vsync: this,
@@ -338,6 +362,7 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
   @override
   void dispose() {
     _restoreCtrl.dispose();
+    _heroCtrl.dispose();
     _focusTimer?.cancel();
     _entryCtrl.dispose();
     _arrivalTimer?.cancel();
@@ -494,79 +519,110 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
   }
 
   void _applyRestore(int idx, Hotspot h, NazoResult result) {
-    {
-      final wasRestored = _sceneRestored;
-      setState(() {
-        _solved[idx] = true;
-        _restoringIdx = idx; // one-shot gold glow on the restored NPC
-        _focusIdx = idx; // studio #1: focal camera-push on THIS NPC
-        _sessionMinos += result.minosEarned; // #86 reward accumulator
-      });
-      // Clear the glow flag once it has played, so it never re-glows on rebuild.
-      _restoreTimer?.cancel();
-      _restoreTimer = Timer(const Duration(milliseconds: 900), () {
-        if (mounted) setState(() => _restoringIdx = null);
-      });
-      // Focal camera-push: snap the eye to the NPC the instant it comes alive.
-      // Reduced-motion → no push (the colour swap is instant; _focusIdx stays null).
-      if (prefersReducedMotion(context)) {
-        _focusIdx = null;
-      } else {
-        _restoreCtrl.forward(from: 0);
-        _focusTimer?.cancel();
-        _focusTimer = Timer(const Duration(milliseconds: 640), () {
-          if (mounted) setState(() => _focusIdx = null);
-        });
-      }
-      // Persist so the restored colour survives the next session (#115).
-      SceneSolvedStore.markSolved(widget.eikenLevel, idx);
-      _sound.playCorrect();
-      // Completion payoff: when THIS solve restores the whole scene (grey→colour
-      // flood), give a "case closed" beat so the world earns a return visit —
-      // not just a silent saturation tween (#115). Only on the live transition.
-      final justCleared = !wasRestored && _sceneRestored;
+    final wasRestored = _sceneRestored;
+    setState(() {
+      _solved[idx] = true;
+      _restoringIdx = idx; // one-shot gold glow on the restored NPC
+      _sessionMinos += result.minosEarned; // #86 reward accumulator
+    });
+    // Clear the glow flag once it has played, so it never re-glows on rebuild.
+    _restoreTimer?.cancel();
+    _restoreTimer = Timer(const Duration(milliseconds: 900), () {
+      if (mounted) setState(() => _restoringIdx = null);
+    });
+    // Persist so the restored colour survives the next session (#115).
+    SceneSolvedStore.markSolved(widget.eikenLevel, idx);
+    _sound.playCorrect();
+    // Completion payoff: when THIS solve restores the whole scene (grey→colour
+    // flood), give a "case closed" beat so the world earns a return visit —
+    // not just a silent saturation tween (#115). Only on the live transition.
+    final justCleared = !wasRestored && _sceneRestored;
+    // Build the restoration line (used in hero frame AND reduced-motion banner).
+    final String? restorationLine = justCleared
+        ? null
+        : () {
+            final name =
+                h.kind == HotspotKind.npc ? (h.step?.npcName.trim() ?? '') : '';
+            final who = name.isNotEmpty ? '$name：' : '';
+            // Mastery-reflected reward (2026 SOTA): a FIRST-TRY solve earns a
+            // 「かんぺき！」 flourish. No-scold: a retried solve still earns the FULL
+            // restoration, just without the perfect badge.
+            const tail = 'ことばが… もどってきた！';
+            return result.firstTryCorrect ? '🌟 かんぺき！ $who$tail' : '$who$tail';
+          }();
+    if (prefersReducedMotion(context)) {
+      // ── Reduced-motion: instant colour swap + static top banner + lore ─────
+      // Existing behaviour preserved exactly. No camera-push, no hero overlay,
+      // no dim — the colour swap is instant and the text is a static top banner.
+      _focusIdx = null;
       if (justCleared) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (mounted) _showSceneClearedPayoff();
         });
-      } else if (h.mysteryFragmentJa != null) {
-        // §3 per-solve lore drip — only when this solve did NOT clear the scene
-        // (the colour-flood payoff carries the chapter's finale lore instead, so
-        // we never stack a banner under the modal).
-        _showLore(h.mysteryFragmentJa!);
+      } else {
+        if (h.mysteryFragmentJa != null) _showLore(h.mysteryFragmentJa!);
+        if (restorationLine != null) {
+          setState(() => _restoreLabel = restorationLine);
+          _restoreLabelTimer?.cancel();
+          _restoreLabelTimer = Timer(const Duration(milliseconds: 2200), () {
+            if (mounted) setState(() => _restoreLabel = null);
+          });
+        }
       }
-      // Witnessed victory: name the restoration so the child SEES their correct
-      // answer restore THIS villager (the game⇄learning link, CEO 1755). Skipped on
-      // a chapter-clear — the colour-flood modal carries that beat instead.
-      if (!justCleared) {
-        final name =
-            h.kind == HotspotKind.npc ? (h.step?.npcName.trim() ?? '') : '';
-        final who = name.isNotEmpty ? '$name：' : '';
-        // Mastery-reflected reward (2026 SOTA — the game reward must reflect REAL
-        // mastery, not mere activity, or the point-economy decouples from learning):
-        // a FIRST-TRY solve (the child actually KNEW it) earns a 「かんぺき！」 flourish.
-        // No-scold: a retried/guessed solve still earns the FULL restoration, just
-        // without the perfect badge — the game payoff now tracks the learning signal.
-        const tail = 'ことばが… もどってきた！';
-        final line =
-            result.firstTryCorrect ? '🌟 かんぺき！ $who$tail' : '$who$tail';
-        setState(() => _restoreLabel = line);
+    } else {
+      // ── Non-reduced-motion: HELD RESTORATION FRAME ───────────────────────
+      // Studio #2 spec: dim → hero portrait scales to screen centre → hold →
+      // settle. The §3 lore fires ONLY AFTER the hero frame (~1700ms).
+      //
+      // Step 1: keep the brief camera-push on the in-scene NPC (studio #1 —
+      // retained as a sub-beat; the hero overlay REPLACES the top banner but
+      // the camera-push still snaps the eye to the in-scene position first).
+      setState(() => _focusIdx = idx);
+      _restoreCtrl.forward(from: 0);
+      _focusTimer?.cancel();
+      _focusTimer = Timer(const Duration(milliseconds: 640), () {
+        if (mounted) setState(() => _focusIdx = null);
+      });
+      // Step 2: launch the hero overlay (dim + enlarged portrait + restore text).
+      // Only fires for a non-clearing solve (justCleared uses the modal instead).
+      if (!justCleared && restorationLine != null) {
+        setState(() {
+          _heroNpcIdx = idx;
+          _dimActive = true;
+          _restoreLabel = restorationLine; // displayed inside hero overlay
+        });
+        _heroCtrl.forward(from: 0);
+        // After the hero frame settles (~1700ms): clear hero, fire lore.
         _restoreLabelTimer?.cancel();
-        _restoreLabelTimer = Timer(const Duration(milliseconds: 2200), () {
-          if (mounted) setState(() => _restoreLabel = null);
+        _restoreLabelTimer = Timer(const Duration(milliseconds: 1700), () {
+          if (!mounted) return;
+          setState(() {
+            _heroNpcIdx = null;
+            _dimActive = false;
+            _restoreLabel = null;
+          });
+          // Step 3: §3 lore drip — fires ONLY AFTER the hero frame, never
+          // simultaneously (was the root of the perceptual invisibility).
+          if (h.mysteryFragmentJa != null) _showLore(h.mysteryFragmentJa!);
         });
       }
-      // Front-door 英検 puzzle solved → feed the home engagement spine (streak +
-      // daily-goal), same as exam practice. Before this, scene play earned ZERO
-      // streak/goal credit.
-      recordExamHabit(1);
-      recordExamXp(1);
-      recordExamAchievements();
-      // …and feed 合格率 with an HONEST signal: record first-try correctness
-      // (a ナゾ retries to solve, so 1/1 every time would inflate the meter).
-      // Scene ナゾ test vocab/reading 英検 knowledge → EikenSkill.reading.
-      _recordSkill(result.firstTryCorrect);
+      // justCleared: show the modal after a short delay (post-transition).
+      if (justCleared) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) _showSceneClearedPayoff();
+        });
+      }
     }
+    // Front-door 英検 puzzle solved → feed the home engagement spine (streak +
+    // daily-goal), same as exam practice. Before this, scene play earned ZERO
+    // streak/goal credit.
+    recordExamHabit(1);
+    recordExamXp(1);
+    recordExamAchievements();
+    // …and feed 合格率 with an HONEST signal: record first-try correctness
+    // (a ナゾ retries to solve, so 1/1 every time would inflate the meter).
+    // Scene ナゾ test vocab/reading 英検 knowledge → EikenSkill.reading.
+    _recordSkill(result.firstTryCorrect);
   }
 
   /// Records one front-door ナゾ into 合格率 (SkillAccuracyStore). Fire-and-forget;
@@ -586,6 +642,14 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
       }
     }();
   }
+
+  /// Test seam: invoke the restore payoff for hotspot [idx] directly, bypassing
+  /// the NazoScreen navigation. This is the only way to test the hero-frame
+  /// path from a widget test without a real Navigator round-trip. Not in the
+  /// production call graph — the real entry is [_openNazo] → [_applyRestore].
+  @visibleForTesting
+  void applyRestoreForTest(int idx, Hotspot h, NazoResult result) =>
+      _applyRestore(idx, h, result);
 
   Future<void> _collectCoin(int idx, Hotspot h) async {
     if (_coinFound[idx] == true) return;
@@ -991,6 +1055,157 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
               for (var i = 0; i < widget.scene.hotspots.length; i++)
                 _hotspotWidget(i, w, h),
 
+              // ── Held-restoration hero frame (game-studio #2) ──────────────
+              // Full-bleed dim overlay: sits ABOVE the scene+hotspots so the busy
+              // painted scene recedes and the restored NPC portrait is isolated.
+              // Animates 0→0.6→0 over the 1700ms hero window.
+              if (_dimActive)
+                Positioned.fill(
+                  key: const ValueKey('hero_dim_overlay'),
+                  child: IgnorePointer(
+                    child: RepaintBoundary(
+                      child: AnimatedBuilder(
+                        animation: _heroCtrl,
+                        builder: (_, __) {
+                          // Fade in fast (first 25%), hold, fade out (last 22%).
+                          final t = _heroCtrl.value;
+                          final alpha = t < 0.247
+                              ? (0.6 * (t / 0.247))
+                              : t < 0.776
+                                  ? 0.6
+                                  : 0.6 * (1 - (t - 0.776) / 0.224);
+                          return ColoredBox(
+                            color: Colors.black.withAlpha(
+                                (alpha.clamp(0.0, 1.0) * 255).round()),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              // Hero portrait: the just-restored NPC's COLOUR portrait enlarges
+              // to 2.2× at screen centre over the dim.  Two-phase curve:
+              //   0 → 420ms  : scale 0→2.2 easeOutBack
+              //   420–1320ms  : hold at 2.2 (900ms hold window)
+              //   1320–1700ms : scale 2.2→1.0 easeInOut
+              // Decoupled overlay — the in-scene portrait keeps its grey→colour
+              // crossfade underneath; layout is never disturbed.
+              if (_heroNpcIdx != null)
+                Positioned.fill(
+                  key: const ValueKey('hero_portrait_overlay'),
+                  child: IgnorePointer(
+                    child: RepaintBoundary(
+                      child: AnimatedBuilder(
+                        animation: _heroCtrl,
+                        builder: (_, __) {
+                          final t = _heroCtrl.value;
+                          // Phase fractions: up=24.7%, hold=52.9%, down=22.4%
+                          final double scale;
+                          if (t < 0.247) {
+                            final s = t / 0.247;
+                            scale = Curves.easeOutBack.transform(s) * 2.2;
+                          } else if (t < 0.776) {
+                            scale = 2.2;
+                          } else {
+                            final s = (t - 0.776) / 0.224;
+                            scale = 2.2 - 1.2 * Curves.easeInOut.transform(s);
+                          }
+                          // Opacity mirrors the dim: fade with it so the hero
+                          // doesn't pop in before the scene has receded.
+                          final dimT = t < 0.247 ? t / 0.247 : 1.0;
+                          final opacity = dimT.clamp(0.0, 1.0);
+                          final hotspot = widget.scene.hotspots[_heroNpcIdx!];
+                          final colorAsset = hotspot.npcColorAsset;
+                          const heroSize = 120.0; // base size before scale
+                          return Center(
+                            child: Opacity(
+                              opacity: opacity,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Transform.scale(
+                                    scale: scale,
+                                    child: colorAsset != null
+                                        ? _npcPortraitImage(
+                                            colorAsset, heroSize)
+                                        : Container(
+                                            width: heroSize,
+                                            height: heroSize,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: dqBox,
+                                              border: Border.all(
+                                                  color: dqGold, width: 3),
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                hotspot.step?.npcEmoji ?? '👤',
+                                                style: const TextStyle(
+                                                    fontSize: 48),
+                                              ),
+                                            ),
+                                          ),
+                                  ),
+                                  // Restoration line centred below the hero
+                                  // portrait — visible during the hold phase.
+                                  if (_restoreLabel != null &&
+                                      t >= 0.247 &&
+                                      t < 0.776) ...[
+                                    const SizedBox(height: 16),
+                                    Semantics(
+                                      liveRegion: true,
+                                      label: _restoreLabel!,
+                                      excludeSemantics: true,
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20, vertical: 10),
+                                        decoration: BoxDecoration(
+                                          color: dqBox.withAlpha(240),
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          border: Border.all(
+                                              color: dqGold, width: 2),
+                                          boxShadow: [
+                                            BoxShadow(
+                                                color: dqGold.withAlpha(80),
+                                                blurRadius: 14),
+                                            const BoxShadow(
+                                                color: Colors.black54,
+                                                blurRadius: 8,
+                                                offset: Offset(0, 3)),
+                                          ],
+                                        ),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            const Text('✨',
+                                                style: TextStyle(fontSize: 18)),
+                                            const SizedBox(width: 8),
+                                            Flexible(
+                                              child: Text(
+                                                _restoreLabel!,
+                                                textAlign: TextAlign.center,
+                                                style: dqText(
+                                                    size: 14,
+                                                    w: FontWeight.w800,
+                                                    color: dqGold),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+
               // ── Active NPC speech bubble (scene-level so it is TAPPABLE) ────
               if (_bubbleIndex != null) _bubbleOverlay(_bubbleIndex!, w, h),
 
@@ -1008,9 +1223,12 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
               if (_loreFragment != null && !_showArrival)
                 _loreBanner(_loreFragment!, w, h),
 
-              // Witnessed-victory restoration beat (top-centre, pops in) — names the
-              // villager the child's correct answer just brought back to colour.
-              if (_restoreLabel != null) _restorationBanner(_restoreLabel!, w),
+              // Reduced-motion fallback: the static top-centre restoration banner
+              // (unchanged from before the hero-frame feature). Only shown when
+              // the hero overlay is NOT active — i.e. on the reduced-motion path
+              // where _heroNpcIdx is always null.
+              if (_restoreLabel != null && _heroNpcIdx == null)
+                _restorationBanner(_restoreLabel!, w),
             ],
           );
         },
