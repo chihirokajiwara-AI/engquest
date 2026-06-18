@@ -761,6 +761,68 @@ const TeachCard kArticleTeach = TeachCard(
   ],
 );
 
+/// Teach-first lesson for ホシオの 大問2 (会話文の文空所補充) ナゾ.
+/// Item: A "Let's play tennis after school." / B ___.
+/// Teaches the four response options BEFORE asking, so a 6+ child can make a
+/// meaning-based choice. Worked examples use situations (accept / decline) and
+/// are free of the exact option strings to avoid leaking the answer.
+/// NO use of the answer string ("Sorry, I can't. I have homework.") or any
+/// distractor in the teach text (anti-corruption gate).
+const TeachCard kLetsPlanResponseTeach = TeachCard(
+  titleJa: '「Let\'s 〜」の さそいへの こたえかた',
+  leadJa: '「Let\'s 〜（〜しよう）」と さそわれたとき、どう こたえる？',
+  // Examples are GENERIC patterns — none is a verbatim quiz option (not the
+  // answer "Sorry, I can't. I have homework." nor any distractor), so the
+  // teach card teaches the response TYPES without pre-eliminating a choice
+  // (content-QA: a worked example must not be one of the item's own options).
+  items: [
+    TeachItem(
+      'Sure! / OK, let\'s!',
+      'いいよ！ / うん、そうしよう！',
+      'さそいを うけるとき',
+    ),
+    TeachItem(
+      'No, thank you.',
+      'ごめん、むりなんだ。',
+      'ことわるとき — りゆうを つけると ていねい',
+    ),
+    TeachItem(
+      'I have a dog.',
+      'いぬを かっているよ。',
+      'さそいへの こたえに なっていない（まちがいの れい）',
+    ),
+  ],
+);
+
+/// ホシオの 大問2 (会話文の文空所補充) ナゾ.
+/// Verified bank item — 英検5級 conversation bank item #5 (grade '5',
+/// conversationItemsForTest('5')[4]):
+///   A: "Let's play tennis after school."  B: ___
+///   choices: ["Sorry, I can't. I have homework.", "Tennis is a sport.",
+///             "I played tennis last week.", "My racket is new."]
+///   correctIdx: 0
+///   解説: 「Let's 〜」のさそいには、いいよ / ごめんできない で返事するよ。
+///         「Sorry, I can't. I have homework.」がさそいへの自然な返事。
+/// AUTHORED for ホシオ so the case-identity header reads 「ホシオ の ナゾ」
+/// (not reused from another NPC — avoids the bank identity mismatch fixed
+/// for セル). autoPlayAudio derives from npcLine; cloze blank renders as a gap.
+const QuestEncounter kHoshioConversationNazo = QuestEncounter(
+  npcName: 'ホシオ',
+  npcEmoji: '🔭',
+  npcLine: 'A: Let\'s play tennis after school.\nB: ___',
+  npcLineJa: 'A：「放課後（ほうかご）、テニスを しよう。」\nB：「___」— なんて こたえる？',
+  choices: [
+    "Sorry, I can't. I have homework.",
+    'Tennis is a sport.',
+    'I played tennis last week.',
+    'My racket is new.',
+  ],
+  correctIndex: 0,
+  onCorrect: 'そう、「Let\'s 〜」と さそわれたら、いいよ か ごめんできない で こたえるよ。'
+      ' りゆうも つけると、なおよし。ホシオは うなずく。「…そのことばが、きこえた夜（よる）も、'
+      'ふたりは おんなじ そらを みていたんじゃろうな。」',
+);
+
 /// 灰守セルの a/an 大問1 ナゾ — AUTHORED for セル (NOT reused from the linear quest,
 /// which would put another villager's name/line on her hotspot and break the
 /// case-identity header). Real 英検5級 article grammar (an before a vowel sound),
@@ -900,6 +962,52 @@ final SceneDef kTown5Scene = SceneDef(
       // seeded here in ch.1 and paid off at 準1級. STORY-BIBLE Clue #1.
       mysteryFragmentJa: 'たんていメモ：とまった とけいが、コチ…と ひとつ うごいた。\n'
           'じいさん――「しずけさは そとからじゃない。まんなかから、あるいて きたんだ。」',
+    ),
+    // ── NPC 4: ホシオ（星緒） — 大問2 会話文の文空所補充 ナゾ ──────────────────────
+    // Elderly village stargazer + former postman. The night サイレント came he was
+    // on his roof counting stars; by morning every star-NAME had vanished. He
+    // relays two overheard voices from that night — a "Let's ~" invitation —
+    // and asks the detective to fill the missing reply.
+    // item = kHoshioConversationNazo (verified bank item #5, 英検5級 大問2):
+    //   A: "Let's play tennis after school."  B: ___
+    //   correct: "Sorry, I can't. I have homework."
+    // teachCard = kLetsPlanResponseTeach (Let's ~ response patterns).
+    // Hints: pure kana, no English option strings leak (nazo_hint_rail_test).
+    Hotspot.npc(
+      pos: const Alignment(-0.20, -0.55),
+      size: 0.17,
+      step: kHoshioConversationNazo,
+      teachCard: kLetsPlanResponseTeach,
+      hints: const [
+        NazoHint(
+          tier: 1,
+          textJa: '【ヒント T1】「Let\'s 〜（〜しよう）」と さそわれている。'
+              'さそいへの こたえとして、ふさわしい ものを えらぼう。',
+        ),
+        NazoHint(
+          tier: 2,
+          textJa: '【ヒント T2】さそいには、うける か ことわる か こたえるよ。'
+              '「スポーツです」や「まえに やった」は さそいへの こたえに なっていないね。',
+        ),
+        NazoHint(
+          tier: 3,
+          textJa: '【ヒント T3】ことわるとき は、まず「ごめん、できない」と つたえる。'
+              'そのあと、なぜ できないか りゆうを つけると ていねいになるよ。',
+        ),
+      ],
+      clueLineJa: 'ホシオは まるい めがねを なおした。\n'
+          '「あの夜（よる）、やねの うえで きこえたんじゃ。ふたりのこえが。'
+          'てにすの さそいと、つぎの ことば…でも、そこで きれてしもうた。」',
+      framingJa: 'ホシオは よぞらを みあげる しわだらけの むらびと。\n'
+          'サイレントが きた夜（よる）、やねで ほしを かぞえていた。\n'
+          'あさに なると、ほしの なまえが ぜんぶ きえていた。\n'
+          'でも あの夜（よる）、ふたりのこえが きこえた。やくそくの はなし。\n'
+          'つぎの ことばを、きみが うめてあげよう。',
+      npcGreyAsset: 'assets/art/scenes_layton/npc_hoshio_grey.webp',
+      npcColorAsset: 'assets/art/scenes_layton/npc_hoshio_color.webp',
+      mysteryFragmentJa: 'たんていメモ：ホシオ――\n'
+          '「あの夜（よる）、やねで きいた。ふたりの こえ、そして やくそく。'
+          'ほしの なまえは きえた。でも、こえだけは のこっている。」',
     ),
     // ── Coin: hidden on the lamppost ────────────────────────────────────────
     Hotspot.coin(

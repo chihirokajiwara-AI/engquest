@@ -272,9 +272,10 @@ void main() {
     await tester.pump();
 
     // Re-entry after BOTH coins were collected in a prior session → all GONE.
-    // (#90 Layton-density: kTown5Scene now hides 2 coins, idx 3 + idx 4.)
-    await SceneSolvedStore.markCoinCollected('5', 3); // idx 3 = lamppost coin
-    await SceneSolvedStore.markCoinCollected('5', 4); // idx 4 = rooftop coin
+    // (#90 Layton-density: kTown5Scene now hides 2 coins, idx 4 + idx 5.)
+    // (ホシオ NPC was inserted at idx 3; lamppost/rooftop coins shifted to 4/5.)
+    await SceneSolvedStore.markCoinCollected('5', 4); // idx 4 = lamppost coin
+    await SceneSolvedStore.markCoinCollected('5', 5); // idx 5 = rooftop coin
     final h2 = tester.ensureSemantics();
     await tester.pumpWidget(
       MaterialApp(home: SceneView(scene: kTown5Scene, eikenLevel: '5')),
