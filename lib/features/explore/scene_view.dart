@@ -168,8 +168,11 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
   /// accumulator, so no 「あと1問」 pull; this makes each solve visibly add up.
   int _sessionMinos = 0;
 
-  // Parallax offset driven by pan gesture
-  double _parallaxOffset = 0.0;
+  // Parallax offset driven by pan gesture. A ValueNotifier (NOT setState) so a
+  // drag updates ONLY the background layers via a ValueListenableBuilder — the
+  // hotspot loop (Image+ClipOval+AnimatedCrossFade × N) is a sibling in the outer
+  // Stack and must NOT rebuild ~60×/s during the pan (perf #134).
+  final ValueNotifier<double> _parallax = ValueNotifier<double>(0.0);
   static const _parallaxMaxShift = 0.04; // fraction of container width
 
   /// Saturation FLOOR of an unsolved scene — muted "the world lost its words"
@@ -337,22 +340,23 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
     _restoreTimer?.cancel();
     _restoreLabelTimer?.cancel();
     _cue.dispose();
+    _parallax.dispose();
     super.dispose();
   }
 
   // ── Parallax ──────────────────────────────────────────────────────────────
 
   void _onPanUpdate(DragUpdateDetails d) {
-    setState(() {
-      // Drag right → layers drift left (negative shift for near, less for far).
-      _parallaxOffset = (_parallaxOffset + d.delta.dx * 0.0008)
-          .clamp(-_parallaxMaxShift, _parallaxMaxShift);
-    });
+    // No setState: update the notifier so ONLY the ValueListenableBuilder around
+    // the background layers rebuilds — not the whole scene (incl. the hotspots).
+    // Drag right → layers drift left (negative shift for near, less for far).
+    _parallax.value = (_parallax.value + d.delta.dx * 0.0008)
+        .clamp(-_parallaxMaxShift, _parallaxMaxShift);
   }
 
   void _onPanEnd(DragEndDetails _) {
-    // Spring back to centre
-    setState(() => _parallaxOffset = 0.0);
+    // Reset to centre (same instant return as before, no setState).
+    _parallax.value = 0.0;
   }
 
   // ── Hotspot interactions ──────────────────────────────────────────────────
@@ -932,7 +936,15 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
                   curve: Curves.easeInOut,
                   builder: (context, sat, _) => ColorFiltered(
                     colorFilter: ColorFilter.matrix(saturationMatrix(sat)),
-                    child: Stack(children: _buildParallaxLayers(w, h)),
+                    // Only this subtree rebuilds/repaints on a parallax pan —
+                    // RepaintBoundary keeps the drag off the hotspots' layer.
+                    child: RepaintBoundary(
+                      child: ValueListenableBuilder<double>(
+                        valueListenable: _parallax,
+                        builder: (_, parallax, __) => Stack(
+                            children: _buildParallaxLayers(w, h, parallax)),
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -986,23 +998,24 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
     );
   }
 
-  List<Widget> _buildParallaxLayers(double w, double h) {
+  List<Widget> _buildParallaxLayers(double w, double h, double parallax) {
     final layers = widget.scene.parallaxLayers;
     if (layers.isEmpty) {
       // Single background layer, no parallax.
-      return [_backgroundImage(widget.scene.backgroundAsset, 0, w)];
+      return [_backgroundImage(widget.scene.backgroundAsset, 0, w, parallax)];
     }
     // Multiple layers: far layer shifts least, near layer shifts most.
     return [
       for (var i = 0; i < layers.length; i++)
-        _backgroundImage(layers[i], i / (layers.length - 1), w),
+        _backgroundImage(layers[i], i / (layers.length - 1), w, parallax),
     ];
   }
 
   /// Render one parallax layer. [depthFraction] 0.0 = far (least movement),
   /// 1.0 = near (most movement). Shift is applied via Transform.translate.
-  Widget _backgroundImage(String asset, double depthFraction, double w) {
-    final shift = _parallaxOffset * w * depthFraction * 3;
+  Widget _backgroundImage(
+      String asset, double depthFraction, double w, double parallax) {
+    final shift = parallax * w * depthFraction * 3;
     return Positioned.fill(
       child: Transform.translate(
         offset: Offset(shift, 0),
