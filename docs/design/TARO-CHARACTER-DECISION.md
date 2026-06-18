@@ -65,6 +65,28 @@ See CEO msg 2020 / the workflow output. Positive-only, FACE+eyes first, the too-
 creature. Expression sheet: proud/puffed · startled-duck · word-click delight · hopeful 「…どう？」 ·
 full pride-glow beam · anxious.
 
+## Art evaluation — v1 Grok render = REVISE (4/10), DO NOT ship (2026-06-18)
+Strict 5-critic + director eval of the CEO's first Grok render. Verdict REVISE. Strengths to
+KEEP: the dusty-teal+cream+brass palette (lock as brand spec), emotional warmth, the honey-glow
+as a reward beat, the cap concept. Three MUST-FIX blockers (the standing ART GATE for any タロ art):
+1. **OWNABILITY / silhouette**: the character must hold its identity in **pure-black silhouette at
+   16px with the cap AND glow removed**. v1 failed — strip the (removable) cap + (render-only) glow
+   and it's a generic AI-cute fluff-blob. FIX: bake 1-2 **structural anatomical** signatures — a
+   committed **puppy muzzle/nose** (dog-DNA; タロ is a dog name), **one asymmetric floppy ear**, and
+   a **question-mark-curl TAIL** (detective + ownable + the word-light). Signatures must be anatomy,
+   not props/effects.
+2. **Render language / cohesion**: NO airbrushed "AI-slop" (soft fur, glassy symmetric sparkle-eyes,
+   symmetric cheek-dots, painterly vignette). Render in the MAINS' language — defined clean linework,
+   flatter cel-leaning shading, matte coat — and vet by generating タロ **on the same sheet as an
+   M5/M6 main**.
+3. **On-spec + species**: cap tilted/slipping over **ONE** eye (the decided comedic beat); must read
+   as a PUP, not a fur-blob.
+Plus: dial proportions ~1 age-notch older (6+, not 3-4yo toy); asymmetric eye catch-lights; make the
+cap タロ's OWN (a custom brass letter/コトバ charm, not a stock deerstalker); plush-reproducible glow
+(stitched cream sunburst belly patch). **Gate before lock**: a production proof — turnaround
+(front/3-4/back), flat 1-colour mark, 16px favicon crop, brave↔startled expression sheet — and a
+char-anchor/LoRA so the design stops drifting. Revised Grok prompt: see CEO msg 2025.
+
 ## Execution on the CEO's Grok image (per [[distinct-identity-not-ip-copy]])
 Import → `assets/art/masters/slime.webp` (`'スラ'→` map quest_screen.dart:330/497) +
 `assets/art/scenes_layton/npc_slime_{color,grey}.webp` (scene grey⇄colour pair; derive grey from a
