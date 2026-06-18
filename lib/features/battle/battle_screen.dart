@@ -1753,7 +1753,14 @@ class _GradeButtonState extends State<_GradeButton>
 
   @override
   Widget build(BuildContext context) {
-    final interval = _intervalLabel();
+    // The FSRS next-interval is only ever shown on the legacy 4-grade tiles (in
+    // the visible Text below AND the a11y label) — both gated on
+    // labelJpOverride == null. The production child 2-button UI always sets
+    // labelJpOverride, so calling _intervalLabel() unconditionally ran a full
+    // fsrs.schedule() (exp/pow chain) on EVERY rebuild for a value never used —
+    // and the parent setState()s many times per answered card during the
+    // shimmer/XP-float animation window. Compute it only when it will be shown.
+    final interval = widget.labelJpOverride == null ? _intervalLabel() : null;
     // A DQ command-window tile: cream-bordered navy fill, an accent dot for the
     // grade, bilingual JP/EN label, and the FSRS next-interval underneath.
     // a11y: the recall-grade buttons are how the child completes a card — without
@@ -1828,7 +1835,7 @@ class _GradeButtonState extends State<_GradeButton>
                 if (widget.labelJpOverride == null) ...[
                   const SizedBox(height: 3),
                   Text(
-                    interval,
+                    interval!, // non-null here: computed iff labelJpOverride == null
                     style: dqText(size: 9, color: dqGoldDeep),
                     textAlign: TextAlign.center,
                   ),
