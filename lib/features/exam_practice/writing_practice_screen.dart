@@ -415,7 +415,17 @@ const List<WritingPrompt> kWritingPrompts = [
     underlinedQuestions: [],
     wordCountMin: 25,
     wordCountMax: 35,
-    rubricPoints: ['内容 / Content', '語彙 / Vocabulary', '文法 / Grammar'],
+    // 英検3級 意見論述 is scored on 4 観点 (内容・構成・語彙・文法), 0–4 each = 16点満点
+    // — official 英検 rubric (eiken.or.jp 2017scoring_3w; 旺文社 2024-reform guide).
+    // This prompt previously carried the EMAIL rubric (3 観点, no 構成), under-counting
+    // a child as "writing-ready" while the real exam grades logical structure
+    // (主張→理由→まとめ). All sibling opinion prompts (準2/2/準1) already use 4 観点.
+    rubricPoints: [
+      '内容 / Content',
+      '構成 / Organization',
+      '語彙 / Vocabulary',
+      '文法 / Grammar',
+    ],
     modelAnswer:
         'Yes, I agree that children should play sports. First, sports help them '
         'stay healthy and strong. Second, playing on a team teaches them to work '

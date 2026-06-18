@@ -291,9 +291,12 @@ void main() {
       }
     });
 
-    test('summary and opinion prompts have 4 rubric points for pre2+', () {
-      for (final p in kWritingPrompts.where((p) =>
-          p.type != WritingTaskType.email && !p.id.startsWith('3_opinion'))) {
+    test('summary and opinion prompts have 4 rubric points', () {
+      // All non-email writing (summary + opinion, incl. 英検3級 意見論述) is scored
+      // on 4 観点 (内容・構成・語彙・文法), 0–4 each = 16点満点 — official 英検 rubric.
+      // (3_opinion was previously exempted here, enshrining a 3-観点 copy-paste bug.)
+      for (final p
+          in kWritingPrompts.where((p) => p.type != WritingTaskType.email)) {
         expect(p.rubricPoints.length, equals(4),
             reason: '${p.id} must have 4 観点 (内容/構成/語彙/文法)');
       }
