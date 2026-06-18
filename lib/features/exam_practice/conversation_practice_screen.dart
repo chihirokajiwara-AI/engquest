@@ -646,6 +646,18 @@ class _ConversationPracticeScreenState
           ),
           const SizedBox(height: 16),
           PracticeResultStars(correct: _correctCount, total: _problems.length),
+          // Honesty (#157): the 合格率 counts only UNAIDED answers — disclose the
+          // hinted ones here so the encouraging session score and the home meter
+          // don't silently contradict (mirrors word_ordering's existing note).
+          if (_problems.length - _measuredTotal > 0) ...[
+            const SizedBox(height: 10),
+            Text(
+              'ヒントを つかった ${_problems.length - _measuredTotal}問（もん）は、\n'
+              '合格率（ごうかくりつ）に 入（い）れていません。',
+              textAlign: TextAlign.center,
+              style: dqText(color: dqInk.withAlpha(160), size: 12),
+            ),
+          ],
           // Actionable next-step: the conversation patterns missed this session,
           // each with its 解説 — a "review these points" study list.
           if (_missedPoints.isNotEmpty) ...[

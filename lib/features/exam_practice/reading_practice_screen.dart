@@ -853,6 +853,18 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             ),
             const SizedBox(height: 16),
             PracticeResultStars(correct: _correctCount, total: _totalQuestions),
+            // Honesty (#157): the 合格率 counts only UNAIDED answers — disclose the
+            // hinted ones so the session score and the home meter don't silently
+            // contradict (mirrors word_ordering's existing note).
+            if (_totalQuestions - _measuredTotal > 0) ...[
+              const SizedBox(height: 10),
+              Text(
+                'ヒントを つかった ${_totalQuestions - _measuredTotal}問（もん）は、\n'
+                '合格率（ごうかくりつ）に 入（い）れていません。',
+                textAlign: TextAlign.center,
+                style: dqText(color: dqInk.withAlpha(160), size: 12),
+              ),
+            ],
             if (_missedReading.isNotEmpty) ...[
               const SizedBox(height: 20),
               ReadingReviewPanel(missed: _missedReading),

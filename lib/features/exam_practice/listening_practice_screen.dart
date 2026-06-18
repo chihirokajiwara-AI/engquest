@@ -695,6 +695,19 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
               ),
               const SizedBox(height: 16),
               PracticeResultStars(correct: _correctCount, total: _items.length),
+              // Honesty (#157): captioned items (answered by READING the script,
+              // not by ear) are excluded from the 合格率 — disclose them so the
+              // session score and the home meter don't silently contradict
+              // (mirrors word_ordering's existing note).
+              if (_items.length - _measuredTotal > 0) ...[
+                const SizedBox(height: 10),
+                Text(
+                  '文字（もじ）を よんで こたえた ${_items.length - _measuredTotal}問（もん）は、\n'
+                  '合格率（ごうかくりつ）に 入（い）れていません（耳（みみ）で きく ちからを はかるため）。',
+                  textAlign: TextAlign.center,
+                  style: dqText(color: dqInk.withAlpha(160), size: 12),
+                ),
+              ],
               const SizedBox(height: 16),
               DqPanel(
                 title: 'RESULT',
