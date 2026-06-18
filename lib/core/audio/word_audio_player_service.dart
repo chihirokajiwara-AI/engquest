@@ -153,8 +153,15 @@ class WordAudioPlayerService extends ChangeNotifier {
   Future<void> _playAudioBytes(Uint8List bytes) async {
     final source = BytesSource(bytes);
     await _audioPlayer.play(source);
-    // Wait for playback to complete before transitioning state
-    await _audioPlayer.onPlayerComplete.first;
+    // Wait for playback to complete before transitioning state — but with a
+    // TIMEOUT. On Flutter web with BytesSource, onPlayerComplete is unreliable
+    // and can never fire, which would pin the service in `playing` forever and
+    // make the 🔊 replay button DEAD for the rest of the session (playWord skips
+    // a replay while state==playing). The timeout guarantees the state always
+    // resets; on native the event fires first (~word length) so it is a no-op.
+    // onTimeout returns normally (no throw) so no error path is needed.
+    await _audioPlayer.onPlayerComplete.first
+        .timeout(const Duration(seconds: 5), onTimeout: () {});
     if (_state == WordAudioState.playing) {
       _setState(WordAudioState.idle);
       _currentVocabId = null;
