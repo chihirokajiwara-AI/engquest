@@ -115,6 +115,9 @@ class _VocabGrammarPracticeScreenState
   // same words are already scheduled in the FSRS review store (#119), so the
   // list and the home due-count agree.
   final List<VocabItem> _missedWords = [];
+  // Words already given one in-session re-test (cap 1 per word) so a string of
+  // misses cannot grow the session unboundedly — mirrors Battle's re-queue cap.
+  final Set<String> _retriedWords = {};
   // The streak/daily-goal earned THIS session, shown on the results screen so the
   // child feels their progress at the moment that pulls them back (SessionEndHook).
   StreakState? _earnedStreak;
@@ -335,13 +338,18 @@ class _VocabGrammarPracticeScreenState
       // are mutually exclusive, so they share one banner slot below.
       _consecutiveWrong = correct ? 0 : _consecutiveWrong + 1;
       _consecutiveCorrect = correct ? _consecutiveCorrect + 1 : 0;
-      // Honest measurement: only UNAIDED answers count toward 合格率. A hinted
-      // question is recorded as assisted and excluded from the readiness signal.
-      if (_hintShown) {
-        _assistedCount++;
-      } else {
-        _unaidedTotal++;
-        if (correct) _unaidedCorrect++;
+      // Honest measurement: only UNAIDED FIRST attempts count toward 合格率. A
+      // hinted question is recorded as assisted; an error-corrective RE-TEST
+      // (isRetry) is a learning re-exposure and is excluded entirely — the
+      // first attempt already set the score, so a 2nd-chance success must not
+      // inflate the readiness signal.
+      if (!q.isRetry) {
+        if (_hintShown) {
+          _assistedCount++;
+        } else {
+          _unaidedTotal++;
+          if (correct) _unaidedCorrect++;
+        }
       }
     });
     // Game-feel (#51): a haptic tick + chime so answering feels responsive.
@@ -357,12 +365,32 @@ class _VocabGrammarPracticeScreenState
     // Spaced repetition (#119): schedule this word via FSRS so a missed word
     // is re-surfaced in a future session (acquisition, not one-shot recognition).
     // Fire-and-forget; a hinted-correct is scheduled as 'hard' (not mastered).
-    _reviewStore.recordAnswer(
-      grade: widget.eikenGrade,
-      word: q.word.word,
-      correct: correct,
-      hinted: _hintShown,
-    );
+    // A RE-TEST is NOT re-scheduled — the first miss already scheduled it, and
+    // one in-session retrieval doesn't make the word "mastered" for next session.
+    if (!q.isRetry) {
+      _reviewStore.recordAnswer(
+        grade: widget.eikenGrade,
+        word: q.word.word,
+        correct: correct,
+        hinted: _hintShown,
+      );
+    }
+
+    // In-session error-corrective re-retrieval (2026 SLA: retrieval AFTER
+    // feedback builds durable encoding; a passive answer-reveal alone does not).
+    // Mirrors Battle's re-queue (battle_screen.dart): a first-attempt miss is
+    // re-presented ~3 questions later so the child RETRIEVES the correct form
+    // before the session ends. Capped at one re-test per word; the re-test is
+    // learning-only (excluded from 合格率 above). Hinted misses are not re-tested
+    // (the child already saw the meanings — that path is the scaffold, not an error).
+    if (!correct &&
+        !q.isRetry &&
+        !_hintShown &&
+        !_retriedWords.contains(q.word.word)) {
+      _retriedWords.add(q.word.word);
+      final insertAt = min(_currentIdx + 3, _questions.length);
+      setState(() => _questions.insert(insertAt, q.asRetry()));
+    }
   }
 
   /// Reveal the choice meanings for the current question (opt-in scaffold).
@@ -414,6 +442,13 @@ class _VocabGrammarPracticeScreenState
   @visibleForTesting
   List<String> get debugCorrectChoices =>
       _questions.map((q) => q.choices[q.correctIdx]).toList();
+
+  /// Test hooks for the retry-aware record-path test: a wrong answer re-inserts a
+  /// re-test question, so the session length is not fixed — drive by these.
+  @visibleForTesting
+  int get debugCurrentIdx => _currentIdx;
+  @visibleForTesting
+  bool get debugSessionDone => _sessionDone;
 
   /// Test hook (#37): a choice text for [questionIdx] that is NOT the correct
   /// answer — lets the record-path test deliberately answer one question wrong.
@@ -1012,6 +1047,12 @@ class _Question {
   /// whose meaning is shown prominently at the top of the panel.
   final Map<String, String> choiceGloss;
 
+  /// True when this is a RE-TEST copy re-inserted after the child missed the
+  /// word earlier this session (error-corrective retrieval). A retry is a
+  /// LEARNING re-exposure only — it is excluded from the 合格率 signal and is
+  /// not re-scheduled in the cross-session store (the first miss already did).
+  final bool isRetry;
+
   const _Question({
     required this.cloze,
     required this.choices,
@@ -1019,7 +1060,18 @@ class _Question {
     required this.word,
     required this.originalSentence,
     this.choiceGloss = const {},
+    this.isRetry = false,
   });
+
+  _Question asRetry() => _Question(
+        cloze: cloze,
+        choices: choices,
+        correctIdx: correctIdx,
+        word: word,
+        originalSentence: originalSentence,
+        choiceGloss: choiceGloss,
+        isRetry: true,
+      );
 }
 
 /// A small 🔊 tap-to-hear button for the answer word, driven by

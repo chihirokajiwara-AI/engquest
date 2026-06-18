@@ -526,20 +526,34 @@ void main() {
     expect(n, greaterThanOrEqualTo(2),
         reason: 'need ≥2 questions to make one wrong, rest right');
 
-    for (var i = 0; i < n; i++) {
-      if (i == 0) {
-        // Deliberately answer the FIRST question wrong.
-        final wrong = (v.state as dynamic).debugWrongChoiceFor(0) as String;
+    // Answer the FIRST question wrong, the rest correct. A first-attempt miss
+    // re-inserts a learning-only re-test (excluded from the 合格率 signal), so the
+    // session runs longer than n — drive by live state until it completes rather
+    // than a fixed loop, and read the current question's answer each step.
+    final state = v.state as dynamic;
+    var stepped = 0;
+    while (!(state.debugSessionDone as bool)) {
+      final idx = state.debugCurrentIdx as int;
+      final choices = (state.debugCorrectChoices as List).cast<String>();
+      if (stepped == 0) {
+        final wrong = state.debugWrongChoiceFor(idx) as String;
         await tester.tap(find.text(wrong).first);
       } else {
-        await tester.tap(find.text(v.corrects[i]).first);
+        await tester.tap(find.text(choices[idx]).first);
       }
       await tester.pump();
-      await tester.tap(find.text(i < n - 1 ? '次の問題へ' : '結果を見る'));
+      final last = idx >= choices.length - 1;
+      await tester.tap(find.text(last ? '結果を見る' : '次の問題へ'));
       await tester.pump();
+      stepped++;
+      if (stepped > 200) break; // safety: never spin forever
     }
     await tester.pump(const Duration(milliseconds: 300));
     await tester.pump();
+
+    // The miss was re-tested in-session (one extra step beyond the n originals).
+    expect(stepped, equals(n + 1),
+        reason: 'a first-attempt miss adds exactly one in-session re-test');
 
     final reading = await _readingFor(grade);
     expect(reading.itemsAttempted, equals(n));
