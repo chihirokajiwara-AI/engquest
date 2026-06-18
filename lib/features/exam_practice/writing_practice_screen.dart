@@ -156,6 +156,11 @@ class WritingPrompt {
     required this.rubricPoints,
     this.modelAnswer,
   });
+
+  /// Max points per 観点 (official 英検 scale): Eメール is scored 0–3 each
+  /// (3 観点 = 9点満点); 要約 and 意見論述 are 0–4 each (16点満点). Using a uniform
+  /// ×4 over-counted email by a third — verified vs 旺文社 / eiken.or.jp 2024-reform.
+  int get maxPerCriterion => type == WritingTaskType.email ? 3 : 4;
 }
 
 // ── Prompt bank ──────────────────────────────────────────────────────────────
@@ -640,20 +645,25 @@ List<WritingPrompt> promptsForGrade(String eikenGrade) {
 
 // ── Grading result ───────────────────────────────────────────────────────────
 
-/// Scores for each 観点 (0-4 each, per official 英検 rubric).
+/// Scores for each 観点 (0–[maxPerCriterion] each, per official 英検 rubric:
+/// 0–4 for 要約/意見論述, 0–3 for Eメール).
 class WritingRubricResult {
-  final Map<String, int> scores; // rubricPoint → 0-4
+  final Map<String, int> scores; // rubricPoint → 0–maxPerCriterion
   final String feedbackJa; // ひらがな-friendly feedback
   final bool apiAvailable;
+
+  /// Points per 観点 — 4 for 要約/意見論述 (16点満点), 3 for Eメール (9点満点).
+  final int maxPerCriterion;
 
   const WritingRubricResult({
     required this.scores,
     required this.feedbackJa,
     required this.apiAvailable,
+    this.maxPerCriterion = 4,
   });
 
   int get total => scores.values.fold(0, (a, b) => a + b);
-  int get maxScore => scores.length * 4;
+  int get maxScore => scores.length * maxPerCriterion;
 }
 
 /// The (correct, total) signal a graded writing [result] contributes to the
@@ -674,9 +684,30 @@ class WritingRubricResult {
 // ── Grading prompt builder ────────────────────────────────────────────────────
 
 String _buildGradingSystemPrompt(WritingPrompt prompt) {
-  final rubricLines = prompt.rubricPoints
-      .map((p) => '  - $p: 0(unsatisfactory)–1–2–3–4(excellent)')
-      .join('\n');
+  // Official 英検 scale per task: Eメール 0–3 (9点満点), 要約/意見論述 0–4 (16点満点).
+  final maxPer = prompt.maxPerCriterion;
+  final ladder = [
+    for (var i = 0; i <= maxPer; i++)
+      i == 0
+          ? '0(unsatisfactory)'
+          : i == maxPer
+              ? '$i(excellent)'
+              : '$i'
+  ].join('–');
+  final rubricLines =
+      prompt.rubricPoints.map((p) => '  - $p: $ladder').join('\n');
+
+  // Band descriptors must match the scale's top mark (3 for Eメール, 4 otherwise).
+  final guidelines = maxPer == 3
+      ? '''- 3: Communicates the task completely and clearly; appropriate vocabulary; minimal errors.
+- 2: Mostly communicates the task; adequate vocabulary; some errors.
+- 1: Barely communicates; very limited vocabulary; frequent errors.
+- 0: Off-task, unintelligible, or violates a key task constraint.'''
+      : '''- 4: Communicates the task completely and clearly; rich vocabulary; minimal errors.
+- 3: Mostly communicates the task; adequate vocabulary; a few minor errors.
+- 2: Partially communicates; limited vocabulary; noticeable errors.
+- 1: Barely communicates; very limited vocabulary; frequent errors.
+- 0: Off-task, unintelligible, or violates a key task constraint.''';
 
   final taskSpecific = switch (prompt.type) {
     WritingTaskType.email when prompt.emailAsksQuestions => '''
@@ -711,28 +742,24 @@ TASK-SPECIFIC CHECKS (意見論述):
 You are a strict but kind 英検 writing examiner grading a learner's submission.
 The learner is a Japanese child or teenager studying English.
 
-RUBRIC (official 英検 観点, each scored 0–4):
+RUBRIC (official 英検 観点, each scored 0–$maxPer):
 $rubricLines
 
 $taskSpecific
 
 SCORING GUIDELINES:
-- 4: Communicates the task completely and clearly; rich vocabulary; minimal errors.
-- 3: Mostly communicates the task; adequate vocabulary; a few minor errors.
-- 2: Partially communicates; limited vocabulary; noticeable errors.
-- 1: Barely communicates; very limited vocabulary; frequent errors.
-- 0: Off-task, unintelligible, or violates a key task constraint.
+$guidelines
 
 FEEDBACK STYLE:
 - Write in Japanese (ひらがなを中心に). Use simple words suitable for middle-school students.
 - Be SPECIFIC: name one thing done well, one concrete thing to improve.
-- Be KIND but honest: don't give 4s unless genuinely earned.
+- Be KIND but honest: don't give the top mark ($maxPer) unless genuinely earned.
 - Keep feedback under 120 characters.
 
 RESPONSE FORMAT (strict JSON, no markdown, no extra text):
 {
   "scores": {
-    "内容 / Content": <0-4>,
+    "内容 / Content": <0-$maxPer>,
     ... (repeat for each rubric point)
   },
   "feedbackJa": "<kind, specific, ひらがな-friendly feedback in Japanese>"
@@ -1243,6 +1270,7 @@ class _WritingPracticeScreenState extends State<WritingPracticeScreen> {
           scores: {for (final p in _prompt.rubricPoints) p: -1},
           feedbackJa: '',
           apiAvailable: false,
+          maxPerCriterion: _prompt.maxPerCriterion,
         );
         _phase = _Phase.result;
       });
@@ -1254,6 +1282,7 @@ class _WritingPracticeScreenState extends State<WritingPracticeScreen> {
           scores: {for (final p in _prompt.rubricPoints) p: -1},
           feedbackJa: '',
           apiAvailable: false,
+          maxPerCriterion: _prompt.maxPerCriterion,
         );
         _phase = _Phase.result;
       });
@@ -1698,12 +1727,13 @@ WritingRubricResult _parseGradingResponse(
         jsonDecode(cleaned) as Map<String, dynamic>;
     final rawScores = parsed['scores'] as Map<String, dynamic>;
     final scores = <String, int>{};
+    final maxPer = prompt.maxPerCriterion; // 4 (要約/意見) or 3 (Eメール)
     for (final rp in prompt.rubricPoints) {
       final val = rawScores[rp];
       scores[rp] = (val is int)
-          ? val.clamp(0, 4)
+          ? val.clamp(0, maxPer)
           : (val is num)
-              ? val.toInt().clamp(0, 4)
+              ? val.toInt().clamp(0, maxPer)
               : 0;
     }
     final feedback = (parsed['feedbackJa'] as String?) ?? '';
@@ -1711,6 +1741,7 @@ WritingRubricResult _parseGradingResponse(
       scores: scores,
       feedbackJa: feedback,
       apiAvailable: true,
+      maxPerCriterion: prompt.maxPerCriterion,
     );
   } catch (_) {
     // Parse failure → offline mode gracefully
@@ -1718,6 +1749,7 @@ WritingRubricResult _parseGradingResponse(
       scores: {for (final p in prompt.rubricPoints) p: -1},
       feedbackJa: '',
       apiAvailable: false,
+      maxPerCriterion: prompt.maxPerCriterion,
     );
   }
 }
