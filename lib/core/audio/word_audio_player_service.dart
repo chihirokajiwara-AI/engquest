@@ -59,6 +59,11 @@ class WordAudioPlayerService extends ChangeNotifier {
   /// Pre-fetch audio for upcoming flashcards (call at session start)
   /// Non-blocking — fires in background, errors are swallowed
   Future<void> prefetchSession(List<({String id, String word})> words) async {
+    // Voice channel muted in Settings → skip the pre-fetch entirely. playWord
+    // also guards playback (defence-in-depth for a mid-session mute change), but
+    // the FETCH itself must not spend TTS API budget / network on audio the child
+    // will never hear — a parent who mutes voice should see ZERO voice fetches.
+    if (AudioMute.voiceMuted) return;
     try {
       final results = await _tts.prefetchBatch(words);
       _sessionCache.addAll(results);

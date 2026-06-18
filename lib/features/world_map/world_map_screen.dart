@@ -123,6 +123,7 @@ class _WorldMapScreenState extends State<WorldMapScreen>
   final _xpService = XpService();
   final _auth = AuthService();
   XpProfile? _xpProfile; // null until loaded; UI shows skeleton
+  bool _entranceFired = false; // staggered entrance runs once, in didChangeDeps
 
   @override
   void initState() {
@@ -141,18 +142,36 @@ class _WorldMapScreenState extends State<WorldMapScreen>
             ).animate(CurvedAnimation(parent: c, curve: Curves.easeOutCubic)))
         .toList();
 
-    // Staggered entrance: each card starts 200 ms after the previous
-    for (int i = 0; i < _slideCtls.length; i++) {
-      Future.delayed(Duration(milliseconds: i * 200), () {
-        if (mounted) _slideCtls[i].forward();
-      });
-    }
+    // The staggered entrance is started in didChangeDependencies (it needs a
+    // BuildContext to honour prefersReducedMotion — the primary nav hub must not
+    // fire a large vestibular-triggering slide when the OS asks for reduced motion).
 
     // Load real XP profile from Firestore
     _loadXpProfile();
 
     // Listen to XpService for live updates (e.g. returning from BattleScreen)
     _xpService.profileNotifier.addListener(_onXpProfileUpdated);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Fire the entrance ONCE. Honour reduced-motion: a large staggered slide on
+    // the primary nav hub is a vestibular trigger (WCAG 2.3.3), so when the OS
+    // asks for reduced motion we snap the cards to their final position —
+    // visible, zero motion. Mirrors the guard every other animated screen uses.
+    if (_entranceFired) return;
+    _entranceFired = true;
+    final reduce = prefersReducedMotion(context);
+    for (var i = 0; i < _slideCtls.length; i++) {
+      if (reduce) {
+        _slideCtls[i].value = 1.0;
+      } else {
+        Future.delayed(Duration(milliseconds: i * 200), () {
+          if (mounted) _slideCtls[i].forward();
+        });
+      }
+    }
   }
 
   void _onXpProfileUpdated() {
