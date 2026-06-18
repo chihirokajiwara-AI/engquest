@@ -89,5 +89,25 @@ void main() {
       expect(find.textContaining('とどきません'), findsNothing,
           reason: 'on the child device the settings DO apply — no warning');
     });
+
+    // Honesty (#156): the 英検準備度 readiness card reads DEVICE-LOCAL exam data.
+    // On a linked-parent device that's the parent's (or none), not the child's —
+    // so the linked view must NOT show a readiness % (it would label the parent's
+    // own data as the child's 合格率); it shows an honest "view on your child's
+    // device" note instead. The suppressed path loads no store, so this is robust.
+    testWidgets('linked view: readiness card shows the honest device note',
+        (tester) async {
+      SharedPreferences.setMockInitialValues({});
+      await tester.pumpWidget(MaterialApp(
+        home: ParentDashboardScreen(
+          childUid: 'child-xyz',
+          progressService: _RecordingProgressService(),
+        ),
+      ));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('ごらんいただけます'), findsOneWidget,
+          reason: 'a remote parent must not be shown device-local data as the '
+              'child 合格率 — show the honest note instead');
+    });
   });
 }

@@ -269,7 +269,9 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
                 return TabBarView(
                   controller: _tabController,
                   children: [
-                    _HomeTab(progress: progress),
+                    _HomeTab(
+                        progress: progress,
+                        isLinkedChild: widget.childUid != null),
                     _ProgressTab(progress: progress),
                     _ScheduleTab(progress: progress),
                     _SettingsTab(
@@ -375,7 +377,11 @@ class _DqTabBar extends StatelessWidget {
 
 class _HomeTab extends StatelessWidget {
   final LearningProgress progress;
-  const _HomeTab({required this.progress});
+
+  /// True on the remote linked-parent view — gates the device-local readiness
+  /// card so it never shows the parent's own data as the child's 合格率 (#156).
+  final bool isLinkedChild;
+  const _HomeTab({required this.progress, this.isLinkedChild = false});
 
   @override
   Widget build(BuildContext context) {
@@ -449,7 +455,7 @@ class _HomeTab extends StatelessWidget {
         // the SAME model the in-app pass-meter uses. NOT vocabulary mastery: a
         // child with high flashcard mastery but no listening/writing practice is
         // NOT "on pace to pass", and a parent must not be told otherwise (#128).
-        const _HonestReadinessCard(),
+        _HonestReadinessCard(isLinkedChild: isLinkedChild),
         const SizedBox(height: 14),
 
         // ── Next review ───────────────────────────────────────────────────
@@ -525,7 +531,15 @@ class _HomeTab extends StatelessWidget {
 // ══════════════════════════════════════════════════════════════════════════════
 
 class _HonestReadinessCard extends StatefulWidget {
-  const _HonestReadinessCard();
+  /// True on the REMOTE linked-parent view (childUid set — the parent is on their
+  /// OWN device). The readiness number below comes from device-local
+  /// SkillAccuracyStore, which on a linked device holds the PARENT's (or no)
+  /// exam practice, NOT the child's — so showing it as the child's 合格率 would be
+  /// a false trust signal that contradicts the dashboard's "this is your child's
+  /// progress" promise. When linked we show an honest note instead (the child's
+  /// real readiness needs same-device viewing or remote sync — a separate feature).
+  final bool isLinkedChild;
+  const _HonestReadinessCard({this.isLinkedChild = false});
 
   @override
   State<_HonestReadinessCard> createState() => _HonestReadinessCardState();
@@ -545,7 +559,10 @@ Future<CseEstimate?> loadParentReadiness() async {
 }
 
 class _HonestReadinessCardState extends State<_HonestReadinessCard> {
-  late final Future<CseEstimate?> _future = loadParentReadiness();
+  // On a linked-parent device the local store is NOT the child's data, so we do
+  // not even load it — showing it would mislead. Null future → honest note below.
+  late final Future<CseEstimate?>? _future =
+      widget.isLinkedChild ? null : loadParentReadiness();
 
   Color _color(double pct) {
     if (pct >= 100) return const Color(0xFF8BE08B);
@@ -555,6 +572,20 @@ class _HonestReadinessCardState extends State<_HonestReadinessCard> {
 
   @override
   Widget build(BuildContext context) {
+    // Linked-parent device: the local 合格率 store is not the child's — be honest
+    // rather than show a wrong number under a "this is your child's progress" claim.
+    if (widget.isLinkedChild) {
+      return DqPanel(
+        title: '英検準備度 / Eiken Readiness',
+        child: Text(
+          '「合格（ごうかく）までの目安（めやす）」は、おこさんが れんしゅうしている '
+          'デバイスで ごらんいただけます。\n'
+          'このがめんは べつの デバイスから みているため、合格目安は ここには 出ません'
+          '（ごい・れんぞく日数などの しんちょくは おこさんの ものです）。',
+          style: dqText(size: 12, color: dqInk),
+        ),
+      );
+    }
     return DqPanel(
       title: '英検準備度 / Eiken Readiness',
       child: FutureBuilder<CseEstimate?>(
