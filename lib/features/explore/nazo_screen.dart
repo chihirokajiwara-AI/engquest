@@ -72,6 +72,17 @@ class NazoResult {
 /// flip to false to A/B back to the plain navy boxes (loses the framed craft).
 const bool kNazoWarmTheme = true;
 
+/// Retrieval-gap duration (seconds) between teach and quiz (game-studio director
+/// #1 — genuine cued-recall instead of recognition). Tunable here; the screen
+/// auto-advances to the quiz when the countdown completes (or the child skips).
+const int kRecallGapSeconds = 8;
+
+/// Three-phase state machine that replaces the old boolean [_teaching] flag.
+/// • [teach]  — show the TeachCard (teach-first, pre-quiz)
+/// • [recall] — closed casebook gap: child recalls without seeing the words
+/// • [quiz]   — the actual ナゾ quiz (existing behaviour)
+enum _NazoPhase { teach, recall, quiz }
+
 class NazoScreen extends StatefulWidget {
   final Hotspot hotspot;
 
@@ -98,7 +109,7 @@ class NazoScreen extends StatefulWidget {
   State<NazoScreen> createState() => _NazoScreenState();
 }
 
-class _NazoScreenState extends State<NazoScreen> {
+class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
   late final MinosController _minos;
   late final HintCoinService _coins;
   final _cue = AudioCueService();
@@ -138,10 +149,23 @@ class _NazoScreenState extends State<NazoScreen> {
   // honest "準備中" note instead of leaving the child with silence (#43).
   bool _audioMissing = false;
 
-  // Teach-first (CEO 2026-06-09 致命的欠陥): when this ナゾ carries a [TeachCard],
-  // the child is TAUGHT the words first and only sees the quiz after tapping
-  // 「わかった！」. Starts true iff a card is present; flips false on advance.
-  bool _teaching = false;
+  // Three-phase state machine (teach → recall gap → quiz). Replaces the old
+  // bool _teaching so the retrieval gap can be inserted between teach and quiz
+  // without duplicating the quiz scaffold. quiz is the only phase with tappable
+  // options, so _firstAttempted/_firstTryCorrect cannot be set prematurely.
+  late _NazoPhase _phase;
+
+  // Discrete recall-gap countdown: decrements once per second via a periodic
+  // Timer. kRecallGapSeconds → 0; at 0 fires _phase = _NazoPhase.quiz.
+  // A discrete per-second update (vs a continuous AnimationController) keeps
+  // pumpAndSettle() in tests stable — each Timer tick is one pump call, and
+  // after the last tick pumpAndSettle() sees no pending frames and returns.
+  // Null in reduced-motion mode (no auto-advance).
+  int _recallSecondsLeft = kRecallGapSeconds;
+
+  // Fires _phase = _NazoPhase.quiz after kRecallGapSeconds (real wall time).
+  // Not started in reduced-motion mode (no auto-advance, skip btn only).
+  Timer? _recallTimer;
 
   QuestStep get _step => widget.hotspot.step!;
   TeachCard? get _teachCard => widget.hotspot.teachCard;
@@ -156,7 +180,7 @@ class _NazoScreenState extends State<NazoScreen> {
   @override
   void initState() {
     super.initState();
-    _teaching = _teachCard != null;
+    _phase = (_teachCard != null) ? _NazoPhase.teach : _NazoPhase.quiz;
     // Restore the hint tier the child already paid for (relocking it on reopen
     // would charge them twice for the same hint — the spend is durable).
     _hintsShown = widget.initialHintsShown;
@@ -183,6 +207,7 @@ class _NazoScreenState extends State<NazoScreen> {
     _burstTimer?.cancel();
     _finishTimer?.cancel();
     _wrongMeaningTimer?.cancel();
+    _recallTimer?.cancel();
     _cue.dispose();
     super.dispose();
   }
@@ -413,7 +438,8 @@ class _NazoScreenState extends State<NazoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (_teaching) return _teachScaffold();
+    if (_phase == _NazoPhase.teach) return _teachScaffold();
+    if (_phase == _NazoPhase.recall) return _recallScaffold();
     return DqScene(
       warm: kNazoWarmTheme,
       contentMaxWidth: 600, // #144: centre on tablet, full-width on phone
@@ -623,6 +649,115 @@ class _NazoScreenState extends State<NazoScreen> {
         ),
       );
 
+  // ── Recall gap ────────────────────────────────────────────────────────────────
+
+  /// Transitions from the teach phase to the recall phase and starts the
+  /// countdown (unless the OS requests reduced motion, in which case no
+  /// auto-advance fires — the child taps 「もう だいじょうぶ ▶」 to proceed).
+  void _startRecall() {
+    final reduceMotion = prefersReducedMotion(context);
+    setState(() {
+      _phase = _NazoPhase.recall;
+      _recallSecondsLeft = kRecallGapSeconds;
+    });
+    if (!reduceMotion) {
+      // Discrete per-second tick: decrements the counter and rebuilds the ring
+      // digit once per second. This is intentionally NOT a continuous
+      // AnimationController — a continuous animation would keep pumping frames
+      // and cause pumpAndSettle() in widget tests to run the full 8 seconds and
+      // auto-advance past the recall phase before tests can assert on it.
+      _recallTimer = Timer.periodic(const Duration(seconds: 1), (t) {
+        if (!mounted) {
+          t.cancel();
+          return;
+        }
+        setState(() {
+          _recallSecondsLeft -= 1;
+          if (_recallSecondsLeft <= 0) {
+            t.cancel();
+            _recallTimer = null;
+            _phase = _NazoPhase.quiz;
+          }
+        });
+      });
+    }
+    // Reduced motion: no auto-advance; child uses the skip button.
+  }
+
+  /// Closed-casebook interstitial shown between teach and quiz.
+  /// OCCLUDES all teach content (teach scaffold is no longer in the widget tree).
+  /// A discrete countdown ring updates once per second; on reduced motion a
+  /// static full ring is shown with no auto-advance (skip button is the sole CTA).
+  Widget _recallScaffold() {
+    final reduceMotion = prefersReducedMotion(context);
+    final sLeft = _recallSecondsLeft;
+    final progress = reduceMotion
+        ? 1.0
+        : sLeft / kRecallGapSeconds; // remaining fraction 1.0→0.0
+
+    return DqScene(
+      warm: kNazoWarmTheme,
+      contentMaxWidth: 600,
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Semantics(
+                liveRegion: true,
+                label: 'ことばを おもいだそう',
+                child: DqPanel(
+                  warm: kNazoWarmTheme,
+                  child: Column(
+                    children: [
+                      const Icon(
+                        Icons.menu_book_rounded,
+                        color: pcFrameGold,
+                        size: 56,
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'あたまの なかで、ことばを おもいだそう。',
+                        textAlign: TextAlign.center,
+                        style: dqInkText(
+                            size: 16, w: FontWeight.w700, color: pcInk),
+                      ),
+                      const SizedBox(height: 24),
+                      // Countdown ring: updates once per second (not continuous
+                      // animation) so widget tests can assert on the recall phase
+                      // without pumpAndSettle draining the full countdown.
+                      SizedBox(
+                        width: 100,
+                        height: 100,
+                        child: CustomPaint(
+                          painter: _RecallRingPainter(
+                            progress: progress,
+                            digit: reduceMotion ? kRecallGapSeconds : sLeft,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 28),
+              DqButton(
+                label: 'もう だいじょうぶ ▶',
+                onTap: () {
+                  _recallTimer?.cancel();
+                  _recallTimer = null;
+                  setState(() => _phase = _NazoPhase.quiz);
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   // ── Teach-first view (shown BEFORE the quiz when a TeachCard is present) ─────
 
   Widget _teachScaffold() {
@@ -700,8 +835,8 @@ class _NazoScreenState extends State<NazoScreen> {
                           ),
                           const SizedBox(height: 20),
                           DqButton(
-                            label: 'わかった！ こたえてみる ▶',
-                            onTap: () => setState(() => _teaching = false),
+                            label: 'おぼえた！ ナゾへ ▶',
+                            onTap: _startRecall,
                           ),
                           const SizedBox(height: 10),
                           Center(
@@ -1161,6 +1296,63 @@ class _NazoScreenState extends State<NazoScreen> {
       ),
     );
   }
+}
+
+/// Countdown ring for the recall gap. [progress] sweeps 1.0→0.0 (full ring →
+/// empty arc). [digit] is the remaining whole-second count shown at centre.
+/// Stroked in [pcFrameGold] on the dark navy background, matching the casebook
+/// palette. On reduced motion, always renders with progress==1.0 (static ring).
+class _RecallRingPainter extends CustomPainter {
+  final double progress; // 1.0 = full ring; 0.0 = empty
+  final int digit;
+
+  const _RecallRingPainter({required this.progress, required this.digit});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = size.center(Offset.zero);
+    final radius = size.shortestSide / 2 - 6;
+    // Background track (dim).
+    canvas.drawCircle(
+      center,
+      radius,
+      Paint()
+        ..color = pcFrameGold.withAlpha(50)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 7,
+    );
+    // Foreground arc (sweeps clockwise from top, representing remaining time).
+    if (progress > 0) {
+      canvas.drawArc(
+        Rect.fromCircle(center: center, radius: radius),
+        -math.pi / 2, // start at top
+        progress * 2 * math.pi, // sweep based on remaining fraction
+        false,
+        Paint()
+          ..color = pcFrameGold
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 7
+          ..strokeCap = StrokeCap.round,
+      );
+    }
+    // Centre digit.
+    final tp = TextPainter(
+      text: TextSpan(
+        text: '$digit',
+        style: TextStyle(
+          color: pcInk,
+          fontSize: 28,
+          fontWeight: FontWeight.w800,
+        ),
+      ),
+      textDirection: TextDirection.ltr,
+    )..layout();
+    tp.paint(canvas, center - Offset(tp.width / 2, tp.height / 2));
+  }
+
+  @override
+  bool shouldRepaint(_RecallRingPainter old) =>
+      old.progress != progress || old.digit != digit;
 }
 
 /// The solve-moment climax: a one-shot full-screen gold radial bloom that scales

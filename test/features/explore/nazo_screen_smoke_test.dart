@@ -72,12 +72,22 @@ void main() {
       ));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 100));
-      // Past the teach-first card if present (the case-title is on the quiz).
-      final proceed = find.textContaining('こたえてみる');
+      // Past the teach-first card if present (the case-title is on the quiz),
+      // then past the recall gap.
+      final proceed = find.textContaining('おぼえた');
       if (proceed.evaluate().isNotEmpty) {
         await tester.ensureVisible(proceed.first);
         await tester.pump();
         await tester.tap(proceed.first);
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+      // Skip recall gap if present.
+      final skipRecall = find.textContaining('もう だいじょうぶ');
+      if (skipRecall.evaluate().isNotEmpty) {
+        await tester.ensureVisible(skipRecall.first);
+        await tester.pump();
+        await tester.tap(skipRecall.first);
         await tester.pump();
         await tester.pump(const Duration(milliseconds: 100));
       }
@@ -188,14 +198,24 @@ void main() {
       await tester.tap(find.text('go'));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 400));
-      // Past the teach-first card if present (the 英検 ナゾ teach before asking).
-      final proceed = find.textContaining('こたえてみる');
+      // Past the teach-first card if present → tap teach advance → then skip
+      // the recall gap so we land on the quiz immediately.
+      final proceed = find.textContaining('おぼえた');
       if (proceed.evaluate().isNotEmpty) {
         await tester.ensureVisible(proceed.first);
         await tester.pump();
         await tester.tap(proceed.first);
         await tester.pump();
         await tester.pump(const Duration(milliseconds: 300));
+      }
+      // Skip recall gap if present (reduced-motion path: static ring, skip btn).
+      final skipRecall = find.textContaining('もう だいじょうぶ');
+      if (skipRecall.evaluate().isNotEmpty) {
+        await tester.ensureVisible(skipRecall.first);
+        await tester.pump();
+        await tester.tap(skipRecall.first);
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 200));
       }
       for (final i in taps) {
         await tester.tap(find.byType(AudioOptionButton).at(i));
@@ -245,12 +265,20 @@ void main() {
         home: NazoScreen(hotspot: hotspot, eikenLevel: '5'),
       ));
       await t.pump(const Duration(milliseconds: 400));
-      final proceed = find.textContaining('こたえてみる');
+      final proceed = find.textContaining('おぼえた');
       if (proceed.evaluate().isNotEmpty) {
         await t.ensureVisible(proceed.first);
         await t.pump();
         await t.tap(proceed.first);
         await t.pump(const Duration(milliseconds: 300));
+      }
+      // Skip recall gap if present.
+      final skipRecall = find.textContaining('もう だいじょうぶ');
+      if (skipRecall.evaluate().isNotEmpty) {
+        await t.ensureVisible(skipRecall.first);
+        await t.pump();
+        await t.tap(skipRecall.first);
+        await t.pump(const Duration(milliseconds: 200));
       }
       await t.tap(find.byType(AudioOptionButton).at(correctIdxOf5kuNpc()));
       await t.pump();
@@ -353,14 +381,22 @@ void main() {
       ));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 400));
-      // Past the teach-first card if present.
-      final proceed = find.textContaining('こたえてみる');
+      // Past the teach-first card if present, then skip the recall gap.
+      final proceed = find.textContaining('おぼえた');
       if (proceed.evaluate().isNotEmpty) {
         await tester.ensureVisible(proceed.first);
         await tester.pump();
         await tester.tap(proceed.first);
         await tester.pump();
         await tester.pump(const Duration(milliseconds: 300));
+      }
+      final skipRecall = find.textContaining('もう だいじょうぶ');
+      if (skipRecall.evaluate().isNotEmpty) {
+        await tester.ensureVisible(skipRecall.first);
+        await tester.pump();
+        await tester.tap(skipRecall.first);
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 200));
       }
       // Tap a WRONG choice.
       final correct = hotspot.step!.correctIndex;
@@ -420,12 +456,21 @@ void main() {
       ));
       await t.pump();
       await t.pump(const Duration(milliseconds: 300));
-      final teachBtn =
-          find.textContaining('こたえてみる'); // dismiss teach-first card
+      final teachBtn = find.textContaining('おぼえた'); // dismiss teach-first card
       await t.ensureVisible(teachBtn);
       await t.pump();
       await t.tap(teachBtn);
       await t.pump();
+      await t.pump(const Duration(milliseconds: 200));
+      // Skip recall gap to reach the quiz.
+      final skipRecall = find.textContaining('もう だいじょうぶ');
+      if (skipRecall.evaluate().isNotEmpty) {
+        await t.ensureVisible(skipRecall.first);
+        await t.pump();
+        await t.tap(skipRecall.first);
+        await t.pump();
+        await t.pump(const Duration(milliseconds: 200));
+      }
       expect(find.textContaining(' = '),
           findsNothing); // nothing before a wrong tap
       await t.tap(find.byType(AudioOptionButton).at(wrong!));
