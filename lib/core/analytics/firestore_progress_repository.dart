@@ -147,13 +147,28 @@ class FirestoreProgressRepository {
       final dateKey = _dateKey(now);
       final batch = _db.batch();
 
-      // Session doc: merge (increment) today's totals
+      // Session doc: merge (increment) today's totals.
       final sessionRef = _sessionDoc(uid, dateKey);
-      final sessionSnap = await sessionRef.get(
-        const GetOptions(source: Source.serverAndCache),
-      );
+      // Read today's doc to accumulate same-day sessions (weighted average).
+      // Source.serverAndCache THROWS FirebaseException(unavailable) on an offline
+      // cold cache-MISS (first session of the day with no network). If that throw
+      // aborts the batch, the ENTIRE session — words, minutes, streak, 合格率 — is
+      // silently dropped: the SDK's offline queue only covers writes that reach
+      // commit(), and we never got there. Catch it and treat as "no existing doc"
+      // → write a FRESH session, which batch.commit() queues offline and syncs
+      // later. Online / cached → exact weighted merge as before (unchanged).
+      DocumentSnapshot<Map<String, dynamic>>? sessionSnap;
+      try {
+        sessionSnap = await sessionRef.get(
+          const GetOptions(source: Source.serverAndCache),
+        );
+      } catch (_) {
+        sessionSnap = null;
+      }
 
-      if (sessionSnap.exists && sessionSnap.data() != null) {
+      if (sessionSnap != null &&
+          sessionSnap.exists &&
+          sessionSnap.data() != null) {
         final existing = sessionSnap.data()!;
         final prevWords = (existing['wordsPracticed'] as num? ?? 0).toInt();
         final prevMins = (existing['sessionMinutes'] as num? ?? 0).toInt();
