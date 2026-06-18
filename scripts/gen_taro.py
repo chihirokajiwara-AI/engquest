@@ -17,15 +17,15 @@ from diffusers import StableDiffusionXLPipeline, DPMSolverMultistepScheduler
 OUT = pathlib.Path(__file__).resolve().parent.parent / "art_candidates" / "taro"
 OUT.mkdir(parents=True, exist_ok=True)
 
-POS = ("masterpiece, best quality, 1 creature, solo, a single small mascot creature, "
-       "one creature centered, full body, refined detailed anime, flat cel shading, "
-       "clean bold ink linework, matte finish, "
-       "a small soft round egg-shaped detective creature, "
-       "TWO MISMATCHED ears, one ear pricked straight up and alert, one ear folded down, "
-       "oversized round detective cap with a brass band tilted low over one eye, "
-       "big round worried-hopeful eyes, small cream belly patch, "
-       "deep saturated jewel teal green body, dusty teal and warm brass palette, "
-       "warm and huggable, instantly lovable, plain pale cream background, premium, 4k")
+# CLIP-77 fix (run 1 truncated at 77 tokens, dropping colour/bg): front-load the
+# critical, scoring terms — singularity, the ONE signature (mismatched ears),
+# cap-over-one-eye, the LOCKED deep-teal colour, then style — within ~77 tokens.
+POS = ("1 creature, solo, a small round teal detective creature, "
+       "deep saturated teal-green body, "
+       "TWO MISMATCHED ears one pricked up one folded down, "
+       "oversized brass-band cap tilted low over one eye, "
+       "big worried-hopeful eyes, cream belly patch, "
+       "flat cel anime, bold clean ink linework, matte, plain pale-cream background")
 NEG = ("grid, sprite sheet, sticker sheet, character sheet, multiple creatures, two creatures, "
        "duplicate, rows, tiled, collage, contact sheet, set of, pattern, "
        "symmetric matching ears, both ears identical, bunny, cat, human, person, clothes, robe, "
