@@ -47,7 +47,9 @@
 //   non-public and change every administration).
 //
 //   passTargetRaw — 目安 only (協会 2016 raw-rate note + 2025/26 塾 estimates):
-//     5級/4級/3級/準2級/準2級プラス/2級 → 0.60   準1級 → 0.70
+//     5級/3級/準2級/準2級プラス/2級 → 0.60   4級 → 0.65   準1級 → 0.70
+//     (4級 raised 2026-06-19: R+L only, no Writing buffer, CSE-fraction ≈ raw;
+//      0.60=合格最低ライン over-promise → 0.65=~92%-pass genuine 合格圏)
 //
 // NO dart:io. No Firebase. No network. Pure-Dart computation only (R4).
 
@@ -247,9 +249,22 @@ const Map<String, _GradeSpec> _kGradeSpecs = {
 /// 2026-06-09). 協会: 1級/準1≈各技能7割, 2級以下≈各技能6割 (eiken.or.jp 合否判定,
 /// a 2016 statement — 目安 only); corroborated by 2025/26 塾 raw→CSE tables
 /// (準1 passes at ~65–70% raw, NOT the 79.6% CSE fraction). Default 0.60.
+///
+/// 4級 CALIBRATION (2026-06-19 honesty fix, verified vs official + 2025/2026 sources):
+///   4級 一次 pass threshold = CSE 622/1000 = 62.2%. 4級 has Reading + Listening
+///   ONLY (no Writing buffer). Empirical raw pass band: 40-42/65 correct.
+///   60% (39/65) = bare MINIMUM line (~50% pass rate); 65% (42-43/65) ≈ 92% pass
+///   (genuine 合格圏). Setting the 目安 at 0.60 made readinessPct hit 100 and
+///   reachedPassMeyasu=true at the minimum line — celebrating 「合格圏」 when a
+///   child would likely FAIL. That is an over-promise. Fix: 0.65 = the ~92%-pass
+///   level (2025/2026: "60%=合格最低ライン, 70%=安全圏; 65%≈合格圏の目安").
+///   5級 is kept at 0.60 (lower CSE pass fraction 419/850=49.3% → 0.60 is already
+///   conservative). 3級/準2/準2plus/2級 keep 0.60 (Writing buffer present →
+///   unmeasuredSkills gate already masks; separate verified fix warranted).
 const Map<String, double> _kPassTargetRaw = {
   '5': 0.60,
-  '4': 0.60,
+  '4':
+      0.65, // honesty fix 2026-06-19: 60%=合格最低ライン over-promise; 65%≈92%-pass 合格圏
   '3': 0.60,
   'pre2': 0.60,
   'pre2plus': 0.60,
