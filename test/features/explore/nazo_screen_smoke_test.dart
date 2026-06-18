@@ -210,6 +210,37 @@ void main() {
       expect(r.firstTryCorrect, isTrue);
     });
 
+    testWidgets(
+        'correct-answer 解説 is announced to screen readers (live region)',
+        (t) async {
+      // The win + the teach-why 解説 must reach a screen-reader / low-vision
+      // child, not just sighted children. Solve, then assert the reveal carries
+      // a live region whose label starts with せいかい (mirrors the wrong-answer
+      // banner). Stops at the reveal — does NOT tap finish.
+      t.view.physicalSize = const Size(440, 1600);
+      t.view.devicePixelRatio = 1.0;
+      addTearDown(t.view.reset);
+      final hotspot = kTown5Scene.hotspots
+          .firstWhere((h) => h.kind == HotspotKind.npc && h.step != null);
+      await t.pumpWidget(MaterialApp(
+        home: NazoScreen(hotspot: hotspot, eikenLevel: '5'),
+      ));
+      await t.pump(const Duration(milliseconds: 400));
+      final proceed = find.textContaining('こたえてみる');
+      if (proceed.evaluate().isNotEmpty) {
+        await t.ensureVisible(proceed.first);
+        await t.pump();
+        await t.tap(proceed.first);
+        await t.pump(const Duration(milliseconds: 300));
+      }
+      await t.tap(find.byType(AudioOptionButton).at(correctIdxOf5kuNpc()));
+      await t.pump();
+      await t.pump(const Duration(milliseconds: 100));
+      expect(find.bySemanticsLabel(RegExp(r'^せいかい')), findsOneWidget,
+          reason: 'correct-answer explanation must be in a live region so a '
+              'screen-reader child hears the teach-why, not just sighted kids');
+    });
+
     testWidgets('wrong then correct → firstTryCorrect == false (no inflation)',
         (t) async {
       final c = correctIdxOf5kuNpc();

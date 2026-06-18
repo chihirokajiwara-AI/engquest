@@ -464,10 +464,24 @@ class _NazoScreenState extends State<NazoScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 12),
-                                DqDialogBox(
-                                  speaker: _step.npcName,
-                                  child: Text(_step.onCorrect,
-                                      style: dqText(size: 15)),
+                                // Announce the win + the teach-why 解説 to a
+                                // screen-reader / low-vision child. Without this
+                                // live region the most-frequent learning moment
+                                // (a correct answer) delivered its explanation to
+                                // sighted children only — the wrong-answer banner
+                                // already announces (see _wrongMeaningBanner), so
+                                // the correct path was the one inverted-learning
+                                // gap. excludeSemantics so the inner Text is not
+                                // read twice. (WCAG 2.2 status-message guidance.)
+                                Semantics(
+                                  liveRegion: true,
+                                  label: 'せいかい！ ${_step.onCorrect}',
+                                  excludeSemantics: true,
+                                  child: DqDialogBox(
+                                    speaker: _step.npcName,
+                                    child: Text(_step.onCorrect,
+                                        style: dqText(size: 15)),
+                                  ),
                                 ),
                                 const SizedBox(height: 16),
                                 // Gated on _burstReady (after the read window) so a child
