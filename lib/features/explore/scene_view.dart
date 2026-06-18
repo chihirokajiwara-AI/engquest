@@ -1620,24 +1620,28 @@ class _IdlePulseHaloState extends State<_IdlePulseHalo>
           // Ease the breath so it lingers at the dim ends and glides through the
           // peak — a calm pulse, not a strobe.
           final t = Curves.easeInOut.transform(_ctrl.value);
-          return Opacity(
-            opacity:
-                t * 0.5, // max ~50% — present but never louder than the art
+          // Animate the gradient's mid-stop ALPHA, not an Opacity wrapper:
+          // Opacity forces a per-frame saveLayer on CanvasKit, ×3 NPCs running
+          // continuously. A shader-param change has no offscreen layer. The
+          // RepaintBoundary contains the repaint so the painted plate + sibling
+          // hotspots don't redraw with the pulse (perf #123).
+          final midAlpha = (102 * t * 0.5).round(); // 0 → ~51, matches old peak
+          return RepaintBoundary(
             child: SizedBox(
               width: ring,
               height: ring,
-              child: const DecoratedBox(
+              child: DecoratedBox(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   gradient: RadialGradient(
                     // dqGoldDeep (0xB8923C): transparent core (don't wash the
                     // portrait) → soft ring → transparent rim.
                     colors: [
-                      Color(0x00B8923C),
-                      Color(0x66B8923C),
-                      Color(0x00B8923C),
+                      const Color(0x00B8923C),
+                      const Color(0xFFB8923C).withAlpha(midAlpha),
+                      const Color(0x00B8923C),
                     ],
-                    stops: [0.42, 0.70, 1.0],
+                    stops: const [0.42, 0.70, 1.0],
                   ),
                 ),
               ),
@@ -1691,7 +1695,11 @@ class _ObservationShimmerState extends State<_ObservationShimmer>
     final borderAlpha = (70 + 60 * t).round(); // 70 → 130
     final iconAlpha = (130 + 60 * t).round(); // 130 → 190
     final glowAlpha = (10 + 45 * t).round(); // very soft halo, 10 → 55
-    final glowBlur = 4.0 + 5.0 * t; // 4 → 9
+    // Hold the blur radius CONSTANT (was 4→9): an animated blurRadius can't be
+    // layer-cached on CanvasKit — it re-rasterizes the gaussian mask every
+    // frame. The breathe stays legible via the animated border/icon/glow alpha
+    // above (perf #123). Mid value keeps the prior look.
+    const glowBlur = 6.5;
     return Container(
       width: widget.size,
       height: widget.size,
@@ -1713,9 +1721,11 @@ class _ObservationShimmerState extends State<_ObservationShimmer>
   @override
   Widget build(BuildContext context) {
     if (widget.reduceMotion) return _dot(0.45);
-    return AnimatedBuilder(
-      animation: _ctrl,
-      builder: (_, __) => _dot(Curves.easeInOut.transform(_ctrl.value)),
+    return RepaintBoundary(
+      child: AnimatedBuilder(
+        animation: _ctrl,
+        builder: (_, __) => _dot(Curves.easeInOut.transform(_ctrl.value)),
+      ),
     );
   }
 }
@@ -1754,8 +1764,12 @@ class _CoinTwinkleState extends State<_CoinTwinkle>
   Widget _glint(double t) {
     // t: 0 (dim) → 1 (bright). Reduced-motion passes 0.5 (mid glint).
     final glowAlpha = (120 + 90 * t).round(); // 120 → 210
-    final glowBlur = 9.0 + 9.0 * t; // 9 → 18
-    final glowSpread = 1.0 + 2.5 * t; // 1 → 3.5
+    // Hold blur + spread CONSTANT (were 9→18 / 1→3.5): animating a BoxShadow's
+    // blurRadius/spreadRadius re-rasterizes the gaussian mask every frame on
+    // CanvasKit. The twinkle stays vivid via the animated glow alpha + the
+    // cheap Transform.scale below (perf #123). Mid values keep the prior look.
+    const glowBlur = 13.5;
+    const glowSpread = 2.25;
     final starScale = 0.9 + 0.18 * t; // 0.90 → 1.08
     return Container(
       width: widget.size,
@@ -1784,9 +1798,11 @@ class _CoinTwinkleState extends State<_CoinTwinkle>
   @override
   Widget build(BuildContext context) {
     if (widget.reduceMotion) return _glint(0.5);
-    return AnimatedBuilder(
-      animation: _ctrl,
-      builder: (_, __) => _glint(Curves.easeInOut.transform(_ctrl.value)),
+    return RepaintBoundary(
+      child: AnimatedBuilder(
+        animation: _ctrl,
+        builder: (_, __) => _glint(Curves.easeInOut.transform(_ctrl.value)),
+      ),
     );
   }
 }
