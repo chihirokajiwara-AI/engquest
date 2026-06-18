@@ -378,6 +378,14 @@ const Map<String, String> _kReadingExplanations = {
       '正解は solve「解決する」。solve the mystery で「謎を解く」という決まった言い方です。名探偵がついにできたこととして自然ですね。melt（とかす）では合いません。',
   '2_r_018':
       '正解は releasing「放出すること」。without releasing harmful gases で「有害なガスを出さずに」という意味になり、気候変動と戦う助けになるという流れに合います。',
+  '2_r_032':
+      'つなぎ言葉の問題。前半「在宅勤務は生産性を下げる」という思い込みと、後半「実際は会社よりも多くの仕事をこなす」という事実は逆の内容なので、逆接の however「しかし」が正解。therefore や as a result は順接、for example は例示なので合いません。',
+  '2_r_033':
+      '正解は spread「広げる」。花から花へ動きながら花粉を「植物の間に広げる」ことで、植物が実や種を作れるという流れ。absorb（吸収する）や store（ためる）では花粉が他の植物に渡らず繁殖を助けられず、destroy（こわす）は逆の意味です。',
+  '2_r_034':
+      '正解は lower「下げる」。客がスマホで値段を簡単に比べられるので、店は競争に勝つために値段を「下げる」必要がある。raise（上げる）は逆、hide（隠す）や announce（発表する）では競争への対応になりません。',
+  '2_r_035':
+      '正解は allowed。be allowed to ～ で「～することを許される」。建物を守るため、壁にさわったりフラッシュを使ったりすることが「もう許されない」という意味。forced / required / expected は「～する義務がある」で、さわる義務はもともとないので合いません。',
   '2_r_019':
       '本文の However 以降に、自転車を「良い状態に保つのに苦労する」とあります。これが本文の挙げる問題点。「Maintaining the bicycles」（自転車の整備）が正解です。逆接の However が手がかりです。',
   '2_r_020':
@@ -1901,6 +1909,57 @@ const _grade2Reading = [
     questionText: 'Choose the best phrase for the blank.',
     choices: ['collecting', 'storing', 'releasing', 'buying'],
     correctIdx: 2,
+  ),
+  // 大問2 had only 2 items vs the official 6 (2 passages × 3 blanks, post-2024
+  // reform — eigonotomo / ei-navi). +4 here (→6) so a 2級 child actually
+  // practises 長文の語句空所補充. Condensed single-paragraph style matching the
+  // pool; each blank is comprehension-based (all four choices are grammatically
+  // valid, so a tile can't be eliminated on grammar alone) with exactly one
+  // defensible answer. Includes a つなぎ言葉 (discourse-marker) item — a signature
+  // 2級 大問2 sub-type.
+  ReadingMockItem(
+    id: '2_r_032',
+    sectionId: '2_r2',
+    passageText:
+        'Many people believe that working from home reduces productivity. '
+        'Recent studies, ( ), show that remote employees often complete more '
+        'tasks than office workers, partly because they face fewer interruptions.',
+    questionText: 'Choose the best phrase for the blank.',
+    choices: ['therefore', 'however', 'for example', 'as a result'],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: '2_r_033',
+    sectionId: '2_r2',
+    passageText:
+        'Bees play a vital role in growing the food we eat. As they move from '
+        'flower to flower collecting nectar, they ( ) pollen between the plants, '
+        'which allows the plants to produce fruits and seeds.',
+    questionText: 'Choose the best phrase for the blank.',
+    choices: ['spread', 'destroy', 'absorb', 'store'],
+    correctIdx: 0,
+  ),
+  ReadingMockItem(
+    id: '2_r_034',
+    sectionId: '2_r2',
+    passageText:
+        'Online shopping has grown rapidly in recent years. Because customers '
+        'can compare prices easily on their phones, many traditional stores '
+        'have had to ( ) their prices to stay competitive.',
+    questionText: 'Choose the best phrase for the blank.',
+    choices: ['raise', 'lower', 'hide', 'announce'],
+    correctIdx: 1,
+  ),
+  ReadingMockItem(
+    id: '2_r_035',
+    sectionId: '2_r2',
+    passageText:
+        'The old castle attracts thousands of tourists every year. To protect '
+        'the building, visitors are no longer ( ) to touch the ancient walls or '
+        'use flash photography, both of which can cause slow damage over time.',
+    questionText: 'Choose the best phrase for the blank.',
+    choices: ['allowed', 'forced', 'required', 'expected'],
+    correctIdx: 0,
   ),
   // ── 大問3 長文の内容一致選択 (passage comprehension) ──────────────────────
   ReadingMockItem(
