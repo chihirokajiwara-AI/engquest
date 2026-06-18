@@ -588,9 +588,28 @@ class _WordOrderingPracticeScreenState
             ),
           ),
           const SizedBox(height: 12),
-          // Check / Next button
-          if (!_answered && _remainingWords.isEmpty)
-            DqButton(label: '答え合わせ', onTap: _checkAnswer),
+          // Progress cue: shown only while chips remain (before answered) so
+          // a 6yo knows what to do on the currently-actionless screen.
+          if (!_answered && _remainingWords.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Text(
+                'あと ${_remainingWords.length}こ ならべよう',
+                textAlign: TextAlign.center,
+                style: dqText(
+                  size: 13,
+                  color: dqInk.withAlpha(160),
+                  w: FontWeight.w600,
+                ),
+              ),
+            ),
+          // Check button: always visible while unanswered; disabled (greys out
+          // via DqButton's null-onTap path) until every chip is placed.
+          if (!_answered)
+            DqButton(
+              label: '答え合わせ',
+              onTap: _remainingWords.isEmpty ? _checkAnswer : null,
+            ),
           if (_answered)
             DqButton(
               label: _currentIdx < _problems.length - 1 ? '次の問題へ' : '結果を見る',
@@ -954,7 +973,9 @@ class _WordChip extends StatelessWidget {
           ),
           if (removable) ...[
             const SizedBox(width: 4),
-            Icon(Icons.close, size: 14, color: dqInk.withAlpha(150)),
+            // Bumped from 14→18 and coloured dqGold so "tap to take back"
+            // reads at a glance for a 6yo (44px tap target kept intact).
+            const Icon(Icons.close, size: 18, color: dqGold),
           ],
         ],
       ),

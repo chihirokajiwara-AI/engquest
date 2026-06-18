@@ -167,6 +167,17 @@ void main() {
       (tester) async {
     // CEO 1132 cont.: the opt-in 「ルールをみる」 teaches the grammar rule before
     // answering; a rule-assisted problem must NOT count as unaided reading skill.
+    //
+    // Tall viewport required: after revealing the hint, the grammar-rule panel
+    // plus the always-visible submit button (fix: UX defect where no button was
+    // shown until ALL chips were placed) makes the scrollable area taller.  A
+    // 800×600 default viewport scrolls the word-bank chips off-screen; use the
+    // same 320-logical-px tall approach as the other word-ordering tests.
+    tester.view.physicalSize = const Size(640, 2400);
+    tester.view.devicePixelRatio = 2.0;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
     const grade = '5';
     final chunkSets = wordOrderingChunksForTest(grade);
     final n = chunkSets.length;
