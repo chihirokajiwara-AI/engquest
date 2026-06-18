@@ -12,7 +12,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:convert';
 import 'package:engquest/core/fsrs/fsrs_card.dart';
-import 'package:engquest/features/home/kotoba_home_screen.dart';
+import 'package:engquest/core/fsrs/grade_due.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

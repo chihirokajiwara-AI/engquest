@@ -41,6 +41,7 @@ import '../../core/fsrs/firestore_card_repository.dart';
 import '../../core/fsrs/fsrs_algorithm.dart';
 import '../../core/fsrs/fsrs_card.dart';
 import '../../core/fsrs/fsrs_card_repository.dart';
+import '../../core/fsrs/grade_due.dart';
 import '../../core/gamification/achievement_service.dart';
 import '../../core/gamification/xp_service.dart';
 import '../../core/gamification/xp_profile.dart';
@@ -275,6 +276,9 @@ class _BattleScreenState extends State<BattleScreen>
   final _xpService = XpService();
   final _achievementService = AchievementService();
   String? _userId;
+  // How many ナゾ (grade-scoped FSRS cards) will be due when the child returns
+  // tomorrow — the forward-pull hook shown on the session-end card (D7 return).
+  int? _dueTomorrow;
   bool _repoLoading = true; // true while we await uid + loadDeck
 
   // ── Deck state ─────────────────────────────────────────────────────────────
@@ -686,6 +690,23 @@ class _BattleScreenState extends State<BattleScreen>
         if (mounted) setState(() => _streakSnapshot = snapshot);
       } catch (_) {
         // Non-fatal: SharedPreferences failure is rare.
+      }
+      // Forward-pull hook (#133): how many ナゾ are waiting when the child
+      // returns TOMORROW — the open loop that drives the D2/D7 return. Backward
+      // state alone (streak + today's goal met) closes the emotional loop with
+      // no reason to come back; "あした N つ とどく" leaves a thread open. Grade-
+      // scoped so the count matches the deck Battle will actually show.
+      try {
+        final uid = _userId;
+        if (uid != null) {
+          final tomorrow = DateTime.now().add(const Duration(days: 1));
+          final due = await _repository.getDueCards(uid, tomorrow);
+          final n = gradeScopedDueCount(
+              due, kGradeVocabIdPrefix[widget.eikenGrade] ?? '');
+          if (mounted) setState(() => _dueTomorrow = n);
+        }
+      } catch (_) {
+        // Non-fatal: a repo error just leaves the generic "come back" line.
       }
     }());
   }
@@ -1363,7 +1384,8 @@ class _BattleScreenState extends State<BattleScreen>
                 // CEO 951 daily-return spine). Honest: real StreakService data.
                 if (_streakSnapshot != null) ...[
                   const SizedBox(height: 12),
-                  _DailyReturnCard(snapshot: _streakSnapshot!),
+                  _DailyReturnCard(
+                      snapshot: _streakSnapshot!, dueTomorrow: _dueTomorrow),
                 ],
                 // 合格率 progress moment — the in-context "I'm closer to 合格"
                 // signal at peak engagement (the daily-return spine, CEO 951).
@@ -1465,7 +1487,11 @@ class _StreakBadge extends StatelessWidget {
 // StreakService state, never fabricating a streak.
 class _DailyReturnCard extends StatelessWidget {
   final StreakState snapshot;
-  const _DailyReturnCard({required this.snapshot});
+
+  /// ナゾ waiting tomorrow (grade-scoped). Null = not yet computed / repo error
+  /// → a generic "come back" line instead of a fabricated number (#36 honesty).
+  final int? dueTomorrow;
+  const _DailyReturnCard({required this.snapshot, this.dueTomorrow});
 
   @override
   Widget build(BuildContext context) {
@@ -1492,6 +1518,17 @@ class _DailyReturnCard extends StatelessWidget {
                   size: 13,
                   w: FontWeight.w700,
                   color: snapshot.goalMet ? const Color(0xFF8BE08B) : dqInk)),
+          // Forward-pull: the open loop that brings the child back tomorrow.
+          if (dueTomorrow != null) ...[
+            const SizedBox(height: 6),
+            Text(
+              dueTomorrow! > 0
+                  ? '⭐ あした $dueTomorrow つ ナゾが とどくよ — また きてね！'
+                  : 'あした また あたらしい ナゾが くるよ！',
+              textAlign: TextAlign.center,
+              style: dqText(size: 12, w: FontWeight.w600, color: dqInk),
+            ),
+          ],
         ],
       ),
     );
