@@ -82,6 +82,12 @@ sealed class QuestStep {
   String? get practicePromptJa;
   List<QuestOption> get options;
   String get onCorrect;
+
+  /// Optional: the grammar/answer RULE in ひらがな (the 英検 learning payload),
+  /// shown as a distinct rule-card SEPARATE from the [onCorrect] story beat so a
+  /// 6-year-old can tell "why the answer is right" apart from "what happens in the
+  /// story". Null = the reveal is the story beat alone (old behaviour).
+  String? get onCorrectJa => null;
   bool get penalizeWrong;
 
   /// Index of the correct option (first `isCorrect`, else 0).
@@ -259,6 +265,11 @@ class QuestEncounter extends QuestStep {
   @override
   final String onCorrect;
 
+  /// The grammar/answer RULE in ひらがな, rendered as a distinct rule-card above
+  /// the [onCorrect] story beat (see base getter). Optional.
+  @override
+  final String? onCorrectJa;
+
   const QuestEncounter({
     required this.npcName,
     required this.npcEmoji,
@@ -267,6 +278,7 @@ class QuestEncounter extends QuestStep {
     required this.choices,
     required this.correctIndex,
     required this.onCorrect,
+    this.onCorrectJa,
   });
 
   @override

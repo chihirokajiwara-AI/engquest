@@ -818,9 +818,10 @@ const QuestEncounter kHoshioConversationNazo = QuestEncounter(
     'My racket is new.',
   ],
   correctIndex: 0,
-  onCorrect: 'そう、「Let\'s 〜」と さそわれたら、いいよ か ごめんできない で こたえるよ。'
-      ' りゆうも つけると、なおよし。ホシオは うなずく。「…そのことばが、きこえた夜（よる）も、'
-      'ふたりは おんなじ そらを みていたんじゃろうな。」',
+  onCorrectJa: '「Let\'s 〜（〜しよう）」と さそわれたら、「いいよ」か「ごめん、できない」で'
+      ' こたえるんだ。りゆうも いえると、もっといい。',
+  onCorrect: 'ホシオは しずかに うなずいた。「…そのことばが きこえた夜（よる）も、'
+      'ふたりは おなじ そらを 見上（みあ）げていたんじゃろうな。」',
 );
 
 /// 灰守セルの a/an 大問1 ナゾ — AUTHORED for セル (NOT reused from the linear quest,
@@ -835,10 +836,11 @@ const QuestEncounter kCelArticleNazo = QuestEncounter(
   npcLineJa: 'かまどは まだ もえている。ほら、これは ___ りんご。たべて、きいて。',
   choices: ['a', 'an', 'the', 'one'],
   correctIndex: 1,
-  onCorrect:
-      "An apple — yes. 'apple' begins with a vowel sound, so it is AN, not A. "
-      "The ember flared bright as you spoke. Cel smiles: 'You can still hear. "
-      "I kept the fire for someone like you.'",
+  onCorrectJa: '「apple」は「ア」という ぼいんの おとで はじまる。'
+      'だから「a」じゃなくて「an」を つかうんだ。',
+  onCorrect: 'きみが こたえた しゅんかん、おきびが パッと あかるく もえあがった。'
+      'セルは ほほえむ。「まだ きこえるんだね。'
+      'きみみたいな ひとのために、火（ひ）を まもってきたんだ。」',
 );
 
 final SceneDef kTown5Scene = SceneDef(

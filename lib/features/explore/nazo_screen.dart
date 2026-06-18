@@ -482,9 +482,52 @@ class _NazoScreenState extends State<NazoScreen> {
                                 // the correct path was the one inverted-learning
                                 // gap. excludeSemantics so the inner Text is not
                                 // read twice. (WCAG 2.2 status-message guidance.)
+                                // The 英検 learning payload (WHY the answer is
+                                // right) as a distinct gold-accented rule-card,
+                                // visually SEPARATE from the story beat below so a
+                                // 6yo can tell the rule apart from the narrative
+                                // (Layton-style: deduction, THEN explanation).
+                                if (_step.onCorrectJa != null) ...[
+                                  Container(
+                                    width: double.infinity,
+                                    padding: const EdgeInsets.fromLTRB(
+                                        14, 12, 14, 12),
+                                    decoration: BoxDecoration(
+                                      color: pcParchment1,
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                          color: dqGold.withAlpha(120),
+                                          width: 1.5),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(children: [
+                                          const Icon(Icons.lightbulb_outline,
+                                              color: dqGold, size: 16),
+                                          const SizedBox(width: 6),
+                                          Text('なぜ せいかい？',
+                                              style: dqInkText(
+                                                  size: 12,
+                                                  w: FontWeight.w800,
+                                                  color: dqGold,
+                                                  spacing: 1)),
+                                        ]),
+                                        const SizedBox(height: 6),
+                                        Text(_step.onCorrectJa!,
+                                            style: dqInkText(
+                                                size: 15, w: FontWeight.w600)),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(height: 12),
+                                ],
                                 Semantics(
                                   liveRegion: true,
-                                  label: 'せいかい！ ${_step.onCorrect}',
+                                  label: _step.onCorrectJa != null
+                                      ? 'せいかい！ ${_step.onCorrectJa} ${_step.onCorrect}'
+                                      : 'せいかい！ ${_step.onCorrect}',
                                   excludeSemantics: true,
                                   child: DqDialogBox(
                                     speaker: _step.npcName,
