@@ -15,6 +15,7 @@ import 'package:engquest/features/exam_practice/pass/pass_meter_screen.dart';
 import 'package:engquest/features/exam_practice/pass/cse_model.dart';
 import 'package:engquest/features/exam_practice/pass/mastery_advisor.dart';
 import 'package:engquest/core/config/flavor_config.dart';
+import 'package:engquest/features/home/streak_service.dart';
 import 'package:engquest/features/paywall/grade_gate_screen.dart';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -125,6 +126,53 @@ void main() {
           hasWriting: true);
       await tester.pumpWidget(_wrap(PassMeterScreen(estimate: est)));
       await tester.pump();
+      expect(tester.takeException(), isNull);
+    });
+
+    // #151: the mock pushes PassMeterScreen WITH an earnedStreak so the streak
+    // reward shows at the completion peak. The prior smoke tests all passed
+    // earnedStreak == null, so the SessionEndHook path was never actually
+    // rendered in-test — these cover it (and catch any overflow/layout throw).
+    testWidgets('earnedStreak goal-met — renders SessionEndHook, no exception',
+        (tester) async {
+      final est = _estimate(grade: '5', reading: 0.7, listening: 0.7);
+      const streak = StreakState(
+        currentStreak: 7,
+        weeklyBits: 0x7F,
+        todayCount: 1,
+        problemsToday: 12,
+        dailyGoal: 10, // problemsToday >= dailyGoal → goalMet
+      );
+      await tester.pumpWidget(
+          _wrap(PassMeterScreen(estimate: est, earnedStreak: streak)));
+      await tester.pump();
+      expect(find.byKey(const ValueKey('session_end_hook')), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('earnedStreak goal-not-met — renders SessionEndHook',
+        (tester) async {
+      final est = _estimate(grade: '3', reading: 0.6, listening: 0.6);
+      const streak = StreakState(
+        currentStreak: 3,
+        weeklyBits: 0x0F,
+        todayCount: 1,
+        problemsToday: 4,
+        dailyGoal: 10, // not met
+      );
+      await tester.pumpWidget(
+          _wrap(PassMeterScreen(estimate: est, earnedStreak: streak)));
+      await tester.pump();
+      expect(find.byKey(const ValueKey('session_end_hook')), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('no earnedStreak — SessionEndHook absent (live meter path)',
+        (tester) async {
+      final est = _estimate(grade: '5', reading: 0.7, listening: 0.7);
+      await tester.pumpWidget(_wrap(PassMeterScreen(estimate: est)));
+      await tester.pump();
+      expect(find.byKey(const ValueKey('session_end_hook')), findsNothing);
       expect(tester.takeException(), isNull);
     });
 

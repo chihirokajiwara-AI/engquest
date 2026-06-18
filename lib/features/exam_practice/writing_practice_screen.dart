@@ -30,6 +30,7 @@ import 'exam_session_rewards.dart';
 import 'eiken_exam_config.dart';
 import 'pass/cse_model.dart';
 import 'pass/skill_accuracy_store.dart';
+import 'practice_encouragement.dart';
 import 'writing_readiness.dart';
 
 // ── Data models ─────────────────────────────────────────────────────────────
@@ -1120,6 +1121,10 @@ class _WritingPracticeScreenState extends State<WritingPracticeScreen> {
   _Phase _phase = _Phase.writing;
   WritingRubricResult? _result;
   String? _gradingError;
+  // The streak/daily-goal earned by submitting this essay — shown at the result
+  // peak via SessionEndHook, the same daily-return reinforcement every other exam
+  // section gives at session end. Recorded even when AI grading is offline (#151).
+  StreakState? _earnedStreak;
 
   /// Whether the 書き方のヒント structure scaffold is expanded. Default open so a
   /// beginner sees the 型 before writing; collapsible to free space once learned.
@@ -1235,8 +1240,11 @@ class _WritingPracticeScreenState extends State<WritingPracticeScreen> {
     if (!_canSubmit) return;
     // Writing a full essay is a study session — count it toward the home streak
     // + daily-goal even when offline (AI grading may be unavailable), so writing
-    // practice is never invisible to the engagement spine.
-    recordExamHabit(1);
+    // practice is never invisible to the engagement spine. Capture the resulting
+    // StreakState so the result view celebrates it at the completion peak (#151).
+    recordExamHabitAndGet(1).then((st) {
+      if (mounted && st != null) setState(() => _earnedStreak = st);
+    });
     recordExamXp(1);
     recordExamAchievements();
     setState(() {
@@ -1598,6 +1606,13 @@ class _WritingPracticeScreenState extends State<WritingPracticeScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Daily-return reward at the completion peak (#151) — shown above the
+          // detailed result for BOTH the scored and the offline-readiness branch,
+          // since the habit is recorded either way.
+          if (_earnedStreak != null) ...[
+            SessionEndHook(streak: _earnedStreak!),
+            const SizedBox(height: 14),
+          ],
           if (!result.apiAvailable) ...[
             _buildReadinessReport(_prompt, _controller.text),
             // Offer the learner-confirmed 見直しチェック ONLY when the objective
