@@ -25,13 +25,27 @@ class QuestMapScreen extends StatefulWidget {
 }
 
 class _QuestMapScreenState extends State<QuestMapScreen> {
-  static const _prefKey = 'quest_unlocked_index';
+  // Grade-SCOPED town-unlock cursor: each 英検 grade keeps its own progress. A
+  // single global key let a 5級 unlock (towns 0→4) bleed into 3級 (startIdx 2),
+  // pre-unlocking 準2/2級 towns the child never cleared — corrupting the
+  // progression gate that ties story advance to 英検 mastery (and trivially
+  // unlockable by switching grades repeatedly).
+  static String _unlockKey(String level) => 'quest_unlocked_index_$level';
   static const _levelKey = 'quest_start_level';
+
+  // Cached current level so _saveUnlocked (also called from _openTown, which has
+  // no level arg) scopes the key correctly.
+  String _level = '5';
 
   int _startIdx = 0;
   int _unlocked = 0;
   bool _loaded = false;
   bool _needsPick = false;
+
+  /// The highest unlocked town index after _load — used to lock the grade-scoping
+  /// invariant (one grade's unlock must not bleed into another).
+  @visibleForTesting
+  int get debugUnlocked => _unlocked;
 
   @override
   void initState() {
@@ -49,7 +63,8 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
       });
       return;
     }
-    final stored = prefs.getInt(_prefKey);
+    _level = level;
+    final stored = prefs.getInt(_unlockKey(level));
     _startIdx = startingTownIndex(level);
     setState(() {
       _unlocked = stored < _startIdx ? _startIdx : stored;
@@ -61,6 +76,7 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
   Future<void> _chooseLevel(String level) async {
     final prefs = await PreferencesService.getInstance();
     await prefs.setString(_levelKey, level);
+    _level = level;
     _startIdx = startingTownIndex(level);
     setState(() {
       _unlocked = _startIdx;
@@ -71,7 +87,7 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
 
   Future<void> _saveUnlocked(int idx) async {
     final prefs = await PreferencesService.getInstance();
-    await prefs.setInt(_prefKey, idx);
+    await prefs.setInt(_unlockKey(_level), idx);
   }
 
   Future<void> _openTown(int i) async {
