@@ -1,6 +1,35 @@
 # タロ (Taro) — companion character DECISION (v2, standalone)
 
-> ⚠️ **FORM — panel verdict in, awaiting CEO adjudication (2026-06-18, CEO 2033/2034).**
+> ✅ **LOCKED (2026-06-18, CEO 「go」 msg 2043).** The viral-IP studio spec + the
+> China/global palette are APPROVED. Final locked spec for タロ:
+> - **ONE signature = mismatched-ear ANATOMY** (one ear pricked UP, one folded DOWN
+>   = brave↔startled frozen in a still silhouette; survives 24px 1-bit HATLESS).
+>   The detective cap is DEMOTED to a secondary accent (flavor/world-colour, not the
+>   identity). Tail cut as a signature (inside-outline bump only). Name タロ locked.
+> - **Viral beat = the びくっ FLINCH** (sticker-#1; Mirumi CES Jan-2026 pattern).
+> - **Glow = the EARNED reward state** (cool body blooms warm honey-amber on the
+>   child's correct answer = the IP color-CHANGE), never the resting signature.
+> - **Palette (China/global-viral, CEO 2039/2040):** body **#1A7A78** deep saturated
+>   Transformative-Teal (NOT the old Japan-muted #5E9A95), cel-shadow **#114E52**,
+>   cap brass **#E0A458**, face cream #F2E8D5; earned-glow **#FFB733→#FF8A1F** (near-
+>   complementary so the bloom pops). Alt brighter aqua **#1AA0A0** if #1A7A78 reads
+>   too dark at small size. World stays muted (hero-chroma > world-chroma); a half-
+>   step world-teal lift is approved.
+> - **Merch = NO gacha/sealed-random** (named visible assortment only; dodges the
+>   2026 blind-box backlash).
+> - **GATES before the slime→タロ webp swap (quest_screen.dart:330):** (1) the CEO
+>   generates the master in Grok from the FINAL prompt below; (2) 24px 1-bit hatless
+>   silhouette test; (3) real 6yo + parent read-test on a still frame; (4) a11y
+>   body↔glow ≥3:1 luminance on the real render. Only then import + wire #116 art.
+>
+> **FINAL Grok prompt (palette-corrected to #1A7A78, mismatched-ear signature):**
+> ```
+> Original creature mascot character named Taro, full body, front view, standing, centered on plain flat cream background. A small soft round egg-shaped body, slightly taller than wide, no neck. TWO MISMATCHED oversized rounded listening ears — one ear pricked straight UP and alert, the other ear folded DOWN — this asymmetric ear pair is the single defining feature. Large round low-set eyes spaced wide, gentle worried-hopeful expression, single highlight dot per eye, two small matte blush ovals on the cheeks, tiny mouth. Short stub arms and legs, no fingers. Wearing an oversized round detective cap tipped over one eye as a SECONDARY accent, with a brass band. Body color DEEP SATURATED TEAL (#1A7A78) with one darker cel shadow tone (#114E52), cap warm brass (#E0A458), face accents cream (#F2E8D5). Clean uniform 1px ink contour, slightly thicker on the outer silhouette, two-tone flat cel shading with hard-edged shadow blocks, flat color fields, four flat colors total, matte finish. Warm, huggable, instantly lovable as a still image, reads clearly as a tiny brave-but-startled creature. Adorable kawaii companion, child-friendly, premium hand-illustrated anime cel style.
+> Avoid: airbrush, soft gradients, smooth blur, painterly rendering, rendered fur or hair strands, ambient glow or halo, honey-amber body color, muted or greyed or pastel body, monocle, scarf, badge, long or visible tail, symmetric matching ears, bunny-tall or cat-pointed ears, slime, blob, ball, puddle, generic chibi, photorealism, 3D, text, watermark, drop shadow, busy background, more than four colors, checkmark, cross mark.
+> ```
+> The form-agnostic voice/bible stays valid. Superseded banner (pre-go review) below.
+
+> ⚠️ **[SUPERSEDED — pre-go review] FORM — panel verdict in, awaiting CEO adjudication (2026-06-18, CEO 2033/2034).**
 > The CEO re-questioned the cute-puppy premise ("子犬が良いのか？ ラブブもバズったよね。
 > 最新でこれからバズりそうなキャラは？"). The `next-breakout-character-direction` team (5
 > latest-2026 experts → director, run wf_ffdf737c-83e) concluded with dated evidence:
