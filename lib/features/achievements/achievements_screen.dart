@@ -371,6 +371,18 @@ class _BadgeCard extends StatelessWidget {
                       color: dqInk.withAlpha(140),
                     ),
                   ),
+                  // The GOAL — what to do to unlock this badge. Without it the bare
+                  // "37 / 50" has no unit (words? days? reps?) so a locked card
+                  // never tells the child their next action. descriptionJa already
+                  // exists (shown in the unlock toast); surface it on the card too.
+                  const SizedBox(height: 3),
+                  Text(
+                    def.descriptionJa,
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: dqText(size: 9, color: dqInk.withAlpha(120)),
+                  ),
                 ],
               ),
           ],
