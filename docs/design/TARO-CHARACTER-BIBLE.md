@@ -87,3 +87,23 @@ in the same breath as a Japanese gloss (M6's job); never delete the 「…どう
 cap-fit a cutscene; never fire case-noticing outside a case; never fail the 32px cap-dome+amber gate;
 never add a 2nd victory catchphrase; never graduate タロ out of needing the child.
 TWO CI GATES: (1) constancy-guard tier test; (2) 32px silhouette recognizability in visual-QA.
+
+## #116 スラ→タロ rename — execution plan + LANDMINES (scoped 2026-06-18, not a blind sed)
+106 lib + 4 test files. It is BOTH a name swap AND a content-consistency pass (スラ's old
+behaviour contradicts タロ's bible). Execute atomically in one gated commit:
+- **NAME (safe regex):** `perl -i -pe 's/スラ(?![イッ])/タロ/g'` — the negative lookahead PROTECTS
+  `スライス` (vocab_a2.dart:2516 'slice', a content word — must NOT become タロイス) and leaves
+  `スライム` (スラ+イ) for separate handling. Renames speaker tags / 'スラが'/'スラの'/'スラ：'/
+  Text('スラ') everywhere. Files: hotspot, nazo_screen, kotoba_home_screen, practice_encouragement,
+  chapter.dart (speaker key :137 + comment :30), scene_view, quest_screen (:330 map key + :501 use),
+  quest_data, + the 4 tests (nazo_teach_first, scene_view_smoke, quiz_audio, chapter_test).
+- **FORM/VOICE (per-line, apply the bible voice):** the slime tic 「ぷる」 (~15 lines, mostly
+  hotspot.dart clueLineJa) → タロ's voice (eager 「…っ」, never the slime jiggle); 「ちいさなスライム」/
+  「このスライム」/「スラの からだ」 → soft detective-PUP descriptors.
+- **OFF-BIBLE CONTENT (decide, don't blind-rename):** `quest_data.dart:416-433` has スラ TEACHING
+  phonics (s-a-t blending, says "ぷる") — タロ NEVER teaches/defines (bible hard-kill). Check if
+  quest_data/QuestScreen is live or legacy/preview-only; if live, the lines must be reworked
+  on-bible (タロ doesn't blend-teach), not just renamed.
+- **ASSET:** keep `assets/art/masters/slime.webp` + `npc_slime_*` paths until the CEO's タロ art
+  locks (Grok-audit pending); only the MAP KEY 'スラ'→'タロ' changes now.
+- **GATE:** dart format + analyze 0 + full flutter test (the renamed test asserts must match).
