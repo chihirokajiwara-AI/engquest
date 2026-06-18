@@ -69,4 +69,22 @@ void main() {
       );
     });
   }
+
+  // Security: the ?preview= harness must be DISABLED in any paid flavor, or a
+  // live `?preview=exam3` URL would hand paid 英検 content out for free (the
+  // preview routes hardcode paid grades with no isGradeFree check). Lock the
+  // invariant so the guard can't be silently removed.
+  group('previewNameForFlavor — paywall-bypass guard', () {
+    test('paid flavor suppresses every preview name', () {
+      for (final name in kPreviewRouteNames) {
+        expect(previewNameForFlavor(name, paymentRequired: true), isNull,
+            reason: '"$name" must not be honoured in a paid build');
+      }
+    });
+
+    test('free flavor passes preview names through unchanged', () {
+      expect(previewNameForFlavor('exam3', paymentRequired: false), 'exam3');
+      expect(previewNameForFlavor(null, paymentRequired: false), isNull);
+    });
+  });
 }

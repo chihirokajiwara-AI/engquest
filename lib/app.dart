@@ -236,7 +236,22 @@ class EngQuestApp extends StatelessWidget {
       },
       // Entry point: check onboarding flag and route accordingly.
       // ?preview=<name> renders a single screen for design audit/screenshots.
-      home: _previewFor(Uri.base.queryParameters['preview']),
+      //
+      // SECURITY: never honour ?preview in the PAID (aken) build. The preview
+      // routes hardcode paid 英検 grades (exam3, reading-pre1, listening2, …) and
+      // run NO isGradeFree() check, so a live `?preview=<route>` URL would hand the
+      // entire paid catalogue out for free — a complete paywall bypass on the
+      // production web build. The harness stays fully available in the free edilab
+      // flavor (paymentRequired == false), including the release builds used for
+      // real-render audits, where there is no paid content to protect. (Tests reach
+      // the harness via previewWidgetForTest → _previewFor directly, unaffected.)
+      home: _previewFor(
+        previewNameForFlavor(
+          Uri.base.queryParameters['preview'],
+          paymentRequired:
+              FlavorConfig.instanceOrNull?.paymentRequired ?? false,
+        ),
+      ),
       // NOTE: Named routes for Battle must carry childAge.
       // WorldMapScreen uses Navigator.push (not named route) to pass childAge.
       // The named '/battle' route is a fallback for direct navigation (childAge=8 default).
@@ -427,6 +442,17 @@ const List<String> kPreviewRouteNames = [
 /// Test-visible wrapper for the private preview harness.
 @visibleForTesting
 Widget previewWidgetForTest(String? name) => _previewFor(name);
+
+/// The `?preview=` name to actually honour, given the active flavor. In any PAID
+/// flavor ([paymentRequired] == true) this returns null so the preview harness is
+/// fully disabled — the preview routes hardcode paid 英検 grades with no
+/// isGradeFree() check, so honouring `?preview=<route>` in production would be a
+/// complete paywall bypass. In the free edilab flavor it passes the name through
+/// unchanged, keeping the harness available for design audits.
+@visibleForTesting
+String? previewNameForFlavor(String? rawPreview,
+        {required bool paymentRequired}) =>
+    paymentRequired ? null : rawPreview;
 
 /// Design-audit harness: `?preview=<name>` renders one screen in isolation so
 /// every page can be screenshotted. Returns the normal entry point otherwise.
