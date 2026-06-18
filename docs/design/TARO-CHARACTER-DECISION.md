@@ -1,5 +1,16 @@
 # タロ (Taro) — companion character DECISION (v2, standalone)
 
+> ⚠️ **FORM UNDER CEO RE-REVIEW (2026-06-18, CEO 2033/2034).** The CEO is
+> re-questioning the *cute-puppy premise itself* ("子犬が良いのか？ ラブブもバズった
+> よね。最新でこれからバズりそうなキャラは？"). The `next-breakout-character-direction`
+> team (5 latest-2026 experts → director: toy-IP market / kimo-kawaii aesthetic /
+> plush-blindbox producibility / 6yo-learning / distinctiveness critic) is deciding
+> whether to KEEP the refined puppy, EVOLVE it, or PIVOT to an original ugly-cute
+> creature — explicitly decoding the Labubu(The Monsters/Pop Mart) breakout. **Do
+> NOT treat the puppy FORM below as locked** until the CEO adjudicates that team's
+> ranked recommendation. The VOICE/bible (besotted word-detective sidekick, ひらがな,
+> never-wrong-about-words, pride-glow, 「…どう?」) is form-agnostic and stays valid.
+
 Decided 2026-06-18 by the diverse latest-researching team (`taro-standalone-redecide`: 3 experts
 + 2 critics incl. the **story-portability critic** + Opus director), per CEO 2013/2016/2018
 ("stop asking me — use the ≥5-member team from the START, don't solo-decide"). This is v2:
