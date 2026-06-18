@@ -541,7 +541,7 @@ void main() {
     ));
     await _settle(tester);
     // The companion card is present and reacts to the met-goal state.
-    expect(find.byKey(const ValueKey('home_companion_sura')), findsOneWidget);
+    expect(find.byKey(const ValueKey('home_companion_taro')), findsOneWidget);
     expect(find.textContaining('きみと いると たのしいよ'), findsOneWidget);
   });
 
@@ -559,7 +559,7 @@ void main() {
       cardRepository: InMemoryFsrsCardRepository(),
     ));
     await _settle(tester);
-    expect(find.byKey(const ValueKey('home_companion_sura')), findsOneWidget);
+    expect(find.byKey(const ValueKey('home_companion_taro')), findsOneWidget);
     // A lapsed returner gets a warm, non-shaming welcome — not a guilt nag.
     expect(find.textContaining('また いっしょに なぞ'), findsOneWidget);
   });

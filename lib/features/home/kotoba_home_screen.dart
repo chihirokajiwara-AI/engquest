@@ -714,10 +714,12 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
       return 'おかえり！ また いっしょに なぞを ときにいこう！';
     }
     if (s.goalMet) {
-      return 'きょうの目標（もくひょう）たっせい！ きみと いると たのしいよ！';
+      // peak beat → タロ's signature 「…っ」 glottal catch (CHARACTER-BIBLE voice;
+      // rate-limited to excitement peaks, not every line).
+      return 'きょうの目標（もくひょう）たっせい！ きみと いると たのしいよっ！';
     }
     if (s.currentStreak >= 7) {
-      return '${s.currentStreak}日（にち）も つづくなんて、ほんものの たんていだね！';
+      return '${s.currentStreak}日（にち）も つづくなんて、ほんものの たんていだねっ！';
     }
     if (s.problemsToday > 0) {
       // No 「あと N問」 here — the goal caption right above already says it;
@@ -732,7 +734,7 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
   /// character across the hub and the exploration scenes.
   Widget _buildCompanionCard() {
     return Container(
-      key: const ValueKey('home_companion_sura'),
+      key: const ValueKey('home_companion_taro'),
       margin: const EdgeInsets.only(top: 14),
       padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
       decoration: BoxDecoration(
