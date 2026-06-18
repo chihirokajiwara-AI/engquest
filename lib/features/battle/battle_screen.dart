@@ -107,6 +107,25 @@ String posLabelEn(PartOfSpeech pos) => switch (pos) {
       PartOfSpeech.unknown => '',
     };
 
+/// ひらがな part-of-speech label for the target age floor (6, 年長/小1, CEO 1889)
+/// who reads kana but NOT English. The card chip shows "めいし（noun）" — kana
+/// primary (readable now) + the English term as a scaffold for older children.
+/// All-kana so it stays inside the bundled font subset (no tofu).
+String posLabelJa(PartOfSpeech pos) => switch (pos) {
+      PartOfSpeech.noun => 'めいし',
+      PartOfSpeech.verb => 'どうし',
+      PartOfSpeech.adjective => 'けいようし',
+      PartOfSpeech.adverb => 'ふくし',
+      PartOfSpeech.number => 'すうし',
+      PartOfSpeech.phrase => 'フレーズ',
+      PartOfSpeech.interjection => 'かんどうし',
+      PartOfSpeech.preposition => 'ぜんちし',
+      PartOfSpeech.conjunction => 'せつぞくし',
+      PartOfSpeech.pronoun => 'だいめいし',
+      PartOfSpeech.properNoun => 'こゆうめいし',
+      PartOfSpeech.unknown => '',
+    };
+
 // ── Cumulative deck stats (achievement / progress inputs) ─────────────────────
 //
 // The deck merges every grade vocab id with the child's PERSISTED FSRS state, so
@@ -1162,7 +1181,8 @@ class _BattleScreenState extends State<BattleScreen>
                 border: Border.all(color: dqGold.withAlpha(150), width: 1.5),
                 borderRadius: BorderRadius.circular(6),
               ),
-              child: Text(posLabelEn(vocab.pos.first),
+              child: Text(
+                  '${posLabelJa(vocab.pos.first)}（${posLabelEn(vocab.pos.first)}）',
                   style: dqText(size: 12, color: dqGold)),
             ),
           const SizedBox(height: 14),
