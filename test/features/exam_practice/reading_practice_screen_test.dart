@@ -137,11 +137,12 @@ void main() {
   // fix), so locate a choice by its TEXT regardless of which slot it landed in.
   // A choice renders as "<n>. <answer>", so an anchored regex matches the choice
   // exactly and can never accidentally hit the passage body.
+  // The option number now lives in a separate circular disc (unified option
+  // component, CEO 2186 craft audit), so the answer text is its own Text widget
+  // (was the inline "N. answer"). The number is still exposed via the disc + the
+  // choice's Semantics label.
   Finder choice(String answer) => find.byWidgetPredicate(
-        (w) =>
-            w is Text &&
-            w.data != null &&
-            RegExp('^\\d+\\. ${RegExp.escape(answer)}\$').hasMatch(w.data!),
+        (w) => w is Text && w.data == answer,
         description: 'choice "$answer" at any position',
       );
 

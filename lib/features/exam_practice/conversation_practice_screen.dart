@@ -499,11 +499,26 @@ class _ConversationPracticeScreenState
                               ),
                               child: Row(
                                 children: [
-                                  Text(
-                                    '${i + 1}',
-                                    style: TextStyle(
-                                      color: textColor,
-                                      fontWeight: FontWeight.bold,
+                                  // Unified circular number disc — match the 大問1
+                                  // vocab option component (CEO 2186 craft audit:
+                                  // the same 1-of-4 task used a bare number here vs
+                                  // a disc in vocab). One option widget across types.
+                                  Container(
+                                    width: 32,
+                                    height: 32,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: borderColor.withAlpha(30),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        '${i + 1}',
+                                        style: TextStyle(
+                                          color: textColor,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                   const SizedBox(width: 10),

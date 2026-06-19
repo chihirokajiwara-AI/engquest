@@ -712,9 +712,33 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
                                     ),
                                     child: Row(
                                       children: [
+                                        // Unified circular number disc — match the
+                                        // vocab/listening/conversation option widget
+                                        // (CEO 2186 craft audit: reading used an
+                                        // inline "1." while the same task used a disc
+                                        // elsewhere). One option component, all types.
+                                        Container(
+                                          width: 32,
+                                          height: 32,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: borderColor.withAlpha(30),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              '${i + 1}',
+                                              style: TextStyle(
+                                                color: textColor,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 10),
                                         Expanded(
                                           child: Text(
-                                            '${i + 1}. ${question.choices[i]}',
+                                            question.choices[i],
                                             style: dqText(
                                                 size: 15,
                                                 w: FontWeight.w600,
