@@ -1079,7 +1079,8 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
                                   ),
                                   const SizedBox(height: 12),
                                 ],
-                                for (final it in card.items) _teachItemTile(it),
+                                for (var i = 0; i < card.items.length; i++)
+                                  _teachItemTile(card.items[i], i),
                               ],
                             ),
                           ),
@@ -1179,54 +1180,81 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
     );
   }
 
-  Widget _teachItemTile(TeachItem it) {
+  /// Renders a single teach item tile using the reusable [DetectiveCaseFrame]
+  /// premium card widget (#113/#159 — cohesion fix: the flat navy boxes made the
+  /// teach card look like a different product from the crafted explore/title
+  /// screens). [index] is 0-based; index==0 gets the [highlighted] frame (brighter
+  /// gold rules + soft glow) so the eye lands on the first word to learn first.
+  Widget _teachItemTile(TeachItem it, int index) {
+    // Non-warm path stays as flat Container (kNazoWarmTheme is the only shipped
+    // variant; this guard means the flag is still reversible for A/B testing).
     const warm = kNazoWarmTheme;
-    return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      decoration: BoxDecoration(
-        color: warm ? pcParchment0 : dqBox.withAlpha(230),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-            color: warm ? pcFrameBrown : dqGoldDeep.withAlpha(120),
-            width: warm ? 1.5 : 1),
+    if (!warm) {
+      return Container(
+        width: double.infinity,
+        margin: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        decoration: BoxDecoration(
+          color: dqBox.withAlpha(230),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: dqGoldDeep.withAlpha(120)),
+        ),
+        child: _teachItemContent(it, warm: false),
+      );
+    }
+    // Warm path: route through DetectiveCaseFrame (#113/#159).
+    // index==0 → highlighted (eye-entry point for the child learning the list).
+    // caseLabel shows the 1-based item number so the child knows "word 1 of 4".
+    final itemNum = index + 1;
+    final total = _teachCard?.items.length ?? 1;
+    final caseLabel = 'ことば $itemNum / $total';
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: DetectiveCaseFrame(
+        highlighted: index == 0,
+        caseLabel: caseLabel,
+        child: _teachItemContent(it, warm: true),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+    );
+  }
+
+  /// The inner content of a teach item (EN headword + JA meaning + optional rule).
+  /// Extracted so both the warm and non-warm paths share the same content layout.
+  Widget _teachItemContent(TeachItem it, {required bool warm}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          it.en,
+          style: warm
+              ? dqInkText(size: 22, w: FontWeight.w800, color: pcInk)
+              : dqText(size: 22, w: FontWeight.w800, color: dqGold),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          it.ja,
+          // pcInk (full cream ~9:1), not pcInkSoft (~3.5:1): this is the word's
+          // MEANING — the child must read it. Hierarchy below the headword is
+          // carried by size (18 vs 22), not by dimming it under WCAG (the same
+          // pcInkSoft→pcInk contrast fix dq_ui already applies to panel titles).
+          style: warm
+              ? dqInkText(size: 18, w: FontWeight.w700, color: pcInk)
+              : dqText(size: 18, w: FontWeight.w700, color: dqInk),
+        ),
+        if (it.whenJa != null) ...[
+          const SizedBox(height: 4),
           Text(
-            it.en,
+            '・${it.whenJa!}',
+            // The RULE line IS the lesson ("next sound is a consonant → a"),
+            // yet it was the dimmest/smallest text — pcInkSoft size 12 (~3.5:1)
+            // fails WCAG 4.5:1 for normal text (visual-auditor, CEO 2132). Lift
+            // to pcInk + 13 + medium weight so the teaching is actually legible.
             style: warm
-                ? dqInkText(size: 22, w: FontWeight.w800, color: pcInk)
-                : dqText(size: 22, w: FontWeight.w800, color: dqGold),
+                ? dqInkText(size: 13, color: pcInk, w: FontWeight.w500)
+                : dqText(size: 13, color: dqInk, w: FontWeight.w500),
           ),
-          const SizedBox(height: 2),
-          Text(
-            it.ja,
-            // pcInk (full cream ~9:1), not pcInkSoft (~3.5:1): this is the word's
-            // MEANING — the child must read it. Hierarchy below the headword is
-            // carried by size (18 vs 22), not by dimming it under WCAG (the same
-            // pcInkSoft→pcInk contrast fix dq_ui already applies to panel titles).
-            style: warm
-                ? dqInkText(size: 18, w: FontWeight.w700, color: pcInk)
-                : dqText(size: 18, w: FontWeight.w700, color: dqInk),
-          ),
-          if (it.whenJa != null) ...[
-            const SizedBox(height: 4),
-            Text(
-              '・${it.whenJa!}',
-              // The RULE line IS the lesson ("next sound is a consonant → a"),
-              // yet it was the dimmest/smallest text — pcInkSoft size 12 (~3.5:1)
-              // fails WCAG 4.5:1 for normal text (visual-auditor, CEO 2132). Lift
-              // to pcInk + 13 + medium weight so the teaching is actually legible.
-              style: warm
-                  ? dqInkText(size: 13, color: pcInk, w: FontWeight.w500)
-                  : dqText(size: 13, color: dqInk, w: FontWeight.w500),
-            ),
-          ],
         ],
-      ),
+      ],
     );
   }
 

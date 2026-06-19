@@ -1356,6 +1356,159 @@ class DqParchPanel extends StatelessWidget {
   }
 }
 
+// ── DetectiveCaseFrame — the cohesion-defining premium card (#113 / #159) ──────
+//
+// Problem: content screens (ナゾ teach card, achievements, caselog) render flat
+// plain-navy rounded boxes while explore/title screens are genuinely crafted —
+// the app reads as two different products. This reusable widget closes that gap:
+// a premium dark-navy/gold framed card that makes any wrapped content read as a
+// piece of the コトバ探偵 world.
+//
+// Design: outer dark-gold rule → 3 px gap → inner bright-gold gradient rule →
+// subtle navy gradient fill (deeper at top/bottom edges for depth). Optional
+// top "case bar" (e.g. EXHIBIT 01) and optional title slot; both use pcInk cream
+// so contrast is AAA. [highlighted] brightens the gold rules and adds a soft
+// gold glow — use it for the "focus" item (first teach item, active cue, etc.)
+// to guide the eye without colour-palette pollution.
+//
+// No animations. No new colours — only dq_ui palette tokens. const-friendly.
+//
+// Usage:
+//   DetectiveCaseFrame(
+//     child: ...,
+//     caseLabel: 'EXHIBIT 01',   // optional — narrow cap-text top bar
+//     title: 'こんにちは',        // optional — gold heading inside frame
+//     highlighted: true,          // optional — brighter frame + glow
+//   )
+/// A reusable premium dark-navy/gold framed card. Double-rule border: outer dark
+/// gold [pcFrameBrown] rule + inset bright gold [pcFrameGold] gradient rule, with
+/// a subtle navy gradient fill. Wraps arbitrary [child] content.
+///
+/// [caseLabel] — optional narrow ALL-CAPS strip at the very top of the card body
+///               (e.g. 'EXHIBIT 01', 'てがかり'). Rendered in [pcInkSoft] at 11sp.
+///               Adds a fine gold divider beneath it.
+///
+/// [title] — optional gold heading inside the frame, above [child].
+///
+/// [highlighted] — brighter outer/inner rules and a soft gold box-shadow. Use for
+///                 the item that deserves visual priority (the first teach word,
+///                 the current recall cue, etc.). Reduced-motion-safe: pure colour,
+///                 no animation.
+///
+/// [padding] — inner padding; defaults to comfortable card padding.
+class DetectiveCaseFrame extends StatelessWidget {
+  final Widget child;
+  final String? caseLabel;
+  final String? title;
+  final bool highlighted;
+  final EdgeInsetsGeometry padding;
+
+  const DetectiveCaseFrame({
+    super.key,
+    required this.child,
+    this.caseLabel,
+    this.title,
+    this.highlighted = false,
+    this.padding = const EdgeInsets.fromLTRB(14, 12, 14, 12),
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // ── Colour tokens ────────────────────────────────────────────────────────
+    // Normal:      outer rule = dark-gold (pcFrameBrown), inner = pcFrameGold
+    // Highlighted: both rules brighter (pcFrameGold / dqGold) + soft gold glow
+    final outerBorderColor = highlighted ? pcFrameGold : pcFrameBrown;
+    final innerBorderColor = highlighted ? dqGold : pcFrameGold;
+
+    // Fill: deep-navy → mid-navy → deep-navy (top-to-bottom) — the "depth" of
+    // a physical object that catches the scene light in the middle.
+    const fillGradient = LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [
+        Color(0xFF0D1428), // deep edge (top)
+        Color(0xFF192040), // mid fill (navy)
+        Color(0xFF0D1428), // deep edge (bottom)
+      ],
+      stops: [0.0, 0.5, 1.0],
+    );
+
+    final outerBoxShadow = highlighted
+        ? [
+            BoxShadow(
+                color: dqGold.withAlpha(55), blurRadius: 14, spreadRadius: 1)
+          ]
+        : const [
+            BoxShadow(
+                color: Color(0x33000000), blurRadius: 8, offset: Offset(0, 3))
+          ];
+
+    return Container(
+      width: double.infinity,
+      // Outer rule: the thick dark-gold frame that establishes the card boundary.
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        border:
+            Border.all(color: outerBorderColor, width: highlighted ? 2.0 : 1.8),
+        boxShadow: outerBoxShadow,
+        // Fill sits at the outer container level so the inner margin gap shows
+        // the gradient (the gap between outer rule and inner rule is the fill).
+        gradient: fillGradient,
+      ),
+      child: Container(
+        // Inner margin creates the visible gap between rules.
+        margin: const EdgeInsets.all(3),
+        // Inner rule: bright gold, thinner — the "gilt inlay" line.
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(9),
+          border: Border.all(color: innerBorderColor, width: 1.0),
+        ),
+        padding: padding,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // ── Optional top case-label strip ────────────────────────────────
+            if (caseLabel != null) ...[
+              Text(
+                caseLabel!,
+                style: dqInkText(
+                  size: 10,
+                  w: FontWeight.w800,
+                  color: pcInkSoft,
+                  spacing: 2.0,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 5, bottom: 8),
+                child: Container(
+                  height: 1,
+                  color: innerBorderColor.withAlpha(highlighted ? 200 : 120),
+                ),
+              ),
+            ],
+            // ── Optional gold title ──────────────────────────────────────────
+            if (title != null) ...[
+              Text(
+                title!,
+                style: dqInkText(
+                  size: 13,
+                  w: FontWeight.w800,
+                  color: highlighted ? dqGold : pcFrameGold,
+                  spacing: 0.5,
+                ),
+              ),
+              const SizedBox(height: 6),
+            ],
+            // ── Content ──────────────────────────────────────────────────────
+            child,
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 /// A Layton gold-framed "exhibit" preview — the framed puzzle thumbnail our ナゾ
 /// screen is missing (the single most Layton-defining element). A sepia mat holds
 /// [child] (art) inset, wrapped in the double brown+gold frame, with an optional
