@@ -86,4 +86,47 @@ void main() {
     await repo.clearDeck(uid);
     expect(await PrefsFsrsCardRepository().loadDeck(uid), isEmpty);
   });
+
+  // Lost-update gate (data-integrity flaw-hunt 2026-06-19): the whole deck lives
+  // under one prefs key, so saveCard is a read-modify-write of that blob. Battle
+  // fires saveCard() per answer UNAWAITED, so a fast answerer has several in
+  // flight at once. Without serialization they all read the same baseline and the
+  // last _write clobbers the others → FSRS progress (the learning record) is
+  // silently lost. Fire 30 concurrent saves of DISTINCT cards; every one must
+  // survive. (Pre-fix this collapses to ~1 card.)
+  test('concurrent fire-and-forget saveCard calls do not lost-update',
+      () async {
+    const uid = 'rapid';
+    final repo = PrefsFsrsCardRepository();
+    final futures = <Future<void>>[
+      for (var i = 0; i < 30; i++)
+        repo.saveCard(
+            uid, FSRSCard(vocabId: 'eiken5_${i.toString().padLeft(3, '0')}')),
+    ];
+    await Future.wait(futures);
+
+    final reloaded = await PrefsFsrsCardRepository().loadDeck(uid);
+    expect(reloaded, hasLength(30),
+        reason: 'all 30 concurrent saves must persist (no lost-update)');
+    expect(
+      reloaded.map((c) => c.vocabId).toSet(),
+      {for (var i = 0; i < 30; i++) 'eiken5_${i.toString().padLeft(3, '0')}'},
+    );
+  });
+
+  // The serialization must also order a clear against in-flight saves: a save
+  // queued after clearDeck still lands (does not vanish), and a save queued
+  // before the clear is wiped — i.e. FIFO ordering, not arbitrary interleave.
+  test('clearDeck is ordered against concurrent saves (FIFO)', () async {
+    const uid = 'order';
+    final repo = PrefsFsrsCardRepository();
+    final before = repo.saveCard(uid, const FSRSCard(vocabId: 'before'));
+    final clear = repo.clearDeck(uid);
+    final after = repo.saveCard(uid, const FSRSCard(vocabId: 'after'));
+    await Future.wait([before, clear, after]);
+
+    final reloaded = await PrefsFsrsCardRepository().loadDeck(uid);
+    expect(reloaded.map((c) => c.vocabId), ['after'],
+        reason: 'before-clear save wiped, after-clear save survives');
+  });
 }

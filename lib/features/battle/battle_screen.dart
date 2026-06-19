@@ -682,13 +682,19 @@ class _BattleScreenState extends State<BattleScreen>
   /// toward 合格. Fire-and-forget; storage errors are swallowed by the store's
   /// guarded in-memory fallback.
   void _recordSkillAccuracy() {
+    // Snapshot the session grades SYNCHRONOUSLY, before any await. A 「もういちど」
+    // tap re-inits the deck and calls _sessionResults.clear() (see _loadDeck); if
+    // we read _sessionResults after the liveCseEstimate await below, that race
+    // would empty the list → c.total==0 → this session's reading accuracy is
+    // silently dropped from 合格率. Capturing the grades up front closes it.
+    final sessionGrades = _sessionResults.map((r) => r.grade).toList();
     unawaited(() async {
       // Capture the baseline BEFORE recording this session — deterministically,
       // in the same closure, so the +delta can never be collapsed by a race with
       // an async pre-capture (the pre always reflects prior sessions only).
       final pre = await liveCseEstimate(widget.eikenGrade);
 
-      final c = battleReadingContribution(_sessionResults.map((r) => r.grade));
+      final c = battleReadingContribution(sessionGrades);
       if (c.total > 0) {
         try {
           final store = await SkillAccuracyStore.getInstance();

@@ -15,6 +15,7 @@
 // Migration path: swap InMemoryFsrsCardRepository for SqliteFsrsCardRepository
 //   once Flutter integration tests are set up.
 
+import 'dart:async';
 import 'dart:convert';
 import 'fsrs_card.dart';
 import '../storage/preferences_service.dart';
@@ -163,6 +164,32 @@ class InMemoryFsrsCardRepository implements FsrsCardRepository {
 class PrefsFsrsCardRepository implements FsrsCardRepository {
   static String _key(String userId) => 'fsrs_deck_$userId';
 
+  // The whole deck for a user lives under one prefs key, so every mutation is a
+  // read-modify-write of that single blob. Battle fires saveCard() per answer
+  // *unawaited* (fire-and-forget), so a fast answerer can have two saves in
+  // flight at once; without serialization they both _read the same baseline,
+  // each adds its own card, and the second _write clobbers the first — silently
+  // losing FSRS progress (the learning record itself). The interface contract
+  // (top of file) requires concurrency-safety, so we serialize all writes per
+  // user through a static chain (static = process-wide, because every instance
+  // shares the same key namespace). The chain future itself never rejects, so a
+  // single failed op can't wedge the queue; the caller still sees its own result.
+  static final Map<String, Future<void>> _writeLocks = {};
+
+  Future<void> _locked(String userId, Future<void> Function() op) {
+    final prev = _writeLocks[userId] ?? Future<void>.value();
+    final completer = Completer<void>();
+    _writeLocks[userId] = prev.then((_) async {
+      try {
+        await op();
+        completer.complete();
+      } catch (e, st) {
+        completer.completeError(e, st);
+      }
+    });
+    return completer.future;
+  }
+
   Future<Map<String, dynamic>> _read(String userId) async {
     final prefs = await PreferencesService.getInstance();
     final raw = prefs.getString(_key(userId));
@@ -188,20 +215,24 @@ class PrefsFsrsCardRepository implements FsrsCardRepository {
   }
 
   @override
-  Future<void> saveCard(String userId, FSRSCard card) async {
-    final map = await _read(userId);
-    map[card.vocabId] = card.toJson();
-    await _write(userId, map);
+  Future<void> saveCard(String userId, FSRSCard card) {
+    return _locked(userId, () async {
+      final map = await _read(userId);
+      map[card.vocabId] = card.toJson();
+      await _write(userId, map);
+    });
   }
 
   @override
-  Future<void> saveCards(String userId, List<FSRSCard> cards) async {
-    if (cards.isEmpty) return;
-    final map = await _read(userId);
-    for (final c in cards) {
-      map[c.vocabId] = c.toJson();
-    }
-    await _write(userId, map);
+  Future<void> saveCards(String userId, List<FSRSCard> cards) {
+    if (cards.isEmpty) return Future<void>.value();
+    return _locked(userId, () async {
+      final map = await _read(userId);
+      for (final c in cards) {
+        map[c.vocabId] = c.toJson();
+      }
+      await _write(userId, map);
+    });
   }
 
   @override
@@ -213,8 +244,12 @@ class PrefsFsrsCardRepository implements FsrsCardRepository {
   }
 
   @override
-  Future<void> clearDeck(String userId) async {
-    final prefs = await PreferencesService.getInstance();
-    await prefs.remove(_key(userId));
+  Future<void> clearDeck(String userId) {
+    // Through the same lock so a clear is ordered against in-flight saves
+    // (otherwise a queued saveCard could resurrect a just-cleared deck).
+    return _locked(userId, () async {
+      final prefs = await PreferencesService.getInstance();
+      await prefs.remove(_key(userId));
+    });
   }
 }

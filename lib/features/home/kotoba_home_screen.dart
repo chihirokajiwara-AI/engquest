@@ -255,7 +255,7 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
     final scene = sceneForGrade(_eikenLevel);
     if (scene != null) {
       // SceneView pops true when all NPCs are solved (G2: scene-clear → map
-      // advance). On clear, advance the shared quest_unlocked_index pref so
+      // advance). On clear, advance the grade-scoped quest-unlock pref so
       // QuestMapScreen shows the next node unlocked on the next visit.
       final cleared = await Navigator.of(context).push<bool>(
         MaterialPageRoute(
@@ -267,10 +267,15 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
         try {
           final prefs = await PreferencesService.getInstance();
           final startIdx = _startingIndexForLevel(_eikenLevel);
-          final stored = prefs.getInt('quest_unlocked_index');
+          // Grade-SCOPED key — must match QuestMapScreen._unlockKey (#139). The
+          // old unscoped 'quest_unlocked_index' write was dead: the map reads the
+          // per-grade key, so a scene cleared from the home path never advanced
+          // the town cursor (broken progression on the main path).
+          final unlockKey = 'quest_unlocked_index_$_eikenLevel';
+          final stored = prefs.getInt(unlockKey);
           // Only advance if the next node is beyond the current high-water mark.
           if (startIdx + 1 > stored) {
-            await prefs.setInt('quest_unlocked_index', startIdx + 1);
+            await prefs.setInt(unlockKey, startIdx + 1);
           }
         } catch (_) {
           // Prefs unavailable — the map will just re-derive on next open.
