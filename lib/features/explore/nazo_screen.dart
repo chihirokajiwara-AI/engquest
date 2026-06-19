@@ -112,6 +112,15 @@ class NazoScreen extends StatefulWidget {
   /// callers that don't supply a plate are unaffected.
   final String? sceneBackgroundAsset;
 
+  /// Gathered observation clue lines for the FINAL ナゾ (対決 confrontation).
+  ///
+  /// When non-null and non-empty, a 探偵メモ block is rendered above the stem so
+  /// the confrontation reads as deduction from collected evidence rather than an
+  /// anonymous quiz. Format: pre-built JP string with header + '・' bullet lines,
+  /// constructed by scene_view._openNazo for the final ナゾ only. Null (default)
+  /// for all other ナゾ — the block is simply absent.
+  final String? gatheredCluesJa;
+
   const NazoScreen({
     super.key,
     required this.hotspot,
@@ -119,6 +128,7 @@ class NazoScreen extends StatefulWidget {
     this.hintCoinService,
     this.initialHintsShown = 0,
     this.sceneBackgroundAsset,
+    this.gatheredCluesJa,
   });
 
   @override
@@ -548,6 +558,11 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
                                   message: kPhonicsMutedMessage,
                                 ),
                                 const SizedBox(height: 12),
+                              ],
+                              if (widget.gatheredCluesJa != null &&
+                                  widget.gatheredCluesJa!.isNotEmpty) ...[
+                                _gatheredCluesBox(),
+                                const SizedBox(height: 14),
                               ],
                               if (widget.hotspot.framingJa != null) ...[
                                 _framingBox(),
@@ -1286,6 +1301,23 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
                   ? dqInkText(size: 15, w: FontWeight.w500, color: pcInk)
                   : dqText(size: 15, w: FontWeight.w500, color: dqInk))
               .copyWith(height: 1.7),
+        ),
+      );
+
+  /// 探偵メモ block for the FINAL ナゾ (対決 confrontation): renders the observation
+  /// clues the child gathered, so the accusation reads as deduction from evidence
+  /// rather than an anonymous quiz.  Only rendered when [widget.gatheredCluesJa]
+  /// is non-null and non-empty (i.e. only the final ナゾ in a scene with read obs).
+  /// Reuses the same DqPanel(warm: kNazoWarmTheme) styling as [_framingBox].
+  Widget _gatheredCluesBox() => DqPanel(
+        warm: kNazoWarmTheme,
+        title: '📖 たんていメモを よみかえす',
+        child: Text(
+          widget.gatheredCluesJa!,
+          style: (kNazoWarmTheme
+                  ? dqInkText(size: 14, w: FontWeight.w500, color: pcInk)
+                  : dqText(size: 14, w: FontWeight.w500, color: dqInk))
+              .copyWith(height: 1.8),
         ),
       );
 

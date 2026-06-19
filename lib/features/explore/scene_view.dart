@@ -526,6 +526,26 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
   final Map<int, int> _hintTierByHotspot = {};
 
   Future<void> _openNazo(int idx, Hotspot h) async {
+    // Deduction spine (studio run-2 #5): when this IS the final ナゾ (対決),
+    // collect the clue lines from every observation hotspot the child has already
+    // read (_observed[i]==true) and pass them to NazoScreen as a 探偵メモ block
+    // so the confrontation reads as evidence-led deduction, not an anonymous quiz.
+    String? gatheredCluesJa;
+    if (isFinalNazoIndex(widget.scene, _solved, idx)) {
+      final clues = <String>[];
+      for (var i = 0; i < widget.scene.hotspots.length; i++) {
+        final hs = widget.scene.hotspots[i];
+        if (hs.kind == HotspotKind.observation &&
+            _observed[i] == true &&
+            hs.clueLineJa != null &&
+            hs.clueLineJa!.isNotEmpty) {
+          clues.add('・${hs.clueLineJa!.trim()}');
+        }
+      }
+      if (clues.isNotEmpty) {
+        gatheredCluesJa = clues.join('\n');
+      }
+    }
     final result = await Navigator.of(context).push<NazoResult>(
       _nazoRoute(
         NazoScreen(
@@ -534,6 +554,7 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
           hintCoinService: _coins,
           initialHintsShown: _hintTierByHotspot[idx] ?? 0,
           sceneBackgroundAsset: widget.scene.backgroundAsset,
+          gatheredCluesJa: gatheredCluesJa,
         ),
       ),
     );
