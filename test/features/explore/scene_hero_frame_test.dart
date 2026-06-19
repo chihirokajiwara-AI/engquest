@@ -379,6 +379,75 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  // ── Hero burst (studio run-2 #3) ─────────────────────────────────────────────
+
+  testWidgets(
+      'hero burst mounts during restore hero frame (non-reduced-motion)',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(440, 900));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await pumpScene(tester);
+
+    // Before solve: no burst (keyed by the NPC index, so check that specific key).
+    final idx = _firstNpcIdx();
+    expect(
+      find.byKey(ValueKey('hero_burst_$idx')),
+      findsNothing,
+      reason: 'no hero burst before any solve',
+    );
+
+    await _callApplyRestore(tester, _firstNpcIdx(), _firstNpc(), _solvedResult);
+    await tester.pump();
+
+    // During the hero window: burst must be present, keyed by NPC index.
+    expect(
+      find.byKey(ValueKey('hero_burst_$idx')),
+      findsOneWidget,
+      reason: 'hero burst must be mounted during the hero frame',
+    );
+    expect(tester.takeException(), isNull);
+
+    // Drain timers and animation.
+    await tester.pump(const Duration(milliseconds: 2000));
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('hero burst absent under reduced-motion', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(440, 900));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await pumpScene(tester, reduceMotion: true);
+
+    await _callApplyRestore(tester, _firstNpcIdx(), _firstNpc(), _solvedResult);
+    await tester.pump();
+
+    // Reduced-motion: hero frame is suppressed, so burst must NOT mount.
+    final idx = _firstNpcIdx();
+    expect(
+      find.byKey(ValueKey('hero_burst_$idx')),
+      findsNothing,
+      reason: 'hero burst must be absent under reduced-motion (a11y)',
+    );
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('hero burst absent before any solve', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(440, 900));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await pumpScene(tester);
+
+    // No solve yet: the burst widget must not exist in the tree at all.
+    final idx = _firstNpcIdx();
+    expect(
+      find.byKey(ValueKey('hero_burst_$idx')),
+      findsNothing,
+      reason: 'no hero burst when _heroNpcIdx is null (no solve yet)',
+    );
+    expect(tester.takeException(), isNull);
+  });
+
   // ── Safety: no crash on consecutive solves ────────────────────────────────────
 
   testWidgets('no exception when two NPCs are restored in quick succession',

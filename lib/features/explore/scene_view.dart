@@ -12,6 +12,7 @@
 // Firebase uid must NOT be used here (see test constraint).
 
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -1235,6 +1236,17 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
+              // Hero burst: a centered gold bloom that fires once at hero-frame
+              // onset, BEHIND the hero portrait so the "bursts to colour" read
+              // is one felt event.  Keyed by _heroNpcIdx so it re-triggers per
+              // restore.  IgnorePointer — never eats taps.  Gated on motion.
+              if (_heroNpcIdx != null && !prefersReducedMotion(context))
+                Positioned.fill(
+                  child: IgnorePointer(
+                    child: _HeroBurst(key: ValueKey('hero_burst_$_heroNpcIdx')),
+                  ),
+                ),
+
               // Hero portrait: the just-restored NPC's COLOUR portrait enlarges
               // to 2.2× at screen centre over the dim.  Two-phase curve:
               //   0 → 420ms  : scale 0→2.2 easeOutBack
@@ -2299,6 +2311,133 @@ class _CoinTwinkleState extends State<_CoinTwinkle>
     );
   }
 }
+
+// ── Hero-burst (studio run-2 #3) ─────────────────────────────────────────────
+// A centered one-shot gold radial bloom + rays + sparkles that fires at hero-
+// frame onset, placed BEHIND the 2.2× hero portrait so "I answered correctly →
+// this villager bursts back to colour" lands as one felt event.
+// Duration ~700ms — shorter than the 900ms NazoScreen burst so it peaks and
+// recedes before the hero portrait holds, keeping the portrait the climax.
+// Reduced-motion: never mounted (parent gates on !prefersReducedMotion).
+// Keyed by _heroNpcIdx so a fresh instance is created per restore.
+
+class _HeroBurst extends StatefulWidget {
+  const _HeroBurst({super.key});
+
+  @override
+  State<_HeroBurst> createState() => _HeroBurstState();
+}
+
+class _HeroBurstState extends State<_HeroBurst>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _c;
+
+  @override
+  void initState() {
+    super.initState();
+    _c = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 700),
+    )..forward();
+  }
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _c,
+      builder: (_, __) => CustomPaint(
+        size: Size.infinite,
+        painter: _HeroBurstPainter(Curves.easeOut.transform(_c.value)),
+      ),
+    );
+  }
+}
+
+/// Centered radial gold bloom + 12 rays + 6 sparkles with ramp-then-fade alpha
+/// envelope — mirrors the feel of nazo_screen.dart's _SolveBurstPainter but at
+/// a moderate scale (maxR = 0.40 × shortestSide vs 0.55) so it stays behind
+/// the hero portrait without overwhelming the moment.
+class _HeroBurstPainter extends CustomPainter {
+  final double t; // 0 → 1, eased
+  const _HeroBurstPainter(this.t);
+
+  static const _gold = Color(0xFFFFD700);
+  int _a(double o) => (o.clamp(0.0, 1.0) * 255).round();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = size.center(Offset.zero);
+    // Moderate radius — behind the 2.2× hero portrait, not competing with it.
+    final maxR = size.shortestSide * 0.40;
+
+    // Brightness ENVELOPE: ramp up over the first ~18% then fade (same math as
+    // the NazoScreen burst so the two moments feel related, not mismatched).
+    final env = (t < 0.18 ? (t / 0.18) : ((1.0 - t) / 0.82)).clamp(0.0, 1.0);
+    final fade = env;
+
+    // 0. Inner impact flash — peaks early (~t=0.25), fades faster than the bloom.
+    final innerEnv =
+        (t < 0.25 ? (t / 0.25) : ((1.0 - t) / 0.75)).clamp(0.0, 1.0);
+    canvas.drawCircle(
+      center,
+      maxR * 0.16,
+      Paint()
+        ..color = _gold.withAlpha(_a(0.9 * innerEnv))
+        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8),
+    );
+
+    // 1. Radial bloom — punches outward from near-zero so it reads as an impact.
+    final bloomR = maxR * (0.02 + 1.18 * t);
+    canvas.drawCircle(
+      center,
+      bloomR,
+      Paint()
+        ..shader = RadialGradient(
+          colors: [
+            _gold.withAlpha(_a(0.75 * fade)),
+            _gold.withAlpha(_a(0.28 * fade)),
+            _gold.withAlpha(0),
+          ],
+          stops: const [0.0, 0.45, 1.0],
+        ).createShader(Rect.fromCircle(center: center, radius: bloomR)),
+    );
+
+    // 2. Radiating rays — 12 thin gold spokes shooting from near-centre.
+    final rayLen = maxR * (0.05 + 1.35 * t);
+    final rayInner = maxR * 0.06;
+    final rayPaint = Paint()
+      ..color = _gold.withAlpha(_a(0.80 * fade))
+      ..strokeWidth = 1.8
+      ..strokeCap = StrokeCap.round;
+    const rays = 12;
+    for (var i = 0; i < rays; i++) {
+      final ang = (i / rays) * 2 * math.pi + t * 0.25;
+      final dir = Offset(math.cos(ang), math.sin(ang));
+      canvas.drawLine(center + dir * rayInner, center + dir * rayLen, rayPaint);
+    }
+
+    // 3. Sparkles — 6 small dots flung outward, shrinking as they travel.
+    final dist = maxR * (0.18 + 1.1 * t);
+    final sparkPaint = Paint()..color = _gold.withAlpha(_a(fade));
+    const sparks = 6;
+    for (var i = 0; i < sparks; i++) {
+      final ang = (i / sparks) * 2 * math.pi + 0.4;
+      final dir = Offset(math.cos(ang), math.sin(ang));
+      canvas.drawCircle(center + dir * dist, 8.0 * (1.0 - t * 0.4), sparkPaint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(_HeroBurstPainter old) => old.t != t;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 
 /// One-shot entry animation for scene overlays (#82 game-feel): the speech bubble
 /// and banners used to POP in via a bare `if` in the Stack. _EntryAnim makes them
