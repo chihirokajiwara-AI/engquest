@@ -167,6 +167,16 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
   // Not started in reduced-motion mode (no auto-advance, skip btn only).
   Timer? _recallTimer;
 
+  // Active cued-recall (game-studio director #1): instead of passive blank-wait,
+  // the child steps through each taught item one at a time, tapping to reveal
+  // the JA meaning they must recall. Two fields drive the cover-card flow:
+  //   _recallCueIdx   — which item is currently on the cover card (0-based)
+  //   _revealedCues   — which items the child has already tapped to reveal
+  // Both are reset to 0/{} in _startRecall(). The per-second Timer is the hard
+  // wall-clock fallback; completing all cues also advances to quiz immediately.
+  int _recallCueIdx = 0;
+  final Set<int> _revealedCues = {};
+
   QuestStep get _step => widget.hotspot.step!;
   TeachCard? get _teachCard => widget.hotspot.teachCard;
 
@@ -653,12 +663,22 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
 
   /// Transitions from the teach phase to the recall phase and starts the
   /// countdown (unless the OS requests reduced motion, in which case no
-  /// auto-advance fires — the child taps 「もう だいじょうぶ ▶」 to proceed).
+  /// auto-advance fires — the child taps 「つぎへ ▶」 to proceed through each cue).
+  ///
+  /// If the TeachCard has no items (empty list), skip straight to quiz so an
+  /// empty card cannot crash or strand the child in a blank recall screen.
   void _startRecall() {
+    final card = _teachCard;
+    if (card == null || card.items.isEmpty) {
+      setState(() => _phase = _NazoPhase.quiz);
+      return;
+    }
     final reduceMotion = prefersReducedMotion(context);
     setState(() {
       _phase = _NazoPhase.recall;
       _recallSecondsLeft = kRecallGapSeconds;
+      _recallCueIdx = 0;
+      _revealedCues.clear();
     });
     if (!reduceMotion) {
       // Discrete per-second tick: decrements the counter and rebuilds the ring
@@ -681,19 +701,118 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
         });
       });
     }
-    // Reduced motion: no auto-advance; child uses the skip button.
+    // Reduced motion: no auto-advance; child steps through cues manually.
   }
 
-  /// Closed-casebook interstitial shown between teach and quiz.
+  /// Active cued-recall cover-card shown between teach and quiz.
+  ///
   /// OCCLUDES all teach content (teach scaffold is no longer in the widget tree).
-  /// A discrete countdown ring updates once per second; on reduced motion a
-  /// static full ring is shown with no auto-advance (skip button is the sole CTA).
+  /// The child is walked through each taught item one at a time:
+  ///   1. The EN word is shown large (cover card, DqPanel warm).
+  ///   2. The JA meaning is HIDDEN behind a gold 「いみは？」 tap-target.
+  ///   3. Tapping 「いみは？」 reveals the JA (AnimatedCrossFade ~200ms; instant on
+  ///      reduced-motion). A pop scale 1.0→1.08→1.0 draws the eye (skipped on
+  ///      reduced-motion).
+  ///   4. 「つぎへ ▶」 advances to the next cue. On the last cue it transitions
+  ///      immediately to quiz (no separate "all done" step).
+  ///
+  /// The per-second Timer is a hard fallback: if the timer fires before the
+  /// child completes all cues, the quiz still starts. Whichever comes first wins.
+  /// The small corner ring now reads as a gentle background timer, not the focus.
   Widget _recallScaffold() {
     final reduceMotion = prefersReducedMotion(context);
     final sLeft = _recallSecondsLeft;
     final progress = reduceMotion
         ? 1.0
         : sLeft / kRecallGapSeconds; // remaining fraction 1.0→0.0
+
+    final card = _teachCard!; // guarded: null-card → quiz in _startRecall()
+    final totalItems = card.items.length;
+
+    // Safety: if items somehow empty, fall through to quiz immediately.
+    if (totalItems == 0) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) setState(() => _phase = _NazoPhase.quiz);
+      });
+      return const SizedBox.shrink();
+    }
+
+    // Clamp index to valid range in case timer fires concurrently.
+    final idx = _recallCueIdx.clamp(0, totalItems - 1);
+    final item = card.items[idx];
+    final isRevealed = _revealedCues.contains(idx);
+    final isLast = idx >= totalItems - 1;
+
+    void advanceCue() {
+      _recallTimer?.cancel();
+      _recallTimer = null;
+      if (isLast) {
+        setState(() => _phase = _NazoPhase.quiz);
+      } else {
+        setState(() => _recallCueIdx++);
+      }
+    }
+
+    // The JA reveal — animated swap from the 「いみは？」 placeholder to the meaning.
+    //
+    // Uses AnimatedSwitcher (not AnimatedCrossFade) so the outgoing child is
+    // removed from the widget tree once the transition completes. This makes
+    // `pumpAndSettle()` in widget tests see only the live child, which lets the
+    // occlusion contract tests (`find.text('こんにちは') findsNothing`) work correctly
+    // without needing explicit reduced-motion mode.
+    //
+    // Pop scale (0.88→1.0, elasticOut) fires on reveal; reduced-motion: instant.
+    Widget meaningTarget() {
+      final placeholder = GestureDetector(
+        key: const ValueKey('placeholder'),
+        onTap: () => setState(() => _revealedCues.add(idx)),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 18),
+          decoration: BoxDecoration(
+            color: pcParchment1,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: pcFrameGold, width: 1.5),
+            boxShadow: [
+              BoxShadow(color: pcFrameGold.withAlpha(60), blurRadius: 10)
+            ],
+          ),
+          child: Text(
+            'いみは？',
+            textAlign: TextAlign.center,
+            style: dqInkText(size: 18, w: FontWeight.w800, color: pcFrameGold),
+          ),
+        ),
+      );
+
+      // The revealed JA text, with an optional pop-scale entry animation.
+      Widget revealedChild = reduceMotion
+          ? Text(
+              item.ja,
+              key: const ValueKey('revealed'),
+              textAlign: TextAlign.center,
+              style: dqInkText(size: 22, w: FontWeight.w700, color: pcInk),
+            )
+          : TweenAnimationBuilder<double>(
+              key: const ValueKey('revealed'),
+              tween: Tween(begin: 0.88, end: 1.0),
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.elasticOut,
+              builder: (_, scale, child) =>
+                  Transform.scale(scale: scale, child: child),
+              child: Text(
+                item.ja,
+                textAlign: TextAlign.center,
+                style: dqInkText(size: 22, w: FontWeight.w700, color: pcInk),
+              ),
+            );
+
+      return AnimatedSwitcher(
+        duration:
+            reduceMotion ? Duration.zero : const Duration(milliseconds: 200),
+        child: isRevealed ? revealedChild : placeholder,
+      );
+    }
 
     return DqScene(
       warm: kNazoWarmTheme,
@@ -705,51 +824,67 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // ── Cover card ─────────────────────────────────────────────────
               Semantics(
                 liveRegion: true,
-                label: 'ことばを おもいだそう',
+                label: 'ことばを おもいだそう。${item.en}。いみは？',
                 child: DqPanel(
                   warm: kNazoWarmTheme,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Icon(
-                        Icons.menu_book_rounded,
-                        color: pcFrameGold,
-                        size: 56,
-                      ),
-                      const SizedBox(height: 16),
+                      // Instruction above the cover card.
                       Text(
-                        'あたまの なかで、ことばを おもいだそう。',
+                        'いみを おもいだしてから、タップ。',
                         textAlign: TextAlign.center,
                         style: dqInkText(
-                            size: 16, w: FontWeight.w700, color: pcInk),
+                            size: 12, w: FontWeight.w600, color: pcInkSoft),
                       ),
-                      const SizedBox(height: 24),
-                      // Countdown ring: updates once per second (not continuous
-                      // animation) so widget tests can assert on the recall phase
-                      // without pumpAndSettle draining the full countdown.
-                      SizedBox(
-                        width: 100,
-                        height: 100,
-                        child: CustomPaint(
-                          painter: _RecallRingPainter(
-                            progress: progress,
-                            digit: reduceMotion ? kRecallGapSeconds : sLeft,
-                          ),
-                        ),
+                      const SizedBox(height: 14),
+                      // EN word — large, strong, centred.
+                      Text(
+                        item.en,
+                        textAlign: TextAlign.center,
+                        style: dqInkText(
+                            size: 26, w: FontWeight.w800, color: pcInk),
+                      ),
+                      const SizedBox(height: 16),
+                      // JA meaning — hidden behind tap-target until revealed.
+                      meaningTarget(),
+                      // Progress counter (e.g. 「1 / 4」).
+                      const SizedBox(height: 12),
+                      Text(
+                        '${idx + 1} / $totalItems',
+                        style: dqInkText(
+                            size: 11, w: FontWeight.w600, color: pcInkSoft),
                       ),
                     ],
                   ),
                 ),
               ),
-              const SizedBox(height: 28),
+              const SizedBox(height: 20),
+              // ── 「つぎへ ▶」 CTA ──────────────────────────────────────────────
               DqButton(
-                label: 'もう だいじょうぶ ▶',
-                onTap: () {
-                  _recallTimer?.cancel();
-                  _recallTimer = null;
-                  setState(() => _phase = _NazoPhase.quiz);
-                },
+                label: isLast ? 'ナゾへ ▶' : 'つぎへ ▶',
+                onTap: advanceCue,
+              ),
+              const SizedBox(height: 16),
+              // ── Corner countdown ring ────────────────────────────────────────
+              // Repositioned from centred focal element to a small background
+              // timer indicator — the cover card is now the focus.
+              Align(
+                alignment: Alignment.centerRight,
+                child: SizedBox(
+                  width: 36,
+                  height: 36,
+                  child: CustomPaint(
+                    painter: _RecallRingPainter(
+                      progress: progress,
+                      digit: reduceMotion ? kRecallGapSeconds : sLeft,
+                      small: true,
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
@@ -1302,16 +1437,23 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
 /// empty arc). [digit] is the remaining whole-second count shown at centre.
 /// Stroked in [pcFrameGold] on the dark navy background, matching the casebook
 /// palette. On reduced motion, always renders with progress==1.0 (static ring).
+/// [small] = true renders a compact 36px corner indicator (new active recall UI).
 class _RecallRingPainter extends CustomPainter {
   final double progress; // 1.0 = full ring; 0.0 = empty
   final int digit;
+  final bool small;
 
-  const _RecallRingPainter({required this.progress, required this.digit});
+  const _RecallRingPainter({
+    required this.progress,
+    required this.digit,
+    this.small = false,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
     final center = size.center(Offset.zero);
-    final radius = size.shortestSide / 2 - 6;
+    final strokeW = small ? 3.0 : 7.0;
+    final radius = size.shortestSide / 2 - (small ? 2 : 6);
     // Background track (dim).
     canvas.drawCircle(
       center,
@@ -1319,7 +1461,7 @@ class _RecallRingPainter extends CustomPainter {
       Paint()
         ..color = pcFrameGold.withAlpha(50)
         ..style = PaintingStyle.stroke
-        ..strokeWidth = 7,
+        ..strokeWidth = strokeW,
     );
     // Foreground arc (sweeps clockwise from top, representing remaining time).
     if (progress > 0) {
@@ -1331,28 +1473,30 @@ class _RecallRingPainter extends CustomPainter {
         Paint()
           ..color = pcFrameGold
           ..style = PaintingStyle.stroke
-          ..strokeWidth = 7
+          ..strokeWidth = strokeW
           ..strokeCap = StrokeCap.round,
       );
     }
-    // Centre digit.
-    final tp = TextPainter(
-      text: TextSpan(
-        text: '$digit',
-        style: TextStyle(
-          color: pcInk,
-          fontSize: 28,
-          fontWeight: FontWeight.w800,
+    // Centre digit — omit in small mode (too cramped at 36px).
+    if (!small) {
+      final tp = TextPainter(
+        text: TextSpan(
+          text: '$digit',
+          style: const TextStyle(
+            color: pcInk,
+            fontSize: 28,
+            fontWeight: FontWeight.w800,
+          ),
         ),
-      ),
-      textDirection: TextDirection.ltr,
-    )..layout();
-    tp.paint(canvas, center - Offset(tp.width / 2, tp.height / 2));
+        textDirection: TextDirection.ltr,
+      )..layout();
+      tp.paint(canvas, center - Offset(tp.width / 2, tp.height / 2));
+    }
   }
 
   @override
   bool shouldRepaint(_RecallRingPainter old) =>
-      old.progress != progress || old.digit != digit;
+      old.progress != progress || old.digit != digit || old.small != small;
 }
 
 /// The solve-moment climax: a one-shot full-screen gold radial bloom that scales
