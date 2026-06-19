@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:engquest/core/analytics/progress_service.dart';
+import 'package:engquest/core/firebase/auth_service.dart';
 import 'package:engquest/core/models/progress_data.dart';
 import 'package:engquest/core/storage/preferences_service.dart';
 import 'package:engquest/features/exam_practice/pass/cse_model.dart';
@@ -11,18 +12,28 @@ import 'package:engquest/features/parent_dashboard/parent_dashboard_screen.dart'
 /// Records which uid the dashboard asked progress for (no Firestore).
 class _RecordingProgressService extends ProgressService {
   String? lastUid;
+  final List<DailyProgress> days;
+  final int streak;
+  _RecordingProgressService({this.days = const [], this.streak = 0});
   @override
   Future<LearningProgress> getProgress(String uid) async {
     lastUid = uid;
     return LearningProgress(
       uid: uid,
-      currentStreak: 0,
+      currentStreak: streak,
       totalWordsMastered: 0,
       totalWordsPracticed: 0,
       masteryPercent: 0,
-      last7Days: const [],
+      last7Days: days,
     );
   }
+}
+
+/// #181 test seam: a uid without hitting Firebase, so the data-dependent tabs
+/// render under flutter_test instead of the offline error state.
+class _FakeAuth extends AuthService {
+  @override
+  Future<String> getOrCreateUid() async => 'test-uid';
 }
 
 void main() {
@@ -122,13 +133,58 @@ void main() {
     // maps that non-empty set → 暫定 label + prominent 未測定 box. (A full-widget
     // assertion is impractical here: the card lazy-builds below the fold in the
     // rich on-device dashboard, so it is not in the default pumped subtree.)
-    // NOTE (#177 weekly summary / #179 readiness): the DATA-dependent tabs
-    // (Home/記録) resolve _progressFuture via AuthService.getOrCreateUid() →
-    // Firebase, which is hardcoded (not injected) and fails under flutter_test,
-    // so those tabs render the error state in tests. The 今週のまとめ weekly
-    // summary card (_WeeklySummaryCard) is therefore verified by analyze + manual
-    // render, not a widget pump. Making these tabs testable needs an AuthService
-    // injection seam — tracked separately (test-infra gap).
+    // #177 + #181: with the AuthService seam the data-dependent 記録 tab renders,
+    // so we can assert the weekly summary card is actually present (not just that
+    // its data computes). Leads the tab with a legible 今週のまとめ / This Week.
+    testWidgets('records tab shows the 今週のまとめ weekly summary card (#177)',
+        (tester) async {
+      SharedPreferences.setMockInitialValues({});
+      await tester.pumpWidget(MaterialApp(
+        home: ParentDashboardScreen(
+          progressService: _RecordingProgressService(
+            days: [
+              DailyProgress(
+                  date: DateTime(2026, 6, 18),
+                  wordsPracticed: 12,
+                  sessionMinutes: 8,
+                  averageScore: 2.0),
+            ],
+            streak: 3,
+          ),
+          authService: _FakeAuth(),
+        ),
+      ));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('記録'));
+      await tester.pumpAndSettle();
+      // DqPanel uppercases the English half ("THIS WEEK"); 「まとめ」 is unique to
+      // the summary-card title (the takeaway line uses 今週 but not まとめ).
+      expect(find.textContaining('まとめ'), findsOneWidget,
+          reason: 'the records tab must lead with a legible weekly summary');
+    });
+
+    // #179 + #181: the home tab's readiness card now renders, so assert the
+    // provisional 暫定 state shows when a skill is unmeasured (reading-only data).
+    testWidgets('home readiness card marks partial data 暫定 (#179)',
+        (tester) async {
+      SharedPreferences.setMockInitialValues({'onboarding_start_level': '5'});
+      PreferencesService.resetInstance();
+      SkillAccuracyStore.resetInstance();
+      final store = await SkillAccuracyStore.getInstance();
+      await store.record(
+          grade: '5', skill: EikenSkill.reading, correct: 8, total: 10);
+
+      await tester.pumpWidget(MaterialApp(
+        home: ParentDashboardScreen(
+          progressService: _RecordingProgressService(),
+          authService: _FakeAuth(),
+        ),
+      ));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('暫定', skipOffstage: false), findsOneWidget,
+          reason: 'a % built on one skill must be flagged provisional, not a '
+              'confident gold headline');
+    });
 
     test('loadParentReadiness flags partial data as provisional (#179)',
         () async {

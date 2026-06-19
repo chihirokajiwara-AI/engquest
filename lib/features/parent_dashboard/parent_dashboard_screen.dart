@@ -47,7 +47,19 @@ class ParentDashboardScreen extends StatefulWidget {
   /// without a live Firestore. Null → the real Firestore-backed service.
   final ProgressService? progressService;
 
-  const ParentDashboardScreen({super.key, this.childUid, this.progressService});
+  /// Test seam: inject a fake [AuthService] so the data-dependent tabs (Home /
+  /// 記録) can resolve a uid and render under flutter_test. Without this the real
+  /// AuthService.getOrCreateUid() hits Firebase and throws in tests, forcing the
+  /// whole dashboard into the error state — which had made the weekly summary
+  /// (#177) and provisional readiness (#179) cards untestable. Null → real auth.
+  final AuthService? authService;
+
+  const ParentDashboardScreen({
+    super.key,
+    this.childUid,
+    this.progressService,
+    this.authService,
+  });
 
   @override
   State<ParentDashboardScreen> createState() => _ParentDashboardScreenState();
@@ -57,7 +69,7 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   late final ProgressService _service;
-  final _auth = AuthService();
+  late final AuthService _auth;
   late Future<LearningProgress> _progressFuture;
 
   // Settings state. _dailyGoal mirrors the REAL home-ring goal (streak_daily_goal
@@ -73,6 +85,7 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
     super.initState();
     _service = widget.progressService ??
         ProgressService(repository: FirestoreProgressRepository());
+    _auth = widget.authService ?? AuthService();
     _tabController = TabController(length: 4, vsync: this);
     _loadProgress();
     _loadReminderTime();
