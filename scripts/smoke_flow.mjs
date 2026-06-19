@@ -150,10 +150,12 @@ record('tap 英検 CTA → exam hub', examMs < 0 ? DEAD_MS : examMs, examMs >= 0
   !okCta ? 'CTA not found' : (examMs < 0 ? 'DEAD tap (no exam screen)' : ''));
 
 // ── exam hub → 筆記1 (大問1 vocab) → assert the active question screen ─────────
-// '正答' (the score counter) appears ONLY on the live question screen, never on
-// the hub button, so a match proves we actually entered the 大問.
+// A numbered choice '1. ' (semantics '${i+1}. <choice>') is on the live question
+// screen but never on the hub, so a match proves we entered the 大問. (NOT '正答':
+// that score counter is gated behind the first CORRECT answer per the no-scold
+// rule #101/#106, so it is absent on a fresh question screen.)
 const okSec = examMs >= 0 && await clickLabel('筆記1');
-const q1Ms = okSec ? await waitForLabel('正答', DEAD_MS) : -1;
+const q1Ms = okSec ? await waitForLabel('1. ', DEAD_MS) : -1;
 record('tap 筆記1 → 大問1 question', q1Ms < 0 ? DEAD_MS : q1Ms, q1Ms >= 0,
   !okSec ? '筆記1 not reached' : (q1Ms < 0 ? 'DEAD tap (no question screen)' : ''));
 
@@ -179,11 +181,10 @@ record('✕ close → back to hub', backMs < 0 ? DEAD_MS : backMs, backMs >= 0,
   q2Ms < 0 ? 'skipped' : (backMs < 0 ? 'DEAD tap (no hub)' : ''));
 
 // ── 筆記2 (大問2 会話文) loads + is answerable — generalises beyond 大問1 ────────
-// Assert '正答' (active-question score counter) — present on the live 大問2 screen
-// but NOT on the hub button (whose label merely *contains* '会話文'), avoiding the
-// false-positive of matching the hub button text itself.
+// Assert a numbered choice '1. ' (on the live 大問2 question screen, not the hub).
+// Same reason as 筆記1: '正答' is gated behind the first correct answer (#101/#106).
 const okSec2 = backMs >= 0 && await clickLabel('筆記2');
-const conv = okSec2 ? await waitForLabel('正答', DEAD_MS) : -1;
+const conv = okSec2 ? await waitForLabel('1. ', DEAD_MS) : -1;
 record('tap 筆記2 → 大問2 question', conv < 0 ? DEAD_MS : conv, conv >= 0,
   !okSec2 ? '筆記2 not reached' : (conv < 0 ? 'DEAD tap (no question screen)' : ''));
 const okAns2 = conv >= 0 && await clickLabel('1. ');
@@ -192,11 +193,13 @@ record('筆記2 answer → reveal', reveal2 < 0 ? DEAD_MS : reveal2, reveal2 >= 
   !okAns2 ? 'no choice to tap' : (reveal2 < 0 ? 'DEAD tap (answer did nothing)' : ''));
 
 // ── 筆記3 (大問3 語句の並びかえ) loads — the remaining 筆記 大問 ─────────────────
-// Back to the hub, then assert the live question screen ('正答', not on the hub).
+// Back to the hub, then assert the live question screen. 語句整序 has no numbered
+// MC choices (it's drag-to-order tiles), so detect the start-state answer-box
+// hint 'べましょう' (下の単語をタップして並べましょう), present before any tile is placed.
 if (reveal2 >= 0) await tapClose(); // ✕ close → hub
 const back2 = reveal2 >= 0 ? await waitForLabel('試験概要', DEAD_MS) : -1;
 const okSec3 = back2 >= 0 && await clickLabel('筆記3');
-const r3 = okSec3 ? await waitForLabel('正答', DEAD_MS) : -1;
+const r3 = okSec3 ? await waitForLabel('べましょう', DEAD_MS) : -1;
 record('tap 筆記3 → 大問3 (語句整序) loads', r3 < 0 ? DEAD_MS : r3, r3 >= 0,
   back2 < 0 ? 'no hub return' : (!okSec3 ? '筆記3 not reached' : (r3 < 0 ? 'DEAD tap (no question screen)' : '')));
 await page.screenshot({ path: '/tmp/eq_smoke_end.png' }).catch(() => {});
