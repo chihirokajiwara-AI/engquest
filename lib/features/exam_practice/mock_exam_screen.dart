@@ -279,7 +279,13 @@ class _MockExamScreenState extends State<MockExamScreen> {
     // No drawable items (a grade whose pools are empty) — be honest, don't fake.
     if (_items.isEmpty) {
       return Scaffold(
-        appBar: AppBar(title: Text('$label フル模試')),
+        appBar: AppBar(
+          title: FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: Text('$label フル模試'),
+          ),
+        ),
         body: const DqScene(
           child: Center(
             child: Padding(
@@ -323,7 +329,11 @@ class _MockExamScreenState extends State<MockExamScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('$label フル模試'),
+          title: FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: Text('$label フル模試'),
+          ),
           actions: [
             Center(
               child: Padding(

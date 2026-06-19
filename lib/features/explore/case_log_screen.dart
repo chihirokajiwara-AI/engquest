@@ -162,12 +162,20 @@ class _CaseLogScreenState extends State<CaseLogScreen> {
           Text('🔖 ことばの しおり',
               style: dqText(size: 13, w: FontWeight.w800, color: dqGold)),
           const SizedBox(height: 8),
-          Text(
-            assembledBookmarkLine(cleared),
-            style: dqText(size: 15, w: FontWeight.w700, color: dqInk)
-                .copyWith(height: 1.6),
-          ),
-          const SizedBox(height: 6),
+          // Only show the assembling bookmark line ONCE at least one case is
+          // cleared. With nothing cleared it is a bare "？ ？ ？ ？ ？ ？ ？" row
+          // that reads as a broken/placeholder string (CEO demo-audit); the warm
+          // invitation caption below carries the empty state instead. After the
+          // first clear the line is meaningful — revealed bookmarks + ？ for the
+          // grades still to come (the partial-reveal hook).
+          if (cleared.isNotEmpty) ...[
+            Text(
+              assembledBookmarkLine(cleared),
+              style: dqText(size: 15, w: FontWeight.w700, color: dqInk)
+                  .copyWith(height: 1.6),
+            ),
+            const SizedBox(height: 6),
+          ],
           Text(
             cleared.isEmpty
                 // Warm first-visit state — a bleak all-？ board would discourage;
