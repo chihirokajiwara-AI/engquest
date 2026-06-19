@@ -1,11 +1,11 @@
 {
-    "name": "ENG Quest",
-    "short_name": "ENG Quest",
+    "name": "コトバ探偵 / A-KEN Quest",
+    "short_name": "コトバ探偵",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0F0E17",
     "theme_color": "#FFD700",
-    "description": "L1-L2 boundary elimination platform for Japanese children",
+    "description": "探偵ミステリーで英検に合格！英検5級〜準1級に対応した、6歳からの子ども向け英語学習RPG。",
     "orientation": "portrait-primary",
     "prefer_related_applications": false
 }
