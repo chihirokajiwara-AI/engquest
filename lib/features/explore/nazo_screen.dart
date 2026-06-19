@@ -204,6 +204,12 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
   // Per-cue keys for recall tiles — rebuilt each time _recallCueIdx changes.
   // A List<GlobalKey<AudioOptionButtonState>> so wrong taps can shake the tile.
   List<GlobalKey<AudioOptionButtonState>> _recallTileKeys = [];
+  // Correct-tap green-pop hold (studio #1 CEO 2147): when the child taps the
+  // correct tile, we light it DqChoiceState.correct for ~300ms BEFORE advancing.
+  // _recallCorrectIdx holds the tapped tile index during the hold; null = no hold.
+  // _recallPopTimer fires the deferred advanceCue() after the hold window.
+  int? _recallCorrectIdx;
+  Timer? _recallPopTimer;
 
   QuestStep get _step => widget.hotspot.step!;
   TeachCard? get _teachCard => widget.hotspot.teachCard;
@@ -246,6 +252,7 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
     _finishTimer?.cancel();
     _wrongMeaningTimer?.cancel();
     _recallTimer?.cancel();
+    _recallPopTimer?.cancel();
     _cue.dispose();
     super.dispose();
   }
@@ -734,10 +741,12 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
       for (var i = 0; i < card.items.length; i++)
         GlobalKey<AudioOptionButtonState>(),
     ];
+    _recallPopTimer?.cancel();
     setState(() {
       _phase = _NazoPhase.recall;
       _recallSecondsLeft = kRecallGapSeconds;
       _recallCueIdx = 0;
+      _recallCorrectIdx = null;
       _revealedCues.clear();
       _knewCues.clear();
       _producedCues.clear();
@@ -821,26 +830,51 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
     void advanceCue() {
       _recallTimer?.cancel();
       _recallTimer = null;
+      _recallPopTimer?.cancel();
+      _recallPopTimer = null;
       if (isLast) {
-        setState(() => _phase = _NazoPhase.quiz);
+        setState(() {
+          _recallCorrectIdx = null;
+          _phase = _NazoPhase.quiz;
+        });
       } else {
         // Rebuild tile keys for the next cue.
         _recallTileKeys = [
           for (var i = 0; i < totalItems; i++)
             GlobalKey<AudioOptionButtonState>(),
         ];
-        setState(() => _recallCueIdx++);
+        setState(() {
+          _recallCorrectIdx = null;
+          _recallCueIdx++;
+        });
       }
     }
 
     void onTileChoice(int chosenItemIdx) {
+      // Guard: during the 300ms correct-tap hold a second tap must be a no-op.
+      // (The callback is already null-gated at the call site, but this is a
+      // belt-and-suspenders safety in case the widget rebuilds mid-hold.)
+      if (_recallCorrectIdx != null) return;
       final isCorrect = chosenItemIdx == idx;
       if (isCorrect) {
         // First-tap tracking: if not yet produced, it's a "knew" (first try).
         if (!_producedCues.contains(idx)) _knewCues.add(idx);
         _producedCues.add(idx);
         if (!reduceMotion) HapticFeedback.lightImpact();
-        advanceCue();
+        // Cancel the 8s wall-clock fallback so it can't race the pop timer.
+        _recallTimer?.cancel();
+        _recallTimer = null;
+        if (reduceMotion) {
+          // Reduced-motion: skip the hold, advance immediately.
+          advanceCue();
+        } else {
+          // Light the tapped tile green for ~300ms BEFORE advancing.
+          setState(() => _recallCorrectIdx = chosenItemIdx);
+          _recallPopTimer = Timer(const Duration(milliseconds: 300), () {
+            if (!mounted) return;
+            advanceCue();
+          });
+        }
       } else {
         // Wrong: shake the tapped tile; stay on current cue.
         if (!reduceMotion) {
@@ -918,14 +952,22 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
                     ),
                     const SizedBox(height: 8),
                     // ── EN choice tiles — same visual grammar as the quiz ────
+                    // During the 300ms correct-tap hold (_recallCorrectIdx != null):
+                    //   • tapped tile → DqChoiceState.correct (green elastic pop)
+                    //   • other tiles → DqChoiceState.normal
+                    //   • onChoose is null-gated to prevent double-advance
                     for (final tileIdx in indices)
                       AudioOptionButton(
                         key: _recallTileKeys[tileIdx],
                         label: card.items[tileIdx].en,
-                        state: DqChoiceState.normal,
+                        state: tileIdx == _recallCorrectIdx
+                            ? DqChoiceState.correct
+                            : DqChoiceState.normal,
                         warm: kNazoWarmTheme,
                         index: indices.indexOf(tileIdx) + 1,
-                        onChoose: () => onTileChoice(tileIdx),
+                        onChoose: _recallCorrectIdx != null
+                            ? null
+                            : () => onTileChoice(tileIdx),
                       ),
                     const SizedBox(height: 8),
                   ],

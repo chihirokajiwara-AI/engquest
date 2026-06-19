@@ -284,6 +284,124 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  // ── CEO 2147: correct-tap green-pop hold (studio #1) ────────────────────────
+
+  testWidgets(
+      'correct-tap green-pop: tile reaches DqChoiceState.correct before advancing',
+      (tester) async {
+    // Reduced-motion is FALSE here (default): we want the 300ms hold to fire.
+    tester.view.physicalSize = const Size(440, 1600);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+
+    final hotspot = greetingHotspot();
+    final items = hotspot.teachCard!.items;
+    // Need at least 2 items to observe "hold then advance" without going to quiz.
+    expect(items.length, greaterThan(1),
+        reason: 'greetingHotspot must have >1 cue to test non-last advance');
+
+    await tester.pumpWidget(
+      MaterialApp(home: NazoScreen(hotspot: hotspot, eikenLevel: '5')),
+    );
+    await tester.pumpAndSettle();
+
+    // Advance teach → recall.
+    final advance = find.textContaining('おぼえた');
+    await tester.ensureVisible(advance);
+    await tester.pumpAndSettle();
+    await tester.tap(advance);
+    await tester.pumpAndSettle();
+
+    // Locate the correct EN tile for cue 0.
+    final correctLabel = items[0].en;
+    final correctTile = find.widgetWithText(AudioOptionButton, correctLabel);
+    expect(correctTile, findsOneWidget,
+        reason: 'correct EN tile must be present for cue 0');
+    await tester.ensureVisible(correctTile.first);
+    await tester.pump();
+
+    // Tap, then pump ONE frame to process the setState setting _recallCorrectIdx.
+    // Do NOT pumpAndSettle yet — that would drain the 300ms pop timer and advance.
+    await tester.tap(correctTile.first);
+    await tester
+        .pump(); // single frame: setState fired, tile should be .correct
+
+    // The tapped tile must now be in DqChoiceState.correct (green elastic pop).
+    final tappedWidget = tester.widget<AudioOptionButton>(correctTile);
+    expect(tappedWidget.state, equals(DqChoiceState.correct),
+        reason:
+            'tapped tile must be DqChoiceState.correct during the 300ms hold before advancing');
+
+    // The JA cue for item 0 must still be visible — we have NOT advanced yet.
+    expect(find.text(items[0].ja), findsOneWidget,
+        reason: 'first JA cue must remain visible during the 300ms hold');
+
+    // No quiz yet.
+    expect(find.text('ミノス'), findsNothing,
+        reason: 'quiz must not appear during the 300ms hold');
+
+    // Now drain the 300ms timer — should advance to cue 1 (or quiz if last).
+    await tester.pumpAndSettle();
+    expect(find.text(items[0].ja), findsNothing,
+        reason:
+            'first JA cue must be gone after the pop-timer fires and advances');
+
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets(
+      'wrong-tap still shakes and stays on cue (unchanged by studio #1 pop)',
+      (tester) async {
+    tester.view.physicalSize = const Size(440, 1600);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+
+    final hotspot = greetingHotspot();
+    final items = hotspot.teachCard!.items;
+    expect(items.length, greaterThan(1),
+        reason: 'greetingHotspot must have >1 item for a wrong-tile choice');
+
+    await tester.pumpWidget(
+      MaterialApp(home: NazoScreen(hotspot: hotspot, eikenLevel: '5')),
+    );
+    await tester.pumpAndSettle();
+
+    // Advance teach → recall.
+    final advance = find.textContaining('おぼえた');
+    await tester.ensureVisible(advance);
+    await tester.pumpAndSettle();
+    await tester.tap(advance);
+    await tester.pumpAndSettle();
+
+    final firstJa = items[0].ja;
+    // Tap a WRONG tile (items[1].en is a different word than items[0].ja).
+    final wrongLabel = items[1].en;
+    final wrongTile = find.widgetWithText(AudioOptionButton, wrongLabel);
+    if (wrongTile.evaluate().isNotEmpty) {
+      await tester.ensureVisible(wrongTile.first);
+      await tester.pump();
+      await tester.tap(wrongTile.first);
+      await tester.pumpAndSettle();
+    }
+
+    // JA cue must still be visible — wrong tap must NOT advance.
+    expect(find.text(firstJa), findsOneWidget,
+        reason: 'JA cue must stay after wrong tap — no advance');
+
+    // Wrong tile must NOT be DqChoiceState.correct.
+    if (wrongTile.evaluate().isNotEmpty) {
+      final wrongWidget = tester.widget<AudioOptionButton>(wrongTile);
+      expect(wrongWidget.state, isNot(equals(DqChoiceState.correct)),
+          reason: 'wrong tile must not show green after a wrong tap');
+    }
+
+    // No quiz.
+    expect(find.text('ミノス'), findsNothing,
+        reason: 'quiz must not start from a wrong recall tap');
+
+    expect(tester.takeException(), isNull);
+  });
+
   // ── knewWords in NazoResult ──────────────────────────────────────────────────
 
   testWidgets(
