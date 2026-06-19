@@ -478,9 +478,14 @@ class _DqButtonState extends State<DqButton>
             alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(vertical: 15),
             decoration: BoxDecoration(
+              // Disabled used a muddy OLIVE gradient that, with the dark ink
+              // label below, measured ~1.2:1 — effectively illegible AND
+              // off-palette (looked like a render bug; visual-auditor CEO 2132
+              // on the writing 提出 button). Use a dim NAVY that fits the
+              // dark-navy/gold scheme and reads as "not yet" without vanishing.
               gradient: onTap == null
                   ? const LinearGradient(
-                      colors: [Color(0xFF5A5448), Color(0xFF3E3A32)])
+                      colors: [Color(0xFF353B57), Color(0xFF272C44)])
                   : const LinearGradient(colors: [dqGold, dqGoldDeep]),
               borderRadius: BorderRadius.circular(10),
               border: Border.all(color: dqBorder, width: 1.5),
@@ -493,7 +498,12 @@ class _DqButtonState extends State<DqButton>
             ),
             child: Text(label,
                 style: notoSerifJp(
-                    color: const Color(0xFF2A1C00),
+                    // Dark ink on gold when active; a dimmed CREAM on the dark
+                    // disabled ground so the requirement text stays readable
+                    // (≥4.5:1) instead of dark-on-mud (~1.2:1).
+                    color: onTap == null
+                        ? const Color(0xFFC9C0A8)
+                        : const Color(0xFF2A1C00),
                     fontSize: 17,
                     fontWeight: FontWeight.w800,
                     letterSpacing: 2)),
