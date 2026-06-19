@@ -1633,7 +1633,12 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
       // a11y: announce the 探偵メモ lore drip via a liveRegion so a low-vision
       // child perceives the §3 サイレント mystery beat, not just the painted banner.
       child: _EntryAnim(
-        key: const ValueKey('lore_banner'),
+        // Key by the fragment TEXT, not a const: a const key let a second lore
+        // fragment (rapid sequential solves) reuse the still-mounted _EntryAnim,
+        // so its entrance animation never re-fired and the new fragment just
+        // text-swapped in invisibly (game-studio world/narrative expert, team #5).
+        // A per-text key remounts _EntryAnim so each fragment animates in.
+        key: ValueKey('lore_banner_$text'),
         reduceMotion: prefersReducedMotion(context),
         child: Semantics(
           liveRegion: true,
