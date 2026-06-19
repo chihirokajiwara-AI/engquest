@@ -336,8 +336,15 @@ void main() {
     // #66: the due-count panel now opens the FSRS vocabulary review
     // (BattleScreen) instead of stranding the child. Before, BattleScreen was
     // only reachable via the orphaned WorldMapScreen.
+    // A RETURNING child (non-zero streak), not a first-run beginner: on first
+    // run the ナゾ panel is intentionally hidden because it would duplicate the
+    // primary gold CTA verbatim (same text, same _goToReview tap — visual
+    // auditor, CEO 2132; the first-run LEARN path is covered by the dedicated
+    // gold-CTA test above). Once the child has data the panel returns with its
+    // distinct word-review role, which is exactly what this test exercises.
     await tester.pumpWidget(_wrap(
-      streakService: _MockStreakService(const StreakState.zero()),
+      streakService: _MockStreakService(
+          const StreakState(currentStreak: 7, weeklyBits: 63, todayCount: 1)),
       cardRepository: InMemoryFsrsCardRepository(),
     ));
     await _settle(tester);

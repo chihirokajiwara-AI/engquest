@@ -382,8 +382,17 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
             // reward below).
             _buildExamCta(), // PRIMARY: 英検れんしゅう / 合格率
             _buildExamReviewNudge(), // #120: "misses are waiting" → exam hub
-            const SizedBox(height: 12),
-            _buildNazoPanel(), // tappable → FSRS vocabulary review
+            // On first-run the ナゾ panel duplicates the primary CTA verbatim —
+            // same 'さいしょの ことばを おぼえよう' text, same _goToReview tap —
+            // so the child sees two cards for one action and can't tell which
+            // is THE button (visual-auditor, CEO 2132). Show the single gold
+            // hero CTA only until there is real review data; once words are due
+            // (or caught-up), the ナゾ panel returns with its distinct
+            // word-review role and the two no longer collide.
+            if (!_isFirstRun) ...[
+              const SizedBox(height: 12),
+              _buildNazoPanel(), // tappable → FSRS vocabulary review
+            ],
             const SizedBox(height: 14),
             _buildStreakPanel(),
             const SizedBox(height: 18),
