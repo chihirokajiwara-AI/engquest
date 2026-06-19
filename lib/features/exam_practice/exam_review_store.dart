@@ -13,6 +13,7 @@
 // session, DUE words (previously seen, now forgotten) are surfaced FIRST so the
 // child actually re-learns what they missed. Pure-Dart, web-safe, no Firebase.
 
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -42,6 +43,31 @@ class ExamReviewStore {
   String _prefsKey(String grade) => section == 'vocab'
       ? 'vocab_fsrs_$grade'
       : 'fsrs_review_${section}_$grade';
+
+  // Serialise read-modify-write per (section, grade). recordAnswer is called
+  // fire-and-forget from the UI, so a child answering quickly issues overlapping
+  // load→schedule→save cycles that read the SAME baseline blob and the second
+  // save clobbers the first — silently DISCARDING the just-missed word's
+  // Grade.again schedule, so it never re-surfaces and 合格率 inflates. This is the
+  // same write-race class fixed in PrefsFsrsCardRepository (_writeLocks) and
+  // StreakService (_writeQueue); ExamReviewStore was the last unguarded store.
+  // Static so all instances of a given (section, grade) share one chain.
+  static final Map<String, Future<void>> _writeLocks = {};
+
+  Future<void> _locked(String key, Future<void> Function() op) {
+    final prev = _writeLocks[key] ?? Future<void>.value();
+    final completer = Completer<void>();
+    _writeLocks[key] = completer.future;
+    prev.whenComplete(() async {
+      try {
+        await op();
+        completer.complete();
+      } catch (e, st) {
+        completer.completeError(e, st);
+      }
+    });
+    return completer.future;
+  }
 
   /// Normalise a word to a stable per-grade key.
   static String keyFor(String word) => word.trim().toLowerCase();
@@ -81,11 +107,17 @@ class ExamReviewStore {
     bool hinted = false,
   }) async {
     final key = keyFor(word);
-    final cards = await _load(grade);
-    final card = cards[key] ?? FSRSCard(vocabId: key);
-    final grd = !correct ? Grade.again : (hinted ? Grade.hard : Grade.good);
-    cards[key] = _fsrs.schedule(card, grd, DateTime.now());
-    await _save(grade, cards);
+    // Serialised so overlapping fire-and-forget calls can't clobber each other's
+    // schedule (see _locked). The whole load→schedule→save cycle is the critical
+    // section — loading inside the lock is what guarantees each call sees the
+    // previous call's saved blob, not a stale shared baseline.
+    await _locked('${section}_$grade', () async {
+      final cards = await _load(grade);
+      final card = cards[key] ?? FSRSCard(vocabId: key);
+      final grd = !correct ? Grade.again : (hinted ? Grade.hard : Grade.good);
+      cards[key] = _fsrs.schedule(card, grd, DateTime.now());
+      await _save(grade, cards);
+    });
   }
 
   /// Word keys the child has SEEN before and that are DUE for review now

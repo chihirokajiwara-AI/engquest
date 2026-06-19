@@ -57,6 +57,30 @@ void main() {
             'a learned word should be scheduled into the future, not re-shown now');
   });
 
+  test(
+      'concurrent fire-and-forget answers do NOT clobber each other (write-race)',
+      () async {
+    // recordAnswer is called unawaited from the UI; a child answering quickly
+    // issues overlapping load→schedule→save cycles. Without serialisation each
+    // reads the same baseline blob and the last save wins, silently dropping the
+    // other words' schedules (a missed word never re-surfaces; 合格率 inflates).
+    // Fire 5 distinct words concurrently and require ALL 5 to persist.
+    final store = ExamReviewStore();
+    final words = ['alpha', 'bravo', 'charlie', 'delta', 'echo'];
+    await Future.wait([
+      for (final w in words)
+        store.recordAnswer(grade: '5', word: w, correct: false),
+    ]);
+    final prefs = await SharedPreferences.getInstance();
+    final map =
+        jsonDecode(prefs.getString('vocab_fsrs_5')!) as Map<String, dynamic>;
+    for (final w in words) {
+      expect(map.containsKey(w), isTrue,
+          reason:
+              '$w must survive concurrent writes (no last-write-wins clobber)');
+    }
+  });
+
   test('grades are namespaced — 5級 reviews do not leak into 4級', () async {
     final store = ExamReviewStore();
     await store.recordAnswer(grade: '5', word: 'cat', correct: false);
