@@ -17,30 +17,59 @@ import 'package:engquest/features/quest/quest_data.dart' show TeachSound;
 import 'package:engquest/features/quest/ui/dq_ui.dart';
 import 'package:engquest/features/quest/ui/muted_voice_banner.dart';
 
-/// Advances through the active cued-recall phase (new director #1 design) by
-/// tapping 「つぎへ ▶」 / 「ナゾへ ▶」 until no such button remains, leaving the quiz
-/// phase visible. Called instead of the old 「もう だいじょうぶ ▶」 skip.
+/// Advances through the active cued-production recall phase (2026-06-19 design)
+/// by cycling through EN choice tiles until the quiz phase is reached (ミノス
+/// visible). The recall phase shows the JA cue + shuffled AudioOptionButton
+/// tiles; only the correct EN tile advances to the next cue.
+///
+/// Detection strategy: each correct tap changes the cue (different JA text or
+/// ミノス appears). We snapshot the DqPanel-rendered JA cue text before each
+/// tap, then check if the screen changed after. If nothing changed after cycling
+/// all tiles, break to avoid infinite loop (should never happen with valid data).
+///
+/// Cap: 8 cues × 6 tiles each = 48 tile attempts max.
 Future<void> _skipThroughRecall(WidgetTester tester) async {
-  // Allow up to 20 taps — well above any realistic cue count (max ~4).
-  for (var i = 0; i < 20; i++) {
-    final next = find.textContaining('つぎへ');
-    final go = find.textContaining('ナゾへ');
-    if (next.evaluate().isNotEmpty) {
-      await tester.ensureVisible(next.first);
+  // Helper: is the recall cue prompt visible right now?
+  bool inRecall() => find.text('えいごで いうと？').evaluate().isNotEmpty;
+  bool inQuiz() => find.text('ミノス').evaluate().isNotEmpty;
+
+  for (var attempt = 0; attempt < 48; attempt++) {
+    if (inQuiz()) return;
+    if (!inRecall()) return;
+
+    // Snapshot the current JA cue texts so we can detect an advance.
+    final beforeJa = tester
+        .widgetList(find.byType(Text))
+        .whereType<Text>()
+        .map((t) => t.data ?? '')
+        .toSet();
+
+    final tiles = find.byType(AudioOptionButton);
+    final count = tiles.evaluate().length;
+    if (count == 0) return;
+
+    bool advanced = false;
+    for (var ti = 0; ti < count; ti++) {
+      final tile = find.byType(AudioOptionButton).at(ti);
+      await tester.ensureVisible(tile);
       await tester.pump();
-      await tester.tap(next.first);
+      await tester.tap(tile);
       await tester.pump();
-      await tester.pump(const Duration(milliseconds: 100));
-    } else if (go.evaluate().isNotEmpty) {
-      await tester.ensureVisible(go.first);
-      await tester.pump();
-      await tester.tap(go.first);
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 100));
-      break; // 「ナゾへ ▶」 is the last-cue button → quiz starts after this
-    } else {
-      break; // no recall buttons visible → already on quiz
+      await tester.pump(const Duration(milliseconds: 50));
+      if (inQuiz()) return; // last cue correct → quiz
+      // Detect advance by checking if the JA cue set changed.
+      final afterJa = tester
+          .widgetList(find.byType(Text))
+          .whereType<Text>()
+          .map((t) => t.data ?? '')
+          .toSet();
+      if (afterJa != beforeJa) {
+        advanced = true;
+        await tester.pumpAndSettle();
+        break;
+      }
     }
+    if (!advanced) break; // guard against infinite loop
   }
 }
 

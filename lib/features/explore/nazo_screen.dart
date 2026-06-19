@@ -54,11 +54,19 @@ class NazoResult {
   /// already bought.
   final int hintsShown;
 
+  /// English strings the learner produced correctly on the FIRST tap during the
+  /// cued-production recall phase. Populated from [_NazoScreenState._knewCues]
+  /// (only first-tap correct cues are counted). Defaults to {} so existing callers
+  /// that do not consume this field compile unchanged. FSRS wiring is out-of-scope
+  /// for this change — the data is available for future integration.
+  final Set<String> knewWords;
+
   const NazoResult({
     required this.solved,
     required this.minosEarned,
     this.firstTryCorrect = false,
     this.hintsShown = 0,
+    this.knewWords = const {},
   });
 }
 
@@ -184,11 +192,18 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
   // the child steps through each taught item one at a time, tapping to reveal
   // the JA meaning they must recall. Two fields drive the cover-card flow:
   //   _recallCueIdx   — which item is currently on the cover card (0-based)
-  //   _revealedCues   — which items the child has already tapped to reveal
-  // Both are reset to 0/{} in _startRecall(). The per-second Timer is the hard
-  // wall-clock fallback; completing all cues also advances to quiz immediately.
+  //   _revealedCues   — (legacy; kept but unused by active-production path)
+  //   _knewCues       — indices produced correctly on FIRST tap (honest 合格率)
+  //   _producedCues   — indices produced correctly (any tap; used to advance)
+  // Both _knewCues/_producedCues are reset to {} in _startRecall().
+  // The per-second Timer is the hard wall-clock accessibility fallback.
   int _recallCueIdx = 0;
   final Set<int> _revealedCues = {};
+  final Set<int> _knewCues = {};
+  final Set<int> _producedCues = {};
+  // Per-cue keys for recall tiles — rebuilt each time _recallCueIdx changes.
+  // A List<GlobalKey<AudioOptionButtonState>> so wrong taps can shake the tile.
+  List<GlobalKey<AudioOptionButtonState>> _recallTileKeys = [];
 
   QuestStep get _step => widget.hotspot.step!;
   TeachCard? get _teachCard => widget.hotspot.teachCard;
@@ -394,11 +409,21 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
     _burstTimer?.cancel();
     _finishTimer?.cancel();
     final earned = _minos.earn();
+    // Build the knewWords set from the cue indices produced correctly on the
+    // FIRST tap. _knewCues may be empty when recall was skipped via the timer.
+    final card = _teachCard;
+    final knewWords = <String>{};
+    if (card != null) {
+      for (final idx in _knewCues) {
+        if (idx < card.items.length) knewWords.add(card.items[idx].en);
+      }
+    }
     Navigator.of(context).pop(NazoResult(
       solved: true,
       minosEarned: earned,
       firstTryCorrect: _firstTryCorrect,
       hintsShown: _hintsShown,
+      knewWords: knewWords,
     ));
   }
 
@@ -704,11 +729,18 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
       return;
     }
     final reduceMotion = prefersReducedMotion(context);
+    // Build initial tile keys for the first cue (rebuilt per cue in _recallScaffold).
+    _recallTileKeys = [
+      for (var i = 0; i < card.items.length; i++)
+        GlobalKey<AudioOptionButtonState>(),
+    ];
     setState(() {
       _phase = _NazoPhase.recall;
       _recallSecondsLeft = kRecallGapSeconds;
       _recallCueIdx = 0;
       _revealedCues.clear();
+      _knewCues.clear();
+      _producedCues.clear();
     });
     if (!reduceMotion) {
       // Discrete per-second tick: decrements the counter and rebuilds the ring
@@ -734,26 +766,27 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
     // Reduced motion: no auto-advance; child steps through cues manually.
   }
 
-  /// Active cued-recall cover-card shown between teach and quiz.
+  /// Active CUED-PRODUCTION recall shown between teach and quiz.
   ///
-  /// OCCLUDES all teach content (teach scaffold is no longer in the widget tree).
-  /// The child is walked through each taught item one at a time:
-  ///   1. The EN word is shown large (cover card, DqPanel warm).
-  ///   2. The JA meaning is HIDDEN behind a gold 「いみは？」 tap-target.
-  ///   3. Tapping 「いみは？」 reveals the JA (AnimatedCrossFade ~200ms; instant on
-  ///      reduced-motion). A pop scale 1.0→1.08→1.0 draws the eye (skipped on
-  ///      reduced-motion).
-  ///   4. 「つぎへ ▶」 advances to the next cue. On the last cue it transitions
-  ///      immediately to quiz (no separate "all done" step).
+  /// Each cue: the JA meaning is shown LARGE at the top (the cue). Below it the
+  /// full set of EN words from the TeachCard is rendered as tappable choice tiles
+  /// (same AudioOptionButton widget as the quiz, same visual grammar). The child
+  /// must TAP the correct English word to advance:
   ///
-  /// The per-second Timer is a hard fallback: if the timer fires before the
-  /// child completes all cues, the quiz still starts. Whichever comes first wins.
-  /// The small corner ring now reads as a gentle background timer, not the focus.
+  ///   • CORRECT tap → elastic correct-pop + HapticFeedback.lightImpact() →
+  ///     if first tap for this cue, add to _knewCues → add to _producedCues →
+  ///     advance to next cue (or _NazoPhase.quiz on the last cue).
+  ///   • WRONG tap   → triggerShake() on the tapped tile → DO NOT advance →
+  ///     child retries with the same JA prompt still visible. No ミノス penalty
+  ///     (this is practice, not the scored quiz).
+  ///
+  /// The kRecallGapSeconds Timer fires as an accessibility escape hatch: if the
+  /// child cannot tap (switch-access, etc.) the quiz starts automatically. No
+  /// visible countdown — the timer is a silent backstop only.
+  ///
+  /// Reduced-motion: skip pop/shake (instant state change), gate logic identical.
   Widget _recallScaffold() {
     final reduceMotion = prefersReducedMotion(context);
-    // FIX 3 (c): sLeft/progress were used only by the now-removed corner
-    // timer ring. The per-second Timer still fires and auto-advances to quiz.
-
     final card = _teachCard!; // guarded: null-card → quiz in _startRecall()
     final totalItems = card.items.length;
 
@@ -768,8 +801,22 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
     // Clamp index to valid range in case timer fires concurrently.
     final idx = _recallCueIdx.clamp(0, totalItems - 1);
     final item = card.items[idx];
-    final isRevealed = _revealedCues.contains(idx);
     final isLast = idx >= totalItems - 1;
+
+    // Ensure tile keys are sized for the current card (may differ after a
+    // hot-reload or rebuild — rebuild to card length if needed).
+    if (_recallTileKeys.length != totalItems) {
+      _recallTileKeys = [
+        for (var i = 0; i < totalItems; i++)
+          GlobalKey<AudioOptionButtonState>(),
+      ];
+    }
+
+    // Stable shuffle order per cue (seed = cue index) so rebuilds don't
+    // reshuffle and tiles stay where the child's eyes already landed.
+    final indices = List<int>.generate(totalItems, (i) => i);
+    final rng = math.Random(idx * 31337);
+    indices.shuffle(rng);
 
     void advanceCue() {
       _recallTimer?.cancel();
@@ -777,100 +824,29 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
       if (isLast) {
         setState(() => _phase = _NazoPhase.quiz);
       } else {
+        // Rebuild tile keys for the next cue.
+        _recallTileKeys = [
+          for (var i = 0; i < totalItems; i++)
+            GlobalKey<AudioOptionButtonState>(),
+        ];
         setState(() => _recallCueIdx++);
       }
     }
 
-    // FIX 3 (b): The JA reveal — animated swap from the covered-slot placeholder
-    // to the meaning. Uses AnimatedSwitcher (not AnimatedCrossFade) so the
-    // outgoing child is removed from the widget tree once the transition
-    // completes. This makes `pumpAndSettle()` in widget tests see only the live
-    // child, which lets the occlusion contract tests (`find.text('こんにちは')
-    // findsNothing`) work correctly without needing explicit reduced-motion mode.
-    //
-    // Pop scale (0.88→1.0, elasticOut) fires on reveal; reduced-motion: instant.
-    Widget meaningTarget() {
-      // FIX 3 (a): COVERED SLOT — recessed inset style with a dashed border and
-      // a faint ❓ watermark so a 6yo reads "something hidden to uncover" rather
-      // than a CTA button that advances the screen. Clearly distinct from the
-      // raised gold 「つぎへ ▶」 DqButton below.
-      final placeholder = GestureDetector(
-        key: const ValueKey('placeholder'),
-        onTap: () => setState(() => _revealedCues.add(idx)),
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 18),
-          decoration: BoxDecoration(
-            // Recessed: darker than the card background, inner-shadow via
-            // multiple inward box-shadows to suggest depth-behind.
-            color: pcParchment0, // deep navy — darker than the panel fill
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(
-              color: pcFrameBrown, // dim brown dashed-like rule (solid thin)
-              width: 1.2,
-            ),
-            boxShadow: const [
-              // Inward shadow simulation: a tight dark shadow on the inside
-              // edges makes the slot read as recessed, not raised.
-              BoxShadow(
-                color: Color(0x44000000),
-                blurRadius: 6,
-                spreadRadius: -2,
-                offset: Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              // Faint ❓ watermark — behind the tap-prompt text.
-              Text(
-                '？',
-                style: TextStyle(
-                  fontSize: 48,
-                  color: pcFrameGold.withAlpha(22), // very faint gold
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-              // Tap-prompt label.
-              Text(
-                'いみは？',
-                textAlign: TextAlign.center,
-                style:
-                    dqInkText(size: 16, w: FontWeight.w700, color: pcInkSoft),
-              ),
-            ],
-          ),
-        ),
-      );
-
-      // The revealed JA text, with an optional pop-scale entry animation.
-      Widget revealedChild = reduceMotion
-          ? Text(
-              item.ja,
-              key: const ValueKey('revealed'),
-              textAlign: TextAlign.center,
-              style: dqInkText(size: 22, w: FontWeight.w700, color: pcInk),
-            )
-          : TweenAnimationBuilder<double>(
-              key: const ValueKey('revealed'),
-              tween: Tween(begin: 0.88, end: 1.0),
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.elasticOut,
-              builder: (_, scale, child) =>
-                  Transform.scale(scale: scale, child: child),
-              child: Text(
-                item.ja,
-                textAlign: TextAlign.center,
-                style: dqInkText(size: 22, w: FontWeight.w700, color: pcInk),
-              ),
-            );
-
-      return AnimatedSwitcher(
-        duration:
-            reduceMotion ? Duration.zero : const Duration(milliseconds: 200),
-        child: isRevealed ? revealedChild : placeholder,
-      );
+    void onTileChoice(int chosenItemIdx) {
+      final isCorrect = chosenItemIdx == idx;
+      if (isCorrect) {
+        // First-tap tracking: if not yet produced, it's a "knew" (first try).
+        if (!_producedCues.contains(idx)) _knewCues.add(idx);
+        _producedCues.add(idx);
+        if (!reduceMotion) HapticFeedback.lightImpact();
+        advanceCue();
+      } else {
+        // Wrong: shake the tapped tile; stay on current cue.
+        if (!reduceMotion) {
+          _recallTileKeys[chosenItemIdx].currentState?.triggerShake();
+        }
+      }
     }
 
     return DqScene(
@@ -884,36 +860,29 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // ── Cover card ─────────────────────────────────────────────────
+              // ── JA cue — the prompt the child must produce the EN for ──────
               Semantics(
                 liveRegion: true,
-                label: 'ことばを おもいだそう。${item.en}。いみは？',
+                label: 'えいごで こたえよう。${item.ja}。えいごは？',
                 child: DqPanel(
                   warm: kNazoWarmTheme,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // Instruction above the cover card.
                       Text(
-                        'いみを おもいだしてから、タップ。',
+                        'えいごで いうと？',
                         textAlign: TextAlign.center,
                         style: dqInkText(
                             size: 12, w: FontWeight.w600, color: pcInkSoft),
                       ),
-                      const SizedBox(height: 16),
-                      // FIX 3 (b): EN word — scaled up ~20% (26→32sp) so it
-                      // clearly DOMINATES the card as the optical centre and
-                      // the child focuses on the word to recall, not the prompt.
+                      const SizedBox(height: 12),
+                      // JA meaning LARGE — the cue the child must match to EN.
                       Text(
-                        item.en,
+                        item.ja,
                         textAlign: TextAlign.center,
                         style: dqInkText(
                             size: 32, w: FontWeight.w800, color: pcInk),
                       ),
-                      const SizedBox(height: 18),
-                      // JA meaning — hidden behind the covered slot until tapped.
-                      meaningTarget(),
-                      // Progress counter (e.g. 「1 / 4」).
                       const SizedBox(height: 12),
                       Text(
                         '${idx + 1} / $totalItems',
@@ -924,19 +893,23 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
-              // ── 「つぎへ ▶」 CTA ──────────────────────────────────────────────
-              DqButton(
-                label: isLast ? 'ナゾへ ▶' : 'つぎへ ▶',
-                onTap: advanceCue,
+              const SizedBox(height: 16),
+              // ── EN choice tiles — same visual grammar as the quiz ──────────
+              Text(
+                'タップして えいごを えらぼう',
+                style:
+                    dqInkText(size: 12, w: FontWeight.w700, color: pcInkSoft),
               ),
-              // FIX 3 (c): Remove the corner timer ring from the cover-card
-              // state. The ring was an orphaned element with unclear meaning
-              // (a 6yo didn't know why a ring counted down on a recall card).
-              // The per-second Timer still fires and auto-advances to quiz — the
-              // ring was never load-bearing for the logic, only for the visual.
-              // No replacement is needed: the child taps through at their pace
-              // and the DqButton is the clear CTA.
+              const SizedBox(height: 8),
+              for (final tileIdx in indices)
+                AudioOptionButton(
+                  key: _recallTileKeys[tileIdx],
+                  label: card.items[tileIdx].en,
+                  state: DqChoiceState.normal,
+                  warm: kNazoWarmTheme,
+                  index: indices.indexOf(tileIdx) + 1,
+                  onChoose: () => onTileChoice(tileIdx),
+                ),
               const SizedBox(height: 8),
             ],
           ),
