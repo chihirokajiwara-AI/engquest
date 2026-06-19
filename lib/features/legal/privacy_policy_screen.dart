@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../core/config/flavor_config.dart';
+
 /// ENG Quest — Privacy Policy Screen
 ///
 /// Displays the app's privacy policy in a scrollable view.
@@ -47,13 +49,16 @@ class _PrivacyPolicyContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _Section(
-          title: 'ENG Quest プライバシーポリシー',
-          body: '最終更新日: 2026年5月31日\n\n'
-              'EDILAB（以下「当社」）は、ENG Quest（以下「本アプリ」）をご利用いただく'
+          // Product name is flavor-correct; the legal ENTITY (EDILAB) is left as-is
+          // pending the CEO entity/name lock (escalation #6).
+          title:
+              '${FlavorConfig.instanceOrNull?.appName ?? 'コトバ探偵'} プライバシーポリシー',
+          body: '最終更新日: 2026年6月19日\n\n'
+              'EDILAB（以下「当社」）は、${FlavorConfig.instanceOrNull?.appName ?? 'コトバ探偵'}（以下「本アプリ」）をご利用いただく'
               'お子様と保護者の皆様のプライバシーを保護することをお約束いたします。\n\n'
               '本アプリは、児童オンラインプライバシー保護法（COPPA）および'
               '個人情報保護法に準拠して設計されています。',

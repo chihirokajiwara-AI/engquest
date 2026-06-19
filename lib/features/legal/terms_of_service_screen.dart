@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../core/config/flavor_config.dart';
+
 /// ENG Quest — Terms of Service Screen
 ///
 /// Displays the app's terms of service in a scrollable view.
@@ -45,16 +47,17 @@ class _TermsContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _Section(
-          title: 'ENG Quest 利用規約',
-          body: '最終更新日：2026年5月31日',
+          title: '${FlavorConfig.instanceOrNull?.appName ?? 'コトバ探偵'} 利用規約',
+          body: '最終更新日：2026年6月19日',
         ),
         _Section(
           title: '第1条（適用）',
-          body: 'この利用規約は、ENG Quest（以下「本サービス」）の利用に関する条件を定めるものです。',
+          body:
+              'この利用規約は、${FlavorConfig.instanceOrNull?.appName ?? 'コトバ探偵'}（以下「本サービス」）の利用に関する条件を定めるものです。',
         ),
         _Section(
           title: '第2条（利用資格）',

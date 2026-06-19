@@ -12,7 +12,7 @@ void main() {
       );
 
       expect(find.textContaining('保護者の方へ'), findsOneWidget);
-      expect(find.textContaining('ENG Questへようこそ'), findsOneWidget);
+      expect(find.textContaining('コトバ探偵へようこそ'), findsOneWidget);
       expect(find.textContaining('プライバシーポリシー'), findsWidgets);
     });
 
@@ -164,7 +164,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Should navigate to privacy policy screen
-      expect(find.text('ENG Quest プライバシーポリシー'), findsOneWidget);
+      expect(find.text('コトバ探偵 プライバシーポリシー'), findsOneWidget);
     });
   });
 }

@@ -10,7 +10,7 @@ void main() {
       );
 
       expect(find.text('プライバシーポリシー'), findsOneWidget);
-      expect(find.text('ENG Quest プライバシーポリシー'), findsOneWidget);
+      expect(find.text('コトバ探偵 プライバシーポリシー'), findsOneWidget);
       expect(find.text('1. 収集する情報'), findsOneWidget);
       expect(find.text('2. マイクの使用'), findsOneWidget);
       expect(find.text('6. 広告'), findsOneWidget);

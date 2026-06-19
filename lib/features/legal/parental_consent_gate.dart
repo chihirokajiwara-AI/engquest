@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/config/flavor_config.dart';
 import '../../core/storage/preferences_service.dart';
 import 'privacy_policy_screen.dart';
 import 'terms_of_service_screen.dart';
@@ -175,11 +176,14 @@ class _ParentalConsentGateState extends State<ParentalConsentGate> {
                 ),
               ],
             ),
-            child: const Column(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'ENG Questへようこそ',
+                  // Flavor-correct product name (aken=A-KEN Quest, edilab=ENG
+                  // Quest) — was hard-coded "ENG Quest" even in the aken/コトバ探偵
+                  // product (visual-audit #159). Age floor is 6 (CEO 1889), not 4.
+                  '${FlavorConfig.instanceOrNull?.appName ?? 'コトバ探偵'}へようこそ',
                   style: TextStyle(
                     color: Color(0xFF263238),
                     fontSize: 18,
@@ -188,7 +192,7 @@ class _ParentalConsentGateState extends State<ParentalConsentGate> {
                 ),
                 SizedBox(height: 12),
                 Text(
-                  'ENG Questは4〜18歳のお子様向けの英語学習RPGアプリです。\n\n'
+                  '${FlavorConfig.instanceOrNull?.appName ?? 'コトバ探偵'}は6〜18歳のお子様向けの英語学習RPGアプリです。\n\n'
                   'このアプリは:\n'
                   '• お名前やメールアドレスを収集しません\n'
                   '• 広告を表示しません\n'
