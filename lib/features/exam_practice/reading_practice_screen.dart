@@ -633,14 +633,24 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Text(
-                          question.question,
-                          style: dqText(
-                              size: 15,
-                              w: FontWeight.w700,
-                              color: Colors.white),
+                        // The question was a bare white Text carrying LESS visual
+                        // weight than the bordered answer cards below — visual-audit
+                        // #159 iter2 (#178): after reading the passage a 6yo couldn't
+                        // tell what was being ASKED. Give the question its own framed
+                        // focal bar (DetectiveCaseFrame, highlighted) so it reads as
+                        // the prompt, visually separated from passage and answers.
+                        DetectiveCaseFrame(
+                          highlighted: true,
+                          title: 'しつもん / Question',
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 14, vertical: 12),
+                          child: Text(
+                            question.question,
+                            style: dqText(
+                                size: 16, w: FontWeight.w700, color: dqInk),
+                          ),
                         ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 12),
                         ListView.separated(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
