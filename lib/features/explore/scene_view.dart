@@ -21,6 +21,7 @@ import '../../core/gamification/hint_coin_service.dart';
 import '../../core/sound/sound_service.dart';
 import '../quest/ui/dq_ui.dart';
 import '../home/streak_service.dart';
+import '../exam_practice/practice_encouragement.dart';
 import '../../core/gamification/xp_service.dart';
 import '../exam_practice/exam_session_rewards.dart';
 import '../exam_practice/pass/cse_model.dart';
@@ -560,7 +561,7 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
     }
   }
 
-  void _applyRestore(int idx, Hotspot h, NazoResult result) {
+  Future<void> _applyRestore(int idx, Hotspot h, NazoResult result) async {
     final wasRestored = _sceneRestored;
     setState(() {
       _solved[idx] = true;
@@ -605,6 +606,25 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
             ? 'あと $remainingつ！ このまちの ことばを、とりもどそう！'
             : 'あと 1つ！ さいごの なぞ が まっている——')
         : null;
+    // Fire all fire-and-forget side effects BEFORE any await, so they are
+    // never skipped by an early `if (!mounted) return` guard below.
+    // recordExamXp / recordExamAchievements / _recordSkill / seedSceneWords are
+    // context-free and must run on every solve regardless of whether justCleared.
+    recordExamXp(1);
+    recordExamAchievements();
+    // …and feed 合格率 with an HONEST signal: record first-try correctness
+    // (a ナゾ retries to solve, so 1/1 every time would inflate the meter).
+    // Scene ナゾ test vocab/reading 英検 knowledge → EikenSkill.reading.
+    _recordSkill(result.firstTryCorrect);
+    // Game⇄learning interconnect: seed the rescued words into the FSRS deck
+    // so they surface in Battle ("まちで であった ことば"). Fire-and-forget;
+    // non-fatal — never breaks the restore flow. Only first-try-correct words
+    // are seeded (knewWords). Skip if knewWords is empty (e.g. a retried solve
+    // with no first-try correct answers).
+    if (result.knewWords.isNotEmpty) {
+      seedSceneWords(widget.eikenLevel, result.knewWords);
+    }
+
     if (prefersReducedMotion(context)) {
       // ── Reduced-motion: instant colour swap + static top banner + lore ─────
       // Existing behaviour preserved exactly. No camera-push, no hero overlay,
@@ -612,10 +632,16 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
       // Forward-pull shown statically after restoration (no animated chaining).
       _focusIdx = null;
       if (justCleared) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (mounted) _showSceneClearedPayoff();
-        });
+        // Front-door 英検 puzzle solved → feed the home engagement spine (streak
+        // + daily-goal). justCleared: use recordExamHabitAndGet to capture the
+        // updated StreakState so the payoff dialog can surface the SessionEndHook
+        // at the emotional peak (studio run-2 #4). Single call — no double-count.
+        final streak = await recordExamHabitAndGet(1);
+        if (!mounted) return;
+        _showSceneClearedPayoff(streak);
       } else {
+        // Non-clearing solve: fire-and-forget habit record (no streak surface needed).
+        recordExamHabit(1);
         if (h.mysteryFragmentJa != null) _showLore(h.mysteryFragmentJa!);
         if (restorationLine != null) {
           setState(() => _restoreLabel = restorationLine);
@@ -651,6 +677,8 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
       // Step 2: launch the hero overlay (dim + enlarged portrait + restore text).
       // Only fires for a non-clearing solve (justCleared uses the modal instead).
       if (!justCleared && restorationLine != null) {
+        // Non-clearing solve: fire-and-forget habit record.
+        recordExamHabit(1);
         setState(() {
           _heroNpcIdx = idx;
           _dimActive = true;
@@ -682,30 +710,14 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
           }
         });
       }
-      // justCleared: show the modal after a short delay (post-transition).
+      // justCleared: record habit + capture streak, then show the modal.
+      // The await naturally lands us past the current frame (no postFrameCallback
+      // needed) while the camera-push/colour-flood animation plays.
       if (justCleared) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (mounted) _showSceneClearedPayoff();
-        });
+        final streak = await recordExamHabitAndGet(1);
+        if (!mounted) return;
+        _showSceneClearedPayoff(streak);
       }
-    }
-    // Front-door 英検 puzzle solved → feed the home engagement spine (streak +
-    // daily-goal), same as exam practice. Before this, scene play earned ZERO
-    // streak/goal credit.
-    recordExamHabit(1);
-    recordExamXp(1);
-    recordExamAchievements();
-    // …and feed 合格率 with an HONEST signal: record first-try correctness
-    // (a ナゾ retries to solve, so 1/1 every time would inflate the meter).
-    // Scene ナゾ test vocab/reading 英検 knowledge → EikenSkill.reading.
-    _recordSkill(result.firstTryCorrect);
-    // Game⇄learning interconnect: seed the rescued words into the FSRS deck
-    // so they surface in Battle ("まちで であった ことば"). Fire-and-forget;
-    // non-fatal — never breaks the restore flow. Only first-try-correct words
-    // are seeded (knewWords). Skip if knewWords is empty (e.g. a retried solve
-    // with no first-try correct answers).
-    if (result.knewWords.isNotEmpty) {
-      seedSceneWords(widget.eikenLevel, result.knewWords);
     }
   }
 
@@ -803,7 +815,7 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
     if (_forwardPullText != null) setState(() => _forwardPullText = null);
   }
 
-  void _showSceneClearedPayoff() {
+  void _showSceneClearedPayoff(StreakState? streak) {
     // Multi-sensory "case closed" payoff for the moment the village fully wakes
     // up — the colour-flood used to land in SILENCE (studio game-feel/art
     // convergence: the app's biggest moment had no audio/haptic punctuation).
@@ -832,98 +844,108 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
             border: Border.all(color: dqGold, width: 2),
             boxShadow: [BoxShadow(color: dqGold.withAlpha(70), blurRadius: 24)],
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // A diegetic "case closed" stamp instead of a generic 🎉 — the
-              // game's biggest moment now reads as a detective solving the case
-              // (本格 feel + 事件→英検 fusion, #51/#52). Slightly rotated like a
-              // real case-file stamp.
-              Transform.rotate(
-                angle: -0.06,
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // A diegetic "case closed" stamp instead of a generic 🎉 — the
+                // game's biggest moment now reads as a detective solving the case
+                // (本格 feel + 事件→英検 fusion, #51/#52). Slightly rotated like a
+                // real case-file stamp.
+                Transform.rotate(
+                  angle: -0.06,
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: dqGold.withAlpha(20),
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(color: dqGold, width: 3),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text('事件（じけん） 解決（かいけつ）',
+                            style: dqText(
+                                size: 20, w: FontWeight.w900, color: dqGold)),
+                        Text('CASE CLOSED',
+                            style: dqText(
+                                size: 9,
+                                w: FontWeight.w700,
+                                color: dqGold.withAlpha(210),
+                                spacing: 3)),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  'この まちに、ことばと いろが もどった！',
+                  textAlign: TextAlign.center,
+                  style: dqText(size: 17, w: FontWeight.w800, color: dqGold),
+                ),
+                const SizedBox(height: 12),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: dqGold.withAlpha(20),
-                    borderRadius: BorderRadius.circular(6),
-                    border: Border.all(color: dqGold, width: 3),
+                    color: dqNight1,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: dqGoldDeep.withAlpha(120)),
                   ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text('事件（じけん） 解決（かいけつ）',
-                          style: dqText(
-                              size: 20, w: FontWeight.w900, color: dqGold)),
-                      Text('CASE CLOSED',
-                          style: dqText(
-                              size: 9,
-                              w: FontWeight.w700,
-                              color: dqGold.withAlpha(210),
-                              spacing: 3)),
-                    ],
+                  child: SingleChildScrollView(
+                    child: Text(
+                      storyBeat,
+                      style:
+                          dqText(size: 13, color: dqInk).copyWith(height: 1.6),
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                'この まちに、ことばと いろが もどった！',
-                textAlign: TextAlign.center,
-                style: dqText(size: 17, w: FontWeight.w800, color: dqGold),
-              ),
-              const SizedBox(height: 12),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: dqNight1,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: dqGoldDeep.withAlpha(120)),
+                const SizedBox(height: 10),
+                // Tie the per-case payoff to the meta-mystery collectible: a 解決 ど
+                // restores one bookmark — point the child to the 事件簿 (Settings →
+                // じけんぼ) where the 7-bookmark sentence assembles (N1/N12 loop).
+                Text(
+                  '🔖 ことばの しおりが、1まい もどった。\n'
+                  '「じけんぼ」で、つながっていく おはなしを たしかめよう。',
+                  textAlign: TextAlign.center,
+                  style: dqText(size: 11, color: dqGold.withAlpha(220))
+                      .copyWith(height: 1.5),
                 ),
-                child: SingleChildScrollView(
-                  child: Text(
-                    storyBeat,
-                    style: dqText(size: 13, color: dqInk).copyWith(height: 1.6),
-                  ),
+                // Episodic forward-pull (N6/N12): name the NEXT case so the chapter
+                // doesn't end in a vacuum — Layton's "to be continued" hook. On the
+                // final chapter (準1級) tease nothing; close the arc instead. Purely
+                // narrative — it does NOT navigate (the paywall still gates entry).
+                ...(() {
+                  final next = nextChapterTitleJa(widget.eikenLevel);
+                  return [
+                    const SizedBox(height: 12),
+                    Text(
+                      next != null
+                          ? '🗺️ どこかで、また ことばが きえはじめた——\n'
+                              'つぎの事件（じけん）：「$next」が きみを まっている。'
+                          : '🕯️ すべての事件（じけん）が つながった。\n'
+                              'やぶれた おはなしの さいごの 1ページへ——「じけんぼ」で たしかめよう。',
+                      textAlign: TextAlign.center,
+                      style: dqText(size: 11.5, color: dqInk.withAlpha(210))
+                          .copyWith(height: 1.5),
+                    ),
+                  ];
+                })(),
+                // Engagement spine: surface the streak / daily-goal the child just
+                // earned at the scene-clear emotional peak (#4 studio run-2) — the
+                // same SessionEndHook all 5 exam-practice screens show at results.
+                if (streak != null) ...[
+                  const SizedBox(height: 14),
+                  SessionEndHook(streak: streak),
+                ],
+                const SizedBox(height: 16),
+                DqButton(
+                  label: 'つづける',
+                  onTap: () => Navigator.of(ctx).pop(),
                 ),
-              ),
-              const SizedBox(height: 10),
-              // Tie the per-case payoff to the meta-mystery collectible: a 解決 ど
-              // restores one bookmark — point the child to the 事件簿 (Settings →
-              // じけんぼ) where the 7-bookmark sentence assembles (N1/N12 loop).
-              Text(
-                '🔖 ことばの しおりが、1まい もどった。\n'
-                '「じけんぼ」で、つながっていく おはなしを たしかめよう。',
-                textAlign: TextAlign.center,
-                style: dqText(size: 11, color: dqGold.withAlpha(220))
-                    .copyWith(height: 1.5),
-              ),
-              // Episodic forward-pull (N6/N12): name the NEXT case so the chapter
-              // doesn't end in a vacuum — Layton's "to be continued" hook. On the
-              // final chapter (準1級) tease nothing; close the arc instead. Purely
-              // narrative — it does NOT navigate (the paywall still gates entry).
-              ...(() {
-                final next = nextChapterTitleJa(widget.eikenLevel);
-                return [
-                  const SizedBox(height: 12),
-                  Text(
-                    next != null
-                        ? '🗺️ どこかで、また ことばが きえはじめた——\n'
-                            'つぎの事件（じけん）：「$next」が きみを まっている。'
-                        : '🕯️ すべての事件（じけん）が つながった。\n'
-                            'やぶれた おはなしの さいごの 1ページへ——「じけんぼ」で たしかめよう。',
-                    textAlign: TextAlign.center,
-                    style: dqText(size: 11.5, color: dqInk.withAlpha(210))
-                        .copyWith(height: 1.5),
-                  ),
-                ];
-              })(),
-              const SizedBox(height: 16),
-              DqButton(
-                label: 'つづける',
-                onTap: () => Navigator.of(ctx).pop(),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
