@@ -1076,17 +1076,25 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
           const SizedBox(height: 2),
           Text(
             it.ja,
+            // pcInk (full cream ~9:1), not pcInkSoft (~3.5:1): this is the word's
+            // MEANING — the child must read it. Hierarchy below the headword is
+            // carried by size (18 vs 22), not by dimming it under WCAG (the same
+            // pcInkSoft→pcInk contrast fix dq_ui already applies to panel titles).
             style: warm
-                ? dqInkText(size: 18, w: FontWeight.w700, color: pcInkSoft)
+                ? dqInkText(size: 18, w: FontWeight.w700, color: pcInk)
                 : dqText(size: 18, w: FontWeight.w700, color: dqInk),
           ),
           if (it.whenJa != null) ...[
             const SizedBox(height: 4),
             Text(
               '・${it.whenJa!}',
+              // The RULE line IS the lesson ("next sound is a consonant → a"),
+              // yet it was the dimmest/smallest text — pcInkSoft size 12 (~3.5:1)
+              // fails WCAG 4.5:1 for normal text (visual-auditor, CEO 2132). Lift
+              // to pcInk + 13 + medium weight so the teaching is actually legible.
               style: warm
-                  ? dqInkText(size: 12, color: pcInkSoft, w: FontWeight.w400)
-                  : dqText(size: 12, color: dqInk, w: FontWeight.w400),
+                  ? dqInkText(size: 13, color: pcInk, w: FontWeight.w500)
+                  : dqText(size: 13, color: dqInk, w: FontWeight.w500),
             ),
           ],
         ],
