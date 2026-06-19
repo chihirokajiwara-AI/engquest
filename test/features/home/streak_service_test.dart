@@ -359,4 +359,39 @@ void main() {
     await svc.setDailyGoal(0);
     expect(await svc.currentDailyGoal(), greaterThanOrEqualTo(1));
   });
+
+  // Lost-update gate (gamification flaw-hunt 2026-06-19): recordProgress is a
+  // read-modify-write of the shared 'streak_problems_today' key, fired UNAWAITED
+  // from both battle (_recordDailyHabit) and exam (recordExamHabitAndGet) session
+  // ends. Without serialization, two concurrent calls read the same baseline and
+  // the last write clobbers the other → the daily-goal ring under-counts and the
+  // child is told「あと N問」when they already met today's goal. Fire several
+  // concurrent recordProgress calls (distinct instances, like the real call
+  // sites) and assert EVERY problem is counted. (Pre-fix this collapses to the
+  // last writer's count.)
+  test('concurrent recordProgress calls do not lost-update the daily count',
+      () async {
+    final today = DateTime(2026, 6, 19, 10);
+    final futures = <Future<StreakState>>[
+      for (var i = 0; i < 8; i++) StreakService().recordProgress(5, now: today),
+    ];
+    await Future.wait(futures);
+
+    final state = await StreakService().load(now: today);
+    expect(state.problemsToday, 8 * 5,
+        reason: 'all 8 concurrent +5 writes must accumulate (no lost-update)');
+  });
+
+  test('concurrent recordStudySession calls keep todayCount exact', () async {
+    final futures = <Future<StreakState>>[
+      for (var i = 0; i < 6; i++) StreakService().recordStudySession(),
+    ];
+    await Future.wait(futures);
+
+    final state = await StreakService().load();
+    expect(state.todayCount, 6,
+        reason: 'six same-day sessions = todayCount 6 (no lost-update)');
+    expect(state.currentStreak, 1,
+        reason: 'same-day sessions never inflate the streak');
+  });
 }

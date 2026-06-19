@@ -218,7 +218,38 @@ class StreakService {
   /// fills from zero each day. Independent of [recordStudySession] (which counts
   /// sessions/streak) so call ordering does not matter. Returns the updated
   /// [StreakState].
-  Future<StreakState> recordProgress(int count, {DateTime? now}) async {
+  // Serialize every streak WRITE (recordProgress + recordStudySession) so
+  // concurrent fire-and-forget callers never lose a read-modify-write on the
+  // shared prefs counters. Both writes are unawaited at their call sites — a
+  // battle session-end (_recordDailyHabit) and an exam session-end
+  // (recordExamHabitAndGet) can have writes in flight at once during fast screen
+  // navigation; without serialization both read the same baseline and the last
+  // setInt clobbers the other, so the daily-goal ring silently UNDER-COUNTS —
+  // telling a child「あと N問」when they already met today's goal (a direct honesty
+  // violation on the engagement spine, CEO 951). Static = process-wide, since
+  // StreakService is constructed ad-hoc per call site. Same remediation the repo
+  // already uses for the FSRS deck and SkillAccuracyStore (#147). The chain never
+  // rejects (one failed write can't wedge the queue); the caller still gets its
+  // own result/error.
+  static Future<void> _writeQueue = Future<void>.value();
+
+  static Future<T> _serialize<T>(Future<T> Function() op) {
+    final completer = Completer<T>();
+    _writeQueue = _writeQueue.then((_) async {
+      try {
+        completer.complete(await op());
+      } catch (e, st) {
+        completer.completeError(e, st);
+      }
+    });
+    return completer.future;
+  }
+
+  /// Record [count] practice questions answered toward today's goal.
+  Future<StreakState> recordProgress(int count, {DateTime? now}) =>
+      _serialize(() => _doRecordProgress(count, now: now));
+
+  Future<StreakState> _doRecordProgress(int count, {DateTime? now}) async {
     final prefs = await PreferencesService.getInstance();
     final todayKey = _dateKey(now ?? DateTime.now());
 
@@ -235,7 +266,9 @@ class StreakService {
   /// Record a completed study session (called after battle/exam finish).
   ///
   /// Returns the updated [StreakState].
-  Future<StreakState> recordStudySession() async {
+  Future<StreakState> recordStudySession() => _serialize(_doRecordStudySession);
+
+  Future<StreakState> _doRecordStudySession() async {
     final prefs = await PreferencesService.getInstance();
     final now = DateTime.now();
     final todayKey = _dateKey(now);
