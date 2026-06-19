@@ -252,6 +252,13 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
   /// Whether the full-bleed dim overlay is visible.
   bool _dimActive = false;
 
+  // ── Forward-pull beat (game-studio #3) ───────────────────────────────────
+  // When a non-final ナゾ is solved (remaining >= 1), タロ delivers a diegetic
+  // "あとNつ！" line after the hero+lore beats, creating a variable-ratio pull
+  // toward the next mystery (the same mechanic Battle has).  Null → no beat.
+  String? _forwardPullText;
+  Timer? _forwardPullTimer;
+
   // Services
   final _cue = AudioCueService();
   final _sound = SoundService();
@@ -369,6 +376,7 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
     _loreTimer?.cancel();
     _restoreTimer?.cancel();
     _restoreLabelTimer?.cancel();
+    _forwardPullTimer?.cancel();
     _cue.dispose();
     _parallax.dispose();
     super.dispose();
@@ -550,10 +558,24 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
             const tail = 'ことばが… もどってきた！';
             return result.firstTryCorrect ? '🌟 かんぺき！ $who$tail' : '$who$tail';
           }();
+    // Forward-pull beat (game-studio #3): compute the remaining ナゾ count AFTER
+    // this solve (_solved already updated above).  justCleared → remaining == 0
+    // → no pull (the cleared modal handles that). The language escalates naturally
+    // as remaining decrements (あと3つ→あと1つ), giving variable-ratio acceleration
+    // without a randomizer.  Side-effect: lore state is ALWAYS recorded (see
+    // _showLore call below) even when the pull replaces the visible lore banner.
+    final progress = nazoProgress(widget.scene, _solved);
+    final remaining = progress.total - progress.solved;
+    final String? forwardPullLine = (!justCleared && remaining >= 1)
+        ? (remaining >= 2
+            ? 'あと $remainingつ！ このまちの ことばを、とりもどそう！'
+            : 'あと 1つ！ さいごの なぞ が まっている——')
+        : null;
     if (prefersReducedMotion(context)) {
       // ── Reduced-motion: instant colour swap + static top banner + lore ─────
       // Existing behaviour preserved exactly. No camera-push, no hero overlay,
       // no dim — the colour swap is instant and the text is a static top banner.
+      // Forward-pull shown statically after restoration (no animated chaining).
       _focusIdx = null;
       if (justCleared) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -568,11 +590,20 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
             if (mounted) setState(() => _restoreLabel = null);
           });
         }
+        // Reduced-motion forward-pull: fire after restoration label clears (~2.5s).
+        if (forwardPullLine != null) {
+          _forwardPullTimer?.cancel();
+          _forwardPullTimer = Timer(const Duration(milliseconds: 2500), () {
+            if (mounted) _showForwardPull(forwardPullLine);
+          });
+        }
       }
     } else {
       // ── Non-reduced-motion: HELD RESTORATION FRAME ───────────────────────
       // Studio #2 spec: dim → hero portrait scales to screen centre → hold →
       // settle. The §3 lore fires ONLY AFTER the hero frame (~1700ms).
+      // Studio #3 forward-pull fires AFTER the lore has had its moment (~1300ms
+      // after lore appears).  Strict beat sequence: hero → lore → forward-pull.
       //
       // Step 1: keep the brief camera-push on the in-scene NPC (studio #1 —
       // retained as a sub-beat; the hero overlay REPLACES the top banner but
@@ -604,6 +635,17 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
           // Step 3: §3 lore drip — fires ONLY AFTER the hero frame, never
           // simultaneously (was the root of the perceptual invisibility).
           if (h.mysteryFragmentJa != null) _showLore(h.mysteryFragmentJa!);
+          // Step 4: forward-pull — fires ~1300ms after the lore appears, so the
+          // beat sequence is strictly: hero(1700ms) → lore(shown) → pull(+1300ms).
+          // The lore auto-dismisses after _kArrivalAutoDismissMs (4500ms), so the
+          // pull fires while lore is still visible then lore dismisses naturally
+          // and pull takes over the slot — no overlap with the hero frame.
+          if (forwardPullLine != null) {
+            _forwardPullTimer?.cancel();
+            _forwardPullTimer = Timer(const Duration(milliseconds: 1300), () {
+              if (mounted) _showForwardPull(forwardPullLine);
+            });
+          }
         });
       }
       // justCleared: show the modal after a short delay (post-transition).
@@ -692,6 +734,31 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
   void _dismissLore() {
     _loreTimer?.cancel();
     if (_loreFragment != null) setState(() => _loreFragment = null);
+  }
+
+  /// Show タロ's diegetic forward-pull line ("あとNつ！…") using the arrival-banner
+  /// widget.  Replaces any pending pull or lore so rapid solves don't stack.
+  /// Dismisses the lore banner (if still showing) so the beats run strictly in
+  /// sequence without an overlap window: the pull OWNS the bottom slot.
+  /// Auto-dismisses after ~3.5s (slightly faster than the arrival banner's 4.5s
+  /// — the message is shorter and the pull effect lands quickly).
+  void _showForwardPull(String line) {
+    _forwardPullTimer?.cancel();
+    // Dismiss the lore so the pull can take over the bottom slot immediately
+    // (lore has already had its ~1.3s moment; this keeps beats strictly sequential).
+    _loreTimer?.cancel();
+    setState(() {
+      _loreFragment = null;
+      _forwardPullText = line;
+    });
+    _forwardPullTimer = Timer(const Duration(milliseconds: 3500), () {
+      if (mounted) setState(() => _forwardPullText = null);
+    });
+  }
+
+  void _dismissForwardPull() {
+    _forwardPullTimer?.cancel();
+    if (_forwardPullText != null) setState(() => _forwardPullText = null);
   }
 
   void _showSceneClearedPayoff() {
@@ -1070,10 +1137,10 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
                           // Fade in fast (first 25%), hold, fade out (last 22%).
                           final t = _heroCtrl.value;
                           final alpha = t < 0.247
-                              ? (0.6 * (t / 0.247))
+                              ? (0.74 * (t / 0.247))
                               : t < 0.776
-                                  ? 0.6
-                                  : 0.6 * (1 - (t - 0.776) / 0.224);
+                                  ? 0.74
+                                  : 0.74 * (1 - (t - 0.776) / 0.224);
                           return ColoredBox(
                             color: Colors.black.withAlpha(
                                 (alpha.clamp(0.0, 1.0) * 255).round()),
@@ -1222,6 +1289,18 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
               // slot. Gated so it never co-renders with the arrival banner.
               if (_loreFragment != null && !_showArrival)
                 _loreBanner(_loreFragment!, w, h),
+
+              // Game-studio #3 forward-pull beat: タロ's diegetic "あとNつ！" line.
+              // Rendered via the existing _arrivalBanner widget (same placement,
+              // same teal border — this IS タロ speaking).  Gated so it never
+              // co-renders with the arrival banner, the lore banner, OR the hero
+              // overlay (the hero dim is down before the pull ever fires).
+              if (_forwardPullText != null &&
+                  !_showArrival &&
+                  _loreFragment == null &&
+                  _heroNpcIdx == null)
+                _arrivalBanner(_forwardPullText!, w, h,
+                    onDismiss: _dismissForwardPull),
 
               // Reduced-motion fallback: the static top-centre restoration banner
               // (unchanged from before the hero-frame feature). Only shown when
@@ -1403,7 +1482,12 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
   /// entry.  Positioned at the bottom of the scene, full-width but short, with
   /// a teal accent border matching タロ's dominant hue (CHARACTER-BIBLE §3 —
   /// dusty teal #5DA9E9).  Tap anywhere to dismiss.
-  Widget _arrivalBanner(String text, double w, double h) {
+  ///
+  /// [onDismiss] overrides the default [_dismissArrival] handler so the same
+  /// widget can be reused for the forward-pull beat (game-studio #3) with a
+  /// distinct dismiss action.
+  Widget _arrivalBanner(String text, double w, double h,
+      {VoidCallback? onDismiss}) {
     return Positioned(
       left: 12,
       right: 12,
@@ -1419,7 +1503,7 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
           label: 'タロ。$text',
           excludeSemantics: true,
           child: GestureDetector(
-            onTap: _dismissArrival,
+            onTap: onDismiss ?? _dismissArrival,
             child: Container(
               padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
               decoration: BoxDecoration(
