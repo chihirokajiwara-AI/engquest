@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'dart:async';
+
+import 'package:engquest/core/analytics/analytics_service.dart';
 import 'package:engquest/core/gamification/xp_service.dart';
 import 'package:engquest/core/gamification/xp_profile.dart';
 import 'package:engquest/core/gamification/achievement_service.dart';
@@ -1068,6 +1071,9 @@ class _AppEntryPointState extends State<_AppEntryPoint> {
     // which reads OnboardingStorage.ageYears later, sees the chosen age rather
     // than the age-8 default on the very first session), then enter the quest.
     await OnboardingStorage.save(result);
+    // D1-funnel signal: count every onboarding completion (inert until analytics
+    // consent). Without this the trial→activation funnel has no baseline.
+    unawaited(AnalyticsService.instance.logOnboardingComplete(result.avatarId));
     if (!mounted) return;
     setState(() => _onboardingComplete = true);
   }

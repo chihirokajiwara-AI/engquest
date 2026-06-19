@@ -28,6 +28,11 @@ class EngQuestEvent {
   static const String battleCardShown = 'eq_battle_card_shown';
   static const String battleCardAnswered = 'eq_battle_card_answered';
   static const String battleSessionComplete = 'eq_battle_session_complete';
+  // Generic practice-session completion (battle + every exam type) — the core
+  // retention signal. No accuracy param: the shared completion chokepoint
+  // (recordExamHabitAndGet) doesn't have it, and a 1.0 placeholder would be
+  // dishonest data. Accuracy stays on battleSessionComplete where it is real.
+  static const String practiceSessionComplete = 'eq_practice_session_complete';
 
   // Voice module
   static const String voiceAttemptStart = 'eq_voice_attempt_start';
@@ -297,6 +302,15 @@ class AnalyticsService {
     await sink.logEvent(EngQuestEvent.battleSessionComplete, parameters: {
       EngQuestParam.wordsPracticed: wordsPracticed,
       EngQuestParam.accuracy: accuracy,
+    });
+  }
+
+  /// Generic practice-session completion — the core retention signal, fired from
+  /// the single chokepoint every battle/exam completion already calls
+  /// (recordExamHabitAndGet). Inert until a parent grants analytics consent.
+  Future<void> logPracticeSessionComplete({required int wordsPracticed}) async {
+    await sink.logEvent(EngQuestEvent.practiceSessionComplete, parameters: {
+      EngQuestParam.wordsPracticed: wordsPracticed,
     });
   }
 

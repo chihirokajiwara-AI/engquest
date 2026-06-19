@@ -18,6 +18,7 @@
 
 import 'dart:async';
 
+import 'package:engquest/core/analytics/analytics_service.dart';
 import 'package:engquest/core/storage/preferences_service.dart';
 
 // ── Streak state ──────────────────────────────────────────────────────────────
@@ -360,7 +361,13 @@ Future<StreakState?> recordExamHabitAndGet(int answered) async {
   try {
     final streak = StreakService();
     await streak.recordStudySession();
-    return await streak.recordProgress(answered);
+    final state = await streak.recordProgress(answered);
+    // Core retention signal (session_complete) — fires for battle AND every exam
+    // type at this single chokepoint. Inert until a parent grants analytics
+    // consent (NoOp sink otherwise), so no data is collected pre-consent.
+    unawaited(AnalyticsService.instance
+        .logPracticeSessionComplete(wordsPracticed: answered));
+    return state;
   } catch (_) {
     // Non-fatal: SharedPreferences failure is rare and must not surface.
     return null;
