@@ -853,67 +853,87 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
       warm: kNazoWarmTheme,
       backgroundAsset: widget.sceneBackgroundAsset,
       contentMaxWidth: 600,
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // ── JA cue — the prompt the child must produce the EN for ──────
-              Semantics(
-                liveRegion: true,
-                label: 'えいごで こたえよう。${item.ja}。えいごは？',
-                child: DqPanel(
-                  warm: kNazoWarmTheme,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        'えいごで いうと？',
-                        textAlign: TextAlign.center,
-                        style: dqInkText(
-                            size: 12, w: FontWeight.w600, color: pcInkSoft),
+      // DqScene (warm) already wraps with SafeArea — no inner SafeArea needed.
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            physics: const ClampingScrollPhysics(),
+            child: ConstrainedBox(
+              // At least fill the available height so Column(center) actually
+              // centres — without this the column shrink-wraps and the
+              // "centre" alignment has nothing to push against.
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // ── Question card — JA cue the child must name in EN ────
+                    Semantics(
+                      liveRegion: true,
+                      label: 'えいごで こたえよう。${item.ja}。えいごは？',
+                      child: DqPanel(
+                        warm: kNazoWarmTheme,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            // Eyebrow: raised to 13sp + full pcInk so it reads
+                            // as a clear label, not a hint in the background.
+                            Text(
+                              'えいごで いうと？',
+                              textAlign: TextAlign.center,
+                              style: dqInkText(
+                                  size: 13, w: FontWeight.w700, color: pcInk),
+                            ),
+                            const SizedBox(height: 10),
+                            // JA meaning DOMINANT — unmistakably the question.
+                            // 34sp / w800 / pcInk clears any tile text (20sp).
+                            Text(
+                              item.ja,
+                              textAlign: TextAlign.center,
+                              style: dqInkText(
+                                  size: 34, w: FontWeight.w800, color: pcInk),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              '${idx + 1} / $totalItems',
+                              style: dqInkText(
+                                  size: 11,
+                                  w: FontWeight.w600,
+                                  color: pcInkSoft),
+                            ),
+                          ],
+                        ),
                       ),
-                      const SizedBox(height: 12),
-                      // JA meaning LARGE — the cue the child must match to EN.
-                      Text(
-                        item.ja,
-                        textAlign: TextAlign.center,
-                        style: dqInkText(
-                            size: 32, w: FontWeight.w800, color: pcInk),
+                    ),
+                    // Real gap separates the question card from the answer tiles.
+                    const SizedBox(height: 24),
+                    // ── Instruction between card and tiles ───────────────────
+                    Text(
+                      'タップして えいごを えらぼう',
+                      style: dqInkText(
+                          size: 12, w: FontWeight.w700, color: pcInkSoft),
+                    ),
+                    const SizedBox(height: 8),
+                    // ── EN choice tiles — same visual grammar as the quiz ────
+                    for (final tileIdx in indices)
+                      AudioOptionButton(
+                        key: _recallTileKeys[tileIdx],
+                        label: card.items[tileIdx].en,
+                        state: DqChoiceState.normal,
+                        warm: kNazoWarmTheme,
+                        index: indices.indexOf(tileIdx) + 1,
+                        onChoose: () => onTileChoice(tileIdx),
                       ),
-                      const SizedBox(height: 12),
-                      Text(
-                        '${idx + 1} / $totalItems',
-                        style: dqInkText(
-                            size: 11, w: FontWeight.w600, color: pcInkSoft),
-                      ),
-                    ],
-                  ),
+                    const SizedBox(height: 8),
+                  ],
                 ),
               ),
-              const SizedBox(height: 16),
-              // ── EN choice tiles — same visual grammar as the quiz ──────────
-              Text(
-                'タップして えいごを えらぼう',
-                style:
-                    dqInkText(size: 12, w: FontWeight.w700, color: pcInkSoft),
-              ),
-              const SizedBox(height: 8),
-              for (final tileIdx in indices)
-                AudioOptionButton(
-                  key: _recallTileKeys[tileIdx],
-                  label: card.items[tileIdx].en,
-                  state: DqChoiceState.normal,
-                  warm: kNazoWarmTheme,
-                  index: indices.indexOf(tileIdx) + 1,
-                  onChoose: () => onTileChoice(tileIdx),
-                ),
-              const SizedBox(height: 8),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }
