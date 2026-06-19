@@ -192,8 +192,16 @@ const Set<int> kMomentumCadence = {3, 7, 12, 18};
   bool goalMet,
 ) {
   final atCadence = kMomentumCadence.contains(answersThisSession);
-  final goalUnmet = !goalMet && remainingToGoal > 0;
-  return (atCadence && goalUnmet, remainingToGoal);
+  // LIVE remaining: the daily-goal count only commits at session END
+  // (_recordDailyHabit → recordProgress), and remainingToGoal is the
+  // PRE-session snapshot, so it must be reduced by the answers already given
+  // THIS session — otherwise the pulse shows the same "あと N問" at answers
+  // 3/7/12 and never closes in, killing the very pull it exists to create
+  // (game-studio reward-scheduling expert, run-3). Each answer counts 1 toward
+  // the goal (recordProgress(answered)).
+  final live = (remainingToGoal - answersThisSession).clamp(0, remainingToGoal);
+  final goalUnmet = !goalMet && live > 0;
+  return (atCadence && goalUnmet, live);
 }
 
 // ── Session result per card ───────────────────────────────────────────────────
