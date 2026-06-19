@@ -115,6 +115,13 @@ bool isFinalNazoIndex(SceneDef scene, Map<int, bool> solved, int idx) {
   return unsolved == 1;
 }
 
+/// Minimum observation hotspots a child must have READ before the final ナゾ
+/// (対決/confrontation) unlocks. Gates the climax behind evidence-gathering so
+/// observation hotspots are meaningful evidence rather than three independent quiz
+/// booths. SAFETY: the gate is skipped when a scene has fewer than this many
+/// observation hotspots (no soft-lock; see [_onBubbleTap]).
+const int kFinalNazoObsRequired = 2;
+
 class SceneView extends StatefulWidget {
   final SceneDef scene;
 
@@ -454,6 +461,31 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
     if (_solved[idx] == true || h.step == null) {
       setState(() => _bubbleIndex = null);
       return;
+    }
+    // ── Evidence gate: the final ナゾ (対決) requires the child to have read at
+    // least [kFinalNazoObsRequired] observation notes first, so hotspots become
+    // EVIDENCE that unlocks the confrontation rather than independent quiz booths
+    // (studio rank #6 — cross-hotspot deduction loop). The gate is skipped when the
+    // scene has fewer observation hotspots than the threshold (no soft-lock).
+    // _observed is seeded from persistence in _restoreSolved(), so a returning child
+    // who already explored is never re-gated.
+    if (isFinalNazoIndex(widget.scene, _solved, idx)) {
+      final obsCount = widget.scene.hotspots
+          .where((hs) => hs.kind == HotspotKind.observation)
+          .length;
+      if (obsCount >= kFinalNazoObsRequired) {
+        final seenObs = _observed.values.where((seen) => seen == true).length;
+        if (seenObs < kFinalNazoObsRequired) {
+          // Not enough evidence yet — dismiss the bubble and show the gate prompt.
+          setState(() => _bubbleIndex = null);
+          _showLore(
+            'まだ てがかりが たりない。'
+            'このまちを もっと しらべてみよう。'
+            '（てがかり $seenObs/$kFinalNazoObsRequired）',
+          );
+          return;
+        }
+      }
     }
     setState(() => _bubbleIndex = null);
     _openNazo(idx, h);
