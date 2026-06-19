@@ -10,10 +10,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:engquest/core/storage/preferences_service.dart';
 import 'package:engquest/features/quest/quest_map_screen.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+
+  // QuestMapScreen reads prefs through the PreferencesService singleton, which
+  // caches the SharedPreferences from the FIRST getInstance(). Without this
+  // reset, a later test's setMockInitialValues is ignored (it keeps reading the
+  // first test's prefs) — which made the cold-start case flake under ordering.
+  setUp(PreferencesService.resetInstance);
 
   testWidgets('overworld renders at 320 px with no overflow / crash',
       (WidgetTester tester) async {
@@ -66,6 +73,55 @@ void main() {
     final state = tester.state(find.byType(QuestMapScreen)) as dynamic;
     expect(state.debugUnlocked, isNot(4),
         reason: '3級 must not inherit the 5級 unlock cursor (cross-grade bleed)');
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets(
+      'a child who chose their grade in onboarding skips the redundant picker',
+      (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(640, 3000);
+    tester.view.devicePixelRatio = 2.0;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    // No quest-specific 'quest_start_level' yet — but the child already picked
+    // 5級 in onboarding (canonical 'onboarding_start_level'). The quest map must
+    // honour that and land them on their painted journey, NOT ask them to pick
+    // their grade a SECOND time (the redundant-picker bug a visual audit found).
+    SharedPreferences.setMockInitialValues({
+      'onboarding_start_level': '5',
+    });
+
+    await tester.pumpWidget(const MaterialApp(home: QuestMapScreen()));
+    await tester.pump(); // let _load() resolve prefs
+    await tester.pump(const Duration(milliseconds: 50));
+
+    final state = tester.state(find.byType(QuestMapScreen)) as dynamic;
+    expect(state.debugNeedsPick, isFalse,
+        reason: 'onboarding grade present → no redundant grade re-pick');
+    // The painted map (start town) is showing, not the "Choose your level" list.
+    expect(find.textContaining('ことばを失'), findsOneWidget);
+    expect(find.textContaining('Choose your level'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('a genuine cold start (no grade anywhere) still shows the picker',
+      (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(640, 3000);
+    tester.view.devicePixelRatio = 2.0;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    SharedPreferences.setMockInitialValues({}); // nothing chosen anywhere
+
+    await tester.pumpWidget(const MaterialApp(home: QuestMapScreen()));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
+
+    final state = tester.state(find.byType(QuestMapScreen)) as dynamic;
+    expect(state.debugNeedsPick, isTrue,
+        reason:
+            'no grade chosen anywhere → the picker is the correct cold start');
     expect(tester.takeException(), isNull);
   });
 }

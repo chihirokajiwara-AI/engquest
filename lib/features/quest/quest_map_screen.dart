@@ -47,6 +47,11 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
   @visibleForTesting
   int get debugUnlocked => _unlocked;
 
+  /// Whether the level-picker is showing — used to lock the rule that a child
+  /// who already chose their grade in onboarding is NOT asked to pick again.
+  @visibleForTesting
+  bool get debugNeedsPick => _needsPick;
+
   @override
   void initState() {
     super.initState();
@@ -55,8 +60,22 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
 
   Future<void> _load() async {
     final prefs = await PreferencesService.getInstance();
-    final level = prefs.getString(_levelKey);
-    if (level == null) {
+    var level = prefs.getString(_levelKey);
+    // The child already chose their 英検 grade in onboarding — stored under the
+    // canonical 'onboarding_start_level' key that the home, battle and exam all
+    // read. The quest map kept its OWN 'quest_start_level' key, so on the first
+    // visit (quest key unset) it asked the child to pick their grade AGAIN — a
+    // redundant grade re-pick that also routed them to the level-PICKER instead
+    // of their painted journey map. Fall back to the onboarding grade so a
+    // returning child lands straight on the overworld; only show the picker when
+    // NO grade has been chosen anywhere (a genuine cold start).
+    if (level == null || level.isEmpty) {
+      final onboardLevel = prefs.getString('onboarding_start_level');
+      if (onboardLevel != null && onboardLevel.isNotEmpty) {
+        level = onboardLevel;
+      }
+    }
+    if (level == null || level.isEmpty) {
       setState(() {
         _needsPick = true;
         _loaded = true;
