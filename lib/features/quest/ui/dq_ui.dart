@@ -415,7 +415,14 @@ class DqChoice extends StatelessWidget {
 class DqButton extends StatefulWidget {
   final String label;
   final VoidCallback? onTap;
-  const DqButton({super.key, required this.label, this.onTap});
+
+  /// Secondary/ghost variant: a dim-navy fill with a gold outline + gold label
+  /// instead of the filled-gold primary. Use for a "view/check" action sitting
+  /// beside a primary "do" action so the pair has a clear focal hierarchy
+  /// (visual-auditor CEO 2132 — the exam hub had two equal gold buttons).
+  final bool secondary;
+  const DqButton(
+      {super.key, required this.label, this.onTap, this.secondary = false});
 
   @override
   State<DqButton> createState() => _DqButtonState();
@@ -491,10 +498,16 @@ class _DqButtonState extends State<DqButton>
               gradient: onTap == null
                   ? const LinearGradient(
                       colors: [Color(0xFF353B57), Color(0xFF272C44)])
-                  : const LinearGradient(colors: [dqGold, dqGoldDeep]),
+                  : widget.secondary
+                      ? const LinearGradient(
+                          colors: [Color(0xFF1A2138), Color(0xFF141A2E)])
+                      : const LinearGradient(colors: [dqGold, dqGoldDeep]),
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: dqBorder, width: 1.5),
-              boxShadow: onTap == null
+              border: Border.all(
+                  color:
+                      (widget.secondary && onTap != null) ? dqGold : dqBorder,
+                  width: 1.5),
+              boxShadow: (onTap == null || widget.secondary)
                   ? null
                   : [
                       BoxShadow(
@@ -503,12 +516,14 @@ class _DqButtonState extends State<DqButton>
             ),
             child: Text(label,
                 style: notoSerifJp(
-                    // Dark ink on gold when active; a dimmed CREAM on the dark
-                    // disabled ground so the requirement text stays readable
-                    // (≥4.5:1) instead of dark-on-mud (~1.2:1).
+                    // Dark ink on gold (primary); GOLD on the dim-navy ghost
+                    // (secondary); a dimmed CREAM on the dark disabled ground so
+                    // the requirement text stays readable (≥4.5:1).
                     color: onTap == null
                         ? const Color(0xFFC9C0A8)
-                        : const Color(0xFF2A1C00),
+                        : widget.secondary
+                            ? dqGold
+                            : const Color(0xFF2A1C00),
                     fontSize: 17,
                     fontWeight: FontWeight.w800,
                     letterSpacing: 2)),

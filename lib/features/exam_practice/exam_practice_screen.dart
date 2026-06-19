@@ -141,6 +141,10 @@ class _ExamPracticeScreenState extends State<ExamPracticeScreen> {
                 // path is used ONLY by the ?preview=passmeter route in app.dart.
                 DqButton(
                   label: '合格率をみる  /  Check Pass Meter',
+                  // Secondary: a "check" action beside the primary "do" mock —
+                  // gives the two-button pair a clear hierarchy (was two equal
+                  // gold buttons; visual-auditor CEO 2132 exam-hub finding).
+                  secondary: true,
                   onTap: () => _openLivePassMeter(context),
                 ),
                 const SizedBox(height: 8),
