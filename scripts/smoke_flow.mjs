@@ -89,26 +89,15 @@ async function clickLabel(needle) {
   return true;
 }
 
-// Tap the ✕ close (an unlabeled ~40×40 button in the top-left). Click the actual
-// semantic node (robust across screens/states) rather than a hardcoded coordinate.
+// Tap the ✕ close. The exam-screen close IconButton carries tooltip
+// 'とじる / Close' → a real semantics label, so click it BY LABEL (robust across
+// screens whose headers differ in height). The old top-left-coordinate approach
+// missed the conversation header (taller), and the previous "short label only"
+// heuristic now SKIPS the close entirely because it IS labelled. Falls back to a
+// top-left pointer click only if the labelled node can't be found.
 async function tapClose() {
-  const handle = await page.evaluateHandle(() => {
-    const host = document.querySelector('flt-semantics-host') || document;
-    let best = null, bestArea = Infinity;
-    for (const el of host.querySelectorAll('flt-semantics, [role]')) {
-      if (el.getAttribute('role') !== 'button') continue;
-      const lbl = (el.getAttribute('aria-label') || el.textContent || '').trim();
-      if (lbl.length > 3) continue; // close button has an empty/tiny label
-      const r = el.getBoundingClientRect();
-      if (r.x > 80 || r.y > 80) continue; // top-left region only
-      const area = Math.max(1, r.width * r.height);
-      if (area < bestArea) { best = el; bestArea = area; }
-    }
-    return best;
-  });
-  const el = handle.asElement();
-  if (el) { await el.click({ force: true }).catch(() => {}); return true; }
-  await page.mouse.click(24, 24); // fallback
+  if (await clickLabel('とじる')) return true;
+  await page.mouse.click(24, 24); // fallback for any unlabelled close
   return false;
 }
 
