@@ -3,6 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:engquest/core/analytics/progress_service.dart';
 import 'package:engquest/core/models/progress_data.dart';
+import 'package:engquest/core/storage/preferences_service.dart';
+import 'package:engquest/features/exam_practice/pass/cse_model.dart';
+import 'package:engquest/features/exam_practice/pass/skill_accuracy_store.dart';
 import 'package:engquest/features/parent_dashboard/parent_dashboard_screen.dart';
 
 /// Records which uid the dashboard asked progress for (no Firestore).
@@ -108,6 +111,32 @@ void main() {
       expect(find.textContaining('ごらんいただけます'), findsOneWidget,
           reason: 'a remote parent must not be shown device-local data as the '
               'child 合格率 — show the honest note instead');
+    });
+
+    // Honesty (#179): with only ONE skill measured, the readiness % is built on a
+    // partial sample, so the card marks it 暫定 (provisional). The provisional
+    // computation is driven by est.unmeasuredSkills — locked at the data layer by
+    // honest_readiness_test ('reading now has data, so it is no longer 未測定',
+    // i.e. listening remains unmeasured). loadParentReadiness with reading-only
+    // grade-5 data yields readinessPct=50 + unmeasuredSkills={listening}; the card
+    // maps that non-empty set → 暫定 label + prominent 未測定 box. (A full-widget
+    // assertion is impractical here: the card lazy-builds below the fold in the
+    // rich on-device dashboard, so it is not in the default pumped subtree.)
+    test('loadParentReadiness flags partial data as provisional (#179)',
+        () async {
+      SharedPreferences.setMockInitialValues({'onboarding_start_level': '5'});
+      PreferencesService.resetInstance();
+      SkillAccuracyStore.resetInstance();
+      final store = await SkillAccuracyStore.getInstance();
+      await store.record(
+          grade: '5', skill: EikenSkill.reading, correct: 8, total: 10);
+
+      final est = await loadParentReadiness();
+      expect(est, isNotNull);
+      expect(est!.unmeasuredSkills, isNotEmpty,
+          reason: 'listening untested → card must render the 暫定 provisional '
+              'state, not a confident gold %');
+      expect(est.unmeasuredSkills.contains(EikenSkill.listening), isTrue);
     });
   });
 }

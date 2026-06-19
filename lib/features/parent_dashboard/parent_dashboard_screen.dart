@@ -699,9 +699,17 @@ class _HonestReadinessCardState extends State<_HonestReadinessCard> {
             );
           }
           final pct = est.readinessPct;
-          final color = _color(pct);
           final unmeasured =
               est.unmeasuredSkills.map(CseEstimator.skillLabelJa).toList();
+          // HONESTY (#179): when an applicable skill has NO data yet, readinessPct
+          // is built on a partial sample (unmeasured skills count as 0). Showing
+          // it as a big gold/green "on pace" headline oversells to a paying parent.
+          // While incomplete, mark the number 暫定 (provisional), drop the
+          // celebratory colour, replace the encouraging message with a "practice
+          // every skill for a real estimate" line, and make the 未測定 notice a
+          // prominent box rather than a tiny grey footnote.
+          final provisional = unmeasured.isNotEmpty;
+          final color = provisional ? dqInk : _color(pct);
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -710,6 +718,17 @@ class _HonestReadinessCardState extends State<_HonestReadinessCard> {
                   Expanded(
                     child: dqBilingual('合格までの目安', 'Pass guide', jpSize: 13),
                   ),
+                  if (provisional)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 6),
+                      child: Text(
+                        '暫定（ざんてい）',
+                        style: dqText(
+                            size: 11,
+                            w: FontWeight.w700,
+                            color: dqInk.withAlpha(180)),
+                      ),
+                    ),
                   Text(
                     '${pct.toStringAsFixed(0)}%',
                     style: dqText(size: 18, w: FontWeight.w800, color: color),
@@ -720,14 +739,28 @@ class _HonestReadinessCardState extends State<_HonestReadinessCard> {
               _DqBar(value: pct / 100, color: color, height: 14),
               const SizedBox(height: 8),
               Text(
-                CseEstimator.readinessMessageJa(est),
+                provisional
+                    ? '正確（せいかく）な目安（めやす）には、すべての技能（ぎのう）の'
+                        'れんしゅうが ひつようです。'
+                    : CseEstimator.readinessMessageJa(est),
                 style: dqText(size: 12, w: FontWeight.w600, color: color),
               ),
-              if (unmeasured.isNotEmpty) ...[
-                const SizedBox(height: 4),
-                Text(
-                  '※ ${unmeasured.join('・')} は まだ 未測定（みそくてい）です。',
-                  style: dqText(size: 11, color: dqInk.withAlpha(170)),
+              if (provisional) ...[
+                const SizedBox(height: 8),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: dqBox,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: dqGoldDeep.withAlpha(120)),
+                  ),
+                  child: Text(
+                    '⚠ ${unmeasured.join('・')} は まだ 未測定（みそくてい）。\n'
+                    'この技能（ぎのう）を れんしゅうすると、上（うえ）の％が '
+                    '本当（ほんとう）の 合格目安（ごうかくめやす）に なります。',
+                    style: dqText(size: 12, w: FontWeight.w700, color: dqInk),
+                  ),
                 ),
               ],
               const SizedBox(height: 4),
