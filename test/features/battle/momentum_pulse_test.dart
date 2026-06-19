@@ -80,7 +80,7 @@ void main() {
             answersThisSession: 0,
             remainingToGoal: 10,
             goalMet: false),
-        'あと 10 もん',
+        'あと10もん',
       );
       expect(
         battleHeaderGoalLabel(
@@ -88,7 +88,7 @@ void main() {
             answersThisSession: 3,
             remainingToGoal: 10,
             goalMet: false),
-        'あと 7 もん',
+        'あと7もん',
       );
     });
 
@@ -99,7 +99,7 @@ void main() {
             answersThisSession: 0,
             remainingToGoal: 8,
             goalMet: true),
-        'きょうの目標 ✓',
+        '目標クリア✓',
       );
       expect(
         battleHeaderGoalLabel(
@@ -107,7 +107,7 @@ void main() {
             answersThisSession: 10,
             remainingToGoal: 10,
             goalMet: false),
-        'きょうの目標 ✓',
+        '目標クリア✓',
         reason: 'live 0 → done state, never "あと 0 もん"',
       );
     });

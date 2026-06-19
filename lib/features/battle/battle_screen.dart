@@ -221,8 +221,10 @@ String? battleHeaderGoalLabel({
 }) {
   if (!hasGoalContext) return null;
   final live = (remainingToGoal - answersThisSession).clamp(0, remainingToGoal);
-  if (goalMet || live <= 0) return 'きょうの目標 ✓';
-  return 'あと $live もん';
+  // Compact (no spaces) to keep the tight header Row light — real-render
+  // re-audit (CEO 1363). 'あと10もん' / '目標クリア✓'.
+  if (goalMet || live <= 0) return '目標クリア✓';
+  return 'あと$liveもん';
 }
 
 /// 0..1 fill toward the daily goal for the Battle progress bar (#170 companion).
@@ -1005,11 +1007,19 @@ class _BattleScreenState extends State<BattleScreen>
           ),
           const Icon(Icons.style_rounded, color: dqGold, size: 22),
           const SizedBox(width: 8),
-          // #114/WCAG SC 1.4.4: Flexible so the title wraps/shrinks at large text
-          // scales instead of pushing the header Row into a ~57px overflow.
+          // #114/WCAG SC 1.4.4: Flexible so the title never pushes the header Row
+          // into a ~57px overflow. FittedBox.scaleDown SHRINKS the title to fit
+          // instead of wrapping — a real-render re-audit (CEO 1363) showed the
+          // tight header wrapping 'たんごバトル' into an ugly orphaned 'ル' even at
+          // normal text scale. Scaling keeps it one clean line (and still degrades
+          // gracefully at large text scales).
           Flexible(
-            child: dqBilingual('たんごバトル', 'Word Battle',
-                jpSize: 17, jpColor: dqGold, stacked: true),
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerLeft,
+              child: dqBilingual('たんごバトル', 'Word Battle',
+                  jpSize: 17, jpColor: dqGold, stacked: true),
+            ),
           ),
           if (_streak >= 3) ...[
             const SizedBox(width: 10),
