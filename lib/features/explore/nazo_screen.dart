@@ -1045,6 +1045,18 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          // ── CEO 2147 studio run-3 #2: "who you're rescuing" ──
+                          // Show the silenced NPC BEFORE the word-list so the ナゾ
+                          // has a subject and learning ties to the world (Layton
+                          // subject-before-puzzle first-contact convention).
+                          // Guard: only rendered when the hotspot has a name or
+                          // grey portrait asset; ordinary teach cards are unchanged.
+                          if (widget.hotspot.npcGreyAsset != null ||
+                              (widget.hotspot.step?.npcName ?? '').isNotEmpty)
+                            _rescueSubjectRow(),
+                          if (widget.hotspot.npcGreyAsset != null ||
+                              (widget.hotspot.step?.npcName ?? '').isNotEmpty)
+                            const SizedBox(height: 12),
                           DqPanel(
                             warm: warm,
                             title: card.titleJa,
@@ -1097,6 +1109,72 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  // ── CEO 2147 studio run-3 #2: compact "who you're rescuing" row ─────────────
+  // Shown at the TOP of the teach card content (above the DqPanel word-list) when
+  // the hotspot has an NPC name or grey portrait — so the ナゾ has a subject and
+  // the learning ties to the story world (Layton subject-before-puzzle convention).
+  //
+  // Layout: [DqPortrait grey 60px] [gold nameplate + 1-line diegetic hint]
+  // The row sits in a warm parchment container matching the teach-card palette.
+  Widget _rescueSubjectRow() {
+    const warm = kNazoWarmTheme;
+    final greyAsset = widget.hotspot.npcGreyAsset;
+    final npcName = widget.hotspot.step?.npcName.trim() ?? '';
+    // Prefer the authored clue; fall back to the generic rescue prompt.
+    final hintLine = (widget.hotspot.clueLineJa?.trim().isNotEmpty ?? false)
+        ? widget.hotspot.clueLineJa!.trim()
+        : 'この ひとは ことばを なくしている。ことばを おぼえて、たすけよう。';
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      decoration: BoxDecoration(
+        color: warm ? pcParchment0 : dqBox.withAlpha(200),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: warm ? pcFrameBrown : dqGoldDeep.withAlpha(100),
+          width: warm ? 1.5 : 1,
+        ),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // Grey portrait — still silenced, colour not yet restored.
+          DqPortrait(
+            imageAsset: greyAsset,
+            emoji: '🧑',
+            size: 60,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (npcName.isNotEmpty)
+                  Text(
+                    npcName,
+                    style: warm
+                        ? dqInkText(size: 13, w: FontWeight.w800, color: dqGold)
+                        : dqText(size: 13, w: FontWeight.w800, color: dqGold),
+                  ),
+                if (npcName.isNotEmpty) const SizedBox(height: 4),
+                Text(
+                  hintLine,
+                  style: (warm
+                          ? dqInkText(
+                              size: 12, w: FontWeight.w500, color: pcInkSoft)
+                          : dqText(size: 12, w: FontWeight.w500, color: dqInk))
+                      .copyWith(height: 1.5),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
