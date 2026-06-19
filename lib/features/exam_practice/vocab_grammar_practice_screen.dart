@@ -610,15 +610,17 @@ class _VocabGrammarPracticeScreenState
                   ),
                 ),
                 const SizedBox(height: 24),
-                // Cloze sentence
-                Container(
+                // Cloze sentence — the PROMPT plate. Visual-audit #159 iter2 (#178):
+                // this used the SAME dqBox fill + gold-hairline border as the four
+                // answer cards below, so the question had no focal anchor — the eye
+                // read it as "answer zero". DetectiveCaseFrame(highlighted) gives the
+                // prompt a heavier double-gold frame + soft glow + 問題 seal so it
+                // reads as the question; the answer cards stay on the subordinate
+                // dqBox treatment. Single highest-leverage cohesion fix from iter2.
+                DetectiveCaseFrame(
+                  highlighted: true,
+                  title: '問題',
                   padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: dqBox,
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(
-                        color: dqGoldDeep.withAlpha(120), width: 1.5),
-                  ),
                   child: clozeRich(
                     q.cloze,
                     dqText(size: 18, w: FontWeight.w500, color: dqInk)
