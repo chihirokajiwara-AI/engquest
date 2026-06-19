@@ -156,11 +156,28 @@ class DqScene extends StatelessWidget {
                   ),
                 ),
               ),
-              // 2. Dark scrim — keeps card text readable (cards are opaque navy
-              //    DqPanels, so contrast is preserved; scrim controls the ambient
-              //    bleed around them). Alpha 165 ≈ 0.65 opacity.
-              const ColoredBox(
-                  color: Color(0xA5000000), child: SizedBox.expand()),
+              // 2. Vertical-gradient scrim — evens the dimmed field top-to-bottom
+              //    so the painted plate reads as a CONSISTENT recessed environment
+              //    rather than a bright strip pinned to the top with a near-black
+              //    bottom. Slightly heavier in the mid-zone (where the plate's
+              //    brightest pigments live), lighter at the top edge and the
+              //    already-dark lower sky — net result: flat perceived luminance.
+              //    Alpha stops: 0x55 ≈ 0.33 · 0x88 ≈ 0.53 · 0x55 ≈ 0.33.
+              const DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Color(0x55000000), // light at top
+                      Color(0x88000000), // heavier mid-zone (bright pigments)
+                      Color(0x66000000), // slightly lighter at the dark bottom
+                    ],
+                    stops: [0.0, 0.5, 1.0],
+                  ),
+                ),
+                child: SizedBox.expand(),
+              ),
             ] else
               // Flat-gradient fallback when no plate is supplied.
               const DecoratedBox(
@@ -631,12 +648,11 @@ class DqPanel extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             if (title != null) ...[
+              // FIX 2: use pcInk (full cream ~9:1) instead of pcInkSoft (~3.5:1)
+              // for the section label so multi-line ひらがな clears WCAG 4.5:1.
               Text(title!.toUpperCase(),
                   style: dqInkText(
-                      size: 12,
-                      w: FontWeight.w800,
-                      color: pcInkSoft,
-                      spacing: 2)),
+                      size: 12, w: FontWeight.w800, color: pcInk, spacing: 2)),
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 8),
                 child: Divider(color: pcFrameGold, height: 1, thickness: 1),

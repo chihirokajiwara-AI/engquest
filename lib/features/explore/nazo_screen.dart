@@ -474,21 +474,31 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
       child: Stack(
         children: [
           SafeArea(
+            // FIX 2: add bottom padding so the last answer option clears the
+            // safe-area / home-indicator bar and never gets clipped.
+            bottom: true,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 20),
+              // FIX 2: outer horizontal margin (20 instead of 16) so the dimmed
+              // plate is visible at the left/right margins — the world FRAMES the
+              // column rather than being completely hidden behind it.
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _header(),
-                  const SizedBox(height: 12),
+                  // FIX 2: inter-panel gap so the plate shows between header and ミノス.
+                  const SizedBox(height: 14),
                   _minosRow(),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 14),
                   // Body CENTRES in the remaining space (scrolls when tall) so a
                   // short ナゾ fills the screen instead of clinging to the top over
                   // a dead navy void (#112 / EIKEN5-LAYTON-NAZO-PLAN.md #4).
                   Expanded(
                     child: LayoutBuilder(
                       builder: (context, c) => SingleChildScrollView(
+                        // FIX 2: bottom padding inside the scroll so the last
+                        // option tile is never flush against the safe-area edge.
+                        padding: const EdgeInsets.only(bottom: 12),
                         child: ConstrainedBox(
                           constraints: BoxConstraints(minHeight: c.maxHeight),
                           child: Column(
@@ -509,12 +519,14 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
                               ],
                               if (widget.hotspot.framingJa != null) ...[
                                 _framingBox(),
-                                const SizedBox(height: 10),
+                                // FIX 2: larger inter-panel gap so the plate reads between
+                                // the framing box and the quiz card.
+                                const SizedBox(height: 14),
                               ],
                               _quizCard(),
-                              const SizedBox(height: 14),
+                              const SizedBox(height: 16),
                               _promptLabel(),
-                              const SizedBox(height: 8),
+                              const SizedBox(height: 10),
                               ..._optionTiles(),
                               // Teach at the error moment (studio #3): the tapped word's
                               // meaning, shown gently (info, not a scold) for ~2.4s.
@@ -739,10 +751,8 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
   /// The small corner ring now reads as a gentle background timer, not the focus.
   Widget _recallScaffold() {
     final reduceMotion = prefersReducedMotion(context);
-    final sLeft = _recallSecondsLeft;
-    final progress = reduceMotion
-        ? 1.0
-        : sLeft / kRecallGapSeconds; // remaining fraction 1.0→0.0
+    // FIX 3 (c): sLeft/progress were used only by the now-removed corner
+    // timer ring. The per-second Timer still fires and auto-advances to quiz.
 
     final card = _teachCard!; // guarded: null-card → quiz in _startRecall()
     final totalItems = card.items.length;
@@ -771,34 +781,65 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
       }
     }
 
-    // The JA reveal — animated swap from the 「いみは？」 placeholder to the meaning.
-    //
-    // Uses AnimatedSwitcher (not AnimatedCrossFade) so the outgoing child is
-    // removed from the widget tree once the transition completes. This makes
-    // `pumpAndSettle()` in widget tests see only the live child, which lets the
-    // occlusion contract tests (`find.text('こんにちは') findsNothing`) work correctly
-    // without needing explicit reduced-motion mode.
+    // FIX 3 (b): The JA reveal — animated swap from the covered-slot placeholder
+    // to the meaning. Uses AnimatedSwitcher (not AnimatedCrossFade) so the
+    // outgoing child is removed from the widget tree once the transition
+    // completes. This makes `pumpAndSettle()` in widget tests see only the live
+    // child, which lets the occlusion contract tests (`find.text('こんにちは')
+    // findsNothing`) work correctly without needing explicit reduced-motion mode.
     //
     // Pop scale (0.88→1.0, elasticOut) fires on reveal; reduced-motion: instant.
     Widget meaningTarget() {
+      // FIX 3 (a): COVERED SLOT — recessed inset style with a dashed border and
+      // a faint ❓ watermark so a 6yo reads "something hidden to uncover" rather
+      // than a CTA button that advances the screen. Clearly distinct from the
+      // raised gold 「つぎへ ▶」 DqButton below.
       final placeholder = GestureDetector(
         key: const ValueKey('placeholder'),
         onTap: () => setState(() => _revealedCues.add(idx)),
         child: Container(
           width: double.infinity,
-          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 18),
+          padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 18),
           decoration: BoxDecoration(
-            color: pcParchment1,
+            // Recessed: darker than the card background, inner-shadow via
+            // multiple inward box-shadows to suggest depth-behind.
+            color: pcParchment0, // deep navy — darker than the panel fill
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: pcFrameGold, width: 1.5),
-            boxShadow: [
-              BoxShadow(color: pcFrameGold.withAlpha(60), blurRadius: 10)
+            border: Border.all(
+              color: pcFrameBrown, // dim brown dashed-like rule (solid thin)
+              width: 1.2,
+            ),
+            boxShadow: const [
+              // Inward shadow simulation: a tight dark shadow on the inside
+              // edges makes the slot read as recessed, not raised.
+              BoxShadow(
+                color: Color(0x44000000),
+                blurRadius: 6,
+                spreadRadius: -2,
+                offset: Offset(0, 2),
+              ),
             ],
           ),
-          child: Text(
-            'いみは？',
-            textAlign: TextAlign.center,
-            style: dqInkText(size: 18, w: FontWeight.w800, color: pcFrameGold),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              // Faint ❓ watermark — behind the tap-prompt text.
+              Text(
+                '？',
+                style: TextStyle(
+                  fontSize: 48,
+                  color: pcFrameGold.withAlpha(22), // very faint gold
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+              // Tap-prompt label.
+              Text(
+                'いみは？',
+                textAlign: TextAlign.center,
+                style:
+                    dqInkText(size: 16, w: FontWeight.w700, color: pcInkSoft),
+              ),
+            ],
           ),
         ),
       );
@@ -838,7 +879,7 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
       contentMaxWidth: 600,
       child: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 20),
+          padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -859,16 +900,18 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
                         style: dqInkText(
                             size: 12, w: FontWeight.w600, color: pcInkSoft),
                       ),
-                      const SizedBox(height: 14),
-                      // EN word — large, strong, centred.
+                      const SizedBox(height: 16),
+                      // FIX 3 (b): EN word — scaled up ~20% (26→32sp) so it
+                      // clearly DOMINATES the card as the optical centre and
+                      // the child focuses on the word to recall, not the prompt.
                       Text(
                         item.en,
                         textAlign: TextAlign.center,
                         style: dqInkText(
-                            size: 26, w: FontWeight.w800, color: pcInk),
+                            size: 32, w: FontWeight.w800, color: pcInk),
                       ),
-                      const SizedBox(height: 16),
-                      // JA meaning — hidden behind tap-target until revealed.
+                      const SizedBox(height: 18),
+                      // JA meaning — hidden behind the covered slot until tapped.
                       meaningTarget(),
                       // Progress counter (e.g. 「1 / 4」).
                       const SizedBox(height: 12),
@@ -887,24 +930,14 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
                 label: isLast ? 'ナゾへ ▶' : 'つぎへ ▶',
                 onTap: advanceCue,
               ),
-              const SizedBox(height: 16),
-              // ── Corner countdown ring ────────────────────────────────────────
-              // Repositioned from centred focal element to a small background
-              // timer indicator — the cover card is now the focus.
-              Align(
-                alignment: Alignment.centerRight,
-                child: SizedBox(
-                  width: 36,
-                  height: 36,
-                  child: CustomPaint(
-                    painter: _RecallRingPainter(
-                      progress: progress,
-                      digit: reduceMotion ? kRecallGapSeconds : sLeft,
-                      small: true,
-                    ),
-                  ),
-                ),
-              ),
+              // FIX 3 (c): Remove the corner timer ring from the cover-card
+              // state. The ring was an orphaned element with unclear meaning
+              // (a 6yo didn't know why a ring counted down on a recall card).
+              // The per-second Timer still fires and auto-advances to quiz — the
+              // ring was never load-bearing for the logic, only for the visual.
+              // No replacement is needed: the child taps through at their pace
+              // and the DqButton is the clear CTA.
+              const SizedBox(height: 8),
             ],
           ),
         ),
@@ -1455,72 +1488,6 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
       ),
     );
   }
-}
-
-/// Countdown ring for the recall gap. [progress] sweeps 1.0→0.0 (full ring →
-/// empty arc). [digit] is the remaining whole-second count shown at centre.
-/// Stroked in [pcFrameGold] on the dark navy background, matching the casebook
-/// palette. On reduced motion, always renders with progress==1.0 (static ring).
-/// [small] = true renders a compact 36px corner indicator (new active recall UI).
-class _RecallRingPainter extends CustomPainter {
-  final double progress; // 1.0 = full ring; 0.0 = empty
-  final int digit;
-  final bool small;
-
-  const _RecallRingPainter({
-    required this.progress,
-    required this.digit,
-    this.small = false,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final center = size.center(Offset.zero);
-    final strokeW = small ? 3.0 : 7.0;
-    final radius = size.shortestSide / 2 - (small ? 2 : 6);
-    // Background track (dim).
-    canvas.drawCircle(
-      center,
-      radius,
-      Paint()
-        ..color = pcFrameGold.withAlpha(50)
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = strokeW,
-    );
-    // Foreground arc (sweeps clockwise from top, representing remaining time).
-    if (progress > 0) {
-      canvas.drawArc(
-        Rect.fromCircle(center: center, radius: radius),
-        -math.pi / 2, // start at top
-        progress * 2 * math.pi, // sweep based on remaining fraction
-        false,
-        Paint()
-          ..color = pcFrameGold
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = strokeW
-          ..strokeCap = StrokeCap.round,
-      );
-    }
-    // Centre digit — omit in small mode (too cramped at 36px).
-    if (!small) {
-      final tp = TextPainter(
-        text: TextSpan(
-          text: '$digit',
-          style: const TextStyle(
-            color: pcInk,
-            fontSize: 28,
-            fontWeight: FontWeight.w800,
-          ),
-        ),
-        textDirection: TextDirection.ltr,
-      )..layout();
-      tp.paint(canvas, center - Offset(tp.width / 2, tp.height / 2));
-    }
-  }
-
-  @override
-  bool shouldRepaint(_RecallRingPainter old) =>
-      old.progress != progress || old.digit != digit || old.small != small;
 }
 
 /// The solve-moment climax: a one-shot full-screen gold radial bloom that scales
