@@ -450,24 +450,24 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
   String _partSubtitle(int part) {
     final grade = widget.eikenGrade;
     if (grade == '5' || grade == '4') {
-      if (part == 1) return '応答選択 / Response Selection';
-      if (part == 2) return '会話内容一致 / Dialogue Content';
-      return '文内容一致 / Passage Content';
+      if (part == 1) return '応答選択（おうとうせんたく） / Response Selection';
+      if (part == 2) return '会話内容一致（かいわないよういっち） / Dialogue Content';
+      return '文内容一致（ぶんないよういっち） / Passage Content';
     }
     if (grade == '3') {
-      if (part == 1) return '会話内容一致 / Dialogue Content';
-      if (part == 2) return '会話内容一致 / Dialogue Content';
-      return '文内容一致 / Passage Content';
+      if (part == 1) return '会話内容一致（かいわないよういっち） / Dialogue Content';
+      if (part == 2) return '会話内容一致（かいわないよういっち） / Dialogue Content';
+      return '文内容一致（ぶんないよういっち） / Passage Content';
     }
     if (grade == 'pre1') {
       // 準1: 第1部 会話の内容一致 / 第2部 説明文の内容一致 / 第3部 Real-Life形式.
-      if (part == 1) return '会話の内容一致 / Dialogue Content';
-      if (part == 2) return '説明文の内容一致 / Passage Content';
-      return 'Real-Life形式 / Real-Life';
+      if (part == 1) return '会話（かいわ）の内容一致（ないよういっち） / Dialogue Content';
+      if (part == 2) return '説明文（せつめいぶん）の内容一致（ないよういっち） / Passage Content';
+      return 'Real-Life形式（けいしき） / Real-Life';
     }
     // pre2 / 2
-    if (part == 1) return '会話応答選択 / Dialogue Q&A';
-    return '文内容一致 / Passage Content';
+    if (part == 1) return '会話応答選択（かいわおうとうせんたく） / Dialogue Q&A';
+    return '文内容一致（ぶんないよういっち） / Passage Content';
   }
 
   String _partInstruction(int part) {

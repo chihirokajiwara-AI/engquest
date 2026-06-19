@@ -442,7 +442,8 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
   Widget build(BuildContext context) {
     // Honest empty-state: grades with no dedicated passages (e.g. 準2級プラス)
     // — never index into an empty _passages list.
-    final title = _isPassageFillIn ? '長文語句空所補充' : '長文読解';
+    final title =
+        _isPassageFillIn ? '長文語句空所補充（ちょうぶんごくくうしょほじゅう）' : '長文読解（ちょうぶんどっかい）';
     if (_passages.isEmpty) {
       return DqScene(
         child: Column(

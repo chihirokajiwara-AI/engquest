@@ -188,8 +188,8 @@ void main() {
     testWidgets('renders passage and question for grade 5', (tester) async {
       await pumpReading(tester, '5', grade5Section);
 
-      // Should show the title '長文読解'
-      expect(find.text('長文読解'), findsOneWidget);
+      // Should show the title '長文読解（ちょうぶんどっかい）'
+      expect(find.text('長文読解（ちょうぶんどっかい）'), findsOneWidget);
       // Should show passage type badge
       expect(find.text('NOTICE'), findsOneWidget);
       // Should show first question
@@ -324,7 +324,7 @@ void main() {
       await pumpReading(tester, '2', grade2FillInSection);
 
       // Should show fill-in specific title
-      expect(find.text('長文語句空所補充'), findsOneWidget);
+      expect(find.text('長文語句空所補充（ちょうぶんごくくうしょほじゅう）'), findsOneWidget);
       // Progress should show /6
       expect(find.textContaining('/6'), findsOneWidget);
     });
@@ -340,7 +340,7 @@ void main() {
     testWidgets('pre-1 fill-in shows correct title and count', (tester) async {
       await pumpReading(tester, 'pre1', pre1FillInSection);
 
-      expect(find.text('長文語句空所補充'), findsOneWidget);
+      expect(find.text('長文語句空所補充（ちょうぶんごくくうしょほじゅう）'), findsOneWidget);
       expect(find.textContaining('/6'), findsOneWidget);
     });
 
