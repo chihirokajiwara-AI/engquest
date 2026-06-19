@@ -63,9 +63,17 @@ flutter:
     # Kyoko; assets/audio/ui_ja/). Bundled (negligible vs the #48 925MB word-audio
     # problem) so AudioCueService.play(AssetSource) serves them offline.
     - assets/audio/ui_ja/
-    # NOTE: per-word 英検 vocab MP3s (eiken5..eiken_pre1, ~21k files) are
-    # deliberately NOT bundled. They added ~21,184 of the AssetManifest's 23,266
-    # entries (a 1.3MB manifest fetched+parsed on EVERY cold start) and ~925MB to
+    # 5級 (trial-cohort grade) word audio — bundle the full 600-word eiken5 set so
+    # the hear-the-word 🔊 button is NEVER silent for the grade every new child
+    # starts on (audio is the age-6 non-reader's only learning channel). The files
+    # already exist on disk (18MB); this adds ~600 AssetManifest entries — a small,
+    # bounded cost (~1/35th of the all-grades problem below) for the one grade that
+    # matters most at launch. Other grades stay unbundled (CDN-gated, CEO-domain).
+    - assets/audio/eiken5/
+    # NOTE: per-word 英検 vocab MP3s for grades ABOVE 5級 (eiken4..eiken_pre1, ~21k
+    # files) are deliberately NOT bundled. They added ~21,184 of the
+    # AssetManifest's 23,266 entries (a 1.3MB manifest fetched+parsed on EVERY cold
+    # start) and ~925MB to
     # the web build — yet are never served live: the deploy excludes audio and the
     # Google-TTS key is unconfigured, so TtsService already falls through to
     # "unavailable". Bundling them was pure cold-start tax for zero live audio.
