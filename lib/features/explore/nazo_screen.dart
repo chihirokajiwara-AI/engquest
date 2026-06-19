@@ -1511,7 +1511,11 @@ class _SolveBurstState extends State<_SolveBurst>
     super.initState();
     _c = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 680),
+      // 680→900ms: the burst RAMPS to peak then fades (see painter envelope), so
+      // it needs to live long enough to fill the post-solve read window instead
+      // of strobing once and leaving dead air before auto-advance (game-studio
+      // game-feel + pedagogy experts, team #4).
+      duration: const Duration(milliseconds: 900),
     )..forward();
   }
 
@@ -1551,7 +1555,27 @@ class _SolveBurstPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final center = size.center(Offset.zero);
     final maxR = size.shortestSide * 0.55;
-    final fade = (1.0 - t).clamp(0.0, 1.0);
+    // Brightness ENVELOPE: ramp up over the first ~18% then fade — so the burst
+    // BRIGHTENS into a peak the eye catches, instead of being brightest at t=0
+    // (a front-loaded strobe that has already begun fading before the child's eye
+    // re-focuses on it after the read window — game-studio game-feel + pedagogy
+    // experts, team #4). Radius/length still grow with t (outward expansion); only
+    // alpha uses the ramp-then-fade envelope.
+    final env = (t < 0.18 ? (t / 0.18) : ((1.0 - t) / 0.82)).clamp(0.0, 1.0);
+    final fade = env;
+
+    // 0. Inner impact flash — a small central pop that peaks early (~t=0.25) then
+    // fades faster than the outer bloom, reading as "the hit lands at the centre"
+    // before the ring radiates out.
+    final innerEnv =
+        (t < 0.25 ? (t / 0.25) : ((1.0 - t) / 0.75)).clamp(0.0, 1.0);
+    canvas.drawCircle(
+      center,
+      maxR * 0.16,
+      Paint()
+        ..color = _gold.withAlpha(_a(0.9 * innerEnv))
+        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8),
+    );
 
     // 1. Radial bloom — originates from a POINT and punches outward (#98 R2-#3:
     // the easeOut curve made it spring into existence already at 25% radius = a
@@ -1597,7 +1621,9 @@ class _SolveBurstPainter extends CustomPainter {
     for (var i = 0; i < sparks; i++) {
       final ang = (i / sparks) * 2 * math.pi + 0.4;
       final dir = Offset(math.cos(ang), math.sin(ang));
-      canvas.drawCircle(center + dir * dist, 3.2 * (1.0 - t * 0.6), sparkPaint);
+      // 8px (was 3.2 — invisible at arm's length on a retina phone), shrinking
+      // to ~5px as it flies out (game-feel expert, team #4).
+      canvas.drawCircle(center + dir * dist, 8.0 * (1.0 - t * 0.4), sparkPaint);
     }
   }
 
