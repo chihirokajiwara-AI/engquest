@@ -1716,18 +1716,12 @@ class _SolveBurstPainter extends CustomPainter {
     final env = (t < 0.18 ? (t / 0.18) : ((1.0 - t) / 0.82)).clamp(0.0, 1.0);
     final fade = env;
 
-    // 0. Inner impact flash — a small central pop that peaks early (~t=0.25) then
-    // fades faster than the outer bloom, reading as "the hit lands at the centre"
-    // before the ring radiates out.
-    final innerEnv =
-        (t < 0.25 ? (t / 0.25) : ((1.0 - t) / 0.75)).clamp(0.0, 1.0);
-    canvas.drawCircle(
-      center,
-      maxR * 0.16,
-      Paint()
-        ..color = _gold.withAlpha(_a(0.9 * innerEnv))
-        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8),
-    );
+    // CENTRE DEADZONE (run-3 game-feel + learning-science experts): _SolveBurst
+    // is a Positioned.fill ON TOP of the 解説 rule card + 'ことばが ひびいた！' text
+    // the child reads during the read window, so a centre flash/bloom washed the
+    // very teaching it celebrates. The celebration now lives in the OUTER ring
+    // only — no centre flash, an annulus bloom, and rays/sparkles that start
+    // beyond the inner ~50%, keeping the 英検 explanation always readable.
 
     // 1. Radial bloom — originates from a POINT and punches outward (#98 R2-#3:
     // the easeOut curve made it spring into existence already at 25% radius = a
@@ -1742,19 +1736,20 @@ class _SolveBurstPainter extends CustomPainter {
       Paint()
         ..shader = RadialGradient(
           colors: [
-            _gold.withAlpha(_a(0.80 * fade)),
-            _gold.withAlpha(_a(0.32 * fade)),
+            _gold.withAlpha(0),
+            _gold.withAlpha(0),
+            _gold.withAlpha(_a(0.42 * fade)),
             _gold.withAlpha(0),
           ],
-          stops: const [0.0, 0.45, 1.0],
+          stops: const [0.0, 0.50, 0.74, 1.0],
         ).createShader(Rect.fromCircle(center: center, radius: bloomR)),
     );
 
     // 2. Radiating rays — thin gold spokes that shoot out and recede. Also
     // shoot from near-centre (#98) so they read as thrown FROM the impact point,
     // not as pre-existing spokes; peak length (1.40·maxR) preserved.
-    final rayLen = maxR * (0.05 + 1.35 * t);
-    final rayInner = maxR * 0.06;
+    final rayLen = maxR * (0.55 + 0.85 * t);
+    final rayInner = maxR * 0.52;
     final rayPaint = Paint()
       ..color = _gold.withAlpha(_a(0.85 * fade))
       ..strokeWidth = 2.0
@@ -1767,7 +1762,7 @@ class _SolveBurstPainter extends CustomPainter {
     }
 
     // 3. Sparkles — small dots flung outward, shrinking as they go.
-    final dist = maxR * (0.18 + 1.1 * t);
+    final dist = maxR * (0.58 + 0.6 * t);
     final sparkPaint = Paint()..color = _gold.withAlpha(_a(fade));
     const sparks = 6;
     for (var i = 0; i < sparks; i++) {
