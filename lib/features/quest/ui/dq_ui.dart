@@ -394,8 +394,13 @@ class DqChoice extends StatelessWidget {
     if (state == DqChoiceState.correct && !prefersReducedMotion(context)) {
       return TweenAnimationBuilder<double>(
         key: const ValueKey('dqchoice_correct_pop'),
-        tween: Tween(begin: 0.85, end: 1.0),
-        duration: const Duration(milliseconds: 360),
+        // A correct answer must read as a WIN = outward growth. The old
+        // begin:0.85→1.0 SHRANK the tile first (recoil = the grammar of a wrong
+        // hit; game-studio game-feel expert). Pop from 1.12 and elastic-settle
+        // to resting 1.0 so the dominant motion is bigger, not smaller.
+        // (begin:1.0→1.12 would have settled enlarged — kept end at 1.0.)
+        tween: Tween(begin: 1.12, end: 1.0),
+        duration: const Duration(milliseconds: 480),
         curve: Curves.elasticOut,
         builder: (_, scale, child) =>
             Transform.scale(scale: scale, child: child),
@@ -1103,16 +1108,17 @@ class AudioOptionButtonState extends State<AudioOptionButton>
     );
     // Correct-answer kinetic POP (#64): wins were a static colour swap while wrong
     // answers shake (#59) — an inverted reward signal. On becoming correct, a brief
-    // elastic scale-pop (grows past 100% then settles) makes the win felt. The
-    // branch only exists in the correct state, so the freshly-inserted
-    // TweenAnimationBuilder animates from begin once. Reduced-motion → no pop.
+    // elastic scale-pop makes the win felt. The pop POPS BIG (1.12) then settles to
+    // resting 1.0 — outward growth = a win; the old begin:0.85→1.0 shrank first,
+    // which reads as a recoil/hit (game-studio game-feel expert). End stays 1.0 so
+    // the tile never settles enlarged. Reduced-motion → no pop.
     final Widget content;
     if (widget.state == DqChoiceState.correct &&
         !prefersReducedMotion(context)) {
       content = TweenAnimationBuilder<double>(
         key: const ValueKey('dqaob_correct_pop'),
-        tween: Tween(begin: 0.85, end: 1.0),
-        duration: const Duration(milliseconds: 360),
+        tween: Tween(begin: 1.12, end: 1.0),
+        duration: const Duration(milliseconds: 480),
         curve: Curves.elasticOut,
         builder: (_, scale, child) =>
             Transform.scale(scale: scale, child: child),
