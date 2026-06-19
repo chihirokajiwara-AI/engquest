@@ -117,6 +117,11 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
 
   int? _picked;
   bool _revealed = false;
+  // Indices the child tapped WRONG on a non-penalizing ナゾ. The 320ms shake
+  // vanishes, so without a durable mark a 6yo re-taps a tile they already tried.
+  // These stay struck-out (DqChoiceState.wrong) for the life of the question
+  // (#113 re-score #2). Reset per ナゾ in _finish.
+  final Set<int> _triedWrong = {};
   // Choreographed reward (studio #1): on a correct answer the learning text shows
   // FIRST (_revealed), then after a ~550ms read window the gold burst + continue
   // fire (_burstReady) — so the climax PUNCTUATES the answer instead of burying it
@@ -242,6 +247,9 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
       _sound.playWrong();
       HapticFeedback.selectionClick();
       _optionKeys[i].currentState?.triggerShake();
+      // Durable wrong-scar (#113 re-score #2): mark this tile so it stays
+      // struck-out and the child's eye skips it instead of re-tapping it.
+      setState(() => _triedWrong.add(i));
       _cue.play(_step.autoPlayAudio);
       return;
     }
@@ -374,6 +382,7 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
   void _finish() {
     if (_finished) return; // idempotent: the auto-timer and the CTA can race
     _finished = true;
+    _triedWrong.clear(); // wrong-scars are per-ナゾ (#113 re-score #2)
     _burstTimer?.cancel();
     _finishTimer?.cancel();
     final earned = _minos.earn();
@@ -1306,6 +1315,10 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
       if (_revealed && correct) {
         st = DqChoiceState.correct;
       } else if (_step.penalizeWrong && _picked == i && !correct) {
+        st = DqChoiceState.wrong;
+      } else if (_triedWrong.contains(i)) {
+        // #113 re-score #2: a previously-tried wrong tile stays struck-out so the
+        // child doesn't re-tap it (the 320ms shake left no durable mark).
         st = DqChoiceState.wrong;
       }
       final audioKey = o.audioAsset ?? quizAudioAsset(o.label);
