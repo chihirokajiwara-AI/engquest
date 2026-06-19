@@ -790,6 +790,15 @@ class _ProgressTab extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
       children: [
+        // ── This-week summary (legible, screenshot-shareable) ─────────────
+        // The 記録 tab gave a parent charts but no plain-language takeaway. This
+        // card states the week in words+numbers a parent reads at a glance —
+        // the parent-legible-progress that drives renewal/word-of-mouth (#177).
+        // All figures are computed from the child's REAL last7Days data; honest
+        // empty-state before any practice (no inflation).
+        _WeeklySummaryCard(progress: progress),
+        const SizedBox(height: 14),
+
         // ── 7-day bar chart ───────────────────────────────────────────────
         DqPanel(
           title: '直近7日間 / Last 7 Days',
@@ -834,6 +843,76 @@ class _ProgressTab extends StatelessWidget {
                 ),
         ),
       ],
+    );
+  }
+}
+
+// ── This-week summary card ────────────────────────────────────────────────────
+
+class _WeeklySummaryCard extends StatelessWidget {
+  final LearningProgress progress;
+  const _WeeklySummaryCard({required this.progress});
+
+  @override
+  Widget build(BuildContext context) {
+    final days = progress.last7Days;
+    final daysPracticed =
+        days.where((d) => d.wordsPracticed > 0 || d.sessionMinutes > 0).length;
+    final wordsThisWeek = days.fold<int>(0, (sum, d) => sum + d.wordsPracticed);
+    final minutesThisWeek =
+        days.fold<int>(0, (sum, d) => sum + d.sessionMinutes);
+
+    // Warm, HONEST one-line takeaway keyed off days practiced — never inflates
+    // (no "great job" when nothing was done).
+    final String takeaway;
+    if (daysPracticed == 0) {
+      takeaway = '今週（こんしゅう）は まだ きろくが ありません。\n'
+          '1日（にち）5分（ふん）でも つづけると、ここに せいかが でます。';
+    } else if (daysPracticed >= 5) {
+      takeaway = 'すばらしい ペース！ この ちょうしで つづけましょう。';
+    } else if (daysPracticed >= 2) {
+      takeaway = 'いい スタート。あと 1〜2日（にち）ふやせると、もっと のびます。';
+    } else {
+      takeaway = '今週（こんしゅう）の 第一歩（だいいっぽ）！ つぎは 2日（にち）れんぞくを めざそう。';
+    }
+
+    return DqPanel(
+      title: '今週（こんしゅう）のまとめ / This Week',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _StatPill(
+                label: '日 / Days',
+                value: '$daysPracticed',
+                icon: Icons.event_available,
+              ),
+              _StatPill(
+                label: '学習 / Items',
+                value: '$wordsThisWeek',
+                icon: Icons.spellcheck,
+              ),
+              _StatPill(
+                label: '分 / Min',
+                value: '$minutesThisWeek',
+                icon: Icons.timer,
+              ),
+              _StatPill(
+                label: '連続 / Streak',
+                value: '${progress.currentStreak}',
+                icon: Icons.local_fire_department,
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            takeaway,
+            style: dqText(size: 12, w: FontWeight.w600, color: dqInk),
+          ),
+        ],
+      ),
     );
   }
 }

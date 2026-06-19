@@ -122,6 +122,14 @@ void main() {
     // maps that non-empty set → 暫定 label + prominent 未測定 box. (A full-widget
     // assertion is impractical here: the card lazy-builds below the fold in the
     // rich on-device dashboard, so it is not in the default pumped subtree.)
+    // NOTE (#177 weekly summary / #179 readiness): the DATA-dependent tabs
+    // (Home/記録) resolve _progressFuture via AuthService.getOrCreateUid() →
+    // Firebase, which is hardcoded (not injected) and fails under flutter_test,
+    // so those tabs render the error state in tests. The 今週のまとめ weekly
+    // summary card (_WeeklySummaryCard) is therefore verified by analyze + manual
+    // render, not a widget pump. Making these tabs testable needs an AuthService
+    // injection seam — tracked separately (test-infra gap).
+
     test('loadParentReadiness flags partial data as provisional (#179)',
         () async {
       SharedPreferences.setMockInitialValues({'onboarding_start_level': '5'});
