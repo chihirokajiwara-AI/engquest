@@ -143,6 +143,26 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
         kAchievements.where((d) => _states[d.id]?.unlocked != true).toList();
     final sorted = [...unlocked, ...locked];
 
+    // Pick the closest reachable locked badge as the "next up" goal.
+    // Sort by progress-ratio descending, tie-break by smallest target ascending
+    // (so a brand-new child with 0 progress gets the easiest first goal).
+    String? nextUpId;
+    if (locked.isNotEmpty) {
+      final sortable = [...locked];
+      sortable.sort((a, b) {
+        final sa = _states[a.id];
+        final sb = _states[b.id];
+        final ratioA =
+            (a.target > 0 && sa != null) ? sa.progress / a.target : 0.0;
+        final ratioB =
+            (b.target > 0 && sb != null) ? sb.progress / b.target : 0.0;
+        final cmp = ratioB.compareTo(ratioA); // descending ratio
+        if (cmp != 0) return cmp;
+        return a.target.compareTo(b.target); // ascending target as tie-break
+      });
+      nextUpId = sortable.first.id;
+    }
+
     final unlockedCount = _states.values.where((s) => s.unlocked).length;
 
     return Column(
@@ -187,7 +207,11 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
             itemBuilder: (context, i) {
               final def = sorted[i];
               final state = _states[def.id] ?? AchievementState.empty(def.id);
-              return _BadgeCard(def: def, state: state);
+              return _BadgeCard(
+                def: def,
+                state: state,
+                isNextUp: def.id == nextUpId,
+              );
             },
           ),
         ),
@@ -201,8 +225,13 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
 class _BadgeCard extends StatelessWidget {
   final AchievementDef def;
   final AchievementState state;
+  final bool isNextUp;
 
-  const _BadgeCard({required this.def, required this.state});
+  const _BadgeCard({
+    required this.def,
+    required this.state,
+    this.isNextUp = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -214,10 +243,14 @@ class _BadgeCard extends StatelessWidget {
     final isCapstone = isCapstoneAchievement(def);
 
     // Unlocked: gold-framed navy panel that glows. Locked: dim navy, faded ink.
-    final Color frame = isUnlocked ? dqGold : dqGoldDeep.withAlpha(90);
+    // Next-up (closest reachable goal): gold frame + white title to stand out.
+    final Color frame =
+        isUnlocked ? dqGold : (isNextUp ? dqGold : dqGoldDeep.withAlpha(90));
     final Color iconColor = isUnlocked ? dqGold : dqInk.withAlpha(90);
-    final Color titleColor = isUnlocked ? Colors.white : dqInk.withAlpha(120);
-    final Color subColor = isUnlocked ? dqGold : dqGoldDeep.withAlpha(120);
+    final Color titleColor = isUnlocked
+        ? Colors.white
+        : (isNextUp ? Colors.white : dqInk.withAlpha(220));
+    final Color subColor = isUnlocked ? dqGold : dqGold.withAlpha(165);
 
     return Container(
       decoration: BoxDecoration(
@@ -232,13 +265,21 @@ class _BadgeCard extends StatelessWidget {
                   offset: const Offset(0, 4),
                 ),
               ]
-            : const [
-                BoxShadow(
-                  color: Colors.black45,
-                  blurRadius: 8,
-                  offset: Offset(0, 3),
-                ),
-              ],
+            : isNextUp
+                ? [
+                    BoxShadow(
+                      color: dqGold.withAlpha(70),
+                      blurRadius: 14,
+                      offset: const Offset(0, 4),
+                    ),
+                  ]
+                : const [
+                    BoxShadow(
+                      color: Colors.black45,
+                      blurRadius: 8,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
       ),
       child: Padding(
         padding: const EdgeInsets.all(14),
@@ -357,9 +398,8 @@ class _BadgeCard extends StatelessWidget {
                     child: LinearProgressIndicator(
                       value: progress,
                       minHeight: 5,
-                      backgroundColor: dqNight0,
-                      valueColor:
-                          const AlwaysStoppedAnimation<Color>(dqGoldDeep),
+                      backgroundColor: dqGoldDeep.withAlpha(70),
+                      valueColor: const AlwaysStoppedAnimation<Color>(dqGold),
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -368,7 +408,7 @@ class _BadgeCard extends StatelessWidget {
                     style: dqText(
                       size: 10,
                       w: FontWeight.w600,
-                      color: dqInk.withAlpha(140),
+                      color: dqInk.withAlpha(205),
                     ),
                   ),
                   // The GOAL — what to do to unlock this badge. Without it the bare
@@ -376,13 +416,26 @@ class _BadgeCard extends StatelessWidget {
                   // never tells the child their next action. descriptionJa already
                   // exists (shown in the unlock toast); surface it on the card too.
                   const SizedBox(height: 3),
-                  Text(
-                    def.descriptionJa,
-                    textAlign: TextAlign.center,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: dqText(size: 9, color: dqInk.withAlpha(120)),
-                  ),
+                  // For the highlighted "next up" badge the actionable remaining
+                  // count REPLACES the static goal line (not a 4th line) so the
+                  // tile height is unchanged at any textScaler — a 4th line
+                  // overflowed the fixed-ratio tile at scale 2.0 (a11y test).
+                  isNextUp
+                      ? Text(
+                          'あと ${def.target - state.progress} で ゲット！',
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: dqText(
+                              size: 10, w: FontWeight.w800, color: dqGold),
+                        )
+                      : Text(
+                          def.descriptionJa,
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: dqText(size: 9, color: dqInk.withAlpha(190)),
+                        ),
                 ],
               ),
           ],
