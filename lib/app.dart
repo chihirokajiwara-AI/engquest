@@ -931,10 +931,12 @@ Widget _previewFor(String? name) {
     case 'passprogress':
       // Session-end 合格率 progress moment (gain state): readiness rose this
       // session, so the card shows a +delta badge + gauge.
-      return Scaffold(
-        backgroundColor: dqNight0,
-        body: Center(
-          child: Padding(
+      // Previously this was a bare Center+Padding that left ~85% empty navy —
+      // fixed by using DqScene so the card fills/centres the frame properly.
+      return DqScene(
+        contentMaxWidth: 600,
+        child: Center(
+          child: SingleChildScrollView(
             padding: const EdgeInsets.all(18),
             child: PassProgressCard(
               pre: CseEstimator.estimate(

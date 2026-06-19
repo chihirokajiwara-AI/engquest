@@ -15,6 +15,12 @@ class DialogScenariosScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // The scenario list is short (3 cards) — a plain ListView left ~45% empty
+    // navy void below the last card (#CEO quality crisis). Use a centred
+    // scrollable column so the cards fill the frame vertically when the content
+    // is shorter than the screen, while still scrolling on tiny screens.
+    final cards =
+        DialogScenario.values.map((s) => _ScenarioCard(scenario: s)).toList();
     return DqScene(
       contentMaxWidth: 600, // #144: centre on tablet, full-width on phone
       child: Padding(
@@ -33,12 +39,17 @@ class DialogScenariosScreen extends StatelessWidget {
               child: dqBilingual('誰と話す？', 'Who will you talk to?',
                   jpSize: 14, jpColor: dqInk),
             ),
+            // Centre the small card list so it reads as intentionally placed,
+            // not top-anchored in an empty frame.
             Expanded(
-              child: ListView(
-                padding: const EdgeInsets.only(bottom: 16),
-                children: DialogScenario.values
-                    .map((s) => _ScenarioCard(scenario: s))
-                    .toList(),
+              child: Center(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: cards,
+                  ),
+                ),
               ),
             ),
           ],

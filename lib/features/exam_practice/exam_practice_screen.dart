@@ -89,13 +89,15 @@ class _ExamPracticeScreenState extends State<ExamPracticeScreen> {
               onBack: () => Navigator.of(context).pop(),
             ),
           ),
-          // Below the pinned header, the exam-info panel + section tiles + footer
-          // buttons all scroll together in one list so nothing overflows on a
-          // short (phone-landscape) viewport (#144); on a tall screen the content
-          // simply sits at the top with the dark scene below.
+          // Exam-info panel + section tiles scroll freely.
+          // The two CTA buttons are PINNED below (outside the scroll) so they are
+          // always visible on any phone viewport regardless of section count.
+          // On grades with 5-6 sections the old layout pushed the primary Start
+          // button below the fold and the child could not reach it without
+          // knowing to scroll. Pinning them fixes this.
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.fromLTRB(16, 6, 16, 16),
+              padding: const EdgeInsets.fromLTRB(16, 6, 16, 6),
               children: [
                 // Exam info panel (試験時間 / 合格ライン / CEFR).
                 DqPanel(
@@ -135,30 +137,36 @@ class _ExamPracticeScreenState extends State<ExamPracticeScreen> {
                     section: section,
                     onTap: () => _navigateToSection(context, section),
                   ),
-                const SizedBox(height: 8),
-                // ── 合格メーター (LIVE — reads real SkillAccuracyStore data) ──
-                // Sources REAL practice results; the const PassMeterScreen() demo
-                // path is used ONLY by the ?preview=passmeter route in app.dart.
-                DqButton(
-                  label: '合格率をみる  /  Check Pass Meter',
-                  // Secondary: a "check" action beside the primary "do" mock —
-                  // gives the two-button pair a clear hierarchy (was two equal
-                  // gold buttons; visual-auditor CEO 2132 exam-hub finding).
-                  secondary: true,
-                  onTap: () => _openLivePassMeter(context),
-                ),
-                const SizedBox(height: 8),
-                DqButton(
-                  label: 'フル模試を開始  /  Start Full Mock',
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) =>
-                          MockExamScreen(eikenGrade: widget.eikenGrade),
-                    ),
-                  ),
-                ),
               ],
+            ),
+          ),
+          // ── Pinned CTAs — always visible on screen ────────────────────────────
+          // Primary action first (Start Full Mock) so it is the dominant target
+          // on first glance. Secondary (合格率をみる) below as a supporting action.
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
+            child: DqButton(
+              label: 'フル模試を開始  /  Start Full Mock',
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => MockExamScreen(eikenGrade: widget.eikenGrade),
+                ),
+              ),
+            ),
+          ),
+          // ── 合格メーター (LIVE — reads real SkillAccuracyStore data) ──
+          // Sources REAL practice results; the const PassMeterScreen() demo
+          // path is used ONLY by the ?preview=passmeter route in app.dart.
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+            child: DqButton(
+              label: '合格率をみる  /  Check Pass Meter',
+              // Secondary: a "check" action beside the primary "do" mock —
+              // gives the two-button pair a clear hierarchy (was two equal
+              // gold buttons; visual-auditor CEO 2132 exam-hub finding).
+              secondary: true,
+              onTap: () => _openLivePassMeter(context),
             ),
           ),
         ],

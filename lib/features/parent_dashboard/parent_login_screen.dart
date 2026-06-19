@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:engquest/core/firebase/parent_auth_service.dart';
+import '../quest/ui/dq_ui.dart';
 import 'parent_dashboard_screen.dart';
 
 /// Parent login / signup screen.
 ///
 /// Two tabs: ログイン (login) and 新規登録 (sign up).
 /// After auth, prompts for a link code to connect to a child's account.
+///
+/// Styled to match the dark-navy/gold DQ canon (#947) so parents flow
+/// seamlessly from the app into this screen without a jarring palette shift.
 class ParentLoginScreen extends StatefulWidget {
   const ParentLoginScreen({super.key});
 
@@ -205,51 +209,65 @@ class _ParentLoginScreenState extends State<ParentLoginScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          tooltip: 'もどる / Back',
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF263238)),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        title: const Text(
-          '保護者ログイン',
-          style:
-              TextStyle(color: Color(0xFFFFD700), fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-      ),
-      body: SafeArea(
-        child: _authenticated ? _buildLinkCodePhase() : _buildAuthPhase(),
+    return DqScene(
+      child: Column(
+        children: [
+          _buildHeader(),
+          Expanded(
+            child: _authenticated ? _buildLinkCodePhase() : _buildAuthPhase(),
+          ),
+        ],
       ),
     );
   }
 
-  // ── Auth Phase: Login / Sign Up tabs ──────────────────────────────────
+  // ── DQ-style header (back arrow + gold bilingual title) ───────────────────
+
+  Widget _buildHeader() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(8, 6, 16, 6),
+      child: Row(
+        children: [
+          IconButton(
+            tooltip: 'もどる / Back',
+            icon: const Icon(Icons.arrow_back, color: dqInk),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          Expanded(
+            child: dqBilingual(
+              '保護者ログイン',
+              'Parent Login',
+              jpSize: 20,
+              stacked: true,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ── Auth Phase: Login / Sign Up tabs ──────────────────────────────────────
 
   Widget _buildAuthPhase() {
     return Column(
       children: [
         const SizedBox(height: 8),
-        // Tab bar
+        // Tab bar — dark navy fill, gold selected indicator
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 24),
           decoration: BoxDecoration(
-            color: const Color(0xFFE8EEF3),
+            color: dqBox,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: const Color(0xFFE0E0E0)),
+            border: Border.all(color: dqBorder, width: 1.5),
           ),
           child: TabBar(
             controller: _tabCtrl,
             indicator: BoxDecoration(
-              color: const Color(0xFFFFD700),
+              gradient: const LinearGradient(colors: [dqGold, dqGoldDeep]),
               borderRadius: BorderRadius.circular(12),
             ),
-            labelColor: Colors.black,
-            unselectedLabelColor: const Color(0xFF607D8B),
+            labelColor: const Color(0xFF2A1C00),
+            unselectedLabelColor: dqInk,
             labelStyle: const TextStyle(fontWeight: FontWeight.bold),
             dividerHeight: 0,
             tabs: const [
@@ -258,8 +276,8 @@ class _ParentLoginScreenState extends State<ParentLoginScreen>
             ],
           ),
         ),
-        const SizedBox(height: 24),
-        // Tab content
+        const SizedBox(height: 20),
+        // Tab content — centred so the form does not leave the lower half empty
         Expanded(
           child: TabBarView(
             controller: _tabCtrl,
@@ -274,194 +292,217 @@ class _ParentLoginScreenState extends State<ParentLoginScreen>
   }
 
   Widget _buildLoginForm() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const Text(
-            'お子様の学習状況を確認するために\n保護者アカウントでログインしてください',
-            style:
-                TextStyle(color: Color(0xFF607D8B), fontSize: 14, height: 1.5),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 24),
-          _buildTextField(
-            controller: _emailCtrl,
-            label: 'メールアドレス',
-            keyboardType: TextInputType.emailAddress,
-          ),
-          const SizedBox(height: 16),
-          _buildTextField(
-            controller: _passwordCtrl,
-            label: 'パスワード',
-            obscure: true,
-          ),
-          if (_error != null) ...[
-            const SizedBox(height: 12),
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
             Text(
-              _error!,
-              style: const TextStyle(color: Colors.redAccent, fontSize: 13),
+              'お子様の学習状況を確認するために\n保護者アカウントでログインしてください',
+              style: dqText(size: 14, color: dqInk),
               textAlign: TextAlign.center,
             ),
+            const SizedBox(height: 24),
+            _buildTextField(
+              controller: _emailCtrl,
+              label: 'メールアドレス',
+              keyboardType: TextInputType.emailAddress,
+            ),
+            const SizedBox(height: 16),
+            _buildTextField(
+              controller: _passwordCtrl,
+              label: 'パスワード',
+              obscure: true,
+            ),
+            if (_error != null) ...[
+              const SizedBox(height: 12),
+              Text(
+                _error!,
+                style: dqText(size: 13, color: const Color(0xFFE89090)),
+                textAlign: TextAlign.center,
+              ),
+            ],
+            const SizedBox(height: 24),
+            DqButton(
+              label: 'ログイン',
+              onTap: _loading ? null : _handleLogin,
+            ),
+            if (_loading) ...[
+              const SizedBox(height: 16),
+              const Center(
+                child: SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: dqGold,
+                  ),
+                ),
+              ),
+            ],
           ],
-          const SizedBox(height: 24),
-          _buildPrimaryButton(
-            label: 'ログイン',
-            onPressed: _handleLogin,
-          ),
-        ],
+        ),
       ),
     );
   }
 
   Widget _buildSignUpForm() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const Text(
-            '保護者アカウントを作成して\nお子様の進捗を見守りましょう',
-            style:
-                TextStyle(color: Color(0xFF607D8B), fontSize: 14, height: 1.5),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 24),
-          _buildTextField(
-            controller: _emailCtrl,
-            label: 'メールアドレス',
-            keyboardType: TextInputType.emailAddress,
-          ),
-          const SizedBox(height: 16),
-          _buildTextField(
-            controller: _passwordCtrl,
-            label: 'パスワード（6文字以上）',
-            obscure: true,
-          ),
-          const SizedBox(height: 16),
-          _buildTextField(
-            controller: _confirmCtrl,
-            label: 'パスワード（確認）',
-            obscure: true,
-          ),
-          if (_error != null) ...[
-            const SizedBox(height: 12),
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
             Text(
-              _error!,
-              style: const TextStyle(color: Colors.redAccent, fontSize: 13),
+              '保護者アカウントを作成して\nお子様の進捗を見守りましょう',
+              style: dqText(size: 14, color: dqInk),
               textAlign: TextAlign.center,
             ),
+            const SizedBox(height: 24),
+            _buildTextField(
+              controller: _emailCtrl,
+              label: 'メールアドレス',
+              keyboardType: TextInputType.emailAddress,
+            ),
+            const SizedBox(height: 16),
+            _buildTextField(
+              controller: _passwordCtrl,
+              label: 'パスワード（6文字以上）',
+              obscure: true,
+            ),
+            const SizedBox(height: 16),
+            _buildTextField(
+              controller: _confirmCtrl,
+              label: 'パスワード（確認）',
+              obscure: true,
+            ),
+            if (_error != null) ...[
+              const SizedBox(height: 12),
+              Text(
+                _error!,
+                style: dqText(size: 13, color: const Color(0xFFE89090)),
+                textAlign: TextAlign.center,
+              ),
+            ],
+            const SizedBox(height: 24),
+            DqButton(
+              label: 'アカウント作成',
+              onTap: _loading ? null : _handleSignUp,
+            ),
+            if (_loading) ...[
+              const SizedBox(height: 16),
+              const Center(
+                child: SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: dqGold,
+                  ),
+                ),
+              ),
+            ],
           ],
-          const SizedBox(height: 24),
-          _buildPrimaryButton(
-            label: 'アカウント作成',
-            onPressed: _handleSignUp,
-          ),
-        ],
+        ),
       ),
     );
   }
 
-  // ── Link Code Phase ───────────────────────────────────────────────────
+  // ── Link Code Phase ────────────────────────────────────────────────────────
 
   Widget _buildLinkCodePhase() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const SizedBox(height: 16),
-          Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: const Color(0xFFFFD700).withAlpha(100)),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF4FC3F7).withAlpha(20),
-                  blurRadius: 8,
-                  offset: const Offset(0, 3),
-                ),
-              ],
-            ),
-            child: const Column(
-              children: [
-                Icon(Icons.link, color: Color(0xFFFFD700), size: 48),
-                SizedBox(height: 16),
-                Text(
-                  'お子様のアカウントをリンク',
-                  style: TextStyle(
-                    color: Color(0xFF263238),
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            DqPanel(
+              title: 'リンク / Link',
+              child: Column(
+                children: [
+                  const Icon(Icons.link, color: dqGold, size: 48),
+                  const SizedBox(height: 16),
+                  Text(
+                    'お子様のアカウントをリンク',
+                    style: dqText(size: 20, w: FontWeight.bold, color: dqGold),
+                    textAlign: TextAlign.center,
                   ),
-                ),
-                SizedBox(height: 12),
-                Text(
-                  'お子様のアプリで表示される6桁のリンクコードを\n入力してください。\n\n'
-                  'コードの取得方法：\n'
-                  'お子様のアプリ → Scholar\'s Tower → 設定タブ → リンクコード生成',
-                  style: TextStyle(
-                    color: Color(0xFF607D8B),
-                    fontSize: 13,
-                    height: 1.5,
+                  const SizedBox(height: 12),
+                  Text(
+                    'お子様のアプリで表示される6桁のリンクコードを\n入力してください。\n\n'
+                    'コードの取得方法：\n'
+                    'お子様のアプリ → Scholar\'s Tower → 設定タブ → リンクコード生成',
+                    style: dqText(size: 13, color: dqInk),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 24),
-          _buildTextField(
-            controller: _linkCodeCtrl,
-            label: 'リンクコード（6桁）',
-            keyboardType: TextInputType.number,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 8,
-            ),
-          ),
-          if (_error != null) ...[
-            const SizedBox(height: 12),
-            Text(
-              _error!,
-              style: const TextStyle(color: Colors.redAccent, fontSize: 13),
+            const SizedBox(height: 24),
+            _buildTextField(
+              controller: _linkCodeCtrl,
+              label: 'リンクコード（6桁）',
+              keyboardType: TextInputType.number,
               textAlign: TextAlign.center,
+              style: dqText(
+                size: 28,
+                w: FontWeight.bold,
+                color: dqInk,
+                spacing: 8,
+              ),
+            ),
+            if (_error != null) ...[
+              const SizedBox(height: 12),
+              Text(
+                _error!,
+                style: dqText(size: 13, color: const Color(0xFFE89090)),
+                textAlign: TextAlign.center,
+              ),
+            ],
+            const SizedBox(height: 24),
+            DqButton(
+              label: 'リンクする',
+              onTap: _loading ? null : _handleLinkCode,
+            ),
+            if (_loading) ...[
+              const SizedBox(height: 16),
+              const Center(
+                child: SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: dqGold,
+                  ),
+                ),
+              ),
+            ],
+            const SizedBox(height: 16),
+            TextButton(
+              onPressed: () async {
+                await _parentAuth.signOut();
+                if (mounted) {
+                  setState(() {
+                    _authenticated = false;
+                    _error = null;
+                    _loading = false;
+                  });
+                }
+              },
+              child: Text(
+                'ログアウト',
+                style: dqText(size: 14, color: dqGoldDeep),
+              ),
             ),
           ],
-          const SizedBox(height: 24),
-          _buildPrimaryButton(
-            label: 'リンクする',
-            onPressed: _handleLinkCode,
-          ),
-          const SizedBox(height: 16),
-          TextButton(
-            onPressed: () async {
-              await _parentAuth.signOut();
-              if (mounted) {
-                setState(() {
-                  _authenticated = false;
-                  _error = null;
-                  _loading = false;
-                });
-              }
-            },
-            child: const Text(
-              'ログアウト',
-              style: TextStyle(color: Color(0xFF90A4AE), fontSize: 14),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
 
-  // ── Shared widgets ────────────────────────────────────────────────────
+  // ── Shared widgets ─────────────────────────────────────────────────────────
 
   Widget _buildTextField({
     required TextEditingController controller,
@@ -476,56 +517,25 @@ class _ParentLoginScreenState extends State<ParentLoginScreen>
       obscureText: obscure,
       keyboardType: keyboardType,
       textAlign: textAlign,
-      style: style ?? const TextStyle(color: Color(0xFF263238), fontSize: 16),
+      style: style ?? dqText(size: 16, color: dqInk),
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: const TextStyle(color: Color(0xFF90A4AE)),
+        labelStyle: dqText(size: 14, color: dqGoldDeep),
         filled: true,
-        fillColor: Colors.white,
+        fillColor: dqBox,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(color: dqBorder),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(color: dqBorder),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFFFFD700)),
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(color: dqGold, width: 2),
         ),
       ),
-    );
-  }
-
-  Widget _buildPrimaryButton({
-    required String label,
-    required VoidCallback onPressed,
-  }) {
-    return ElevatedButton(
-      onPressed: _loading ? null : onPressed,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFFFFD700),
-        foregroundColor: Colors.black,
-        disabledBackgroundColor: Colors.white12,
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
-      child: _loading
-          ? const SizedBox(
-              height: 20,
-              width: 20,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                color: Colors.black54,
-              ),
-            )
-          : Text(
-              label,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
     );
   }
 }

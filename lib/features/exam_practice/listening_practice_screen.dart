@@ -412,37 +412,44 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
       3: ('第3部', _partSubtitle(3)),
     };
     final (jp, sub) = partLabels[_currentPart] ?? ('リスニング', 'Listening');
-    return Padding(
-      padding: const EdgeInsets.all(24),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Spacer(),
-          DqDialogBox(
-            speaker: jp,
-            child: Column(
-              children: [
-                Text(
-                  sub,
-                  style: dqText(size: 15, color: dqInk),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  _partInstruction(_currentPart),
-                  style: dqText(size: 13, color: dqGold),
-                  textAlign: TextAlign.center,
-                ),
-              ],
+    // Vertically centre the intro group so the listening screen never shows a
+    // dead-navy top void (#CEO quality crisis). SingleChildScrollView keeps
+    // short content centred while still allowing overflow on very small screens.
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Large 🔊 focal affordance — makes the audio-first nature
+            // unmistakable and fills what was previously ~40% empty navy.
+            const Text('🔊', style: TextStyle(fontSize: 72)),
+            const SizedBox(height: 24),
+            DqDialogBox(
+              speaker: jp,
+              child: Column(
+                children: [
+                  Text(
+                    sub,
+                    style: dqText(size: 15, color: dqInk),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    _partInstruction(_currentPart),
+                    style: dqText(size: 13, color: dqGold),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 32),
-          DqButton(
-            label: 'はじめる / Start',
-            onTap: _dismissPartHeader,
-          ),
-          const Spacer(),
-        ],
+            const SizedBox(height: 32),
+            DqButton(
+              label: 'はじめる / Start',
+              onTap: _dismissPartHeader,
+            ),
+          ],
+        ),
       ),
     );
   }

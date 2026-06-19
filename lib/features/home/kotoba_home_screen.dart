@@ -370,42 +370,52 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
     return DqScene(
       contentMaxWidth:
           600, // #144: centre the hub column on tablet, full-width on phone
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _buildHeader(),
-            const SizedBox(height: 16),
-            // ── 合格率 readiness, surfaced at the top (#66/#68) — the parent's
-            // first signal of "is my kid on track to pass". ──────────────────
-            _buildReadinessCard(),
-            const SizedBox(height: 14),
-            // ── 英検 core, foregrounded (#66, CEO 2026-06-08) ──────────────
-            // The primary daily path is 英検 practice + the FSRS review the
-            // 合格率 is built on — not the RPG world (which is now an optional
-            // reward below).
-            _buildExamCta(), // PRIMARY: 英検れんしゅう / 合格率
-            _buildExamReviewNudge(), // #120: "misses are waiting" → exam hub
-            // On first-run the ナゾ panel duplicates the primary CTA verbatim —
-            // same 'さいしょの ことばを おぼえよう' text, same _goToReview tap —
-            // so the child sees two cards for one action and can't tell which
-            // is THE button (visual-auditor, CEO 2132). Show the single gold
-            // hero CTA only until there is real review data; once words are due
-            // (or caught-up), the ナゾ panel returns with its distinct
-            // word-review role and the two no longer collide.
-            if (!_isFirstRun) ...[
-              const SizedBox(height: 12),
-              _buildNazoPanel(), // tappable → FSRS vocabulary review
-            ],
-            const SizedBox(height: 14),
-            _buildStreakPanel(),
-            const SizedBox(height: 18),
-            // ── ぼうけん (おまけ・任意) — demoted game world ──────────────────
-            _buildAdventureSection(),
-            const SizedBox(height: 20),
-          ],
-        ),
+      // LayoutBuilder gives us the available height so we can make the
+      // scrollable content fill the viewport — eliminating the dead-navy void
+      // at the bottom that made the home read as "half-loaded" (#CEO quality).
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+            child: ConstrainedBox(
+              constraints:
+                  BoxConstraints(minHeight: constraints.maxHeight - 28),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _buildHeader(),
+                      const SizedBox(height: 16),
+                      // ── 合格率 readiness, surfaced at the top (#66/#68) ──────
+                      _buildReadinessCard(),
+                      const SizedBox(height: 14),
+                      // ── 英検 core, foregrounded (#66, CEO 2026-06-08) ──────
+                      _buildExamCta(), // PRIMARY: 英検れんしゅう / 合格率
+                      _buildExamReviewNudge(), // #120: "misses are waiting"
+                      // On first-run the ナゾ panel duplicates the primary CTA
+                      // — hide it until real review data exists.
+                      if (!_isFirstRun) ...[
+                        const SizedBox(height: 12),
+                        _buildNazoPanel(), // tappable → FSRS vocabulary review
+                      ],
+                      const SizedBox(height: 14),
+                      _buildStreakPanel(),
+                    ],
+                  ),
+                  // ── ぼうけん (おまけ・任意) pushed toward the bottom so the
+                  // frame feels intentionally composed, never half-empty. ──────
+                  Padding(
+                    padding: const EdgeInsets.only(top: 18),
+                    child: _buildAdventureSection(),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -812,6 +822,11 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
 
   Widget _buildWeekDots() {
     const dayLabels = ['月', '火', '水', '木', '金', '土', '日'];
+    // Unstudied dots previously rendered as plain dark circles with no label
+    // inside — they looked like unloaded/broken widgets (#CEO quality crisis).
+    // Fix: show the day kanji inside each dot so every slot reads as a calendar
+    // entry, and use a slightly brighter fill so empty slots are visible but
+    // clearly distinct from "completed" gold-glow slots.
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: List.generate(7, (i) {
@@ -820,14 +835,14 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
           children: [
             AnimatedContainer(
               duration: const Duration(milliseconds: 300),
-              width: 28,
-              height: 28,
+              width: 32,
+              height: 32,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: studied ? dqBox : dqNight0,
+                color: studied ? dqBox : dqNight1,
                 border: Border.all(
-                  color: studied ? dqGold : dqGoldDeep.withAlpha(100),
-                  width: studied ? 2 : 1.5,
+                  color: studied ? dqGold : dqGoldDeep.withAlpha(70),
+                  width: studied ? 2 : 1,
                 ),
                 boxShadow: studied
                     ? [BoxShadow(color: dqGold.withAlpha(70), blurRadius: 6)]
@@ -835,17 +850,24 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
               ),
               child: Center(
                 child: studied
-                    ? const Icon(Icons.auto_stories, color: dqGold, size: 13)
-                    : null,
+                    ? const Icon(Icons.auto_stories, color: dqGold, size: 14)
+                    : Text(
+                        dayLabels[i],
+                        style: dqText(
+                          size: 10,
+                          w: FontWeight.w400,
+                          color: dqInk.withAlpha(100),
+                        ),
+                      ),
               ),
             ),
             const SizedBox(height: 4),
             Text(
-              dayLabels[i],
+              studied ? dayLabels[i] : '',
               style: dqText(
                 size: 10,
-                w: studied ? FontWeight.w700 : FontWeight.w400,
-                color: studied ? dqGold : dqInk.withAlpha(130),
+                w: FontWeight.w700,
+                color: dqGold,
               ),
             ),
           ],

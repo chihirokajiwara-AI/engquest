@@ -516,9 +516,17 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
     }
     answeredSoFar += _questionIdx;
 
+    // Phone-layout fix: the old flex(3)/flex(2) split gave the choices region
+    // only ~40% of available height (~338px on a 844px phone after header), which
+    // caused choice 4 to clip off-screen with no scroll affordance. The fix:
+    // - Progress row stays pinned at the top (no change).
+    // - Passage + question + choices live in ONE unified SingleChildScrollView
+    //   so the child scrolls through a single continuous column — no clipping.
+    // - "次へ" button is pinned OUTSIDE the scroll so it is always reachable
+    //   without having to scroll to the very bottom first.
     return Column(
       children: [
-        // Progress
+        // ── Pinned progress bar ───────────────────────────────────────────────
         Padding(
           padding: const EdgeInsets.fromLTRB(20, 4, 20, 0),
           child: Row(
@@ -578,290 +586,265 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
           ),
         ),
         const SizedBox(height: 10),
-        // Passage
+        // ── Unified scroll body: passage → question → choices → extras ────────
+        // Single scroll eliminates the fixed-height split that clipped choice 4.
         Expanded(
-          flex: 3,
-          child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16),
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: dqBox.withAlpha(235),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: dqBorder, width: 2),
-              boxShadow: const [
-                BoxShadow(
-                    color: Colors.black54,
-                    blurRadius: 10,
-                    offset: Offset(0, 3)),
-              ],
-            ),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (passage.title.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: Text(
-                        passage.title,
-                        style:
-                            dqText(size: 16, w: FontWeight.w800, color: dqGold),
-                      ),
-                    ),
-                  Text(
-                    passage.content,
-                    style: dqText(size: 15, w: FontWeight.w500, color: dqInk)
-                        .copyWith(height: 1.7),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(height: 12),
-        // Question + choices
-        Expanded(
-          flex: 2,
-          child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16),
+          child: SingleChildScrollView(
+            controller: _qScroll,
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Expanded(
-                  child: SingleChildScrollView(
-                    controller: _qScroll,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        // The question was a bare white Text carrying LESS visual
-                        // weight than the bordered answer cards below — visual-audit
-                        // #159 iter2 (#178): after reading the passage a 6yo couldn't
-                        // tell what was being ASKED. Give the question its own framed
-                        // focal bar (DetectiveCaseFrame, highlighted) so it reads as
-                        // the prompt, visually separated from passage and answers.
-                        DetectiveCaseFrame(
-                          highlighted: true,
-                          title: 'しつもん / Question',
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 14, vertical: 12),
+                // Passage card
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: dqBox.withAlpha(235),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: dqBorder, width: 2),
+                    boxShadow: const [
+                      BoxShadow(
+                          color: Colors.black54,
+                          blurRadius: 10,
+                          offset: Offset(0, 3)),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (passage.title.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
                           child: Text(
-                            question.question,
+                            passage.title,
                             style: dqText(
-                                size: 16, w: FontWeight.w700, color: dqInk),
+                                size: 16, w: FontWeight.w800, color: dqGold),
                           ),
                         ),
-                        const SizedBox(height: 12),
-                        ListView.separated(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: question.choices.length,
-                          separatorBuilder: (_, __) =>
-                              const SizedBox(height: 8),
-                          itemBuilder: (context, i) {
-                            final isSelected = _selectedAnswer == i;
-                            final isCorrect = i == question.correctIdx;
-
-                            Color bgColor = dqBox;
-                            Color borderColor = dqGoldDeep.withAlpha(120);
-                            Color textColor = dqInk;
-
-                            // #16 hint: a choice eliminated by the 50/50 lifeline
-                            // is dimmed + un-tappable (only before answering).
-                            final eliminated =
-                                !_answered && _eliminated.contains(i);
-
-                            if (_answered) {
-                              if (isCorrect) {
-                                bgColor = const Color(0xFF14301B);
-                                borderColor = const Color(0xFF8BE08B);
-                                textColor = const Color(0xFF8BE08B);
-                              } else if (isSelected) {
-                                bgColor = const Color(0xFF3A1A1A);
-                                borderColor = const Color(0xFFE0853A);
-                                textColor = const Color(0xFFE89A82);
-                              }
-                            } else if (eliminated) {
-                              bgColor = dqBox.withAlpha(90);
-                              borderColor = dqGoldDeep.withAlpha(50);
-                              textColor = dqInk.withAlpha(90);
-                            } else if (isSelected) {
-                              borderColor = dqGold;
-                              bgColor = dqNight1;
-                            }
-
-                            final semLabel = _answered && isCorrect
-                                ? '${i + 1}. ${question.choices[i]}、せいかい'
-                                : _answered && isSelected
-                                    ? '${i + 1}. ${question.choices[i]}、ふせいかい'
-                                    : eliminated
-                                        ? '${i + 1}. ${question.choices[i]}、じょがい'
-                                        : '${i + 1}. ${question.choices[i]}';
-                            return Semantics(
-                              button: true,
-                              label: semLabel,
-                              onTap: (_answered || eliminated)
-                                  ? null
-                                  : () => _selectAnswer(i),
-                              excludeSemantics: true,
-                              child: Material(
-                                color: bgColor,
-                                borderRadius: BorderRadius.circular(10),
-                                child: InkWell(
-                                  key: ValueKey('reading_choice_$i'),
-                                  onTap: eliminated
-                                      ? null
-                                      : () => _selectAnswer(i),
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 14, vertical: 12),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      border: Border.all(
-                                          color: borderColor, width: 2),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        // Unified circular number disc — match the
-                                        // vocab/listening/conversation option widget
-                                        // (CEO 2186 craft audit: reading used an
-                                        // inline "1." while the same task used a disc
-                                        // elsewhere). One option component, all types.
-                                        Container(
-                                          width: 32,
-                                          height: 32,
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: borderColor.withAlpha(30),
-                                          ),
-                                          child: Center(
-                                            child: Text(
-                                              '${i + 1}',
-                                              style: TextStyle(
-                                                color: textColor,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 16,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(width: 10),
-                                        Expanded(
-                                          child: Text(
-                                            question.choices[i],
-                                            style: dqText(
-                                                size: 15,
-                                                w: FontWeight.w600,
-                                                color: textColor),
-                                          ),
-                                        ),
-                                        if (_answered && isCorrect)
-                                          const Icon(Icons.check_circle_rounded,
-                                              color: Color(0xFF8BE08B),
-                                              size: 20),
-                                        if (_answered &&
-                                            isSelected &&
-                                            !isCorrect)
-                                          const Icon(Icons.cancel_rounded,
-                                              color: Color(0xFFE0853A),
-                                              size: 20),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                        // #16 hint scaffold: a once-per-question 50/50 lifeline.
-                        // Hidden after answering; replaced by an honesty notice
-                        // once used (the question is then out of the 合格率).
-                        if (!_answered && !_hintUsed)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: Semantics(
-                              button: true,
-                              label: '2つに しぼる。ヒントを つかうと、この問題は '
-                                  '合格率に 入りません',
-                              excludeSemantics: true,
-                              child: InkWell(
-                                key: const ValueKey('reading_hint_button'),
-                                onTap: _useHint,
-                                borderRadius: BorderRadius.circular(10),
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12, vertical: 9),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(
-                                        color: dqGoldDeep.withAlpha(120),
-                                        width: 1.5),
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      const Icon(Icons.lightbulb_outline,
-                                          color: dqGold, size: 18),
-                                      const SizedBox(width: 8),
-                                      Flexible(
-                                        child: Text(
-                                          '2つに しぼる（合格率には 入りません）',
-                                          style: dqText(
-                                              size: 12, color: dqGoldDeep),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        if (_hintUsed && !_answered)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: Text(
-                              '💡 2つに しぼったよ。この問題は 合格率に 入りません。',
-                              style: dqText(size: 12, color: dqGoldDeep),
-                            ),
-                          ),
-                        // Struggling-child support: a cold streak shows a gentle,
-                        // non-scolding 探偵 encouragement above the 解説. (CEO 1135)
-                        if (_answered &&
-                            _selectedAnswer != question.correctIdx &&
-                            _consecutiveWrong >= kStruggleThreshold)
-                          const Padding(
-                            padding: EdgeInsets.only(top: 12),
-                            child: PracticeEncouragementBanner(
-                                message: kReadingEncourageMsg),
-                          )
-                        // Positive mirror: celebrate a correct streak (same slot).
-                        else if (_answered &&
-                            _selectedAnswer == question.correctIdx &&
-                            _consecutiveCorrect >= kMomentumThreshold)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 12),
-                            child: PracticeMomentumBanner(
-                                streak: _consecutiveCorrect),
-                          ),
-                        if (_answered && question.explanation != null)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 12),
-                            child:
-                                _ExplanationPanel(text: question.explanation!),
-                          ),
-                      ],
-                    ),
+                      Text(
+                        passage.content,
+                        style:
+                            dqText(size: 15, w: FontWeight.w500, color: dqInk)
+                                .copyWith(height: 1.7),
+                      ),
+                    ],
                   ),
                 ),
-                if (_answered)
+                const SizedBox(height: 12),
+                // Question frame
+                // The question was a bare white Text carrying LESS visual
+                // weight than the bordered answer cards below — visual-audit
+                // #159 iter2 (#178): after reading the passage a 6yo couldn't
+                // tell what was being ASKED. Give the question its own framed
+                // focal bar (DetectiveCaseFrame, highlighted) so it reads as
+                // the prompt, visually separated from passage and answers.
+                DetectiveCaseFrame(
+                  highlighted: true,
+                  title: 'しつもん / Question',
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                  child: Text(
+                    question.question,
+                    style: dqText(size: 16, w: FontWeight.w700, color: dqInk),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                // Answer choices — all 4 always rendered, never clipped
+                ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: question.choices.length,
+                  separatorBuilder: (_, __) => const SizedBox(height: 8),
+                  itemBuilder: (context, i) {
+                    final isSelected = _selectedAnswer == i;
+                    final isCorrect = i == question.correctIdx;
+
+                    Color bgColor = dqBox;
+                    Color borderColor = dqGoldDeep.withAlpha(120);
+                    Color textColor = dqInk;
+
+                    // #16 hint: a choice eliminated by the 50/50 lifeline
+                    // is dimmed + un-tappable (only before answering).
+                    final eliminated = !_answered && _eliminated.contains(i);
+
+                    if (_answered) {
+                      if (isCorrect) {
+                        bgColor = const Color(0xFF14301B);
+                        borderColor = const Color(0xFF8BE08B);
+                        textColor = const Color(0xFF8BE08B);
+                      } else if (isSelected) {
+                        bgColor = const Color(0xFF3A1A1A);
+                        borderColor = const Color(0xFFE0853A);
+                        textColor = const Color(0xFFE89A82);
+                      }
+                    } else if (eliminated) {
+                      bgColor = dqBox.withAlpha(90);
+                      borderColor = dqGoldDeep.withAlpha(50);
+                      textColor = dqInk.withAlpha(90);
+                    } else if (isSelected) {
+                      borderColor = dqGold;
+                      bgColor = dqNight1;
+                    }
+
+                    final semLabel = _answered && isCorrect
+                        ? '${i + 1}. ${question.choices[i]}、せいかい'
+                        : _answered && isSelected
+                            ? '${i + 1}. ${question.choices[i]}、ふせいかい'
+                            : eliminated
+                                ? '${i + 1}. ${question.choices[i]}、じょがい'
+                                : '${i + 1}. ${question.choices[i]}';
+                    return Semantics(
+                      button: true,
+                      label: semLabel,
+                      onTap: (_answered || eliminated)
+                          ? null
+                          : () => _selectAnswer(i),
+                      excludeSemantics: true,
+                      child: Material(
+                        color: bgColor,
+                        borderRadius: BorderRadius.circular(10),
+                        child: InkWell(
+                          key: ValueKey('reading_choice_$i'),
+                          onTap: eliminated ? null : () => _selectAnswer(i),
+                          borderRadius: BorderRadius.circular(10),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 14, vertical: 12),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: borderColor, width: 2),
+                            ),
+                            child: Row(
+                              children: [
+                                // Unified circular number disc — match the
+                                // vocab/listening/conversation option widget
+                                // (CEO 2186 craft audit: reading used an
+                                // inline "1." while the same task used a disc
+                                // elsewhere). One option component, all types.
+                                Container(
+                                  width: 32,
+                                  height: 32,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: borderColor.withAlpha(30),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      '${i + 1}',
+                                      style: TextStyle(
+                                        color: textColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Text(
+                                    question.choices[i],
+                                    style: dqText(
+                                        size: 15,
+                                        w: FontWeight.w600,
+                                        color: textColor),
+                                  ),
+                                ),
+                                if (_answered && isCorrect)
+                                  const Icon(Icons.check_circle_rounded,
+                                      color: Color(0xFF8BE08B), size: 20),
+                                if (_answered && isSelected && !isCorrect)
+                                  const Icon(Icons.cancel_rounded,
+                                      color: Color(0xFFE0853A), size: 20),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                // #16 hint scaffold: a once-per-question 50/50 lifeline.
+                // Hidden after answering; replaced by an honesty notice
+                // once used (the question is then out of the 合格率).
+                if (!_answered && !_hintUsed)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Semantics(
+                      button: true,
+                      label: '2つに しぼる。ヒントを つかうと、この問題は '
+                          '合格率に 入りません',
+                      excludeSemantics: true,
+                      child: InkWell(
+                        key: const ValueKey('reading_hint_button'),
+                        onTap: _useHint,
+                        borderRadius: BorderRadius.circular(10),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 9),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                                color: dqGoldDeep.withAlpha(120), width: 1.5),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.lightbulb_outline,
+                                  color: dqGold, size: 18),
+                              const SizedBox(width: 8),
+                              Flexible(
+                                child: Text(
+                                  '2つに しぼる（合格率には 入りません）',
+                                  style: dqText(size: 12, color: dqGoldDeep),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                if (_hintUsed && !_answered)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Text(
+                      '💡 2つに しぼったよ。この問題は 合格率に 入りません。',
+                      style: dqText(size: 12, color: dqGoldDeep),
+                    ),
+                  ),
+                // Struggling-child support: a cold streak shows a gentle,
+                // non-scolding 探偵 encouragement above the 解説. (CEO 1135)
+                if (_answered &&
+                    _selectedAnswer != question.correctIdx &&
+                    _consecutiveWrong >= kStruggleThreshold)
+                  const Padding(
+                    padding: EdgeInsets.only(top: 12),
+                    child: PracticeEncouragementBanner(
+                        message: kReadingEncourageMsg),
+                  )
+                // Positive mirror: celebrate a correct streak (same slot).
+                else if (_answered &&
+                    _selectedAnswer == question.correctIdx &&
+                    _consecutiveCorrect >= kMomentumThreshold)
                   Padding(
                     padding: const EdgeInsets.only(top: 12),
-                    child: DqButton(label: '次へ', onTap: _next),
+                    child: PracticeMomentumBanner(streak: _consecutiveCorrect),
+                  ),
+                if (_answered && question.explanation != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 12),
+                    child: _ExplanationPanel(text: question.explanation!),
                   ),
               ],
             ),
           ),
         ),
+        // ── Pinned "次へ" button — always reachable without scrolling ─────────
+        if (_answered)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+            child: DqButton(label: '次へ', onTap: _next),
+          ),
       ],
     );
   }
