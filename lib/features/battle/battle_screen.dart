@@ -1266,17 +1266,47 @@ class _BattleScreenState extends State<BattleScreen>
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 8),
-          // Speaker icon — tap to hear pronunciation
-          IconButton(
-            icon: const Icon(Icons.volume_up_rounded),
-            iconSize: 28,
-            color: dqGold,
-            tooltip: '発音を聞く',
-            onPressed: () {
-              WordAudioAutoPlay.trigger(
-                player: _wordAudio,
-                vocabId: vocab.id,
-                word: vocab.word,
+          // Speaker — tap to hear pronunciation. Reflects the audio state so an
+          // unavailable word is an HONEST dimmed state, not a silent dead tap.
+          // (Verified 2026-06-19: the 5級 deck is 600 words but only ~300 have a
+          // bundled clip and the Google-TTS fallback is unconfigured, so ~half
+          // the deck has no audio — and a 6yo non-reader, for whom 🔊 is the only
+          // way to learn pronunciation, otherwise taps a button that does
+          // nothing with no feedback. Missing audio itself is CDN-gated; this is
+          // the honest-degradation half.)
+          ListenableBuilder(
+            listenable: _wordAudio,
+            builder: (context, _) {
+              // Only reflect state for THIS card's word — a stale error from the
+              // previous word must not dim the next word's fresh speaker.
+              final isThis = _wordAudio.currentVocabId == vocab.id;
+              final st = isThis ? _wordAudio.state : WordAudioState.idle;
+              if (st == WordAudioState.loading) {
+                return const SizedBox(
+                  width: 48,
+                  height: 48,
+                  child: Padding(
+                    padding: EdgeInsets.all(11),
+                    child: CircularProgressIndicator(
+                        strokeWidth: 2.5, color: dqGold),
+                  ),
+                );
+              }
+              final unavailable = st == WordAudioState.error;
+              return IconButton(
+                icon: Icon(unavailable
+                    ? Icons.volume_off_rounded
+                    : Icons.volume_up_rounded),
+                iconSize: 28,
+                color: unavailable ? dqGoldDeep.withAlpha(120) : dqGold,
+                tooltip: unavailable ? 'おとは じゅんびちゅう' : '発音を聞く',
+                onPressed: () {
+                  WordAudioAutoPlay.trigger(
+                    player: _wordAudio,
+                    vocabId: vocab.id,
+                    word: vocab.word,
+                  );
+                },
               );
             },
           ),
