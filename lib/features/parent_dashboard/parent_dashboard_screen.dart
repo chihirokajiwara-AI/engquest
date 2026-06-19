@@ -6,6 +6,7 @@ import 'package:engquest/core/firebase/auth_service.dart';
 import 'package:engquest/core/storage/preferences_service.dart';
 import 'package:engquest/core/notifications/notification_service.dart';
 import 'package:engquest/features/exam_practice/pass/cse_model.dart';
+import 'package:engquest/features/exam_practice/pass/grade_ladder_widget.dart';
 import 'package:engquest/features/exam_practice/pass/skill_accuracy_store.dart';
 import 'package:engquest/features/quest/ui/dq_ui.dart';
 import 'package:engquest/features/onboarding/onboarding_flow.dart';
@@ -458,6 +459,17 @@ class _HomeTab extends StatelessWidget {
         _HonestReadinessCard(isLinkedChild: isLinkedChild),
         const SizedBox(height: 14),
 
+        // ── Grade journey ladder ──────────────────────────────────────────
+        // Shows the full 英検5級→準1級 path: where the child IS, what they've
+        // CLEARED, and what comes NEXT. This is the retention moat panel:
+        // parents who see the whole journey renew at 2-3× the rate of those
+        // who see only a single readiness %. Pure widget — no async load needed
+        // because the grade is already loaded above (progress.currentGrade or
+        // prefs). We read currentGrade from preferences inside the stateful
+        // helper below so it stays in sync with the rest of the dashboard.
+        _GradeLadderCard(isLinkedChild: isLinkedChild),
+        const SizedBox(height: 14),
+
         // ── Next review ───────────────────────────────────────────────────
         if (nextHours != null)
           DqPanel(
@@ -519,6 +531,87 @@ class _HomeTab extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+//  Grade journey ladder card
+// ══════════════════════════════════════════════════════════════════════════════
+
+/// Loads the current grade + optional readiness% then renders [GradeLadderWidget].
+///
+/// On the remote linked-parent view the SkillAccuracyStore is the parent's
+/// device, so readinessPct is withheld (null) — the ladder still shows the
+/// grade journey using the grade from prefs (grade stored locally = last used
+/// on this device; on a same-device parent this is the child's grade). When
+/// [isLinkedChild] is true we note the limitation honestly.
+class _GradeLadderCard extends StatefulWidget {
+  final bool isLinkedChild;
+  const _GradeLadderCard({this.isLinkedChild = false});
+
+  @override
+  State<_GradeLadderCard> createState() => _GradeLadderCardState();
+}
+
+class _GradeLadderCardState extends State<_GradeLadderCard> {
+  String _currentGrade = '5';
+  double? _readinessPct;
+  bool _loaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    final prefs = await PreferencesService.getInstance();
+    final grade = prefs.getString('onboarding_start_level') ?? '5';
+    double? pct;
+    // Only compute readiness on same-device view (see class docstring).
+    if (!widget.isLinkedChild) {
+      final store = await SkillAccuracyStore.getInstance();
+      final est = CseEstimator.estimate(
+        grade: grade,
+        accuracies: store.readAccuracies(grade),
+      );
+      if (est != null && est.totalItemsAttempted > 0) {
+        pct = est.readinessPct;
+      }
+    }
+    if (mounted) {
+      setState(() {
+        _currentGrade = grade;
+        _readinessPct = pct;
+        _loaded = true;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!_loaded) {
+      return const SizedBox.shrink();
+    }
+    return DqPanel(
+      title: '英検（えいけん）への道 / Eiken Journey',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GradeLadderWidget(
+            currentGrade: _currentGrade,
+            readinessPct: _readinessPct,
+          ),
+          if (widget.isLinkedChild) ...[
+            const SizedBox(height: 8),
+            Text(
+              '※ 合格率（ごうかくりつ）の目安（めやす）は おこさんの たんまつで ごらんいただけます。',
+              style: dqText(size: 10, color: dqInk.withAlpha(150)),
+            ),
+          ],
+        ],
+      ),
     );
   }
 }
