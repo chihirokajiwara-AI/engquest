@@ -255,7 +255,14 @@ class _PrologueScreenState extends State<PrologueScreen>
           ),
           // 0b — ランプ the lampkeeper, the one face the child rescues
           _lampkeeper(),
-          // 1 — bottom scrim so captions stay legible over the art
+          // 1 — bottom scrim so captions stay legible over the art. The ramp
+          // starts earlier (0.42) and reaches near-opaque by 0.72 — the band
+          // where the subtitle, EN line and controls actually sit — because the
+          // old transparent→0.5→black87 gradient left the caption zone only
+          // half-darkened, so the cream ひらがな washed out over the BRIGHT warm
+          // panels (4/5) and the mid-grey 転 panel (2) (visual-auditor, CEO 2132
+          // contrast finding). Keeps the upper art fully clear (full-bleed
+          // cinematic, no dialog card — CEO 1372/1375).
           const IgnorePointer(
             child: DecoratedBox(
               decoration: BoxDecoration(
@@ -265,9 +272,10 @@ class _PrologueScreenState extends State<PrologueScreen>
                   colors: [
                     Colors.transparent,
                     Colors.transparent,
-                    Colors.black87
+                    Color(0xCC000000), // ~0.80 black across the caption band
+                    Color(0xF2000000), // ~0.95 black at the very bottom
                   ],
-                  stops: [0.0, 0.5, 1.0],
+                  stops: [0.0, 0.42, 0.72, 1.0],
                 ),
               ),
             ),
