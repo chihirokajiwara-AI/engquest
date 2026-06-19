@@ -1571,12 +1571,18 @@ class _BattleScreenState extends State<BattleScreen>
 
     return Stack(
       children: [
-        // Animated star burst behind content
+        // Animated star burst behind content. RepaintBoundary isolates the
+        // 60fps/1.8s particle layer so its per-tick repaint doesn't dirty-mark
+        // the heavy summary column (PassProgressCard + tables + buttons) in the
+        // same Stack — without it the reward screen janks on web/CanvasKit at
+        // exactly the daily-return peak (same class as #123/#134).
         Positioned.fill(
-          child: AnimatedBuilder(
-            animation: _starsAnim,
-            builder: (context, _) => CustomPaint(
-              painter: _StarBurstPainter(_starsAnim.value),
+          child: RepaintBoundary(
+            child: AnimatedBuilder(
+              animation: _starsAnim,
+              builder: (context, _) => CustomPaint(
+                painter: _StarBurstPainter(_starsAnim.value),
+              ),
             ),
           ),
         ),
