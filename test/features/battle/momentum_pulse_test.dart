@@ -56,4 +56,106 @@ void main() {
       expect(shouldShowMomentumPulse(0, 20, false).$1, isFalse);
     });
   });
+
+  // #170 (diverse-values first-run panel, 2026-06-19): the Battle header must
+  // never show the raw "N / 600" grade-deck total — 3 personas flagged it as the
+  // clearest "endless drill" demotivator. It shows the achievable daily-goal
+  // near-horizon instead, consistent with the momentum pulse's live count.
+  group('battleHeaderGoalLabel', () {
+    test('null while the goal context is still loading (never shows 600)', () {
+      expect(
+        battleHeaderGoalLabel(
+            hasGoalContext: false,
+            answersThisSession: 0,
+            remainingToGoal: 0,
+            goalMet: false),
+        isNull,
+      );
+    });
+
+    test('shows the live near-horizon, decrementing as the child answers', () {
+      expect(
+        battleHeaderGoalLabel(
+            hasGoalContext: true,
+            answersThisSession: 0,
+            remainingToGoal: 10,
+            goalMet: false),
+        'あと 10 もん',
+      );
+      expect(
+        battleHeaderGoalLabel(
+            hasGoalContext: true,
+            answersThisSession: 3,
+            remainingToGoal: 10,
+            goalMet: false),
+        'あと 7 もん',
+      );
+    });
+
+    test('positive ✓ state once the goal is met or the horizon closes', () {
+      expect(
+        battleHeaderGoalLabel(
+            hasGoalContext: true,
+            answersThisSession: 0,
+            remainingToGoal: 8,
+            goalMet: true),
+        'きょうの目標 ✓',
+      );
+      expect(
+        battleHeaderGoalLabel(
+            hasGoalContext: true,
+            answersThisSession: 10,
+            remainingToGoal: 10,
+            goalMet: false),
+        'きょうの目標 ✓',
+        reason: 'live 0 → done state, never "あと 0 もん"',
+      );
+    });
+  });
+
+  group('battleHeaderGoalFraction', () {
+    test('null while loading → caller uses the session-queue fraction', () {
+      expect(
+        battleHeaderGoalFraction(
+            hasGoalContext: false,
+            answersThisSession: 0,
+            remainingToGoal: 0,
+            goalMet: false),
+        isNull,
+      );
+    });
+
+    test('fills proportionally toward the daily goal', () {
+      expect(
+        battleHeaderGoalFraction(
+            hasGoalContext: true,
+            answersThisSession: 3,
+            remainingToGoal: 10,
+            goalMet: false),
+        closeTo(0.3, 1e-9),
+      );
+    });
+
+    test('full bar when the goal is met (no crawling 1/600)', () {
+      expect(
+        battleHeaderGoalFraction(
+            hasGoalContext: true,
+            answersThisSession: 0,
+            remainingToGoal: 0,
+            goalMet: true),
+        1.0,
+      );
+    });
+
+    test('clamps to 1.0 past the goal (bonus practice)', () {
+      expect(
+        battleHeaderGoalFraction(
+            hasGoalContext: true,
+            answersThisSession: 15,
+            remainingToGoal: 10,
+            goalMet: false),
+        1.0,
+      );
+    });
+  });
 }

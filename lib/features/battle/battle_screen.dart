@@ -204,6 +204,43 @@ const Set<int> kMomentumCadence = {3, 7, 12, 18};
   return (atCadence && goalUnmet, live);
 }
 
+/// The Battle header's progress label. Replaces the demotivating raw "N / 600"
+/// (the WHOLE-grade deck size) with a short, achievable near-horizon toward the
+/// DAILY goal — or a positive 「✓」 state once the goal is met. Returns null while
+/// the streak/goal context is still loading, so the crushing 600 total is never
+/// shown. (Diverse-values first-run panel #170, 2026-06-19: 3 personas
+/// independently flagged the naked 600 denominator as the clearest "endless
+/// drill" demotivator for a child.) `live` matches [shouldShowMomentumPulse] so
+/// the header count and the momentum nudge never disagree. Pure + public so the
+/// honest framing is unit-tested.
+String? battleHeaderGoalLabel({
+  required bool hasGoalContext,
+  required int answersThisSession,
+  required int remainingToGoal,
+  required bool goalMet,
+}) {
+  if (!hasGoalContext) return null;
+  final live = (remainingToGoal - answersThisSession).clamp(0, remainingToGoal);
+  if (goalMet || live <= 0) return 'きょうの目標 ✓';
+  return 'あと $live もん';
+}
+
+/// 0..1 fill toward the daily goal for the Battle progress bar (#170 companion).
+/// A bar that crawls 1/600 reads as "endless"; this fills as the child closes the
+/// day's remaining goal. Returns null while the goal context is loading, so the
+/// caller falls back to the session-queue fraction (never the 600 denominator
+/// directly, which the header label already suppresses).
+double? battleHeaderGoalFraction({
+  required bool hasGoalContext,
+  required int answersThisSession,
+  required int remainingToGoal,
+  required bool goalMet,
+}) {
+  if (!hasGoalContext) return null;
+  if (goalMet || remainingToGoal <= 0) return 1.0;
+  return (answersThisSession / remainingToGoal).clamp(0.0, 1.0);
+}
+
 // ── Session result per card ───────────────────────────────────────────────────
 class _CardResult {
   final String word;
@@ -993,11 +1030,21 @@ class _BattleScreenState extends State<BattleScreen>
             onPressed: () => setState(() => _sound.muted = !_sound.muted),
           ),
           if (!_repoLoading && !_sessionDone)
-            Padding(
-              padding: const EdgeInsets.only(left: 2),
-              child: Text('${_doneCards + 1} / $_totalCards',
-                  style: dqText(size: 14, color: dqGoldDeep)),
-            ),
+            Builder(builder: (_) {
+              // #170: never show the raw N / 600 grade-deck total — show the
+              // achievable daily-goal near-horizon (or nothing while loading).
+              final label = battleHeaderGoalLabel(
+                hasGoalContext: _streakSnapshot != null,
+                answersThisSession: _answersThisSession,
+                remainingToGoal: _streakSnapshot?.remainingToGoal ?? 0,
+                goalMet: _streakSnapshot?.goalMet ?? false,
+              );
+              if (label == null) return const SizedBox.shrink();
+              return Padding(
+                padding: const EdgeInsets.only(left: 2),
+                child: Text(label, style: dqText(size: 14, color: dqGoldDeep)),
+              );
+            }),
         ],
       ),
     );
@@ -1084,7 +1131,17 @@ class _BattleScreenState extends State<BattleScreen>
   }
 
   Widget _buildProgressBar() {
-    final progress = _totalCards == 0 ? 0.0 : _doneCards / _totalCards;
+    // #170: fill toward the DAILY goal (achievable near-horizon), not the
+    // 600-word grade deck — a bar crawling 1/600 reads as "endless". Falls back
+    // to the session-queue fraction only while the goal context is still loading.
+    final goalFraction = battleHeaderGoalFraction(
+      hasGoalContext: _streakSnapshot != null,
+      answersThisSession: _answersThisSession,
+      remainingToGoal: _streakSnapshot?.remainingToGoal ?? 0,
+      goalMet: _streakSnapshot?.goalMet ?? false,
+    );
+    final progress =
+        goalFraction ?? (_totalCards == 0 ? 0.0 : _doneCards / _totalCards);
     // HP-style bar: cream-bordered navy track with a gold fill.
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
