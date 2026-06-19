@@ -316,7 +316,11 @@ class _PassHero extends StatelessWidget {
             '${(est.passTargetRaw * 100).round()}%（${est.grade == 'pre1' ? '７割' : '６割'}）。\n'
             '${CseEstimator.meyasuDisclaimerJa}',
             textAlign: TextAlign.center,
-            style: dqText(size: 10, color: const Color(0xFF8A93B5)),
+            // Was size 10 in a muted blue-grey — a dense furigana paragraph that
+            // failed 6yo readability (CEO demo-audit). Lift to 12 + cream so the
+            // honesty disclaimer is actually legible.
+            style: dqText(size: 12, color: dqInk.withAlpha(180))
+                .copyWith(height: 1.5),
           ),
 
           const SizedBox(height: 4),

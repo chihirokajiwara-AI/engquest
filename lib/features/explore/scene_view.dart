@@ -1918,28 +1918,46 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
     final Widget portrait;
     if (grey == null && color == null) {
       // If no art exists yet: fallback to emoji/icon portrait.
-      portrait = Container(
+      // Wrapped in the same contact-shadow Stack as _npcPortraitImage so the
+      // grounded look is consistent across both the art and no-art states.
+      portrait = SizedBox(
         width: size,
         height: size,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: dqBox.withAlpha(200),
-          border: Border.all(
-            color: solved ? const Color(0xFF8BE08B) : dqGold,
-            width: 2.5,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: (solved ? const Color(0xFF8BE08B) : dqGold).withAlpha(100),
-              blurRadius: 10,
+        child: Stack(
+          clipBehavior: Clip.none,
+          alignment: Alignment.center,
+          children: [
+            _npcContactShadow(size),
+            Container(
+              width: size,
+              height: size,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: dqBox.withAlpha(200),
+                border: Border.all(
+                  color: solved ? const Color(0xFF8BE08B) : dqGold,
+                  width: 2.5,
+                ),
+                boxShadow: [
+                  const BoxShadow(
+                      color: Colors.black54,
+                      blurRadius: 10,
+                      offset: Offset(0, 3)),
+                  BoxShadow(
+                    color: (solved ? const Color(0xFF8BE08B) : dqGold)
+                        .withAlpha(80),
+                    blurRadius: 8,
+                  ),
+                ],
+              ),
+              child: Center(
+                child: Text(
+                  hotspot.step?.npcEmoji ?? '👤',
+                  style: TextStyle(fontSize: size * 0.45),
+                ),
+              ),
             ),
           ],
-        ),
-        child: Center(
-          child: Text(
-            hotspot.step?.npcEmoji ?? '👤',
-            style: TextStyle(fontSize: size * 0.45),
-          ),
         ),
       );
     } else {
@@ -2041,44 +2059,100 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
     );
   }
 
-  Widget _npcPortraitImage(String asset, double size) {
-    return Container(
-      width: size,
-      height: size,
-      // Ground the portrait as a framed 探偵 case-file medallion in the scene,
-      // not a raw cut-out pasted on the painting (composition audit, CEO 1629):
-      // a soft drop-shadow lifts it off the background and a thin gold rim defines
-      // a clean edge + signals "tappable". The coin target and the no-art fallback
-      // already carry this framing — only the real-art portrait lacked it, so it
-      // read as a sticker. ClipOval keeps the image circular under the shadow
-      // (a clipping Container would swallow the boxShadow).
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        border: Border.all(color: dqGold.withAlpha(170), width: 2),
-        boxShadow: const [
-          BoxShadow(color: Colors.black54, blurRadius: 8, offset: Offset(0, 2)),
-        ],
-      ),
-      child: ClipOval(
-        child: Image.asset(
-          asset,
-          fit: BoxFit.cover,
-          // Decode at ~3× the display size (covers high-DPR) instead of the WebP's
-          // native 525×768 — the portrait renders in a 52–96px circle, so the full
-          // decode wasted ~5-10× GPU/heap per NPC over a long explore session
-          // (flaw-hunt R7; sibling of #131).
-          cacheWidth: (size * 3).round().clamp(1, 1600),
-          cacheHeight: (size * 3).round().clamp(1, 1600),
-          errorBuilder: (_, __, ___) => Container(
+  /// Soft elliptical contact shadow painted BELOW the portrait disk to anchor it
+  /// in the scene — turns the floating sticker into a character standing on the
+  /// ground (opus visual-audit finding). IgnorePointer so it never eats taps.
+  /// [size] is the portrait diameter; the ellipse is wider and shorter than the
+  /// disk so it reads as a cast shadow on the ground rather than a halo.
+  Widget _npcContactShadow(double size) {
+    return IgnorePointer(
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: Transform.translate(
+          // Shift down by ~28 % of the diameter so the shadow sits at the base
+          // of the disk (below it), not centred behind it.
+          offset: Offset(0, size * 0.28),
+          child: Container(
+            width: size * 0.72,
+            height: size * 0.18,
             decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: dqBox.withAlpha(200),
-              border: Border.all(color: dqGold, width: 2),
+              borderRadius: BorderRadius.circular(size * 0.09),
+              // Near-black blur — palette-neutral (works on dark-navy/gold #947
+              // and on the painted street background alike).
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withAlpha(110),
+                  blurRadius: size * 0.30,
+                  spreadRadius: size * 0.04,
+                ),
+              ],
             ),
-            child:
-                const Center(child: Text('👤', style: TextStyle(fontSize: 28))),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _npcPortraitImage(String asset, double size) {
+    // Wrap in a Stack with clipBehavior: Clip.none so the contact shadow can
+    // paint outside the disk bounds without being clipped, then the portrait
+    // disk sits on top. IgnorePointer wraps the shadow layer; the outer
+    // GestureDetector (in _hotspotWidget) handles all taps.
+    return SizedBox(
+      width: size,
+      height: size,
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          // Contact shadow — anchors the disk to the painted scene floor so it
+          // reads as a character standing in place, not a sticker floating in
+          // mid-air (opus visual-audit finding).
+          _npcContactShadow(size),
+          // Portrait disk — framed 探偵 case-file medallion.
+          // Ground the portrait as a framed 探偵 case-file medallion in the
+          // scene, not a raw cut-out pasted on the painting (composition audit,
+          // CEO 1629): a soft drop-shadow lifts it off the background and a thin
+          // gold rim defines a clean edge + signals "tappable". ClipOval keeps
+          // the image circular under the shadow (a clipping Container would
+          // swallow the boxShadow).
+          Container(
+            width: size,
+            height: size,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: dqGold.withAlpha(170), width: 2),
+              boxShadow: const [
+                // Lift shadow: gives the disk tangible depth above the background.
+                BoxShadow(
+                    color: Colors.black54,
+                    blurRadius: 10,
+                    offset: Offset(0, 3)),
+              ],
+            ),
+            child: ClipOval(
+              child: Image.asset(
+                asset,
+                fit: BoxFit.cover,
+                // Decode at ~3× the display size (covers high-DPR) instead of
+                // the WebP's native 525×768 — the portrait renders in a 52–96px
+                // circle, so the full decode wasted ~5-10× GPU/heap per NPC over
+                // a long explore session (flaw-hunt R7; sibling of #131).
+                cacheWidth: (size * 3).round().clamp(1, 1600),
+                cacheHeight: (size * 3).round().clamp(1, 1600),
+                errorBuilder: (_, __, ___) => Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: dqBox.withAlpha(200),
+                    border: Border.all(color: dqGold, width: 2),
+                  ),
+                  child: const Center(
+                      child: Text('👤', style: TextStyle(fontSize: 28))),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
