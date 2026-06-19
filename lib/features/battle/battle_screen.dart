@@ -500,15 +500,6 @@ class _BattleScreenState extends State<BattleScreen>
     _vocab = filterVocabByAge(_vocabRepo.getAll().toList(), widget.childAge);
     final vocabIds = _vocab.map((v) => v.id).toList();
 
-    // 2.5. Prefetch word audio for this session (fire-and-forget)
-    _wordAudio.initialize().then((_) {
-      final audioWords = _vocab
-          .map((v) => (id: v.id, word: v.word))
-          .take(20) // prefetch first 20 to avoid blocking
-          .toList();
-      _wordAudio.prefetchSession(audioWords);
-    }).catchError((_) {});
-
     // 3. Load persisted cards from Firestore (or InMemory fallback)
     List<FSRSCard> persistedCards;
     try {
@@ -577,6 +568,23 @@ class _BattleScreenState extends State<BattleScreen>
       _preEstimate = null;
       _postEstimate = null;
     });
+
+    // 7. Prefetch audio for the first cards the child will actually SEE — in
+    // _queue order (FSRS-prioritised + shuffled), NOT raw _vocab order. The old
+    // prefetch warmed _vocab[0..19] (e.g. eiken5_001..020), but cards are shown
+    // as _vocab[_queue[i]], so the words actually shown first usually were NOT
+    // prewarmed and still fetched-on-tap — the latency landed exactly where a
+    // 6yo non-reader taps 🔊 first. Fire-and-forget; placed after the queue
+    // exists so it can read it.
+    final firstShown = _queue.take(20);
+    final audioWords = [
+      for (final deckIdx in firstShown)
+        (id: _vocab[deckIdx].id, word: _vocab[deckIdx].word),
+    ];
+    _wordAudio.initialize().then((_) {
+      if (!mounted) return;
+      _wordAudio.prefetchSession(audioWords);
+    }).catchError((_) {});
   }
 
   // ── Current card helpers ───────────────────────────────────────────────────
