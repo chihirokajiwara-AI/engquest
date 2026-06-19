@@ -559,14 +559,21 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
                 '${answeredSoFar + 1}/$_totalQuestions',
                 style: dqText(size: 13, w: FontWeight.w600, color: dqInk),
               ),
-              const SizedBox(width: 8),
-              Text(
-                '✓$_correctCount',
-                style: dqText(
-                    size: 13,
-                    w: FontWeight.w800,
-                    color: const Color(0xFF8BE08B)),
-              ),
+              // Only show the running ✓ correct-count once the child has engaged
+              // (answered the current question or a prior one). A prominent "✓0"
+              // on the fresh first question — before any answer — reads as a
+              // discouraging zero-score to a 6yo and carries no information
+              // (real-render re-audit, CEO 1363; #163).
+              if (answeredSoFar > 0 || _answered) ...[
+                const SizedBox(width: 8),
+                Text(
+                  '✓$_correctCount',
+                  style: dqText(
+                      size: 13,
+                      w: FontWeight.w800,
+                      color: const Color(0xFF8BE08B)),
+                ),
+              ],
             ],
           ),
         ),
