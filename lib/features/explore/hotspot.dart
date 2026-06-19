@@ -98,6 +98,28 @@ class Hotspot {
   /// (TeachSound/BlendWord/Phrase carry their own teachJa) → no card needed.
   final TeachCard? teachCard;
 
+  /// Optional pre-generated voice-over clip for [clueLineJa] / the lore beat,
+  /// relative to `assets/` (e.g. `'audio/scene_clues/cel_clue.mp3'`).
+  ///
+  /// When non-null, SceneView renders a 🔊 tap-to-hear button on the NPC speech
+  /// bubble and the 探偵メモ lore banner so a 6+-yo who cannot yet read can HEAR
+  /// the clue. The button is suppressed when null — no dead-sound affordance for
+  /// clips that do not exist yet.
+  ///
+  /// TODO(WS3-clue-vo): generate clips via
+  /// `scripts/generate_scene_clues_audio.sh` (macOS `say -v Kyoko`, same
+  /// pipeline as `scripts/generate_nav_audio_say.sh`). One clip per
+  /// [clueLineJa] keyed by NPC id, stored in `assets/audio/scene_clues/`.
+  /// Declare the directory in pubspec.yaml and set [clueVoiceAsset] here.
+  final String? clueVoiceAsset;
+
+  /// Optional pre-generated voice-over clip for [mysteryFragmentJa] (the §3
+  /// サイレント lore drip shown after solving), relative to `assets/`.
+  /// Same generation pipeline as [clueVoiceAsset]; separate field so the clue
+  /// and the solve-lore can be voiced independently.
+  /// TODO(WS3-clue-vo): generate alongside [clueVoiceAsset].
+  final String? loreVoiceAsset;
+
   /// Optional per-hotspot authored hint ladder (H1 model).
   ///
   /// When non-null and non-empty, [NazoScreen._hintLadder] uses these hints
@@ -133,6 +155,8 @@ class Hotspot {
     this.teachCard,
     this.hints,
     this.mysteryFragmentJa,
+    this.clueVoiceAsset,
+    this.loreVoiceAsset,
     this.coinValue = 0,
   }) : kind = HotspotKind.npc;
 
@@ -141,6 +165,7 @@ class Hotspot {
     this.size = 0.12,
     this.coinValue = 1,
     this.clueLineJa,
+    this.clueVoiceAsset,
     this.step,
     this.framingJa,
     this.npcGreyAsset,
@@ -148,6 +173,7 @@ class Hotspot {
   })  : teachCard = null,
         hints = null,
         mysteryFragmentJa = null,
+        loreVoiceAsset = null,
         kind = HotspotKind.coin;
 
   /// An observation point (#90): tap reveals [clueLineJa] as a 探偵メモ beat, no
@@ -157,6 +183,7 @@ class Hotspot {
     required this.pos,
     this.size = 0.09,
     required this.clueLineJa,
+    this.clueVoiceAsset,
   })  : step = null,
         framingJa = null,
         npcGreyAsset = null,
@@ -164,6 +191,7 @@ class Hotspot {
         teachCard = null,
         hints = null,
         mysteryFragmentJa = null,
+        loreVoiceAsset = null,
         coinValue = 0,
         kind = HotspotKind.observation;
 }

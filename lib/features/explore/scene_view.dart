@@ -18,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../core/audio/audio_cue_service.dart';
+import '../../core/audio/audio_mute.dart';
 import '../../core/gamification/hint_coin_service.dart';
 import '../../core/sound/sound_service.dart';
 import '../quest/ui/dq_ui.dart';
@@ -219,6 +220,12 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
   /// non-clearing solve of a hotspot that carries [Hotspot.mysteryFragmentJa],
   /// auto-dismissed like the arrival banner. Null → no beat visible.
   String? _loreFragment;
+
+  /// Voice asset for the active lore fragment. Non-null only when the hotspot
+  /// that triggered [_loreFragment] carries a [Hotspot.clueVoiceAsset] / loreVoiceAsset.
+  /// Drives the 🔊 replay button in the lore banner (WS3 tap-to-hear).
+  String? _loreVoiceAsset;
+
   Timer? _loreTimer;
 
   /// The NPC hotspot index whose colour just returned — drives a one-shot gold
@@ -416,8 +423,11 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
       // Discovery beat (not a silent pickup): show タロ's authored clue first —
       // notice → discover → collect, the only real "find something" verb in the
       // world. Collection happens on the bubble's 「ひろう」 tap (_onBubbleTap).
+      // Voice-over: if a pre-generated clip is attached to the coin hotspot
+      // ([Hotspot.clueVoiceAsset]) play it now; otherwise no sound (the old
+      // _cue.play(null) was a silent no-op — removed WS3).
       setState(() => _bubbleIndex = (_bubbleIndex == idx) ? null : idx);
-      _cue.play(null); // best-effort discovery chirp (no asset yet → no-op)
+      if (h.clueVoiceAsset != null) _cue.play(h.clueVoiceAsset);
     } else if (h.kind == HotspotKind.npc) {
       _tapNpc(idx, h);
     } else if (h.kind == HotspotKind.observation) {
@@ -430,8 +440,11 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
           setState(() => _observed[idx] = true);
           SceneSolvedStore.markObservationSeen(widget.eikenLevel, idx);
         }
-        _cue.play(null);
-        _showLore(h.clueLineJa!);
+        // Voice-over: play the attached clip immediately on tap (if present).
+        // The lore banner also shows a 🔊 button for replay. No clip → silence;
+        // the old _cue.play(null) was a dead no-op (removed WS3).
+        if (h.clueVoiceAsset != null) _cue.play(h.clueVoiceAsset);
+        _showLore(h.clueLineJa!, voiceAsset: h.clueVoiceAsset);
       }
     }
   }
@@ -442,10 +455,11 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
     // the story fragment they recovered — the world stays responsive and the
     // authored lore (shown once as a fleeting banner) becomes re-readable. Both
     // solved and unsolved NPCs toggle a bubble; the bubble's CONTENT differs.
-    if (h.clueLineJa != null) {
-      // Audio asset not available yet (generated separately); best-effort no-op.
-      _cue.play(null);
-    }
+    // Voice-over: if this NPC has a pre-generated clue clip, play it on tap so
+    // the 6+-yo hears the clue line. No clip → no sound (old _cue.play(null)
+    // was a dead no-op — removed WS3). The speech bubble also shows a 🔊 replay
+    // button when [Hotspot.clueVoiceAsset] is present.
+    if (h.clueVoiceAsset != null) _cue.play(h.clueVoiceAsset);
     setState(() {
       _bubbleIndex = (_bubbleIndex == idx) ? null : idx;
     });
@@ -664,7 +678,9 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
       } else {
         // Non-clearing solve: fire-and-forget habit record (no streak surface needed).
         recordExamHabit(1);
-        if (h.mysteryFragmentJa != null) _showLore(h.mysteryFragmentJa!);
+        if (h.mysteryFragmentJa != null) {
+          _showLore(h.mysteryFragmentJa!, voiceAsset: h.loreVoiceAsset);
+        }
         if (restorationLine != null) {
           setState(() => _restoreLabel = restorationLine);
           _restoreLabelTimer?.cancel();
@@ -718,7 +734,9 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
           });
           // Step 3: §3 lore drip — fires ONLY AFTER the hero frame, never
           // simultaneously (was the root of the perceptual invisibility).
-          if (h.mysteryFragmentJa != null) _showLore(h.mysteryFragmentJa!);
+          if (h.mysteryFragmentJa != null) {
+            _showLore(h.mysteryFragmentJa!, voiceAsset: h.loreVoiceAsset);
+          }
           // Step 4: forward-pull — fires ~1300ms after the lore appears, so the
           // beat sequence is strictly: hero(1700ms) → lore(shown) → pull(+1300ms).
           // The lore auto-dismisses after _kArrivalAutoDismissMs (4500ms), so the
@@ -796,20 +814,37 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
   /// Drip one サイレント lore fragment as a brief diegetic 探偵メモ banner after a
   /// solve (COMPOSITION §3). Replaces any visible fragment so rapid solves don't
   /// stack, and auto-dismisses on the same cadence as the arrival banner.
-  void _showLore(String fragment) {
+  ///
+  /// [voiceAsset] (WS3 tap-to-hear): when the hotspot carries a pre-generated
+  /// voice clip for this text, pass it here so the lore banner shows a 🔊 button.
+  /// Null → no button (no dead-sound affordance for absent clips).
+  void _showLore(String fragment, {String? voiceAsset}) {
     _loreTimer?.cancel();
-    setState(() => _loreFragment = fragment);
+    setState(() {
+      _loreFragment = fragment;
+      _loreVoiceAsset = voiceAsset;
+    });
     _loreTimer = Timer(
       const Duration(milliseconds: _kArrivalAutoDismissMs),
       () {
-        if (mounted) setState(() => _loreFragment = null);
+        if (mounted) {
+          setState(() {
+            _loreFragment = null;
+            _loreVoiceAsset = null;
+          });
+        }
       },
     );
   }
 
   void _dismissLore() {
     _loreTimer?.cancel();
-    if (_loreFragment != null) setState(() => _loreFragment = null);
+    if (_loreFragment != null) {
+      setState(() {
+        _loreFragment = null;
+        _loreVoiceAsset = null;
+      });
+    }
   }
 
   /// Show タロ's diegetic forward-pull line ("あとNつ！…") using the arrival-banner
@@ -1384,8 +1419,10 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
 
               // §3 per-solve サイレント lore drip — a 探偵メモ beat above the arrival
               // slot. Gated so it never co-renders with the arrival banner.
+              // WS3: pass _loreVoiceAsset so the banner shows a 🔊 button when
+              // a pre-generated clip is attached to the current lore hotspot.
               if (_loreFragment != null && !_showArrival)
-                _loreBanner(_loreFragment!, w, h),
+                _loreBanner(_loreFragment!, w, h, voiceAsset: _loreVoiceAsset),
 
               // Game-studio #3 forward-pull beat: タロ's diegetic "あとNつ！" line.
               // Rendered via the existing _arrivalBanner widget (same placement,
@@ -1559,10 +1596,12 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
             child: solvedNpc
                 // A restored villager re-shares the memory you recovered — the lore
                 // fragment (shown once as a banner) is re-readable here, on demand.
+                // WS3: pass loreVoiceAsset so a 6+-yo can tap 🔊 to hear it.
                 ? _speechBubble(
                     hotspot.mysteryFragmentJa ?? 'ありがとう、たんていさん。\nことばが もどってきたよ。',
                     ctaLabel: '✓ とじる',
                     npcName: npcName,
+                    clueVoiceAsset: hotspot.loreVoiceAsset,
                   )
                 : _speechBubble(
                     // 対決 beat: the final mystery is framed as the confrontation.
@@ -1572,6 +1611,8 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
                         : hotspot.clueLineJa,
                     ctaLabel: isFinal ? '⚔️ 対決（たいけつ）する' : '「？」ナゾをみる',
                     npcName: npcName,
+                    // WS3: show 🔊 replay button when a pre-generated clip exists.
+                    clueVoiceAsset: hotspot.clueVoiceAsset,
                   ),
           ),
         ),
@@ -1725,7 +1766,10 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
   /// §3 per-solve lore beat. Same placement/cadence as the arrival banner but a
   /// distinct 探偵メモ identity — gold (dqGold), 🔖 bookmark icon — so a clue reads
   /// as the unfolding サイレント mystery, not タロ chatter. Tap anywhere to dismiss.
-  Widget _loreBanner(String text, double w, double h) {
+  ///
+  /// WS3 tap-to-hear: [voiceAsset] (from [_loreVoiceAsset]) drives a 🔊 button
+  /// so a 6+-yo can replay the lore text without reading it.
+  Widget _loreBanner(String text, double w, double h, {String? voiceAsset}) {
     return Positioned(
       left: 12,
       right: 12,
@@ -1772,6 +1816,36 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
                           dqText(size: 13, color: dqInk).copyWith(height: 1.55),
                     ),
                   ),
+                  // WS3 tap-to-hear: 🔊 button for pre-literacy children.
+                  // Shown only when a clip exists — the lore banner is auto-dismissed
+                  // (tap anywhere), so the speaker sits just to the left of the
+                  // dismiss hint and uses GestureDetector to prevent the tap from
+                  // propagating to the parent GestureDetector (which would dismiss).
+                  if (voiceAsset != null && !AudioMute.voiceMuted)
+                    GestureDetector(
+                      onTap: () => _cue.play(voiceAsset),
+                      // Absorb pointer so the speaker tap does NOT dismiss the banner.
+                      child: AbsorbPointer(
+                        absorbing: false,
+                        child: Semantics(
+                          button: true,
+                          label: 'よみあげ / Read aloud',
+                          excludeSemantics: true,
+                          child: Container(
+                            margin: const EdgeInsets.only(left: 4, right: 2),
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: dqGold.withAlpha(28),
+                              borderRadius: BorderRadius.circular(6),
+                              border: Border.all(
+                                  color: dqGold.withAlpha(120), width: 1),
+                            ),
+                            child: Icon(Icons.volume_up_rounded,
+                                color: dqGold.withAlpha(220), size: 14),
+                          ),
+                        ),
+                      ),
+                    ),
                   const Padding(
                     padding: EdgeInsets.only(left: 4, top: 2),
                     child: Text(
@@ -2009,8 +2083,43 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
     );
   }
 
+  /// WS3 tap-to-hear: a 🔊 speaker button shown when a pre-generated voice clip is
+  /// available for the clue line — lets a 6+-yo who cannot yet read HEAR the text.
+  /// Gated on mute-state (honours AudioMute.voiceMuted via AudioCueService).
+  /// Render a small gold speaker button inline with the clue text area.
+  Widget _clueSpeakerButton(String voiceAsset) {
+    // Only show when voice is not muted — if muted the button would be a dead tap.
+    // (AudioCueService.play() also short-circuits on mute, but hiding the button
+    // is cleaner UX: the child's tap then doesn't feel broken.)
+    if (AudioMute.voiceMuted) return const SizedBox.shrink();
+    return Semantics(
+      button: true,
+      label: 'よみあげ / Read aloud',
+      excludeSemantics: true,
+      child: GestureDetector(
+        // Requires a tap gesture (not onPressed via InkWell) since the whole
+        // bubble is already inside a GestureDetector and we must not propagate
+        // the tap up to _onBubbleTap (which would open the ナゾ screen).
+        onTap: () => _cue.play(voiceAsset),
+        child: Container(
+          padding: const EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            color: dqGold.withAlpha(28),
+            borderRadius: BorderRadius.circular(7),
+            border: Border.all(color: dqGold.withAlpha(120), width: 1),
+          ),
+          child: Icon(Icons.volume_up_rounded,
+              color: dqGold.withAlpha(220), size: 15),
+        ),
+      ),
+    );
+  }
+
   Widget _speechBubble(String? clueLineJa,
-      {String ctaLabel = '「？」ナゾをみる', String? npcName}) {
+      {String ctaLabel = '「？」ナゾをみる',
+      String? npcName,
+      // WS3: non-null → show a 🔊 replay button beside the clue text.
+      String? clueVoiceAsset}) {
     return Container(
       constraints: const BoxConstraints(maxWidth: 220),
       padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
@@ -2050,9 +2159,21 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
             const SizedBox(height: 5),
           ],
           if (clueLineJa != null) ...[
-            Text(clueLineJa,
-                style: dqText(size: 12, w: FontWeight.w500, color: dqInk)
-                    .copyWith(height: 1.5)),
+            // WS3: clue text + optional 🔊 button on the same row.
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Text(clueLineJa,
+                      style: dqText(size: 12, w: FontWeight.w500, color: dqInk)
+                          .copyWith(height: 1.5)),
+                ),
+                if (clueVoiceAsset != null) ...[
+                  const SizedBox(width: 6),
+                  _clueSpeakerButton(clueVoiceAsset),
+                ],
+              ],
+            ),
             const SizedBox(height: 6),
           ],
           Row(
