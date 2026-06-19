@@ -511,6 +511,7 @@ Widget _previewFor(String? name) {
         hotspot: kTown5Scene.hotspots
             .firstWhere((h) => h.kind == HotspotKind.npc && h.step != null),
         eikenLevel: '5',
+        sceneBackgroundAsset: kTown5Scene.backgroundAsset,
       );
     case 'chaptermap':
       // Design-audit: the 案内図 with a SYNTHETIC 2-location chapter so the

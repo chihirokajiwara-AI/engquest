@@ -499,6 +499,7 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
           eikenLevel: widget.eikenLevel,
           hintCoinService: _coins,
           initialHintsShown: _hintTierByHotspot[idx] ?? 0,
+          sceneBackgroundAsset: widget.scene.backgroundAsset,
         ),
       ),
     );

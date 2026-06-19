@@ -4,6 +4,8 @@
 // professional RPG: atmospheric backgrounds, navy+cream dialogue boxes, ▶cursor
 // command windows. Replaces the bright pastel card UI.
 
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:engquest/core/ui/app_fonts.dart';
@@ -131,15 +133,45 @@ class DqScene extends StatelessWidget {
         body: Stack(
           fit: StackFit.expand,
           children: [
-            const DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [Color(0xFF0A0E24), Color(0xFF161F3C)],
+            // Base layer: painted scene plate (blurred + scrimed) when provided,
+            // otherwise the flat navy gradient. Puzzle cards sit on top, so the
+            // world "surfaces behind" the ナゾ instead of being UI on a void.
+            if (backgroundAsset != null) ...[
+              // 1. Blurred scene plate — ImageFilter.blur recesses it so it reads
+              //    as a deep atmospheric field, not a competing illustration.
+              ImageFiltered(
+                imageFilter: ui.ImageFilter.blur(
+                    sigmaX: 10, sigmaY: 10, tileMode: TileMode.clamp),
+                child: Image.asset(
+                  backgroundAsset!,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, __, ___) => const DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [Color(0xFF0A0E24), Color(0xFF161F3C)],
+                      ),
+                    ),
+                  ),
                 ),
               ),
-            ),
+              // 2. Dark scrim — keeps card text readable (cards are opaque navy
+              //    DqPanels, so contrast is preserved; scrim controls the ambient
+              //    bleed around them). Alpha 165 ≈ 0.65 opacity.
+              const ColoredBox(
+                  color: Color(0xA5000000), child: SizedBox.expand()),
+            ] else
+              // Flat-gradient fallback when no plate is supplied.
+              const DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [Color(0xFF0A0E24), Color(0xFF161F3C)],
+                  ),
+                ),
+              ),
             // Subtle vignette at the edges so the page reads as a deep field.
             const DecoratedBox(
               decoration: BoxDecoration(

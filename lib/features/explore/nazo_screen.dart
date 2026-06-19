@@ -97,12 +97,20 @@ class NazoScreen extends StatefulWidget {
   /// hints the child already bought instead of relocking them. Defaults to 0.
   final int initialHintsShown;
 
+  /// The scene's painted background plate (e.g. 'assets/art/scenes_layton/town5_lane.webp').
+  /// When provided, DqScene renders it blurred + scrimed behind the ナゾ cards so
+  /// the puzzle "surfaces inside the world" instead of floating on a navy void.
+  /// Null (the default) keeps the existing flat-gradient behaviour — tests and any
+  /// callers that don't supply a plate are unaffected.
+  final String? sceneBackgroundAsset;
+
   const NazoScreen({
     super.key,
     required this.hotspot,
     required this.eikenLevel,
     this.hintCoinService,
     this.initialHintsShown = 0,
+    this.sceneBackgroundAsset,
   });
 
   @override
@@ -461,6 +469,7 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
     if (_phase == _NazoPhase.recall) return _recallScaffold();
     return DqScene(
       warm: kNazoWarmTheme,
+      backgroundAsset: widget.sceneBackgroundAsset,
       contentMaxWidth: 600, // #144: centre on tablet, full-width on phone
       child: Stack(
         children: [
@@ -825,6 +834,7 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
 
     return DqScene(
       warm: kNazoWarmTheme,
+      backgroundAsset: widget.sceneBackgroundAsset,
       contentMaxWidth: 600,
       child: SafeArea(
         child: Padding(
@@ -909,6 +919,7 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
     const warm = kNazoWarmTheme;
     return DqScene(
       warm: kNazoWarmTheme,
+      backgroundAsset: widget.sceneBackgroundAsset,
       contentMaxWidth: 600, // #144: centre on tablet, full-width on phone
       child: SafeArea(
         child: Padding(
