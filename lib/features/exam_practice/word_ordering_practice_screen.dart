@@ -324,13 +324,15 @@ class _WordOrderingPracticeScreenState
                             dqText(size: 14, w: FontWeight.w700, color: dqInk),
                       ),
                       const Spacer(),
-                      Text(
-                        '正答: $_correctCount',
-                        style: dqText(
-                            size: 14,
-                            w: FontWeight.w700,
-                            color: const Color(0xFF8BE08B)),
-                      ),
+                      // no-scold: don't show "正答: 0" before the first correct (CEO #101/#106)
+                      if (_correctCount > 0)
+                        Text(
+                          '正答: $_correctCount',
+                          style: dqText(
+                              size: 14,
+                              w: FontWeight.w700,
+                              color: const Color(0xFF8BE08B)),
+                        ),
                     ],
                   ),
                   const SizedBox(height: 8),
