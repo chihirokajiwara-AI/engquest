@@ -52,6 +52,7 @@ import '../../core/models/vocab_item.dart';
 import '../exam_practice/pass/cse_model.dart';
 import '../exam_practice/pass/skill_accuracy_store.dart';
 import '../exam_practice/pass/pass_progress_card.dart';
+import '../explore/scene_fsrs_seeder.dart';
 import '../home/streak_service.dart';
 import '../quest/ui/dq_ui.dart';
 
@@ -345,6 +346,11 @@ class _BattleScreenState extends State<BattleScreen>
   // (CEO 1320 fun→volume loop / CEO 951 daily-return spine). Null until loaded.
   StreakState? _streakSnapshot;
 
+  // Game⇄learning interconnect: vocabIds seeded from scene ナゾ rescues.
+  // When a card's vocabId is in this set, the card front shows a small tag
+  // "🌍 まちで であった ことば" so the child knows they met this word in the world.
+  Set<String> _sceneOriginIds = const {};
+
   // ── Card flip animation ────────────────────────────────────────────────────
   late AnimationController _flipCtrl;
   late Animation<double> _flipAnim;
@@ -435,6 +441,14 @@ class _BattleScreenState extends State<BattleScreen>
     final uid = await _auth.resolveUid();
     if (!mounted) return;
     _userId = uid;
+
+    // 1.5. Load scene-origin vocabIds for the "まちで であった" tag (non-fatal).
+    try {
+      final originIds = await loadSceneOriginVocabIds();
+      if (mounted && originIds.isNotEmpty) {
+        setState(() => _sceneOriginIds = originIds);
+      }
+    } catch (_) {/* non-fatal — tag simply won't show */}
 
     // 2. Load vocab list from repository — filtered by child's age
     await _vocabRepo.initialize(eikenGrade: widget.eikenGrade);
@@ -1222,6 +1236,30 @@ class _BattleScreenState extends State<BattleScreen>
               jpSize: 12,
               jpColor: dqGold,
               enColor: dqGold),
+          // Game⇄learning tag: if this word was rescued in a world ナゾ, remind
+          // the child — the review is the word returning from the world they saved.
+          // Tiny ひらがな chip; reuses existing text styles; non-intrusive.
+          if (_sceneOriginIds.contains(vocab.id)) ...[
+            const SizedBox(height: 4),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+              decoration: BoxDecoration(
+                color: const Color(0xFF1A3A1A), // dark forest green chip
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: const Color(0xFF4CAF50).withAlpha(180),
+                  width: 1,
+                ),
+              ),
+              child: Text(
+                '🌍 まちで であった ことば',
+                style: dqText(
+                  size: 11,
+                  color: const Color(0xFF81C784),
+                ),
+              ),
+            ),
+          ],
           const SizedBox(height: 6),
           dqBilingual('こころの中（なか）で おもいだして、タップ', 'Recall it, then tap to check',
               jpSize: 13, jpColor: dqGoldDeep, enColor: dqGoldDeep),

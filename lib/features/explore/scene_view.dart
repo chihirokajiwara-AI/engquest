@@ -27,6 +27,7 @@ import '../exam_practice/pass/cse_model.dart';
 import '../exam_practice/pass/skill_accuracy_store.dart';
 import 'hotspot.dart';
 import 'nazo_screen.dart';
+import 'scene_fsrs_seeder.dart';
 import 'scene_solved_store.dart';
 
 export 'hotspot.dart'
@@ -698,6 +699,14 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
     // (a ナゾ retries to solve, so 1/1 every time would inflate the meter).
     // Scene ナゾ test vocab/reading 英検 knowledge → EikenSkill.reading.
     _recordSkill(result.firstTryCorrect);
+    // Game⇄learning interconnect: seed the rescued words into the FSRS deck
+    // so they surface in Battle ("まちで であった ことば"). Fire-and-forget;
+    // non-fatal — never breaks the restore flow. Only first-try-correct words
+    // are seeded (knewWords). Skip if knewWords is empty (e.g. a retried solve
+    // with no first-try correct answers).
+    if (result.knewWords.isNotEmpty) {
+      seedSceneWords(widget.eikenLevel, result.knewWords);
+    }
   }
 
   /// Records one front-door ナゾ into 合格率 (SkillAccuracyStore). Fire-and-forget;
