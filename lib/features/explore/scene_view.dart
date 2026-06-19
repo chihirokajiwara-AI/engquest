@@ -1518,6 +1518,8 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
     final hotspot = widget.scene.hotspots[idx];
     final solvedNpc = hotspot.kind == HotspotKind.npc && _solved[idx] == true;
     final isFinal = isFinalNazo(idx);
+    final npcName =
+        hotspot.kind == HotspotKind.npc ? hotspot.step?.npcName.trim() : null;
     final cx = (hotspot.pos.x + 1) / 2 * w;
     final cy = (hotspot.pos.y + 1) / 2 * h;
     final size = hotspot.size * w.clamp(100.0, 480.0);
@@ -1548,6 +1550,7 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
                 ? _speechBubble(
                     hotspot.mysteryFragmentJa ?? 'ありがとう、たんていさん。\nことばが もどってきたよ。',
                     ctaLabel: '✓ とじる',
+                    npcName: npcName,
                   )
                 : _speechBubble(
                     // 対決 beat: the final mystery is framed as the confrontation.
@@ -1556,6 +1559,7 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
                             '${hotspot.clueLineJa ?? ''}'
                         : hotspot.clueLineJa,
                     ctaLabel: isFinal ? '⚔️ 対決（たいけつ）する' : '「？」ナゾをみる',
+                    npcName: npcName,
                   ),
           ),
         ),
@@ -1993,7 +1997,8 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
     );
   }
 
-  Widget _speechBubble(String? clueLineJa, {String ctaLabel = '「？」ナゾをみる'}) {
+  Widget _speechBubble(String? clueLineJa,
+      {String ctaLabel = '「？」ナゾをみる', String? npcName}) {
     return Container(
       constraints: const BoxConstraints(maxWidth: 220),
       padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
@@ -2008,6 +2013,30 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          // The mystery gets a SUBJECT at the moment of contact (Layton-grade
+          // first-contact): name the villager in the bubble itself, not only
+          // after the ナゾ opens (the NazoScreen header named them late — backwards
+          // ordering). A small gold nameplate above the clue.
+          if (npcName != null && npcName.isNotEmpty) ...[
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text('🕵', style: TextStyle(fontSize: 13)),
+                  const SizedBox(width: 4),
+                  Flexible(
+                    child: Text(npcName,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: dqText(
+                            size: 12.5, w: FontWeight.w800, color: dqGold)),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 5),
+          ],
           if (clueLineJa != null) ...[
             Text(clueLineJa,
                 style: dqText(size: 12, w: FontWeight.w500, color: dqInk)
