@@ -177,8 +177,13 @@ class _OnboardingFlowState extends State<OnboardingFlow>
   int _step = 0; // 0..3
   static const int _totalSteps = 4;
 
-  // Step 1 — age
-  int _age = 8;
+  // Step 1 — age. Default to the audience FLOOR (kMinSelectableAge = 6, CEO 1889),
+  // NOT 8 (#128): the placement quiz is English-only, and a parent who quick-taps
+  // つぎへ without changing the age sent a non-reading 6yo straight into an
+  // unreadable English MCQ — instant D1 abandonment of the target 年長/小1 user.
+  // At 6 the pre-reader gate (_age <= kPreReaderMaxAge) skips the quiz and places
+  // at the 5級 floor (#101 never-start-high); parents of older children tap "+".
+  int _age = kMinSelectableAge;
 
   // Step 1 — self-report ("how much English do you know?"), asked on the same
   // warm first screen as age, BEFORE any test (CEO 1841: 自己申告させてから診断).
