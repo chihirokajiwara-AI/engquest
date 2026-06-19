@@ -1225,6 +1225,26 @@ class _BattleScreenState extends State<BattleScreen>
           const SizedBox(height: 6),
           dqBilingual('こころの中（なか）で おもいだして、タップ', 'Recall it, then tap to check',
               jpSize: 13, jpColor: dqGoldDeep, enColor: dqGoldDeep),
+          const SizedBox(height: 16),
+          // A VISIBLE tap target. The whole card is already tappable (_flipCard),
+          // but the only affordance was the instruction TEXT above — which the
+          // visual-auditor (CEO 2132) flagged as undiscoverable for an early
+          // reader on this, the highest-frequency daily screen. This gold pill
+          // makes "the card flips when you tap" obvious; the line above stays as
+          // the "recall FIRST" method cue. ひらがな-led for a 6yo.
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 9),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(colors: [dqGold, dqGoldDeep]),
+              borderRadius: BorderRadius.circular(22),
+              border: Border.all(color: dqBorder, width: 1.5),
+            ),
+            child: Text('👆 こたえを みる',
+                style: dqText(
+                    size: 14,
+                    w: FontWeight.w800,
+                    color: const Color(0xFF2A1C00))),
+          ),
         ],
       ),
     );
