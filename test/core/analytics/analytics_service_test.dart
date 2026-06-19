@@ -27,6 +27,13 @@ class SpySink implements AnalyticsSink {
   Future<void> setUserProperty(String name, String value) async =>
       userProperties[name] = value;
 
+  @override
+  Future<void> logError(
+    Object error,
+    StackTrace? stack, {
+    String? context,
+  }) async {}
+
   void reset() {
     events.clear();
     userProperties.clear();

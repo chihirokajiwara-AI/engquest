@@ -7,6 +7,16 @@
 //
 // Web-safe: no dart:io. Firebase init is guarded; analytics stay OFF until a
 // parent consents (COPPA / privacy-by-default).
+//
+// Crash / error reporting (WS6):
+// - runZonedGuarded wraps runApp so uncaught async Dart errors are captured.
+// - FlutterError.onError captures widget-build / framework errors.
+// - PlatformDispatcher.instance.onError captures engine-level errors.
+// All three routes to CrashReporter, which delegates to AnalyticsService
+// (no-op when analytics consent is not granted or Firebase is unavailable).
+// No new SDK dependency — fully web-safe.
+import 'dart:async';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +45,15 @@ Future<void> bootstrapApp(Flavor flavor) async {
   if (kReleaseMode) {
     ErrorWidget.builder = friendlyErrorWidget;
   }
+
+  // ── Crash / Error Reporting (WS6) ──────────────────────────────────────
+  // Install all three Flutter/Dart error hooks BEFORE runApp so even early
+  // init errors are captured. CrashReporter delegates to AnalyticsService
+  // which is no-op until Firebase is wired below.
+  FlutterError.onError = CrashReporter.onFlutterError;
+  PlatformDispatcher.instance.onError = CrashReporter.onPlatformError;
+  // runZonedGuarded is set up around runApp further below.
+  // ───────────────────────────────────────────────────────────────────────
 
   // 1. SharedPreferences — pre-warm so the first frame has data.
   await PreferencesService.getInstance();
@@ -90,5 +109,12 @@ Future<void> bootstrapApp(Flavor flavor) async {
   await NotificationService.instance.init(firebaseAvailable: firebaseAvailable);
   await NotificationService.instance.setupReminders();
 
-  runApp(const EngQuestApp());
+  // 6. Launch the app inside a guarded zone so any uncaught async Dart error
+  //    (e.g. a Future that throws after a user interaction) is routed to
+  //    CrashReporter rather than silently swallowed or crashing the engine.
+  //    Happy-path behaviour is completely unchanged.
+  runZonedGuarded(
+    () => runApp(const EngQuestApp()),
+    CrashReporter.onZoneError,
+  );
 }

@@ -10,6 +10,7 @@
 library;
 
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:flutter/foundation.dart';
 
 // ---------------------------------------------------------------------------
 // Event constants
@@ -79,6 +80,15 @@ abstract class AnalyticsSink {
   Future<void> logEvent(String name, {Map<String, Object>? parameters});
   Future<void> setUserId(String uid);
   Future<void> setUserProperty(String name, String value);
+
+  /// Report an unhandled error to the analytics backend (if wired).
+  /// Implementations must be safe to call at any time — including before
+  /// Firebase is fully initialised — and must NOT rethrow.
+  Future<void> logError(
+    Object error,
+    StackTrace? stack, {
+    String? context,
+  });
 }
 
 /// No-op implementation for unit tests and offline debug builds.
@@ -91,6 +101,13 @@ class NoOpAnalytics implements AnalyticsSink {
 
   @override
   Future<void> setUserProperty(String name, String value) async {}
+
+  @override
+  Future<void> logError(
+    Object error,
+    StackTrace? stack, {
+    String? context,
+  }) async {}
 }
 
 /// Production Firebase Analytics implementation.
@@ -133,6 +150,33 @@ class FirebaseAnalyticsAdapter implements AnalyticsSink {
   @override
   Future<void> setUserProperty(String name, String value) async {
     await _analytics.setUserProperty(name: name, value: value);
+  }
+
+  @override
+  Future<void> logError(
+    Object error,
+    StackTrace? stack, {
+    String? context,
+  }) async {
+    // Firebase Analytics has no dedicated crash API on web; log as a custom
+    // event so production errors surface in the Analytics dashboard.
+    // TODO(crash-backend): replace with Firebase Crashlytics once the Dart
+    // Crashlytics plugin is stable for Flutter Web.
+    try {
+      await _analytics.logEvent(
+        name: 'eq_unhandled_error',
+        parameters: {
+          'error_type': error.runtimeType.toString(),
+          'error_msg': error.toString().substring(
+                0,
+                error.toString().length.clamp(0, 100),
+              ),
+          if (context != null) 'context': context,
+        },
+      );
+    } catch (_) {
+      // Swallow: the error reporter must never throw.
+    }
   }
 }
 
@@ -384,5 +428,73 @@ class AnalyticsService {
           group == AbGroup.treatment ? 'treatment' : 'control',
       EngQuestParam.retentionScore: retentionScore,
     });
+  }
+
+  // ---- Error / Crash -------------------------------------------------
+
+  /// Report an unhandled error. Routes to [AnalyticsSink.logError] (no-op
+  /// when analytics consent is not granted or Firebase is unavailable).
+  Future<void> logError(
+    Object error,
+    StackTrace? stack, {
+    String? context,
+  }) async {
+    await sink.logError(error, stack, context: context);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Crash / Error Reporter (bootstrap helper)
+// ---------------------------------------------------------------------------
+
+/// Lightweight, web-safe error reporter.
+///
+/// Installed once during app bootstrap. Routes [FlutterError.onError],
+/// [PlatformDispatcher.instance.onError], and [runZonedGuarded] catches here.
+///
+/// In debug builds errors are printed to the console so devs see them
+/// immediately. In release builds they are forwarded to [AnalyticsService]
+/// (Firebase Analytics custom event) — silent if the user has not consented.
+///
+/// NO dart:io, NO external SDK dependency beyond what already exists.
+class CrashReporter {
+  CrashReporter._();
+
+  /// Route a Flutter framework error (widget build errors, rendering errors …).
+  static void onFlutterError(FlutterErrorDetails details) {
+    // In debug mode keep the default presenter (prints to console with stack).
+    if (kDebugMode) {
+      FlutterError.presentError(details);
+      return;
+    }
+    // In release/profile: log quietly and forward to analytics.
+    _report(details.exception, details.stack, context: 'flutter');
+  }
+
+  /// Route a platform / Dart isolate error from [PlatformDispatcher.onError].
+  /// Must return [true] to mark the error as handled (suppresses the engine's
+  /// default behaviour of printing and crashing on some platforms).
+  static bool onPlatformError(Object error, StackTrace stack) {
+    _report(error, stack, context: 'platform');
+    return true;
+  }
+
+  /// Route an error caught by [runZonedGuarded].
+  static void onZoneError(Object error, StackTrace stack) {
+    _report(error, stack, context: 'zone');
+  }
+
+  static void _report(Object error, StackTrace? stack, {String? context}) {
+    if (kDebugMode) {
+      // Developer-facing: full stack trace.
+      debugPrint('[CrashReporter:$context] $error');
+      if (stack != null) debugPrint(stack.toString());
+    }
+    // Fire-and-forget: analytics call is async but we must not await here
+    // (we may be running outside of a Flutter zone).
+    AnalyticsService.instance
+        .logError(error, stack, context: context)
+        // Ignore any error from the reporter itself.
+        .ignore();
   }
 }
