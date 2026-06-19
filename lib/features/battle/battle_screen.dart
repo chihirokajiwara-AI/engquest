@@ -33,6 +33,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../core/analytics/analytics_service.dart';
 import '../../core/analytics/firestore_progress_repository.dart';
 import '../../core/analytics/progress_service.dart';
 import '../../core/content/vocab_age_filter.dart';
@@ -570,6 +571,12 @@ class _BattleScreenState extends State<BattleScreen>
       _preEstimate = null;
       _postEstimate = null;
     });
+
+    // Fire battle_started once the deck is visible. Inert until analytics consent.
+    AnalyticsService.instance.logBattleStarted(
+      eikenGrade: widget.eikenGrade,
+      deckSize: _queue.length,
+    );
 
     // 7. Prefetch audio for the first cards the child will actually SEE — in
     // _queue order (FSRS-prioritised + shuffled), NOT raw _vocab order. The old

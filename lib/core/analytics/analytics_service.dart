@@ -50,6 +50,11 @@ class EngQuestEvent {
   // A/B trial
   static const String abGroupAssigned = 'eq_ab_group_assigned';
   static const String abRetentionTest = 'eq_ab_retention_test';
+
+  // Conversion funnel
+  static const String paywallViewed = 'eq_paywall_viewed';
+  static const String gradeSwitch = 'eq_grade_switch';
+  static const String battleStarted = 'eq_battle_started';
 }
 
 /// Parameter key names (Firebase Analytics custom params, ≤40 chars).
@@ -68,6 +73,9 @@ class EngQuestParam {
   static const String abGroup = 'ab_group'; // treatment|control
   static const String retentionScore = 'retention_score'; // 0.0–1.0
   static const String stepName = 'step_name';
+  static const String fromGrade = 'from_grade'; // prior grade before switch
+  static const String toGrade = 'to_grade'; // new grade after switch
+  static const String eikenGrade = 'eiken_grade'; // grade shown on paywall
 }
 
 // ---------------------------------------------------------------------------
@@ -400,6 +408,41 @@ class AnalyticsService {
 
   Future<void> logOnboardingComplete(String uid) async {
     await sink.logEvent(EngQuestEvent.onboardingComplete);
+  }
+
+  // ---- Conversion funnel ---------------------------------------------
+
+  /// Fired when the paywall (GradeGateScreen) is shown to a user.
+  /// [eikenGrade] is the grade the user tried to access (e.g. "3", "pre2").
+  Future<void> logPaywallViewed({required String eikenGrade}) async {
+    await sink.logEvent(EngQuestEvent.paywallViewed, parameters: {
+      EngQuestParam.eikenGrade: eikenGrade,
+    });
+  }
+
+  /// Fired when a child/parent switches the active 英検 grade in settings.
+  /// Both the previous grade and the new grade are captured for funnel analysis.
+  Future<void> logGradeSwitch({
+    required String fromGrade,
+    required String toGrade,
+  }) async {
+    await sink.logEvent(EngQuestEvent.gradeSwitch, parameters: {
+      EngQuestParam.fromGrade: fromGrade,
+      EngQuestParam.toGrade: toGrade,
+    });
+  }
+
+  /// Fired once when the battle deck has loaded and the child starts practice.
+  /// [eikenGrade] is the active grade; [deckSize] is how many cards are in the
+  /// due queue (0 = empty deck, child still opened the screen).
+  Future<void> logBattleStarted({
+    required String eikenGrade,
+    required int deckSize,
+  }) async {
+    await sink.logEvent(EngQuestEvent.battleStarted, parameters: {
+      EngQuestParam.eikenGrade: eikenGrade,
+      EngQuestParam.wordsPracticed: deckSize,
+    });
   }
 
   // ---- A/B Trial -----------------------------------------------------

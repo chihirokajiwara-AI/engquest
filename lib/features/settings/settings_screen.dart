@@ -24,6 +24,7 @@ import 'package:flutter/foundation.dart'
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:engquest/core/analytics/analytics_service.dart';
 import 'package:engquest/core/config/flavor_config.dart';
 import 'package:engquest/core/sound/sound_service.dart';
 import 'package:engquest/core/audio/audio_mute.dart';
@@ -189,12 +190,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
   /// Persist the new grade + confirm. Shared by the free-grade path and the
   /// post-purchase callback so the paywall is never bypassed.
   Future<void> _applyGrade(String grade) async {
+    final previousGrade = _currentGrade;
     try {
       final prefs = await PreferencesService.getInstance();
       await prefs.setString(_kStartLevelKey, grade);
     } catch (_) {
       return; // best-effort; on failure the UI simply does not change
     }
+    // Fire grade_switch before the state update so fromGrade is still valid.
+    AnalyticsService.instance.logGradeSwitch(
+      fromGrade: previousGrade,
+      toGrade: grade,
+    );
     if (!mounted) return;
     setState(() => _currentGrade = grade);
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(

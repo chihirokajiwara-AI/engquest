@@ -15,6 +15,7 @@
 // For edilab flavor, this screen is never shown (all grades free).
 
 import 'package:flutter/material.dart';
+import '../../core/analytics/analytics_service.dart';
 import '../../core/billing/billing_service.dart';
 import '../../core/config/flavor_config.dart';
 import '../exam_practice/eiken_exam_config.dart';
@@ -44,6 +45,16 @@ class _GradeGateScreenState extends State<GradeGateScreen> {
   final _billing = BillingService();
   bool _purchasing = false;
   String? _errorMessage;
+
+  @override
+  void initState() {
+    super.initState();
+    // Fire paywall_viewed as soon as the screen is shown — the primary signal
+    // for measuring conversion-funnel reach. Inert until analytics consent.
+    AnalyticsService.instance.logPaywallViewed(
+      eikenGrade: widget.eikenGrade,
+    );
+  }
 
   // Canonical label (handles pre2plus → 英検準2級プラス; was missing → raw key).
   String get _gradeDisplay => gradeLabelJa(widget.eikenGrade);
