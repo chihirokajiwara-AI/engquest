@@ -26,6 +26,7 @@ class AudioCueService {
   // tests that only exercise the mute gate).
   final AudioPlayer? _injectedPlayer;
   AudioPlayer? _playerInstance;
+  bool _disposed = false;
   AudioPlayer get _player =>
       _playerInstance ??= (_injectedPlayer ?? AudioPlayer());
 
@@ -39,6 +40,10 @@ class AudioCueService {
   /// (e.g. the child taps 🔊 repeatedly to imitate). Must be invoked from a
   /// user-gesture chain on web.
   Future<void> play(String? assetKey) async {
+    // Guard against a tap landing after dispose() (e.g. a 🔊 replay in the #168
+    // memo drawer tapped during the scene-pop animation) — calling play()/stop()
+    // on a disposed AudioPlayer would otherwise hit the catch and silently no-op.
+    if (_disposed) return;
     // Voice channel muted in Settings → silence ALL word/pronunciation audio.
     if (AudioMute.voiceMuted) return;
     if (assetKey == null || assetKey.isEmpty) return;
@@ -51,10 +56,14 @@ class AudioCueService {
   }
 
   Future<void> stop() async {
+    if (_disposed) return;
     try {
       await _playerInstance?.stop();
     } catch (_) {/* ignore */}
   }
 
-  void dispose() => _playerInstance?.dispose();
+  void dispose() {
+    _disposed = true;
+    _playerInstance?.dispose();
+  }
 }
