@@ -78,16 +78,18 @@ List<MockMcqItem> readingItemsFor(String grade) => (_kReadingPool[grade] ??
           correctIdx: r.correctIdx,
           skill: EikenSkill.reading,
           sectionId: r.sectionId,
-          // Authored 解説 (teach-why) surfaced in the post-mock review when one
-          // exists for this item; null otherwise (the review never fabricates).
+          // Authored 解説 (teach-why) surfaced after answering — in both the
+          // single-question practice flow and the post-mock review; null otherwise
+          // (no fabrication). Coverage is now complete (see map below).
           explanation: _kReadingExplanations[r.id],
         ))
     .toList();
 
-/// Authored per-item 解説 (teach-why) for the post-mock review, keyed by item id.
-/// Each points at the passage evidence for the correct answer (content-qa-verified,
-/// 英検5級 2026-06-12). Items without an entry show no 解説 (no fabrication).
-/// Extend grade-by-grade (5級 done; 4級/3級/… next).
+/// Authored per-item 解説 (teach-why), keyed by item id, surfaced after answering
+/// in practice + post-mock review. Each names the correct answer + why it fits and
+/// (upper grades) why each distractor fails. COVERAGE IS COMPLETE: every reading
+/// item across all 7 grades (5級〜準1級, 216/216) has an entry — verified 2026-06-20.
+/// Items without an entry would show no 解説 (no fabrication), but none remain.
 const Map<String, String> _kReadingExplanations = {
   '5_r_001': 'ほんぶんに「Tom has a dog.」とあるね。トムが もっているのは「いぬ（A dog）」だよ。',
   '5_r_002':

@@ -70,7 +70,8 @@ class ListeningItem {
   /// Optional child-facing 解説 (「なぜこの答えか」) shown after answering, next
   /// to the script reveal — the same "teach why" aid vocab/reading/conversation
   /// already have. Null → the transcript panel alone is shown (graceful, the
-  /// prior behavior). Seeded per-grade starting with 5級 (entry learners).
+  /// prior behavior). Coverage is complete across all grades (215/215 items,
+  /// verified 2026-06-20); the explanation is also read aloud to screen-readers.
   final String? explanation;
 
   const ListeningItem({
