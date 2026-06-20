@@ -89,6 +89,42 @@ void main() {
   });
 
   testWidgets(
+      'grade buttons are inert for the card-back dwell, then go live (#3)',
+      (t) async {
+    final h = t.ensureSemantics();
+    await t.pumpWidget(MaterialApp(
+      home: BattleScreen(
+        repository: InMemoryFsrsCardRepository(),
+        vocabRepo: _seeded([_w('eiken5_001', 'cat'), _w('eiken5_002', 'dog')]),
+        childAge: 10,
+        eikenGrade: '5',
+      ),
+    ));
+    await _pumpLoad(t);
+
+    await t.tap(find.bySemanticsLabel(RegExp('めくって')).first);
+    // Just after the flip, within the ~700ms settle: the buttons are rendered but
+    // a flip-gesture tap-race must NOT be able to grade the card (FSRS pollution).
+    await t.pump(const Duration(milliseconds: 300));
+    bool ignoringTaps() => t
+        .widget<IgnorePointer>(find
+            .ancestor(
+                of: find.textContaining('わかった'),
+                matching: find.byType(IgnorePointer))
+            .first)
+        .ignoring;
+    expect(ignoringTaps(), isTrue,
+        reason: 'grade taps are inert during the card-back dwell (#3)');
+
+    // After the dwell elapses, the buttons go live.
+    await t.pump(const Duration(milliseconds: 500));
+    expect(ignoringTaps(), isFalse,
+        reason: 'the grade buttons must become operable after the dwell');
+    h.dispose();
+    expect(t.takeException(), isNull);
+  });
+
+  testWidgets(
       'the flashcard front exposes a tap-to-hear speaker for non-readers',
       (t) async {
     await t.pumpWidget(MaterialApp(

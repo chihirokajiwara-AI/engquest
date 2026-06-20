@@ -404,6 +404,14 @@ class _BattleScreenState extends State<BattleScreen>
   late Animation<double> _flipAnim;
   bool _isFlipped = false;
 
+  // Card-back dwell (studio #3): on flip the grade buttons are RENDERED but stay
+  // inert for ~700ms, then fade in as they go live. A double-tap carried over
+  // from the flip gesture would otherwise grade the card before the child has
+  // even read the answer — an accidental grade pollutes the FSRS schedule and the
+  // live 合格率. The fade is the visible "now you can answer" cue.
+  bool _gradeReady = false;
+  Timer? _dwellTimer;
+
   // ── Shimmer overlay (correct answer) ──────────────────────────────────────
   bool _showShimmer = false;
 
@@ -475,6 +483,7 @@ class _BattleScreenState extends State<BattleScreen>
   @override
   void dispose() {
     _momentumTimer?.cancel();
+    _dwellTimer?.cancel();
     _flipCtrl.dispose();
     _starsCtrl.dispose();
     _wordAudio.dispose();
@@ -617,18 +626,33 @@ class _BattleScreenState extends State<BattleScreen>
       vocabId: _currentVocab.id,
       word: _currentVocab.word,
     );
-    setState(() => _isFlipped = true);
+    setState(() {
+      _isFlipped = true;
+      _gradeReady = false;
+    });
     _flipCtrl.forward();
+    // Hold the grade buttons inert for the dwell, then let them go live.
+    _dwellTimer?.cancel();
+    _dwellTimer = Timer(const Duration(milliseconds: 700), () {
+      if (mounted) setState(() => _gradeReady = true);
+    });
   }
 
   void _resetFlip() {
+    _dwellTimer?.cancel();
     _flipCtrl.reset();
-    setState(() => _isFlipped = false);
+    setState(() {
+      _isFlipped = false;
+      _gradeReady = false;
+    });
   }
 
   // ── Grade ──────────────────────────────────────────────────────────────────
 
   void _gradeCard(Grade grade) {
+    // Card-back dwell (studio #3): the buttons are visible but inert until the
+    // ~700ms settle elapses, so a flip-gesture tap-race can't grade unread.
+    if (!_gradeReady) return;
     // Block a re-entrant double-tap (see [_grading] above). The session-end branch
     // leaves _grading set (no further grading on the summary); the normal path
     // releases it post-frame, once the rebuild has removed the grade buttons.
@@ -1091,7 +1115,18 @@ class _BattleScreenState extends State<BattleScreen>
             // the card itself (after the サイレント rescue frame) — a separate
             // footer hint here just duplicated it on the most-used screen
             // (real-render 2026-06-17). The grade buttons take this slot post-flip.
-            if (_isFlipped) _buildGradeButtons(),
+            // Buttons render on flip but fade in + ignore taps until the dwell
+            // (700ms) elapses — the visible "you can answer now" cue, and the
+            // structural guard against an accidental flip→grade tap-race (#3).
+            if (_isFlipped)
+              AnimatedOpacity(
+                opacity: _gradeReady ? 1.0 : 0.4,
+                duration: const Duration(milliseconds: 280),
+                child: IgnorePointer(
+                  ignoring: !_gradeReady,
+                  child: _buildGradeButtons(),
+                ),
+              ),
             const SizedBox(height: 24),
           ],
         ),
