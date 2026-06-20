@@ -481,11 +481,13 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
     final grade = widget.eikenGrade;
     if (grade == '5' || grade == '4') {
       if (part == 1) {
-        return '音声を聞いて、最も適切な返答を選んでください。\n'
+        // Furigana on every kanji (6yo-readability convention, matches the
+        // section labels above + the wordorder instruction) — #164.
+        return '音声（おんせい）を聞（き）いて、最（もっと）も適切（てきせつ）な返答（へんとう）を選（えら）んでください。\n'
             'Listen and choose the best response.';
       }
     }
-    return '音声を聞いて、質問に答えてください。\n'
+    return '音声（おんせい）を聞（き）いて、質問（しつもん）に答（こた）えてください。\n'
         'Listen and answer the question.';
   }
 
