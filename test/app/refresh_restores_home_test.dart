@@ -99,4 +99,25 @@ void main() {
     await _drain(tester);
     _drainOverflowOnly(tester);
   });
+
+  testWidgets(
+      'onboarded-but-prologue-unseen player still meets the title first '
+      '(CEO 2233 — no いきなり cold-open without the title)', (tester) async {
+    // Edge: onboarding_complete persisted from an earlier session, but
+    // prologue_seen is false (e.g. the prologue gate shipped/was reset AFTER the
+    // user onboarded). They are pre-story → must meet the 本格 title, NOT be
+    // dropped straight onto the cold-open prologue. This is the「いきなりこの画面から
+    // 始まる」path: booting to the title is the fix.
+    SharedPreferences.setMockInitialValues({
+      'onboarding_complete': true,
+      'prologue_seen': false,
+    });
+    await _boot(tester);
+    _drainOverflowOnly(tester);
+    expect(find.text(_titleStart), findsOneWidget,
+        reason: 'a prologue-unseen user is pre-story → title first, not an '
+            'abrupt cold-open (CEO 2233)');
+    await _drain(tester);
+    _drainOverflowOnly(tester);
+  });
 }

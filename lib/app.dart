@@ -1043,20 +1043,28 @@ class _AppEntryPointState extends State<_AppEntryPoint> {
     // Ensure PreferencesService is initialised (real SharedPreferences).
     await OnboardingStorage.init();
     final complete = OnboardingStorage.isComplete;
+    final prologueSeen = OnboardingStorage.prologueSeen;
     if (mounted) {
       setState(() {
         _onboardingComplete = complete;
-        _prologueSeen = OnboardingStorage.prologueSeen;
+        _prologueSeen = prologueSeen;
         // #53 (CEO P0): a returning player must boot straight back INTO the app,
         // not be dumped on the title screen on every web refresh. A web refresh
         // restarts the Dart app, resetting in-memory _started → previously every
         // refresh bounced an already-onboarded child back to はじめる. We restore
-        // to the top-level home hub (the safe nav location) by treating an
-        // onboarded session as already-started. Deep mid-quest/mid-exam state is
+        // to the top-level home hub (the safe nav location) by treating a fully
+        // initiated session as already-started. Deep mid-quest/mid-exam state is
         // intentionally NOT restored — it would need args the boot path lacks and
         // could bypass the onboarding/prologue gates. First-run users (onboarding
         // incomplete) still get the 本格 title as their first impression.
-        _started = complete;
+        //
+        // CEO 2233 fix: gate on prologueSeen too, not just `complete`. A user who
+        // is onboarding-complete but has NOT seen the opening prologue (e.g. a
+        // prologue_seen key shipped/reset AFTER they onboarded) is still pre-story
+        // — skipping the title dropped them straight onto the cold-open prologue,
+        // which reads as「いきなりこの画面から始まる」. The documented intent is that a
+        // pre-story user meets the title first, so require BOTH gates passed.
+        _started = complete && prologueSeen;
         _loading = false;
       });
     }
