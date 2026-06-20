@@ -210,11 +210,8 @@ class _CaseLogScreenState extends State<CaseLogScreen> {
             e.value.mysteryFragmentJa != null)
           e.value.mysteryFragmentJa!,
     ];
-    final status = cleared
-        ? '✓ かいけつ'
-        : solvedCount > 0
-            ? '$solvedCount / $npcCount'
-            : 'みかいふう';
+    // Uncleared status text (cleared cases get the 解決 ink-stamp instead).
+    final status = solvedCount > 0 ? '$solvedCount / $npcCount' : 'みかいふう';
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(12),
@@ -235,11 +232,13 @@ class _CaseLogScreenState extends State<CaseLogScreen> {
                   style: dqText(size: 14, w: FontWeight.w800, color: dqInk),
                 ),
               ),
-              Text(status,
-                  style: dqText(
-                      size: 12,
-                      w: FontWeight.w700,
-                      color: cleared ? dqGold : dqInk.withAlpha(160))),
+              cleared
+                  ? _solvedStamp()
+                  : Text(status,
+                      style: dqText(
+                          size: 12,
+                          w: FontWeight.w700,
+                          color: dqInk.withAlpha(160))),
             ],
           ),
           for (final frag in unlocked) ...[
@@ -262,7 +261,7 @@ class _CaseLogScreenState extends State<CaseLogScreen> {
                 border: Border.all(color: dqGold.withAlpha(70)),
               ),
               child: Text(
-                '🎉 ${scene.cleared!}',
+                scene.cleared!,
                 style: dqText(size: 11, color: dqInk.withAlpha(220))
                     .copyWith(height: 1.55),
               ),
@@ -272,4 +271,27 @@ class _CaseLogScreenState extends State<CaseLogScreen> {
       ),
     );
   }
+
+  /// 解決 (case-closed) rubber-stamp — the detective-casebook signature in
+  /// evidence-red, tilted like a real ink stamp (#186 de-DQ identity; replaces
+  /// the plain "✓ かいけつ" gold text on a cleared case). FittedBox keeps the
+  /// furigana label from overflowing the stamp on the narrowest tile.
+  Widget _solvedStamp() => Transform.rotate(
+        angle: -0.1,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+          decoration: BoxDecoration(
+            border: Border.all(color: evidenceRed, width: 2),
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              '解決（かいけつ）',
+              style: dqText(size: 12, w: FontWeight.w900, color: evidenceRed)
+                  .copyWith(letterSpacing: 1.5),
+            ),
+          ),
+        ),
+      );
 }

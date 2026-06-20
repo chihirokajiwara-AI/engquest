@@ -111,9 +111,11 @@ void main() {
       // 5級's bookmark word is now revealed in the assembling sentence.
       expect(find.textContaining('Once, I'), findsWidgets,
           reason: '5級 cleared → its bookmark "Once, I" reveals');
-      // …and the case can be re-read in full (the 🎉 解決 finale shows).
-      expect(find.textContaining('🎉'), findsWidgets,
-          reason: 'a cleared chapter shows its 解決 finale for re-reading (N12)');
+      // …and the cleared case shows the detective 解決 (case-closed) ink-stamp
+      // (#186 de-DQ identity: replaced the old "✓ かいけつ" gold text + 🎉 emoji).
+      // The stamp's 解決 label proves the cleared-state rendering + finale re-read.
+      expect(find.textContaining('解決'), findsWidgets,
+          reason: 'a cleared chapter shows the 解決 case-closed stamp (N12)');
       expect(tester.takeException(), isNull);
     });
   });
