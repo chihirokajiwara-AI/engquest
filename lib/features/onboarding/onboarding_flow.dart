@@ -447,6 +447,9 @@ class _StepAge extends StatelessWidget {
               // Flavor-aware product name (A-KEN Quest / ENG Quest) kept; the
               // "brave one"→"word detective" + 賢者/勇者→探偵 recast removes the OLD
               // hero trope that contradicted the shipped コトバ探偵 opening (CEO 1363).
+              // NOTE: this deliberately shows the store product name (guarded by
+              // onboarding_brand_test #25); the title-vs-welcome brand split
+              // (コトバ探偵 wordmark vs A-KEN Quest product) is a CEO call, not a solo edit.
               '${FlavorConfig.instanceOrNull?.appName ?? 'A-KEN Quest'} へようこそ',
               'Welcome, word detective',
               jpSize: 22,
