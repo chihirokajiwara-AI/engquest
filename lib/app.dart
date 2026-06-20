@@ -1093,9 +1093,9 @@ class _AppEntryPointState extends State<_AppEntryPoint> {
   // transition, so the keys are what make the seam animate.
   Widget _buildPhase() {
     if (_loading) {
-      // Minimal splash while SharedPreferences warms up (<100 ms typically).
-      // Deep-night field with gold spinner so the first frame is already 本格.
-      final flavor = EngQuestApp._flavor;
+      // Detective-identity splash while SharedPreferences warms up (<100 ms).
+      // Shows the brand mark + コトバ探偵 wordmark + investigation-start copy.
+      // Dark-navy throughout; gold spinner kept for continuity.
       return KeyedSubtree(
         key: const ValueKey('phase-loading'),
         child: Scaffold(
@@ -1112,10 +1112,23 @@ class _AppEntryPointState extends State<_AppEntryPoint> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  const BrandMark(size: 64),
+                  const SizedBox(height: 14),
+                  Text(
+                    'コトバ探偵',
+                    style: dqText(
+                        size: 20,
+                        w: FontWeight.w800,
+                        color: dqGold,
+                        spacing: 3),
+                  ),
+                  const SizedBox(height: 20),
                   const CircularProgressIndicator(color: dqGold),
-                  const SizedBox(height: 16),
-                  Text(flavor.splashText,
-                      style: dqText(size: 14, color: dqInk)),
+                  const SizedBox(height: 14),
+                  Text(
+                    '事件（じけん）を ひらいています…',
+                    style: dqText(size: 13, color: dqInk),
+                  ),
                 ],
               ),
             ),

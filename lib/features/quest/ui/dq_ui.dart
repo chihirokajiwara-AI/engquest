@@ -1,8 +1,8 @@
 // lib/features/quest/ui/dq_ui.dart
-// A-KEN Quest — the shared 本格 (Dragon-Quest-grade) scene-framework components.
+// A-KEN Quest — the shared コトバ探偵 scene-framework components.
 // Every quest scene composes these so the whole game reads as one coherent,
-// professional RPG: atmospheric backgrounds, navy+cream dialogue boxes, ▶cursor
-// command windows. Replaces the bright pastel card UI.
+// premium detective casebook: atmospheric backgrounds, navy+cream dialogue boxes,
+// case-file entry tiles. Replaces the bright pastel card UI.
 
 import 'dart:ui' as ui;
 
@@ -19,6 +19,14 @@ const dqBorder = Color(0xFFF5ECD0); // cream border
 const dqGold = Color(0xFFF0D080);
 const dqGoldDeep = Color(0xFFB8923C);
 const dqInk = Color(0xFFEDE3C8);
+
+// ── Detective-specific accent tokens ──
+// evidenceRed: investigation urgency / solved-seal signal (think red evidence
+// tape, stamped 「解決」). Distinct from gold so it can convey a separate state.
+const evidenceRed = Color(0xFFCC2222);
+// inkBlue: annotation ink / secondary information (think blue ballpoint margin
+// notes in a detective's casebook). Used for secondary labels and gloss text.
+const inkBlue = Color(0xFF4A7FAA);
 
 // ── コトバ探偵 "casebook / 捜査ledger" tokens — our DISTINCT dark navy+gold skin.
 // CEO 1933/1934: the earlier warm PARCHMENT version copied Layton's signature
@@ -67,6 +75,151 @@ TextStyle dqInkText(
       letterSpacing: spacing,
       height: 1.6,
     );
+
+// ── Brand mark: コトバ探偵 magnifier-over-コ ──────────────────────────────────
+//
+// The detective identity in a single glyph: a gold magnifying lens framing
+// the first character of our name (コ), with a short tapered handle. Drawn
+// entirely with CustomPainter — zero new assets, crisp at any resolution.
+//
+// Proportions (based on `size` diameter D):
+//   lens outer radius:   D * 0.42  (the circle)
+//   ring stroke width:   D * 0.075 (readable but not chunky)
+//   handle length:       D * 0.34  (exits lens at ~225° — lower-left)
+//   handle width (base): D * 0.065 → tapers to D * 0.03 at tip
+//   コ glyph:            D * 0.44  font size, centred in lens
+//
+// Use [BrandMark(size: 80)] at the title screen, [BrandMark(size: 48)] at
+// the loading splash. Color is [dqGold] throughout with a subtle cream fill
+// inside the lens to give slight depth.
+
+class _BrandMarkPainter extends CustomPainter {
+  const _BrandMarkPainter();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final cx = size.width / 2;
+    final cy = size.height / 2;
+    final d = size.width; // treat as square
+
+    final outerR = d * 0.42;
+    final ringW = d * 0.075;
+
+    // ── 1. Subtle interior fill — a very dark navy so the コ glyph reads
+    //       on a gold ring without harsh contrast.
+    final fillPaint = Paint()
+      ..color = const Color(0xFF0D1428)
+      ..style = PaintingStyle.fill;
+    // Lens centre: offset slightly UP-RIGHT so the handle exits lower-left.
+    final lensCenter = Offset(cx - d * 0.04, cy - d * 0.04);
+    canvas.drawCircle(lensCenter, outerR - ringW * 0.5, fillPaint);
+
+    // ── 2. Outer glow ring (soft, large radius, low alpha) — makes the lens
+    //       feel lit from above, like polished brass.
+    final glowPaint = Paint()
+      ..color = dqGold.withAlpha(55)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = ringW * 2.4
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
+    canvas.drawCircle(lensCenter, outerR, glowPaint);
+
+    // ── 3. Gold ring (the magnifier lens rim).
+    final ringPaint = Paint()
+      ..color = dqGold
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = ringW
+      ..strokeCap = StrokeCap.round;
+    canvas.drawCircle(lensCenter, outerR - ringW * 0.5, ringPaint);
+
+    // ── 4. Handle: tapers from the lens at ~225° downward-left.
+    //       Entry point = lens rim at 225°, exit = d*0.34 further along.
+    // sin(225°) ≈ cos(225°) ≈ -√2/2 ≈ -0.7071 (lower-left diagonal).
+    const sinA = -0.7071;
+    const cosA = -0.7071;
+
+    final rimX = lensCenter.dx + (outerR - ringW * 0.5) * cosA;
+    final rimY = lensCenter.dy + (outerR - ringW * 0.5) * sinA;
+    final tipX = lensCenter.dx + (outerR + d * 0.34) * cosA;
+    final tipY = lensCenter.dy + (outerR + d * 0.34) * sinA;
+
+    final baseHalf = d * 0.032;
+    final tipHalf = d * 0.014;
+
+    // Perpendicular direction (90° rotated from handle axis).
+    const perpDx = -sinA; // perpendicular to handle direction
+    const perpDy = cosA;
+
+    final path = Path()
+      ..moveTo(rimX + perpDx * baseHalf, rimY + perpDy * baseHalf)
+      ..lineTo(tipX + perpDx * tipHalf, tipY + perpDy * tipHalf)
+      ..lineTo(tipX - perpDx * tipHalf, tipY - perpDy * tipHalf)
+      ..lineTo(rimX - perpDx * baseHalf, rimY - perpDy * baseHalf)
+      ..close();
+
+    final handleFill = Paint()
+      ..color = dqGold
+      ..style = PaintingStyle.fill;
+    canvas.drawPath(path, handleFill);
+
+    // Handle edge stroke for crispness.
+    final handleStroke = Paint()
+      ..color = dqGoldDeep
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = d * 0.012
+      ..strokeJoin = StrokeJoin.round;
+    canvas.drawPath(path, handleStroke);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+/// The コトバ探偵 brand mark: a gold magnifying lens framing the katakana コ.
+/// Drawn entirely with CustomPainter — no image assets required.
+///
+/// Sizes: 80–96 px at the title screen, 48 px at the loading splash.
+class BrandMark extends StatelessWidget {
+  final double size;
+  const BrandMark({super.key, this.size = 80});
+
+  @override
+  Widget build(BuildContext context) {
+    // The lens centre is nudged up-right inside the bounding box so the
+    // lower-left handle has space without clipping.
+    return SizedBox(
+      width: size,
+      height: size,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          // Magnifier ring + handle.
+          CustomPaint(
+            size: Size(size, size),
+            painter: const _BrandMarkPainter(),
+          ),
+          // コ glyph centred in the lens (offset matches lensCenter nudge).
+          Transform.translate(
+            offset: Offset(-size * 0.04, -size * 0.04),
+            child: Text(
+              'コ',
+              style: notoSerifJp(
+                color: dqGold,
+                fontSize: size * 0.42,
+                fontWeight: FontWeight.w900,
+                shadows: const [
+                  Shadow(
+                      color: Color(0xFF0A0E24),
+                      blurRadius: 4,
+                      offset: Offset(0, 1)),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
 
 /// Renders a cloze/fill-in stem with the blank shown as a continuous gold
 /// UNDERLINE gap (the print-英検 / mikan convention) instead of the literal

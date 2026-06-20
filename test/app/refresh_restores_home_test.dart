@@ -1,7 +1,7 @@
 // test/app/refresh_restores_home_test.dart
 // #53 (CEO P0) — a web refresh restarts the Dart app and resets the in-memory
 // `_started` flag, which previously bounced an already-onboarded child back to
-// the title screen (はじめる) on every refresh — losing their place. The fix boots
+// the title screen on every refresh — losing their place. The fix boots
 // a returning (onboarded) player straight to the home hub, while a brand-new
 // player still meets the 本格 title first.
 //
@@ -17,7 +17,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:engquest/app.dart';
 import 'package:engquest/core/storage/preferences_service.dart';
 
-const _titleStart = 'はじめる / Start';
+// The text rendered inside the primary case-file entry tile on the title screen.
+// Updated for detective reskin: new JP line is rendered in its own Text widget.
+const _titleStart = '捜査（そうさ）を はじめる';
 
 Future<void> _boot(WidgetTester tester) async {
   // A generous portrait-ish surface so the home hub lays out without a
@@ -58,7 +60,7 @@ void main() {
   // each test boots against its own setMockInitialValues.
   setUp(PreferencesService.resetInstance);
 
-  testWidgets('first-run player meets the title screen (はじめる)', (tester) async {
+  testWidgets('first-run player meets the title screen', (tester) async {
     SharedPreferences.setMockInitialValues({});
     await _boot(tester);
     expect(find.text(_titleStart), findsOneWidget,

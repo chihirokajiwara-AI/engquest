@@ -1,7 +1,7 @@
 // test/features/quest/quest_title_screen_smoke_test.dart
 // R3 smoke test: pump QuestTitleScreen and assert no render exception.
-// R4: pure StatelessWidget — no Firebase / network. Title art loads via
-// Image.asset with an errorBuilder, so it renders even if the asset is absent.
+// R4: pure StatelessWidget — no Firebase / network.
+// Updated for detective reskin: new entry labels, no crest/parchment assets.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -24,10 +24,10 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    // a11y (#63): the title screen is the universal first interaction — its menu
-    // items MUST expose screen-reader button nodes, or a VoiceOver/TalkBack user
-    // cannot start the game. Before the fix they were bare GestureDetectors.
-    testWidgets('start/continue menu items expose screen-reader buttons',
+    // a11y (#63): the title screen is the universal first interaction — its
+    // entry actions MUST expose screen-reader button nodes, or a VoiceOver/
+    // TalkBack user cannot start the game at all.
+    testWidgets('case-file entry tiles expose screen-reader buttons',
         (tester) async {
       final handle = tester.ensureSemantics();
       var started = 0;
@@ -36,11 +36,19 @@ void main() {
       ));
       await tester.pump();
 
-      expect(find.bySemanticsLabel('はじめる / Start'), findsOneWidget);
-      expect(find.bySemanticsLabel('つづきから / Continue'), findsOneWidget);
+      // Primary: 「捜査（そうさ）を はじめる / Open the Case」
+      expect(
+        find.bySemanticsLabel('捜査（そうさ）を はじめる / Open the Case'),
+        findsOneWidget,
+      );
+      // Secondary: 「捜査を 再開（さいかい） / Resume」
+      expect(
+        find.bySemanticsLabel('捜査を 再開（さいかい） / Resume'),
+        findsOneWidget,
+      );
 
-      // The semantics node carries the tap action (not just a 'group').
-      await tester.tap(find.bySemanticsLabel('はじめる / Start'));
+      // Tapping the primary action fires onStart.
+      await tester.tap(find.bySemanticsLabel('捜査（そうさ）を はじめる / Open the Case'));
       expect(started, 1);
       handle.dispose();
     });

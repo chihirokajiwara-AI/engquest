@@ -1,194 +1,117 @@
 // lib/features/quest/quest_title_screen.dart
-// A-KEN Quest — the title screen, built to a 本格 Dragon-Quest standard:
-// black field → ornate parchment+gold carved frame → textured map background
-// → beveled crest logo → cursor menu. Verified against the DQ3 reference.
+// A-KEN Quest — the title screen, コトバ探偵 detective identity.
+// Dark-navy desk surface (noir/premium — NOT a parchment fantasy map).
+// No ▶ cursor, no heraldic crest, no RPG command windows.
+// Entry actions are case-file tiles in detective language.
 
 import 'package:flutter/material.dart';
 import 'package:engquest/core/ui/app_fonts.dart';
+import 'package:engquest/features/quest/ui/dq_ui.dart';
 
 class QuestTitleScreen extends StatelessWidget {
-  /// Called when the player chooses はじめる.
+  /// Called when the player chooses to begin a case (either entry action).
   final VoidCallback onStart;
   const QuestTitleScreen({super.key, required this.onStart});
 
-  static const _gold = Color(0xFFF0D080);
-  static const _goldDeep = Color(0xFFB8923C);
-  static const _goldDark = Color(0xFF6E5320);
-  static const _parchment = Color(0xFF6B4F2A);
-  static const _ink = Color(0xFFEDE3C8);
+  // Local palette aliases — reuse the shared dq_ui tokens.
+  static const _gold = dqGold;
+  static const _goldDeep = dqGoldDeep;
+  static const _ink = dqInk;
+  static const _night0 = dqNight0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: _night0,
       body: SafeArea(
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(14),
-            child: _ornateFrame(child: _innerContent()),
+            child: _thinGoldFrame(child: _innerContent()),
           ),
         ),
       ),
     );
   }
 
-  // ── Ornate carved frame: gold rim → dark bevel → gold inner line → corners ──
-  Widget _ornateFrame({required Widget child}) {
-    return Stack(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [_gold, _goldDeep, _goldDark, _goldDeep, _gold],
-              stops: [0.0, 0.3, 0.5, 0.7, 1.0],
-            ),
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(
-                  color: _goldDeep.withAlpha(120),
-                  blurRadius: 26,
-                  spreadRadius: 2),
-              const BoxShadow(
-                  color: Colors.black, blurRadius: 14, offset: Offset(0, 6)),
-            ],
-          ),
-          padding: const EdgeInsets.all(7),
-          child: Container(
-            decoration: BoxDecoration(
-              color: const Color(0xFF120B04),
-              borderRadius: BorderRadius.circular(5),
-              border: Border.all(color: _goldDark, width: 1),
-            ),
-            padding: const EdgeInsets.all(4),
-            child:
-                ClipRRect(borderRadius: BorderRadius.circular(3), child: child),
-          ),
-        ),
-        // four corner ornaments
-        for (final a in const [
-          Alignment.topLeft,
-          Alignment.topRight,
-          Alignment.bottomLeft,
-          Alignment.bottomRight
-        ])
-          Positioned.fill(child: Align(alignment: a, child: _corner())),
-      ],
-    );
-  }
-
-  Widget _corner() => Container(
-        margin: const EdgeInsets.all(3),
-        width: 18,
-        height: 18,
+  // ── Clean thin gold hairline border — premium, not ornate or carved ──
+  Widget _thinGoldFrame({required Widget child}) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        // Outer dark-gold rule.
+        border: Border.all(color: const Color(0xFF6E5320), width: 1.8),
+        boxShadow: [
+          BoxShadow(
+              color: _goldDeep.withAlpha(80), blurRadius: 28, spreadRadius: 1),
+          const BoxShadow(
+              color: Colors.black, blurRadius: 16, offset: Offset(0, 6)),
+        ],
+      ),
+      padding: const EdgeInsets.all(3),
+      child: Container(
         decoration: BoxDecoration(
-          gradient:
-              const LinearGradient(colors: [Color(0xFFFFF0C0), _goldDeep]),
-          shape: BoxShape.circle,
-          border: Border.all(color: _goldDark, width: 1.5),
-          boxShadow: [BoxShadow(color: _gold.withAlpha(160), blurRadius: 8)],
+          borderRadius: BorderRadius.circular(9),
+          // Inner bright-gold rule.
+          border: Border.all(color: _gold.withAlpha(180), width: 1.0),
         ),
-      );
-
-  // ── Inside the frame: textured map bg + logo + menu ──
-  Widget _innerContent() {
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        // textured background (generated map; parchment fallback). The warm
-        // parchment field shows WHILE the painted map decodes, and the map fades
-        // in over it — so a cold boot opens on parchment→map, never a black frame
-        // inside the gold border (#56: CEO saw the painted map pop in late).
-        const DecoratedBox(
-          decoration: BoxDecoration(
-            gradient: RadialGradient(
-              center: Alignment.center,
-              radius: 1.0,
-              colors: [Color(0xFF8A6A38), _parchment, Color(0xFF3C2C16)],
-              stops: [0.0, 0.6, 1.0],
-            ),
-          ),
-          child: SizedBox.expand(),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: child,
         ),
-        Image.asset(
-          'assets/art/title_bg.png',
-          fit: BoxFit.cover,
-          frameBuilder: (_, child, frame, wasSync) => AnimatedOpacity(
-            opacity: (frame == null && !wasSync) ? 0.0 : 1.0,
-            duration: const Duration(milliseconds: 450),
-            curve: Curves.easeIn,
-            child: child,
-          ),
-          errorBuilder: (_, __, ___) => const SizedBox.shrink(),
-        ),
-        // Legibility scrim — kept light so the painted title_bg reads as the
-        // STAR (Layton's title is its painterly scene, not a near-black field).
-        // The logo is stroke-outlined + shadowed and the menu items are boxed, so
-        // they stay readable over the lighter map (CEO 1904 quality bar).
-        DecoratedBox(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Colors.black.withAlpha(85),
-                Colors.black.withAlpha(20),
-                Colors.black.withAlpha(140)
-              ],
-              stops: const [0.0, 0.45, 1.0],
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            children: [
-              const Spacer(flex: 3),
-              _crest(),
-              const SizedBox(height: 10),
-              _logo(),
-              const SizedBox(height: 12),
-              _subtitleBanner(),
-              const Spacer(flex: 4),
-              _menu(),
-              const Spacer(flex: 2),
-              Text('© A-KEN QUEST  英検学習RPG',
-                  style: notoSerifJp(
-                      color: _ink.withAlpha(140),
-                      fontSize: 9,
-                      letterSpacing: 1)),
-              const SizedBox(height: 8),
-            ],
-          ),
-        ),
-      ],
+      ),
     );
   }
 
-  // Generated heraldic crest (wings + gem). Falls back to a simple mark.
-  Widget _crest() => Image.asset(
-        'assets/art/crest.png',
-        height: 96,
-        errorBuilder: (_, __, ___) => SizedBox(
-          height: 40,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Transform.flip(
-                  flipX: true,
-                  child: const Icon(Icons.eco, color: _gold, size: 26)),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 2),
-                child: Icon(Icons.diamond, color: Color(0xFFBFE3FF), size: 22),
-              ),
-              const Icon(Icons.eco, color: _gold, size: 26),
-            ],
-          ),
+  // ── Dark desk interior: deep-navy gradient + logo column + case-file tiles ──
+  Widget _innerContent() {
+    return DecoratedBox(
+      decoration: const BoxDecoration(
+        // Detective noir: deep navy at the edges, slightly lighter mid —
+        // the feel of a dark desk lamp pooling light in the centre.
+        gradient: RadialGradient(
+          center: Alignment(0.0, -0.2),
+          radius: 1.1,
+          colors: [
+            Color(0xFF1C2448), // lamp-pool centre (lighter navy)
+            dqNight1, // mid
+            dqNight0, // deep edges
+          ],
+          stops: [0.0, 0.55, 1.0],
         ),
-      );
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          children: [
+            const Spacer(flex: 3),
+            // ── Brand mark: magnifier-over-コ ──
+            const BrandMark(size: 88),
+            const SizedBox(height: 14),
+            _logo(),
+            const SizedBox(height: 12),
+            _subtitleBanner(),
+            const Spacer(flex: 2),
+            // Central case-file focal object (fills the mid void; presents the
+            // unsolved case the detective opens — direction #1's case-envelope).
+            _todaysCasePlate(),
+            const Spacer(flex: 2),
+            _caseEntries(),
+            const Spacer(flex: 2),
+            // Legal footer — product name stays, "RPG" dropped.
+            Text(
+              '英検対応 推理学習アプリ  ©︎ A-KEN QUEST',
+              style: notoSerifJp(
+                  color: _ink.withAlpha(130), fontSize: 9, letterSpacing: 1),
+            ),
+            const SizedBox(height: 8),
+          ],
+        ),
+      ),
+    );
+  }
 
-  // beveled blue+white title (DQ-style: gradient fill, light top, dark outline)
+  // ── コトバ探偵 wordmark — dark-navy outline + gold-to-white gradient fill ──
   Widget _logo() {
     final style = notoSerifJp(
       fontSize: 42,
@@ -198,30 +121,31 @@ class QuestTitleScreen extends StatelessWidget {
     return Stack(
       alignment: Alignment.center,
       children: [
-        // dark outline / extrude
-        Text('コトバ探偵',
-            style: style.copyWith(
-              foreground: Paint()
-                ..style = PaintingStyle.stroke
-                ..strokeWidth = 6
-                ..color = const Color(0xFF12233F),
-              shadows: const [
-                Shadow(
-                    color: Colors.black, blurRadius: 10, offset: Offset(0, 4))
-              ],
-            )),
-        // blue→steel gradient fill with a white top highlight
+        // Dark outline / extrude.
+        Text(
+          'コトバ探偵',
+          style: style.copyWith(
+            foreground: Paint()
+              ..style = PaintingStyle.stroke
+              ..strokeWidth = 6
+              ..color = const Color(0xFF0A1020),
+            shadows: const [
+              Shadow(color: Colors.black, blurRadius: 12, offset: Offset(0, 4))
+            ],
+          ),
+        ),
+        // Gold→cream gradient fill with a top highlight.
         ShaderMask(
           shaderCallback: (r) => const LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Colors.white,
-              Color(0xFF8FD0FF),
-              Color(0xFF2E72C8),
-              Color(0xFF1A4E97)
+              Color(0xFFFFF8DC), // cream top highlight
+              dqGold, // bright gold upper-mid
+              Color(0xFFD4A840), // mid gold
+              dqGoldDeep, // deep gold base
             ],
-            stops: [0.0, 0.32, 0.7, 1.0],
+            stops: [0.0, 0.28, 0.65, 1.0],
           ).createShader(r),
           child: Text('コトバ探偵', style: style.copyWith(color: Colors.white)),
         ),
@@ -229,79 +153,218 @@ class QuestTitleScreen extends StatelessWidget {
     );
   }
 
+  // ── Subtitle banner — detective framing, no RPG adventure language ──
   Widget _subtitleBanner() => Container(
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 5),
         decoration: BoxDecoration(
-          gradient: const LinearGradient(colors: [
-            Color(0xFF1A4E97),
-            Color(0xFF2E72C8),
-            Color(0xFF1A4E97)
-          ]),
+          // Deep navy band with subtle gold borders — reads as a case-file label.
+          color: const Color(0xFF0D1428),
           borderRadius: BorderRadius.circular(4),
-          border: Border.all(color: _gold, width: 1),
+          border: Border.all(color: _gold.withAlpha(160), width: 1),
         ),
-        child: Text('英検（えいけん）の ぼうけん',
-            style: notoSerifJp(
-                color: Colors.white,
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 2)),
+        child: Text(
+          'ことばを とりもどす 推理（すいり）',
+          style: notoSerifJp(
+              color: _ink,
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 1.5),
+        ),
       );
 
-  Widget _menu() => Column(
+  // ── Case-file entry tiles ─────────────────────────────────────────────────
+  // A centred, non-interactive case-file plate: the unsolved case the detective
+  // is about to open. Fills the title's mid-section with the product's premise
+  // (replaces the dead navy void) and seats the evidence-red "unsolved" token.
+  Widget _todaysCasePlate() => Container(
+        margin: const EdgeInsets.symmetric(horizontal: 44),
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 13),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: _gold.withAlpha(70), width: 1),
+          color: Colors.black.withAlpha(55),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 7,
+                  height: 7,
+                  decoration: const BoxDecoration(
+                      color: evidenceRed, shape: BoxShape.circle),
+                ),
+                const SizedBox(width: 7),
+                Text(
+                  '未解決事件（みかいけつじけん）',
+                  style: notoSerifJp(
+                      color: _gold.withAlpha(205),
+                      fontSize: 11,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 2),
+                ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            Text(
+              'ことばを 失（うしな）った 街（まち）',
+              style: notoSerifJp(
+                  color: _ink.withAlpha(210),
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 1),
+            ),
+          ],
+        ),
+      );
+
+  Widget _caseEntries() => Column(
         children: [
-          _menuItem('はじめる / Start', selected: true, onTap: onStart),
-          const SizedBox(height: 6),
-          _menuItem('つづきから / Continue', selected: false, onTap: onStart),
+          _caseEntryTile(
+            jp: '捜査（そうさ）を はじめる',
+            en: 'Open the Case',
+            // Small corner case-tag on the primary tile.
+            caseTag: '事件 No.1',
+            primary: true,
+            semanticsLabel: '捜査（そうさ）を はじめる / Open the Case',
+            onTap: onStart,
+          ),
+          const SizedBox(height: 8),
+          _caseEntryTile(
+            jp: '捜査を 再開（さいかい）',
+            en: 'Resume',
+            caseTag: null,
+            primary: false,
+            semanticsLabel: '捜査を 再開（さいかい） / Resume',
+            onTap: onStart,
+          ),
         ],
       );
 
-  // DQ-style command window: dark navy box, cream border, ▶ cursor when selected.
-  Widget _menuItem(String label,
-      {required bool selected, required VoidCallback onTap}) {
-    // a11y: the title screen is the universal first interaction — without a
-    // Semantics node a VoiceOver/TalkBack user cannot start the game at all.
+  // Premium case-file entry tile.
+  // No ▶ cursor. Corner [caseTag] on primary. Two hairline rules (inner/outer).
+  Widget _caseEntryTile({
+    required String jp,
+    required String en,
+    required String? caseTag,
+    required bool primary,
+    required String semanticsLabel,
+    required VoidCallback onTap,
+  }) {
+    // a11y: the title screen is the universal first interaction — screen-reader
+    // users must be able to start the game without sighted assistance.
     return Semantics(
       button: true,
-      label: label,
+      label: semanticsLabel,
       onTap: onTap,
       excludeSemantics: true,
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 36),
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 11),
+          margin: const EdgeInsets.symmetric(horizontal: 24),
+          // Outer double-rule container (matches DetectiveCaseFrame style).
           decoration: BoxDecoration(
-            color: const Color(0xFF101A33).withAlpha(selected ? 235 : 180),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: const Color(0xFFF5ECD0), width: 2),
-            boxShadow: selected
-                ? [BoxShadow(color: _gold.withAlpha(120), blurRadius: 14)]
-                : null,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: const Color(0xFF6E5320), width: 1.6),
+            boxShadow: primary
+                ? [
+                    BoxShadow(color: _gold.withAlpha(90), blurRadius: 18),
+                    const BoxShadow(
+                        color: Colors.black54,
+                        blurRadius: 8,
+                        offset: Offset(0, 3)),
+                  ]
+                : [
+                    const BoxShadow(
+                        color: Colors.black38,
+                        blurRadius: 6,
+                        offset: Offset(0, 2))
+                  ],
           ),
-          child: Row(
-            children: [
-              SizedBox(
-                width: 22,
-                child: selected
-                    ? const Icon(Icons.play_arrow, color: _gold, size: 18)
-                    : const SizedBox.shrink(),
+          child: Container(
+            // Inner bright-gold hairline rule (the "gilt inlay" line).
+            margin: const EdgeInsets.all(2),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                  color: primary ? _gold.withAlpha(200) : _gold.withAlpha(100),
+                  width: 1.0),
+              // Fill: deep navy, slightly brighter for primary.
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: primary
+                    ? [
+                        const Color(0xFF182042),
+                        const Color(0xFF101830),
+                      ]
+                    : [
+                        const Color(0xFF10192E),
+                        const Color(0xFF0A0E24),
+                      ],
               ),
-              Expanded(
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  alignment: Alignment.centerLeft,
-                  child: Text(label,
-                      maxLines: 1,
+            ),
+            child: Stack(
+              children: [
+                // Case-tag corner label on the primary tile.
+                if (caseTag != null)
+                  Positioned(
+                    top: 6,
+                    right: 10,
+                    child: Text(
+                      caseTag,
                       style: notoSerifJp(
-                        color: selected ? Colors.white : _ink.withAlpha(190),
-                        fontSize: 18,
+                        color: _gold.withAlpha(180),
+                        fontSize: 9,
                         fontWeight: FontWeight.w700,
-                        letterSpacing: 2,
-                      )),
+                        letterSpacing: 1,
+                      ),
+                    ),
+                  ),
+                // Main label content.
+                Padding(
+                  padding: EdgeInsets.fromLTRB(
+                      18, primary ? 16 : 13, 18, primary ? 16 : 13),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // FittedBox so the JP line (with furigana parens) never
+                      // wraps to a second line on a 390px tile — a wrap collided
+                      // with the 事件 No. tag (CEO craft bar).
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          jp,
+                          maxLines: 1,
+                          style: notoSerifJp(
+                            color: primary ? Colors.white : _ink.withAlpha(200),
+                            fontSize: primary ? 17 : 15,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 1.2,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        en,
+                        style: notoSerifJp(
+                          color: primary
+                              ? _gold.withAlpha(220)
+                              : _gold.withAlpha(140),
+                          fontSize: primary ? 11 : 10,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 1.5,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
