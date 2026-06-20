@@ -1,20 +1,18 @@
 // lib/features/quest/prologue_screen.dart
 // A-KEN Quest — the opening PROLOGUE (『ことばを失った世界』).
 //
-// Full-bleed cinematic opening — 5 kishōtenketsu (起承転結) beats with ONE
-// protagonist, ランプ the lampkeeper (diverse-team redesign, CEO 1372/1375; the
-// 英検5級 phonics story, CEO 1385): 起 his lamp won't catch ("す…") → 承 his memory
-// blooms the grey square to colour → 転 the サイレント drains it back, but きみ can
-// still hear → the BLEND beat: the child taps 🔊, joins s·a·t, and the lampkeeper
-// is restored grey→colour → 結 his lamp lights, "…ありがとう", a quiet road ahead.
-// The blend is a guaranteed win (no-scold). The win is restoration, not conquest.
+// Full-bleed cinematic opening — 6 kishōtenketsu (起承転結) beats with ONE
+// protagonist, ランプ the lampkeeper (diverse-team redesign, CEO 1372/1375).
 //
-// Plays once-ever (the caller persists that); skippable from panel 1. The blend
-// beat sounds the clean continuant/vowel segments per tap (phoneme_s, phoneme_a)
-// and on the COMPLETING tap plays the CONNECTED joined word (blend_sat.mp3):
-// connected phonation (Gonzalez-Frey & Ehri 2020) beats detached segments for
-// age-5 non-readers, and it keeps the schwa-prone isolated /t/ stop out of the
-// live flow (phoneme_t is HAND-RECORD-pending per generate_phonemes_elevenlabs.py).
+// 起 his lamp won't catch ("す…") → 承 his memory blooms the grey square to colour
+// → 転 the サイレント drains it back → the DEDUCTION beat: the child taps the word
+// that restores ランプ's sign (英検5級 大問1 word-deduction — knowing one English word
+// restores the world) → 結 his lamp lights, "…ありがとう", a quiet road ahead.
+//
+// The deduction is a guaranteed win (no-scold). Correct tap = LIGHT → colour blooms
+// radially from the lamp. Wrong tap = shake only, retry allowed.
+//
+// Plays once-ever (the caller persists that); skippable from panel 1.
 
 import 'dart:async';
 
@@ -27,7 +25,7 @@ class _Panel {
   final String jp;
   final String en;
   final String? audio; // best-effort cue key (graceful no-op if unrecorded)
-  final bool interactive; // panel 5: the s·a·t blend demo
+  final bool interactive; // panel 3: the 英検 word-deduction beat
   final bool tappable; // 起: child taps 🔊 to sound the keeper's broken す… first
   final bool isLast;
   const _Panel(this.jp, this.en,
@@ -38,12 +36,10 @@ class _Panel {
 }
 
 // The opening as 6 kishōtenketsu (起承転結) beats — one protagonist: ランプ the
-// lampkeeper (diverse-team redesign, CEO 1372/1375; 英検5級 phonics story, CEO 1385).
-// Deepened per CEO 1870/1872/1873 (iterated design wf wme3rp4q8, 3 critique→redesign
-// rounds): the first blend is "sat" — the child COMPLETES the keeper's own lost /s/
-// sound 「す…」 (was the disconnected "cat"); 承 grieves ONE named nightly ritual
-// (mono-no-aware); 転 (loss) breathes on its own beat; 結 plants WORLD-BIBLE §2's
-// inward spiral VISUALLY (the relit flame leans toward the centre — no English needed).
+// lampkeeper (diverse-team redesign, CEO 1372/1375). Deepened per CEO
+// 1870/1872/1873 (iterated design wf wme3rp4q8, 3 critique→redesign rounds):
+// the interactive beat replaces phonics with a real 英検5級 大問1 word-deduction —
+// ランプ's sign reads "_ I G H T"; the child deduces LIGHT, and the lamp is restored.
 const _panels = <_Panel>[
   // 起 — the lamplighter's lamp won't catch; his one surviving sound is /s/.
   _Panel(
@@ -66,13 +62,12 @@ const _panels = <_Panel>[
     'But the Silence came and ate the words. Colour and voice fell quietly '
         'asleep. The lamp went out too.',
   ),
-  // 転→結 — the hope-turn (you can still hear + speak) joined to the playable
-  //         errorless blend. "sat" completes the keeper's lost /s/ — motivated,
-  //         not arbitrary; it also rehearses 5級 case-1's first blend.
+  // 転→結 — the 英検5級 大問1 deduction beat: タロ's sign reads "_ I G H T"; the
+  //         child deduces LIGHT and the lamp's colour is restored. Knowing one
+  //         English word restores the world — dramatises the product's real value.
   _Panel(
-    'でも、きみには まだ きこえる。\nそして、まだ こえに だせる。\nタップして、おとを つなげてみよう。',
-    'But you can still hear. And you can still speak. Tap, and join the sounds.',
-    audio: 'audio/phonics/blend_sat.mp3',
+    'ランプの ことばが きえてる。\nきみには、よめる?',
+    "The lamp's word is gone. Can you read it?",
     interactive: true,
   ),
   // 結 — payoff + mystery-plant: the relit flame leans toward the CENTRE,
@@ -88,6 +83,17 @@ const _panels = <_Panel>[
     "Let's bring back the words, one by one.",
     isLast: true,
   ),
+];
+
+// ── Word-deduction constants ──────────────────────────────────────────────────
+// The 英検5級 大問1 cloze: "_ I G H T" — the child picks which -IGHT word names
+// the lamp. Correct = LIGHT (index 1, slot ②). NIGHT and RIGHT are plausible
+// distractors (same rime family, all bundled in assets/audio/a1/).
+const _kCorrectLabel = 'LIGHT';
+const _kChoices = [
+  (label: 'NIGHT', audio: 'audio/a1/eiken5_215_night.mp3'),
+  (label: 'LIGHT', audio: 'audio/a1/eiken5_095_light.mp3'), // correct
+  (label: 'RIGHT', audio: 'audio/a1/eiken5_182_right.mp3'),
 ];
 
 class PrologueScreen extends StatefulWidget {
@@ -107,18 +113,25 @@ class _PrologueScreenState extends State<PrologueScreen>
   final _cue = AudioCueService();
   late int _index = widget.startIndex.clamp(0, _panels.length - 1);
 
-  // The blend beat: each 🔊 tap lights + SOUNDS the next phoneme s→a→t (tap-
-  // driven). Single source of truth for the letters (shared with the
-  // BlendWordCard in _foregroundElement).
-  static const _blendLetters = <String>['s', 'a', 't'];
-  int _activeLetter = -1; // -1 none lit; 0=s, 1=a, 2=t
-  bool _blendDone = false; // true once all three are sounded → join + restore
-  bool _heard =
-      false; // 起: child has tapped to hear す… (agency gate, per panel)
-  double _revealFrom =
-      0.0; // the LEAVING beat's saturation → bloom/drain origin
+  // ── Deduction beat state ──────────────────────────────────────────────────
+  // Tracks which choice buttons are in which DqChoiceState for the -IGHT deduction.
+  // Indexed 0/1/2 matching _kChoices.
+  final _choiceStates = [
+    DqChoiceState.normal,
+    DqChoiceState.normal,
+    DqChoiceState.normal,
+  ];
 
-  // Council S3 — non-reader gate: a 4-7yo who can't read 「つぎへ」 needs a VISUAL
+  /// True once the child taps LIGHT (correct). Drives the colour bloom for this
+  /// beat — replaces the old _blendDone gate in _beatSaturation / _background /
+  /// _revealPlate so colour blooms radially from the lamp exactly as the blend did.
+  bool _restored = false;
+
+  // ── Other panel state ─────────────────────────────────────────────────────
+  bool _heard = false; // 起: child has tapped to hear す…
+  double _revealFrom = 0.0; // leaving beat's saturation → bloom/drain origin
+
+  // Council S3 — non-reader gate: a 6-7yo who can't read 「つぎへ」 needs a VISUAL
   // cue for what to tap. If the panel sits untapped ~4s, pulse the advance/🔊
   // control to draw the eye. Reset on any interaction; suppressed under
   // reduce-motion.
@@ -180,60 +193,49 @@ class _PrologueScreenState extends State<PrologueScreen>
     setState(() {
       _revealFrom = leaving;
       _index++;
-      _activeLetter = -1;
-      _blendDone = false;
+      // Reset deduction state on panel change.
+      _choiceStates[0] = DqChoiceState.normal;
+      _choiceStates[1] = DqChoiceState.normal;
+      _choiceStates[2] = DqChoiceState.normal;
+      _restored = false;
       _heard = false;
     });
     // This runs from a tap (user gesture) → safe to fire audio on web, except on
-    // the interactive blend / tappable 起 panels where the child taps 🔊 itself.
+    // the interactive deduction / tappable 起 panels.
     if (!_p.interactive && !_p.tappable && _p.audio != null) {
       _cue.play(_p.audio);
     }
     _armIdle();
   }
 
-  /// TAP-DRIVEN blend (the diverse-team design's core: the CHILD performs the
-  /// blend, not an auto-animation). Each 🔊 tap lights the next phoneme s→a→t;
-  /// the third tap joins them into "sat" and restores ランプ. Errorless — there
-  /// is no wrong tap, only "not yet complete" (the no-scold spine).
-  /// 起 agency (frontier studio wrf7umkta #2): the child TAPS to sound the
-  /// keeper's broken 「す…」 in the first ~10s, rather than it auto-playing while
-  /// the first real agency waits until the blend on panel 4. The idle pulse
-  /// draws a non-reader's eye to the 🔊; tapping reveals ▶ つぎへ.
+  /// 起 agency: the child TAPS to sound the keeper's broken 「す…」 in the first
+  /// ~10s, rather than it auto-playing. The idle pulse draws a non-reader's eye
+  /// to the 🔊; tapping reveals ▶ つぎへ.
   void _hearPanel() {
     _cue.play(_p.audio);
     setState(() => _heard = true);
     _armIdle();
   }
 
-  void _playBlend() {
-    if (_activeLetter < _blendLetters.length - 1) {
-      final next = _activeLetter + 1;
-      final isLast = next >= _blendLetters.length - 1;
-      setState(() {
-        _activeLetter = next;
-        if (isLast) _blendDone = true;
-      });
-      if (isLast) {
-        // CONNECTED phonation on the climax (frontier studio wrf7umkta). The
-        // completing tap plays the HELD, joined word — never the isolated final
-        // stop. Two evidenced reasons: (1) Gonzalez-Frey & Ehri (2020) found
-        // connected blending ("ssssaaat") beats detached segments for age-5
-        // non-readers; (2) the isolated /t/ clip (phoneme_t.mp3) is the
-        // schwa-prone stop the repo's OWN generate_phonemes_elevenlabs.py header
-        // says "Do NOT wire into the live flow until ear-verified" (it wasn't).
-        // So /t/ is only ever heard inside the clean joined word, not as "tuh".
-        _cue.play(_p.audio); // blend_sat.mp3 — the connected, joined word
-      } else {
-        // Earlier taps sound the clean LOW-RISK segment as its tile lights
-        // (s = continuant, a = vowel — both ear-QA'd / lower-risk per the script).
-        _cue.play('audio/phonics/phoneme_${_blendLetters[next]}.mp3');
-      }
-    } else {
-      // Already complete → the 🔁「つなげて きく」 replays the connected word.
-      _cue.play(_p.audio); // blend_sat.mp3
-    }
+  /// Word-deduction tap handler. Each choice plays its own audio; only LIGHT
+  /// (index 1 in _kChoices) is correct. Errorless: wrong tap shakes the button
+  /// and keeps the panel open; correct tap blooms colour and auto-advances.
+  void _onChoiceTap(int i) {
+    final isCorrect = _kChoices[i].label == _kCorrectLabel;
+    _cue.play(_kChoices[i].audio);
+    setState(() {
+      _choiceStates[i] =
+          isCorrect ? DqChoiceState.correct : DqChoiceState.wrong;
+      if (isCorrect) _restored = true;
+    });
     _armIdle();
+    if (isCorrect) {
+      // Brief hold so the child sees the green pop + colour bloom, then advance.
+      Future.delayed(const Duration(milliseconds: 900), () {
+        if (!mounted) return;
+        _next();
+      });
+    }
   }
 
   @override
@@ -370,14 +372,14 @@ class _PrologueScreenState extends State<PrologueScreen>
   static const _squareAsset = 'assets/art/scenes_layton/town5_lane.webp';
 
   /// Target colour saturation for the current beat (0 = grey/silenced, 1 = full
-  /// colour): 起 grey → 承 his memory blooms → 転 the Silence drains it → blend
+  /// colour): 起 grey → 承 his memory blooms → 転 the Silence drains it → deduction
   /// grey until the child restores it → 結 restored.
   double get _beatSaturation {
     switch (_index) {
       case 1: // 承 — memory blooms
         return 1.0;
-      case 3: // the blend — colour returns only when the child completes it
-        return _blendDone ? 1.0 : 0.0;
+      case 3: // the deduction — colour returns only when the child taps LIGHT
+        return _restored ? 1.0 : 0.0;
       case 4: // 結 — restored (lamp lit, flame leans inward)
         return 1.0;
       case 5: // 結 — the CTA hook, stays in colour
@@ -390,7 +392,7 @@ class _PrologueScreenState extends State<PrologueScreen>
   /// Whether ランプ shows in COLOUR. He colours WITH the world, so the lampkeeper
   /// is never grey-on-colour (the pasted-card tension): grey at 起, colour as the
   /// memory blooms at 承, grey again as the Silence drains it at 転, colour the
-  /// moment the child completes the blend, and colour at 結. Tracking the beat's
+  /// moment the child taps LIGHT, and colour at 結. Tracking the beat's
   /// own saturation keeps the man and the world in lockstep (CEO 1436 design:
   /// "承 = 色がブワッと戻る").
   bool get _lampColoured => _beatSaturation >= 1.0;
@@ -402,14 +404,14 @@ class _PrologueScreenState extends State<PrologueScreen>
     final to = _beatSaturation;
     if (prefersReducedMotion(context)) return _revealPlate(to, 1.06);
     return TweenAnimationBuilder<double>(
-      // Re-keyed on beat AND blend state so the tween re-runs. Animates reveal
+      // Re-keyed on beat AND restored state so the tween re-runs. Animates reveal
       // from the LEAVING beat's saturation (_revealFrom) to this beat's target:
-      // colour BLOOMS outward from the lamp when it returns (起→承, blend done)
+      // colour BLOOMS outward from the lamp when it returns (起→承, LIGHT tapped)
       // and DRAINS back toward the lamp when the Silence eats it (承→転) — the
-      // loss is SHOWN through the mechanic, not just narrated (studio wrf7umkta
-      // #2). Seamless under the outer 450ms switcher: each beat starts at the
+      // loss is SHOWN through the mechanic, not just narrated.
+      // Seamless under the outer 450ms switcher: each beat starts at the
       // previous beat's end saturation, so the cross-fade has nothing to jump.
-      key: ValueKey('bg$_index$_blendDone'),
+      key: ValueKey('bg$_index$_restored'),
       tween: Tween<double>(begin: _revealFrom, end: to),
       duration: const Duration(milliseconds: 2400),
       curve: Curves.easeInOut,
@@ -431,12 +433,9 @@ class _PrologueScreenState extends State<PrologueScreen>
         ),
       );
 
-  /// Colour returns by BLOOMING radially out from ランプ's lamp (frontier studio
-  /// wrf7umkta #2: SHOW the canon "his lamp made the square evening" through the
-  /// grey→colour mechanic itself, not a global fade a non-reader can't connect to
-  /// the lamp). [reveal] 0 = all grey, 1 = full colour; in between, a feathered
-  /// colour disc grows from the lamp at the composition's focal point. At rest
-  /// it's a single cheap plate (no mask / no extra decode).
+  /// Colour returns by BLOOMING radially out from ランプ's lamp: [reveal] 0 = all
+  /// grey, 1 = full colour; in between, a feathered colour disc grows from the lamp
+  /// at the composition's focal point. At rest it's a single cheap plate.
   Widget _revealPlate(double reveal, double scale) {
     if (reveal <= 0.01) return _plate(0.0, scale);
     if (reveal >= 0.99) return _plate(1.0, scale);
@@ -456,8 +455,7 @@ class _PrologueScreenState extends State<PrologueScreen>
   }
 
   /// ランプ — the lampkeeper, composited over the square: a grey (silenced) and a
-  /// colour (restored) sprite cross-fading on restoration. He is the one face the
-  /// child rescues. Reused npc_lampkeeper art (no new asset).
+  /// colour (restored) sprite cross-fading on restoration.
   Widget _lampkeeper() {
     return IgnorePointer(
       child: Align(
@@ -467,9 +465,7 @@ class _PrologueScreenState extends State<PrologueScreen>
           child: AspectRatio(
             aspectRatio: 0.8,
             // Feather the sprite into a soft oval so the lampkeeper reads as a
-            // figure IN the square, not a hard-edged portrait card pasted on it
-            // (the npc art has a baked vignette background) — super-strict
-            // re-audit, CEO 1366/1372.
+            // figure IN the square, not a hard-edged portrait card pasted on it.
             child: ShaderMask(
               blendMode: BlendMode.dstIn,
               shaderCallback: (rect) => const RadialGradient(
@@ -495,17 +491,16 @@ class _PrologueScreenState extends State<PrologueScreen>
     );
   }
 
-  /// The interactive panel gates "next" behind one 🔊 tap; others show "▶ つぎへ"
-  /// (or "▶ はじめる" on the last panel).
+  /// The interactive deduction panel gates "next" behind a correct LIGHT tap;
+  /// other panels show "▶ つぎへ" (or "▶ はじめる" on the last panel).
   Widget _advanceControl() {
-    final Widget control = (_p.interactive && !_blendDone)
-        ? DqReplayButton(onTap: _playBlend, label: '🔊 おして、きいてみよう')
+    final Widget control = (_p.interactive && !_restored)
+        ? const SizedBox.shrink() // choice buttons replace the advance control
         : (_p.tappable && !_heard)
             ? DqReplayButton(onTap: _hearPanel, label: '🔊 きいてみよう')
             : DqButton(
                 label: _p.isLast ? '▶ はじめる / Begin' : '▶ つぎへ', onTap: _next);
-    // Council S3: pulse the control when the child has gone idle, so a non-reader
-    // sees WHERE to tap. Reduce-motion → no pulse (the control still stands out).
+    // Council S3: pulse the control when the child has gone idle.
     final reduceMotion =
         MediaQuery.maybeOf(context)?.disableAnimations ?? false;
     if (!_idleHint || reduceMotion) return control;
@@ -517,22 +512,101 @@ class _PrologueScreenState extends State<PrologueScreen>
     );
   }
 
-  // ── Foreground element over the full-bleed background. Only the blend beat has
-  //    one (the s·a·t card the child taps); every other beat lets the grey square
-  //    + the lampkeeper carry the moment.
+  // ── Foreground element ────────────────────────────────────────────────────
+  // Only the deduction beat has one — every other beat lets the grey square
+  // + the lampkeeper carry the moment.
   Widget _foregroundElement() {
     if (_p.interactive) {
-      return BlendWordCard(
-        letters: _blendLetters,
-        word: 'sat',
-        npcName: 'ランプ',
-        npcEmoji: '🪔',
-        npcImage: 'assets/art/scenes_layton/npc_lampkeeper_grey.webp',
-        activeLetter: _activeLetter,
-        onReplay: _playBlend,
-      );
+      return SingleChildScrollView(child: _deductionCard());
     }
     return const SizedBox.shrink();
+  }
+
+  /// The 英検5級 大問1 deduction card: a DetectiveCaseFrame over the grey lane plate
+  /// showing the redacted sign "_ I G H T" and three AudioOptionButton choices.
+  Widget _deductionCard() {
+    return DetectiveCaseFrame(
+      caseLabel: 'ランプの ことば',
+      highlighted: true,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // ── Redacted evidence sign ──────────────────────────────────────
+          // "_ I G H T" — the first letter is a gold-bordered blank box;
+          // "I G H T" is visible in gold. Honest: all three options end in -IGHT.
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Gold-bordered blank box for the missing first letter.
+                _blankBox(),
+                const SizedBox(width: 6),
+                // The rest of the word in gold.
+                Text(
+                  'I G H T',
+                  style: dqText(
+                    size: 26,
+                    color: dqGold,
+                    w: FontWeight.w800,
+                    spacing: 3,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // JP hint beneath the sign.
+          Text(
+            '「ランプの ことば」',
+            style: dqText(size: 13, color: dqGold, w: FontWeight.w600),
+          ),
+          const SizedBox(height: 16),
+          // タロ's cheer copy after correct tap, else stay silent.
+          if (_restored)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Text(
+                'そうだ! ことばが、ひかりを とりもどした!',
+                textAlign: TextAlign.center,
+                style: dqText(size: 14, color: dqGold),
+              ),
+            ),
+          // ── Three AudioOptionButton choices ──────────────────────────────
+          for (var i = 0; i < _kChoices.length; i++)
+            AudioOptionButton(
+              key: ValueKey('choice_$i'),
+              label: _kChoices[i].label,
+              state: _choiceStates[i],
+              index: i + 1, // 1-based badge: ①②③
+              onAudio: () => _cue.play(_kChoices[i].audio),
+              onChoose: _choiceStates[i] == DqChoiceState.correct ||
+                      _choiceStates[i] == DqChoiceState.wrong
+                  ? null // already resolved — ignore re-tap
+                  : () => _onChoiceTap(i),
+            ),
+        ],
+      ),
+    );
+  }
+
+  /// Gold-bordered blank box representing the missing first letter (the _ in
+  /// _ I G H T). Sized to match the I G H T glyph height.
+  Widget _blankBox() {
+    return Container(
+      width: 32,
+      height: 42,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: dqGold.withAlpha(28),
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(color: dqGold, width: 2),
+      ),
+      child: Text(
+        '_',
+        style: dqText(size: 22, color: dqGold, w: FontWeight.w800),
+      ),
+    );
   }
 
   /// 5x4 colour matrix that scales saturation: [s]=1 → identity (full colour),
