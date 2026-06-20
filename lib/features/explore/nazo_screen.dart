@@ -338,6 +338,35 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
     return null;
   }
 
+  /// The solve-moment victory stamp body (studio panel #3 — fuse the won English
+  /// word into the highest-arousal beat). Test-potentiated-encoding research: the
+  /// strongest memory trace is form-specific feedback at the arousal spike, so the
+  /// burst moment should NAME the word the child just restored — not a generic
+  /// 'ことばが ひびいた！'. When the correct option has a teach-card meaning we show
+  /// 「word = いみ」 as the hero line with the resonance flavour beneath; for grammar
+  /// ナゾ with no clean word=meaning match we fall back to the original flavour line.
+  Widget _victoryStampBody() {
+    final word = _step.options[_step.correctIndex].label;
+    final meaning = _meaningFor(word);
+    const flavour = 'ことばが ひびいた！ ―― 色（いろ）が もどる。';
+    if (meaning == null) {
+      return Text(flavour,
+          style: dqText(size: 14, w: FontWeight.w800, color: dqGold));
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text('$word = $meaning',
+            style: dqText(size: 17, w: FontWeight.w900, color: dqGold)),
+        const SizedBox(height: 2),
+        Text(flavour,
+            style: dqText(
+                size: 12, w: FontWeight.w700, color: dqGold.withAlpha(205))),
+      ],
+    );
+  }
+
   /// Surface the tapped wrong word's meaning for ~2.4s (studio #3 — the error
   /// moment is the highest-salience encoding moment; teach, don't just shake).
   void _showWrongMeaning(int i) {
@@ -618,15 +647,7 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
                                       const Text('✦',
                                           style: TextStyle(fontSize: 18)),
                                       const SizedBox(width: 8),
-                                      Expanded(
-                                        child: Text(
-                                          'ことばが ひびいた！ ―― 色（いろ）が もどる。',
-                                          style: dqText(
-                                              size: 14,
-                                              w: FontWeight.w800,
-                                              color: dqGold),
-                                        ),
-                                      ),
+                                      Expanded(child: _victoryStampBody()),
                                     ],
                                   ),
                                 ),

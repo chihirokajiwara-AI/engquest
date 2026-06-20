@@ -285,6 +285,61 @@ void main() {
               'screen-reader child hears the teach-why, not just sighted kids');
     });
 
+    testWidgets(
+        'victory stamp NAMES the won word + meaning at the burst moment',
+        (t) async {
+      // Studio panel #3 (test-potentiated encoding): the highest-arousal beat
+      // must show the SPECIFIC English word just restored — 「word = いみ」 — not a
+      // generic 'ことばが ひびいた！'. Compute the expected pairing from the hotspot's
+      // own teach card so the test is data-driven, not hard-coded.
+      t.view.physicalSize = const Size(440, 1600);
+      t.view.devicePixelRatio = 1.0;
+      addTearDown(t.view.reset);
+      String norm(String s) => s.toLowerCase().replaceAll(RegExp('[^a-z]'), '');
+      String? meaningFor(Hotspot h, String word) {
+        for (final it in h.teachCard?.items ?? const []) {
+          if (norm(it.en) == norm(word)) return it.ja;
+        }
+        return null;
+      }
+
+      // Word-fusion applies to VOCAB ナゾ whose correct option is a taught word
+      // (the greeting ナゾ); grammar/conversation ナゾ ('an'/'are'/a response
+      // sentence) correctly fall back to the generic flavour stamp. Target the
+      // first NPC where the fusion actually fires.
+      final hotspot = kTown5Scene.hotspots.firstWhere(
+        (h) =>
+            h.kind == HotspotKind.npc &&
+            h.step != null &&
+            meaningFor(h, h.step!.options[h.step!.correctIndex].label) != null,
+        orElse: () => throw StateError(
+            'no 5級 NPC has a vocab correct-option with a teach meaning — '
+            'the word-fusion stamp would be dead code'),
+      );
+      final correctIdx = hotspot.step!.correctIndex;
+      final correctWord = hotspot.step!.options[correctIdx].label;
+      final meaning = meaningFor(hotspot, correctWord)!;
+
+      await t.pumpWidget(MaterialApp(
+        home: NazoScreen(hotspot: hotspot, eikenLevel: '5'),
+      ));
+      await t.pump(const Duration(milliseconds: 400));
+      final proceed = find.textContaining('おぼえた');
+      if (proceed.evaluate().isNotEmpty) {
+        await t.ensureVisible(proceed.first);
+        await t.pump();
+        await t.tap(proceed.first);
+        await t.pump(const Duration(milliseconds: 300));
+      }
+      await _skipThroughRecall(t);
+      await t.tap(find.byType(AudioOptionButton).at(correctIdx));
+      await t.pump();
+      await t.pump(const Duration(milliseconds: 100));
+      expect(find.text('$correctWord = $meaning'), findsOneWidget,
+          reason: 'the burst moment must NAME the restored word (form-specific '
+              'feedback at the arousal spike), not only a generic stamp');
+    });
+
     testWidgets('wrong then correct → firstTryCorrect == false (no inflation)',
         (t) async {
       final c = correctIdxOf5kuNpc();
