@@ -228,6 +228,48 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
 
   Timer? _loreTimer;
 
+  // ── 探偵メモ drawer state (#168) ──────────────────────────────────────────────
+  //
+  // Persistent per-scene collection of UNLOCKED fragments: every solved NPC's
+  // [mysteryFragmentJa] + every READ observation's [clueLineJa]. Derived
+  // on-demand from the already-persisted _solved / _observed maps — no extra
+  // storage. The FAB is hidden when the collection is empty (nothing to re-read)
+  // and suppressed while [_nazoScreenOpen] is true (NazoScreen is live) so the
+  // memo button is never a distraction during an active puzzle (attention
+  // guardrail).
+  //
+  // [_nazoScreenOpen] is set true just before Navigator.push to NazoScreen and
+  // cleared when that future resolves — a simple flag avoids a ModalRoute lookup
+  // and keeps the suppression logic in one place.
+  bool _nazoScreenOpen = false;
+
+  /// Collect all fragments the child has ALREADY unlocked in the current scene.
+  ///
+  /// Returns a list of [(text, voiceAsset?)] pairs in hotspot-index order:
+  ///   • Solved NPC hotspots contribute [Hotspot.mysteryFragmentJa].
+  ///   • Read observation hotspots contribute [Hotspot.clueLineJa].
+  /// Empty → nothing collected yet (FAB hidden, empty-state shown in drawer).
+  ///
+  /// Pure / no side-effects — only reads [widget.scene.hotspots], [_solved],
+  /// [_observed]. Public + @visibleForTesting so the helper is directly testable.
+  @visibleForTesting
+  List<({String text, String? voiceAsset})> collectedMemos() {
+    final out = <({String text, String? voiceAsset})>[];
+    for (var i = 0; i < widget.scene.hotspots.length; i++) {
+      final h = widget.scene.hotspots[i];
+      if (h.kind == HotspotKind.npc &&
+          _solved[i] == true &&
+          h.mysteryFragmentJa != null) {
+        out.add((text: h.mysteryFragmentJa!, voiceAsset: h.loreVoiceAsset));
+      } else if (h.kind == HotspotKind.observation &&
+          _observed[i] == true &&
+          h.clueLineJa != null) {
+        out.add((text: h.clueLineJa!, voiceAsset: h.clueVoiceAsset));
+      }
+    }
+    return out;
+  }
+
   /// The NPC hotspot index whose colour just returned — drives a one-shot gold
   /// restore-glow so the game's defining verb ("ことばで世界に色が戻る") FEELS magical
   /// at the moment of solving, not just a quiet cross-fade. Cleared after the
@@ -561,6 +603,9 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
         gatheredCluesJa = clues.join('\n');
       }
     }
+    // Suppress the 探偵メモ FAB while the puzzle screen is live (#168 attention
+    // guardrail): the memo button must not be a distraction during an active ナゾ.
+    setState(() => _nazoScreenOpen = true);
     final result = await Navigator.of(context).push<NazoResult>(
       _nazoRoute(
         NazoScreen(
@@ -573,6 +618,7 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
         ),
       ),
     );
+    if (mounted) setState(() => _nazoScreenOpen = false);
     if (!mounted) return;
     // Remember the paid-for hint tier so a reopen restores it instead of charging
     // again. idx is stable for the scene session; a solved hotspot short-circuits
@@ -1442,9 +1488,213 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
               // where _heroNpcIdx is always null.
               if (_restoreLabel != null && _heroNpcIdx == null)
                 _restorationBanner(_restoreLabel!, w),
+
+              // ── 探偵メモ FAB (#168) ────────────────────────────────────────────
+              // A notebook-icon affordance in the bottom-right corner lets the child
+              // re-read lore/clues they have already unlocked in this scene without
+              // leaving it (Layton 事件簿 feel, in-scene). Hidden until at least one
+              // fragment is collected so a fresh-entry child sees no dead button.
+              // Suppressed while the NazoScreen is live (_nazoScreenOpen) so the FAB
+              // is never a distraction during an active puzzle (attention guardrail).
+              // Also suppressed while the hero-frame dim overlay is up (_dimActive)
+              // so it doesn't float over the "restoration moment" cinematic.
+              if (!_nazoScreenOpen &&
+                  !_dimActive &&
+                  collectedMemos().isNotEmpty)
+                Positioned(
+                  right: 14,
+                  bottom: 72,
+                  child: Semantics(
+                    button: true,
+                    label: 'たんていメモ / Detective Memo',
+                    excludeSemantics: true,
+                    child: GestureDetector(
+                      onTap: () => _showMemoDrawer(context),
+                      child: Container(
+                        width: 52,
+                        height: 52,
+                        decoration: BoxDecoration(
+                          color: dqBox.withAlpha(245),
+                          shape: BoxShape.circle,
+                          border: Border.all(color: dqGold, width: 2),
+                          boxShadow: [
+                            BoxShadow(
+                                color: dqGold.withAlpha(100), blurRadius: 12),
+                            const BoxShadow(
+                                color: Colors.black54, blurRadius: 6),
+                          ],
+                        ),
+                        child: Icon(Icons.menu_book_rounded,
+                            color: dqGold, size: 26),
+                      ),
+                    ),
+                  ),
+                ),
             ],
           );
         },
+      ),
+    );
+  }
+
+  /// Opens the in-scene 探偵メモ drawer — a scrollable 事件簿-style list of every
+  /// lore/clue fragment already unlocked in this scene. Uses showModalBottomSheet
+  /// so the scene background remains visible (Layton in-scene feel, not a full
+  /// page push). Each entry shows its 探偵メモ line + an optional 🔊 replay button
+  /// when a voice asset is attached. Empty-state is shown when the collection is
+  /// somehow empty at open-time (defensive guard).
+  void _showMemoDrawer(BuildContext ctx) {
+    final memos = collectedMemos();
+    showModalBottomSheet<void>(
+      context: ctx,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => DraggableScrollableSheet(
+        initialChildSize: 0.55,
+        minChildSize: 0.25,
+        maxChildSize: 0.85,
+        expand: false,
+        builder: (_, scrollCtrl) => Container(
+          decoration: BoxDecoration(
+            color: dqBox,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+            border: Border.all(color: dqGold, width: 2),
+            boxShadow: [
+              BoxShadow(color: dqGold.withAlpha(60), blurRadius: 24),
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // ── Header bar ─────────────────────────────────────────────
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                child: Row(
+                  children: [
+                    const Text('📓', style: TextStyle(fontSize: 22)),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        'たんていメモ',
+                        style:
+                            dqText(size: 18, w: FontWeight.w900, color: dqGold),
+                      ),
+                    ),
+                    Semantics(
+                      button: true,
+                      label: 'とじる / Close',
+                      excludeSemantics: true,
+                      child: GestureDetector(
+                        onTap: () => Navigator.of(ctx).pop(),
+                        child: Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: dqGold.withAlpha(28),
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                                color: dqGold.withAlpha(120), width: 1),
+                          ),
+                          child: Icon(Icons.close,
+                              color: dqGold.withAlpha(200), size: 18),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Divider(
+                  color: dqGoldDeep.withAlpha(120), height: 1, thickness: 1),
+
+              // ── Fragment list ──────────────────────────────────────────
+              Expanded(
+                child: memos.isEmpty
+                    // Empty-state (defensive — FAB is already hidden when empty)
+                    ? Center(
+                        child: Text(
+                          'まだ メモが ありません。\n事件（じけん）を しらべよう。',
+                          textAlign: TextAlign.center,
+                          style: dqText(size: 14, color: dqInk)
+                              .copyWith(height: 1.65),
+                        ),
+                      )
+                    : ListView.separated(
+                        controller: scrollCtrl,
+                        padding: const EdgeInsets.fromLTRB(14, 10, 14, 24),
+                        itemCount: memos.length,
+                        separatorBuilder: (_, __) => Divider(
+                          color: dqGoldDeep.withAlpha(80),
+                          height: 18,
+                          thickness: 1,
+                        ),
+                        itemBuilder: (_, i) {
+                          final m = memos[i];
+                          return Semantics(
+                            label: '探偵メモ ${i + 1}。${m.text}',
+                            excludeSemantics: true,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 14, vertical: 12),
+                              decoration: BoxDecoration(
+                                color: dqNight1.withAlpha(200),
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                    color: dqGold.withAlpha(110), width: 1.5),
+                              ),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Padding(
+                                    padding: EdgeInsets.only(top: 2),
+                                    child: Text('🔖',
+                                        style: TextStyle(fontSize: 16)),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: Text(
+                                      m.text,
+                                      style: dqText(size: 13, color: dqInk)
+                                          .copyWith(height: 1.6),
+                                    ),
+                                  ),
+                                  // 🔊 replay — only when a voice asset exists
+                                  // AND voice is not muted (no dead-sound affordance).
+                                  if (m.voiceAsset != null &&
+                                      !AudioMute.voiceMuted) ...[
+                                    const SizedBox(width: 8),
+                                    Semantics(
+                                      button: true,
+                                      label: 'よみあげ / Read aloud',
+                                      excludeSemantics: true,
+                                      child: GestureDetector(
+                                        onTap: () => _cue.play(m.voiceAsset!),
+                                        child: Container(
+                                          padding: const EdgeInsets.all(5),
+                                          decoration: BoxDecoration(
+                                            color: dqGold.withAlpha(28),
+                                            borderRadius:
+                                                BorderRadius.circular(7),
+                                            border: Border.all(
+                                                color: dqGold.withAlpha(120),
+                                                width: 1),
+                                          ),
+                                          child: Icon(Icons.volume_up_rounded,
+                                              color: dqGold.withAlpha(200),
+                                              size: 15),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
