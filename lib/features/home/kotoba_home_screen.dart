@@ -739,7 +739,26 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('🟢', style: TextStyle(fontSize: 22)),
+          // タ monogram avatar (de-emoji): a raw 🟢 debug emoji on the
+          // highest-frequency screen read as unfinished/commodity. This styled
+          // placeholder uses タロ's dusty-teal identity ring; it is deliberately
+          // a monogram (NOT a creature design) so it doesn't pre-empt the
+          // CEO-gated final タロ art (#129).
+          Container(
+            width: 30,
+            height: 30,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: const Color(0xFF0A1024),
+              border: Border.all(color: const Color(0xFF5DA9E9), width: 1.6),
+            ),
+            child: Text('タ',
+                style: dqText(
+                    size: 15,
+                    w: FontWeight.w800,
+                    color: const Color(0xFF5DA9E9))),
+          ),
           const SizedBox(width: 8),
           Expanded(
             child: Column(
