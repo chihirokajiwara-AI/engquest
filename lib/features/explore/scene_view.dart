@@ -1917,8 +1917,25 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // タロ slime icon
-                  const Text('🟢', style: TextStyle(fontSize: 22)),
+                  // タロ avatar — styled タ monogram (de-emoji), matching the home
+                  // companion card (d91f8fd). A monogram, NOT a creature design,
+                  // so it doesn't pre-empt the CEO-gated final タロ art (#129).
+                  Container(
+                    width: 30,
+                    height: 30,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: const Color(0xFF0A1024),
+                      border: Border.all(
+                          color: const Color(0xFF5DA9E9), width: 1.6),
+                    ),
+                    child: Text('タ',
+                        style: dqText(
+                            size: 15,
+                            w: FontWeight.w800,
+                            color: const Color(0xFF5DA9E9))),
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Column(
