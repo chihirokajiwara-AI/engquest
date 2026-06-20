@@ -1131,13 +1131,13 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
         Padding(
           padding: const EdgeInsets.only(left: 4, bottom: 8),
           child: Text(
-            'おまけ：ぼうけん / Adventure（あそび）',
+            'おまけ：捜査（そうさ）ファイル / Story',
             style: dqText(
                 size: 12, w: FontWeight.w600, color: dqInk.withAlpha(150)),
           ),
         ),
         _adventureButton(
-          icon: Icons.play_arrow_rounded,
+          icon: Icons.search,
           label: 'じけんげんばへ　／　Story',
           onTap: _goToScene,
           navKey: 'scene', // pre-literacy: a non-reader hears the label

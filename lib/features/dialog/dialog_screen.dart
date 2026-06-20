@@ -102,7 +102,6 @@ class _ScenarioCard extends StatelessWidget {
                   ],
                 ),
               ),
-              const Icon(Icons.play_arrow, color: dqGold, size: 22),
             ],
           ),
         ),

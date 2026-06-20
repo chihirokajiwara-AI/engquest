@@ -225,7 +225,7 @@ class _QuestScreenState extends State<QuestScreen> {
         ),
         const SizedBox(height: 24),
         DqButton(
-            label: _hasEncounters ? '▶ ぼうけんを はじめる' : '準備中',
+            label: _hasEncounters ? '捜査（そうさ）を はじめる' : '準備中',
             onTap: _hasEncounters ? _start : null),
         const Spacer(),
       ],
@@ -318,7 +318,9 @@ class _QuestScreenState extends State<QuestScreen> {
                       ),
                       const SizedBox(height: 16),
                       DqButton(
-                          label: _index < total - 1 ? '▶ つぎへ' : '▶ 街（まち）をクリア！',
+                          label: _index < total - 1
+                              ? 'つぎの てがかりへ'
+                              : '街（まち）を 解決（かいけつ）！',
                           onTap: _next),
                     ],
                     const SizedBox(height: 20),
@@ -453,8 +455,7 @@ class _QuestScreenState extends State<QuestScreen> {
         ),
         const SizedBox(height: 24),
         DqButton(
-            label: '▶ 地図（ちず）にもどる',
-            onTap: () => Navigator.of(context).pop(true)),
+            label: '街（まち）の ちずへ', onTap: () => Navigator.of(context).pop(true)),
         const Spacer(),
       ],
     );

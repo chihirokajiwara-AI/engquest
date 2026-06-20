@@ -11,8 +11,8 @@
 //   (c) A WRONG tap (NIGHT or RIGHT) sets that button to DqChoiceState.wrong but
 //       does NOT advance the panel (the interactive panel remains visible, the child
 //       can retry).
-//   (d) The deduction panel does NOT show a "▶ つぎへ" advance button while the
-//       correct word has not yet been tapped (choice buttons replace it).
+//   (d) The deduction panel does NOT show a "つぎの てがかりへ" advance button while
+//       the correct word has not yet been tapped (choice buttons replace it).
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -143,16 +143,17 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('(d) interactive panel hides ▶ つぎへ while LIGHT not yet tapped',
+    testWidgets(
+        '(d) interactive panel hides 「つぎの てがかりへ」 while LIGHT not yet tapped',
         (tester) async {
       await _pumpDeductionPanel(tester);
 
       // The standard advance button must NOT appear while the deduction is pending.
       expect(
-        find.textContaining('つぎへ'),
+        find.textContaining('てがかりへ'),
         findsNothing,
         reason:
-            '▶ つぎへ must be hidden on the deduction panel before restoration',
+            '「つぎの てがかりへ」 must be hidden on the deduction panel before restoration',
       );
 
       expect(tester.takeException(), isNull);

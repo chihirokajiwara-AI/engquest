@@ -564,7 +564,7 @@ class DqChoice extends StatelessWidget {
   }
 }
 
-/// Gold action button (はじめる / つぎへ).
+/// Gold action button (捜査を はじめる / つぎの てがかりへ etc.).
 class DqButton extends StatefulWidget {
   final String label;
   final VoidCallback? onTap;
@@ -877,11 +877,10 @@ class DqPanel extends StatelessWidget {
   }
 }
 
-/// A command-style menu tile with a bilingual label (JP / EN) and an icon, for
+/// A detective-style menu tile with a bilingual label (JP / EN) and an icon, for
 /// home-screen quick-start actions (単語バトル / Word Battle, etc.). Renders as a
-/// gold-bordered navy row with a leading icon medallion and a ▶ cursor; the
-/// optional [color] tints only the icon medallion (the frame stays dq palette,
-/// never candy-bright).
+/// gold-bordered navy row with a leading icon medallion; the optional [color]
+/// tints only the icon medallion (the frame stays dq palette, never candy-bright).
 class DqTile extends StatelessWidget {
   final String jp;
   final String en;
@@ -941,7 +940,6 @@ class DqTile extends StatelessWidget {
                 ),
                 const SizedBox(width: 14),
                 Expanded(child: dqBilingual(jp, en, jpSize: 16, stacked: true)),
-                const Icon(Icons.play_arrow, color: dqGold, size: 20),
               ],
             ),
           ),

@@ -52,9 +52,9 @@ class _ZoneDef {
 
 final List<_ZoneDef> _kZones = [
   _ZoneDef(
-    label: 'ぼうけん',
-    en: 'Quest',
-    subtitle: '街をめぐる英語の旅',
+    label: '捜査（そうさ）',
+    en: 'Investigation',
+    subtitle: '街をめぐる英語の捜査',
     icon: Icons.map_outlined,
     accent: dqGold,
     route: '/quest',
@@ -585,8 +585,7 @@ class _ZoneNodeState extends State<_ZoneNode>
                       ],
                     ),
                   ),
-                  // ▶ cursor
-                  const Icon(Icons.play_arrow, color: dqGold, size: 22),
+                  // play_arrow removed — detective UI has no command cursor
                 ],
               ),
             ),

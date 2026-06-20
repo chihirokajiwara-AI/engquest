@@ -508,7 +508,7 @@ class _PrologueScreenState extends State<PrologueScreen>
         : (_p.tappable && !_heard)
             ? DqReplayButton(onTap: _hearPanel, label: '🔊 きいてみよう')
             : DqButton(
-                label: _p.isLast ? '▶ はじめる / Begin' : '▶ つぎへ', onTap: _next);
+                label: _p.isLast ? '捜査（そうさ）を はじめる' : 'つぎの てがかりへ', onTap: _next);
     // Council S3: pulse the control when the child has gone idle.
     final reduceMotion =
         MediaQuery.maybeOf(context)?.disableAnimations ?? false;

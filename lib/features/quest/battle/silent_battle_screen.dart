@@ -427,7 +427,7 @@ class _SilentBattleScreenState extends State<SilentBattleScreen> {
             ),
             const SizedBox(height: 16),
             DqButton(
-              label: _isLastStep(ctrl) ? '▶ むらびとをすくった！' : '▶ つぎへ',
+              label: _isLastStep(ctrl) ? 'むらびとをすくった！' : 'つぎの てがかりへ',
               onTap: () => widget.controller.advance(),
             ),
           ] else ...[
@@ -489,7 +489,7 @@ class _SilentBattleScreenState extends State<SilentBattleScreen> {
           ),
           const SizedBox(height: 24),
           DqButton(
-            label: '▶ つぎへすすむ',
+            label: 'つぎの てがかりへ',
             onTap: widget.onVictory ?? () => Navigator.of(context).pop(true),
           ),
         ],
@@ -540,7 +540,7 @@ class _SilentBattleScreenState extends State<SilentBattleScreen> {
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: Text(
-                'マップにもどる',
+                '街（まち）の ちずへ',
                 style: dqText(size: 14, color: dqGoldDeep),
               ),
             ),

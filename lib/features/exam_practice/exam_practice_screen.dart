@@ -493,7 +493,6 @@ class _SectionTile extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 8),
-              const Icon(Icons.play_arrow, color: dqGold, size: 20),
             ],
           ),
         ),

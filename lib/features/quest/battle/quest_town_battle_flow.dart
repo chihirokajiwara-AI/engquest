@@ -182,7 +182,7 @@ class _QuestTownBattleFlowState extends State<QuestTownBattleFlow> {
             ),
             const SizedBox(height: 24),
             DqButton(
-              label: '▶ ぼうけんを はじめる',
+              label: '捜査（そうさ）を はじめる',
               onTap: () => setState(() => _phase = _FlowPhase.battle),
             ),
             const Spacer(),
@@ -240,7 +240,7 @@ class _QuestTownBattleFlowState extends State<QuestTownBattleFlow> {
             ),
             const SizedBox(height: 24),
             DqButton(
-              label: '▶ 地図（ちず）にもどる',
+              label: '街（まち）の ちずへ',
               onTap: () => Navigator.of(context).pop(true),
             ),
             const Spacer(),

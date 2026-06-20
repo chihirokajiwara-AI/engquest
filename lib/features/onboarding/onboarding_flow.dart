@@ -565,7 +565,7 @@ class _StepAge extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          DqButton(label: 'つぎへ / Next ▶', onTap: onNext),
+          DqButton(label: 'つぎへ / Next', onTap: onNext),
         ],
       ),
     );
@@ -843,7 +843,7 @@ class _PlacementResult extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          DqButton(label: 'つぎへ / Next ▶', onTap: onNext),
+          DqButton(label: 'つぎへ / Next', onTap: onNext),
         ],
       ),
     );
@@ -1173,7 +1173,7 @@ class _StepGoal extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           ),
-          DqButton(label: 'ぼうけんをはじめる / Begin Quest ▶', onTap: onFinish),
+          DqButton(label: '捜査（そうさ）を はじめる / Begin', onTap: onFinish),
         ],
       ),
     );

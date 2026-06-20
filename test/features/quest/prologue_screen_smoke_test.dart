@@ -80,10 +80,10 @@ void main() {
           reason:
               'the 起 tap-to-hear agency control stays usable under the pulse');
       expect(tester.takeException(), isNull);
-      // Tapping it satisfies the agency gate → ▶ つぎへ appears.
+      // Tapping it satisfies the agency gate → 'つぎの てがかりへ' appears.
       await tester.tap(find.textContaining('きいてみよう'));
       await tester.pump();
-      expect(find.textContaining('つぎへ'), findsOneWidget,
+      expect(find.textContaining('てがかりへ'), findsOneWidget,
           reason: 'after hearing す…, the advance control appears');
     });
   });

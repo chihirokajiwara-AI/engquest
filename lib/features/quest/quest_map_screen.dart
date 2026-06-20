@@ -181,7 +181,7 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
             const SizedBox(width: 36),
           Expanded(
             child: Center(
-              child: dqBilingual('ぼうけんの地図', 'Adventure Map', jpSize: 19),
+              child: dqBilingual('捜査（そうさ）の地図', 'Case Map', jpSize: 19),
             ),
           ),
           const SizedBox(width: 36),
