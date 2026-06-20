@@ -105,6 +105,7 @@ tools/fonts/
 # Volatile Claude session state (never commit)
 .claude/scheduled_tasks.json
 .claude/scheduled_tasks.lock
+.claude/worktrees/
 .last_ceo_heartbeat
 
 # Transient art-gen candidate batches (curated by hand, never shipped from here;

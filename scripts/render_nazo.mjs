@@ -81,16 +81,53 @@ const bubble = await waitForLabel('ナゾを みる', 8000);
 console.log('bubble found@', bubble, 'ms');
 await clickLabel('ナゾを みる');
 // NazoScreen open → teach-first card present (セル has kArticleTeach).
-const teach = await waitForLabel('こたえてみる', 8000);
+// Teach advance button is now 「おぼえた！ ナゾへ ▶」 (retrieval-gap, 7ef8889).
+const teach = await waitForLabel('おぼえた', 8000);
 await page.waitForTimeout(500);
 await page.screenshot({ path: '/tmp/nazo_teach.png' });
 console.log('teach card@', teach, '→ /tmp/nazo_teach.png');
-// Dismiss the teach card → the quiz surface.
+// Advance teach → the NEW retrieval-gap (recall) screen, then → quiz.
 if (teach >= 0) {
-  await clickLabel('こたえてみる');
-  await page.waitForTimeout(700);
+  await clickLabel('おぼえた');
+  await page.waitForTimeout(600);
+  await page.screenshot({ path: '/tmp/nazo_recall.png' });
+  console.log('→ /tmp/nazo_recall.png (recall cover card: EN + いみは？)');
+  // Active cover-and-reveal (34a29b0): reveal the JA meaning, then advance cues.
+  await clickLabel('いみは');
+  await page.waitForTimeout(500);
+  await page.screenshot({ path: '/tmp/nazo_recall_revealed.png' });
+  console.log('→ /tmp/nazo_recall_revealed.png (JA revealed)');
+  // Walk through all cues to the quiz (reveal + つぎへ; last cue = ナゾへ).
+  for (let k = 0; k < 6; k++) {
+    await clickLabel('いみは');
+    await clickLabel('つぎへ');
+    await clickLabel('ナゾへ');
+    await page.waitForTimeout(300);
+  }
+  await page.waitForTimeout(600);
   await page.screenshot({ path: '/tmp/nazo_quiz.png' });
   console.log('→ /tmp/nazo_quiz.png');
+  // Solve (correct = 'Hello!') → ナゾ reveal (~1.4s auto-finish) → pop to scene
+  // → 250ms → HELD RESTORATION HERO FRAME (scale-up 420ms + hold 900ms). Grab a
+  // few frames across the hold since the exact timing varies.
+  await clickLabel('Hello');
+  await page.waitForTimeout(2000);
+  await page.screenshot({ path: '/tmp/nazo_hero_2000.png' });
+  console.log('→ /tmp/nazo_hero_2000.png');
+  await page.waitForTimeout(500);
+  await page.screenshot({ path: '/tmp/nazo_hero_2500.png' });
+  console.log('→ /tmp/nazo_hero_2500.png');
+  await page.waitForTimeout(500);
+  await page.screenshot({ path: '/tmp/nazo_hero_3000.png' });
+  console.log('→ /tmp/nazo_hero_3000.png');
+  // Forward-pull beat (#3) fires AFTER hero+lore (~3000ms post-solve, dismisses
+  // ~3.5s later) — grab the window: 「あと Nつ！…」 タロ companion line.
+  await page.waitForTimeout(1500);
+  await page.screenshot({ path: '/tmp/nazo_fwdpull_4500.png' });
+  console.log('→ /tmp/nazo_fwdpull_4500.png');
+  await page.waitForTimeout(1200);
+  await page.screenshot({ path: '/tmp/nazo_fwdpull_5700.png' });
+  console.log('→ /tmp/nazo_fwdpull_5700.png');
 }
 console.log('jsErrors:', jsErrors.length, jsErrors.slice(0, 3));
 await browser.close();
