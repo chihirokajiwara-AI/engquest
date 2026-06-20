@@ -317,6 +317,9 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
   // toward the next mystery (the same mechanic Battle has).  Null → no beat.
   String? _forwardPullText;
   Timer? _forwardPullTimer;
+  // #5 (studio rank-5): delays the §3 lore drip so the forward-pull owns the
+  // re-entry peak first (beat order: hero → pull → lore). Non-reduced-motion only.
+  Timer? _loreDelayTimer;
 
   // Services
   final _cue = AudioCueService();
@@ -436,6 +439,7 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
     _restoreTimer?.cancel();
     _restoreLabelTimer?.cancel();
     _forwardPullTimer?.cancel();
+    _loreDelayTimer?.cancel();
     _cue.dispose();
     _parallax.dispose();
     super.dispose();
@@ -745,9 +749,9 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
     } else {
       // ── Non-reduced-motion: HELD RESTORATION FRAME ───────────────────────
       // Studio #2 spec: dim → hero portrait scales to screen centre → hold →
-      // settle. The §3 lore fires ONLY AFTER the hero frame (~1700ms).
-      // Studio #3 forward-pull fires AFTER the lore has had its moment (~1300ms
-      // after lore appears).  Strict beat sequence: hero → lore → forward-pull.
+      // settle. After the hero frame (~1700ms) the forward-pull lands at the
+      // re-entry peak, then the §3 lore drips in after it (studio #5).
+      // Strict beat sequence: hero → forward-pull → lore.
       //
       // Step 1: keep the brief camera-push on the in-scene NPC (studio #1 —
       // retained as a sub-beat; the hero overlay REPLACES the top banner but
@@ -778,21 +782,30 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
             _dimActive = false;
             _restoreLabel = null;
           });
-          // Step 3: §3 lore drip — fires ONLY AFTER the hero frame, never
-          // simultaneously (was the root of the perceptual invisibility).
-          if (h.mysteryFragmentJa != null) {
-            _showLore(h.mysteryFragmentJa!, voiceAsset: h.loreVoiceAsset);
-          }
-          // Step 4: forward-pull — fires ~1300ms after the lore appears, so the
-          // beat sequence is strictly: hero(1700ms) → lore(shown) → pull(+1300ms).
-          // The lore auto-dismisses after _kArrivalAutoDismissMs (4500ms), so the
-          // pull fires while lore is still visible then lore dismisses naturally
-          // and pull takes over the slot — no overlap with the hero frame.
+          // Step 3 (studio #5): the forward-pull IS the re-entry-peak beat — show
+          // it as a diegetic stamp on the colour-flooded scene THE MOMENT the hero
+          // dim clears, so 'あとNつ！' lands at the emotional peak rather than after
+          // ~1.3s of dead air following the lore. Beat order is now strictly
+          // hero(1700ms) → pull → lore (was hero → lore → pull, which buried the
+          // hook 7s into the sequence where a child's eye had already moved on).
           if (forwardPullLine != null) {
-            _forwardPullTimer?.cancel();
-            _forwardPullTimer = Timer(const Duration(milliseconds: 1300), () {
-              if (mounted) _showForwardPull(forwardPullLine);
-            });
+            _showForwardPull(forwardPullLine);
+          }
+          // Step 4: §3 lore drip follows AFTER the pull has had its ~2.5s moment.
+          // Showing the lore dismisses the pull, so the two never co-render. If
+          // there is no pull (shouldn't happen on a non-clearing solve), the lore
+          // shows immediately.
+          if (h.mysteryFragmentJa != null) {
+            if (forwardPullLine == null) {
+              _showLore(h.mysteryFragmentJa!, voiceAsset: h.loreVoiceAsset);
+            } else {
+              _loreDelayTimer?.cancel();
+              _loreDelayTimer = Timer(const Duration(milliseconds: 2500), () {
+                if (!mounted) return;
+                _dismissForwardPull();
+                _showLore(h.mysteryFragmentJa!, voiceAsset: h.loreVoiceAsset);
+              });
+            }
           }
         });
       }

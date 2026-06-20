@@ -186,34 +186,37 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  // (2b) Forward-pull does NOT appear simultaneously with the lore banner.
-  testWidgets('forward-pull does NOT co-exist with the lore banner',
+  // (2b) Forward-pull and lore are STRICTLY SEQUENTIAL, never co-rendered.
+  // Studio #5 reordered the beat to hero → PULL (re-entry peak) → lore: the pull
+  // now owns the bottom slot the moment the hero dim clears, and the lore takes
+  // over only after the pull's ~2.5s moment. The invariant: they never co-render.
+  testWidgets('forward-pull and lore are sequential, never co-rendered (#5)',
       (tester) async {
     await tester.binding.setSurfaceSize(const Size(440, 900));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
     await pumpScene(tester);
-    // Use the first NPC which has a mysteryFragmentJa.
     final firstNpc = kTown5Scene.hotspots[_firstNpcIdx()];
     expect(firstNpc.mysteryFragmentJa, isNotNull,
         reason: 'test NPC must have lore to trigger §3');
 
     await _callApplyRestore(tester, _firstNpcIdx(), _solved);
 
-    // At 1800ms: hero is gone, lore banner is visible.
+    // At 1800ms: hero is gone, the PULL owns the slot (re-entry peak), lore not
+    // yet. 'とりもどそう' is pull-specific (remaining==3 form) — collision-safe vs
+    // any 'あと' the lore fragment might contain.
     await tester.pump(const Duration(milliseconds: 1800));
-    expect(
-      find.byKey(const ValueKey('scene_lore_banner')),
-      findsOneWidget,
-      reason: 'lore banner must be up at 1800ms',
-    );
-    // Forward-pull must NOT be rendered at the same moment as the lore banner.
-    // The gate in the Stack conditions on _loreFragment == null.
-    expect(
-      find.textContaining('あと'),
-      findsNothing,
-      reason: 'forward-pull must not render while the lore banner is visible',
-    );
+    expect(find.textContaining('とりもどそう'), findsWidgets,
+        reason: 'the forward-pull lands the moment the hero dim clears (#5)');
+    expect(find.byKey(const ValueKey('scene_lore_banner')), findsNothing,
+        reason: 'lore must NOT co-render with the pull — the pull comes first');
+
+    // After the pull's ~2.5s moment: lore takes over, the pull is dismissed.
+    await tester.pump(const Duration(milliseconds: 2600));
+    expect(find.byKey(const ValueKey('scene_lore_banner')), findsOneWidget,
+        reason: 'lore drips in after the pull has had its moment');
+    expect(find.textContaining('とりもどそう'), findsNothing,
+        reason: 'the pull must be dismissed before the lore banner shows');
     expect(tester.takeException(), isNull);
   });
 

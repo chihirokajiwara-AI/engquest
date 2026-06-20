@@ -333,7 +333,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('lore banner appears AFTER the 1700ms hero window',
+  testWidgets('lore banner appears AFTER the hero window AND the forward-pull',
       (tester) async {
     await tester.binding.setSurfaceSize(const Size(440, 900));
     addTearDown(() => tester.binding.setSurfaceSize(null));
@@ -345,13 +345,15 @@ void main() {
 
     await _callApplyRestore(tester, _firstNpcIdx(), h, _solvedResult);
 
-    // Advance past the 1700ms hero window.
-    await tester.pump(const Duration(milliseconds: 1800));
+    // Studio #5 reordered the beat to hero(1700ms) → forward-pull → lore: the
+    // pull now owns the re-entry peak first, and the lore drips in only after the
+    // pull's ~2.5s moment. Advance past hero(1700) + pull(2500) = 4200ms.
+    await tester.pump(const Duration(milliseconds: 4400));
 
     expect(
       find.byKey(const ValueKey('scene_lore_banner')),
       findsOneWidget,
-      reason: 'lore banner must fire AFTER the hero frame settles',
+      reason: 'lore banner must fire AFTER the hero frame AND the forward-pull',
     );
     expect(tester.takeException(), isNull);
   });
