@@ -1568,6 +1568,11 @@ class _BattleScreenState extends State<BattleScreen>
     final gradeSum =
         _sessionResults.fold(0.0, (sum, r) => sum + r.grade.index1.toDouble());
     final avgGrade = total > 0 ? gradeSum / total : 0.0;
+    // #172 (mechanic honors the case): reframe this session as case-progress —
+    // the words the child KNEW (Good/Easy = わかった) are words "restored from the
+    // サイレント", the case antagonist the battle cards already invoke (#85). Honest:
+    // the ones they failed stay held by the Silence (FSRS re-queues them).
+    final restored = (counts[Grade.good] ?? 0) + (counts[Grade.easy] ?? 0);
 
     return Stack(
       children: [
@@ -1606,6 +1611,15 @@ class _BattleScreenState extends State<BattleScreen>
                 const SizedBox(height: 10),
                 Text('$total 枚 完了 / $total cards',
                     style: dqText(size: 16, color: dqInk)),
+                // #172 — mechanic honors the case: the known words are "restored
+                // from the サイレント", reframing FSRS practice as case-progress.
+                if (restored > 0) ...[
+                  const SizedBox(height: 6),
+                  Text('サイレントから $restored ことば、とりもどした！',
+                      textAlign: TextAlign.center,
+                      style:
+                          dqText(size: 14, w: FontWeight.w700, color: dqGold)),
+                ],
                 // XP earned
                 const SizedBox(height: 12),
                 Container(
