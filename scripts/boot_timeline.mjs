@@ -124,11 +124,11 @@ for (const m of marks) {
 const titleMs = await titleP;
 // Classify the FIRST interactive screen by UNIQUE needles (NOT 'はじめる' — the
 // home hub has its own start CTA containing はじめる, which false-positives as
-// "title"). The title screen uniquely shows 'つづきから / Continue'; the prologue
-// uniquely shows 'きいてみよう'; neither ⟹ the home hub.
-const titleVisible = await hasLabel('つづきから');
+// "title"). The de-DQ title (3462f39) uniquely shows the '未解決事件' case-file
+// plate; the prologue uniquely shows 'きいてみよう'; neither ⟹ the home hub.
+const titleVisible = await hasLabel('未解決事件');
 const prologueVisibleEarly = await hasLabel(prologueNeedle);
-const firstScreen = titleVisible ? 'TITLE (つづきから present)'
+const firstScreen = titleVisible ? 'TITLE (未解決事件 present)'
   : prologueVisibleEarly ? 'PROLOGUE (title SKIPPED)'
   : 'HOME / other (no title, no prologue)';
 
