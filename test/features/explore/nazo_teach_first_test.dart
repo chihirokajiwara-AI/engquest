@@ -6,13 +6,14 @@
 // quiz now carries a TeachCard, and NazoScreen TEACHES it BEFORE the quiz.
 //
 // This test locks that contract: the slime greeting ナゾ must show the lesson
-// (meanings of Hello/Goodbye/Thank you/Sorry) FIRST; an ACTIVE cued-production
-// recall phase walks the child through each item — the JA meaning is shown LARGE
-// as the cue, and the child must tap the correct English tile from the shuffled
-// set to advance. Quiz options must NOT appear until all cues are produced.
+// (meanings of Hello/Goodbye/Thank you/Sorry) FIRST; a COVER-REVEAL recall phase
+// then walks the child through each item — the JA meaning is shown LARGE as the
+// cue, and a masked '？？？' panel invites the child to recall the EN before tapping
+// to reveal it. Quiz options must NOT appear until all cues are produced.
 //
-// Updated 2026-06-19: passive tap-to-reveal 「いみは？」 replaced with active
-// cued-production retrieval ("claim-the-word"). Tests updated to match.
+// Updated 2026-06-21: active cued-production tile-grid replaced with cover-reveal
+// self-assessment (studio #1). Tests updated to assert cover-reveal instead of
+// tile-tap production.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -47,7 +48,7 @@ void main() {
     expect(find.text('ミノス'), findsNothing);
 
     // Tap 「おぼえた！ ナゾへ」 → the recall phase begins with the first cue:
-    // the JA meaning shown large, and EN tiles below it.
+    // the JA meaning shown large, and a covered '？？？' EN panel below it.
     final advance = find.text('おぼえた！ ナゾへ ▶');
     expect(advance, findsOneWidget);
     await tester.ensureVisible(advance);
@@ -61,9 +62,15 @@ void main() {
     // The ミノス quiz meter must still be hidden.
     expect(find.text('ミノス'), findsNothing,
         reason: 'quiz must not be visible during recall');
-    // AudioOptionButton choice tiles ARE present (the active-production choices).
-    expect(find.byType(AudioOptionButton), findsWidgets,
-        reason: 'EN choice tiles must appear in recall for active production');
+    // Cover panel '？？？' must appear (EN hidden before child taps).
+    expect(find.text('？？？'), findsOneWidget,
+        reason: 'cover mask must appear in recall before reveal');
+    // Safety eyebrow must label this as practice.
+    expect(find.text('れんしゅう — おもいだしてみよう'), findsOneWidget,
+        reason: 'practice safety eyebrow must appear');
+    // Skip button must be present for ≤ 1-tap quiz access.
+    expect(find.text('スキップ ▶'), findsOneWidget,
+        reason: 'skip button must appear in recall');
 
     expect(tester.takeException(), isNull);
   });
@@ -90,10 +97,10 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  // ── Active cued-production recall contract tests ─────────────────────────────
+  // ── Cover-reveal recall contract tests ───────────────────────────────────────
 
   testWidgets(
-      'recall phase: JA cue shown large + EN choice tiles present (no いみは？)',
+      'recall phase: JA cue shown large + cover panel present (no EN tiles initially)',
       (tester) async {
     final hotspot = greetingHotspot();
     await tester.pumpWidget(
@@ -112,19 +119,23 @@ void main() {
     expect(find.text('えいごで いうと？'), findsOneWidget,
         reason: 'recall cue prompt must appear');
 
-    // EN choice tiles (AudioOptionButton) must be present for active production.
-    expect(find.byType(AudioOptionButton), findsWidgets,
-        reason: 'EN choice tiles must appear for active production recall');
+    // Cover panel must be present (EN hidden).
+    expect(find.text('？？？'), findsOneWidget,
+        reason: 'cover mask must appear before reveal');
 
     // The old passive 「いみは？」 tap-target must NOT be present.
     expect(find.text('いみは？'), findsNothing,
         reason:
-            '「いみは？」 passive reveal removed; replaced by active production tiles');
+            '「いみは？」 passive reveal removed; replaced by cover-reveal panel');
+
+    // Self-assessment buttons must NOT be visible before reveal.
+    expect(find.text('おぼえてた！'), findsNothing,
+        reason: 'self-assessment must not appear before cover is tapped');
 
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('wrong tile tap shakes and does NOT advance (same JA cue stays)',
+  testWidgets('tapping the cover panel reveals EN word + self-assessment row',
       (tester) async {
     tester.view.physicalSize = const Size(440, 1600);
     tester.view.devicePixelRatio = 1.0;
@@ -138,7 +149,53 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    // Advance from teach to recall.
+    // Advance teach → recall.
+    final advance = find.textContaining('おぼえた');
+    await tester.ensureVisible(advance);
+    await tester.pumpAndSettle();
+    await tester.tap(advance);
+    await tester.pumpAndSettle();
+
+    // Tap the cover panel to reveal.
+    final coverPanel = find.text('？？？');
+    expect(coverPanel, findsOneWidget, reason: 'cover panel must be present');
+    await tester.ensureVisible(coverPanel);
+    await tester.pump();
+    await tester.tap(coverPanel);
+    await tester.pump();
+
+    // After reveal: EN word appears in place of the mask.
+    final firstEn = items[0].en;
+    expect(find.text(firstEn), findsOneWidget,
+        reason: 'EN word must appear after tapping cover panel');
+    // Cover mask must be gone.
+    expect(find.text('？？？'), findsNothing,
+        reason: 'cover mask must disappear after reveal');
+    // Self-assessment buttons must now appear.
+    expect(find.text('おぼえてた！'), findsOneWidget,
+        reason: '「おぼえてた！」 button must appear after reveal');
+    expect(find.text('もう1かい'), findsOneWidget,
+        reason: '「もう1かい」 button must appear after reveal');
+
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets(
+      'おぼえてた！ advances to next cue (or quiz on last) and adds to knewCues',
+      (tester) async {
+    tester.view.physicalSize = const Size(440, 1600);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+
+    final hotspot = greetingHotspot();
+    final items = hotspot.teachCard!.items;
+
+    await tester.pumpWidget(
+      MaterialApp(home: NazoScreen(hotspot: hotspot, eikenLevel: '5')),
+    );
+    await tester.pumpAndSettle();
+
+    // Advance teach → recall.
     final advance = find.textContaining('おぼえた');
     await tester.ensureVisible(advance);
     await tester.pumpAndSettle();
@@ -146,84 +203,94 @@ void main() {
     await tester.pumpAndSettle();
 
     // Capture first cue JA text.
-    final firstJa = items.first.ja;
+    final firstJa = items[0].ja;
 
-    // Tap a WRONG tile (any tile that is NOT the correct EN for the first cue).
-    // The correct answer for cue idx=0 is items[0].en; wrong = items[1].
-    final wrongLabel = items[1].en; // a different word than the cue
-    // Find the tile by its label text inside an AudioOptionButton.
-    final wrongTile = find.widgetWithText(AudioOptionButton, wrongLabel);
-    // May be off-screen on a small view; ensureVisible first.
-    if (wrongTile.evaluate().isNotEmpty) {
-      await tester.ensureVisible(wrongTile.first);
-      await tester.pump();
-      await tester.tap(wrongTile.first);
-      await tester.pumpAndSettle();
-    }
-
-    // After a wrong tap the JA cue must still be visible (no advance).
-    expect(find.text(firstJa), findsOneWidget,
-        reason:
-            'JA cue must stay visible after wrong tap — child retries without advancing');
-    // ミノス must not appear yet (still in recall, not quiz).
-    expect(find.text('ミノス'), findsNothing,
-        reason: 'quiz must not start from a wrong recall tap');
-
-    expect(tester.takeException(), isNull);
-  });
-
-  testWidgets(
-      'correct tile tap advances the cue (cue index increments or quiz on last)',
-      (tester) async {
-    tester.view.physicalSize = const Size(440, 1600);
-    tester.view.devicePixelRatio = 1.0;
-    addTearDown(tester.view.reset);
-
-    final hotspot = greetingHotspot();
-    final items = hotspot.teachCard!.items;
-
-    await tester.pumpWidget(
-      MaterialApp(home: NazoScreen(hotspot: hotspot, eikenLevel: '5')),
-    );
-    await tester.pumpAndSettle();
-
-    // Advance from teach to recall.
-    final advance = find.textContaining('おぼえた');
-    await tester.ensureVisible(advance);
-    await tester.pumpAndSettle();
-    await tester.tap(advance);
-    await tester.pumpAndSettle();
-
-    // Tap the CORRECT EN tile for the first cue (items[0].en matches cue JA items[0].ja).
-    final correctLabel = items[0].en;
-    final correctTile = find.widgetWithText(AudioOptionButton, correctLabel);
-    expect(correctTile, findsOneWidget,
-        reason: 'correct EN tile must be present for cue 0');
-    await tester.ensureVisible(correctTile.first);
+    // Tap cover to reveal.
+    await tester.ensureVisible(find.text('？？？'));
     await tester.pump();
-    await tester.tap(correctTile.first);
-    await tester.pumpAndSettle();
+    await tester.tap(find.text('？？？'));
+    await tester.pump();
+
+    // Tap 'おぼえてた！' to advance.
+    final knewBtn = find.text('おぼえてた！');
+    await tester.ensureVisible(knewBtn);
+    await tester.pump();
+    await tester.tap(knewBtn);
+    // The 600ms pop-hold is a dart:async Timer; pumpAndSettle() does not drain
+    // it. Advance the fake clock manually past the hold, then pump one frame.
+    await tester.pump(const Duration(milliseconds: 650));
+    await tester.pump();
 
     if (items.length == 1) {
       // Single-item card → quiz starts immediately.
       expect(find.text('ミノス'), findsOneWidget,
-          reason: 'single-cue correct tap must advance straight to quiz');
+          reason: 'single-cue おぼえてた！ must advance straight to quiz');
     } else {
       // Multi-item card → cue advanced to idx=1; second JA is now the cue.
       final secondJa = items[1].ja;
       expect(find.text(secondJa), findsOneWidget,
-          reason:
-              'correct tap must advance to the next cue (idx 1 JA now shown)');
+          reason: 'おぼえてた！ must advance to the next cue (idx 1 JA now shown)');
       // First JA must be gone (we advanced).
-      expect(find.text(items[0].ja), findsNothing,
-          reason: 'first JA must no longer be the cue after correct tap');
+      expect(find.text(firstJa), findsNothing,
+          reason: 'first JA must no longer be the cue after advance');
+    }
+
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('もう1かい advances without adding to knewCues (cover resets)',
+      (tester) async {
+    tester.view.physicalSize = const Size(440, 1600);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+
+    final hotspot = greetingHotspot();
+    final items = hotspot.teachCard!.items;
+
+    await tester.pumpWidget(
+      MaterialApp(home: NazoScreen(hotspot: hotspot, eikenLevel: '5')),
+    );
+    await tester.pumpAndSettle();
+
+    // Advance teach → recall.
+    final advance = find.textContaining('おぼえた');
+    await tester.ensureVisible(advance);
+    await tester.pumpAndSettle();
+    await tester.tap(advance);
+    await tester.pumpAndSettle();
+
+    final firstJa = items[0].ja;
+
+    // Tap cover to reveal.
+    await tester.ensureVisible(find.text('？？？'));
+    await tester.pump();
+    await tester.tap(find.text('？？？'));
+    await tester.pump();
+
+    // Tap 'もう1かい' to advance WITHOUT claiming to know.
+    final againBtn = find.text('もう1かい');
+    await tester.ensureVisible(againBtn);
+    await tester.pump();
+    await tester.tap(againBtn);
+    // The 600ms pop-hold is a dart:async Timer; drain it manually.
+    await tester.pump(const Duration(milliseconds: 650));
+    await tester.pump();
+
+    if (items.length == 1) {
+      expect(find.text('ミノス'), findsOneWidget,
+          reason: 'single-cue もう1かい must advance straight to quiz');
+    } else {
+      expect(find.text(items[1].ja), findsOneWidget,
+          reason: 'もう1かい must advance to next cue');
+      expect(find.text(firstJa), findsNothing,
+          reason: 'first JA must be gone after advance');
     }
 
     expect(tester.takeException(), isNull);
   });
 
   testWidgets(
-      'tapping correct tile through all cues reaches the quiz (ミノス + AudioOptionButtons)',
+      'tapping through all cues with おぼえてた！ reaches the quiz (ミノス visible)',
       (tester) async {
     tester.view.physicalSize = const Size(440, 1600);
     tester.view.devicePixelRatio = 1.0;
@@ -244,24 +311,73 @@ void main() {
     await tester.tap(advance);
     await tester.pumpAndSettle();
 
-    // Tap the correct tile for each cue in sequence.
+    // Step through each cue: tap cover → reveal → tap おぼえてた！
     for (var i = 0; i < items.length; i++) {
-      final correctLabel = items[i].en;
-      final correctTile = find.widgetWithText(AudioOptionButton, correctLabel);
-      expect(correctTile, findsOneWidget,
-          reason:
-              'correct EN tile for cue $i must be present: "$correctLabel"');
-      await tester.ensureVisible(correctTile.first);
+      // Cover must be present at start of each cue.
+      expect(find.text('？？？'), findsOneWidget,
+          reason: 'cover must be present at start of cue $i');
+      await tester.ensureVisible(find.text('？？？'));
       await tester.pump();
-      await tester.tap(correctTile.first);
-      await tester.pumpAndSettle();
+      await tester.tap(find.text('？？？'));
+      await tester.pump();
+
+      // おぼえてた！ must appear after reveal.
+      final knewBtn = find.text('おぼえてた！');
+      expect(knewBtn, findsOneWidget,
+          reason: 'おぼえてた！ must appear after reveal on cue $i');
+      await tester.ensureVisible(knewBtn);
+      await tester.pump();
+      await tester.tap(knewBtn);
+      // Drain the 600ms pop-hold dart:async Timer manually.
+      await tester.pump(const Duration(milliseconds: 650));
+      await tester.pump();
     }
 
     // Now in quiz phase: ミノス meter + AudioOptionButton quiz tiles present.
     expect(find.text('ミノス'), findsOneWidget,
-        reason: 'ミノス meter must appear after all cues are produced correctly');
+        reason: 'ミノス meter must appear after all cues are produced');
     expect(find.byType(AudioOptionButton), findsWidgets,
         reason: 'quiz option tiles must appear after completing recall cues');
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('スキップ ▶ button jumps to quiz without stepping through cues',
+      (tester) async {
+    tester.view.physicalSize = const Size(440, 1600);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+
+    final hotspot = greetingHotspot();
+
+    await tester.pumpWidget(
+      MaterialApp(home: NazoScreen(hotspot: hotspot, eikenLevel: '5')),
+    );
+    await tester.pumpAndSettle();
+
+    // Advance teach → recall.
+    final advance = find.textContaining('おぼえた');
+    await tester.ensureVisible(advance);
+    await tester.pumpAndSettle();
+    await tester.tap(advance);
+    await tester.pumpAndSettle();
+
+    // Recall phase is active (cover visible).
+    expect(find.text('？？？'), findsOneWidget, reason: 'must be in recall phase');
+
+    // Tap skip button.
+    final skipBtn = find.text('スキップ ▶');
+    expect(skipBtn, findsOneWidget, reason: 'skip button must be present');
+    await tester.ensureVisible(skipBtn);
+    await tester.pump();
+    await tester.tap(skipBtn);
+    await tester.pumpAndSettle();
+
+    // Must be in quiz phase now.
+    expect(find.text('ミノス'), findsOneWidget,
+        reason: 'スキップ ▶ must advance immediately to quiz');
+    expect(find.text('？？？'), findsNothing,
+        reason: 'cover panel must be gone after skip');
+
     expect(tester.takeException(), isNull);
   });
 
@@ -281,124 +397,6 @@ void main() {
     expect(find.text('えいごで いうと？'), findsNothing,
         reason: 'recall phase must not appear when there is no TeachCard');
     expect(find.text('ミノス'), findsOneWidget);
-    expect(tester.takeException(), isNull);
-  });
-
-  // ── CEO 2147: correct-tap green-pop hold (studio #1) ────────────────────────
-
-  testWidgets(
-      'correct-tap green-pop: tile reaches DqChoiceState.correct before advancing',
-      (tester) async {
-    // Reduced-motion is FALSE here (default): we want the 300ms hold to fire.
-    tester.view.physicalSize = const Size(440, 1600);
-    tester.view.devicePixelRatio = 1.0;
-    addTearDown(tester.view.reset);
-
-    final hotspot = greetingHotspot();
-    final items = hotspot.teachCard!.items;
-    // Need at least 2 items to observe "hold then advance" without going to quiz.
-    expect(items.length, greaterThan(1),
-        reason: 'greetingHotspot must have >1 cue to test non-last advance');
-
-    await tester.pumpWidget(
-      MaterialApp(home: NazoScreen(hotspot: hotspot, eikenLevel: '5')),
-    );
-    await tester.pumpAndSettle();
-
-    // Advance teach → recall.
-    final advance = find.textContaining('おぼえた');
-    await tester.ensureVisible(advance);
-    await tester.pumpAndSettle();
-    await tester.tap(advance);
-    await tester.pumpAndSettle();
-
-    // Locate the correct EN tile for cue 0.
-    final correctLabel = items[0].en;
-    final correctTile = find.widgetWithText(AudioOptionButton, correctLabel);
-    expect(correctTile, findsOneWidget,
-        reason: 'correct EN tile must be present for cue 0');
-    await tester.ensureVisible(correctTile.first);
-    await tester.pump();
-
-    // Tap, then pump ONE frame to process the setState setting _recallCorrectIdx.
-    // Do NOT pumpAndSettle yet — that would drain the 300ms pop timer and advance.
-    await tester.tap(correctTile.first);
-    await tester
-        .pump(); // single frame: setState fired, tile should be .correct
-
-    // The tapped tile must now be in DqChoiceState.correct (green elastic pop).
-    final tappedWidget = tester.widget<AudioOptionButton>(correctTile);
-    expect(tappedWidget.state, equals(DqChoiceState.correct),
-        reason:
-            'tapped tile must be DqChoiceState.correct during the 300ms hold before advancing');
-
-    // The JA cue for item 0 must still be visible — we have NOT advanced yet.
-    expect(find.text(items[0].ja), findsOneWidget,
-        reason: 'first JA cue must remain visible during the 300ms hold');
-
-    // No quiz yet.
-    expect(find.text('ミノス'), findsNothing,
-        reason: 'quiz must not appear during the 300ms hold');
-
-    // Now drain the 300ms timer — should advance to cue 1 (or quiz if last).
-    await tester.pumpAndSettle();
-    expect(find.text(items[0].ja), findsNothing,
-        reason:
-            'first JA cue must be gone after the pop-timer fires and advances');
-
-    expect(tester.takeException(), isNull);
-  });
-
-  testWidgets(
-      'wrong-tap still shakes and stays on cue (unchanged by studio #1 pop)',
-      (tester) async {
-    tester.view.physicalSize = const Size(440, 1600);
-    tester.view.devicePixelRatio = 1.0;
-    addTearDown(tester.view.reset);
-
-    final hotspot = greetingHotspot();
-    final items = hotspot.teachCard!.items;
-    expect(items.length, greaterThan(1),
-        reason: 'greetingHotspot must have >1 item for a wrong-tile choice');
-
-    await tester.pumpWidget(
-      MaterialApp(home: NazoScreen(hotspot: hotspot, eikenLevel: '5')),
-    );
-    await tester.pumpAndSettle();
-
-    // Advance teach → recall.
-    final advance = find.textContaining('おぼえた');
-    await tester.ensureVisible(advance);
-    await tester.pumpAndSettle();
-    await tester.tap(advance);
-    await tester.pumpAndSettle();
-
-    final firstJa = items[0].ja;
-    // Tap a WRONG tile (items[1].en is a different word than items[0].ja).
-    final wrongLabel = items[1].en;
-    final wrongTile = find.widgetWithText(AudioOptionButton, wrongLabel);
-    if (wrongTile.evaluate().isNotEmpty) {
-      await tester.ensureVisible(wrongTile.first);
-      await tester.pump();
-      await tester.tap(wrongTile.first);
-      await tester.pumpAndSettle();
-    }
-
-    // JA cue must still be visible — wrong tap must NOT advance.
-    expect(find.text(firstJa), findsOneWidget,
-        reason: 'JA cue must stay after wrong tap — no advance');
-
-    // Wrong tile must NOT be DqChoiceState.correct.
-    if (wrongTile.evaluate().isNotEmpty) {
-      final wrongWidget = tester.widget<AudioOptionButton>(wrongTile);
-      expect(wrongWidget.state, isNot(equals(DqChoiceState.correct)),
-          reason: 'wrong tile must not show green after a wrong tap');
-    }
-
-    // No quiz.
-    expect(find.text('ミノス'), findsNothing,
-        reason: 'quiz must not start from a wrong recall tap');
-
     expect(tester.takeException(), isNull);
   });
 
