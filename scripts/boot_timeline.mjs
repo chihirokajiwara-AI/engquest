@@ -122,9 +122,15 @@ for (const m of marks) {
   mi++;
 }
 const titleMs = await titleP;
-// Whether the very first interactive screen is the TITLE or the PROLOGUE:
-const titleVisible = await hasLabel('はじめる');
+// Classify the FIRST interactive screen by UNIQUE needles (NOT 'はじめる' — the
+// home hub has its own start CTA containing はじめる, which false-positives as
+// "title"). The title screen uniquely shows 'つづきから / Continue'; the prologue
+// uniquely shows 'きいてみよう'; neither ⟹ the home hub.
+const titleVisible = await hasLabel('つづきから');
 const prologueVisibleEarly = await hasLabel(prologueNeedle);
+const firstScreen = titleVisible ? 'TITLE (つづきから present)'
+  : prologueVisibleEarly ? 'PROLOGUE (title SKIPPED)'
+  : 'HOME / other (no title, no prologue)';
 
 // If the title is present, tap はじめる and measure the cross-fade → prologue.
 let tapTitleAt = -1, prologueMs = -1;
@@ -145,7 +151,7 @@ const storage = await page.evaluate(() => {
 console.log(`  engine boot (placeholder)      : ${engineMs}ms`);
 console.log(`  title interactive (はじめる)     : ${titleMs}ms  visible=${titleVisible}`);
 console.log(`  prologue CTA early (きいてみよう) : earlyVisible=${prologueVisibleEarly}`);
-console.log(`  FIRST SCREEN                   : ${titleVisible ? 'TITLE (はじめる present)' : (prologueVisibleEarly ? 'PROLOGUE (title SKIPPED)' : 'unknown')}`);
+console.log(`  FIRST SCREEN                   : ${firstScreen}`);
 if (tapTitleAt >= 0) console.log(`  tapped はじめる @${tapTitleAt}ms → prologue painted @${prologueMs >= 0 ? prologueMs + 'ms' : 'NOT FOUND'} (Δ ${prologueMs >= 0 ? prologueMs - tapTitleAt : '?'}ms cross-fade)`);
 console.log(`  jsErrors=${jsErrors.length}`); jsErrors.slice(0, 5).forEach((e) => console.log('    ' + e));
 console.log('  --- screenshot timeline ---'); shots.forEach((s) => console.log('  ' + s));
