@@ -378,7 +378,12 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
     // their own pace. Auto-advance stays for story-only reveals, where it carries
     // a non-reader to the colour-restoration without stranding them on a read.
     if (_step.onCorrectJa != null) return;
-    _finishTimer = Timer(const Duration(milliseconds: 1400), () {
+    // 2400ms (was 1400): the gold burst peaks ~650-1100ms post-tap, so 1400ms
+    // auto-popped the screen before a young reader could register the win AND read
+    // the 「ことばがひびいた」/why-correct reveal. 2400ms leaves a ~1s read window
+    // after the burst peak before auto-advance (game-studio rank-2; child can also
+    // tap 「ナゾ、解けた！」 to advance sooner). onCorrectJa ナゾ still suppress auto-advance.
+    _finishTimer = Timer(const Duration(milliseconds: 2400), () {
       if (mounted) _finish();
     });
   }
@@ -515,6 +520,17 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
       contentMaxWidth: 600, // #144: centre on tablet, full-width on phone
       child: Stack(
         children: [
+          // Solve climax (game-studio #2): the gold burst renders BEHIND the
+          // content column (first Stack child) — a glow behind the teaching
+          // reveal / 「ナゾ、解けた！」, not a full-screen layer ON TOP of them. The
+          // celebration now PUNCTUATES the lesson instead of burying it during the
+          // read window (NN/G animation + Vlambeer juice; 12-expert studio rank-2).
+          // It still sits above the scene bg (DqScene is outside this Stack).
+          // Reduced-motion → none.
+          if (_burstReady && !prefersReducedMotion(context))
+            const Positioned.fill(
+              child: IgnorePointer(child: _SolveBurst()),
+            ),
           SafeArea(
             // FIX 2: add bottom padding so the last answer option clears the
             // safe-area / home-indicator bar and never gets clipped.
@@ -703,16 +719,6 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
               ),
             ),
           ),
-          // Solve climax (game-studio director's #1): the correct answer is the
-          // game's most frequent core verb, but it used to land as a static
-          // reveal ("nothing moves" — the 6yo playtester's "broken button"). A
-          // one-shot full-screen gold burst makes the win VISCERAL. The teaching
-          // reveal + 「ナゾ、解けた！」 button stay (a child must read why it was right),
-          // so the burst celebrates without skipping the lesson. Reduced-motion → none.
-          if (_burstReady && !prefersReducedMotion(context))
-            const Positioned.fill(
-              child: IgnorePointer(child: _SolveBurst()),
-            ),
         ],
       ),
     );
