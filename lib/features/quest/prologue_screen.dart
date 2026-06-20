@@ -17,8 +17,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../core/audio/audio_cue_service.dart';
+import '../../core/sound/sound_service.dart';
 import 'ui/dq_ui.dart';
 
 class _Panel {
@@ -111,6 +113,7 @@ class PrologueScreen extends StatefulWidget {
 class _PrologueScreenState extends State<PrologueScreen>
     with SingleTickerProviderStateMixin {
   final _cue = AudioCueService();
+  final _sound = SoundService();
   late int _index = widget.startIndex.clamp(0, _panels.length - 1);
 
   // ── Deduction beat state ──────────────────────────────────────────────────
@@ -230,6 +233,12 @@ class _PrologueScreenState extends State<PrologueScreen>
     });
     _armIdle();
     if (isCorrect) {
+      // Reward the payoff (the opening's emotional core — knowing one English word
+      // restores the world). It was previously silent: only the re-spoken word +
+      // visual bloom, no chime. Matches the nazo correct-answer cue. Wrong taps
+      // stay errorless (gentle shake + re-speak, no scold) — no sound here.
+      _sound.playCorrect();
+      HapticFeedback.lightImpact();
       // Brief hold so the child sees the green pop + colour bloom, then advance.
       Future.delayed(const Duration(milliseconds: 900), () {
         if (!mounted) return;
