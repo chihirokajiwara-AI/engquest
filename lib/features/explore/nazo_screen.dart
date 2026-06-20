@@ -148,13 +148,20 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
   // These stay struck-out (DqChoiceState.wrong) for the life of the question
   // (#113 re-score #2). Reset per ナゾ in _finish.
   final Set<int> _triedWrong = {};
-  // Choreographed reward (studio #1): on a correct answer the learning text shows
-  // FIRST (_revealed), then after a ~550ms read window the gold burst + continue
-  // fire (_burstReady) — so the climax PUNCTUATES the answer instead of burying it
-  // during the form-meaning encoding window. Auto-advance (~1.4s) carries non-
-  // readers past the unreadable CTA. Reduced-motion collapses to the old instant.
+  // Choreographed reward (studio #1 + panel game-feel): on a correct answer the
+  // learning text shows FIRST (_revealed). Two SEPARATE beats then follow:
+  //  • _burstReady (~90ms) — the gold burst glow. It fires almost immediately so
+  //    the celebration is felt as ONE kinetic moment with the tap (game-feel: a
+  //    550ms gap read as a freeze to a 6yo). Safe to fire early because the burst
+  //    sits BEHIND the content (studio #2), so it glows behind the lesson, never
+  //    buries it.
+  //  • _readWindowDone (~550ms) — gates the 「ナゾ、解けた！」 CTA + auto-advance, so a
+  //    child still cannot skip past reading WHY it was right before the window.
+  // Reduced-motion collapses both to the old instant.
   bool _burstReady = false;
+  bool _readWindowDone = false;
   Timer? _burstTimer;
+  Timer? _readWindowTimer;
   Timer? _finishTimer;
   bool _finished = false;
   // Teach at the error moment (studio #3): a wrong tap briefly surfaces the tapped
@@ -255,6 +262,7 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
   @override
   void dispose() {
     _burstTimer?.cancel();
+    _readWindowTimer?.cancel();
     _finishTimer?.cancel();
     _wrongMeaningTimer?.cancel();
     _recallTimer?.cancel();
@@ -313,12 +321,23 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
     // appear; the moment also auto-advances so a non-reader is carried to the
     // restoration. Reduced-motion shows everything at once (old behaviour).
     if (prefersReducedMotion(context)) {
-      setState(() => _burstReady = true);
+      setState(() {
+        _burstReady = true;
+        _readWindowDone = true;
+      });
       _scheduleAutoFinish();
     } else {
-      _burstTimer = Timer(const Duration(milliseconds: 550), () {
+      // Burst glow fires almost immediately so the win is felt with the tap
+      // (panel game-feel): it blooms BEHIND the lesson, never burying it.
+      _burstTimer = Timer(const Duration(milliseconds: 90), () {
         if (!mounted) return;
         setState(() => _burstReady = true);
+      });
+      // The read-window CTA + auto-advance stay gated to ~550ms so a child can't
+      // skip past the WHY before reading it.
+      _readWindowTimer = Timer(const Duration(milliseconds: 550), () {
+        if (!mounted) return;
+        setState(() => _readWindowDone = true);
         _scheduleAutoFinish();
       });
     }
@@ -454,6 +473,7 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
     _finished = true;
     _triedWrong.clear(); // wrong-scars are per-ナゾ (#113 re-score #2)
     _burstTimer?.cancel();
+    _readWindowTimer?.cancel();
     _finishTimer?.cancel();
     final earned = _minos.earn();
     // Build the knewWords set from the cue indices produced correctly on the
@@ -715,10 +735,11 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
                                   ),
                                 ),
                                 const SizedBox(height: 16),
-                                // Gated on _burstReady (after the read window) so a child
-                                // cannot skip past reading WHY it was right. Auto-advance also
-                                // fires, so this is an optional early-skip, not the only exit.
-                                if (_burstReady)
+                                // Gated on _readWindowDone (~550ms) so a child cannot skip
+                                // past reading WHY it was right — even though the burst glow
+                                // already fired at ~90ms. Auto-advance also fires, so this is
+                                // an optional early-skip, not the only exit.
+                                if (_readWindowDone)
                                   DqButton(
                                       label: '▶ ナゾ、解（と）けた！', onTap: _finish),
                               ] else ...[
@@ -1842,7 +1863,10 @@ class _SolveBurstPainter extends CustomPainter {
     // re-focuses on it after the read window — game-studio game-feel + pedagogy
     // experts, team #4). Radius/length still grow with t (outward expansion); only
     // alpha uses the ramp-then-fade envelope.
-    final env = (t < 0.18 ? (t / 0.18) : ((1.0 - t) / 0.82)).clamp(0.0, 1.0);
+    // Front-loaded envelope (panel game-feel): ramp to peak over the first 8% so
+    // the burst is bright as it blooms (with the ~90ms onset it lands WITH the
+    // tap), then ease out over the long tail.
+    final env = (t < 0.08 ? (t / 0.08) : ((1.0 - t) / 0.92)).clamp(0.0, 1.0);
     final fade = env;
 
     // CENTRE DEADZONE (run-3 game-feel + learning-science experts): _SolveBurst

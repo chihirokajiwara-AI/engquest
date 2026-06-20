@@ -340,6 +340,41 @@ void main() {
               'feedback at the arousal spike), not only a generic stamp');
     });
 
+    testWidgets(
+        'read-window CTA stays gated to ~550ms even though the burst fires early',
+        (t) async {
+      // Panel game-feel split (#194): the burst glow now fires at ~90ms so the win
+      // feels connected to the tap, but the 「ナゾ、解けた！」 CTA must STILL wait for
+      // the ~550ms read window so a child cannot skip past the WHY. Lock that the
+      // CTA is absent shortly after the tap and present after the window.
+      t.view.physicalSize = const Size(440, 1600);
+      t.view.devicePixelRatio = 1.0;
+      addTearDown(t.view.reset);
+      final hotspot = kTown5Scene.hotspots
+          .firstWhere((h) => h.kind == HotspotKind.npc && h.step != null);
+      await t.pumpWidget(MaterialApp(
+        home: NazoScreen(hotspot: hotspot, eikenLevel: '5'),
+      ));
+      await t.pump(const Duration(milliseconds: 400));
+      final proceed = find.textContaining('おぼえた');
+      if (proceed.evaluate().isNotEmpty) {
+        await t.ensureVisible(proceed.first);
+        await t.pump();
+        await t.tap(proceed.first);
+        await t.pump(const Duration(milliseconds: 300));
+      }
+      await _skipThroughRecall(t);
+      await t.tap(find.byType(AudioOptionButton).at(correctIdxOf5kuNpc()));
+      // Shortly after the tap: burst window open, but the CTA must NOT be live yet.
+      await t.pump(const Duration(milliseconds: 150));
+      expect(find.textContaining('ナゾ、解'), findsNothing,
+          reason: 'the read-window CTA must stay gated until ~550ms');
+      // After the read window: the CTA appears.
+      await t.pump(const Duration(milliseconds: 500));
+      expect(find.textContaining('ナゾ、解'), findsOneWidget,
+          reason: 'the CTA must appear once the ~550ms read window elapses');
+    });
+
     testWidgets('wrong then correct → firstTryCorrect == false (no inflation)',
         (t) async {
       final c = correctIdxOf5kuNpc();
