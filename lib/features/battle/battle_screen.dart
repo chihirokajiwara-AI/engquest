@@ -303,12 +303,18 @@ class BattleScreen extends StatefulWidget {
   /// Eiken grade to study (e.g. "5", "4", "3", "pre2"). Defaults to "5".
   final String eikenGrade;
 
+  /// Word audio service — injected in widget tests with a pre-seeded availability
+  /// cache so the proactive speaker state can be exercised without real TTS/asset
+  /// I/O. Null → production WordAudioPlayerService.
+  final WordAudioPlayerService? wordAudioService;
+
   const BattleScreen({
     super.key,
     this.repository,
     this.vocabRepo,
     this.childAge = 8,
     this.eikenGrade = '5',
+    this.wordAudioService,
   });
 
   /// Computes elapsed session time in whole minutes, rounded to the nearest
@@ -337,7 +343,7 @@ class _BattleScreenState extends State<BattleScreen>
   // ── FSRS engine + persistence ──────────────────────────────────────────────
   final FSRSAlgorithm _fsrs = FSRSAlgorithm();
   final _sound = SoundService();
-  final _wordAudio = WordAudioPlayerService();
+  late final WordAudioPlayerService _wordAudio;
   late final FsrsCardRepository _repository;
   final _auth = AuthService();
   late final VocabRepository _vocabRepo;
@@ -441,6 +447,8 @@ class _BattleScreenState extends State<BattleScreen>
     // Resolve repository: injected (tests) or production Firestore
     _repository = widget.repository ?? FirestoreFsrsCardRepository();
     _vocabRepo = widget.vocabRepo ?? VocabRepository();
+    // Resolve word audio: injected (tests with pre-seeded cache) or production.
+    _wordAudio = widget.wordAudioService ?? WordAudioPlayerService();
     _flipCtrl = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 400),
@@ -1326,19 +1334,22 @@ class _BattleScreenState extends State<BattleScreen>
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 8),
-          // Speaker — tap to hear pronunciation. Reflects the audio state so an
-          // unavailable word is an HONEST dimmed state, not a silent dead tap.
-          // (Verified 2026-06-19: the 5級 deck is 600 words but only ~300 have a
-          // bundled clip and the Google-TTS fallback is unconfigured, so ~half
-          // the deck has no audio — and a 6yo non-reader, for whom 🔊 is the only
-          // way to learn pronunciation, otherwise taps a button that does
-          // nothing with no feedback. Missing audio itself is CDN-gated; this is
-          // the honest-degradation half.)
+          // Speaker — tap to hear pronunciation. Proactively absent/dimmed
+          // when the word is KNOWN to have no bundled clip, BEFORE any tap, so
+          // a 6yo non-reader never presses a live-looking button that does
+          // nothing (#175 diverse-values council binding verdict).
+          //
+          // Two-layer honesty:
+          //   Layer 1 (proactive): hasAudioSync() queries the prefetch cache +
+          //   manifest. Words NOT in the manifest (eiken5_301..600, ~half the
+          //   5級 deck) are silently absent — shown dimmed/disabled up front.
+          //   Layer 2 (reactive, defence-in-depth): the existing error state
+          //   dims it if a supposedly-available clip fails at playback time.
           ListenableBuilder(
             listenable: _wordAudio,
             builder: (context, _) {
-              // Only reflect state for THIS card's word — a stale error from the
-              // previous word must not dim the next word's fresh speaker.
+              // Only reflect playback state for THIS card's word — a stale
+              // error from the previous word must not carry over.
               final isThis = _wordAudio.currentVocabId == vocab.id;
               final st = isThis ? _wordAudio.state : WordAudioState.idle;
               if (st == WordAudioState.loading) {
@@ -1352,14 +1363,34 @@ class _BattleScreenState extends State<BattleScreen>
                   ),
                 );
               }
-              final unavailable = st == WordAudioState.error;
+              // Proactive check: is audio known to be unavailable for this
+              // word?  Checked BEFORE any tap so the UI is honest on first
+              // render — not only after a failed playback attempt (reactive).
+              final knownAbsent = !_wordAudio.hasAudioSync(vocab.id);
+              // Reactive fallback: error state from a failed playback attempt.
+              final playbackFailed = st == WordAudioState.error;
+              final unavailable = knownAbsent || playbackFailed;
+              if (unavailable) {
+                // Absent/dimmed affordance: dim volume-off icon + ひらがな
+                // tooltip. Tapping is a no-op (onPressed: null = disabled)
+                // so the child can't tap a button that does nothing.
+                return Tooltip(
+                  message: 'おとは じゅんびちゅう',
+                  child: Opacity(
+                    opacity: 0.35,
+                    child: const Icon(
+                      Icons.volume_off_rounded,
+                      size: 28,
+                      color: dqGoldDeep,
+                    ),
+                  ),
+                );
+              }
               return IconButton(
-                icon: Icon(unavailable
-                    ? Icons.volume_off_rounded
-                    : Icons.volume_up_rounded),
+                icon: const Icon(Icons.volume_up_rounded),
                 iconSize: 28,
-                color: unavailable ? dqGoldDeep.withAlpha(120) : dqGold,
-                tooltip: unavailable ? 'おとは じゅんびちゅう' : '発音を聞く',
+                color: dqGold,
+                tooltip: '発音を聞く',
                 onPressed: () {
                   WordAudioAutoPlay.trigger(
                     player: _wordAudio,

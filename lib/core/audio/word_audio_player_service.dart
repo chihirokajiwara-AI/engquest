@@ -42,6 +42,24 @@ class WordAudioPlayerService extends ChangeNotifier {
       : _tts = ttsService ?? TtsService(),
         _injectedPlayer = audioPlayer;
 
+  /// Test seam: pre-populate the session cache with known availability so that
+  /// [hasAudioSync] can be exercised without a real prefetchBatch roundtrip.
+  /// [availability] maps vocabId → true (has audio) / false (no audio).
+  @visibleForTesting
+  void seedCacheForTest(Map<String, bool> availability) {
+    for (final entry in availability.entries) {
+      _sessionCache[entry.key] = TtsAudioResult(
+        vocabId: entry.key,
+        word: entry.key,
+        audioBytes: entry.value ? Uint8List(0) : null,
+        source: entry.value
+            ? TtsAudioSource.bundledAsset
+            : TtsAudioSource.unavailable,
+        error: entry.value ? null : 'test: no audio',
+      );
+    }
+  }
+
   // The Voice-channel mute lives in [AudioMute] (shared with AudioCueService)
   // so one Settings toggle silences every voice/word-audio path.
 
@@ -50,6 +68,34 @@ class WordAudioPlayerService extends ChangeNotifier {
   String? get lastError => _lastError;
   bool get isPlaying => _state == WordAudioState.playing;
   bool get isLoading => _state == WordAudioState.loading;
+
+  /// Proactive audio-availability check — answers BEFORE the first tap so the
+  /// UI can render an honest affordance (absent/dimmed) instead of a silent
+  /// live button.  Returns true if the word is KNOWN to have a bundled clip;
+  /// false if it is KNOWN to lack one; true as a safe default when unknown
+  /// (so we never hide audio that actually works).
+  ///
+  /// Priority:
+  ///   1. Session-prefetch cache hit (most accurate — post-prefetchSession).
+  ///   2. TTS manifest lookup (the audio_manifest.json loaded at initialize).
+  ///   3. True (safe default: show a live speaker rather than hiding real audio).
+  ///
+  /// This method is intentionally SYNCHRONOUS so it can be called directly in
+  /// `build` without an await/FutureBuilder layer.  prefetchSession + initialize
+  /// both run before the first card is rendered, so by the time the child sees
+  /// a card the cache + manifest are already warm.
+  bool hasAudioSync(String vocabId) {
+    // 1. If the word was prefetched, use the cached availability result.
+    final cached = _sessionCache[vocabId];
+    if (cached != null) return cached.isAvailable;
+
+    // 2. Manifest knows which IDs have a bundled clip marked "ready".
+    final entry = _tts.manifest?.getById(vocabId);
+    if (entry != null) return entry.status == 'ready';
+
+    // 3. Unknown — assume present so we never suppress a working speaker.
+    return true;
+  }
 
   /// Initialize TTS service
   Future<void> initialize() async {
