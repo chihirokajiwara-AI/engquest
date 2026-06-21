@@ -514,7 +514,11 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
                             child: Text(
                               'れんしゅうすると、合格（ごうかく）まで あと どれくらいか'
                               ' わかるよ。タップして はじめよう！',
-                              style: dqText(size: 13, color: dqInk)
+                              // 6yo legibility floor (CEO 1889): this is the home
+                              // hub's primary readiness nudge — 13px (with inline
+                              // furigana shrinking further) was below the child
+                              // reading floor. Lift to 15 (R2-F12 real-render audit).
+                              style: dqText(size: 15, color: dqInk)
                                   .copyWith(height: 1.5),
                             ),
                           ),
