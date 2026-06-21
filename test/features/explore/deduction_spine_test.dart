@@ -58,9 +58,9 @@ const _teachCtaLabel = 'おぼえた！ ナゾへ ▶';
 /// Advance NazoScreen from teach phase (if present) through recall → quiz.
 ///
 /// Scrolls the teach CTA into view before tapping (the teach card can push it
-/// below the 600px test-viewport). Then pumps [kRecallGapSeconds + 2] seconds
-/// so the recall-gap timer auto-advances to quiz without needing correct tile
-/// taps (the timer fires _phase = quiz after kRecallGapSeconds ticks).
+/// below the 600px test-viewport). Then taps 'スキップ ▶' to jump straight to
+/// quiz (council verdict 2026-06-21: countdown timer removed, child advances
+/// per-cue via '「つぎ ▶」' or skips entire recall in one tap via スキップ ▶).
 /// If already on quiz (no teach CTA found), does nothing extra.
 Future<void> _advanceToQuizPhase(WidgetTester tester) async {
   final teachCta = find.text(_teachCtaLabel);
@@ -70,9 +70,14 @@ Future<void> _advanceToQuizPhase(WidgetTester tester) async {
     await tester.pump();
     await tester.tap(teachCta);
     await tester.pump();
-    // Advance past the recall-gap timer (kRecallGapSeconds = 8s default).
-    await tester.pump(const Duration(seconds: kRecallGapSeconds + 2));
-    await tester.pump();
+    // Skip the recall phase (スキップ ▶ cancels recall timers and goes to quiz).
+    final skipBtn = find.text('スキップ ▶');
+    if (skipBtn.evaluate().isNotEmpty) {
+      await tester.ensureVisible(skipBtn);
+      await tester.pump();
+      await tester.tap(skipBtn);
+      await tester.pumpAndSettle();
+    }
   }
 }
 

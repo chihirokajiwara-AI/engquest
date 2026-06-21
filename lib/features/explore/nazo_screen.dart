@@ -54,11 +54,17 @@ class NazoResult {
   /// already bought.
   final int hintsShown;
 
-  /// English strings the learner produced correctly on the FIRST tap during the
-  /// cued-production recall phase. Populated from [_NazoScreenState._knewCues]
-  /// (only first-tap correct cues are counted). Defaults to {} so existing callers
-  /// that do not consume this field compile unchanged. FSRS wiring is out-of-scope
-  /// for this change — the data is available for future integration.
+  /// English words the learner demonstrated objective mastery of — determined by
+  /// FIRST-TRY QUIZ CORRECTNESS, not self-reported recall.
+  ///
+  /// When the child answers the ナゾ quiz correctly on their very first attempt
+  /// ([firstTryCorrect] == true), the quiz's correct option EN string is added
+  /// here. This is the objective signal: a child who tapped through the recall
+  /// phase without really knowing but then got the quiz right on the first try is
+  /// still seeded — their retrieval was real at test-time. A wrong first try → not
+  /// seeded (no FSRS poisoning from overconfident self-report).
+  ///
+  /// Defaults to {} so existing callers compile unchanged.
   final Set<String> knewWords;
 
   const NazoResult({
@@ -79,11 +85,6 @@ class NazoResult {
 /// tokens in dq_ui.dart now resolve to dark navy/cream/gold. Const so it tree-shakes;
 /// flip to false to A/B back to the plain navy boxes (loses the framed craft).
 const bool kNazoWarmTheme = true;
-
-/// Retrieval-gap duration (seconds) between teach and quiz (game-studio director
-/// #1 — genuine cued-recall instead of recognition). Tunable here; the screen
-/// auto-advances to the quiz when the countdown completes (or the child skips).
-const int kRecallGapSeconds = 8;
 
 /// Three-phase state machine that replaces the old boolean [_teaching] flag.
 /// • [teach]  — show the TeachCard (teach-first, pre-quiz)
@@ -193,35 +194,23 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
   // options, so _firstAttempted/_firstTryCorrect cannot be set prematurely.
   late _NazoPhase _phase;
 
-  // Discrete recall-gap countdown: decrements once per second via a periodic
-  // Timer. kRecallGapSeconds → 0; at 0 fires _phase = _NazoPhase.quiz.
-  // A discrete per-second update (vs a continuous AnimationController) keeps
-  // pumpAndSettle() in tests stable — each Timer tick is one pump call, and
-  // after the last tick pumpAndSettle() sees no pending frames and returns.
-  // Null in reduced-motion mode (no auto-advance).
-  int _recallSecondsLeft = kRecallGapSeconds;
-
-  // Fires _phase = _NazoPhase.quiz after kRecallGapSeconds (real wall time).
-  // Not started in reduced-motion mode (no auto-advance, skip btn only).
+  // Recall timer: no longer used for a draining countdown. Kept only as the
+  // timer slot used by _recallPopTimer's predecessor so dispose() stays clean.
+  // Set to null immediately; _recallPopTimer is the only active recall timer.
   Timer? _recallTimer;
 
-  // Cover-reveal cued-retrieval recall (studio #1 — replaces tile-grid):
+  // Cover-reveal cued-retrieval recall (council verdict 2026-06-21):
   // The child sees the JA cue LARGE + a masked '？？？' EN panel. One tap reveals
-  // the EN word; a two-button self-assessment row then appears:
-  //   'おぼえてた！' → adds cue idx to _knewCues (honest 合格率) + advances
-  //   'もう1かい'   → does NOT add to _knewCues + advances
-  // Always adds idx to _producedCues. advanceCue() resets _recallRevealed.
-  // The kRecallGapSeconds Timer stays as the switch-access escape hatch (8s).
+  // the EN word. A single neutral '「つぎ ▶」' button then advances to the next
+  // cue (or to quiz on the last cue). No self-assessment row — metacognitive
+  // self-grading is unreliable at age 6-9 and was poisoning FSRS.
+  // knewWords in NazoResult is now wired from QUIZ first-try correctness.
   int _recallCueIdx = 0;
-  // _revealedCues kept for backward compat with callers; not used in cover-reveal.
-  final Set<int> _revealedCues = {};
-  final Set<int> _knewCues = {};
-  final Set<int> _producedCues = {};
   // Whether the current cue's EN word has been revealed (cover → reveal state).
   // Reset to false in advanceCue() per-cue branch.
   bool _recallRevealed = false;
-  // Pop-hold timer: after the child chooses, hold for ~600ms (feel of "I got it")
-  // before auto-advancing. Reduced-motion: instant advance (no hold).
+  // Pop-hold timer: after the child taps つぎ ▶, hold for ~600ms (feel of "I got
+  // it") before auto-advancing. Reduced-motion: instant advance (no hold).
   Timer? _recallPopTimer;
 
   QuestStep get _step => widget.hotspot.step!;
@@ -497,15 +486,14 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
     _readWindowTimer?.cancel();
     _finishTimer?.cancel();
     final earned = _minos.earn();
-    // Build the knewWords set from the cue indices produced correctly on the
-    // FIRST tap. _knewCues may be empty when recall was skipped via the timer.
-    final card = _teachCard;
-    final knewWords = <String>{};
-    if (card != null) {
-      for (final idx in _knewCues) {
-        if (idx < card.items.length) knewWords.add(card.items[idx].en);
-      }
-    }
+    // knewWords: driven by OBJECTIVE quiz first-try correctness, NOT by
+    // recall self-report (council verdict 2026-06-21 — metacognitive
+    // self-grading at age 6-9 was silently poisoning the FSRS deck).
+    // When the child answers the quiz on the very first tap, seed the
+    // correct option's EN label. Otherwise seed nothing.
+    final knewWords = _firstTryCorrect
+        ? {_step.options[_step.correctIndex].label}
+        : const <String>{};
     Navigator.of(context).pop(NazoResult(
       solved: true,
       minosEarned: earned,
@@ -829,9 +817,11 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
 
   // ── Recall gap ────────────────────────────────────────────────────────────────
 
-  /// Transitions from the teach phase to the recall phase and starts the
-  /// countdown (unless the OS requests reduced motion, in which case no
-  /// auto-advance fires — the child taps 「つぎへ ▶」 to proceed through each cue).
+  /// Transitions from the teach phase to the recall phase.
+  ///
+  /// Council verdict 2026-06-21: the freezing countdown ring is removed.
+  /// The child advances per-cue at their own pace via the 「つぎ ▶」 button;
+  /// スキップ ▶ jumps straight to quiz in ≤ 1 tap.
   ///
   /// If the TeachCard has no items (empty list), skip straight to quiz so an
   /// empty card cannot crash or strand the child in a blank recall screen.
@@ -841,59 +831,28 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
       setState(() => _phase = _NazoPhase.quiz);
       return;
     }
-    final reduceMotion = prefersReducedMotion(context);
     _recallPopTimer?.cancel();
+    _recallTimer?.cancel();
+    _recallTimer = null;
     setState(() {
       _phase = _NazoPhase.recall;
-      _recallSecondsLeft = kRecallGapSeconds;
       _recallCueIdx = 0;
       _recallRevealed = false;
-      _revealedCues.clear();
-      _knewCues.clear();
-      _producedCues.clear();
     });
-    if (!reduceMotion) {
-      // Discrete per-second tick: decrements the counter and rebuilds the ring
-      // digit once per second. This is intentionally NOT a continuous
-      // AnimationController — a continuous animation would keep pumping frames
-      // and cause pumpAndSettle() in widget tests to run the full 8 seconds and
-      // auto-advance past the recall phase before tests can assert on it.
-      _recallTimer = Timer.periodic(const Duration(seconds: 1), (t) {
-        if (!mounted) {
-          t.cancel();
-          return;
-        }
-        setState(() {
-          _recallSecondsLeft -= 1;
-          if (_recallSecondsLeft <= 0) {
-            t.cancel();
-            _recallTimer = null;
-            _phase = _NazoPhase.quiz;
-          }
-        });
-      });
-    }
-    // Reduced motion: no auto-advance; child steps through cues manually.
   }
 
   /// COVER-REVEAL cued-retrieval recall shown between teach and quiz.
   ///
-  /// Each cue: the JA meaning is shown LARGE (the cue). Below it a masked '？？？'
-  /// EN panel invites the child to recall the English word before seeing it.
-  /// One tap on the panel REVEALS the EN word (gold, 28sp). A two-button
-  /// self-assessment row then appears:
-  ///
-  ///   'おぼえてた！' → genuine retrieval success: add cue idx to _knewCues → advance
-  ///   'もう1かい'   → did not recall: do NOT add to _knewCues → advance
-  ///
-  /// Both buttons always add idx to _producedCues and call advanceCue().
-  /// Reveal: instant on first tap (reduced-motion: same behaviour).
-  /// Hold before advance: ~600ms (reduced-motion: instant advance, no hold).
-  /// Skip button: cancels timers + jumps straight to quiz in ≤ 1 tap from recall.
-  ///
-  /// The kRecallGapSeconds countdown ring (visible) auto-advances to quiz when it
-  /// drains — the switch-access escape hatch, now legible. Timer stays active.
-  /// No shake can fire in recall (tiles removed → zero ambiguity on practice-safety).
+  /// Council verdict 2026-06-21:
+  ///   • KEEP generative retrieval: JA cue shown LARGE + masked '？？？' EN panel.
+  ///     One tap reveals the EN word (testing effect intact).
+  ///   • REMOVE self-assessment row ('おぼえてた！'/'もう1かい') — metacognition
+  ///     placebo that was poisoning FSRS at age 6-9.
+  ///   • REMOVE countdown ring — it froze after cue 1 and interrupted slow kids.
+  ///   • ADD neutral '「つぎ ▶」' advance button after reveal; child advances at their
+  ///     own pace. スキップ ▶ still jumps to quiz in ≤ 1 tap.
+  ///   • FSRS seeding (knewWords) now driven by quiz first-try correctness, not
+  ///     self-report.
   Widget _recallScaffold() {
     final reduceMotion = prefersReducedMotion(context);
     final card = _teachCard!; // guarded: null-card → quiz in _startRecall()
@@ -907,15 +866,13 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
       return const SizedBox.shrink();
     }
 
-    // Clamp index to valid range in case timer fires concurrently.
+    // Clamp index to valid range.
     final idx = _recallCueIdx.clamp(0, totalItems - 1);
     final item = card.items[idx];
     final isLast = idx >= totalItems - 1;
 
-    // advanceCue: cancel timers, reset cover state, move to next cue or quiz.
+    // advanceCue: reset cover state, move to next cue or quiz.
     void advanceCue() {
-      _recallTimer?.cancel();
-      _recallTimer = null;
       _recallPopTimer?.cancel();
       _recallPopTimer = null;
       if (isLast) {
@@ -931,22 +888,12 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
       }
     }
 
-    // onAssess: called by 'おぼえてた！' (knew=true) or 'もう1かい' (knew=false).
-    // Always advances after a ~600ms hold so the child has a felt "I did it" beat.
-    // Reduced-motion: immediate advance.
-    void onAssess(bool knew) {
-      // Idempotent: if pop timer already running (race), ignore.
+    // onNext: called by the '「つぎ ▶」' advance button after reveal.
+    // 600ms haptic hold in normal motion (felt beat of progress).
+    // Reduced-motion: instant advance (no hold).
+    void onNext() {
       if (_recallPopTimer != null && _recallPopTimer!.isActive) return;
-      // Wire _knewCues ONLY when 'おぼえてた！' AND this is the first reveal
-      // (not already in _producedCues). This is the honest 合格率 signal.
-      if (knew && !_producedCues.contains(idx)) {
-        _knewCues.add(idx);
-      }
-      _producedCues.add(idx);
       if (!reduceMotion) HapticFeedback.lightImpact();
-      // Cancel the wall-clock fallback so it can't race.
-      _recallTimer?.cancel();
-      _recallTimer = null;
       if (reduceMotion) {
         advanceCue();
       } else {
@@ -957,10 +904,8 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
       }
     }
 
-    // skipToQuiz: DqButton 'スキップ ▶' — cancel recall timers, go to quiz.
+    // skipToQuiz: DqButton 'スキップ ▶' — go straight to quiz in ≤ 1 tap.
     void skipToQuiz() {
-      _recallTimer?.cancel();
-      _recallTimer = null;
       _recallPopTimer?.cancel();
       _recallPopTimer = null;
       setState(() {
@@ -970,15 +915,12 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
     }
 
     // onReveal: first tap on the covered panel → show EN word.
-    // Reduced-motion: same (reveal is always instant; no animation involved).
+    // Reveal is always instant (reduced-motion: same behaviour).
     void onReveal() {
       if (_recallRevealed) return; // idempotent
       HapticFeedback.lightImpact();
       setState(() => _recallRevealed = true);
     }
-
-    // Countdown ring value: drains from 1 → 0 over kRecallGapSeconds.
-    final ringValue = (_recallSecondsLeft / kRecallGapSeconds).clamp(0.0, 1.0);
 
     return DqScene(
       warm: kNazoWarmTheme,
@@ -998,8 +940,6 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     // ── Safety eyebrow: this is practice, not scored ────────
-                    // Teal one-liner above the cue card so the child reads
-                    // "exploration-safe" before even seeing the cover panel.
                     Padding(
                       padding: const EdgeInsets.only(bottom: 8),
                       child: Text(
@@ -1015,59 +955,34 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
                     Semantics(
                       liveRegion: true,
                       label: _recallRevealed
-                          ? 'えいごは ${item.en}。おぼえてた？'
+                          ? 'えいごは ${item.en}。つぎへ すすもう。'
                           : 'えいごで こたえよう。${item.ja}。えいごは？',
                       child: DqPanel(
                         warm: kNazoWarmTheme,
-                        child: Stack(
-                          alignment: Alignment.topRight,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'えいごで いうと？',
-                                  textAlign: TextAlign.center,
-                                  style: dqInkText(
-                                      size: 13,
-                                      w: FontWeight.w700,
-                                      color: pcInk),
-                                ),
-                                const SizedBox(height: 10),
-                                Text(
-                                  item.ja,
-                                  textAlign: TextAlign.center,
-                                  style: dqInkText(
-                                      size: 34,
-                                      w: FontWeight.w800,
-                                      color: pcInk),
-                                ),
-                                const SizedBox(height: 10),
-                                Text(
-                                  '${idx + 1} / $totalItems',
-                                  style: dqInkText(
-                                      size: 11,
-                                      w: FontWeight.w600,
-                                      color: pcInkSoft),
-                                ),
-                              ],
+                            Text(
+                              'えいごで いうと？',
+                              textAlign: TextAlign.center,
+                              style: dqInkText(
+                                  size: 13, w: FontWeight.w700, color: pcInk),
                             ),
-                            // Countdown ring in the top-right corner of the cue
-                            // card. Drains from full→empty over kRecallGapSeconds.
-                            // Gives the child legible urgency + replaces the old
-                            // silent backstop. Hidden when auto-advance is off
-                            // (reduced-motion) to avoid a frozen ring read as a bug.
-                            if (!reduceMotion)
-                              SizedBox(
-                                width: 28,
-                                height: 28,
-                                child: CircularProgressIndicator(
-                                  value: ringValue,
-                                  strokeWidth: 3,
-                                  backgroundColor: pcFrameGold.withAlpha(50),
-                                  color: pcFrameGold,
-                                ),
-                              ),
+                            const SizedBox(height: 10),
+                            Text(
+                              item.ja,
+                              textAlign: TextAlign.center,
+                              style: dqInkText(
+                                  size: 34, w: FontWeight.w800, color: pcInk),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              '${idx + 1} / $totalItems',
+                              style: dqInkText(
+                                  size: 11,
+                                  w: FontWeight.w600,
+                                  color: pcInkSoft),
+                            ),
                           ],
                         ),
                       ),
@@ -1075,7 +990,7 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
                     const SizedBox(height: 20),
                     // ── Cover-reveal EN panel ───────────────────────────────
                     // Before reveal: '？？？' mask invites retrieval attempt.
-                    // After reveal: EN word in gold (28sp) + self-assessment row.
+                    // After reveal: EN word in gold (28sp). No self-assessment.
                     GestureDetector(
                       onTap: _recallRevealed ? null : onReveal,
                       child: DqPanel(
@@ -1118,37 +1033,22 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
                               ),
                       ),
                     ),
-                    // ── Self-assessment row (shown only after reveal) ────────
+                    // ── Neutral advance affordance (shown only after reveal) ─
+                    // Single '「つぎ ▶」' button — no self-assessment, no judgment.
+                    // Council verdict: metacognitive self-grading at age 6-9 is
+                    // unreliable; replace both assessment buttons with one advance.
                     if (_recallRevealed) ...[
                       const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: DqButton(
-                              label: 'おぼえてた！',
-                              onTap: _recallPopTimer != null &&
-                                      _recallPopTimer!.isActive
-                                  ? null
-                                  : () => onAssess(true),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: DqButton(
-                              label: 'もう1かい',
-                              onTap: _recallPopTimer != null &&
-                                      _recallPopTimer!.isActive
-                                  ? null
-                                  : () => onAssess(false),
-                            ),
-                          ),
-                        ],
+                      DqButton(
+                        label: isLast ? 'つぎ ▶ ナゾへ' : 'つぎ ▶',
+                        onTap:
+                            _recallPopTimer != null && _recallPopTimer!.isActive
+                                ? null
+                                : onNext,
                       ),
                     ],
                     const SizedBox(height: 24),
                     // ── Skip button — jump straight to quiz in ≤ 1 tap ─────
-                    // Reachable within 1 tap from recall start (no compulsory
-                    // multi-tile gate). Cancels both recall timers cleanly.
                     DqButton(
                       label: 'スキップ ▶',
                       onTap: skipToQuiz,
