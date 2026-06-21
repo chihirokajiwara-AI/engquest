@@ -90,6 +90,13 @@ class _WordOrderingPracticeScreenState
   List<String> _remainingWords = [];
   bool _answered = false;
   bool _correct = false;
+  // Cold/hot-streak emotional support — parity with the other 4 exam screens.
+  // Word-ordering (the hardest mode: physical 5-chunk assembly, no MC shortcut)
+  // was the lone screen with NEITHER a struggling-child encouragement banner nor
+  // a correct-streak momentum banner (#81 missed it). A 6-8yo on a cold streak
+  // here is the most distressed user in the app and got silence.
+  int _consecutiveWrong = 0;
+  int _consecutiveCorrect = 0;
   int _correctCount = 0;
   // Sentences the child got WRONG this session — surfaced on the results screen
   // as a "review these" list (the JP sentence + its grammar rule), closing the
@@ -191,6 +198,8 @@ class _WordOrderingPracticeScreenState
       _answered = true;
       _correct = isCorrect;
       if (isCorrect) _correctCount++;
+      _consecutiveWrong = isCorrect ? 0 : _consecutiveWrong + 1;
+      _consecutiveCorrect = isCorrect ? _consecutiveCorrect + 1 : 0;
       // Honest measurement: a rule-assisted problem is excluded from 合格率.
       if (_hintShown) {
         _assistedCount++;
@@ -535,6 +544,21 @@ class _WordOrderingPracticeScreenState
                         ],
                       ),
                     ),
+                  ],
+                  // Cold/hot-streak emotional support — parity with the other exam
+                  // screens (shared slot: a child is on a cold OR hot streak, never
+                  // both). Cold → gentle 探偵 encouragement; hot → celebration.
+                  if (_answered &&
+                      !_correct &&
+                      _consecutiveWrong >= kStruggleThreshold) ...[
+                    const SizedBox(height: 10),
+                    const PracticeEncouragementBanner(
+                        message: kWordOrderEncourageMsg),
+                  ] else if (_answered &&
+                      _correct &&
+                      _consecutiveCorrect >= kMomentumThreshold) ...[
+                    const SizedBox(height: 10),
+                    PracticeMomentumBanner(streak: _consecutiveCorrect),
                   ],
                   // Opt-in teach-first scaffold: reveal THIS item's grammar rule
                   // before answering so a stuck beginner is taught, not left to
