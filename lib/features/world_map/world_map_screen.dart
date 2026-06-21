@@ -230,6 +230,13 @@ class _WorldMapScreenState extends State<WorldMapScreen>
   @override
   Widget build(BuildContext context) {
     return DqScene(
+      // World-feel (R2-W1): the village hub read as a settings MENU on a flat
+      // navy void (real-render audit). Surface the existing painted 5級 village
+      // plate behind the list — DqScene blurs + scrims + vignettes it, so the
+      // hub now reads as a PLACE the child stands in, not a list. Reuses bundled
+      // art (no new asset), keeps the locked dark-navy/gold palette, and the
+      // errorBuilder degrades to the gradient if the plate is ever absent.
+      backgroundAsset: 'assets/art/scenes_layton/town5_lane.webp',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
