@@ -784,15 +784,18 @@ String _eikenLabel(String level) {
   }
 }
 
-/// Human-readable confidence label.
+/// Human-readable confidence label. Honest about uncertainty: a low-confidence
+/// result (max-length stop with volatile θ — placement_engine) is a tentative
+/// めやす, NOT 「自信あり」. Over-claiming confidence on a thin CAT result misleads
+/// the child/parent about where they really stand.
 String _confidenceLabel(PlacementConfidence c) {
   switch (c) {
     case PlacementConfidence.high:
       return '自信あり ★★★';
     case PlacementConfidence.medium:
-      return '自信あり ★★';
+      return 'だいたい わかった ★★';
     case PlacementConfidence.low:
-      return '自信あり ★';
+      return 'いまの めやす だよ（やりながら ちょうせい）★';
   }
 }
 
@@ -844,7 +847,13 @@ class _PlacementResult extends StatelessWidget {
           DqDialogBox(
             speaker: 'せんぱい / Mentor',
             child: Text(
-              'よし、きみの ちからは わかった。\nつぎは、きみの すがたを えらぼう。',
+              // On a low-confidence placement, don't claim「ちからは わかった」—
+              // it's a starting めやす the game adjusts as the child plays.
+              outcome.confidence == PlacementConfidence.low
+                  ? 'よし、スタートの めやすが きまった。\n'
+                      'やりながら ちょうど いい むずかしさに あわせるよ。\n'
+                      'つぎは、きみの すがたを えらぼう。'
+                  : 'よし、きみの ちからは わかった。\nつぎは、きみの すがたを えらぼう。',
               style: dqText(size: 15, color: dqInk),
             ),
           ),
