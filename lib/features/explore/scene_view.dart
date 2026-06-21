@@ -321,6 +321,21 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
   // re-entry peak first (beat order: hero → pull → lore). Non-reduced-motion only.
   Timer? _loreDelayTimer;
 
+  // ── Scene-clear staged ceremony (studio finding #6) ──────────────────────
+  // When the LAST ナゾ is solved, the payoff now runs in three witnessed phases
+  // instead of a single immediate dialog dump:
+  //   Phase 1 (0–1200ms)  : colour-flood is the ONLY thing visible (no dialog).
+  //   Phase 2 (1200ms)    : CASE CLOSED stamp drops in over a scrim (no dialog).
+  //   Phase 3 (2200ms)    : the payoff dialog slides up (reordered content).
+  // Reduced-motion: collapses to the immediate single dialog (no staged delays).
+  //
+  // [_sceneClearStampVisible] drives the in-Stack stamp overlay (Phase 2).
+  // [_sceneClearStampTimer] schedules the stamp reveal.
+  // [_sceneClearDialogTimer] schedules the dialog reveal.
+  bool _sceneClearStampVisible = false;
+  Timer? _sceneClearStampTimer;
+  Timer? _sceneClearDialogTimer;
+
   // Services
   final _cue = AudioCueService();
   final _sound = SoundService();
@@ -440,6 +455,8 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
     _restoreLabelTimer?.cancel();
     _forwardPullTimer?.cancel();
     _loreDelayTimer?.cancel();
+    _sceneClearStampTimer?.cancel();
+    _sceneClearDialogTimer?.cancel();
     _cue.dispose();
     _parallax.dispose();
     super.dispose();
@@ -946,127 +963,192 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
         'たんていメモ：さいしょの「こえの いし」を とりもどした。\n'
             'タロ：「きみと いっしょなら、つぎの まちも きっと いける！」';
 
+    // ── Staged ceremony (studio finding #6) ─────────────────────────────────
+    // Reduced-motion: collapse to the immediate single dialog so accessibility
+    // users are never forced through a 2.2-second wait sequence.
+    if (prefersReducedMotion(context)) {
+      _showPayoffDialog(streak, storyBeat);
+      return;
+    }
+
+    // Non-reduced-motion 3-phase staged sequence:
+    //   Phase 1 (0–1200ms)  : colour-flood is seen; nothing overlaid.
+    //   Phase 2 (~1200ms)   : CASE CLOSED stamp drops in (in-Stack overlay).
+    //   Phase 3 (~2200ms)   : payoff dialog slides up (stamp hidden).
+    _sceneClearStampTimer?.cancel();
+    _sceneClearDialogTimer?.cancel();
+
+    // Phase 2: stamp appears after 1200ms.
+    _sceneClearStampTimer = Timer(const Duration(milliseconds: 1200), () {
+      if (!mounted) return;
+      setState(() => _sceneClearStampVisible = true);
+    });
+
+    // Phase 3: dialog at 2200ms; hide the stamp when dialog opens.
+    _sceneClearDialogTimer = Timer(const Duration(milliseconds: 2200), () {
+      if (!mounted) return;
+      setState(() => _sceneClearStampVisible = false);
+      _showPayoffDialog(streak, storyBeat);
+    });
+  }
+
+  /// Opens the CASE CLOSED payoff dialog with content REORDERED so the
+  /// [SessionEndHook] streak pill (tomorrow's return pull) is prominent near
+  /// the TOP — not buried last as it was before studio finding #6.
+  /// Content order: [streak pill] → story beat → bookmark → next-case tease.
+  /// All existing callbacks (onContinue / Navigator.pop) are unchanged.
+  void _showPayoffDialog(StreakState? streak, String storyBeat) {
+    if (!mounted) return;
     showDialog<void>(
       context: context,
       barrierColor: Colors.black.withAlpha(160),
-      builder: (ctx) => Dialog(
-        backgroundColor: Colors.transparent,
-        insetPadding: const EdgeInsets.symmetric(horizontal: 28),
-        child: Container(
-          padding: const EdgeInsets.fromLTRB(20, 22, 20, 18),
-          decoration: BoxDecoration(
-            color: dqBox,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: dqGold, width: 2),
-            boxShadow: [BoxShadow(color: dqGold.withAlpha(70), blurRadius: 24)],
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // A diegetic "case closed" stamp instead of a generic 🎉 — the
-                // game's biggest moment now reads as a detective solving the case
-                // (本格 feel + 事件→英検 fusion, #51/#52). Slightly rotated like a
-                // real case-file stamp.
-                Transform.rotate(
-                  angle: -0.06,
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: dqGold.withAlpha(20),
-                      borderRadius: BorderRadius.circular(6),
-                      border: Border.all(color: dqGold, width: 3),
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text('事件（じけん） 解決（かいけつ）',
-                            style: dqText(
-                                size: 20, w: FontWeight.w900, color: dqGold)),
-                        Text('CASE CLOSED',
-                            style: dqText(
-                                size: 9,
-                                w: FontWeight.w700,
-                                color: dqGold.withAlpha(210),
-                                spacing: 3)),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  'この まちに、ことばと いろが もどった！',
-                  textAlign: TextAlign.center,
-                  style: dqText(size: 17, w: FontWeight.w800, color: dqGold),
-                ),
-                const SizedBox(height: 12),
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: dqNight1,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: dqGoldDeep.withAlpha(120)),
-                  ),
-                  child: SingleChildScrollView(
-                    child: Text(
-                      storyBeat,
-                      style:
-                          dqText(size: 13, color: dqInk).copyWith(height: 1.6),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                // Tie the per-case payoff to the meta-mystery collectible: a 解決 ど
-                // restores one bookmark — point the child to the 事件簿 (Settings →
-                // じけんぼ) where the 7-bookmark sentence assembles (N1/N12 loop).
-                Text(
-                  '🔖 ことばの しおりが、1まい もどった。\n'
-                  '「じけんぼ」で、つながっていく おはなしを たしかめよう。',
-                  textAlign: TextAlign.center,
-                  style: dqText(size: 11, color: dqGold.withAlpha(220))
-                      .copyWith(height: 1.5),
-                ),
-                // Episodic forward-pull (N6/N12): name the NEXT case so the chapter
-                // doesn't end in a vacuum — Layton's "to be continued" hook. On the
-                // final chapter (準1級) tease nothing; close the arc instead. Purely
-                // narrative — it does NOT navigate (the paywall still gates entry).
-                ...(() {
-                  final next = nextChapterTitleJa(widget.eikenLevel);
-                  return [
+      builder: (ctx) {
+        // Slide-up + fade for non-reduced-motion; instant for reduced-motion.
+        final reduceMotion = prefersReducedMotion(context);
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          insetPadding: const EdgeInsets.symmetric(horizontal: 28),
+          child: TweenAnimationBuilder<double>(
+            tween: Tween<double>(begin: 0, end: 1),
+            duration: reduceMotion
+                ? Duration.zero
+                : const Duration(milliseconds: 280),
+            curve: Curves.easeOutCubic,
+            builder: (_, t, child) => Opacity(
+              opacity: t,
+              child: Transform.translate(
+                offset: Offset(0, 24 * (1 - t)),
+                child: child,
+              ),
+            ),
+            child: Container(
+              padding: const EdgeInsets.fromLTRB(20, 22, 20, 18),
+              decoration: BoxDecoration(
+                color: dqBox,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: dqGold, width: 2),
+                boxShadow: [
+                  BoxShadow(color: dqGold.withAlpha(70), blurRadius: 24)
+                ],
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // A diegetic "case closed" stamp instead of a generic 🎉 — the
+                    // game's biggest moment now reads as a detective solving the case
+                    // (本格 feel + 事件→英検 fusion, #51/#52). Slightly rotated like a
+                    // real case-file stamp.
+                    _caseClosedStamp(),
                     const SizedBox(height: 12),
                     Text(
-                      next != null
-                          ? '🗺️ どこかで、また ことばが きえはじめた——\n'
-                              'つぎの事件（じけん）：「$next」が きみを まっている。'
-                          : '🕯️ すべての事件（じけん）が つながった。\n'
-                              'やぶれた おはなしの さいごの 1ページへ——「じけんぼ」で たしかめよう。',
+                      'この まちに、ことばと いろが もどった！',
                       textAlign: TextAlign.center,
-                      style: dqText(size: 11.5, color: dqInk.withAlpha(210))
+                      style:
+                          dqText(size: 17, w: FontWeight.w800, color: dqGold),
+                    ),
+                    // ── Streak pill FIRST (studio #6 reorder) ──────────────────
+                    // Surface the streak / daily-goal at the emotional peak so the
+                    // child SEES tomorrow's return pull — the previous order buried
+                    // it last where no one scrolled. Same SessionEndHook all 5 exam
+                    // screens show at results.
+                    if (streak != null) ...[
+                      const SizedBox(height: 14),
+                      SessionEndHook(streak: streak),
+                    ],
+                    const SizedBox(height: 12),
+                    // ── Story beat ──────────────────────────────────────────────
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: dqNight1,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: dqGoldDeep.withAlpha(120)),
+                      ),
+                      child: SingleChildScrollView(
+                        child: Text(
+                          storyBeat,
+                          style: dqText(size: 13, color: dqInk)
+                              .copyWith(height: 1.6),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    // ── Bookmark fragment ───────────────────────────────────────
+                    // Tie the per-case payoff to the meta-mystery collectible: a 解決
+                    // restores one bookmark — point the child to the 事件簿 (Settings
+                    // → じけんぼ) where the 7-bookmark sentence assembles (N1/N12 loop).
+                    Text(
+                      '🔖 ことばの しおりが、1まい もどった。\n'
+                      '「じけんぼ」で、つながっていく おはなしを たしかめよう。',
+                      textAlign: TextAlign.center,
+                      style: dqText(size: 11, color: dqGold.withAlpha(220))
                           .copyWith(height: 1.5),
                     ),
-                  ];
-                })(),
-                // Engagement spine: surface the streak / daily-goal the child just
-                // earned at the scene-clear emotional peak (#4 studio run-2) — the
-                // same SessionEndHook all 5 exam-practice screens show at results.
-                if (streak != null) ...[
-                  const SizedBox(height: 14),
-                  SessionEndHook(streak: streak),
-                ],
-                const SizedBox(height: 16),
-                DqButton(
-                  label: 'つづける',
-                  onTap: () => Navigator.of(ctx).pop(),
+                    // ── Next-case tease ─────────────────────────────────────────
+                    // Episodic forward-pull (N6/N12): name the NEXT case so the
+                    // chapter doesn't end in a vacuum — Layton's "to be continued"
+                    // hook. Final chapter (準1級) closes the arc instead. Purely
+                    // narrative — it does NOT navigate (the paywall still gates
+                    // entry).
+                    ...(() {
+                      final next = nextChapterTitleJa(widget.eikenLevel);
+                      return [
+                        const SizedBox(height: 12),
+                        Text(
+                          next != null
+                              ? '🗺️ どこかで、また ことばが きえはじめた——\n'
+                                  'つぎの事件（じけん）：「$next」が きみを まっている。'
+                              : '🕯️ すべての事件（じけん）が つながった。\n'
+                                  'やぶれた おはなしの さいごの 1ページへ——「じけんぼ」で たしかめよう。',
+                          textAlign: TextAlign.center,
+                          style: dqText(size: 11.5, color: dqInk.withAlpha(210))
+                              .copyWith(height: 1.5),
+                        ),
+                      ];
+                    })(),
+                    const SizedBox(height: 16),
+                    DqButton(
+                      label: 'つづける',
+                      onTap: () => Navigator.of(ctx).pop(),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
+
+  /// The CASE CLOSED stamp widget, reused by both the in-Stack Phase 2 overlay
+  /// and the payoff dialog. Slightly rotated like a real case-file stamp.
+  Widget _caseClosedStamp() => Transform.rotate(
+        angle: -0.06,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
+          decoration: BoxDecoration(
+            color: dqGold.withAlpha(20),
+            borderRadius: BorderRadius.circular(6),
+            border: Border.all(color: dqGold, width: 3),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('事件（じけん） 解決（かいけつ）',
+                  style: dqText(size: 20, w: FontWeight.w900, color: dqGold)),
+              Text('CASE CLOSED',
+                  style: dqText(
+                      size: 9,
+                      w: FontWeight.w700,
+                      color: dqGold.withAlpha(210),
+                      spacing: 3)),
+            ],
+          ),
+        ),
+      );
 
   /// Pop the scene, passing whether it was fully cleared so callers (map, home)
   /// can advance the quest node without polling Firestore (G2).
@@ -1459,6 +1541,36 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
                             ),
                           );
                         },
+                      ),
+                    ),
+                  ),
+                ),
+
+              // ── Scene-clear stamp overlay (Phase 2 of staged ceremony) ──────
+              // Visible for ~700ms between Phase 1 (colour-flood) and Phase 3
+              // (the payoff dialog). The stamp drops in over a dark scrim so it
+              // reads as a decisive verdict before ANY dialog text appears.
+              // Reduced-motion: never shown (_sceneClearStampVisible stays false).
+              if (_sceneClearStampVisible)
+                Positioned.fill(
+                  key: const ValueKey('scene_clear_stamp_overlay'),
+                  child: IgnorePointer(
+                    child: ColoredBox(
+                      color: Colors.black.withAlpha(160),
+                      child: Center(
+                        child: TweenAnimationBuilder<double>(
+                          tween: Tween<double>(begin: 0, end: 1),
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeOutBack,
+                          builder: (_, t, child) => Opacity(
+                            opacity: t.clamp(0.0, 1.0),
+                            child: Transform.translate(
+                              offset: Offset(0, -60 * (1 - t)),
+                              child: child,
+                            ),
+                          ),
+                          child: _caseClosedStamp(),
+                        ),
                       ),
                     ),
                   ),
