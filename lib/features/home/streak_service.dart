@@ -6,7 +6,7 @@
 //   streak_last_study_date  : ISO-8601 date string (yyyy-MM-dd) of last study
 //   streak_current          : int — current consecutive streak
 //   streak_weekly_bits      : int — 7-bit bitmask, bit 0 = Monday, bit 6 = Sunday
-//   streak_daily_goal       : int — questions target (mirrors onboarding_goal_minutes as proxy)
+//   streak_daily_goal       : int — questions target (fallback: onboarding_goal_minutes key, which stores a question count)
 //   streak_today_count      : int — sessions completed today
 //
 // Streak logic:
@@ -99,8 +99,9 @@ class StreakService {
   static const _kProblemsTodayDate = 'streak_problems_today_date';
   static const _kDailyGoal = 'streak_daily_goal';
 
-  // The parent's onboarding goal choice (written by OnboardingStorage.save as
-  // onboarding_goal_minutes, used here as a question-count proxy — see header).
+  // The onboarding goal (written by OnboardingStorage.save).
+  // Key string is the legacy 'onboarding_goal_minutes' — the stored value is a
+  // question count (OnboardingResult.dailyGoalQuestions), not minutes.
   static const _kOnboardingGoal = 'onboarding_goal_minutes';
 
   /// The effective daily question goal, honouring the parent's onboarding pick.

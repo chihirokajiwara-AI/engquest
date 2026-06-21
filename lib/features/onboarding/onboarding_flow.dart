@@ -60,7 +60,13 @@ class OnboardingResult {
   final double placementTheta;
 
   final String avatarId;
-  final int dailyGoalMinutes;
+
+  /// The number of questions the learner aims to answer each day.
+  /// Named …Questions to match the question-based home ring ("N問") and
+  /// StreakService.problemsToday. The SharedPreferences key is the legacy
+  /// 'onboarding_goal_minutes' string — kept unchanged for back-compat with
+  /// existing stored values (the number stored is now honestly a question count).
+  final int dailyGoalQuestions;
 
   const OnboardingResult({
     required this.ageYears,
@@ -68,7 +74,7 @@ class OnboardingResult {
     required this.placementGrade,
     required this.placementTheta,
     required this.avatarId,
-    required this.dailyGoalMinutes,
+    required this.dailyGoalQuestions,
   });
 }
 
@@ -202,8 +208,8 @@ class _OnboardingFlowState extends State<OnboardingFlow>
   // Step 3 — avatar
   String _selectedAvatarId = _avatars.first.id;
 
-  // Step 4 — goal
-  int _dailyGoalMinutes = 10;
+  // Step 4 — goal (question count, not minutes)
+  int _dailyGoalQuestions = 10;
 
   late final AnimationController _fadeCtrl;
   late final Animation<double> _fadeAnim;
@@ -298,7 +304,7 @@ class _OnboardingFlowState extends State<OnboardingFlow>
       placementGrade: outcome?.grade ?? 0,
       placementTheta: outcome?.theta ?? 0.0,
       avatarId: _selectedAvatarId,
-      dailyGoalMinutes: _dailyGoalMinutes,
+      dailyGoalQuestions: _dailyGoalQuestions,
     );
     widget.onComplete(result);
   }
@@ -361,10 +367,10 @@ class _OnboardingFlowState extends State<OnboardingFlow>
         );
       case 3:
         return _StepGoal(
-          goalMinutes: _dailyGoalMinutes,
+          goalQuestions: _dailyGoalQuestions,
           avatarId: _selectedAvatarId,
           outcome: _outcome,
-          onGoalChanged: (v) => setState(() => _dailyGoalMinutes = v),
+          onGoalChanged: (v) => setState(() => _dailyGoalQuestions = v),
           onFinish: _finish,
         );
       default:
@@ -1017,14 +1023,16 @@ class _AvatarCard extends StatelessWidget {
 // ---------------------------------------------------------------------------
 
 class _StepGoal extends StatelessWidget {
-  final int goalMinutes;
+  /// Number of questions (問) the child aims to answer each day.
+  /// Matches the home ring unit so "10" here ↔ "0/10問" on the home screen.
+  final int goalQuestions;
   final String avatarId;
   final PlacementOutcome? outcome;
   final ValueChanged<int> onGoalChanged;
   final VoidCallback onFinish;
 
   const _StepGoal({
-    required this.goalMinutes,
+    required this.goalQuestions,
     required this.avatarId,
     required this.outcome,
     required this.onGoalChanged,
@@ -1065,8 +1073,8 @@ class _StepGoal extends StatelessWidget {
           DqPanel(
             title: 'まいにちの もくひょう / Daily Goal',
             child: Row(
-              children: _presets.map((min) {
-                final selected = min == goalMinutes;
+              children: _presets.map((n) {
+                final selected = n == goalQuestions;
                 return Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -1076,10 +1084,10 @@ class _StepGoal extends StatelessWidget {
                     child: Semantics(
                       button: true,
                       selected: selected,
-                      label: 'まいにち $min ふんの もくひょう',
+                      label: 'まいにち $n もんの もくひょう',
                       excludeSemantics: true,
                       child: GestureDetector(
-                        onTap: () => onGoalChanged(min),
+                        onTap: () => onGoalChanged(n),
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 200),
                           padding: const EdgeInsets.symmetric(vertical: 12),
@@ -1107,7 +1115,7 @@ class _StepGoal extends StatelessWidget {
                           child: Column(
                             children: [
                               Text(
-                                '$min',
+                                '$n',
                                 style: dqText(
                                   size: 22,
                                   w: FontWeight.w800,
@@ -1117,7 +1125,7 @@ class _StepGoal extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                'min',
+                                'もん',
                                 style: dqText(
                                   size: 11,
                                   w: FontWeight.w600,
@@ -1154,7 +1162,7 @@ class _StepGoal extends StatelessWidget {
                     value: '${avatar.emoji} ${avatar.name}'),
                 const SizedBox(height: 6),
                 _SummaryRow(
-                    jp: 'もくひょう', en: 'Goal', value: '毎日 $goalMinutes min'),
+                    jp: 'もくひょう', en: 'Goal', value: '毎日 $goalQuestions もん'),
               ],
             ),
           ),

@@ -136,7 +136,10 @@ class OnboardingStorage {
     await p.setInt(_kAge, result.ageYears);
     await p.setString(_kStartLevel, result.startEikenLevel);
     await p.setString(_kAvatar, result.avatarId);
-    await p.setInt(_kGoal, result.dailyGoalMinutes);
+    // _kGoal key string is 'onboarding_goal_minutes' — kept unchanged for
+    // back-compat with existing stored values; the number is now a question
+    // count (not minutes), matching the home ring unit ("N問").
+    await p.setInt(_kGoal, result.dailyGoalQuestions);
     // Persist θ̂ for T12 adaptive difficulty hook.
     await p.setString(_kPlacementTheta, result.placementTheta.toString());
     HeroChoice.fromAvatarId =
@@ -158,7 +161,7 @@ class OnboardingStorage {
       placementGrade: 0, // not stored separately; theta is the T12 signal
       placementTheta: theta,
       avatarId: avatarId,
-      dailyGoalMinutes: p.getInt(_kGoal),
+      dailyGoalQuestions: p.getInt(_kGoal),
     );
   }
 }

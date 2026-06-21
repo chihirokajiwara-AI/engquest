@@ -59,7 +59,7 @@ class OnboardingPreferences {
     _prefs.setInt(_keyAge, result.ageYears);
     _prefs.setString(_keyStartLevel, result.startEikenLevel);
     _prefs.setString(_keyAvatar, result.avatarId);
-    _prefs.setInt(_keyGoal, result.dailyGoalMinutes);
+    _prefs.setInt(_keyGoal, result.dailyGoalQuestions);
   }
 
   OnboardingResult? load() {
@@ -70,7 +70,7 @@ class OnboardingPreferences {
       placementGrade: 0,
       placementTheta: 0.0,
       avatarId: _prefs.getString(_keyAvatar) ?? 'knight',
-      dailyGoalMinutes: _prefs.getInt(_keyGoal),
+      dailyGoalQuestions: _prefs.getInt(_keyGoal),
     );
   }
 }
@@ -146,12 +146,12 @@ void main() {
         placementGrade: 0,
         placementTheta: 0.0,
         avatarId: 'knight',
-        dailyGoalMinutes: 10,
+        dailyGoalQuestions: 10,
       );
       expect(result.ageYears, equals(8));
       expect(result.startEikenLevel, equals('5'));
       expect(result.avatarId, equals('knight'));
-      expect(result.dailyGoalMinutes, equals(10));
+      expect(result.dailyGoalQuestions, equals(10));
     });
 
     test('saving OnboardingResult marks onboarding as complete', () {
@@ -162,7 +162,7 @@ void main() {
         placementGrade: 1,
         placementTheta: 1.5,
         avatarId: 'mage',
-        dailyGoalMinutes: 15,
+        dailyGoalQuestions: 15,
       ));
       expect(onboardingPrefs.isOnboardingComplete, isTrue);
     });
@@ -174,7 +174,7 @@ void main() {
         placementGrade: 0,
         placementTheta: 0.0,
         avatarId: 'archer',
-        dailyGoalMinutes: 10,
+        dailyGoalQuestions: 10,
       ));
       final route = resolveStartRoute(onboardingPrefs);
       expect(route, equals(AppRoute.worldMap));
@@ -189,7 +189,7 @@ void main() {
         placementGrade: 2,
         placementTheta: 2.5,
         avatarId: 'healer',
-        dailyGoalMinutes: 20,
+        dailyGoalQuestions: 20,
       );
       onboardingPrefs.save(original);
       final loaded = onboardingPrefs.load();
@@ -197,7 +197,7 @@ void main() {
       expect(loaded!.ageYears, equals(12));
       expect(loaded.startEikenLevel, equals('3'));
       expect(loaded.avatarId, equals('healer'));
-      expect(loaded.dailyGoalMinutes, equals(20));
+      expect(loaded.dailyGoalQuestions, equals(20));
     });
 
     test('load returns null when onboarding not complete', () {
@@ -215,7 +215,7 @@ void main() {
           placementGrade: 0,
           placementTheta: 0.0,
           avatarId: 'knight',
-          dailyGoalMinutes: 10,
+          dailyGoalQuestions: 10,
         ));
         expect(fresh.load()!.startEikenLevel, equals(level));
       }
@@ -232,7 +232,7 @@ void main() {
           placementGrade: 0,
           placementTheta: 0.0,
           avatarId: id,
-          dailyGoalMinutes: 10,
+          dailyGoalQuestions: 10,
         ));
         expect(fresh.load()!.avatarId, equals(id));
       }
@@ -247,7 +247,7 @@ void main() {
         placementGrade: 0,
         placementTheta: 0.0,
         avatarId: 'knight',
-        dailyGoalMinutes: 10,
+        dailyGoalQuestions: 10,
       );
       final deck = buildDeckFromLevel(result.startEikenLevel);
       expect(deck, isNotEmpty);
@@ -280,7 +280,7 @@ void main() {
         placementGrade: 1,
         placementTheta: 1.0,
         avatarId: 'mage',
-        dailyGoalMinutes: 15,
+        dailyGoalQuestions: 15,
       );
       onboardingPrefs.save(result);
 
@@ -300,6 +300,61 @@ void main() {
       final fsrs = FSRSAlgorithm();
       final dueCards = fsrs.getDueCards(deck, DateTime.now());
       expect(dueCards.length, equals(deck.length));
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // Daily goal unit coherence (F1 honesty fix)
+  // ---------------------------------------------------------------------------
+  // The onboarding Step 4 presents presets in 問 (questions), and
+  // OnboardingResult.dailyGoalQuestions carries that number directly to the home
+  // ring ("N問"). The SharedPreferences key 'onboarding_goal_minutes' is kept for
+  // back-compat but now stores a question count, not minutes.
+  group('Daily goal — question-unit contract', () {
+    test('OnboardingResult.dailyGoalQuestions field exists and round-trips',
+        () {
+      // Directly construct + read — confirms the field is named dailyGoalQuestions
+      // (not dailyGoalMinutes) and the value is preserved unchanged.
+      const result = OnboardingResult(
+        ageYears: 9,
+        startEikenLevel: '5',
+        placementGrade: 0,
+        placementTheta: 0.0,
+        avatarId: 'm5',
+        dailyGoalQuestions: 15,
+      );
+      expect(result.dailyGoalQuestions, equals(15),
+          reason: 'dailyGoalQuestions must preserve the question count '
+              'so home ring shows "0/15問"');
+    });
+
+    test('goal is persisted to onboarding_goal_minutes key (back-compat)', () {
+      onboardingPrefs.save(const OnboardingResult(
+        ageYears: 8,
+        startEikenLevel: '5',
+        placementGrade: 0,
+        placementTheta: 0.0,
+        avatarId: 'm5',
+        dailyGoalQuestions: 20,
+      ));
+      // The raw prefs key stays 'onboarding_goal_minutes' for back-compat with
+      // already-stored values; the number stored is now a question count.
+      expect(prefs.getInt('onboarding_goal_minutes'), equals(20),
+          reason: 'Back-compat key must be unchanged so existing installs '
+              'keep their goal after an update');
+    });
+
+    test('loaded result exposes dailyGoalQuestions', () {
+      onboardingPrefs.save(const OnboardingResult(
+        ageYears: 7,
+        startEikenLevel: '4',
+        placementGrade: 0,
+        placementTheta: 0.0,
+        avatarId: 'm6',
+        dailyGoalQuestions: 5,
+      ));
+      final loaded = onboardingPrefs.load()!;
+      expect(loaded.dailyGoalQuestions, equals(5));
     });
   });
 
