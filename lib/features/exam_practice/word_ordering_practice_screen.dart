@@ -680,10 +680,15 @@ class _WordOrderingPracticeScreenState
   }
 
   Widget _buildResults() {
-    final pct = _problems.isEmpty
-        ? 0
-        : (_correctCount / _problems.length * 100).round();
-    final passed = pct >= 60;
+    // Verdict on the HONEST measured signal (UNAIDED problems that fed 合格率),
+    // not the all-items tally inflated by rule-hinted answers (R2-F7 sweep). A
+    // session solved entirely with the rule-hint is practice-only — no pass.
+    final measuredBasis = _unaidedTotal > 0;
+    final resultCorrect = measuredBasis ? _unaidedCorrect : _correctCount;
+    final resultTotal = measuredBasis ? _unaidedTotal : _problems.length;
+    final pct =
+        resultTotal == 0 ? 0 : (resultCorrect / resultTotal * 100).round();
+    final passed = measuredBasis && pct >= 60;
 
     return SingleChildScrollView(
       child: Padding(
@@ -692,23 +697,26 @@ class _WordOrderingPracticeScreenState
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
-              passed ? Icons.emoji_events : Icons.refresh,
+              passed
+                  ? Icons.emoji_events
+                  : (measuredBasis ? Icons.refresh : Icons.menu_book_rounded),
               size: 72,
               color: passed ? dqGold : dqInk.withAlpha(140),
             ),
             const SizedBox(height: 16),
             Text(
-              passed ? '合格（ごうかく）ライン到達（とうたつ）！' : 'もう少（すこ）し！',
+              passed
+                  ? '合格（ごうかく）ライン到達（とうたつ）！'
+                  : (measuredBasis ? 'もう少（すこ）し！' : 'れんしゅう おつかれさま！'),
               style: dqText(size: 24, w: FontWeight.bold, color: dqGold),
             ),
             const SizedBox(height: 12),
             Text(
-              '$_correctCount / ${_problems.length} 正解（せいかい）（$pct%）',
+              '$resultCorrect / $resultTotal 正解（せいかい）（$pct%）',
               style: dqText(color: dqInk, size: 18),
             ),
             const SizedBox(height: 16),
-            PracticeResultStars(
-                correct: _correctCount, total: _problems.length),
+            PracticeResultStars(correct: resultCorrect, total: resultTotal),
             if (_assistedCount > 0) ...[
               const SizedBox(height: 10),
               Text(

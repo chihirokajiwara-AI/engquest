@@ -969,10 +969,15 @@ class _VocabGrammarPracticeScreenState
   }
 
   Widget _buildResults() {
-    final pct = _questions.isEmpty
-        ? 0
-        : (_correctCount / _questions.length * 100).round();
-    final passed = pct >= 60;
+    // Verdict on the HONEST measured signal (UNAIDED first-attempts that fed
+    // 合格率), not the all-items tally inflated by hinted answers (R2-F7 sweep).
+    // A session answered entirely with the hint up is practice-only — no pass.
+    final measuredBasis = _unaidedTotal > 0;
+    final resultCorrect = measuredBasis ? _unaidedCorrect : _correctCount;
+    final resultTotal = measuredBasis ? _unaidedTotal : _questions.length;
+    final pct =
+        resultTotal == 0 ? 0 : (resultCorrect / resultTotal * 100).round();
+    final passed = measuredBasis && pct >= 60;
 
     return SingleChildScrollView(
       child: Padding(
@@ -982,23 +987,28 @@ class _VocabGrammarPracticeScreenState
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Icon(
-              passed ? Icons.workspace_premium_rounded : Icons.refresh_rounded,
+              passed
+                  ? Icons.workspace_premium_rounded
+                  : (measuredBasis
+                      ? Icons.refresh_rounded
+                      : Icons.menu_book_rounded),
               size: 72,
               color: passed ? dqGold : dqInk.withAlpha(140),
             ),
             const SizedBox(height: 16),
             Text(
-              passed ? '合格（ごうかく）ライン到達（とうたつ）！' : 'もう少（すこ）し！',
+              passed
+                  ? '合格（ごうかく）ライン到達（とうたつ）！'
+                  : (measuredBasis ? 'もう少（すこ）し！' : 'れんしゅう おつかれさま！'),
               style: dqText(size: 24, w: FontWeight.w900, color: dqGold),
             ),
             const SizedBox(height: 12),
             Text(
-              '$_correctCount / ${_questions.length} 正解 ($pct%)',
+              '$resultCorrect / $resultTotal 正解 ($pct%)',
               style: dqText(size: 18, w: FontWeight.w600, color: dqInk),
             ),
             const SizedBox(height: 16),
-            PracticeResultStars(
-                correct: _correctCount, total: _questions.length),
+            PracticeResultStars(correct: resultCorrect, total: resultTotal),
             // Honesty: tell the child/parent that hinted questions were kept out
             // of the 合格率, so the pass-meter reflects unaided skill only.
             if (_assistedCount > 0) ...[

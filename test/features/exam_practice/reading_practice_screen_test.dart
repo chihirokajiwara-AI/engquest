@@ -346,6 +346,13 @@ void main() {
     });
 
     testWidgets('results show pass when >= 60%', (tester) async {
+      // The pass verdict is computed on the MEASURED signal (the items that fed
+      // 合格率), not the all-items tally (R2-F7). Instant test taps would be
+      // "too fast to have read" and thus unmeasured → practice-only, no pass.
+      // Make every answer count as a real read so the ≥60% pass path is exercised.
+      ReadingPracticeScreen.minReadTime = Duration.zero;
+      addTearDown(
+          () => ReadingPracticeScreen.minReadTime = const Duration(seconds: 2));
       await pumpReading(tester, '5', grade5Section);
 
       // Answer all 6 correctly by their TEXT (positions are now shuffled).

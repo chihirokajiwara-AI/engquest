@@ -635,10 +635,18 @@ class _ConversationPracticeScreenState
   }
 
   Widget _buildResults() {
-    final pct = _problems.isEmpty
-        ? 0
-        : (_correctCount / _problems.length * 100).round();
-    final passed = pct >= 60;
+    // The verdict + score must reflect the HONEST measured signal — the UNAIDED
+    // answers that actually feed 合格率 (_measuredCorrect/_measuredTotal). Using
+    // all-items _correctCount/_problems.length would celebrate 合格ライン到達 on a
+    // ratio inflated by hinted answers that move NOTHING in the pass-meter — a
+    // lie at the session-end peak (R2-F7, mirrors reading/listening). A session
+    // answered entirely with hints has no measurable result → practice only.
+    final measuredBasis = _measuredTotal > 0;
+    final resultCorrect = measuredBasis ? _measuredCorrect : _correctCount;
+    final resultTotal = measuredBasis ? _measuredTotal : _problems.length;
+    final pct =
+        resultTotal == 0 ? 0 : (resultCorrect / resultTotal * 100).round();
+    final passed = measuredBasis && pct >= 60;
 
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
@@ -647,22 +655,28 @@ class _ConversationPracticeScreenState
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Icon(
-            passed ? Icons.workspace_premium_rounded : Icons.refresh_rounded,
+            passed
+                ? Icons.workspace_premium_rounded
+                : (measuredBasis
+                    ? Icons.refresh_rounded
+                    : Icons.menu_book_rounded),
             size: 72,
             color: passed ? dqGold : dqInk.withAlpha(140),
           ),
           const SizedBox(height: 16),
           Text(
-            passed ? '合格（ごうかく）ライン到達（とうたつ）！' : 'もう少（すこ）し！',
+            passed
+                ? '合格（ごうかく）ライン到達（とうたつ）！'
+                : (measuredBasis ? 'もう少（すこ）し！' : 'れんしゅう おつかれさま！'),
             style: dqText(size: 24, w: FontWeight.w900, color: dqGold),
           ),
           const SizedBox(height: 12),
           Text(
-            '$_correctCount / ${_problems.length} 正解 ($pct%)',
+            '$resultCorrect / $resultTotal 正解 ($pct%)',
             style: dqText(size: 18, w: FontWeight.w600, color: dqInk),
           ),
           const SizedBox(height: 16),
-          PracticeResultStars(correct: _correctCount, total: _problems.length),
+          PracticeResultStars(correct: resultCorrect, total: resultTotal),
           // Honesty (#157): the 合格率 counts only UNAIDED answers — disclose the
           // hinted ones here so the encouraging session score and the home meter
           // don't silently contradict (mirrors word_ordering's existing note).

@@ -861,10 +861,15 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
   }
 
   Widget _buildResults() {
-    final pct = _totalQuestions == 0
-        ? 0
-        : (_correctCount / _totalQuestions * 100).round();
-    final passed = pct >= 60;
+    // Verdict on the HONEST measured signal (the items that fed 合格率), not the
+    // all-items tally inflated by hinted/too-fast answers (R2-F7 sweep). A session
+    // with zero measurable items is practice-only — no pass claim.
+    final measuredBasis = _measuredTotal > 0;
+    final resultCorrect = measuredBasis ? _measuredCorrect : _correctCount;
+    final resultTotal = measuredBasis ? _measuredTotal : _totalQuestions;
+    final pct =
+        resultTotal == 0 ? 0 : (resultCorrect / resultTotal * 100).round();
+    final passed = measuredBasis && pct >= 60;
 
     return SingleChildScrollView(
       child: Padding(
@@ -873,22 +878,28 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
-              passed ? Icons.workspace_premium_rounded : Icons.refresh_rounded,
+              passed
+                  ? Icons.workspace_premium_rounded
+                  : (measuredBasis
+                      ? Icons.refresh_rounded
+                      : Icons.menu_book_rounded),
               size: 72,
               color: passed ? dqGold : dqInk.withAlpha(140),
             ),
             const SizedBox(height: 16),
             Text(
-              passed ? '合格（ごうかく）ライン到達（とうたつ）！' : 'もう少（すこ）し！',
+              passed
+                  ? '合格（ごうかく）ライン到達（とうたつ）！'
+                  : (measuredBasis ? 'もう少（すこ）し！' : 'れんしゅう おつかれさま！'),
               style: dqText(size: 24, w: FontWeight.w900, color: dqGold),
             ),
             const SizedBox(height: 12),
             Text(
-              '$_correctCount / $_totalQuestions 正解 ($pct%)',
+              '$resultCorrect / $resultTotal 正解 ($pct%)',
               style: dqText(size: 18, w: FontWeight.w600, color: dqInk),
             ),
             const SizedBox(height: 16),
-            PracticeResultStars(correct: _correctCount, total: _totalQuestions),
+            PracticeResultStars(correct: resultCorrect, total: resultTotal),
             // Honesty (#157): the 合格率 counts only UNAIDED answers — disclose the
             // hinted ones so the session score and the home meter don't silently
             // contradict (mirrors word_ordering's existing note).
