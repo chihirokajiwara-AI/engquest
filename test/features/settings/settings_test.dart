@@ -294,4 +294,35 @@ void main() {
       '5',
     );
   });
+
+  // R2-F10: the text-size chips ARE the app's low-vision accommodation — they
+  // must themselves be operable by a screen reader, exposing button role +
+  // selected state (WCAG 4.1.2). Before the fix they were bare GestureDetectors
+  // with no Semantics, invisible/unoperable to VoiceOver/TalkBack/switch access.
+  testWidgets('text-size chips are screen-reader buttons with selected state',
+      (tester) async {
+    final h = tester.ensureSemantics();
+    tester.view.physicalSize = const Size(800, 2600);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(const MaterialApp(home: SettingsScreen()));
+    await tester.pumpAndSettle();
+
+    // Default size (ふつう = 1.0) → an operable, SELECTED button.
+    final normal = find.bySemanticsLabel('ふつう');
+    expect(normal, findsOneWidget);
+    expect(
+      tester.getSemantics(normal),
+      isSemantics(isButton: true, isSelected: true, label: 'ふつう'),
+    );
+
+    // A non-default size → an operable, UNSELECTED button.
+    final big = find.bySemanticsLabel('大（おお）きい');
+    expect(big, findsOneWidget);
+    expect(
+      tester.getSemantics(big),
+      isSemantics(isButton: true, isSelected: false, label: '大（おお）きい'),
+    );
+    h.dispose();
+  });
 }

@@ -218,32 +218,44 @@ class _SettingsScreenState extends State<SettingsScreen> {
   /// One selectable text-size chip; the active size is highlighted in gold.
   Widget _sizeChip(double s) {
     final selected = (_textScale - s).abs() < 0.001;
-    return GestureDetector(
-      onTap: () => _setTextScale(s),
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: selected ? dqGold.withAlpha(40) : dqNight1,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: selected ? dqGold : dqGoldDeep.withAlpha(110),
-            width: selected ? 2 : 1,
-          ),
-        ),
-        // #77: shrink-to-fit so a long label (「とても大きい」) never wraps to two
-        // lines inside the equal-width chip (which read as a broken button).
-        child: FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Text(
-            ReadabilityScale.labelJa(s),
-            maxLines: 1,
-            softWrap: false,
-            textAlign: TextAlign.center,
-            style: dqText(
-              size: 12,
-              w: selected ? FontWeight.w800 : FontWeight.w600,
-              color: selected ? dqGold : dqInk,
+    final label = ReadabilityScale.labelJa(s);
+    // a11y (WCAG 4.1.2): a bare GestureDetector exposes no role/state, so a
+    // screen-reader child/parent couldn't tell these are buttons, which is
+    // selected, or operate them — and this IS the app's low-vision text-size
+    // control, the one a11y accommodation that must itself be accessible.
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: label,
+      child: GestureDetector(
+        onTap: () => _setTextScale(s),
+        child: ExcludeSemantics(
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: selected ? dqGold.withAlpha(40) : dqNight1,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: selected ? dqGold : dqGoldDeep.withAlpha(110),
+                width: selected ? 2 : 1,
+              ),
+            ),
+            // #77: shrink-to-fit so a long label (「とても大きい」) never wraps to two
+            // lines inside the equal-width chip (which read as a broken button).
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                label,
+                maxLines: 1,
+                softWrap: false,
+                textAlign: TextAlign.center,
+                style: dqText(
+                  size: 12,
+                  w: selected ? FontWeight.w800 : FontWeight.w600,
+                  color: selected ? dqGold : dqInk,
+                ),
+              ),
             ),
           ),
         ),
