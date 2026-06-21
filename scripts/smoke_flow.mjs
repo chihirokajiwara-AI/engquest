@@ -117,6 +117,25 @@ async function tapClose() {
   return false;
 }
 
+// Tap the ✕ close, then wait for `expectNeedle` (usually the exam hub). Mirrors
+// clickAndAwait: on a slow live frame the close tap can land before the button's
+// (or the hub's) CanvasKit semantics are ready, so the tap is silently dropped and
+// the hub never reappears. If the expected label doesn't show, settle and RE-TAP
+// once. Absorbs the dropped-tap timing flake WITHOUT masking a real break (a
+// genuinely stuck close fails both attempts). Returns wait ms or -1. This is the
+// #202 fix extended to the position/label-close steps (筆記2/筆記3 → hub), which
+// were false-FAILing ~30% with "no hub return" on slow boots.
+async function tapCloseAndAwait(expectNeedle, timeout = DEAD_MS) {
+  await tapClose();
+  let ms = await waitForLabel(expectNeedle, timeout);
+  if (ms < 0) {
+    await page.waitForTimeout(400);
+    await tapClose();
+    ms = await waitForLabel(expectNeedle, timeout);
+  }
+  return ms;
+}
+
 const steps = [];
 function record(name, ms, ok, note = '') { steps.push({ name, ms, ok, note }); }
 
@@ -180,8 +199,7 @@ record('次の問題へ → 問2', q2Ms < 0 ? DEAD_MS : q2Ms, q2Ms >= 0,
 // ── back-nav: tap the ✕ close (unlabeled 40×40 button top-left) → exam hub ─────
 // The close has no semantic label, so tap it by position — a real pointer event to
 // Flutter's glass pane. Proves the back-navigation a user relies on actually works.
-if (q2Ms >= 0) await tapClose();
-const backMs = q2Ms >= 0 ? await waitForLabel('試験概要', DEAD_MS) : -1;
+const backMs = q2Ms >= 0 ? await tapCloseAndAwait('試験概要') : -1;
 record('✕ close → back to hub', backMs < 0 ? DEAD_MS : backMs, backMs >= 0,
   q2Ms < 0 ? 'skipped' : (backMs < 0 ? 'DEAD tap (no hub)' : ''));
 
@@ -201,8 +219,9 @@ record('筆記2 answer → reveal', reveal2 < 0 ? DEAD_MS : reveal2, reveal2 >= 
 // Back to the hub, then assert the live question screen. 語句整序 has no numbered
 // MC choices (it's drag-to-order tiles), so detect the start-state answer-box
 // hint 'べましょう' (下の単語をタップして並べましょう), present before any tile is placed.
-if (reveal2 >= 0) await tapClose(); // ✕ close → hub
-const back2 = reveal2 >= 0 ? await waitForLabel('試験概要', DEAD_MS) : -1;
+// ✕ close → hub (retry the close on a dropped tap; this was the recurring
+// "no hub return" false-FAIL on slow boots).
+const back2 = reveal2 >= 0 ? await tapCloseAndAwait('試験概要') : -1;
 const okSec3 = back2 >= 0 && await clickLabel('筆記3');
 const r3 = okSec3 ? await waitForLabel('べましょう', DEAD_MS) : -1;
 record('tap 筆記3 → 大問3 (語句整序) loads', r3 < 0 ? DEAD_MS : r3, r3 >= 0,
