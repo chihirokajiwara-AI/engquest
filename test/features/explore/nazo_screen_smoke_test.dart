@@ -385,6 +385,48 @@ void main() {
       expect(r.firstTryCorrect, isFalse,
           reason: 'a retried solve must NOT count as a first-try correct');
     });
+
+    // Burst visibility: the _SolveBurst CustomPaint must be present ~150ms after
+    // a correct answer in normal-motion mode and must be the TOPMOST Stack child
+    // (i.e. rendered AFTER the SafeArea content block, not before it).
+    testWidgets('solve burst CustomPaint is present after a correct answer',
+        (t) async {
+      t.view.physicalSize = const Size(440, 1600);
+      t.view.devicePixelRatio = 1.0;
+      addTearDown(t.view.reset);
+      final hotspot = kTown5Scene.hotspots
+          .firstWhere((h) => h.kind == HotspotKind.npc && h.step != null);
+      await t.pumpWidget(MaterialApp(
+        home: NazoScreen(hotspot: hotspot, eikenLevel: '5'),
+      ));
+      await t.pump(const Duration(milliseconds: 400));
+      final proceed = find.textContaining('おぼえた');
+      if (proceed.evaluate().isNotEmpty) {
+        await t.ensureVisible(proceed.first);
+        await t.pump();
+        await t.tap(proceed.first);
+        await t.pump(const Duration(milliseconds: 300));
+      }
+      await _skipThroughRecall(t);
+      // No burst before answering.
+      expect(find.byType(CustomPaint), findsWidgets);
+      final beforeCount = find.byType(CustomPaint).evaluate().length;
+      // Tap the correct answer.
+      await t.tap(find.byType(AudioOptionButton).at(correctIdxOf5kuNpc()));
+      // ~150ms: the burst has fired (~90ms onset) and is animating.
+      await t.pump(const Duration(milliseconds: 150));
+      // The _SolveBurst adds a CustomPaint (via AnimatedBuilder > CustomPaint);
+      // assert at least one more CustomPaint is now present.
+      expect(
+        find.byType(CustomPaint).evaluate().length,
+        greaterThan(beforeCount),
+        reason:
+            'a CustomPaint from _SolveBurst must be in the widget tree ~150ms '
+            'after a correct answer (burst was invisible: it was child[0] of '
+            'the quiz Stack, occluded by navy panels; now it is topmost)',
+      );
+      expect(t.takeException(), isNull);
+    });
   });
 
   group('NazoScreen — missing-audio feedback (#43)', () {

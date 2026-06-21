@@ -571,17 +571,6 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
         contentMaxWidth: 600, // #144: centre on tablet, full-width on phone
         child: Stack(
           children: [
-            // Solve climax (game-studio #2): the gold burst renders BEHIND the
-            // content column (first Stack child) — a glow behind the teaching
-            // reveal / 「ナゾ、解けた！」, not a full-screen layer ON TOP of them. The
-            // celebration now PUNCTUATES the lesson instead of burying it during the
-            // read window (NN/G animation + Vlambeer juice; 12-expert studio rank-2).
-            // It still sits above the scene bg (DqScene is outside this Stack).
-            // Reduced-motion → none.
-            if (_burstReady && !prefersReducedMotion(context))
-              const Positioned.fill(
-                child: IgnorePointer(child: _SolveBurst()),
-              ),
             SafeArea(
               // FIX 2: add bottom padding so the last answer option clears the
               // safe-area / home-indicator bar and never gets clipped.
@@ -764,6 +753,17 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
                 ),
               ),
             ),
+            // Solve climax — TOPMOST Stack child so the burst renders ABOVE the
+            // dark-navy casebook panels and is actually visible. IgnorePointer so
+            // it never intercepts taps on tiles/buttons below. Reduced-motion and
+            // the 90ms onset (_burstReady) are gated by the parent condition.
+            // Four-corner perimeter burst: the painter intentionally leaves the
+            // centre ≥50% deadzone clear, so lesson text / 解説 / victory stamp
+            // remain fully readable even though the burst is now on top.
+            if (_burstReady && !prefersReducedMotion(context))
+              const Positioned.fill(
+                child: IgnorePointer(child: _SolveBurst()),
+              ),
           ],
         ),
       ); // end DqScene (quiz phaseChild)
@@ -1867,89 +1867,80 @@ class _SolveBurstState extends State<_SolveBurst>
   }
 }
 
-/// A real "burst", not a flat flash (#88 re-audit): a radial gold BLOOM + 12
-/// radiating RAYS + 6 outward-flying SPARKLES, all blooming from centre and fading
-/// over the one-shot. The rays + sparkles are what make a correct 英検 answer FEEL
-/// like an impact, not a div fading. Pure CustomPaint; one-shot (parent gates it on
-/// reduced-motion).
+/// Four-corner perimeter burst: gold radial blooms + inward fan-rays from each
+/// corner, keeping the centre ≥50% deadzone completely unpainted so the 解説
+/// rule card + 「ことばが ひびいた！」 stamp remain fully readable while the burst is
+/// topmost. Pure CustomPaint; one-shot (parent gates on reduced-motion).
 class _SolveBurstPainter extends CustomPainter {
   final double t; // 0 → 1, eased
   const _SolveBurstPainter(this.t);
 
-  static const _gold = Color(0xFFFFD700);
   int _a(double o) => (o.clamp(0.0, 1.0) * 255).round();
 
   @override
   void paint(Canvas canvas, Size size) {
-    final center = size.center(Offset.zero);
-    final maxR = size.shortestSide * 0.55;
-    // Brightness ENVELOPE: ramp up over the first ~18% then fade — so the burst
-    // BRIGHTENS into a peak the eye catches, instead of being brightest at t=0
-    // (a front-loaded strobe that has already begun fading before the child's eye
-    // re-focuses on it after the read window — game-studio game-feel + pedagogy
-    // experts, team #4). Radius/length still grow with t (outward expansion); only
-    // alpha uses the ramp-then-fade envelope.
-    // Front-loaded envelope (panel game-feel): ramp to peak over the first 8% so
-    // the burst is bright as it blooms (with the ~90ms onset it lands WITH the
-    // tap), then ease out over the long tail.
+    // Front-loaded envelope: ramp to peak over the first 8% then ease out, so
+    // the burst brightens into a peak the eye catches as it blooms with the
+    // ~90ms onset tap, then gently recedes (game-studio game-feel, team #4).
     final env = (t < 0.08 ? (t / 0.08) : ((1.0 - t) / 0.92)).clamp(0.0, 1.0);
     final fade = env;
 
-    // CENTRE DEADZONE (run-3 game-feel + learning-science experts): _SolveBurst
-    // is a Positioned.fill ON TOP of the 解説 rule card + 'ことばが ひびいた！' text
-    // the child reads during the read window, so a centre flash/bloom washed the
-    // very teaching it celebrates. The celebration now lives in the OUTER ring
-    // only — no centre flash, an annulus bloom, and rays/sparkles that start
-    // beyond the inner ~50%, keeping the 英検 explanation always readable.
+    final w = size.width;
+    final h = size.height;
+    final ss = size.shortestSide;
 
-    // 1. Radial bloom — originates from a POINT and punches outward (#98 R2-#3:
-    // the easeOut curve made it spring into existence already at 25% radius = a
-    // ghost that fades in, not a hit that lands). Starting at ~0 + easeOut's fast
-    // early rise reads as an impact; peak radius (1.20·maxR) is preserved. The
-    // burst mounts AFTER the 550ms read window, so a sharper punch only helps it
-    // re-connect to the solve (the reconcile #98 flagged).
-    final bloomR = maxR * (0.02 + 1.18 * t);
-    canvas.drawCircle(
-      center,
-      bloomR,
-      Paint()
-        ..shader = RadialGradient(
-          colors: [
-            _gold.withAlpha(0),
-            _gold.withAlpha(0),
-            _gold.withAlpha(_a(0.42 * fade)),
-            _gold.withAlpha(0),
-          ],
-          stops: const [0.0, 0.50, 0.74, 1.0],
-        ).createShader(Rect.fromCircle(center: center, radius: bloomR)),
-    );
+    // CENTRE DEADZONE: nothing is painted within a circle of radius 50% of
+    // shortestSide centred at the screen centre — lesson text always readable.
+    // All drawing is corner-anchored and stays well clear of this zone.
 
-    // 2. Radiating rays — thin gold spokes that shoot out and recede. Also
-    // shoot from near-centre (#98) so they read as thrown FROM the impact point,
-    // not as pre-existing spokes; peak length (1.40·maxR) preserved.
-    final rayLen = maxR * (0.55 + 0.85 * t);
-    final rayInner = maxR * 0.52;
-    final rayPaint = Paint()
-      ..color = _gold.withAlpha(_a(0.85 * fade))
-      ..strokeWidth = 2.0
-      ..strokeCap = StrokeCap.round;
-    const rays = 12;
-    for (var i = 0; i < rays; i++) {
-      final ang = (i / rays) * 2 * math.pi + t * 0.25;
-      final dir = Offset(math.cos(ang), math.sin(ang));
-      canvas.drawLine(center + dir * rayInner, center + dir * rayLen, rayPaint);
-    }
+    // Corner anchors: [corner offset, base angle of the inward fan in radians].
+    // Each corner fans ~80° into the screen quadrant facing the centre.
+    //   Top-left  (0,0)  → fan right+down   → baseAngle = 0°   (→ 80° sweep)
+    //   Top-right (w,0)  → fan down+left    → baseAngle = 90°
+    //   Bottom-right(w,h)→ fan left+up      → baseAngle = 180°
+    //   Bottom-left(0,h) → fan up+right     → baseAngle = 270°
+    const fanRays = 12;
+    final corners = <(Offset, double)>[
+      (Offset.zero, 0.0), // top-left
+      (Offset(w, 0), math.pi / 2), // top-right
+      (Offset(w, h), math.pi), // bottom-right
+      (Offset(0, h), 3 * math.pi / 2), // bottom-left
+    ];
 
-    // 3. Sparkles — small dots flung outward, shrinking as they go.
-    final dist = maxR * (0.58 + 0.6 * t);
-    final sparkPaint = Paint()..color = _gold.withAlpha(_a(fade));
-    const sparks = 6;
-    for (var i = 0; i < sparks; i++) {
-      final ang = (i / sparks) * 2 * math.pi + 0.4;
-      final dir = Offset(math.cos(ang), math.sin(ang));
-      // 8px (was 3.2 — invisible at arm's length on a retina phone), shrinking
-      // to ~5px as it flies out (game-feel expert, team #4).
-      canvas.drawCircle(center + dir * dist, 8.0 * (1.0 - t * 0.4), sparkPaint);
+    // Bloom radius per corner: grows outward from the corner with t.
+    final bloomR = ss * (0.10 + 0.18 * t); // peaks at 0.28 * ss
+
+    // Ray length from corner, inward: fans toward centre but stops at ~22% ss.
+    final rayLen = ss * (0.06 + 0.16 * t); // peaks at 0.22 * ss
+
+    for (final (corner, baseAngle) in corners) {
+      // 1. Radial gold bloom centred ON the corner.
+      canvas.drawCircle(
+        corner,
+        bloomR,
+        Paint()
+          ..shader = RadialGradient(
+            colors: [
+              dqGold.withAlpha(_a(0.55 * fade)),
+              dqGold.withAlpha(_a(0.30 * fade)),
+              dqGold.withAlpha(0),
+            ],
+            stops: const [0.0, 0.55, 1.0],
+          ).createShader(Rect.fromCircle(center: corner, radius: bloomR)),
+      );
+
+      // 2. Fan of 12 short rays from the corner pointing inward toward centre.
+      // Spread evenly across 80° of the inward quadrant + slight t rotation.
+      final rayPaint = Paint()
+        ..color = dqGold.withAlpha(_a(0.35 * fade))
+        ..strokeWidth = 1.5
+        ..strokeCap = StrokeCap.round;
+      for (var i = 0; i < fanRays; i++) {
+        final frac = i / (fanRays - 1);
+        final ang = baseAngle + frac * (math.pi / 2.25) + t * 0.15;
+        final dir = Offset(math.cos(ang), math.sin(ang));
+        canvas.drawLine(corner, corner + dir * rayLen, rayPaint);
+      }
     }
   }
 
