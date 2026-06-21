@@ -21,6 +21,10 @@ import 'package:engquest/core/gamification/achievement_service.dart';
 void main() {
   const uid = 'test_user_ach_001';
 
+  // The static unlockEvents dedup set is app-session global; clear it per test so
+  // one test's unlock can't suppress the same ID's broadcast in another (R2-F13).
+  setUp(AchievementService.resetAnnouncedForTest);
+
   // ── AchievementState serialization ────────────────────────────────────────
 
   group('AchievementState', () {
@@ -329,6 +333,40 @@ void main() {
       // The static broadcast is what the app-root AchievementUnlockHost listens
       // to, so an unlock from ANY source (battle OR exam practice) celebrates.
       expect(AchievementService.unlockEvents.value, contains('mastery_10'));
+    });
+
+    test(
+        'static broadcast is de-duped per session — no double celebration (R2-F13)',
+        () async {
+      addTearDown(() => AchievementService.unlockEvents.value = const []);
+
+      // First ad-hoc instance crosses mastery_10 → broadcasts once.
+      final svc1 = AchievementService(firestore: FakeFirebaseFirestore());
+      await svc1.checkAndUpdate(
+          uid: uid,
+          totalMastered: 10,
+          currentStreak: 0,
+          totalPracticed: 0,
+          level: 1);
+      expect(AchievementService.unlockEvents.value, contains('mastery_10'));
+
+      // Host consumes the event.
+      AchievementService.unlockEvents.value = const [];
+
+      // A SECOND ad-hoc instance with its OWN store (models the race where the
+      // first instance's unlocked:true has not yet persisted to where the second
+      // reads) crosses the same threshold — it must NOT re-broadcast mastery_10,
+      // or the child sees a glitchy double banner + double sound/haptic.
+      final svc2 = AchievementService(firestore: FakeFirebaseFirestore());
+      await svc2.checkAndUpdate(
+          uid: uid,
+          totalMastered: 10,
+          currentStreak: 0,
+          totalPracticed: 0,
+          level: 1);
+      expect(AchievementService.unlockEvents.value, isEmpty,
+          reason:
+              'same badge must not fire the static broadcast twice a session');
     });
 
     test('progress is monotonic — a partial-stat check never regresses it',

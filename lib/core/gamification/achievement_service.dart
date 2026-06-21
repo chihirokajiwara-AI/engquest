@@ -56,6 +56,21 @@ class AchievementService {
   /// practice. Carries the newly-unlocked achievement IDs; the host clears it.
   static final ValueNotifier<List<String>> unlockEvents = ValueNotifier([]);
 
+  /// IDs already broadcast via [unlockEvents] THIS app session. Guards the
+  /// double-celebration race: `AchievementService()` is built ad hoc per screen
+  /// (no shared cache), so an exam-end reward check and the achievements screen
+  /// opening can both cross a threshold before either's Firestore unlocked:true
+  /// persists, and each would fire the static notifier for the SAME badge — a
+  /// glitchy double banner + double sound/haptic for a child. The emit is
+  /// synchronous, so this static set dedupes correctly across concurrent callers.
+  static final Set<String> _announcedThisSession = {};
+
+  /// Clears the per-session announced-IDs guard. Tests only — the set is
+  /// app-session global, so a test that triggers an unlock would otherwise
+  /// suppress the same ID in a later test.
+  @visibleForTesting
+  static void resetAnnouncedForTest() => _announcedThisSession.clear();
+
   // ── Firestore helpers ────────────────────────────────────────────────────
 
   CollectionReference<Map<String, dynamic>> _achievementsCol(String uid) =>
@@ -150,8 +165,13 @@ class AchievementService {
 
     if (newlyUnlocked.isNotEmpty) {
       unlockedNotifier.value = List.unmodifiable(newlyUnlocked);
-      unlockEvents.value =
-          List.unmodifiable(newlyUnlocked); // app-wide celebration (any source)
+      // App-wide celebration (any source) — but only for IDs not already
+      // broadcast this session, so two concurrent ad-hoc instances can't
+      // double-fire the same badge (Set.add returns true only when newly added).
+      final fresh = newlyUnlocked.where(_announcedThisSession.add).toList();
+      if (fresh.isNotEmpty) {
+        unlockEvents.value = List.unmodifiable(fresh);
+      }
     }
 
     return newlyUnlocked;
