@@ -557,208 +557,234 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    if (_phase == _NazoPhase.teach) return _teachScaffold();
-    if (_phase == _NazoPhase.recall) return _recallScaffold();
-    return DqScene(
-      warm: kNazoWarmTheme,
-      backgroundAsset: widget.sceneBackgroundAsset,
-      contentMaxWidth: 600, // #144: centre on tablet, full-width on phone
-      child: Stack(
-        children: [
-          // Solve climax (game-studio #2): the gold burst renders BEHIND the
-          // content column (first Stack child) — a glow behind the teaching
-          // reveal / 「ナゾ、解けた！」, not a full-screen layer ON TOP of them. The
-          // celebration now PUNCTUATES the lesson instead of burying it during the
-          // read window (NN/G animation + Vlambeer juice; 12-expert studio rank-2).
-          // It still sits above the scene bg (DqScene is outside this Stack).
-          // Reduced-motion → none.
-          if (_burstReady && !prefersReducedMotion(context))
-            const Positioned.fill(
-              child: IgnorePointer(child: _SolveBurst()),
-            ),
-          SafeArea(
-            // FIX 2: add bottom padding so the last answer option clears the
-            // safe-area / home-indicator bar and never gets clipped.
-            bottom: true,
-            child: Padding(
-              // FIX 2: outer horizontal margin (20 instead of 16) so the dimmed
-              // plate is visible at the left/right margins — the world FRAMES the
-              // column rather than being completely hidden behind it.
-              padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _header(),
-                  // FIX 2: inter-panel gap so the plate shows between header and ミノス.
-                  const SizedBox(height: 14),
-                  _minosRow(),
-                  const SizedBox(height: 14),
-                  // Body CENTRES in the remaining space (scrolls when tall) so a
-                  // short ナゾ fills the screen instead of clinging to the top over
-                  // a dead navy void (#112 / EIKEN5-LAYTON-NAZO-PLAN.md #4).
-                  Expanded(
-                    child: LayoutBuilder(
-                      builder: (context, c) => SingleChildScrollView(
-                        // FIX 2: bottom padding inside the scroll so the last
-                        // option tile is never flush against the safe-area edge.
-                        padding: const EdgeInsets.only(bottom: 12),
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(minHeight: c.maxHeight),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              // This ナゾ plays a phoneme/word the child must HEAR to answer —
-                              // if Voice is muted, warn + offer a one-tap unmute. Suppressed when
-                              // the clip is missing (unmuting wouldn't help → show 準備中 instead).
-                              if (AudioMute.voiceMuted &&
-                                  _step.autoPlayAudio != null &&
-                                  !_audioMissing) ...[
-                                MutedVoiceBanner(
-                                  onUnmute: () => setState(() {}),
-                                  message: kPhonicsMutedMessage,
-                                ),
-                                const SizedBox(height: 12),
-                              ],
-                              if (widget.gatheredCluesJa != null &&
-                                  widget.gatheredCluesJa!.isNotEmpty) ...[
-                                _gatheredCluesBox(),
-                                const SizedBox(height: 14),
-                              ],
-                              if (widget.hotspot.framingJa != null) ...[
-                                _framingBox(),
-                                // FIX 2: larger inter-panel gap so the plate reads between
-                                // the framing box and the quiz card.
-                                const SizedBox(height: 14),
-                              ],
-                              _quizCard(),
-                              const SizedBox(height: 16),
-                              _promptLabel(),
-                              const SizedBox(height: 10),
-                              ..._optionTiles(),
-                              // Teach at the error moment (studio #3): the tapped word's
-                              // meaning, shown gently (info, not a scold) for ~2.4s.
-                              if (_wrongMeaning != null) ...[
+    // Phase child — computed into a local var so AnimatedSwitcher can wrap it.
+    // The quiz block (DqScene) is UNCHANGED; only the assignment form differs.
+    final Widget phaseChild;
+    if (_phase == _NazoPhase.teach) {
+      phaseChild = _teachScaffold();
+    } else if (_phase == _NazoPhase.recall) {
+      phaseChild = _recallScaffold();
+    } else {
+      phaseChild = DqScene(
+        warm: kNazoWarmTheme,
+        backgroundAsset: widget.sceneBackgroundAsset,
+        contentMaxWidth: 600, // #144: centre on tablet, full-width on phone
+        child: Stack(
+          children: [
+            // Solve climax (game-studio #2): the gold burst renders BEHIND the
+            // content column (first Stack child) — a glow behind the teaching
+            // reveal / 「ナゾ、解けた！」, not a full-screen layer ON TOP of them. The
+            // celebration now PUNCTUATES the lesson instead of burying it during the
+            // read window (NN/G animation + Vlambeer juice; 12-expert studio rank-2).
+            // It still sits above the scene bg (DqScene is outside this Stack).
+            // Reduced-motion → none.
+            if (_burstReady && !prefersReducedMotion(context))
+              const Positioned.fill(
+                child: IgnorePointer(child: _SolveBurst()),
+              ),
+            SafeArea(
+              // FIX 2: add bottom padding so the last answer option clears the
+              // safe-area / home-indicator bar and never gets clipped.
+              bottom: true,
+              child: Padding(
+                // FIX 2: outer horizontal margin (20 instead of 16) so the dimmed
+                // plate is visible at the left/right margins — the world FRAMES the
+                // column rather than being completely hidden behind it.
+                padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _header(),
+                    // FIX 2: inter-panel gap so the plate shows between header and ミノス.
+                    const SizedBox(height: 14),
+                    _minosRow(),
+                    const SizedBox(height: 14),
+                    // Body CENTRES in the remaining space (scrolls when tall) so a
+                    // short ナゾ fills the screen instead of clinging to the top over
+                    // a dead navy void (#112 / EIKEN5-LAYTON-NAZO-PLAN.md #4).
+                    Expanded(
+                      child: LayoutBuilder(
+                        builder: (context, c) => SingleChildScrollView(
+                          // FIX 2: bottom padding inside the scroll so the last
+                          // option tile is never flush against the safe-area edge.
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(minHeight: c.maxHeight),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                // This ナゾ plays a phoneme/word the child must HEAR to answer —
+                                // if Voice is muted, warn + offer a one-tap unmute. Suppressed when
+                                // the clip is missing (unmuting wouldn't help → show 準備中 instead).
+                                if (AudioMute.voiceMuted &&
+                                    _step.autoPlayAudio != null &&
+                                    !_audioMissing) ...[
+                                  MutedVoiceBanner(
+                                    onUnmute: () => setState(() {}),
+                                    message: kPhonicsMutedMessage,
+                                  ),
+                                  const SizedBox(height: 12),
+                                ],
+                                if (widget.gatheredCluesJa != null &&
+                                    widget.gatheredCluesJa!.isNotEmpty) ...[
+                                  _gatheredCluesBox(),
+                                  const SizedBox(height: 14),
+                                ],
+                                if (widget.hotspot.framingJa != null) ...[
+                                  _framingBox(),
+                                  // FIX 2: larger inter-panel gap so the plate reads between
+                                  // the framing box and the quiz card.
+                                  const SizedBox(height: 14),
+                                ],
+                                _quizCard(),
+                                const SizedBox(height: 16),
+                                _promptLabel(),
                                 const SizedBox(height: 10),
-                                KeyedSubtree(
-                                  key: _wrongBannerKey,
-                                  child: _wrongMeaningBanner(),
-                                ),
-                              ],
-                              if (_revealed) ...[
-                                const SizedBox(height: 12),
-                                // Solve-moment reward (game-feel #51): a detective-register
-                                // "the word resonated" stamp acknowledges the win BEFORE the
-                                // restoration dialog — so solving feels like a victory, not just
-                                // a correct/next. Static (no animation → reduced-motion-safe).
-                                Container(
-                                  width: double.infinity,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12, vertical: 8),
-                                  decoration: BoxDecoration(
-                                    color: dqGold.withAlpha(34),
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(
-                                        color: dqGold.withAlpha(140)),
+                                ..._optionTiles(),
+                                // Teach at the error moment (studio #3): the tapped word's
+                                // meaning, shown gently (info, not a scold) for ~2.4s.
+                                if (_wrongMeaning != null) ...[
+                                  const SizedBox(height: 10),
+                                  KeyedSubtree(
+                                    key: _wrongBannerKey,
+                                    child: _wrongMeaningBanner(),
                                   ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      const Text('✦',
-                                          style: TextStyle(fontSize: 18)),
-                                      const SizedBox(width: 8),
-                                      Expanded(child: _victoryStampBody()),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(height: 12),
-                                // Announce the win + the teach-why 解説 to a
-                                // screen-reader / low-vision child. Without this
-                                // live region the most-frequent learning moment
-                                // (a correct answer) delivered its explanation to
-                                // sighted children only — the wrong-answer banner
-                                // already announces (see _wrongMeaningBanner), so
-                                // the correct path was the one inverted-learning
-                                // gap. excludeSemantics so the inner Text is not
-                                // read twice. (WCAG 2.2 status-message guidance.)
-                                // The 英検 learning payload (WHY the answer is
-                                // right) as a distinct gold-accented rule-card,
-                                // visually SEPARATE from the story beat below so a
-                                // 6yo can tell the rule apart from the narrative
-                                // (Layton-style: deduction, THEN explanation).
-                                if (_step.onCorrectJa != null) ...[
+                                ],
+                                if (_revealed) ...[
+                                  const SizedBox(height: 12),
+                                  // Solve-moment reward (game-feel #51): a detective-register
+                                  // "the word resonated" stamp acknowledges the win BEFORE the
+                                  // restoration dialog — so solving feels like a victory, not just
+                                  // a correct/next. Static (no animation → reduced-motion-safe).
                                   Container(
                                     width: double.infinity,
-                                    padding: const EdgeInsets.fromLTRB(
-                                        14, 12, 14, 12),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12, vertical: 8),
                                     decoration: BoxDecoration(
-                                      color: pcParchment1,
-                                      borderRadius: BorderRadius.circular(10),
+                                      color: dqGold.withAlpha(34),
+                                      borderRadius: BorderRadius.circular(8),
                                       border: Border.all(
-                                          color: dqGold.withAlpha(120),
-                                          width: 1.5),
+                                          color: dqGold.withAlpha(140)),
                                     ),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Row(children: [
-                                          const Icon(Icons.lightbulb_outline,
-                                              color: dqGold, size: 16),
-                                          const SizedBox(width: 6),
-                                          Text('なぜ せいかい？',
-                                              style: dqInkText(
-                                                  size: 12,
-                                                  w: FontWeight.w800,
-                                                  color: dqGold,
-                                                  spacing: 1)),
-                                        ]),
-                                        const SizedBox(height: 6),
-                                        Text(_step.onCorrectJa!,
-                                            style: dqInkText(
-                                                size: 15, w: FontWeight.w600)),
+                                        const Text('✦',
+                                            style: TextStyle(fontSize: 18)),
+                                        const SizedBox(width: 8),
+                                        Expanded(child: _victoryStampBody()),
                                       ],
                                     ),
                                   ),
                                   const SizedBox(height: 12),
-                                ],
-                                Semantics(
-                                  liveRegion: true,
-                                  label: _step.onCorrectJa != null
-                                      ? 'せいかい！ ${_step.onCorrectJa} ${_step.onCorrect}'
-                                      : 'せいかい！ ${_step.onCorrect}',
-                                  excludeSemantics: true,
-                                  child: DqDialogBox(
-                                    speaker: _step.npcName,
-                                    child: Text(_step.onCorrect,
-                                        style: dqText(size: 15)),
+                                  // Announce the win + the teach-why 解説 to a
+                                  // screen-reader / low-vision child. Without this
+                                  // live region the most-frequent learning moment
+                                  // (a correct answer) delivered its explanation to
+                                  // sighted children only — the wrong-answer banner
+                                  // already announces (see _wrongMeaningBanner), so
+                                  // the correct path was the one inverted-learning
+                                  // gap. excludeSemantics so the inner Text is not
+                                  // read twice. (WCAG 2.2 status-message guidance.)
+                                  // The 英検 learning payload (WHY the answer is
+                                  // right) as a distinct gold-accented rule-card,
+                                  // visually SEPARATE from the story beat below so a
+                                  // 6yo can tell the rule apart from the narrative
+                                  // (Layton-style: deduction, THEN explanation).
+                                  if (_step.onCorrectJa != null) ...[
+                                    Container(
+                                      width: double.infinity,
+                                      padding: const EdgeInsets.fromLTRB(
+                                          14, 12, 14, 12),
+                                      decoration: BoxDecoration(
+                                        color: pcParchment1,
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                            color: dqGold.withAlpha(120),
+                                            width: 1.5),
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(children: [
+                                            const Icon(Icons.lightbulb_outline,
+                                                color: dqGold, size: 16),
+                                            const SizedBox(width: 6),
+                                            Text('なぜ せいかい？',
+                                                style: dqInkText(
+                                                    size: 12,
+                                                    w: FontWeight.w800,
+                                                    color: dqGold,
+                                                    spacing: 1)),
+                                          ]),
+                                          const SizedBox(height: 6),
+                                          Text(_step.onCorrectJa!,
+                                              style: dqInkText(
+                                                  size: 15,
+                                                  w: FontWeight.w600)),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(height: 12),
+                                  ],
+                                  Semantics(
+                                    liveRegion: true,
+                                    label: _step.onCorrectJa != null
+                                        ? 'せいかい！ ${_step.onCorrectJa} ${_step.onCorrect}'
+                                        : 'せいかい！ ${_step.onCorrect}',
+                                    excludeSemantics: true,
+                                    child: DqDialogBox(
+                                      speaker: _step.npcName,
+                                      child: Text(_step.onCorrect,
+                                          style: dqText(size: 15)),
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(height: 16),
-                                // Gated on _readWindowDone (~550ms) so a child cannot skip
-                                // past reading WHY it was right — even though the burst glow
-                                // already fired at ~90ms. Auto-advance also fires, so this is
-                                // an optional early-skip, not the only exit.
-                                if (_readWindowDone)
-                                  DqButton(
-                                      label: '▶ ナゾ、解（と）けた！', onTap: _finish),
-                              ] else ...[
-                                const SizedBox(height: 16),
-                                _hintLadder(),
+                                  const SizedBox(height: 16),
+                                  // Gated on _readWindowDone (~550ms) so a child cannot skip
+                                  // past reading WHY it was right — even though the burst glow
+                                  // already fired at ~90ms. Auto-advance also fires, so this is
+                                  // an optional early-skip, not the only exit.
+                                  if (_readWindowDone)
+                                    DqButton(
+                                        label: '▶ ナゾ、解（と）けた！', onTap: _finish),
+                                ] else ...[
+                                  const SizedBox(height: 16),
+                                  _hintLadder(),
+                                ],
+                                const SizedBox(height: 20),
                               ],
-                              const SizedBox(height: 20),
-                            ],
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
-      ),
+          ],
+        ),
+      ); // end DqScene (quiz phaseChild)
+    } // end else (quiz branch)
+
+    // Key by phase so AnimatedSwitcher detects the phase change and crossfades.
+    final keyed = KeyedSubtree(key: ValueKey(_phase), child: phaseChild);
+
+    // Reduced-motion (OS accessibility): return instantly, no transition.
+    if (prefersReducedMotion(context)) return keyed;
+
+    // Normal motion: 320ms crossfade between teach / recall / quiz phases.
+    // Cognitive-load research: a soft fade makes the phase change intentional
+    // and premium — the transition IS the beat (studio finding #5).
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 320),
+      switchInCurve: Curves.easeOut,
+      switchOutCurve: Curves.easeIn,
+      transitionBuilder: (child, anim) =>
+          FadeTransition(opacity: anim, child: child),
+      child: keyed,
     );
   }
 
