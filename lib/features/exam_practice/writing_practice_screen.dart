@@ -1130,6 +1130,14 @@ class _WritingPracticeScreenState extends State<WritingPracticeScreen> {
   /// beginner sees the 型 before writing; collapsible to free space once learned.
   bool _structureOpen = true;
 
+  /// True after「もう一度（なおして）」on the result screen: the previous draft is
+  /// intentionally kept in the editor so the child REVISES it. Without a cue the
+  /// child would re-submit byte-identical text and be re-graded the same (R2-F2).
+  /// Cleared when moving to a fresh prompt or submitting. Carries a recap of the
+  /// previous score so the revision has a concrete target.
+  bool _revisingDraft = false;
+  String? _priorScoreRecap;
+
   // Lazy-init to satisfy R4 (no network in build/initState)
   ClaudeClient? _claudeClient;
   ClaudeClient get _claude => _claudeClient ??= ClaudeClient(maxTokens: 400);
@@ -1298,7 +1306,19 @@ class _WritingPracticeScreenState extends State<WritingPracticeScreen> {
   }
 
   void _tryAgain() {
+    // Keep the draft so the child revises it (do NOT clear _controller), but
+    // flag revise-mode so the editor shows a "edit before resubmitting" cue with
+    // the previous score as a target — otherwise an unchanged resubmit re-grades
+    // identically and reads as a no-op (R2-F2).
+    final prev = _result;
     setState(() {
+      if (prev != null && prev.apiAvailable && prev.maxScore > 0) {
+        _priorScoreRecap = 'まえは ${prev.total} / ${prev.maxScore}点（てん）だったよ';
+      } else {
+        _priorScoreRecap = null;
+      }
+      _revisingDraft = true;
+      _structureOpen = true; // re-surface the 型 to support the revision
       _phase = _Phase.writing;
       _result = null;
       _gradingError = null;
@@ -1339,6 +1359,8 @@ class _WritingPracticeScreenState extends State<WritingPracticeScreen> {
       setState(() {
         _promptIdx++;
         _controller.clear();
+        _revisingDraft = false;
+        _priorScoreRecap = null;
         _phase = _Phase.writing;
         _result = null;
         _gradingError = null;
@@ -1429,6 +1451,13 @@ class _WritingPracticeScreenState extends State<WritingPracticeScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Revise-mode cue (R2-F2): on「もう一度」the draft is kept on purpose so
+          // the child EDITS it before resubmitting — without this banner an
+          // unchanged resubmit would be re-graded identically and read as a no-op.
+          if (_revisingDraft) ...[
+            _ReviseDraftBanner(scoreRecap: _priorScoreRecap),
+            const SizedBox(height: 12),
+          ],
           // Task type badge
           _TaskTypeBadge(type: _prompt.type),
           const SizedBox(height: 10),
@@ -1840,6 +1869,62 @@ class _DqWritingHeader extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// Revise-mode banner shown above the editor after「もう一度（なおして）」(R2-F2).
+/// The previous draft is intentionally kept in the box; this tells the child to
+/// EDIT it (with the previous score as a concrete target) before resubmitting,
+/// so a re-grade reflects real revision rather than an identical resubmit.
+class _ReviseDraftBanner extends StatelessWidget {
+  const _ReviseDraftBanner({this.scoreRecap});
+  final String? scoreRecap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      liveRegion: true,
+      container: true,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        decoration: BoxDecoration(
+          color: dqGold.withAlpha(28),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: dqGold.withAlpha(140), width: 1.5),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Icon(Icons.edit_note_rounded, color: dqGold, size: 24),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('なおして だしなおそう',
+                      style:
+                          dqText(size: 14, w: FontWeight.w800, color: dqGold)),
+                  const SizedBox(height: 3),
+                  Text(
+                    'まえの ぶんを のこしてあるよ。ヒントを みて なおしてから、'
+                    'もういちど ていしゅつ しよう。',
+                    style: dqText(
+                        size: 12, color: dqInk.withAlpha(210), spacing: 0.2),
+                  ),
+                  if (scoreRecap != null) ...[
+                    const SizedBox(height: 5),
+                    Text(scoreRecap!,
+                        style: dqText(
+                            size: 12, w: FontWeight.w700, color: dqGoldDeep)),
+                  ],
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
