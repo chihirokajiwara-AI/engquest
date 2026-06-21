@@ -389,11 +389,25 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
   /// Surface the tapped wrong word's meaning for ~2.4s (studio #3 — the error
   /// moment is the highest-salience encoding moment; teach, don't just shake).
   void _showWrongMeaning(int i) {
-    final meaning = _meaningFor(_step.options[i].label);
-    if (meaning == null) return;
     final word = _step.options[i].label;
+    final meaning = _meaningFor(word);
+    final String banner;
+    if (meaning != null) {
+      banner = '$word = $meaning';
+    } else {
+      // #4 (studio): ナゾ without a teach-card meaning — notably a penalising
+      // QuestEncounter, the HIGHEST-stakes wrong-tap — used to shake silently with
+      // zero explanation (error-consolidation risk per 2025-26 retrieval-practice
+      // research). Teach at the error spike from the step's own data: name the
+      // correct answer + its JA gloss (npcLineJa/teachJa) if the step carries one.
+      final correct = _step.options[_step.correctIndex].label;
+      final gloss = _step.teachJa?.trim();
+      banner = (gloss != null && gloss.isNotEmpty)
+          ? 'せいかいは「$correct」 ― $gloss'
+          : 'せいかいは「$correct」';
+    }
     _wrongMeaningTimer?.cancel();
-    setState(() => _wrongMeaning = '$word = $meaning');
+    setState(() => _wrongMeaning = banner);
     // Bring the teach on-screen — it renders below the tiles, so on a phone the
     // child who just tapped wrong wouldn't otherwise see it (#100). Post-frame so
     // the banner is laid out before we scroll. Reduced-motion-safe: a near-instant

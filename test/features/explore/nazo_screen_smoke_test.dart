@@ -221,7 +221,13 @@ void main() {
       // Skip the active cued-recall phase if present.
       await _skipThroughRecall(tester);
       for (final i in taps) {
-        await tester.tap(find.byType(AudioOptionButton).at(i));
+        // A wrong tap surfaces the teach banner (studio #3/#4), which reflows the
+        // option tiles downward — ensure the target tile is on-screen before the
+        // next tap so the by-index tap can't miss a pushed-down tile.
+        final tile = find.byType(AudioOptionButton).at(i);
+        await tester.ensureVisible(tile);
+        await tester.pump();
+        await tester.tap(tile);
         await tester.pump();
       }
       // Choreographed reveal (studio #1): the learning text shows immediately, but
