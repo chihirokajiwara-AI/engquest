@@ -18,6 +18,7 @@ class SceneSolvedStore {
   static const _coinsKey = 'scene_coins_v1';
   static const _observedKey = 'scene_observed_v1';
   static const _hintsKey = 'scene_hints_v1';
+  static const _minosKeyPrefix = 'scene_minos_';
 
   /// The solved-hotspot keys for [sceneKey] (e.g. '5') as a set of indices.
   /// Returns an empty set on any error so exploration always works.
@@ -172,12 +173,57 @@ class SceneSolvedStore {
     }
   }
 
-  /// Test seam: clear all persisted solve-, coin-, observation- AND hint-state.
+  // ── Per-case ミノス record ──────────────────────────────────────────────────
+  // ミノス earned in a scene session is a running reward-accumulator shown in the
+  // scene header (#86). By persisting the BEST (highest) value per grade here, it
+  // becomes a durable mastery record visible in the 事件簿 — not just an ephemeral
+  // session number. The child's best run is kept: a re-play can never lower their
+  // recorded ミノス, only improve it.
+
+  /// Persist the ミノス total for [grade], keeping the child's BEST (highest) run.
+  /// A re-play that earns fewer ミノス than the stored record is silently ignored —
+  /// one bad run must never erase a peak performance. Best-effort; non-fatal.
+  static Future<void> saveMinos(String grade, int minos) async {
+    if (minos <= 0) return; // nothing to record yet
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final key = '$_minosKeyPrefix$grade';
+      final stored = prefs.getInt(key) ?? 0;
+      if (minos <= stored) return; // keep the higher stored value
+      await prefs.setInt(key, minos);
+    } catch (_) {
+      // Non-fatal: the 事件簿 ミノス chip simply won't update this run.
+    }
+  }
+
+  /// Load the best-run ミノス total for [grade]. Returns 0 if absent or on error.
+  static Future<int> loadMinos(String grade) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      return prefs.getInt('$_minosKeyPrefix$grade') ?? 0;
+    } catch (_) {
+      return 0;
+    }
+  }
+
+  /// Test seam: clear all persisted solve-, coin-, observation-, hint- AND minos-state.
   static Future<void> clearForTest() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_prefsKey);
     await prefs.remove(_coinsKey);
     await prefs.remove(_observedKey);
     await prefs.remove(_hintsKey);
+    // Clear minos for all known grades.
+    for (final g in [
+      '5',
+      '4',
+      '3',
+      'pre2',
+      'pre2plus',
+      '2',
+      'pre1',
+    ]) {
+      await prefs.remove('$_minosKeyPrefix$g');
+    }
   }
 }

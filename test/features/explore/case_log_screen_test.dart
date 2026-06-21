@@ -118,5 +118,39 @@ void main() {
           reason: 'a cleared chapter shows the 解決 case-closed stamp (N12)');
       expect(tester.takeException(), isNull);
     });
+
+    testWidgets('a cleared chapter with a stored ミノス value shows the ミノス chip',
+        (tester) async {
+      tester.view.physicalSize = const Size(440, 2400);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+      // Clear all 5級 ナゾ and store a ミノス total.
+      for (var i = 0; i < kTown5Scene.hotspots.length; i++) {
+        if (kTown5Scene.hotspots[i].kind == HotspotKind.npc) {
+          await SceneSolvedStore.markSolved('5', i);
+        }
+      }
+      await SceneSolvedStore.saveMinos('5', 35);
+      await tester.pumpWidget(const MaterialApp(home: CaseLogScreen()));
+      await tester.pumpAndSettle();
+      // The ミノス chip must be visible on the cleared 5級 tile.
+      expect(find.textContaining('ミノス'), findsWidgets,
+          reason: 'cleared chapter with stored ミノス shows the mastery chip');
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('an uncleared chapter does NOT show a ミノス chip',
+        (tester) async {
+      tester.view.physicalSize = const Size(440, 2400);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+      // Store a ミノス value but do NOT clear the chapter.
+      await SceneSolvedStore.saveMinos('5', 10);
+      await tester.pumpWidget(const MaterialApp(home: CaseLogScreen()));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('ミノス'), findsNothing,
+          reason: 'chip must not appear unless the chapter is fully cleared');
+      expect(tester.takeException(), isNull);
+    });
   });
 }

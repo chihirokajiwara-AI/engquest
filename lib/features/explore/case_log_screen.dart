@@ -66,31 +66,41 @@ class CaseLogScreen extends StatefulWidget {
   State<CaseLogScreen> createState() => _CaseLogScreenState();
 }
 
+/// Combined load result: solved hotspot indices + best ミノス per grade.
+class _CaseLogData {
+  const _CaseLogData({required this.solved, required this.minos});
+  final Map<String, Set<int>> solved;
+  final Map<String, int> minos;
+}
+
 class _CaseLogScreenState extends State<CaseLogScreen> {
-  late final Future<Map<String, Set<int>>> _solved;
+  late final Future<_CaseLogData> _data;
 
   @override
   void initState() {
     super.initState();
-    _solved = _loadAll();
+    _data = _loadAll();
   }
 
-  Future<Map<String, Set<int>>> _loadAll() async {
-    final out = <String, Set<int>>{};
+  Future<_CaseLogData> _loadAll() async {
+    final solved = <String, Set<int>>{};
+    final minos = <String, int>{};
     for (final g in kCaseLogGradeOrder) {
-      out[g] = await SceneSolvedStore.solvedIndices(g);
+      solved[g] = await SceneSolvedStore.solvedIndices(g);
+      minos[g] = await SceneSolvedStore.loadMinos(g);
     }
-    return out;
+    return _CaseLogData(solved: solved, minos: minos);
   }
 
   @override
   Widget build(BuildContext context) {
     return DqScene(
       child: SafeArea(
-        child: FutureBuilder<Map<String, Set<int>>>(
-          future: _solved,
+        child: FutureBuilder<_CaseLogData>(
+          future: _data,
           builder: (context, snap) {
-            final solved = snap.data ?? const {};
+            final solved = snap.data?.solved ?? const {};
+            final minosMap = snap.data?.minos ?? const {};
             final cleared = <String>{
               for (final g in kCaseLogGradeOrder)
                 if (kScenesByGrade[g] != null &&
@@ -135,6 +145,7 @@ class _CaseLogScreenState extends State<CaseLogScreen> {
                             kScenesByGrade[g]!,
                             solved[g] ?? const {},
                             cleared.contains(g),
+                            minosMap[g] ?? 0,
                           ),
                     ],
                   ),
@@ -192,7 +203,12 @@ class _CaseLogScreenState extends State<CaseLogScreen> {
   }
 
   Widget _chapterTile(
-      String grade, SceneDef scene, Set<int> solvedIdx, bool cleared) {
+    String grade,
+    SceneDef scene,
+    Set<int> solvedIdx,
+    bool cleared,
+    int bestMinos,
+  ) {
     final npcCount =
         scene.hotspots.where((h) => h.kind == HotspotKind.npc).length;
     final solvedCount = scene.hotspots
@@ -241,6 +257,14 @@ class _CaseLogScreenState extends State<CaseLogScreen> {
                           color: dqInk.withAlpha(160))),
             ],
           ),
+          // ── ミノス mastery record chip ─────────────────────────────────────
+          // Shown only on CLEARED chapters where the child earned a ミノス total
+          // (bestMinos > 0). The diamond-cyan chip matches the in-scene accumulator
+          // pill colour so the child recognises it as the same reward.
+          if (cleared && bestMinos > 0) ...[
+            const SizedBox(height: 8),
+            _minosChip(bestMinos),
+          ],
           for (final frag in unlocked) ...[
             const SizedBox(height: 8),
             Text(frag,
@@ -268,6 +292,36 @@ class _CaseLogScreenState extends State<CaseLogScreen> {
             ),
           ],
         ],
+      ),
+    );
+  }
+
+  /// Diamond-cyan ミノス chip: the child's best-run ミノス total for a cleared
+  /// case. Colour matches the in-scene accumulator pill so the reward is
+  /// immediately recognisable as "the score I built up during that adventure."
+  Widget _minosChip(int minos) {
+    const cyan = Color(0xFFB8F0FF);
+    return Semantics(
+      label: 'ミノス $minos',
+      excludeSemantics: true,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        decoration: BoxDecoration(
+          color: Colors.black.withAlpha(60),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: cyan.withAlpha(120)),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.hexagon_outlined, color: cyan, size: 13),
+            const SizedBox(width: 4),
+            Text(
+              'ミノス $minos',
+              style: dqText(size: 12, w: FontWeight.w700, color: cyan),
+            ),
+          ],
+        ),
       ),
     );
   }

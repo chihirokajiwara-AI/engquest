@@ -735,6 +735,10 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
       // Forward-pull shown statically after restoration (no animated chaining).
       _focusIdx = null;
       if (justCleared) {
+        // Persist the child's best ミノス for this case so it becomes a durable
+        // mastery record in the 事件簿. Fire-and-forget; saveMinos is internally
+        // non-fatal, so it never interrupts the clear flow.
+        SceneSolvedStore.saveMinos(widget.eikenLevel, _sessionMinos);
         // Front-door 英検 puzzle solved → feed the home engagement spine (streak
         // + daily-goal). justCleared: use recordExamHabitAndGet to capture the
         // updated StreakState so the payoff dialog can surface the SessionEndHook
@@ -830,6 +834,9 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
       // The await naturally lands us past the current frame (no postFrameCallback
       // needed) while the camera-push/colour-flood animation plays.
       if (justCleared) {
+        // Persist the child's best ミノス for this case (durable mastery record in
+        // 事件簿). Fire-and-forget; saveMinos is internally non-fatal.
+        SceneSolvedStore.saveMinos(widget.eikenLevel, _sessionMinos);
         final streak = await recordExamHabitAndGet(1);
         if (!mounted) return;
         _showSceneClearedPayoff(streak);

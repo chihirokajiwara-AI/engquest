@@ -126,4 +126,38 @@ void main() {
     expect(await SceneSolvedStore.collectedCoinIndices('5'), isEmpty);
     expect(await SceneSolvedStore.seenObservationIndices('5'), isEmpty);
   });
+
+  // ── ミノス mastery record ───────────────────────────────────────────────────
+
+  test('saveMinos persists and loadMinos reads it back', () async {
+    expect(await SceneSolvedStore.loadMinos('5'), 0);
+    await SceneSolvedStore.saveMinos('5', 42);
+    expect(await SceneSolvedStore.loadMinos('5'), 42);
+  });
+
+  test('saveMinos keeps the HIGHEST value (best-run mastery record)', () async {
+    await SceneSolvedStore.saveMinos('5', 30);
+    await SceneSolvedStore.saveMinos('5', 50); // higher → replaces
+    await SceneSolvedStore.saveMinos('5', 20); // lower → ignored
+    expect(await SceneSolvedStore.loadMinos('5'), 50,
+        reason: 'a re-play with fewer ミノス must never lower the record');
+  });
+
+  test('saveMinos with 0 is a no-op (nothing to record yet)', () async {
+    await SceneSolvedStore.saveMinos('5', 0);
+    expect(await SceneSolvedStore.loadMinos('5'), 0);
+  });
+
+  test('ミノス records are per-grade namespaced (5級 ≠ 4級)', () async {
+    await SceneSolvedStore.saveMinos('5', 25);
+    expect(await SceneSolvedStore.loadMinos('4'), 0);
+  });
+
+  test('minos-state is independent of solve/coin/observation namespaces',
+      () async {
+    await SceneSolvedStore.saveMinos('5', 15);
+    expect(await SceneSolvedStore.solvedIndices('5'), isEmpty);
+    expect(await SceneSolvedStore.collectedCoinIndices('5'), isEmpty);
+    expect(await SceneSolvedStore.seenObservationIndices('5'), isEmpty);
+  });
 }
