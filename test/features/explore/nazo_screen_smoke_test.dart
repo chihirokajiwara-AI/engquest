@@ -381,6 +381,52 @@ void main() {
           reason: 'the CTA must appear once the ~550ms read window elapses');
     });
 
+    testWidgets(
+        'vocab ナゾ with word=meaning does NOT auto-dismiss — CTA-only exit (#3)',
+        (t) async {
+      // Studio #3: a vocab ナゾ whose victory stamp shows 「word = いみ」 is the
+      // highest-salience encoding moment — auto-advancing (2400ms) yanks it away
+      // before a 6-8yo can read it. Auto-finish is suppressed (like the rule
+      // card); the screen must remain on the ナゾ past 2400ms until the child taps
+      // the CTA. Target the NPC whose correct option HAS a teach meaning.
+      t.view.physicalSize = const Size(440, 1600);
+      t.view.devicePixelRatio = 1.0;
+      addTearDown(t.view.reset);
+      String norm(String s) => s.toLowerCase().replaceAll(RegExp('[^a-z]'), '');
+      final hotspot = kTown5Scene.hotspots.firstWhere((h) {
+        if (h.kind != HotspotKind.npc || h.step == null) return false;
+        final cw = h.step!.options[h.step!.correctIndex].label;
+        for (final it in h.teachCard?.items ?? const []) {
+          if (norm(it.en) == norm(cw)) return true;
+        }
+        return false;
+      });
+      final correctIdx = hotspot.step!.correctIndex;
+      await t.pumpWidget(MaterialApp(
+        home: NazoScreen(hotspot: hotspot, eikenLevel: '5'),
+      ));
+      await t.pump(const Duration(milliseconds: 400));
+      final proceed = find.textContaining('おぼえた');
+      if (proceed.evaluate().isNotEmpty) {
+        await t.ensureVisible(proceed.first);
+        await t.pump();
+        await t.tap(proceed.first);
+        await t.pump(const Duration(milliseconds: 300));
+      }
+      await _skipThroughRecall(t);
+      final tile = find.byType(AudioOptionButton).at(correctIdx);
+      await t.ensureVisible(tile);
+      await t.pump();
+      await t.tap(tile);
+      // Pump well past the 2400ms auto-advance WITHOUT tapping the CTA.
+      await t.pump(const Duration(milliseconds: 3000));
+      // The ナゾ must still be here (auto-dismiss suppressed for word=meaning).
+      expect(find.textContaining('ナゾ、解'), findsOneWidget,
+          reason: 'vocab ナゾ with a word=meaning payload must NOT auto-dismiss; '
+              'the child reads it and taps the CTA at their own pace');
+      expect(t.takeException(), isNull);
+    });
+
     testWidgets('wrong then correct → firstTryCorrect == false (no inflation)',
         (t) async {
       final c = correctIdxOf5kuNpc();

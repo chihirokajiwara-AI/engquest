@@ -436,6 +436,13 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
     // their own pace. Auto-advance stays for story-only reveals, where it carries
     // a non-reader to the colour-restoration without stranding them on a read.
     if (_step.onCorrectJa != null) return;
+    // #3 (studio): a vocab ナゾ whose victory stamp shows a 「word = いみ」 payload is
+    // the highest-salience encoding moment — auto-advancing yanks it away before a
+    // 6-8yo can read it. Suppress auto-dismiss exactly like the rule card; the
+    // 「▶ ナゾ、解けた！」 CTA (live at ~550ms) is the exit. Grammar/story-only reveals
+    // with no word=meaning keep the 2400ms auto-advance so non-readers aren't
+    // stranded on a read they can't do.
+    if (_meaningFor(_step.options[_step.correctIndex].label) != null) return;
     // 2400ms (was 1400): the gold burst peaks ~650-1100ms post-tap, so 1400ms
     // auto-popped the screen before a young reader could register the win AND read
     // the 「ことばがひびいた」/why-correct reveal. 2400ms leaves a ~1s read window
