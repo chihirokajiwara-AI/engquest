@@ -235,6 +235,11 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
   DateTime? _questionShownAt;
   int _measuredCorrect = 0;
   int _measuredTotal = 0;
+  // Why a question was excluded from the 合格率, tracked separately so the
+  // session-end disclosure tells the TRUTH about each exclusion instead of
+  // blaming the hint for a too-fast answer the child never hinted (R2-F5).
+  int _hintExcludedCount = 0;
+  int _tooFastExcludedCount = 0;
 
   // #16 hint scaffold: a once-per-question "2つに しぼる" (narrow to 2) lifeline for
   // a struggling reader — eliminates two WRONG choices (50/50). Using it EXCLUDES
@@ -336,8 +341,14 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
       }
       _consecutiveWrong = correct ? 0 : _consecutiveWrong + 1;
       _consecutiveCorrect = correct ? _consecutiveCorrect + 1 : 0;
-      // A hinted answer is excluded from the by-comprehension 合格率 (honesty).
-      if (measured && !_hintUsed) {
+      // A hinted OR too-fast answer is excluded from the by-comprehension 合格率
+      // (honesty). Count the reason separately so the disclosure is accurate —
+      // hint exclusion takes precedence (the child consented to it). (R2-F5)
+      if (_hintUsed) {
+        _hintExcludedCount++;
+      } else if (!measured) {
+        _tooFastExcludedCount++;
+      } else {
         _measuredTotal++;
         if (correct) _measuredCorrect++;
       }
@@ -881,10 +892,19 @@ class _ReadingPracticeScreenState extends State<ReadingPracticeScreen> {
             // Honesty (#157): the 合格率 counts only UNAIDED answers — disclose the
             // hinted ones so the session score and the home meter don't silently
             // contradict (mirrors word_ordering's existing note).
-            if (_totalQuestions - _measuredTotal > 0) ...[
+            if (_hintExcludedCount > 0) ...[
               const SizedBox(height: 10),
               Text(
-                'ヒントを つかった ${_totalQuestions - _measuredTotal}問（もん）は、\n'
+                'ヒントを つかった $_hintExcludedCount問（もん）は、\n'
+                '合格率（ごうかくりつ）に 入（い）れていません。',
+                textAlign: TextAlign.center,
+                style: dqText(color: dqInk.withAlpha(160), size: 12),
+              ),
+            ],
+            if (_tooFastExcludedCount > 0) ...[
+              const SizedBox(height: 10),
+              Text(
+                'はやすぎた $_tooFastExcludedCount問（もん）は、\n'
                 '合格率（ごうかくりつ）に 入（い）れていません。',
                 textAlign: TextAlign.center,
                 style: dqText(color: dqInk.withAlpha(160), size: 12),
