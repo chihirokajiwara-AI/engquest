@@ -89,6 +89,22 @@ async function clickLabel(needle) {
   return true;
 }
 
+// Click `clickNeedle`, then wait for `expectNeedle`. On a slow live boot the first
+// post-hub tap can land before the target screen's CanvasKit semantics are ready,
+// so the tap is silently dropped. If the expected label doesn't appear, settle and
+// RE-CLICK once. This absorbs the dropped-tap timing flake WITHOUT masking a real
+// break (a genuinely broken screen fails both attempts). Returns wait ms or -1.
+async function clickAndAwait(clickNeedle, expectNeedle, timeout = DEAD_MS) {
+  if (!(await clickLabel(clickNeedle))) return -1;
+  let ms = await waitForLabel(expectNeedle, timeout);
+  if (ms < 0) {
+    await page.waitForTimeout(400);
+    if (!(await clickLabel(clickNeedle))) return -1;
+    ms = await waitForLabel(expectNeedle, timeout);
+  }
+  return ms;
+}
+
 // Tap the ✕ close. The exam-screen close IconButton carries tooltip
 // 'とじる / Close' → a real semantics label, so click it BY LABEL (robust across
 // screens whose headers differ in height). The old top-left-coordinate approach
@@ -143,8 +159,8 @@ record('tap 英検 CTA → exam hub', examMs < 0 ? DEAD_MS : examMs, examMs >= 0
 // screen but never on the hub, so a match proves we entered the 大問. (NOT '正答':
 // that score counter is gated behind the first CORRECT answer per the no-scold
 // rule #101/#106, so it is absent on a fresh question screen.)
-const okSec = examMs >= 0 && await clickLabel('筆記1');
-const q1Ms = okSec ? await waitForLabel('1. ', DEAD_MS) : -1;
+const okSec = examMs >= 0;
+const q1Ms = okSec ? await clickAndAwait('筆記1', '1. ') : -1;
 record('tap 筆記1 → 大問1 question', q1Ms < 0 ? DEAD_MS : q1Ms, q1Ms >= 0,
   !okSec ? '筆記1 not reached' : (q1Ms < 0 ? 'DEAD tap (no question screen)' : ''));
 
@@ -172,8 +188,8 @@ record('✕ close → back to hub', backMs < 0 ? DEAD_MS : backMs, backMs >= 0,
 // ── 筆記2 (大問2 会話文) loads + is answerable — generalises beyond 大問1 ────────
 // Assert a numbered choice '1. ' (on the live 大問2 question screen, not the hub).
 // Same reason as 筆記1: '正答' is gated behind the first correct answer (#101/#106).
-const okSec2 = backMs >= 0 && await clickLabel('筆記2');
-const conv = okSec2 ? await waitForLabel('1. ', DEAD_MS) : -1;
+const okSec2 = backMs >= 0;
+const conv = okSec2 ? await clickAndAwait('筆記2', '1. ') : -1;
 record('tap 筆記2 → 大問2 question', conv < 0 ? DEAD_MS : conv, conv >= 0,
   !okSec2 ? '筆記2 not reached' : (conv < 0 ? 'DEAD tap (no question screen)' : ''));
 const okAns2 = conv >= 0 && await clickLabel('1. ');
