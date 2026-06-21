@@ -574,6 +574,11 @@ class _BattleScreenState extends State<BattleScreen>
       _queueIdx = 0;
       _sessionResults.clear();
       _sessionDone = false;
+      // The session-end branch in _gradeCard returns with _grading still true
+      // (it never schedules the post-frame release). On 「もういちど」 this same
+      // State is reused, so without this reset the replay deck's grade buttons
+      // would all hit `if (_grading) return` and be permanently dead (R2-F8).
+      _grading = false;
       _isFlipped = false;
       _streak = 0;
       _totalXp = 0;
