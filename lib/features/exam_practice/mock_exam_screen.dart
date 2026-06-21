@@ -66,7 +66,11 @@ class _MockExamScreenState extends State<MockExamScreen> {
 
   int _index = 0;
   int? _selected;
-  late int _secondsLeft;
+  // Countdown as a ValueNotifier so the 1-Hz timer tick rebuilds ONLY the AppBar
+  // clock (via a ValueListenableBuilder), not the whole question/choices subtree.
+  // Driving it with setState rebuilt the entire screen every second for up to an
+  // 85-min 準1 session (~5,100 full rebuilds) — a 1-Hz repaint stall (R2-F11).
+  late final ValueNotifier<int> _secondsLeft;
   Timer? _timer;
   AudioCueService? _cue;
   bool _submitting = false;
@@ -82,18 +86,18 @@ class _MockExamScreenState extends State<MockExamScreen> {
     _exam = MockExamAssembler.assemble(widget.eikenGrade, seed: widget.seed);
     _items = _exam.mcqItems;
     final minutes = kEikenExams[widget.eikenGrade]?.totalMinutes ?? 30;
-    _secondsLeft = minutes * 60;
+    _secondsLeft = ValueNotifier(minutes * 60);
     if (_items.isNotEmpty) _startTimer();
   }
 
   void _startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 1), (_) {
       if (!mounted) return;
-      if (_secondsLeft <= 1) {
-        setState(() => _secondsLeft = 0);
+      if (_secondsLeft.value <= 1) {
+        _secondsLeft.value = 0; // notifier-only → no full-screen setState
         _submit(); // time up → auto-score
       } else {
-        setState(() => _secondsLeft--);
+        _secondsLeft.value--;
       }
     });
   }
@@ -101,6 +105,7 @@ class _MockExamScreenState extends State<MockExamScreen> {
   @override
   void dispose() {
     _timer?.cancel();
+    _secondsLeft.dispose();
     super.dispose();
   }
 
@@ -305,7 +310,6 @@ class _MockExamScreenState extends State<MockExamScreen> {
     final item = _current;
     final isListening = item.skill == EikenSkill.listening;
     final progress = (_index + 1) / _items.length;
-    final low = _secondsLeft <= 60;
 
     return PopScope(
       // Guard a half-finished timed mock: ≥1 answer means leaving would discard
@@ -338,30 +342,38 @@ class _MockExamScreenState extends State<MockExamScreen> {
             Center(
               child: Padding(
                 padding: const EdgeInsets.only(right: 14),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // Non-colour urgency cue (#127, WCAG 1.4.1): a colour-blind
-                    // child can't see the red shift, so a warning icon appears
-                    // when time is low — the SHAPE signals "hurry", not the hue.
-                    if (low)
-                      const Padding(
-                        padding: EdgeInsets.only(right: 4),
-                        child: Icon(Icons.warning_amber_rounded,
-                            color: Colors.redAccent,
-                            size: 20,
-                            semanticLabel: 'のこり時間 わずか'),
-                      ),
-                    Text(
-                      '⏱ ${_clock(_secondsLeft)}',
-                      style: TextStyle(
-                        color: low ? Colors.redAccent : dqGold,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        fontFeatures: const [FontFeature.tabularFigures()],
-                      ),
-                    ),
-                  ],
+                // Only this clock rebuilds on the 1-Hz tick (R2-F11) — the rest
+                // of the screen is outside this builder's subtree.
+                child: ValueListenableBuilder<int>(
+                  valueListenable: _secondsLeft,
+                  builder: (_, secs, __) {
+                    final low = secs <= 60;
+                    return Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Non-colour urgency cue (#127, WCAG 1.4.1): a colour-blind
+                        // child can't see the red shift, so a warning icon appears
+                        // when time is low — the SHAPE signals "hurry", not the hue.
+                        if (low)
+                          const Padding(
+                            padding: EdgeInsets.only(right: 4),
+                            child: Icon(Icons.warning_amber_rounded,
+                                color: Colors.redAccent,
+                                size: 20,
+                                semanticLabel: 'のこり時間 わずか'),
+                          ),
+                        Text(
+                          '⏱ ${_clock(secs)}',
+                          style: TextStyle(
+                            color: low ? Colors.redAccent : dqGold,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            fontFeatures: const [FontFeature.tabularFigures()],
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ),
             ),
