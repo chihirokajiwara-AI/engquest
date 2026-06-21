@@ -75,6 +75,56 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
+    // R2-F9: the OS back-button / iOS swipe-back must carry the paid hint tier
+    // back, just like the ✕ button (#155). Before the PopScope, a back-gesture
+    // popped with null → scene_view skipped the hint-tier save → the child was
+    // charged coins for a hint that silently relocked. Here a child reopens with
+    // a tier-2 hint already bought; a system back must return that tier, not null.
+    testWidgets('system back-gesture returns the paid hint tier (R2-F9)',
+        (tester) async {
+      final hotspot = kTown5Scene.hotspots.firstWhere(
+        (h) => h.kind == HotspotKind.npc,
+      );
+      NazoResult? popped;
+      var didReturn = false;
+      await tester.pumpWidget(MaterialApp(
+        home: Scaffold(
+          body: Builder(
+            builder: (context) => ElevatedButton(
+              onPressed: () async {
+                popped = await Navigator.of(context).push<NazoResult>(
+                  MaterialPageRoute(
+                    builder: (_) => NazoScreen(
+                      hotspot: hotspot,
+                      eikenLevel: '5',
+                      initialHintsShown: 2,
+                    ),
+                  ),
+                );
+                didReturn = true;
+              },
+              child: const Text('open'),
+            ),
+          ),
+        ),
+      ));
+      await tester.tap(find.text('open'));
+      await tester.pumpAndSettle();
+      expect(find.byType(NazoScreen), findsOneWidget);
+
+      // Simulate the platform back button / iOS swipe-back.
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+
+      expect(didReturn, isTrue, reason: 'the back-gesture must pop the ナゾ');
+      expect(popped, isNotNull,
+          reason:
+              'a back-gesture must return a NazoResult, never null (R2-F9)');
+      expect(popped!.hintsShown, 2,
+          reason: 'the paid hint tier must survive a back-gesture (R2-F9)');
+      expect(popped!.solved, isFalse);
+    });
+
     // #61: every ナゾ opens with a NAMED case identity — whose mystery + which 英検
     // grade — replacing the undifferentiated 「？」ナゾが あらわれた！.
     testWidgets('header shows case identity (英検 grade + NPC name)',

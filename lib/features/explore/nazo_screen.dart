@@ -504,6 +504,14 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
   }
 
   void _dismiss() {
+    // Shares the [_finished] terminal guard with _finish() so a back-gesture and
+    // a pending auto-finish can never double-pop the route. Cancels pending
+    // timers so a queued _finish can't fire after we've dismissed.
+    if (_finished) return;
+    _finished = true;
+    _burstTimer?.cancel();
+    _readWindowTimer?.cancel();
+    _finishTimer?.cancel();
     // Carry the unlocked hint tier back so reopening this unsolved ナゾ restores
     // the hints the child already paid for (the coin spend is durable).
     Navigator.of(context).pop(
@@ -782,18 +790,31 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
     final keyed = KeyedSubtree(key: ValueKey(_phase), child: phaseChild);
 
     // Reduced-motion (OS accessibility): return instantly, no transition.
-    if (prefersReducedMotion(context)) return keyed;
-
     // Normal motion: 320ms crossfade between teach / recall / quiz phases.
     // Cognitive-load research: a soft fade makes the phase change intentional
     // and premium — the transition IS the beat (studio finding #5).
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 320),
-      switchInCurve: Curves.easeOut,
-      switchOutCurve: Curves.easeIn,
-      transitionBuilder: (child, anim) =>
-          FadeTransition(opacity: anim, child: child),
-      child: keyed,
+    final Widget body = prefersReducedMotion(context)
+        ? keyed
+        : AnimatedSwitcher(
+            duration: const Duration(milliseconds: 320),
+            switchInCurve: Curves.easeOut,
+            switchOutCurve: Curves.easeIn,
+            transitionBuilder: (child, anim) =>
+                FadeTransition(opacity: anim, child: child),
+            child: keyed,
+          );
+
+    // Route the system back-button / iOS swipe-back through _dismiss() so it
+    // returns a NazoResult carrying the paid hint tier. Without this, a
+    // back-gesture pops with null and scene_view skips the hint-tier save —
+    // the child is charged coins for a hint that silently relocks (R2-F9, the
+    // back-path twin of #155 which only covered the ✕ button).
+    return PopScope<NazoResult>(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) _dismiss();
+      },
+      child: body,
     );
   }
 
