@@ -137,6 +137,17 @@ class PassProgressCard extends StatelessWidget {
               if (gained) const SizedBox(height: 7),
               Text(headline,
                   style: dqText(size: 14, w: FontWeight.w800, color: color)),
+              // Honesty qualifier (council #165): 合格圏 is a 目安, never a guaranteed
+              // pass — a gentle child-readable note so the celebration can't be read
+              // as a promise. Only on the predicted-pass state.
+              if (post.isPredictedPass) ...[
+                const SizedBox(height: 2),
+                Text('※ いまの めやす だよ（ごうかくの やくそく では ないよ）',
+                    style: dqText(
+                        size: 10,
+                        w: FontWeight.w500,
+                        color: dqInk.withAlpha(160))),
+              ],
               const SizedBox(height: 3),
               Text(_subtext(),
                   style: dqText(

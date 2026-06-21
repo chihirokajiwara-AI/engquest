@@ -42,6 +42,24 @@ void main() {
     expect(find.byType(PassGauge), findsNothing);
   });
 
+  testWidgets('合格圏 celebration carries the 目安/not-a-promise qualifier (#165)',
+      (tester) async {
+    // Predicted-pass (readiness 100, all skills measured) → honesty qualifier shown.
+    await tester.pumpWidget(_wrap(PassProgressCard(
+      post: _est(readinessPct: 100, totalItems: 60),
+    )));
+    expect(find.textContaining('めやす'), findsWidgets);
+    expect(find.textContaining('やくそく では ない'), findsOneWidget,
+        reason: '合格圏 must never read as a guaranteed pass (council #165)');
+  });
+
+  testWidgets('non-pass state does NOT show the 合格圏 qualifier', (tester) async {
+    await tester.pumpWidget(_wrap(PassProgressCard(
+      post: _est(readinessPct: 70, totalItems: 50),
+    )));
+    expect(find.textContaining('やくそく では ない'), findsNothing);
+  });
+
   testWidgets('confident + gain → shows the +delta up-badge and the gauge',
       (tester) async {
     await tester.pumpWidget(_wrap(PassProgressCard(
