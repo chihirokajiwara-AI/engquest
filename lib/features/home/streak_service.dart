@@ -181,7 +181,14 @@ class StreakService {
     final lastDateStr = prefs.getString(_kLastDate);
     final lastDate =
         lastDateStr != null ? DateTime.tryParse(lastDateStr) : null;
-    final alive = lastDate != null && _daysBetween(lastDate, nowDt) <= 1;
+    // ALIVE = last study was today or yesterday. Guard the LOWER bound too: a
+    // future lastDate (device clock jumped forward then corrected, or a web/TZ
+    // skew) makes _daysBetween negative, which would slip past a bare `<= 1` and
+    // freeze the streak "alive" forever — a child sees an ever-growing
+    // 「Nにち れんぞく」 with zero real practice, killing the daily-study motivation
+    // that is the whole point of the streak. Only [0, 1] days counts.
+    final daysSinceLast = lastDate != null ? _daysBetween(lastDate, nowDt) : -1;
+    final alive = daysSinceLast >= 0 && daysSinceLast <= 1;
     final streak = alive ? storedStreak : 0;
     final streakBroken = !alive && storedStreak > 0;
 

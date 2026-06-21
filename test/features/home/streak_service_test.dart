@@ -49,6 +49,24 @@ void main() {
     expect(state.streakBroken, isTrue);
   });
 
+  test('future last-study date does NOT keep the streak falsely alive (R2-F4)',
+      () async {
+    // A device clock that jumped forward then was corrected (or a web/TZ skew)
+    // can persist a lastDate in the future. _daysBetween then goes negative,
+    // which a bare `<= 1` would treat as alive → an ever-growing streak with no
+    // real practice. The lower-bound guard must break it.
+    final now = DateTime(2026, 6, 10);
+    SharedPreferences.setMockInitialValues({
+      'streak_current': 9,
+      'streak_last_study_date': iso(now.add(const Duration(days: 3))),
+    });
+    PreferencesService.resetInstance();
+    final state = await StreakService().load(now: now);
+    expect(state.currentStreak, 0,
+        reason: 'a future lastDate must not freeze the streak alive');
+    expect(state.streakBroken, isTrue);
+  });
+
   test('alive streak (studied yesterday) loads the real value, not broken',
       () async {
     final now = DateTime(2026, 6, 10);
