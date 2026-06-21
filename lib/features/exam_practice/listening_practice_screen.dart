@@ -682,9 +682,19 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
   // ── Results ───────────────────────────────────────────────────────────────
 
   Widget _buildResults(BuildContext context) {
+    // The verdict + score must reflect the HONEST measured signal — the items
+    // that actually counted toward 合格率 (audible, answered by ear). _correctCount
+    // / _items.length also counts captioned / no-audio items that move NOTHING in
+    // the pass-meter; celebrating 合格ライン到達 on that inflated ratio is a lie at
+    // the most motivationally critical moment, and the recorded 合格率 wouldn't
+    // budge (R2-F6). A session with zero measurable items is practice only
+    // (未測定 listening) → no pass verdict at all.
+    final measuredBasis = _measuredTotal > 0;
+    final resultCorrect = measuredBasis ? _measuredCorrect : _correctCount;
+    final resultTotal = measuredBasis ? _measuredTotal : _items.length;
     final pct =
-        _items.isEmpty ? 0 : (_correctCount / _items.length * 100).round();
-    final passed = pct >= 60;
+        resultTotal == 0 ? 0 : (resultCorrect / resultTotal * 100).round();
+    final passed = measuredBasis && pct >= 60;
 
     return Center(
       child: SingleChildScrollView(
@@ -694,16 +704,18 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                passed ? '🎉' : '💪',
+                passed ? '🎉' : (measuredBasis ? '💪' : '🎧'),
                 style: const TextStyle(fontSize: 64),
               ),
               const SizedBox(height: 12),
               Text(
-                passed ? '合格（ごうかく）ライン到達（とうたつ）！' : 'もう少（すこ）し！',
+                passed
+                    ? '合格（ごうかく）ライン到達（とうたつ）！'
+                    : (measuredBasis ? 'もう少（すこ）し！' : 'れんしゅう おつかれさま！'),
                 style: dqText(size: 22, color: dqGold),
               ),
               const SizedBox(height: 16),
-              PracticeResultStars(correct: _correctCount, total: _items.length),
+              PracticeResultStars(correct: resultCorrect, total: resultTotal),
               // Honesty (#157): captioned items (answered by READING the script,
               // not by ear) are excluded from the 合格率 — disclose them so the
               // session score and the home meter don't silently contradict
@@ -723,7 +735,7 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
                 child: Column(
                   children: [
                     Text(
-                      '$_correctCount / ${_items.length} 正解',
+                      '$resultCorrect / $resultTotal 正解',
                       style: dqText(size: 20, color: dqInk),
                     ),
                     const SizedBox(height: 4),
@@ -733,7 +745,7 @@ class _ListeningPracticeScreenState extends State<ListeningPracticeScreen> {
                         size: 28,
                         color: passed
                             ? const Color(0xFF8BE08B)
-                            : const Color(0xFFE89090),
+                            : (measuredBasis ? const Color(0xFFE89090) : dqInk),
                         w: FontWeight.w800,
                       ),
                     ),
