@@ -345,6 +345,73 @@ void main() {
       expect(find.textContaining('/6'), findsOneWidget);
     });
 
+    // Happy-path partial-credit regression (#reading-accuracy-guard):
+    // completing a reading session with exactly ONE wrong answer must record
+    // (correct = N-1, total = N) into SkillAccuracyStore for EikenSkill.reading.
+    //
+    // N is derived the same way the existing 'advances through 6 questions' test
+    // does: grade 5 has 3 passages × 2 questions each = 6 (the progress counter
+    // '1/6' visible on screen confirms this at runtime).  An off-by-one,
+    // double-record, or hint-branch regression would silently corrupt every
+    // child's displayed reading pass-rate with no CI gate — this test closes
+    // that gap.
+    //
+    // minReadTime gate: set to Duration.zero (same as the 100%-pass test below)
+    // so every instant test-tap counts as a MEASURED answer.  Without this the
+    // too-fast exclusion path fires and _measuredTotal stays 0, which causes
+    // _recordSessionResult to return early without writing anything to the store.
+    testWidgets(
+        'partial-credit: 1 wrong answer records (correct=N-1, total=N) '
+        'into SkillAccuracyStore for EikenSkill.reading', (tester) async {
+      ReadingPracticeScreen.minReadTime = Duration.zero;
+      addTearDown(
+          () => ReadingPracticeScreen.minReadTime = const Duration(seconds: 2));
+
+      await pumpReading(tester, '5', grade5Section);
+
+      // Derive N from the on-screen progress counter the same way the existing
+      // 'advances through 6 questions' and 'results show pass when >= 60%'
+      // tests rely on it: grade 5 passages = 3 passages × 2 questions = 6.
+      // Confirmed by finding '1/6' in the progress bar on the first question.
+      expect(find.textContaining('/6'), findsOneWidget,
+          reason: 'grade 5 must have 6 total questions (3 passages × 2)');
+      const int n = 6;
+
+      // Answer Q1 WRONG (a wrong choice text that is never the answer key).
+      // Q1 answer key = 'On Saturday, November 15'; pick a wrong distractor.
+      await tester.tap(choice('On Friday, November 14'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('次へ'));
+      await tester.pumpAndSettle();
+
+      // Answer Q2–Q6 all CORRECT by their text (positions are shuffled).
+      await answer(tester, 'Sell rice balls');
+      await answer(tester, 'A cat');
+      await answer(tester, "On Yuki's bed");
+      await answer(tester, 'A rabbit.');
+      await answer(tester, 'Carrots and lettuce.');
+
+      // Session should be done.
+      expect(find.text('戻る'), findsOneWidget, reason: 'reached results screen');
+
+      // _recordSessionResult is fire-and-forget (unawaited); pump to let the
+      // async store.record() Future complete before we inspect the store.
+      await tester.pump(const Duration(milliseconds: 50));
+
+      final store = await SkillAccuracyStore.getInstance();
+      final accuracies = store.readAccuracies('5');
+      final readingAcc =
+          accuracies.firstWhere((a) => a.skill == EikenSkill.reading);
+
+      expect(readingAcc.itemsAttempted, equals(n),
+          reason: 'total must equal N ($n) — every measured question counted');
+      expect(
+        (readingAcc.accuracy * n).round(),
+        equals(n - 1),
+        reason: 'correct must equal N-1 (${n - 1}) — exactly one wrong answer',
+      );
+    });
+
     testWidgets('results show pass when >= 60%', (tester) async {
       // The pass verdict is computed on the MEASURED signal (the items that fed
       // 合格率), not the all-items tally (R2-F7). Instant test taps would be
