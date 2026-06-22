@@ -82,7 +82,7 @@ needs CEO go (spend / secret / prod / legal / art-gen).
 |48|世界/物語実装|55|BUILD|STALE→re-audited 2026-06-12: all 7 STORY-BIBLE towns ARE in quest_data incl recast finale 灰色のひろば (333 narrative lines: companionArrival/teachJa/npcLine/onCorrect); nazo tied to eikenLevel. NOT "thin skin". REMAINING: world-class narrative depth + GATE scene art (#54)|
 |49|キャラ in-game|35|BUILD|cast dialogue, arcs, presence (bible→code); art-gen separate|
 |50|探索の深さ|40|BUILD|scene/nazo/hotspot depth → Layton/Minecraft-grade|
-|51|ゲームフィール/演出|42|BUILD|answer juice (haptic+chime) now across all 5 英検 modes + battle, plus XP ring / daily hook / スラ companion reacts (2026-06-12); REMAINING: scene+route transitions, bigger reward-moment set-pieces|
+|51|ゲームフィール/演出|45|BUILD|answer juice (haptic+chime) across all 5 英検 modes + battle, XP ring / daily hook / スラ reacts; 2026-06-22: home daily-goal ring now animates fill prev→current + gold goal-met pulse (fe95f6a, reduced-motion-safe) = a real reward moment. REMAINING: scene+route transitions, bigger set-pieces|
 |52|事件→英検の有機結合|32|BUILD|each case's puzzles ARE the 英検 skills, diegetic|
 |53|手がかりドリップ|40|BUILD|one clue/case edge→centre per WORLD-BIBLE|
 |54|視覚の本格バー|30|GATE:art-gen|dark-navy/gold look; cast+scene art (heavy job)|
@@ -92,7 +92,7 @@ needs CEO go (spend / secret / prod / legal / art-gen).
 |58|onboarding没入|72|BUILD|make CAT placement diegetic (探偵の入所試験)|
 
 ## I. perf / a11y / QA
-|59|perf|55|BUILD|cold-boot 6.6s engine-bound; audio bundle #48|
+|59|perf|57|BUILD|cold-boot 6.6s engine-bound; audio bundle #48. 2026-06-22: battle header no longer re-inflates on each of ~7 setState/answer — extracted to const _BattleHeader + RepaintBoundary (59c494d), cutting wasted FittedBox/ValueListenableBuilder layout on the hottest screen|
 |60|a11y|89|BUILD|2026-06-22: AudioOptionButton 🔊 preview now 44dp tap target (a9cb5d8); _GradeButton sublabel/interval text lifted off the 9sp 6yo floor + interval WCAG contrast fix (c331a20). REMAINING: hold; extend|
 |61|test/CI/governance|85|BUILD|hold green; expand coverage|
 |62|mobile store|30|GATE:prod|store listings, review, publish|
