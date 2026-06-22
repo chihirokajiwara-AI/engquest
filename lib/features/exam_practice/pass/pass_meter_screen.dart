@@ -103,11 +103,23 @@ class PassMeterScreen extends StatelessWidget {
             // ── Back button + title ──────────────────────────────────────────
             Row(
               children: [
-                InkWell(
-                  onTap: () => Navigator.maybePop(context),
-                  child: const Padding(
-                    padding: EdgeInsets.only(right: 12, top: 4, bottom: 4),
-                    child: Icon(Icons.arrow_back, color: dqGold, size: 24),
+                Semantics(
+                  button: true,
+                  label: 'もどる / Back',
+                  excludeSemantics: true,
+                  child: InkWell(
+                    onTap: () => Navigator.maybePop(context),
+                    child: const SizedBox(
+                      width: 44,
+                      height: 44,
+                      child: Padding(
+                        padding: EdgeInsets.only(right: 12),
+                        child: Center(
+                          child:
+                              Icon(Icons.arrow_back, color: dqGold, size: 24),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
                 Expanded(
@@ -212,14 +224,52 @@ class PassMeterScreen extends StatelessWidget {
 
 // ── Hero meter widget ─────────────────────────────────────────────────────────
 
-class _PassHero extends StatelessWidget {
+class _PassHero extends StatefulWidget {
   final CseEstimate est;
   const _PassHero({required this.est});
 
   @override
+  State<_PassHero> createState() => _PassHeroState();
+}
+
+class _PassHeroState extends State<_PassHero>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctrl;
+  late final Animation<double> _anim;
+
+  @override
+  void initState() {
+    super.initState();
+    final targetPct = widget.est.readinessPct;
+    _ctrl = AnimationController(
+      duration: const Duration(milliseconds: 1400),
+      vsync: this,
+    );
+    final curved = CurvedAnimation(parent: _ctrl, curve: Curves.easeOut);
+    _anim = Tween<double>(begin: 0, end: targetPct).animate(curved);
+    _ctrl.forward();
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final pct = est.readinessPct;
-    final gradeLabel = _gradeLabelJa(est.grade);
+    // Respect the OS "reduce motion" accessibility setting: skip the sweep and
+    // show the final value instantly. prefersReducedMotion is defined in dq_ui.dart.
+    final reduced = prefersReducedMotion(context);
+    final pct = widget.est.readinessPct;
+    final gradeLabel = _gradeLabelJa(widget.est.grade);
+
+    // When motion is reduced, jump the controller to the end state so _anim.value
+    // equals the final pct. We do this lazily on first build rather than in
+    // initState so the BuildContext is available for MediaQuery.
+    if (reduced && !_ctrl.isCompleted) {
+      _ctrl.value = 1.0;
+    }
 
     return DqPanel(
       child: Column(
@@ -227,32 +277,43 @@ class _PassHero extends StatelessWidget {
         children: [
           const SizedBox(height: 4),
 
-          // Hero colours in with the HONEST readiness (CEO 3758 ①): grey when far
-          // from 合格, full colour at the 目安 — the same % the gauge below shows,
-          // felt as the protagonist coming to life. Default M5; gender-select #110.
-          ProgressTintedCharacter(
-            asset:
-                HeroChoice.asset, // the child's chosen main (#110), default M5
-            readiness: pct / 100.0,
-            width: 84,
-            height: 120,
-            semanticLabel: '探偵（たんてい）。れんしゅうするほど 色（いろ）がつきます。',
+          AnimatedBuilder(
+            animation: _anim,
+            builder: (context, _) {
+              final animPct = reduced ? pct : _anim.value;
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // Hero colours in with the HONEST readiness (CEO 3758 ①): grey
+                  // when far from 合格, full colour at the 目安 — the same % the
+                  // gauge below shows, felt as the protagonist coming to life.
+                  // Default M5; gender-select #110.
+                  ProgressTintedCharacter(
+                    asset: HeroChoice.asset, // the child's chosen main (#110)
+                    readiness: animPct / 100.0,
+                    width: 84,
+                    height: 120,
+                    semanticLabel: '探偵（たんてい）。れんしゅうするほど 色（いろ）がつきます。',
+                  ),
+                  const SizedBox(height: 4),
+
+                  // Grade label
+                  Text(
+                    gradeLabel,
+                    textAlign: TextAlign.center,
+                    style: dqText(size: 15, color: dqGold),
+                  ),
+
+                  const SizedBox(height: 6),
+
+                  // Pass-probability gauge: a 270° arc filling toward the ごうかく
+                  // goal, the % centred and a goal marker at 100% — a designed
+                  // meter, not a flat bar (commercial-quality audit #68).
+                  PassGauge(pct: animPct, color: _meterColor(animPct)),
+                ],
+              );
+            },
           ),
-          const SizedBox(height: 4),
-
-          // Grade label
-          Text(
-            gradeLabel,
-            textAlign: TextAlign.center,
-            style: dqText(size: 15, color: dqGold),
-          ),
-
-          const SizedBox(height: 6),
-
-          // Pass-probability gauge: a 270° arc filling toward the ごうかく goal,
-          // the % centred and a goal marker at 100% — a designed meter, not a flat
-          // bar (commercial-quality audit #68).
-          PassGauge(pct: pct, color: _meterColor(pct)),
 
           const SizedBox(height: 2),
           Text(
@@ -263,18 +324,19 @@ class _PassHero extends StatelessWidget {
 
           // Basis disclosure: show how many questions back the % so a high
           // number built on few answers reads as provisional, not fabricated.
-          if (est.totalItemsAttempted > 0) ...[
+          if (widget.est.totalItemsAttempted > 0) ...[
             const SizedBox(height: 6),
             Text(
-              'これまでの ${est.totalItemsAttempted}もんを もとに けいさん\n'
-              'based on ${est.totalItemsAttempted} answers',
+              'これまでの ${widget.est.totalItemsAttempted}もんを もとに けいさん\n'
+              'based on ${widget.est.totalItemsAttempted} answers',
               textAlign: TextAlign.center,
               style: dqText(size: 11, color: const Color(0xFF8A93B5)),
             ),
           ],
           // Thin-sample honesty: a prediction on very few answers is a rough
           // guide, not a promise — say so rather than imply false precision.
-          if (est.totalItemsAttempted > 0 && est.totalItemsAttempted < 20) ...[
+          if (widget.est.totalItemsAttempted > 0 &&
+              widget.est.totalItemsAttempted < 20) ...[
             const SizedBox(height: 4),
             Text(
               '※ まだ データが すくないので、おおよその めやすです。',
@@ -288,10 +350,10 @@ class _PassHero extends StatelessWidget {
           // Writing is special: offline it can only be 未測定 because quality is
           // AI-graded, so we say so honestly rather than "you haven't tried it"
           // (which would be false — practicing writing offline records nothing).
-          if (est.unmeasuredSkills.isNotEmpty) ...[
+          if (widget.est.unmeasuredSkills.isNotEmpty) ...[
             const SizedBox(height: 6),
             Text(
-              _unmeasuredCaption(est.unmeasuredSkills),
+              _unmeasuredCaption(widget.est.unmeasuredSkills),
               textAlign: TextAlign.center,
               style: dqText(size: 11, color: const Color(0xFF8A93B5)),
             ),
@@ -302,18 +364,20 @@ class _PassHero extends StatelessWidget {
           // Honest "how close" line — a 目安 band, never a fabricated CSE-point
           // gap (#113). The raw→CSE conversion is non-public + per-administration.
           Text(
-            CseEstimator.readinessMessageJa(est),
+            CseEstimator.readinessMessageJa(widget.est),
             textAlign: TextAlign.center,
             style: dqText(
               size: 16,
-              color: est.reachedPassMeyasu ? const Color(0xFF8BE08B) : dqInk,
+              color: widget.est.reachedPassMeyasu
+                  ? const Color(0xFF8BE08B)
+                  : dqInk,
             ),
           ),
           const SizedBox(height: 8),
           // Standing honesty disclaimer: this is a 目安, not a precise prediction.
           Text(
             '合格（ごうかく）の目安（めやす）は 正答率（せいとうりつ）'
-            '${(est.passTargetRaw * 100).round()}%（${est.grade == 'pre1' ? '７割' : '６割'}）。\n'
+            '${(widget.est.passTargetRaw * 100).round()}%（${widget.est.grade == 'pre1' ? '７割' : '６割'}）。\n'
             '${CseEstimator.meyasuDisclaimerJa}',
             textAlign: TextAlign.center,
             // Was size 10 in a muted blue-grey — a dense furigana paragraph that
