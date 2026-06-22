@@ -71,11 +71,22 @@ class _MockReviewScreenState extends State<MockReviewScreen> {
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
               child: Row(
                 children: [
-                  InkWell(
-                    onTap: () => Navigator.maybePop(context),
-                    child: const Padding(
-                      padding: EdgeInsets.only(right: 12, top: 4, bottom: 4),
-                      child: Icon(Icons.arrow_back, color: dqGold, size: 24),
+                  Semantics(
+                    button: true,
+                    label: 'もどる / Back',
+                    child: InkWell(
+                      onTap: () => Navigator.maybePop(context),
+                      child: const SizedBox(
+                        width: 44,
+                        height: 44,
+                        child: Center(
+                          child: Icon(
+                            Icons.arrow_back,
+                            color: dqGold,
+                            size: 24,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                   Expanded(
