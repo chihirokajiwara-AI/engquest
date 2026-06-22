@@ -1410,8 +1410,18 @@ class AudioOptionButtonState extends State<AudioOptionButton>
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: onAudio,
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 12),
+                  // a11y/small-hands: the 🔊 preview is the ONLY way to audition
+                  // a clip without committing the answer (the body tap chooses).
+                  // A bare 22px icon gave a ~34×22 hit region — under the 44dp
+                  // floor, so a 6歳 who missed it landed on the body = a blind
+                  // committed guess (the exact failure the body comment warns of).
+                  // Give it a ≥44px square target; the icon stays visually 22px,
+                  // centered, so the ~11px of box whitespace preserves the prior
+                  // gap to the label.
+                  child: Container(
+                    width: 44,
+                    height: 44,
+                    alignment: Alignment.center,
                     child: Icon(Icons.volume_up_rounded,
                         color: audioIcon, size: 22),
                   ),
