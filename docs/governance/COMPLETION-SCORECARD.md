@@ -34,7 +34,7 @@ needs CEO go (spend / secret / prod / legal / art-gen).
 |---|------|----|------|-------------|
 |13|FSRS|75|BUILD|tune params|
 |14|適応難易度|42|BUILD|2026-06-14: grade CHANGEABLE post-onboarding (Settings picker) + one-tap "<grade>に すすむ" advance from the mastery advice card (reversible confirm → persists → home reloads). Recommend→act loop closed. REMAINING: continuous-θ WITHIN-grade item difficulty (needs per-item difficulty data)|
-|15|teach-why|78|BUILD|reading in mock-review, grammar 解説|
+|15|teach-why|82|BUILD|2026-06-22: 会話 now resolves the dialogue in-context after answer (Speaker B blank→correct answer, gold/bold) = parity with vocab/reading/listening, 34 items×4級 (0820269); vocab results missed-word list now has 🔊 replay (93dbf3d). REMAINING: reading in mock-review, grammar 解説|
 |16|hint scaffold|90|BUILD|2026-06-14: hint present on ALL practice surfaces — vocab=meaning-reveal, reading+conversation=50/50 "narrow to 2" (合格率-excluded), listening=replay+caption (excl), nazo=3-tier coin ladder. REMAINING: tune copy / per-screen polish only|
 |17|音声強化|65|GATE:backend|TTS coverage needs backend/static gen|
 |18|連続ミス励まし|85|BUILD|done 4 screens; tune copy|
@@ -93,7 +93,7 @@ needs CEO go (spend / secret / prod / legal / art-gen).
 
 ## I. perf / a11y / QA
 |59|perf|55|BUILD|cold-boot 6.6s engine-bound; audio bundle #48|
-|60|a11y|88|BUILD|hold; extend|
+|60|a11y|89|BUILD|2026-06-22: AudioOptionButton 🔊 preview now 44dp tap target (a9cb5d8); _GradeButton sublabel/interval text lifted off the 9sp 6yo floor + interval WCAG contrast fix (c331a20). REMAINING: hold; extend|
 |61|test/CI/governance|85|BUILD|hold green; expand coverage|
 |62|mobile store|30|GATE:prod|store listings, review, publish|
 
