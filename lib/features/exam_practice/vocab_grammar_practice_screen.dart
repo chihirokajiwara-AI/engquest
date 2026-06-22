@@ -1043,21 +1043,33 @@ class _VocabGrammarPracticeScreenState
                     ..._missedWords.map(
                       (w) => Padding(
                         padding: const EdgeInsets.only(bottom: 4),
-                        child: RichText(
-                          text: TextSpan(
-                            style: dqText(
-                                size: 13,
-                                w: FontWeight.w500,
-                                color: dqInk.withAlpha(220)),
-                            children: [
-                              TextSpan(
-                                text: w.word.replaceAll('_', ' '),
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w800),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: RichText(
+                                text: TextSpan(
+                                  style: dqText(
+                                      size: 13,
+                                      w: FontWeight.w500,
+                                      color: dqInk.withAlpha(220)),
+                                  children: [
+                                    TextSpan(
+                                      text: w.word.replaceAll('_', ' '),
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w800),
+                                    ),
+                                    TextSpan(text: ' — ${w.jpTranslation}'),
+                                  ],
+                                ),
                               ),
-                              TextSpan(text: ' — ${w.jpTranslation}'),
-                            ],
-                          ),
+                            ),
+                            _HearWordButton(
+                              audio: _wordAudio,
+                              vocabId: w.id,
+                              word: w.word,
+                            ),
+                          ],
                         ),
                       ),
                     ),
