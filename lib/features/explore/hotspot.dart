@@ -181,7 +181,12 @@ class Hotspot {
   /// the line so no model field is added.
   const Hotspot.observation({
     required this.pos,
-    this.size = 0.09,
+    // 0.12 (~47px at a 390px viewport, ≥44px even at 375px) clears the child-
+    // finger tap floor and matches this model's own ">= 0.10 for child fingers"
+    // rule; 0.09 (~35px) was below it. size drives the tap-target box
+    // (scene_view: size * w.clamp(100,480)); the shimmer stays subtle relative
+    // to the scene. (a11y — WCAG 2.5.5 / 6yo motor.)
+    this.size = 0.12,
     required this.clueLineJa,
     this.clueVoiceAsset,
   })  : step = null,
