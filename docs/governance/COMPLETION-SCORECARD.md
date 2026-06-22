@@ -26,7 +26,7 @@ needs CEO go (spend / secret / prod / legal / art-gen).
 |8|Listening項目量|72|BUILD|204 items at full official 大問 targets (was stale "110"); gated by mock_listening_fulllength; answer keys content-qa-verified all 7 grades|
 |9|Writing課題量|50|BUILD|expand prompt bank per grade|
 |10|distractor意味品質|65|GATE:backend|runtime same-POS now; semantic uniqueness = LLM|
-|11|例文品質|72|BUILD|tighten cloze-clean sentences|
+|11|例文品質|74|BUILD|2026-06-22: battle-card example sentences now get a child-ひらがな gloss so a 6yo gets comprehensible sentence-level input instead of undecodable English (council child-readability lens; ce547d2). 5級 80/600 glossed (content-qa + glyph-checked); batches continue. REMAINING: finish 5級 + other grades; tighten cloze-clean sentences|
 |12|大問構造再現|86|BUILD|準1大問3=7 etc. residual fixes|
 
 ## B. ペダゴジー
