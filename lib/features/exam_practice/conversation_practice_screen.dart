@@ -416,12 +416,13 @@ class _ConversationPracticeScreenState
                   isLeft: true,
                 ),
                 const SizedBox(height: 12),
-                // Speaker B (with blank)
+                // Speaker B (with blank → resolved after answer)
                 _ChatBubble(
                   speaker: 'B',
-                  text: p.speakerB,
+                  text: _answered ? p.choices[p.correctIdx] : p.speakerB,
                   isLeft: false,
-                  isBlank: true,
+                  isBlank: !_answered,
+                  resolved: _answered,
                 ),
               ],
             ),
@@ -1230,12 +1231,14 @@ class _ChatBubble extends StatelessWidget {
     required this.text,
     required this.isLeft,
     this.isBlank = false,
+    this.resolved = false,
   });
 
   final String speaker;
   final String text;
   final bool isLeft;
   final bool isBlank;
+  final bool resolved;
 
   @override
   Widget build(BuildContext context) {
@@ -1276,7 +1279,11 @@ class _ChatBubble extends StatelessWidget {
                   )
                 : Text(
                     text,
-                    style: dqText(size: 15, w: FontWeight.w500, color: dqInk),
+                    style: dqText(
+                      size: 15,
+                      w: resolved ? FontWeight.w700 : FontWeight.w500,
+                      color: resolved ? dqGold : dqInk,
+                    ),
                   ),
           ),
         ),
