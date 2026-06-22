@@ -34,7 +34,7 @@ needs CEO go (spend / secret / prod / legal / art-gen).
 |---|------|----|------|-------------|
 |13|FSRS|75|BUILD|tune params|
 |14|適応難易度|42|BUILD|2026-06-14: grade CHANGEABLE post-onboarding (Settings picker) + one-tap "<grade>に すすむ" advance from the mastery advice card (reversible confirm → persists → home reloads). Recommend→act loop closed. REMAINING: continuous-θ WITHIN-grade item difficulty (needs per-item difficulty data)|
-|15|teach-why|84|BUILD|2026-06-22: 会話 resolves the dialogue in-context (0820269); vocab results 🔊 replay (93dbf3d); writing result now shows a criterion-specific ひらがな fix-hint on weak 観点 rows, content-qa-corrected (4c9b2cc). REMAINING: reading in mock-review, grammar 解説|
+|15|teach-why|84|BUILD|2026-06-22: 会話 resolves the dialogue in-context (0820269); vocab results 🔊 replay (93dbf3d); writing result now shows a criterion-specific ひらがな fix-hint on weak 観点 rows, content-qa-corrected (4c9b2cc). 2026-06-22 re-audit: reading-in-mock-review was already DONE (see #24). REMAINING: grammar-point 解説 for 大問1 (content-authoring scale)|
 |16|hint scaffold|90|BUILD|2026-06-14: hint present on ALL practice surfaces — vocab=meaning-reveal, reading+conversation=50/50 "narrow to 2" (合格率-excluded), listening=replay+caption (excl), nazo=3-tier coin ladder. REMAINING: tune copy / per-screen polish only|
 |17|音声強化|65|GATE:backend|TTS coverage needs backend/static gen|
 |18|連続ミス励まし|85|BUILD|done 4 screens; tune copy|
@@ -45,7 +45,7 @@ needs CEO go (spend / secret / prod / legal / art-gen).
 
 ## C. アセスメント
 |23|模試組立採点|82|BUILD|residual fidelity|
-|24|模試review|80|BUILD|reading explanation in review|
+|24|模試review|84|BUILD|2026-06-22 re-audit: reading+listening 解説 ALREADY surfaced in post-mock review (mock_exam.dart:262 listening, reading_item_pool.dart:84 _kReadingExplanations 216/216 coverage verified 2026-06-20) — prior "reading explanation in review" note was STALE/done. Wrong-only default + transcript reveal present. REMAINING: vocab/grammar 大問1 items show word-gloss not a grammar-point rationale (content-authoring scale, deferred)|
 |25|Writing採点|35|GATE:backend|AI rubric design done; needs backend|
 |26|Speaking採点|35|BUILD|on-device scorer depth (pronunciation_scorer)|
 |27|未測定honest|88|BUILD|hold|
