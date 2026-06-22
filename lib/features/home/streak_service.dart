@@ -51,6 +51,13 @@ class StreakState {
   /// gracefully (「おかえり！またはじめよう」) instead of silently zeroing the count.
   final bool streakBroken;
 
+  /// True ONLY on the record-time snapshot when the child just RECOVERED a streak
+  /// that would otherwise have hard-reset — a missed day was graced (see
+  /// [StreakService._doRecordStudySession]). Lets the session-end surface show a
+  /// distinct「とりもどした！」win instead of the generic streak line. Always false on
+  /// [load] (a pure read never repairs); transient — not persisted.
+  final bool repaired;
+
   const StreakState({
     required this.currentStreak,
     required this.weeklyBits,
@@ -58,6 +65,7 @@ class StreakState {
     this.problemsToday = 0,
     this.dailyGoal = kDefaultDailyGoal,
     this.streakBroken = false,
+    this.repaired = false,
   });
 
   const StreakState.zero()
@@ -66,7 +74,8 @@ class StreakState {
         todayCount = 0,
         problemsToday = 0,
         dailyGoal = kDefaultDailyGoal,
-        streakBroken = false;
+        streakBroken = false,
+        repaired = false;
 
   /// Whether the given [weekdayIndex] (0=Mon, 6=Sun) was studied.
   bool studiedOn(int weekdayIndex) => (weeklyBits >> weekdayIndex) & 1 == 1;
@@ -87,6 +96,12 @@ class StreakState {
 /// Default daily question goal — a calm, attainable target for a young child
 /// (≈one short review). Visible-progress beats a big number you never finish.
 const int kDefaultDailyGoal = 10;
+
+/// Minimum established streak before a missed day is GRACED instead of hard-reset
+/// (see [StreakService._doRecordStudySession]). A 1–2 day streak isn't worth
+/// "repairing" (and gracing tiny streaks would just dull the consecutive-days
+/// meaning); a child who has shown ≥3 days of habit is the one worth keeping.
+const int kStreakRepairMinToGrace = 3;
 
 // ── Service ───────────────────────────────────────────────────────────────────
 
@@ -286,6 +301,9 @@ class StreakService {
     int streak = prefs.getInt(_kCurrent);
     int bits = prefs.getInt(_kWeeklyBits);
     int todayCount = prefs.getInt(_kTodayCount);
+    // Set true below when a missed day is graced rather than hard-reset, so the
+    // session-end surface can celebrate the recovery. Transient (never persisted).
+    bool repaired = false;
 
     // Reset weekly bits if we're in a new week.
     // We track the Monday of the stored last-date vs now.
@@ -313,8 +331,27 @@ class StreakService {
         final diff = _daysBetween(lastDate, now);
         if (diff == 1) {
           streak++;
+        } else if (diff == 2 && streak >= kStreakRepairMinToGrace) {
+          // GRACE (#retention): one missed day is forgiven for an ESTABLISHED
+          // streak (≥ kStreakRepairMinToGrace). Hard-resetting a 9-day streak to
+          // 1 over a single homework-night miss is the cruelest churn point — the
+          // exact reliable child worth keeping. 2026 streak-freeze research
+          // (Duolingo) shows a repair window yields ~48% longer streaks, the
+          // D7→D30 paid-retention inflection. Keep the streak; today extends it.
+          // Tradeoff (accepted): a child studying every OTHER day keeps the streak
+          // alive — still real practice; a 2-day gap below decays it, a 3-day gap
+          // resets it. This also unlocks the streak_7/10/30 achievements, which
+          // were structurally unreachable for any child who ever missed a night.
+          streak = streak + 1;
+          repaired = true;
+        } else if (diff == 3 && streak >= kStreakRepairMinToGrace) {
+          // Two missed days: PARTIAL credit (halve, floor, min 1) — better than a
+          // hard reset, but a real gap costs more than a single night.
+          final halved = (streak / 2).floor();
+          streak = halved < 1 ? 1 : halved;
+          repaired = true;
         } else {
-          streak = 1; // missed day — reset
+          streak = 1; // 3+ missed days, or too small to grace — reset
         }
       } else {
         streak = 1;
@@ -343,6 +380,7 @@ class StreakService {
       todayCount: todayCount,
       problemsToday: problemsToday,
       dailyGoal: _effectiveDailyGoal(prefs),
+      repaired: repaired,
     );
   }
 }

@@ -131,10 +131,23 @@ class SessionEndHook extends StatelessWidget {
   Widget build(BuildContext context) {
     final s = streak;
     final met = s.goalMet;
-    final String line = met
-        ? '${s.currentStreak}日（にち）れんぞく！ きょうの目標（もくひょう）たっせい！'
-        : 'あと ${s.remainingToGoal}問（もん）で きょうの目標（もくひょう）！';
-    final String tomorrow = met ? 'また あした、つづきを しらべよう！' : 'もう少（すこ）し やってみる？';
+    // A graced recovery (a missed day forgiven, not hard-reset) is its own WIN —
+    // the child who would have lost a 9-day streak over one homework night gets a
+    // distinct「とりもどした！」celebration instead of a silent reset. Takes priority
+    // over the goal-met copy for the header/line so the rescue is the headline.
+    final repaired = s.repaired;
+    // Either case earns the gold, glowing, pop treatment (not the calm blue box).
+    final celebrate = met || repaired;
+    final String line = repaired
+        ? '${s.currentStreak}日（にち）れんぞく、とりもどした！'
+        : met
+            ? '${s.currentStreak}日（にち）れんぞく！ きょうの目標（もくひょう）たっせい！'
+            : 'あと ${s.remainingToGoal}問（もん）で きょうの目標（もくひょう）！';
+    final String tomorrow = repaired
+        ? 'あぶなかった！ あした わすれずに しらべよう！'
+        : met
+            ? 'また あした、つづきを しらべよう！'
+            : 'もう少（すこ）し やってみる？';
 
     // The goal-met moment is the strongest daily-return reinforcement, so it must
     // FEEL distinct from the calm "keep going" box — not the same blue panel with
@@ -146,9 +159,9 @@ class SessionEndHook extends StatelessWidget {
       decoration: BoxDecoration(
         color: dqBox,
         borderRadius: BorderRadius.circular(10),
-        border:
-            Border.all(color: met ? dqGold : _slaBlue, width: met ? 2.5 : 2),
-        boxShadow: met
+        border: Border.all(
+            color: celebrate ? dqGold : _slaBlue, width: celebrate ? 2.5 : 2),
+        boxShadow: celebrate
             ? [
                 BoxShadow(
                     color: dqGold.withAlpha(90),
@@ -159,9 +172,10 @@ class SessionEndHook extends StatelessWidget {
       ),
       child: Column(
         children: [
-          if (met)
+          if (celebrate)
             // A diegetic gold achievement stamp — the same celebratory vocabulary
-            // as the case-clear 「事件 解決」 plate, so a met goal reads as a WIN.
+            // as the case-clear 「事件 解決」 plate, so the win reads as a WIN. The
+            // recovery gets its own 「とりもどした」 stamp distinct from goal-met.
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
               decoration: BoxDecoration(
@@ -169,7 +183,7 @@ class SessionEndHook extends StatelessWidget {
                 borderRadius: BorderRadius.circular(6),
                 border: Border.all(color: dqGold, width: 1.5),
               ),
-              child: Text('✦ もくひょう 達成（たっせい）✦',
+              child: Text(repaired ? '✦ とりもどした！✦' : '✦ もくひょう 達成（たっせい）✦',
                   style: dqText(
                       size: 12, w: FontWeight.w900, color: dqGold, spacing: 1)),
             )
@@ -188,7 +202,7 @@ class SessionEndHook extends StatelessWidget {
       ),
     );
 
-    if (met && !prefersReducedMotion(context)) {
+    if (celebrate && !prefersReducedMotion(context)) {
       return TweenAnimationBuilder<double>(
         key: const ValueKey('session_end_hook_pop'),
         tween: Tween(begin: 0.9, end: 1.0),

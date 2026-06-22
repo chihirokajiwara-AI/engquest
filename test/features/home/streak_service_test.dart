@@ -412,4 +412,186 @@ void main() {
     expect(state.currentStreak, 1,
         reason: 'same-day sessions never inflate the streak');
   });
+
+  // ── Streak-repair / grace-window mechanic ─────────────────────────────────
+  //
+  // recordStudySession uses DateTime.now() (non-injectable), so we drive the
+  // "diff" by seeding streak_last_study_date to a date N days before the real
+  // wall-clock today. The service reads that date at call time and computes the
+  // diff against the live DateTime.now().
+  //
+  //  diff == 1  (yesterday)            → streak++ (consecutive — unchanged)
+  //  diff == 2  (one missed day) AND stored streak >= kStreakRepairMinToGrace (3)
+  //                                    → GRACE: streak = stored + 1, repaired = true
+  //  diff == 3  (two missed days) AND stored streak >= 3
+  //                                    → PARTIAL: streak = max(1, floor(stored/2)),
+  //                                               repaired = true
+  //  diff == 2 or 3 but stored streak < 3
+  //                                    → streak = 1, repaired = false (too small)
+  //  diff >= 4                         → streak = 1, repaired = false
+  //  no lastDate (new user)            → streak = 1, repaired = false (first session)
+  //  same-day re-study                 → streak unchanged, repaired = false
+  //  load() always returns repaired == false (pure read, never repairs)
+
+  test('consecutive day (diff==1) increments streak, repaired stays false',
+      () async {
+    final yesterday = DateTime.now().subtract(const Duration(days: 1));
+    SharedPreferences.setMockInitialValues({
+      'streak_current': 5,
+      'streak_last_study_date': iso(yesterday),
+    });
+    PreferencesService.resetInstance();
+    final state = await StreakService().recordStudySession();
+    expect(state.currentStreak, 6,
+        reason: 'one missed day = 0 → streak increments normally');
+    expect(state.repaired, isFalse,
+        reason: 'a consecutive day is not a repair event');
+  });
+
+  test('GRACE: diff==2 on a 9-day streak → streak becomes 10, repaired==true',
+      () async {
+    // One missed day (diff == 2) on an established streak (≥ 3).
+    final twoDaysAgo = DateTime.now().subtract(const Duration(days: 2));
+    SharedPreferences.setMockInitialValues({
+      'streak_current': 9,
+      'streak_last_study_date': iso(twoDaysAgo),
+    });
+    PreferencesService.resetInstance();
+    final state = await StreakService().recordStudySession();
+    expect(state.currentStreak, 10,
+        reason: 'grace: 9 + 1 = 10 (one missed day forgiven)');
+    expect(state.repaired, isTrue,
+        reason: 'a graced session sets repaired = true');
+  });
+
+  test(
+      'GRACE: diff==2 on the minimum qualifying streak (3) → 4, repaired==true',
+      () async {
+    final twoDaysAgo = DateTime.now().subtract(const Duration(days: 2));
+    SharedPreferences.setMockInitialValues({
+      'streak_current': 3,
+      'streak_last_study_date': iso(twoDaysAgo),
+    });
+    PreferencesService.resetInstance();
+    final state = await StreakService().recordStudySession();
+    expect(state.currentStreak, 4);
+    expect(state.repaired, isTrue);
+  });
+
+  test('PARTIAL: diff==3 on a 9-day streak → 4 (floor(9/2)), repaired==true',
+      () async {
+    // Two missed days (diff == 3) on an established streak.
+    final threeDaysAgo = DateTime.now().subtract(const Duration(days: 3));
+    SharedPreferences.setMockInitialValues({
+      'streak_current': 9,
+      'streak_last_study_date': iso(threeDaysAgo),
+    });
+    PreferencesService.resetInstance();
+    final state = await StreakService().recordStudySession();
+    expect(state.currentStreak, 4, reason: 'partial repair: floor(9/2) = 4');
+    expect(state.repaired, isTrue,
+        reason: 'a partial-repair session sets repaired = true');
+  });
+
+  test(
+      'PARTIAL: diff==3 on the minimum qualifying streak (3) → 1, repaired==true',
+      () async {
+    // floor(3/2) = 1 — minimum, but still a repair (not a hard reset to 1 from ≥3).
+    final threeDaysAgo = DateTime.now().subtract(const Duration(days: 3));
+    SharedPreferences.setMockInitialValues({
+      'streak_current': 3,
+      'streak_last_study_date': iso(threeDaysAgo),
+    });
+    PreferencesService.resetInstance();
+    final state = await StreakService().recordStudySession();
+    expect(state.currentStreak, 1,
+        reason: 'floor(3/2) = 1 (min clamp applies)');
+    expect(state.repaired, isTrue,
+        reason: 'even a partial that lands on 1 is still a repair event');
+  });
+
+  test(
+      'diff==2 but streak < kStreakRepairMinToGrace → hard reset to 1, repaired==false',
+      () async {
+    // A 2-day streak misses a day — too small to grace.
+    final twoDaysAgo = DateTime.now().subtract(const Duration(days: 2));
+    SharedPreferences.setMockInitialValues({
+      'streak_current': 2,
+      'streak_last_study_date': iso(twoDaysAgo),
+    });
+    PreferencesService.resetInstance();
+    final state = await StreakService().recordStudySession();
+    expect(state.currentStreak, 1,
+        reason: 'streak < 3 gets no grace; reset to 1');
+    expect(state.repaired, isFalse,
+        reason: 'too small to grace → repaired stays false');
+  });
+
+  test(
+      'diff==3 but streak < kStreakRepairMinToGrace → hard reset to 1, repaired==false',
+      () async {
+    // A 2-day streak with a 2-missed-day gap — too small for partial credit.
+    final threeDaysAgo = DateTime.now().subtract(const Duration(days: 3));
+    SharedPreferences.setMockInitialValues({
+      'streak_current': 2,
+      'streak_last_study_date': iso(threeDaysAgo),
+    });
+    PreferencesService.resetInstance();
+    final state = await StreakService().recordStudySession();
+    expect(state.currentStreak, 1);
+    expect(state.repaired, isFalse);
+  });
+
+  test(
+      'diff >= 4 → hard reset to 1 regardless of stored streak, repaired==false',
+      () async {
+    final fourDaysAgo = DateTime.now().subtract(const Duration(days: 4));
+    SharedPreferences.setMockInitialValues({
+      'streak_current': 99,
+      'streak_last_study_date': iso(fourDaysAgo),
+    });
+    PreferencesService.resetInstance();
+    final state = await StreakService().recordStudySession();
+    expect(state.currentStreak, 1,
+        reason: 'a gap of 4+ days resets the streak unconditionally');
+    expect(state.repaired, isFalse,
+        reason: 'a hard reset is never a repair event');
+  });
+
+  test('new user (no lastDate) sets streak to 1, repaired==false', () async {
+    // No seeded prefs — simulates a brand-new user.
+    final state = await StreakService().recordStudySession();
+    expect(state.currentStreak, 1);
+    expect(state.repaired, isFalse);
+  });
+
+  test('same-day re-study leaves streak unchanged, repaired==false', () async {
+    final today = DateTime.now();
+    SharedPreferences.setMockInitialValues({
+      'streak_current': 7,
+      'streak_last_study_date': iso(today),
+      'streak_today_count': 1,
+    });
+    PreferencesService.resetInstance();
+    final state = await StreakService().recordStudySession();
+    expect(state.currentStreak, 7,
+        reason: 'same-day re-study never changes the streak');
+    expect(state.todayCount, 2, reason: 'same-day: only todayCount increments');
+    expect(state.repaired, isFalse);
+  });
+
+  test('load() always returns repaired==false (pure read never repairs)',
+      () async {
+    // Seed a state that WOULD be graced on the next record call — a load
+    // must never set repaired = true on its own.
+    final twoDaysAgo = DateTime.now().subtract(const Duration(days: 2));
+    SharedPreferences.setMockInitialValues({
+      'streak_current': 9,
+      'streak_last_study_date': iso(twoDaysAgo),
+    });
+    PreferencesService.resetInstance();
+    final state = await StreakService().load();
+    expect(state.repaired, isFalse,
+        reason: 'load() is a pure read and must never set repaired = true');
+  });
 }
