@@ -2101,7 +2101,10 @@ class _GradeButtonState extends State<_GradeButton>
                 Text(
                   widget.labelEnOverride ?? widget.grade.label,
                   style: dqText(
-                      size: 9, w: FontWeight.w600, color: dqGold, spacing: 0.8),
+                      size: 12,
+                      w: FontWeight.w600,
+                      color: dqGold,
+                      spacing: 0.5),
                   textAlign: TextAlign.center,
                 ),
                 // The FSRS next-interval ("つぎは 3日後") is adult SRS detail — useful
@@ -2111,7 +2114,7 @@ class _GradeButtonState extends State<_GradeButton>
                   const SizedBox(height: 3),
                   Text(
                     interval!, // non-null here: computed iff labelJpOverride == null
-                    style: dqText(size: 9, color: dqGoldDeep),
+                    style: dqText(size: 11, color: dqGold),
                     textAlign: TextAlign.center,
                   ),
                 ],
