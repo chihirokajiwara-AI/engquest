@@ -119,6 +119,34 @@ void main() {
           stored == PrefKeys.kVoiceConsentPolicyVersion && ts != null;
       expect(shouldSkip, isTrue);
     });
+
+    // Regression: a returning consented child must actually LAND on the screen
+    // onConsent navigates to. The real call site (exam_practice_screen) wires
+    // onConsent to Navigator.pushReplacement(SpeakingScreen). A stray
+    // maybePop in _checkStoredConsent used to pop that freshly-pushed screen
+    // straight back off — silently amputating Speaking for every returning user.
+    testWidgets('stored consent → onConsent target survives (not bounced back)',
+        (tester) async {
+      await freshPrefs({
+        PrefKeys.voiceConsentGrantedAt: '2026-06-11T10:00:00.000Z',
+        PrefKeys.voiceConsentPolicyVersion: PrefKeys.kVoiceConsentPolicyVersion,
+      });
+      await tester.pumpWidget(MaterialApp(
+        home: Builder(
+          builder: (context) => SpeakingConsentNotice(
+            eikenGrade: '3',
+            onConsent: () => Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (_) => const Scaffold(body: Text('SPEAKING_TARGET')),
+              ),
+            ),
+          ),
+        ),
+      ));
+      // _checkStoredConsent runs post-frame + awaits prefs, then onConsent.
+      await tester.pumpAndSettle();
+      expect(find.text('SPEAKING_TARGET'), findsOneWidget);
+    });
   });
 
   group('(C) changed policy version — must re-prompt', () {

@@ -72,19 +72,22 @@ class _SpeakingConsentNoticeState extends State<SpeakingConsentNotice> {
   }
 
   /// If a valid stored consent exists for the CURRENT policy version, skip the
-  /// prompt: fire onConsent and pop this route so the parent never sees the wall
-  /// again for the same policy.  A changed policy version falls through to the
-  /// normal prompt path.
+  /// prompt: fire onConsent so the parent never sees the wall again for the same
+  /// policy. A changed policy version falls through to the normal prompt path.
   Future<void> _checkStoredConsent() async {
     if (!mounted) return;
     final prefs = await PreferencesService.getInstance();
     final stored = prefs.getString(PrefKeys.voiceConsentPolicyVersion);
     final ts = prefs.getString(PrefKeys.voiceConsentGrantedAt);
     if (stored == PrefKeys.kVoiceConsentPolicyVersion && ts != null) {
-      // Valid persisted consent — skip the wall.
+      // Valid persisted consent — skip the wall. onConsent does a
+      // Navigator.pushReplacement(SpeakingScreen) (see exam_practice_screen),
+      // which removes THIS consent route on its own. A manual maybePop here used
+      // to fire on the now-deactivated route's Navigator and popped the freshly-
+      // pushed SpeakingScreen straight back off — so every returning consented
+      // child was bounced out of Speaking with a one-frame flash. Do NOT pop.
       if (!mounted) return;
       widget.onConsent();
-      Navigator.maybePop(context);
     }
     // Otherwise: render the consent UI as normal.
   }
