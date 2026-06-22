@@ -31,6 +31,7 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
 
 import '../../core/analytics/analytics_service.dart';
@@ -390,6 +391,11 @@ class _BattleScreenState extends State<BattleScreen>
   int _streak = 0; // consecutive Good/Easy answers
   int _totalXp = 0;
   int _answersThisSession = 0; // track answers for mid-session momentum pulse
+  // Deck indices that have been re-queued (graded Again/Hard → came back this
+  // session). Drives the「もういちど みよう」card-back marker so the SECOND retrieval
+  // is primed as a known-missed item (test-potentiated encoding), not a blank
+  // repeat. Cleared on deck (re)load.
+  final Set<int> _requeuedDeckIndices = {};
   // In-card momentum nudge (studio #4): a readable banner ABOVE the card, not a
   // 1.5s SnackBar under the answer thumb-zone where it was unreadable. Null = none.
   String? _momentumText;
@@ -573,6 +579,7 @@ class _BattleScreenState extends State<BattleScreen>
         ..shuffle(math.Random());
       _queueIdx = 0;
       _sessionResults.clear();
+      _requeuedDeckIndices.clear();
       _sessionDone = false;
       // The session-end branch in _gradeCard returns with _grading still true
       // (it never schedules the post-frame release). On 「もういちど」 this same
@@ -694,6 +701,17 @@ class _BattleScreenState extends State<BattleScreen>
     _totalXp += xpGain;
     final popupId = ++_xpPopupIdCounter;
 
+    // a11y (WCAG 4.1.3): the grade result is otherwise conveyed only by SFX +
+    // haptic + a visual XP float — a screen-reader child gets no spoken verdict.
+    // Announce せいかい/ふせいかい + the word + XP, mirroring vocab_grammar's pattern.
+    SemanticsService.sendAnnouncement(
+      View.of(context),
+      '${isCorrect ? 'せいかい' : 'ふせいかい'}。'
+      '${_currentVocab.word.replaceAll('_', ' ')}'
+      '${xpGain > 0 ? '、$xpGain てんかくとく' : ''}',
+      Directionality.of(context),
+    );
+
     // Show popup only when XP > 0 (Again gives no XP — no popup)
     if (xpGain > 0) {
       _sound.playXpGain();
@@ -734,6 +752,7 @@ class _BattleScreenState extends State<BattleScreen>
         updated.state == CardState.relearning) {
       final insertAt = math.min(_queueIdx + 3, _queue.length);
       _queue.insert(insertAt, _currentDeckIdx);
+      _requeuedDeckIndices.add(_currentDeckIdx); // mark for the もういちど marker
     }
 
     final nextIdx = _queueIdx + 1;
@@ -1082,10 +1101,13 @@ class _BattleScreenState extends State<BattleScreen>
             const SizedBox(height: 24),
           ],
         ),
-        // XP floating popups
-        ..._xpPopups.map((popup) => _XpFloatLabel(
-              key: ValueKey(popup.id),
-              xp: popup.xp,
+        // XP floating popups — decorative; the XP is already in the spoken grade
+        // announcement, so exclude from semantics to avoid a double read.
+        ..._xpPopups.map((popup) => ExcludeSemantics(
+              child: _XpFloatLabel(
+                key: ValueKey(popup.id),
+                xp: popup.xp,
+              ),
             )),
       ],
     );
@@ -1434,10 +1456,29 @@ class _BattleScreenState extends State<BattleScreen>
     final jpExample = vocab.jpExampleSentences.isNotEmpty
         ? vocab.jpExampleSentences.first
         : '';
+    final reSeen = _requeuedDeckIndices.contains(_currentDeckIdx);
     return _cardContainer(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          // Re-queued (previously missed this session) → prime the 2nd retrieval
+          // as a known-missed item, not a blank repeat (test-potentiated encoding).
+          if (reSeen) ...[
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              decoration: BoxDecoration(
+                color: const Color(0xFFE0A23C).withAlpha(36),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: const Color(0xFFE0A23C), width: 1.2),
+              ),
+              child: Text('⚠ もういちど みよう',
+                  style: dqText(
+                      size: 12,
+                      w: FontWeight.w800,
+                      color: const Color(0xFFE0A23C))),
+            ),
+            const SizedBox(height: 12),
+          ],
           Text(vocab.word.replaceAll('_', ' '),
               style: dqText(size: 22, color: dqGoldDeep)),
           const SizedBox(height: 16),
