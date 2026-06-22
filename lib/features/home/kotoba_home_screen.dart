@@ -1223,47 +1223,191 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
 /// daily-return target the child fills each day (the engagement spine, not
 /// decoration). Gold fill, dark track; centre shows done/goal, or a check once
 /// the goal is met.
-class _DailyGoalRing extends StatelessWidget {
+///
+/// Animated: the fill ratio tweens from the previous value to the new one over
+/// 700 ms (easeOutCubic). When the goal is newly met a short gold-glow pulse
+/// fires via a second controller (~500 ms). Both animations are skipped when
+/// [prefersReducedMotion] is true, rendering the instant final state instead.
+class _DailyGoalRing extends StatefulWidget {
   final int done;
   final int goal;
   const _DailyGoalRing({required this.done, required this.goal});
 
   @override
+  State<_DailyGoalRing> createState() => _DailyGoalRingState();
+}
+
+class _DailyGoalRingState extends State<_DailyGoalRing>
+    with TickerProviderStateMixin {
+  // Fill animation controller (700 ms, easeOutCubic).
+  late AnimationController _fillCtrl;
+  late Animation<double> _fillAnim;
+
+  // Goal-met pulse controller (500 ms, forward-only glow fade).
+  late AnimationController _pulseCtrl;
+  late Animation<double> _pulseAnim;
+
+  double _targetRatio() => widget.goal <= 0
+      ? 0.0
+      : (widget.done / widget.goal).clamp(0.0, 1.0).toDouble();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _fillCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 700),
+    );
+    _pulseCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+    _pulseAnim = Tween<double>(begin: 0.0, end: 1.0)
+        .chain(CurveTween(curve: Curves.easeOut))
+        .animate(_pulseCtrl);
+
+    final ratio = _targetRatio();
+    _fillAnim = Tween<double>(begin: ratio, end: ratio).animate(_fillCtrl);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // If reduced-motion was toggled externally, rebuild immediately.
+    if (prefersReducedMotion(context)) {
+      _fillCtrl.stop();
+      _pulseCtrl.stop();
+    }
+  }
+
+  @override
+  void didUpdateWidget(_DailyGoalRing old) {
+    super.didUpdateWidget(old);
+
+    final newRatio = _targetRatio();
+    final oldRatio =
+        old.goal <= 0 ? 0.0 : (old.done / old.goal).clamp(0.0, 1.0).toDouble();
+
+    if (newRatio == oldRatio) return; // nothing changed
+
+    if (prefersReducedMotion(context)) {
+      // Skip animation — jump straight to end state.
+      _fillAnim =
+          Tween<double>(begin: newRatio, end: newRatio).animate(_fillCtrl);
+      return;
+    }
+
+    // Tween from wherever the fill currently sits (mid-animation safe).
+    final fromRatio = _fillAnim.value;
+    _fillAnim = Tween<double>(begin: fromRatio, end: newRatio)
+        .chain(CurveTween(curve: Curves.easeOutCubic))
+        .animate(_fillCtrl);
+    _fillCtrl
+      ..reset()
+      ..forward();
+
+    // Pulse when the goal is newly MET.
+    final wasUnmet = old.done < old.goal || old.goal <= 0;
+    final nowMet = widget.done >= widget.goal && widget.goal > 0;
+    if (wasUnmet && nowMet) {
+      _pulseCtrl
+        ..reset()
+        ..forward();
+    }
+  }
+
+  @override
+  void dispose() {
+    _fillCtrl.dispose();
+    _pulseCtrl.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final ratio = goal <= 0 ? 0.0 : (done / goal).clamp(0.0, 1.0).toDouble();
-    final met = done >= goal && goal > 0;
+    final reduced = prefersReducedMotion(context);
+    final staticRatio = _targetRatio();
+    final met = widget.done >= widget.goal && widget.goal > 0;
     const size = 76.0;
-    return SizedBox(
-      width: size,
-      height: size,
-      child: CustomPaint(
-        painter: _GoalRingPainter(ratio: ratio, met: met),
-        child: Center(
-          // #114/WCAG SC 1.4.4: the ring is a fixed 76px visual; shrink the inner
-          // number to fit at large text scales (2.0x) instead of clipping.
-          child: FittedBox(
-            fit: BoxFit.scaleDown,
-            child: met
-                ? const Icon(Icons.check_rounded, color: dqGold, size: 34)
-                : Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        '$done',
-                        style:
-                            dqText(size: 24, w: FontWeight.w900, color: dqGold),
-                      ),
-                      Text(
-                        '/$goal問',
-                        style: dqText(
-                            size: 11,
-                            w: FontWeight.w600,
-                            color: dqInk.withAlpha(190)),
+
+    if (reduced) {
+      // Accessibility path: instant final state, no animation overhead.
+      return SizedBox(
+        width: size,
+        height: size,
+        child: CustomPaint(
+          painter: _GoalRingPainter(ratio: staticRatio, met: met),
+          child: _RingLabel(done: widget.done, goal: widget.goal, met: met),
+        ),
+      );
+    }
+
+    return AnimatedBuilder(
+      animation: Listenable.merge([_fillAnim, _pulseAnim]),
+      builder: (context, _) {
+        final animRatio = _fillAnim.value;
+        final glowOpacity = _pulseAnim.value;
+        return SizedBox(
+          width: size,
+          height: size,
+          child: DecoratedBox(
+            decoration: glowOpacity > 0
+                ? BoxDecoration(
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: dqGold.withAlpha((glowOpacity * 120).round()),
+                        blurRadius: 18 * glowOpacity,
+                        spreadRadius: 4 * glowOpacity,
                       ),
                     ],
-                  ),
+                  )
+                : const BoxDecoration(),
+            child: CustomPaint(
+              painter: _GoalRingPainter(ratio: animRatio, met: met),
+              child: _RingLabel(done: widget.done, goal: widget.goal, met: met),
+            ),
           ),
-        ),
+        );
+      },
+    );
+  }
+}
+
+/// Shared label widget (centre content of the ring) extracted to avoid
+/// duplication between the reduced-motion and animated paths.
+class _RingLabel extends StatelessWidget {
+  final int done;
+  final int goal;
+  final bool met;
+  const _RingLabel({required this.done, required this.goal, required this.met});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      // #114/WCAG SC 1.4.4: the ring is a fixed 76px visual; shrink the inner
+      // number to fit at large text scales (2.0x) instead of clipping.
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: met
+            ? const Icon(Icons.check_rounded, color: dqGold, size: 34)
+            : Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    '$done',
+                    style: dqText(size: 24, w: FontWeight.w900, color: dqGold),
+                  ),
+                  Text(
+                    '/$goal問',
+                    style: dqText(
+                        size: 11,
+                        w: FontWeight.w600,
+                        color: dqInk.withAlpha(190)),
+                  ),
+                ],
+              ),
       ),
     );
   }
