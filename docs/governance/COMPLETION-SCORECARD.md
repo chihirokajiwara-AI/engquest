@@ -76,7 +76,7 @@ needs CEO go (spend / secret / prod / legal / art-gen).
 |44|backend proxy deploy|10|GATE:spend+secret+prod|backend/server.js EXISTS (29KB) + Dockerfile; needs host + Anthropic key + deploy|
 |45|Firebase設定|55|GATE:secret|placeholder keys → real project|
 |46|offline永続|70|BUILD|hold|
-|47|error耐性|68|BUILD|2026-06-14: app-wide child-safe ErrorWidget.builder (release) so an uncaught build error never shows a grey box; exam screens already have 準備中 empty-states + try/catch. REMAINING: retries on transient Firestore/asset failures, richer offline empty-states|
+|47|error耐性|70|BUILD|2026-06-14: app-wide child-safe ErrorWidget.builder (release) so an uncaught build error never shows a grey box; exam screens already have 準備中 empty-states + try/catch.  2026-06-23: mounted-guarded 5 async setStates on QuestMapScreen (core progression screen) — a back-nav mid-load no longer grey-crashes (e155895). REMAINING: retries on transient Firestore/asset failures, richer offline empty-states|
 
 ## H. GAME COMPOSITION (TOP PRIORITY — CEO 1244, ~5%, mostly BUILD)
 |48|世界/物語実装|55|BUILD|STALE→re-audited 2026-06-12: all 7 STORY-BIBLE towns ARE in quest_data incl recast finale 灰色のひろば (333 narrative lines: companionArrival/teachJa/npcLine/onCorrect); nazo tied to eikenLevel. NOT "thin skin". REMAINING: world-class narrative depth + GATE scene art (#54)|
@@ -94,7 +94,7 @@ needs CEO go (spend / secret / prod / legal / art-gen).
 ## I. perf / a11y / QA
 |59|perf|57|BUILD|cold-boot 6.6s engine-bound; audio bundle #48. 2026-06-22: battle header no longer re-inflates on each of ~7 setState/answer — extracted to const _BattleHeader + RepaintBoundary (59c494d), cutting wasted FittedBox/ValueListenableBuilder layout on the hottest screen|
 |60|a11y|90|BUILD|2026-06-23: battle grade result now spoken via SemanticsService (WCAG 4.1.3) + XP float ExcludeSemantics (2387793). 2026-06-22: AudioOptionButton 🔊 preview now 44dp tap target (a9cb5d8); _GradeButton sublabel/interval text lifted off the 9sp 6yo floor + interval WCAG contrast fix (c331a20). REMAINING: hold; extend|
-|61|test/CI/governance|85|BUILD|hold green; expand coverage|
+|61|test/CI/governance|86|BUILD|2026-06-23: added reading 合格率 partial-credit regression test (correct=N-1/total=N into SkillAccuracyStore) — the measured pass-rate path was unguarded (68b23fb). hold green; expand coverage|
 |62|mobile store|30|GATE:prod|store listings, review, publish|
 
 ## Loop protocol (CEO 1245)
