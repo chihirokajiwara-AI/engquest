@@ -13,6 +13,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../../core/audio/audio_cue_service.dart';
+import '../../../core/sound/sound_service.dart';
 import '../../../core/audio/audio_mute.dart';
 import '../../../core/firebase/auth_service.dart';
 import '../../../core/fsrs/firestore_card_repository.dart';
@@ -60,6 +61,12 @@ class SilentBattleScreen extends StatefulWidget {
 
 class _SilentBattleScreenState extends State<SilentBattleScreen> {
   final _cue = AudioCueService();
+  // Game-feel SFX (chimes), separate from the spoken _cue voice clips. The
+  // flagship サイレントバトル was the ONLY answer path with no chime — every other
+  // surface (nazo, exam) gives audio feedback on a pick. Process-wide singleton.
+  final _sound = SoundService();
+  // Last phase we reacted to, so a same-phase re-notify can't double-chime.
+  BattlePhase? _lastPhase;
 
   bool _rewardsApplied = false;
 
@@ -93,6 +100,23 @@ class _SilentBattleScreenState extends State<SilentBattleScreen> {
   void _onControllerChanged() {
     if (!mounted) return;
     final ctrl = widget.controller;
+    // Answer SFX on the phase TRANSITION (sound-feel parity with nazo/exam — the
+    // flagship rescue loop was silent on every tap, reading as "did it work?" to a
+    // 6yo). Transition-guarded so a same-phase re-notify can't double-fire. The
+    // wrong tone honours the no-scold contract: teach/blend/word/phrase steps have
+    // penalizeWrong==false → a wrong tap just replays audio, no red, no tone.
+    if (ctrl.phase != _lastPhase) {
+      if (ctrl.phase == BattlePhase.resolved) {
+        if (ctrl.lastWasCorrect) {
+          _sound.playCorrect();
+        } else if (ctrl.currentStep.penalizeWrong) {
+          _sound.playWrong();
+        }
+      } else if (ctrl.phase == BattlePhase.victory) {
+        _sound.playSessionComplete();
+      }
+      _lastPhase = ctrl.phase;
+    }
     // Combo flash when combo increments.
     if (ctrl.combo > _lastCombo) {
       _lastCombo = ctrl.combo;
