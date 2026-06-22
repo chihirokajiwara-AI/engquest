@@ -693,7 +693,7 @@ class _SelfReportChip extends StatelessWidget {
 // Step 2a: Adaptive placement question — DQ command-window quiz.
 // ---------------------------------------------------------------------------
 
-class _StepPlacement extends StatelessWidget {
+class _StepPlacement extends StatefulWidget {
   final PlacementItem item;
 
   /// 1-based item number (displayed as "Question N").
@@ -708,6 +708,53 @@ class _StepPlacement extends StatelessWidget {
   });
 
   @override
+  State<_StepPlacement> createState() => _StepPlacementState();
+}
+
+class _StepPlacementState extends State<_StepPlacement> {
+  /// Index of the tapped choice while feedback is showing; null when idle.
+  int? _feedbackIndex;
+
+  /// True while the 600 ms feedback freeze is active — ignores further taps.
+  bool _locked = false;
+
+  @override
+  void didUpdateWidget(_StepPlacement oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // The parent rebuilds _StepPlacement in-place for each placement question
+    // (same switch arm, no key) so this State is REUSED across questions. Reset
+    // the feedback/lock when the item changes, or the freeze from answer N would
+    // persist and brick question N+1.
+    if (!identical(oldWidget.item, widget.item)) {
+      _feedbackIndex = null;
+      _locked = false;
+    }
+  }
+
+  Future<void> _handleTap(int tappedIndex) async {
+    if (_locked) return;
+
+    setState(() {
+      _feedbackIndex = tappedIndex;
+      _locked = true;
+    });
+
+    await Future<void>.delayed(const Duration(milliseconds: 600));
+
+    if (!mounted) return;
+    widget.onAnswer(tappedIndex == widget.item.correctIndex);
+    // No reset here — didUpdateWidget clears _feedbackIndex/_locked when the
+    // next item arrives (this State is reused in-place across questions).
+  }
+
+  DqChoiceState _stateFor(int i) {
+    if (_feedbackIndex == null) return DqChoiceState.normal;
+    if (i == widget.item.correctIndex) return DqChoiceState.correct;
+    if (i == _feedbackIndex) return DqChoiceState.wrong;
+    return DqChoiceState.normal;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
@@ -717,8 +764,8 @@ class _StepPlacement extends StatelessWidget {
           const SizedBox(height: 8),
           Center(
             child: dqBilingual(
-              'えいごチェック $itemNumber',
-              'Placement Q$itemNumber',
+              'えいごチェック ${widget.itemNumber}',
+              'Placement Q${widget.itemNumber}',
               jpSize: 15,
               jpColor: dqInk,
               align: TextAlign.center,
@@ -731,13 +778,13 @@ class _StepPlacement extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  item.stemEn,
+                  widget.item.stemEn,
                   style: dqText(size: 17, w: FontWeight.w700, color: dqInk),
                 ),
-                if (item.stemJa != null) ...[
+                if (widget.item.stemJa != null) ...[
                   const SizedBox(height: 8),
                   Text(
-                    item.stemJa!,
+                    widget.item.stemJa!,
                     style: dqText(size: 13, color: dqInk, w: FontWeight.w400),
                   ),
                 ],
@@ -745,11 +792,12 @@ class _StepPlacement extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 26),
-          ...List.generate(item.choices.length, (i) {
+          ...List.generate(widget.item.choices.length, (i) {
             return DqChoice(
-              label: item.choices[i],
+              label: widget.item.choices[i],
               showCursor: true,
-              onTap: () => onAnswer(i == item.correctIndex),
+              state: _stateFor(i),
+              onTap: () => _handleTap(i),
             );
           }),
         ],
