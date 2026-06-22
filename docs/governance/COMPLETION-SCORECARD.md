@@ -93,7 +93,7 @@ needs CEO go (spend / secret / prod / legal / art-gen).
 
 ## I. perf / a11y / QA
 |59|perf|57|BUILD|cold-boot 6.6s engine-bound; audio bundle #48. 2026-06-22: battle header no longer re-inflates on each of ~7 setState/answer — extracted to const _BattleHeader + RepaintBoundary (59c494d), cutting wasted FittedBox/ValueListenableBuilder layout on the hottest screen|
-|60|a11y|89|BUILD|2026-06-22: AudioOptionButton 🔊 preview now 44dp tap target (a9cb5d8); _GradeButton sublabel/interval text lifted off the 9sp 6yo floor + interval WCAG contrast fix (c331a20). REMAINING: hold; extend|
+|60|a11y|90|BUILD|2026-06-23: battle grade result now spoken via SemanticsService (WCAG 4.1.3) + XP float ExcludeSemantics (2387793). 2026-06-22: AudioOptionButton 🔊 preview now 44dp tap target (a9cb5d8); _GradeButton sublabel/interval text lifted off the 9sp 6yo floor + interval WCAG contrast fix (c331a20). REMAINING: hold; extend|
 |61|test/CI/governance|85|BUILD|hold green; expand coverage|
 |62|mobile store|30|GATE:prod|store listings, review, publish|
 
