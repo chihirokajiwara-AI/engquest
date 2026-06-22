@@ -34,7 +34,7 @@ needs CEO go (spend / secret / prod / legal / art-gen).
 |---|------|----|------|-------------|
 |13|FSRS|75|BUILD|tune params|
 |14|適応難易度|42|BUILD|2026-06-14: grade CHANGEABLE post-onboarding (Settings picker) + one-tap "<grade>に すすむ" advance from the mastery advice card (reversible confirm → persists → home reloads). Recommend→act loop closed. REMAINING: continuous-θ WITHIN-grade item difficulty (needs per-item difficulty data)|
-|15|teach-why|82|BUILD|2026-06-22: 会話 now resolves the dialogue in-context after answer (Speaker B blank→correct answer, gold/bold) = parity with vocab/reading/listening, 34 items×4級 (0820269); vocab results missed-word list now has 🔊 replay (93dbf3d). REMAINING: reading in mock-review, grammar 解説|
+|15|teach-why|84|BUILD|2026-06-22: 会話 resolves the dialogue in-context (0820269); vocab results 🔊 replay (93dbf3d); writing result now shows a criterion-specific ひらがな fix-hint on weak 観点 rows, content-qa-corrected (4c9b2cc). REMAINING: reading in mock-review, grammar 解説|
 |16|hint scaffold|90|BUILD|2026-06-14: hint present on ALL practice surfaces — vocab=meaning-reveal, reading+conversation=50/50 "narrow to 2" (合格率-excluded), listening=replay+caption (excl), nazo=3-tier coin ladder. REMAINING: tune copy / per-screen polish only|
 |17|音声強化|65|GATE:backend|TTS coverage needs backend/static gen|
 |18|連続ミス励まし|85|BUILD|done 4 screens; tune copy|
@@ -82,14 +82,14 @@ needs CEO go (spend / secret / prod / legal / art-gen).
 |48|世界/物語実装|55|BUILD|STALE→re-audited 2026-06-12: all 7 STORY-BIBLE towns ARE in quest_data incl recast finale 灰色のひろば (333 narrative lines: companionArrival/teachJa/npcLine/onCorrect); nazo tied to eikenLevel. NOT "thin skin". REMAINING: world-class narrative depth + GATE scene art (#54)|
 |49|キャラ in-game|35|BUILD|cast dialogue, arcs, presence (bible→code); art-gen separate|
 |50|探索の深さ|40|BUILD|scene/nazo/hotspot depth → Layton/Minecraft-grade|
-|51|ゲームフィール/演出|45|BUILD|answer juice (haptic+chime) across all 5 英検 modes + battle, XP ring / daily hook / スラ reacts; 2026-06-22: home daily-goal ring now animates fill prev→current + gold goal-met pulse (fe95f6a, reduced-motion-safe) = a real reward moment. REMAINING: scene+route transitions, bigger set-pieces|
+|51|ゲームフィール/演出|47|BUILD|answer juice across all 5 英検 modes + battle, XP ring / daily hook / スラ reacts; 2026-06-22: home daily-goal ring animates fill + gold goal-met pulse (fe95f6a); mock-exam result now sweeps the 合格率 arc + colours in the character (3e44101, reduced-motion-safe) = reward-moment on the highest-stakes session. REMAINING: scene+route transitions|
 |52|事件→英検の有機結合|32|BUILD|each case's puzzles ARE the 英検 skills, diegetic|
 |53|手がかりドリップ|40|BUILD|one clue/case edge→centre per WORLD-BIBLE|
 |54|視覚の本格バー|30|GATE:art-gen|dark-navy/gold look; cast+scene art (heavy job)|
 |55|オープニング/掴み|62|BUILD|STALE→re-audited 2026-06-12: the 6-panel OPENING-NARRATIVE-BIBLE prologue IS built (prologue_screen.dart, incl interactive 🔊 c·a·t blend) AND wired (app.dart:1021, once-ever) AND now replayable from Settings. REMAINING: bible's richer 3-beat town ArrivalScene + GATE phoneme clips/leitmotif (#56) + scene art (#54)|
 |56|サウンド/音楽|35|GATE:audio|BGM/SE design+wiring (founder/paid gen escalates)|
 |57|nav到達性/ハブ|72|BUILD|kill orphaned WorldMap hub remnants; clean flow|
-|58|onboarding没入|72|BUILD|make CAT placement diegetic (探偵の入所試験)|
+|58|onboarding没入|74|BUILD|2026-06-22: placement quiz now flashes correct/wrong (600ms DqChoiceState) before advancing — the first interaction no longer ignores the child; fixed a latent State-reuse brick (493b8a7). REMAINING: make CAT placement diegetic (探偵の入所試験)|
 
 ## I. perf / a11y / QA
 |59|perf|57|BUILD|cold-boot 6.6s engine-bound; audio bundle #48. 2026-06-22: battle header no longer re-inflates on each of ~7 setState/answer — extracted to const _BattleHeader + RepaintBoundary (59c494d), cutting wasted FittedBox/ValueListenableBuilder layout on the hottest screen|
