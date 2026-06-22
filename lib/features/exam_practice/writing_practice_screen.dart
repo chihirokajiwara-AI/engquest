@@ -1118,6 +1118,12 @@ class _WritingPracticeScreenState extends State<WritingPracticeScreen> {
   final _controller = TextEditingController();
   final _scrollController = ScrollController();
 
+  // Word-count as a ValueNotifier so each keystroke rebuilds ONLY the
+  // _WordCountBar + submit button (via ValueListenableBuilder), not the whole
+  // editor tree (passage, structure steps, text field). Matches the proven
+  // timer pattern in mock_exam_screen.dart (R2-F11 class perf fix).
+  final _wordCountNotifier = ValueNotifier<int>(0);
+
   _Phase _phase = _Phase.writing;
   WritingRubricResult? _result;
   String? _gradingError;
@@ -1161,6 +1167,7 @@ class _WritingPracticeScreenState extends State<WritingPracticeScreen> {
   void dispose() {
     _controller.dispose();
     _scrollController.dispose();
+    _wordCountNotifier.dispose();
     super.dispose();
   }
 
@@ -1169,9 +1176,6 @@ class _WritingPracticeScreenState extends State<WritingPracticeScreen> {
     if (text.isEmpty) return 0;
     return text.split(RegExp(r'\s+')).where((w) => w.isNotEmpty).length;
   }
-
-  bool get _inRange =>
-      _wordCount >= _prompt.wordCountMin && _wordCount <= _prompt.wordCountMax;
 
   bool get _canSubmit =>
       _wordCount >= _prompt.wordCountMin && _phase == _Phase.writing;
@@ -1356,6 +1360,7 @@ class _WritingPracticeScreenState extends State<WritingPracticeScreen> {
   void _nextPrompt() {
     _recordWritingResult(); // fire-and-forget before state change
     if (_promptIdx < _prompts.length - 1) {
+      _wordCountNotifier.value = 0; // reset before setState (notifier-only)
       setState(() {
         _promptIdx++;
         _controller.clear();
@@ -1548,61 +1553,89 @@ class _WritingPracticeScreenState extends State<WritingPracticeScreen> {
           // Text field
           DqPanel(
             title: 'あなたの答え / Your answer',
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: dqNight0.withAlpha(230),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: _inRange
-                          ? const Color(0xFF8BE08B)
-                          : dqBorder.withAlpha(180),
-                      width: _inRange ? 2 : 1.5,
-                    ),
-                  ),
-                  child: TextField(
-                    controller: _controller,
-                    onChanged: (_) => setState(() {}),
-                    maxLines: 8,
-                    minLines: 6,
-                    style: notoSerif(
-                      color: Colors.white,
-                      fontSize: 15,
-                      height: 1.7,
-                    ),
-                    cursorColor: dqGold,
-                    decoration: InputDecoration(
-                      hintText: 'ここに英語で書いてください…\nWrite your answer here…',
-                      hintStyle: dqText(
-                        size: 13,
-                        color: dqInk.withAlpha(100),
-                        spacing: 0,
+            // ValueListenableBuilder scopes rebuilds to this Column: the border
+            // color, bar, and submit button all respond to word-count changes
+            // without rebuilding the structure guide or DqPanel header above.
+            child: ValueListenableBuilder<int>(
+              valueListenable: _wordCountNotifier,
+              builder: (_, count, __) {
+                final inRange = count >= _prompt.wordCountMin &&
+                    count <= _prompt.wordCountMax;
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: dqNight0.withAlpha(230),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: inRange
+                              ? const Color(0xFF8BE08B)
+                              : dqBorder.withAlpha(180),
+                          width: inRange ? 2 : 1.5,
+                        ),
                       ),
-                      border: InputBorder.none,
-                      contentPadding: const EdgeInsets.all(14),
+                      child: TextField(
+                        controller: _controller,
+                        onChanged: (text) {
+                          // Count once here; push to notifier so only this
+                          // ValueListenableBuilder subtree rebuilds on each
+                          // keystroke (not the whole writing phase tree).
+                          final t = text.trim();
+                          _wordCountNotifier.value = t.isEmpty
+                              ? 0
+                              : t
+                                  .split(RegExp(r'\s+'))
+                                  .where((w) => w.isNotEmpty)
+                                  .length;
+                        },
+                        maxLines: 8,
+                        minLines: 6,
+                        style: notoSerif(
+                          color: Colors.white,
+                          fontSize: 15,
+                          height: 1.7,
+                        ),
+                        cursorColor: dqGold,
+                        decoration: InputDecoration(
+                          hintText: 'ここに英語で書いてください…\nWrite your answer here…',
+                          hintStyle: dqText(
+                            size: 13,
+                            color: dqInk.withAlpha(100),
+                            spacing: 0,
+                          ),
+                          border: InputBorder.none,
+                          contentPadding: const EdgeInsets.all(14),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                // Word count indicator
-                _WordCountBar(
-                  count: _wordCount,
-                  min: _prompt.wordCountMin,
-                  max: _prompt.wordCountMax,
-                ),
-              ],
+                    const SizedBox(height: 10),
+                    _WordCountBar(
+                      count: count,
+                      min: _prompt.wordCountMin,
+                      max: _prompt.wordCountMax,
+                    ),
+                  ],
+                );
+              },
             ),
           ),
           const SizedBox(height: 16),
 
-          // Submit button
-          DqButton(
-            label: _canSubmit
-                ? 'AIに採点してもらう  /  Get AI feedback'
-                : '${_prompt.wordCountMin}語以上書いてから提出 / Write ≥${_prompt.wordCountMin} words',
-            onTap: _canSubmit ? _submit : null,
+          // Submit button also listens to the notifier so its enabled/disabled
+          // state reflects word-count changes without a full-screen rebuild.
+          ValueListenableBuilder<int>(
+            valueListenable: _wordCountNotifier,
+            builder: (_, count, __) {
+              final canSubmit =
+                  count >= _prompt.wordCountMin && _phase == _Phase.writing;
+              return DqButton(
+                label: canSubmit
+                    ? 'AIに採点してもらう  /  Get AI feedback'
+                    : '${_prompt.wordCountMin}語以上書いてから提出 / Write ≥${_prompt.wordCountMin} words',
+                onTap: canSubmit ? _submit : null,
+              );
+            },
           ),
         ],
       ),
@@ -2038,42 +2071,84 @@ class _RubricScoreRow extends StatelessWidget {
   final String label;
   final int score;
 
+  /// Returns a short, warm, criterion-specific ひらがな fix-hint for a child
+  /// aged 6+ who scored 0 or 1 on this 観点. English nouns are fine; scolding
+  /// is not. The hint teaches the NEXT concrete step.
+  ///
+  /// Matching is prefix-based (e.g. '内容 / Content' starts with '内容') so the
+  /// bilingual label strings used in rubricPoints never break the match.
+  String? _fixHint() {
+    if (score > 1) return null; // only shown for weak rows
+    if (label.startsWith('内容')) {
+      // Task-type-agnostic (email asks Qs / opinion needs reasons / summary
+      // needs the main points) — content-qa corrected the email-only original.
+      return 'しつもんや だいもんを よみなおして、つたえたいことを もっと くわしく かこう！';
+    } else if (label.startsWith('構成')) {
+      return 'はじめ・なか・おわり の じゅんに かいてみよう！';
+    } else if (label.startsWith('語彙')) {
+      return 'おなじ ことば より、ちがう いいかた も つかってみよう！';
+    } else if (label.startsWith('文法')) {
+      // Whole-sentence grammar, not just capitals/periods — content-qa flagged
+      // the original as too narrow (false reassurance when structure is wrong).
+      return 'ひとつひとつの ぶんを よみなおして、えいごの かたちが ただしいか たしかめよう！';
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final hint = _fixHint();
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            flex: 3,
-            child: Text(label, style: dqText(size: 13, color: dqInk)),
-          ),
-          // 4 pips
-          for (int i = 1; i <= 4; i++)
-            Container(
-              width: 28,
-              height: 28,
-              margin: const EdgeInsets.only(left: 5),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color:
-                    score >= i ? _scoreColor(score) : dqNight1.withAlpha(200),
-                borderRadius: BorderRadius.circular(6),
-                border: Border.all(
-                  color:
-                      score >= i ? _scoreColor(score) : dqBorder.withAlpha(80),
-                  width: 1.5,
-                ),
+          Row(
+            children: [
+              Expanded(
+                flex: 3,
+                child: Text(label, style: dqText(size: 13, color: dqInk)),
               ),
-              child: Text(
-                '$i',
-                style: notoSerifJp(
-                  color: score >= i
-                      ? const Color(0xFF1A2244)
-                      : dqInk.withAlpha(80),
-                  fontSize: 12,
-                  fontWeight: FontWeight.w800,
+              // 4 pips
+              for (int i = 1; i <= 4; i++)
+                Container(
+                  width: 28,
+                  height: 28,
+                  margin: const EdgeInsets.only(left: 5),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: score >= i
+                        ? _scoreColor(score)
+                        : dqNight1.withAlpha(200),
+                    borderRadius: BorderRadius.circular(6),
+                    border: Border.all(
+                      color: score >= i
+                          ? _scoreColor(score)
+                          : dqBorder.withAlpha(80),
+                      width: 1.5,
+                    ),
+                  ),
+                  child: Text(
+                    '$i',
+                    style: notoSerifJp(
+                      color: score >= i
+                          ? const Color(0xFF1A2244)
+                          : dqInk.withAlpha(80),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
                 ),
+            ],
+          ),
+          // Error-driven learning: show a criterion-specific next-step cue only
+          // when the child scored 0 or 1 — a concrete warm nudge, never a scold.
+          if (hint != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 4, left: 2),
+              child: Text(
+                hint,
+                style: dqText(size: 11.5, color: dqInk.withAlpha(160)),
               ),
             ),
         ],
