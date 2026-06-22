@@ -88,7 +88,7 @@ needs CEO go (spend / secret / prod / legal / art-gen).
 |54|視覚の本格バー|30|GATE:art-gen|dark-navy/gold look; cast+scene art (heavy job)|
 |55|オープニング/掴み|62|BUILD|STALE→re-audited 2026-06-12: the 6-panel OPENING-NARRATIVE-BIBLE prologue IS built (prologue_screen.dart, incl interactive 🔊 c·a·t blend) AND wired (app.dart:1021, once-ever) AND now replayable from Settings. REMAINING: bible's richer 3-beat town ArrivalScene + GATE phoneme clips/leitmotif (#56) + scene art (#54)|
 |56|サウンド/音楽|35|GATE:audio|BGM/SE design+wiring (founder/paid gen escalates)|
-|57|nav到達性/ハブ|72|BUILD|kill orphaned WorldMap hub remnants; clean flow|
+|57|nav到達性/ハブ|76|BUILD|2026-06-23: FIXED a hard dead-end — Speaking was unreachable for ALL returning consented users (stray maybePop after a route-replacement popped SpeakingScreen back off; 262ca87 + regression test). REMAINING: kill orphaned WorldMap hub remnants; clean flow|
 |58|onboarding没入|74|BUILD|2026-06-22: placement quiz now flashes correct/wrong (600ms DqChoiceState) before advancing — the first interaction no longer ignores the child; fixed a latent State-reuse brick (493b8a7). REMAINING: make CAT placement diegetic (探偵の入所試験)|
 
 ## I. perf / a11y / QA
