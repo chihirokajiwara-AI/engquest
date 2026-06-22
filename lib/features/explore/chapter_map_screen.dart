@@ -15,7 +15,13 @@ import 'package:engquest/features/quest/ui/dq_ui.dart';
 /// to the scene (zero added friction). It appears only once a chapter has 2+
 /// locations, so today it is preview-only (?preview=chaptermap) until real 2nd
 /// locations land.
-class ChapterMapScreen extends StatelessWidget {
+///
+/// On first open each node does a brief staggered fade+scale-in ("look what I
+/// unlocked" reveal). The trail is drawn at its final state from frame 0 — it is
+/// a [Positioned.fill] sibling outside the per-node animated subtree, so it is
+/// never animated. Respects [prefersReducedMotion]: the controller is jumped to
+/// complete so all nodes appear instantly.
+class ChapterMapScreen extends StatefulWidget {
   final Chapter chapter;
 
   /// Mandatory ナゾ answered first-try-correct in each location (same length and
@@ -28,6 +34,14 @@ class ChapterMapScreen extends StatelessWidget {
     required this.firstTryCorrectPerLocation,
   });
 
+  @override
+  State<ChapterMapScreen> createState() => _ChapterMapScreenState();
+}
+
+class _ChapterMapScreenState extends State<ChapterMapScreen>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctrl;
+
   // Rec.709 luma greyscale for locked nodes (matches the scene saturation verb).
   static const List<double> _kGreyscale = <double>[
     0.2126, 0.7152, 0.0722, 0, 0, //
@@ -36,9 +50,44 @@ class ChapterMapScreen extends StatelessWidget {
     0, 0, 0, 1, 0, //
   ];
 
+  // Total entrance animation duration. Each node starts at i * _kStagger and
+  // eases in to 1.0, giving a staggered "one by one" feel.
+  static const Duration _kDuration = Duration(milliseconds: 800);
+
+  // Offset between consecutive node starts (fraction of total duration).
+  // With 4 nodes the last node starts at 0.36 and has 64% of the duration to
+  // ease in, which is more than enough for Curves.easeOutBack to settle.
+  static const double _kStagger = 0.12;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(vsync: this, duration: _kDuration);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Start (or skip) the animation once we have a BuildContext for media query.
+    if (!_ctrl.isAnimating && _ctrl.value == 0.0) {
+      if (prefersReducedMotion(context)) {
+        _ctrl.value = 1.0; // jump to final state — no motion
+      } else {
+        _ctrl.forward();
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final states = deriveNodeStates(chapter, firstTryCorrectPerLocation);
+    final states =
+        deriveNodeStates(widget.chapter, widget.firstTryCorrectPerLocation);
     return DqScene(
       contentMaxWidth: 720,
       child: Column(
@@ -70,7 +119,7 @@ class ChapterMapScreen extends StatelessWidget {
               children: [
                 Text('あんないず', style: dqText(size: 12, color: dqGold)),
                 Text(
-                  chapter.titleJa,
+                  widget.chapter.titleJa,
                   style: dqText(size: 18, color: dqBorder),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -89,22 +138,32 @@ class ChapterMapScreen extends StatelessWidget {
         final w = c.maxWidth;
         final h = c.maxHeight;
         final d = (w * 0.26).clamp(76.0, 132.0);
+        final nodes = widget.chapter.map.nodes;
         return Stack(
           children: [
+            // Trail is a sibling OUTSIDE the per-node animated subtree.
+            // It paints at its final state from frame 0 — no animation here.
             Positioned.fill(
               child: CustomPaint(
-                painter: _TrailPainter(chapter.map.nodes, states),
+                painter: _TrailPainter(nodes, states),
               ),
             ),
-            for (int i = 0; i < chapter.map.nodes.length; i++)
-              _node(context, i, states[i], w, h, d),
+            for (int i = 0; i < nodes.length; i++)
+              _animatedNode(context, i, states[i], w, h, d),
           ],
         );
       },
     );
   }
 
-  Widget _node(
+  /// Returns a [Positioned] (direct [Stack] child) whose inner content is
+  /// wrapped in a staggered [FadeTransition] + [ScaleTransition].
+  ///
+  /// The [Positioned] itself must stay the direct Stack child — Flutter forbids
+  /// a [Transform] (used by ScaleTransition) between Stack and Positioned.
+  /// Node [i] starts animating at [i * _kStagger] and eases in to 1.0 using
+  /// [Curves.easeOutBack] for a playful bounce-settle feel.
+  Widget _animatedNode(
     BuildContext context,
     int i,
     MapNodeState state,
@@ -112,8 +171,49 @@ class ChapterMapScreen extends StatelessWidget {
     double h,
     double d,
   ) {
-    final node = chapter.map.nodes[i];
-    final loc = chapter.locations[node.locationIndex];
+    final node = widget.chapter.map.nodes[i];
+    final pinH = state == MapNodeState.current ? 30.0 : 0.0;
+    final left = node.x * w - d / 2;
+    final top = node.y * h - d / 2 - pinH;
+
+    final start = (i * _kStagger).clamp(0.0, 0.99);
+    final scaleCurve = CurvedAnimation(
+      parent: _ctrl,
+      curve: Interval(start, 1.0, curve: Curves.easeOutBack),
+    );
+    final fadeCurve = CurvedAnimation(
+      parent: _ctrl,
+      // Fade starts slightly earlier than scale so the node doesn't "pop" in.
+      curve: Interval(start, (start + 0.3).clamp(0.0, 1.0)),
+    );
+
+    // Semantics sits OUTSIDE FadeTransition so the a11y label is always
+    // discoverable by screen readers even when the node is still fading in.
+    return Positioned(
+      left: left,
+      top: top,
+      child: Semantics(
+        button: state != MapNodeState.locked,
+        label: _a11yLabel(i, state),
+        child: FadeTransition(
+          opacity: Tween<double>(begin: 0.0, end: 1.0).animate(fadeCurve),
+          child: ScaleTransition(
+            scale: Tween<double>(begin: 0.55, end: 1.0).animate(scaleCurve),
+            child: _nodeContent(context, i, state, d),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _nodeContent(
+    BuildContext context,
+    int i,
+    MapNodeState state,
+    double d,
+  ) {
+    final node = widget.chapter.map.nodes[i];
+    final loc = widget.chapter.locations[node.locationIndex];
     final locked = state == MapNodeState.locked;
     final cleared = state == MapNodeState.cleared;
     final current = state == MapNodeState.current;
@@ -189,30 +289,18 @@ class ChapterMapScreen extends StatelessWidget {
           )
         : SizedBox(width: d, height: d, child: medallion);
 
-    final pinH = current ? 30.0 : 0.0;
-    final left = node.x * w - d / 2;
-    final top = node.y * h - d / 2 - pinH;
-
-    return Positioned(
-      left: left,
-      top: top,
-      child: Semantics(
-        button: !locked,
-        label: _a11yLabel(i, state),
-        child: GestureDetector(
-          onTap: locked
-              ? null
-              : () => Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                      builder: (_) => SceneView(
-                        scene: loc.scene,
-                        eikenLevel: chapter.grade,
-                      ),
-                    ),
+    return GestureDetector(
+      onTap: locked
+          ? null
+          : () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => SceneView(
+                    scene: loc.scene,
+                    eikenLevel: widget.chapter.grade,
                   ),
-          child: marker,
-        ),
-      ),
+                ),
+              ),
+      child: marker,
     );
   }
 
