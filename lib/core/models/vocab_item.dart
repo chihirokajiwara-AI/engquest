@@ -135,6 +135,14 @@ class VocabItem extends Equatable {
   final String category; // e.g., "Food"
   final List<PartOfSpeech> pos; // parts of speech
   final List<String> exampleSentences;
+
+  /// ひらがな gloss of each [exampleSentences] entry (index-aligned), for the 6yo
+  /// who cannot yet read English. Without it the example sentence on the battle
+  /// card is undecodable glyph-noise to a year-長/小1 child, who then presses
+  /// 「わかった」on Japanese-WORD recognition having built ZERO sentence-level
+  /// memory — degrading FSRS accuracy and inflating the 合格率. Empty (default)
+  /// when no gloss is authored yet → the card simply shows the English alone.
+  final List<String> jpExampleSentences;
   final String audioUrl; // Firebase Storage path
   final String imageUrl; // Firebase Storage path
   final FsrsState fsrsState; // current learning state
@@ -152,6 +160,7 @@ class VocabItem extends Equatable {
     required this.eikenLevel,
     required this.pos,
     required this.exampleSentences,
+    this.jpExampleSentences = const [],
     this.category = '',
     this.audioUrl = '',
     this.imageUrl = '',
@@ -173,6 +182,9 @@ class VocabItem extends Equatable {
           .map((p) => PartOfSpeechExtension.fromString(p as String))
           .toList(),
       exampleSentences: (json['exampleSentences'] as List<dynamic>)
+          .map((s) => s as String)
+          .toList(),
+      jpExampleSentences: (json['jpExampleSentences'] as List<dynamic>? ?? [])
           .map((s) => s as String)
           .toList(),
       audioUrl: json['audioUrl'] as String? ?? '',
@@ -199,6 +211,7 @@ class VocabItem extends Equatable {
         'category': category,
         'pos': pos.map((p) => p.name).toList(),
         'exampleSentences': exampleSentences,
+        'jpExampleSentences': jpExampleSentences,
         'audioUrl': audioUrl,
         'imageUrl': imageUrl,
         'fsrsState': fsrsState.value,
@@ -209,6 +222,7 @@ class VocabItem extends Equatable {
   VocabItem copyWith({
     FsrsState? fsrsState,
     List<String>? exampleSentences,
+    List<String>? jpExampleSentences,
     List<String>? distractors,
   }) {
     return VocabItem(
@@ -221,6 +235,7 @@ class VocabItem extends Equatable {
       category: category,
       pos: pos,
       exampleSentences: exampleSentences ?? this.exampleSentences,
+      jpExampleSentences: jpExampleSentences ?? this.jpExampleSentences,
       audioUrl: audioUrl,
       imageUrl: imageUrl,
       fsrsState: fsrsState ?? this.fsrsState,

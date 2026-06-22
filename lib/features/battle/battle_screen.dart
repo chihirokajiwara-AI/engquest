@@ -1428,6 +1428,12 @@ class _BattleScreenState extends State<BattleScreen>
     final vocab = _currentVocab;
     final example =
         vocab.exampleSentences.isNotEmpty ? vocab.exampleSentences.first : '';
+    // ひらがな gloss of the example (index-aligned). A 6yo who cannot read the
+    // English sentence gets the comprehensible-input pairing below it; absent
+    // (most grades, for now) → the English shows alone exactly as before.
+    final jpExample = vocab.jpExampleSentences.isNotEmpty
+        ? vocab.jpExampleSentences.first
+        : '';
     return _cardContainer(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -1450,17 +1456,35 @@ class _BattleScreenState extends State<BattleScreen>
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(color: dqGoldDeep.withAlpha(120)),
               ),
-              child: RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  children: exampleHighlightSpans(
-                    example,
-                    vocab.word,
-                    base: dqText(size: 15, w: FontWeight.w500, color: dqInk),
-                    emphasis:
-                        dqText(size: 15, w: FontWeight.w800, color: dqGold),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      children: exampleHighlightSpans(
+                        example,
+                        vocab.word,
+                        base:
+                            dqText(size: 15, w: FontWeight.w500, color: dqInk),
+                        emphasis:
+                            dqText(size: 15, w: FontWeight.w800, color: dqGold),
+                      ),
+                    ),
                   ),
-                ),
+                  // ひらがな gloss — the comprehensible-input line for a 6yo who
+                  // cannot decode the English. Smaller + muted so the English
+                  // stays primary (the word being learned), the gloss supports.
+                  if (jpExample.isNotEmpty) ...[
+                    const SizedBox(height: 6),
+                    Text(
+                      jpExample,
+                      textAlign: TextAlign.center,
+                      style: dqText(size: 13, color: dqInk.withAlpha(185))
+                          .copyWith(height: 1.4),
+                    ),
+                  ],
+                ],
               ),
             ),
           ],
