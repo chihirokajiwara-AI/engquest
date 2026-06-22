@@ -983,7 +983,19 @@ class _BattleScreenState extends State<BattleScreen>
     return DqScene(
       child: Column(
         children: [
-          _buildHeader(),
+          RepaintBoundary(
+            child: _BattleHeader(
+              streak: _streak,
+              xpProfileNotifier: _xpService.profileNotifier,
+              isMuted: _sound.muted,
+              onToggleMute: () => setState(() => _sound.muted = !_sound.muted),
+              repoLoading: _repoLoading,
+              sessionDone: _sessionDone,
+              streakSnapshot: _streakSnapshot,
+              answersThisSession: _answersThisSession,
+              onBack: () => Navigator.maybePop(context),
+            ),
+          ),
           Expanded(
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 400),
@@ -1039,79 +1051,6 @@ class _BattleScreenState extends State<BattleScreen>
 
   // ── Dark header (replaces the bright AppBar): back arrow + gold serif title,
   // streak badge, mute toggle, and the N / total counter. ──────────────────────
-  Widget _buildHeader() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(6, 4, 12, 4),
-      child: Row(
-        children: [
-          IconButton(
-            tooltip: 'もどる / Back',
-            icon: const Icon(Icons.arrow_back, color: dqInk),
-            onPressed: () => Navigator.maybePop(context),
-          ),
-          const Icon(Icons.style_rounded, color: dqGold, size: 22),
-          const SizedBox(width: 8),
-          // #114/WCAG SC 1.4.4: Flexible so the title never pushes the header Row
-          // into a ~57px overflow. FittedBox.scaleDown SHRINKS the title to fit
-          // instead of wrapping — a real-render re-audit (CEO 1363) showed the
-          // tight header wrapping 'たんごバトル' into an ugly orphaned 'ル' even at
-          // normal text scale. Scaling keeps it one clean line (and still degrades
-          // gracefully at large text scales).
-          Flexible(
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              alignment: Alignment.centerLeft,
-              child: dqBilingual('たんごバトル', 'Word Battle',
-                  jpSize: 17, jpColor: dqGold, stacked: true),
-            ),
-          ),
-          if (_streak >= 3) ...[
-            const SizedBox(width: 10),
-            _StreakBadge(streak: _streak),
-          ],
-          const Spacer(),
-          // Live XP ring (game-feel, CEO 1320): a bar filling toward the next
-          // level, visible while answering, so the child sees momentum and
-          // chooses "one more problem". Reactive to XP awards via profileNotifier.
-          ValueListenableBuilder<XpProfile?>(
-            valueListenable: _xpService.profileNotifier,
-            builder: (_, profile, __) => profile == null
-                ? const SizedBox.shrink()
-                : Padding(
-                    padding: const EdgeInsets.only(right: 6),
-                    child: _XpRing(profile: profile),
-                  ),
-          ),
-          IconButton(
-            icon: Icon(
-              _sound.muted ? Icons.volume_off : Icons.volume_up,
-              color: dqInk,
-              size: 22,
-            ),
-            tooltip: _sound.muted ? 'サウンドON' : 'サウンドOFF',
-            onPressed: () => setState(() => _sound.muted = !_sound.muted),
-          ),
-          if (!_repoLoading && !_sessionDone)
-            Builder(builder: (_) {
-              // #170: never show the raw N / 600 grade-deck total — show the
-              // achievable daily-goal near-horizon (or nothing while loading).
-              final label = battleHeaderGoalLabel(
-                hasGoalContext: _streakSnapshot != null,
-                answersThisSession: _answersThisSession,
-                remainingToGoal: _streakSnapshot?.remainingToGoal ?? 0,
-                goalMet: _streakSnapshot?.goalMet ?? false,
-              );
-              if (label == null) return const SizedBox.shrink();
-              return Padding(
-                padding: const EdgeInsets.only(left: 2),
-                child: Text(label, style: dqText(size: 14, color: dqGoldDeep)),
-              );
-            }),
-        ],
-      ),
-    );
-  }
-
   // ── Session screen ─────────────────────────────────────────────────────────
 
   Widget _buildCardSession() {
@@ -1775,6 +1714,127 @@ class _BattleScreenState extends State<BattleScreen>
           ),
         ),
       ],
+    );
+  }
+}
+
+// ── Battle header (extracted StatelessWidget — skips rebuilds on card-flip etc.) ──
+//
+// The header has no reason to rebuild when setState fires for _showShimmer,
+// _gradeReady, _xpPopups, _momentumText, etc.  Extracting it plus wrapping in
+// RepaintBoundary keeps FittedBox double-layout and the ValueListenableBuilder
+// subtree out of those high-frequency rebuilds.
+//
+// Fields threaded:
+//   streak             – int    – drives _StreakBadge visibility/value
+//   xpProfileNotifier  – ValueNotifier<XpProfile?> – passed into the inner
+//                        ValueListenableBuilder so XP ring still rebuilds on
+//                        awardXp independently of the parent State
+//   isMuted            – bool   – mute icon state (read from _sound.muted at
+//                        the time the parent build() runs)
+//   onToggleMute       – VoidCallback – performs setState(() => _sound.muted =
+//                        !_sound.muted) in the parent; no mutable state here
+//   repoLoading        – bool   – goal label visibility guard
+//   sessionDone        – bool   – goal label visibility guard
+//   streakSnapshot     – StreakState? – feeds battleHeaderGoalLabel
+//   answersThisSession – int    – feeds battleHeaderGoalLabel
+//   onBack             – VoidCallback – Navigator.maybePop(context) closure
+//                        captured at the parent's build() site
+
+class _BattleHeader extends StatelessWidget {
+  final int streak;
+  final ValueNotifier<XpProfile?> xpProfileNotifier;
+  final bool isMuted;
+  final VoidCallback onToggleMute;
+  final bool repoLoading;
+  final bool sessionDone;
+  final StreakState? streakSnapshot;
+  final int answersThisSession;
+  final VoidCallback onBack;
+
+  const _BattleHeader({
+    required this.streak,
+    required this.xpProfileNotifier,
+    required this.isMuted,
+    required this.onToggleMute,
+    required this.repoLoading,
+    required this.sessionDone,
+    required this.streakSnapshot,
+    required this.answersThisSession,
+    required this.onBack,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(6, 4, 12, 4),
+      child: Row(
+        children: [
+          IconButton(
+            tooltip: 'もどる / Back',
+            icon: const Icon(Icons.arrow_back, color: dqInk),
+            onPressed: onBack,
+          ),
+          const Icon(Icons.style_rounded, color: dqGold, size: 22),
+          const SizedBox(width: 8),
+          // #114/WCAG SC 1.4.4: Flexible so the title never pushes the header Row
+          // into a ~57px overflow. FittedBox.scaleDown SHRINKS the title to fit
+          // instead of wrapping — a real-render re-audit (CEO 1363) showed the
+          // tight header wrapping 'たんごバトル' into an ugly orphaned 'ル' even at
+          // normal text scale. Scaling keeps it one clean line (and still degrades
+          // gracefully at large text scales).
+          Flexible(
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerLeft,
+              child: dqBilingual('たんごバトル', 'Word Battle',
+                  jpSize: 17, jpColor: dqGold, stacked: true),
+            ),
+          ),
+          if (streak >= 3) ...[
+            const SizedBox(width: 10),
+            _StreakBadge(streak: streak),
+          ],
+          const Spacer(),
+          // Live XP ring (game-feel, CEO 1320): a bar filling toward the next
+          // level, visible while answering, so the child sees momentum and
+          // chooses "one more problem". Reactive to XP awards via profileNotifier.
+          ValueListenableBuilder<XpProfile?>(
+            valueListenable: xpProfileNotifier,
+            builder: (_, profile, __) => profile == null
+                ? const SizedBox.shrink()
+                : Padding(
+                    padding: const EdgeInsets.only(right: 6),
+                    child: _XpRing(profile: profile),
+                  ),
+          ),
+          IconButton(
+            icon: Icon(
+              isMuted ? Icons.volume_off : Icons.volume_up,
+              color: dqInk,
+              size: 22,
+            ),
+            tooltip: isMuted ? 'サウンドON' : 'サウンドOFF',
+            onPressed: onToggleMute,
+          ),
+          if (!repoLoading && !sessionDone)
+            Builder(builder: (_) {
+              // #170: never show the raw N / 600 grade-deck total — show the
+              // achievable daily-goal near-horizon (or nothing while loading).
+              final label = battleHeaderGoalLabel(
+                hasGoalContext: streakSnapshot != null,
+                answersThisSession: answersThisSession,
+                remainingToGoal: streakSnapshot?.remainingToGoal ?? 0,
+                goalMet: streakSnapshot?.goalMet ?? false,
+              );
+              if (label == null) return const SizedBox.shrink();
+              return Padding(
+                padding: const EdgeInsets.only(left: 2),
+                child: Text(label, style: dqText(size: 14, color: dqGoldDeep)),
+              );
+            }),
+        ],
+      ),
     );
   }
 }
