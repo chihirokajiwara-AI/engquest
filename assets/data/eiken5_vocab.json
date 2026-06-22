@@ -15465,6 +15465,9 @@
         "toy",
         "traffic",
         "train"
+      ],
+      "jpExampleSentences": [
+        "おかあさんは ゆうびんきょくで きってを かったよ。"
       ]
     },
     {
@@ -15494,6 +15497,9 @@
         "teacher",
         "team",
         "ten"
+      ],
+      "jpExampleSentences": [
+        "わたしたちの かぞくは にちようびに きょうかいに いくよ。"
       ]
     },
     {
@@ -15523,6 +15529,9 @@
         "child",
         "chocolate",
         "church"
+      ],
+      "jpExampleSentences": [
+        "おとうさんは スーパーで やさいを かってくるよ。"
       ]
     },
     {
@@ -15552,6 +15561,9 @@
         "stomach",
         "straight",
         "strawberry"
+      ],
+      "jpExampleSentences": [
+        "わたしは コンビニで おにぎりを かったよ。"
       ]
     },
     {
@@ -15581,6 +15593,9 @@
         "twelve",
         "twenty",
         "two"
+      ],
+      "jpExampleSentences": [
+        "わたしたちは はくぶつかんで きょうりゅうの ほねを みたよ。"
       ]
     },
     {
@@ -15610,6 +15625,9 @@
         "I_see",
         "I_think_so",
         "after_you"
+      ],
+      "jpExampleSentences": [
+        "すみません、えきへの みちを おしえて もらえますか。"
       ]
     },
     {
@@ -15639,6 +15657,9 @@
         "there_is",
         "this_is",
         "want_to"
+      ],
+      "jpExampleSentences": [
+        "おかあさんは わたしが がっこうから かえったとき「おかえり」と いってくれたよ。"
       ]
     },
     {
@@ -15668,6 +15689,9 @@
         "I_think_so",
         "after_you",
         "are_you"
+      ],
+      "jpExampleSentences": [
+        "あした がっこうで また ね！"
       ]
     },
     {
@@ -15697,6 +15721,9 @@
         "I_am",
         "I_can",
         "I_cannot"
+      ],
+      "jpExampleSentences": [
+        "おばあちゃんの おうちを でるとき「きをつけてね」と いってくれたよ。"
       ]
     },
     {
@@ -15726,6 +15753,9 @@
         "I_think_so",
         "after_you",
         "are_you"
+      ],
+      "jpExampleSentences": [
+        "きょうの つづりの テストで がんばってね！"
       ]
     },
     {
@@ -15755,6 +15785,9 @@
         "I_cannot",
         "I_don't",
         "I_like"
+      ],
+      "jpExampleSentences": [
+        "いっとうしょうを とって おめでとう！"
       ]
     },
     {
@@ -15784,6 +15817,9 @@
         "easy",
         "every",
         "far"
+      ],
+      "jpExampleSentences": [
+        "わたしたちは ジュースの グラスを もちあげて「かんぱい！」と いったよ。"
       ]
     },
     {
@@ -15813,6 +15849,9 @@
         "there_is",
         "this_is",
         "want_to"
+      ],
+      "jpExampleSentences": [
+        "せんせいが ノックすると こうちょうせんせいが「どうぞ」と いったよ。"
       ]
     },
     {
@@ -15842,6 +15881,9 @@
         "good_luck",
         "here_is",
         "how_are_you"
+      ],
+      "jpExampleSentences": [
+        "かれは ドアを おさえてくれて「おさきに どうぞ」と いったよ。"
       ]
     },
     {
@@ -15871,6 +15913,9 @@
         "want_to",
         "welcome_back",
         "I_am"
+      ],
+      "jpExampleSentences": [
+        "おみせの ひとは にこにこして「よい いちにちを」と いってくれたよ。"
       ]
     },
     {
@@ -15900,6 +15945,9 @@
         "let's",
         "let_me",
         "me_too"
+      ],
+      "jpExampleSentences": [
+        "なるほど、そのおみせは ろくじに しまるんだね。"
       ]
     },
     {
@@ -15929,6 +15977,9 @@
         "there_is",
         "this_is",
         "want_to"
+      ],
+      "jpExampleSentences": [
+        "もちろん、わたしの えんぴつを かりていいよ。"
       ]
     },
     {
@@ -15958,6 +16009,9 @@
         "there_is",
         "this_is",
         "want_to"
+      ],
+      "jpExampleSentences": [
+        "たすけてって たのんだら「だいじょうぶだよ」と いってくれたよ。"
       ]
     },
     {
@@ -15987,6 +16041,9 @@
         "nice_to_meet_you",
         "no_problem",
         "of_course"
+      ],
+      "jpExampleSentences": [
+        "わたしは ピザが だいすき！ わたしも！"
       ]
     },
     {
@@ -16016,6 +16073,9 @@
         "I_see",
         "after_you",
         "are_you"
+      ],
+      "jpExampleSentences": [
+        "きょう あめが ふるかな？ たぶん そうだと おもうよ。"
       ]
     },
     {
@@ -16045,6 +16105,9 @@
         "eleven",
         "email",
         "eraser"
+      ],
+      "jpExampleSentences": [
+        "いもうとは せんしゅう じゅうさんさいに なったよ。"
       ]
     },
     {
@@ -16074,6 +16137,9 @@
         "thirty",
         "thousand",
         "three"
+      ],
+      "jpExampleSentences": [
+        "かれは じゅうよんさいで ちゅうがくせいだよ。"
       ]
     },
     {
@@ -16103,6 +16169,9 @@
         "hamster",
         "hand",
         "hat"
+      ],
+      "jpExampleSentences": [
+        "バスは じゅうごふんで とうちゃくするよ。"
       ]
     },
     {
@@ -16132,6 +16201,9 @@
         "taxi",
         "tea",
         "teacher"
+      ],
+      "jpExampleSentences": [
+        "わたしたちの クラスには さんじゅうにんの せいとが いるよ。"
       ]
     },
     {
@@ -16161,6 +16233,9 @@
         "game",
         "game_sport",
         "garden"
+      ],
+      "jpExampleSentences": [
+        "おとうさんは まいにち よんじゅっぷん あるいて しごとに いくよ。"
       ]
     },
     {
@@ -16190,6 +16265,9 @@
         "bird",
         "birthday",
         "board"
+      ],
+      "jpExampleSentences": [
+        "おじいちゃんは きょう ごじゅうさいに なったよ。"
       ]
     },
     {
@@ -16219,6 +16297,9 @@
         "breakfast",
         "brother",
         "bus"
+      ],
+      "jpExampleSentences": [
+        "わたしの さいふには せんえん はいってるよ。"
       ]
     },
     {
@@ -16248,6 +16329,9 @@
         "get",
         "give",
         "go"
+      ],
+      "jpExampleSentences": [
+        "カゴの なかの りんごを ぜんぶ かぞえられるかな？"
       ]
     },
     {
@@ -16277,6 +16361,9 @@
         "know",
         "learn",
         "like"
+      ],
+      "jpExampleSentences": [
+        "さんと ごを たすと はちに なるよ。"
       ]
     },
     {
@@ -16307,6 +16394,9 @@
         "cooking",
         "corn",
         "corner"
+      ],
+      "jpExampleSentences": [
+        "じゅうから よんを ひくと ろくに なるよ。"
       ]
     },
     {
@@ -16336,6 +16426,9 @@
         "airplane",
         "airport",
         "ant"
+      ],
+      "jpExampleSentences": [
+        "わたしたちは まいにちようびの あさごはんに パンケーキを たべるよ。"
       ]
     },
     {
@@ -16365,6 +16458,9 @@
         "science",
         "sea",
         "season"
+      ],
+      "jpExampleSentences": [
+        "げつようびに なると しゅうまつあけで また がっこうが はじまるよ。"
       ]
     },
     {
@@ -16394,6 +16490,9 @@
         "pencil",
         "penguin",
         "phone"
+      ],
+      "jpExampleSentences": [
+        "かようびは ずこうの じゅぎょうが あるよ。"
       ]
     },
     {
@@ -16423,6 +16522,9 @@
         "ice_skating",
         "internet",
         "jacket"
+      ],
+      "jpExampleSentences": [
+        "わたしは まいしゅう すいようびに フルートを がっこうに もっていくよ。"
       ]
     },
     {
@@ -16452,6 +16554,9 @@
         "train",
         "travel",
         "tree"
+      ],
+      "jpExampleSentences": [
+        "もくようびの きゅうしょくは カレーだよ。"
       ]
     },
     {
@@ -16481,6 +16586,9 @@
         "key",
         "kitchen",
         "knee"
+      ],
+      "jpExampleSentences": [
+        "きんようびは さいごの じゅぎょうの あとに そとで あそぶよ。"
       ]
     },
     {
@@ -16510,6 +16618,9 @@
         "bicycle",
         "bicycle_tr",
         "bird"
+      ],
+      "jpExampleSentences": [
+        "どようびは ともだちと サッカーを するよ。"
       ]
     },
     {
@@ -16539,6 +16650,9 @@
         "lunch",
         "lunch_box",
         "magazine"
+      ],
+      "jpExampleSentences": [
+        "わたしの すんでいるところは いちがつに ゆきが たくさん ふるよ。"
       ]
     },
     {
@@ -16568,6 +16682,9 @@
         "duck",
         "ear",
         "egg"
+      ],
+      "jpExampleSentences": [
+        "にがつは いちねんで いちばん さむい つきだよ。"
       ]
     },
     {
@@ -16597,6 +16714,9 @@
         "eraser",
         "escalator",
         "evening"
+      ],
+      "jpExampleSentences": [
+        "にほんでは さんがつに さくらが さくよ。"
       ]
     },
     {
@@ -16626,6 +16746,9 @@
         "light",
         "light_bulb",
         "lion"
+      ],
+      "jpExampleSentences": [
+        "わたしは しがつに あたらしい がっこうに かよいはじめたよ。"
       ]
     },
     {
@@ -16655,6 +16778,9 @@
         "February",
         "Friday",
         "January"
+      ],
+      "jpExampleSentences": [
+        "ごがつには ゴールデンウィークという おおきな おやすみが あるよ。"
       ]
     },
     {
@@ -16684,6 +16810,9 @@
         "singing",
         "sister",
         "six"
+      ],
+      "jpExampleSentences": [
+        "ここでは ろくがつは ほぼ まいにち あめが ふるよ。"
       ]
     },
     {
@@ -16713,6 +16842,9 @@
         "road",
         "room",
         "ruler"
+      ],
+      "jpExampleSentences": [
+        "わたしたちは かぞくで まいとし しちがつに うみに いくよ。"
       ]
     },
     {
@@ -16742,6 +16874,9 @@
         "moon",
         "morning",
         "mother"
+      ],
+      "jpExampleSentences": [
+        "なつやすみは はちがつの おわりまで つづくよ。"
       ]
     },
     {
@@ -16771,6 +16906,9 @@
         "rain",
         "reading",
         "restaurant"
+      ],
+      "jpExampleSentences": [
+        "くがつの はじめに また がっこうが はじまるよ。"
       ]
     },
     {
@@ -16800,6 +16938,9 @@
         "yesterday",
         "zero",
         "zoo"
+      ],
+      "jpExampleSentences": [
+        "じゅうがつ さんじゅういちにちに こどもたちは コスチュームを きるよ。"
       ]
     },
     {
@@ -16829,6 +16970,9 @@
         "forest",
         "forty",
         "four"
+      ],
+      "jpExampleSentences": [
+        "じゅういちがつに もみじが あかや きいろに なるよ。"
       ]
     },
     {
@@ -16858,6 +17002,9 @@
         "May",
         "Monday",
         "November"
+      ],
+      "jpExampleSentences": [
+        "じゅうにがつに おうちで ツリーを かざるよ。"
       ]
     },
     {
@@ -16887,6 +17034,9 @@
         "sea",
         "season",
         "seven"
+      ],
+      "jpExampleSentences": [
+        "わたしたちの きょうしつには つくえが にじゅうごだいと おおきな ホワイトボードが あるよ。"
       ]
     },
     {
@@ -16916,6 +17066,9 @@
         "carrot",
         "cat",
         "center"
+      ],
+      "jpExampleSentences": [
+        "わたしたちは きゅうけいじかんに うんどうじょうで おにごっこを するよ。"
       ]
     },
     {
@@ -16945,6 +17098,9 @@
         "park_play",
         "parrot",
         "pen"
+      ],
+      "jpExampleSentences": [
+        "おかあさんが おべんとうに サンドイッチと りんごを つめてくれたよ。"
       ]
     },
     {
@@ -16974,6 +17130,9 @@
         "flower",
         "food",
         "foot"
+      ],
+      "jpExampleSentences": [
+        "きょうの きゅうしょくは スープと ロールパンだよ。"
       ]
     },
     {
@@ -17003,6 +17162,9 @@
         "hobby",
         "holiday",
         "home"
+      ],
+      "jpExampleSentences": [
+        "たいいくの じかんに グラウンドを なんしゅうも はしるよ。"
       ]
     },
     {
@@ -17032,6 +17194,9 @@
         "math",
         "meat",
         "milk"
+      ],
+      "jpExampleSentences": [
+        "わたしは びじゅつクラブに はいって まいしゅう かようびに えを かくよ。"
       ]
     },
     {
@@ -17061,6 +17226,9 @@
         "thousand",
         "three",
         "ticket"
+      ],
+      "jpExampleSentences": [
+        "きのうの よる さんすうの テストの ために よく べんきょうしたよ。"
       ]
     },
     {
@@ -17090,6 +17258,9 @@
         "orange",
         "panda",
         "pants"
+      ],
+      "jpExampleSentences": [
+        "わたしは じしょで そのことばを しらべたよ。"
       ]
     },
     {
@@ -17119,6 +17290,9 @@
         "horse",
         "hospital",
         "hotel"
+      ],
+      "jpExampleSentences": [
+        "きょうかしょの じゅうにページを ひらいてください。"
       ]
     },
     {
@@ -17148,6 +17322,9 @@
         "wallet",
         "water",
         "watermelon"
+      ],
+      "jpExampleSentences": [
+        "せんせいは チョークで こたえを こくばんに かいたよ。"
       ]
     },
     {
@@ -17177,6 +17354,9 @@
         "art",
         "aunt",
         "baby"
+      ],
+      "jpExampleSentences": [
+        "せんせいは きょうしつの ちずで にほんを さしたよ。"
       ]
     },
     {
@@ -17206,6 +17386,9 @@
         "hobby",
         "holiday",
         "home"
+      ],
+      "jpExampleSentences": [
+        "おとうさんは まいあさ あさごはんの ときに しんぶんを よむよ。"
       ]
     },
     {
@@ -17235,6 +17418,9 @@
         "coat",
         "coffee",
         "coin"
+      ],
+      "jpExampleSentences": [
+        "おかあさんは えきで りょうりの ざっしを かったよ。"
       ]
     },
     {
@@ -17264,6 +17450,9 @@
         "bag",
         "bag_clothing",
         "bag_dl"
+      ],
+      "jpExampleSentences": [
+        "おばあちゃんは わたしたちの しゃしんを かべに かざってくれたよ。"
       ]
     },
     {
@@ -17293,6 +17482,9 @@
         "church",
         "city",
         "class"
+      ],
+      "jpExampleSentences": [
+        "かのじょは カメラを とりに むけたよ。"
       ]
     },
     {
@@ -17322,6 +17514,9 @@
         "ant",
         "apple",
         "arm"
+      ],
+      "jpExampleSentences": [
+        "わたしたちは ラジオで おんがくを きいたよ。"
       ]
     },
     {
@@ -17351,6 +17546,9 @@
         "running",
         "salad",
         "sandwich"
+      ],
+      "jpExampleSentences": [
+        "わたしは インターネットで そのことばを しらべたよ。"
       ]
     },
     {
@@ -17380,6 +17578,9 @@
         "pants",
         "paper",
         "park"
+      ],
+      "jpExampleSentences": [
+        "せんせいは すべての おとうさんや おかあさんに メールを おくったよ。"
       ]
     },
     {
@@ -17409,6 +17610,9 @@
         "forest",
         "forty",
         "four"
+      ],
+      "jpExampleSentences": [
+        "かのじょは おんがくの レッスンの まえに ピアノを れんしゅうするよ。"
       ]
     },
     {
@@ -17438,6 +17642,9 @@
         "traffic",
         "train",
         "travel"
+      ],
+      "jpExampleSentences": [
+        "おかあさんは カレンダーに わたしの たんじょうびを まるで かこんだよ。"
       ]
     },
     {
@@ -17467,6 +17674,9 @@
         "card_game",
         "carrot",
         "cat"
+      ],
+      "jpExampleSentences": [
+        "わたしの よていひょうには かようびと きんようびに すいえいが はいってるよ。"
       ]
     },
     {
@@ -17496,6 +17706,9 @@
         "winter",
         "wolf",
         "woman"
+      ],
+      "jpExampleSentences": [
+        "おとうさんは さいふを だいどころの テーブルに おいてきちゃったよ。"
       ]
     },
     {
@@ -17525,6 +17738,9 @@
         "top",
         "toy",
         "traffic"
+      ],
+      "jpExampleSentences": [
+        "かのじょは ふんすいに コインを なげいれたよ。"
       ]
     },
     {
@@ -17554,6 +17770,9 @@
         "birthday",
         "board",
         "boat"
+      ],
+      "jpExampleSentences": [
+        "かみを いちまい ください。"
       ]
     },
     {
@@ -17583,6 +17802,9 @@
         "grandfather",
         "grandmother",
         "grape"
+      ],
+      "jpExampleSentences": [
+        "わたしたちは おもちゃを おおきな はこに つめたよ。"
       ]
     },
     {
@@ -17612,6 +17834,9 @@
         "October",
         "Saturday",
         "September"
+      ],
+      "jpExampleSentences": [
+        "おかあさんは りんごを かみぶくろに いれたよ。"
       ]
     },
     {
@@ -17641,6 +17866,9 @@
         "corner",
         "country",
         "cow"
+      ],
+      "jpExampleSentences": [
+        "わたしたちは きょねんの なつ うみで バレーボールを したよ。"
       ]
     },
     {
@@ -17670,6 +17898,9 @@
         "month",
         "moon",
         "morning"
+      ],
+      "jpExampleSentences": [
+        "おじいちゃんは まいにちようびの あさに ゴルフを するよ。"
       ]
     },
     {
@@ -17699,6 +17930,9 @@
         "hobby",
         "holiday",
         "home"
+      ],
+      "jpExampleSentences": [
+        "わたしたちは まいとし いちがつに ゆきやまを スキーで すべりおりるよ。"
       ]
     },
     {
@@ -17728,6 +17962,9 @@
         "half",
         "hamster",
         "hand"
+      ],
+      "jpExampleSentences": [
+        "わたしたちは まちの リンクへ アイススケートに いったよ。"
       ]
     },
     {
@@ -17757,6 +17994,9 @@
         "duck",
         "ear",
         "egg"
+      ],
+      "jpExampleSentences": [
+        "わたしたちは ハイキングに いって おかの てっぺんに とうちゃくしたよ。"
       ]
     },
     {
