@@ -41,7 +41,7 @@ needs CEO go (spend / secret / prod / legal / art-gen).
 |19|メタ認知/calibration|25|BUILD|"how sure are you?" + calibration — SELF-BUILDABLE|
 |20|合格率誠実性|90|BUILD|hold; keep honest|
 |21|mastery追跡|70|BUILD|surface per-skill mastery|
-|22|再来訪/通知|62|BUILD|2026-06-14: in-app daily-return nudge done (gentle no-guilt "keep it going today" when streak active + not studied today; 2026 streak research). REMAINING: web push / out-of-app streak reminder (needs SW + permission)|
+|22|再来訪/通知|68|BUILD|2026-06-14: in-app daily-return nudge done. 2026-06-22: STREAK-REPAIR grace window (998c1d6) — an established streak (≥3) survives one missed homework-night (kept) or two (halved) instead of hard-resetting to 1, with a とりもどした celebration; +unlocks the previously-unreachable streak_7/10/30 achievements. 2026 streak-freeze research ~+48% length at the D7→D30 paid-retention inflection. Surfaced by the diverse-values council (engineering-lens miss). REMAINING: web push / out-of-app reminder (needs SW + permission)|
 
 ## C. アセスメント
 |23|模試組立採点|82|BUILD|residual fidelity|
