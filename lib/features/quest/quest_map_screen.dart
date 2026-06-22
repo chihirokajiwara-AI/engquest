@@ -60,6 +60,9 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
 
   Future<void> _load() async {
     final prefs = await PreferencesService.getInstance();
+    // A back-nav before this async prefs load resolves would otherwise setState
+    // on a disposed State → a grey crash overlay on the core progression screen.
+    if (!mounted) return;
     var level = prefs.getString(_levelKey);
     // The child already chose their 英検 grade in onboarding — stored under the
     // canonical 'onboarding_start_level' key that the home, battle and exam all
@@ -95,6 +98,7 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
   Future<void> _chooseLevel(String level) async {
     final prefs = await PreferencesService.getInstance();
     await prefs.setString(_levelKey, level);
+    if (!mounted) return;
     _level = level;
     _startIdx = startingTownIndex(level);
     setState(() {
@@ -125,6 +129,7 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
           builder: (_) => SceneView(scene: scene, eikenLevel: town.eikenLevel),
         ),
       );
+      if (!mounted) return;
       if (cleared == true && i + 1 > _unlocked) {
         setState(() => _unlocked = i + 1);
         _saveUnlocked(i + 1);
@@ -134,6 +139,7 @@ class _QuestMapScreenState extends State<QuestMapScreen> {
     final cleared = await Navigator.of(context).push<bool>(
       MaterialPageRoute(builder: (_) => QuestTownBattleFlow(town: town)),
     );
+    if (!mounted) return;
     if (cleared == true && i + 1 > _unlocked) {
       setState(() => _unlocked = i + 1);
       _saveUnlocked(i + 1);
