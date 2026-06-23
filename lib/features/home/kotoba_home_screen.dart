@@ -110,6 +110,7 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
   bool _examReviewDue = false;
   String _eikenLevel = '5'; // used to route to the right scene
   int _childAge = 8; // used to age-filter the FSRS review deck
+  double _placementTheta = 0.0; // onboarding ability → ZPD-sorts review new cards
   CseEstimate? _estimate; // live 合格率, null until the child has practice data
   MasteryRecommendation? _advice; // mastery-based progression advice (#14)
   bool _loading = true;
@@ -159,6 +160,16 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
         // Keep defaults — safe.
       }
     }
+
+    // 2.6 Placement θ (0..6) — drives ZPD new-card ordering in the review battle
+    //     (no-op when absent/0). Read unconditionally so it applies even when the
+    //     grade was supplied via initialEikenLevel.
+    try {
+      final prefs = await PreferencesService.getInstance();
+      final t = double.tryParse(
+          prefs.getString(PrefKeys.placementTheta) ?? '');
+      if (t != null) _placementTheta = t;
+    } catch (_) {/* keep 0.0 — safe */}
 
     // 2.5 Pre-warm the selected grade's vocab DB during idle. The multi-MB
     //     load+decode (3.89MB for 準1級) is the verified cause of the "tap into
@@ -318,7 +329,11 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
   /// home told the child "N reviews are due" then stranded them.
   void _goToReview() {
     _pushThenRefresh(
-      BattleScreen(childAge: _childAge, eikenGrade: _eikenLevel),
+      BattleScreen(
+        childAge: _childAge,
+        eikenGrade: _eikenLevel,
+        placementTheta: _placementTheta,
+      ),
     );
   }
 
