@@ -276,6 +276,44 @@ class _CardResult {
   return (correct: scaled, total: cap);
 }
 
+/// Re-order the due [queue] (indices into [deck]) so already-seen cards come
+/// FIRST, then NEW cards sorted by how close their FSRS difficulty is to the
+/// child's onboarding placement ability — ZPD: meet the learner at the right
+/// level instead of a random new-card order. This is what finally makes the
+/// captured-but-dead `onboarding_placement_theta` diagnostic DO something.
+///
+/// Reorders PRESENTATION ONLY — it never calls schedule() or mutates a card, so
+/// it cannot affect FSRS state or the 合格率 estimate.
+///
+/// [theta] is the placement ability on a 0..6 scale (placement_engine); FSRS
+/// difficulty is 1..10. The scales differ, so theta is mapped onto the
+/// difficulty scale (0→1 … 6→10) before matching — otherwise a high-ability
+/// child would never be steered toward the hardest cards. No-op when theta==0
+/// (no placement data) so decks for un-placed users are untouched.
+void thetaSortQueue(List<int> queue, List<FSRSCard> deck, double theta) {
+  if (theta == 0.0) return;
+  final targetDifficulty = 1.0 + (theta.clamp(0.0, 6.0) / 6.0) * 9.0;
+  final reviewed = <int>[];
+  final newCards = <int>[];
+  for (final idx in queue) {
+    final c = deck[idx];
+    if (c.state == CardState.review || c.reps > 0) {
+      reviewed.add(idx);
+    } else {
+      newCards.add(idx);
+    }
+  }
+  final d0good = FSRSAlgorithm().initialDifficulty(Grade.good);
+  double diffOf(int i) => deck[i].difficulty > 0 ? deck[i].difficulty : d0good;
+  newCards.sort((a, b) => (diffOf(a) - targetDifficulty)
+      .abs()
+      .compareTo((diffOf(b) - targetDifficulty).abs()));
+  queue
+    ..clear()
+    ..addAll(reviewed)
+    ..addAll(newCards);
+}
+
 // ── XP floating label data ────────────────────────────────────────────────────
 class _XpPopup {
   final int xp;
