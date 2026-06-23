@@ -28,6 +28,7 @@ import '../../core/gamification/xp_service.dart';
 import '../exam_practice/exam_session_rewards.dart';
 import '../exam_practice/pass/cse_model.dart';
 import '../exam_practice/pass/skill_accuracy_store.dart';
+import '../exam_practice/pass/pass_gauge.dart';
 import 'hotspot.dart';
 import 'nazo_screen.dart';
 import 'scene_fsrs_seeder.dart';
@@ -335,6 +336,10 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
   bool _sceneClearStampVisible = false;
   Timer? _sceneClearStampTimer;
   Timer? _sceneClearDialogTimer;
+  // One-shot guard: _showPayoffDialog now awaits liveCseEstimate before opening,
+  // so a second clear-trigger during that async gap could otherwise stack two
+  // dialogs. Set before the await, cleared when the dialog closes.
+  bool _payoffDialogShown = false;
 
   // Services
   final _cue = AudioCueService();
@@ -1000,12 +1005,90 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
   }
 
   /// Opens the CASE CLOSED payoff dialog with content REORDERED so the
+  /// Compact 合格率 gauge surfaced at the CASE CLOSED peak so the game reward and
+  /// the 英検 outcome (合格率 rising) land in the SAME moment (CEO 2424 — the
+  /// experience⇄learning coupling that had been starved). Mirrors the home
+  /// readiness meter's honest colour/caption rules (thin → muted/診断中,
+  /// predicted-pass → green) so the 合格率 reads as one thing everywhere (#68).
+  Widget _passGaugePill(CseEstimate est) {
+    // Only reached at ≥20 items (gated at the call site), so the data is real:
+    // green when the 目安 is met, gold while climbing.
+    final color = est.isPredictedPass ? const Color(0xFF8BE08B) : dqGold;
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: dqNight1,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: dqGoldDeep.withAlpha(120)),
+      ),
+      child: Row(
+        children: [
+          PassGauge(
+              pct: est.readinessPct,
+              color: color,
+              size: 64,
+              stroke: 7,
+              fontSize: 17),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${_eikenGradeLabelJa(est.grade)}・ごうかくの 目安（めやす）',
+                  style: dqText(size: 12.5, w: FontWeight.w800, color: dqGold),
+                ),
+                const SizedBox(height: 3),
+                Text(
+                  'いまの ことばの ちから。れんしゅうで のびるよ',
+                  style: dqText(size: 10.5, color: dqInk.withAlpha(170))
+                      .copyWith(height: 1.35),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 6yo-readable ひらがな grade label, consistent with the PassMeter screen.
+  String _eikenGradeLabelJa(String grade) {
+    switch (grade) {
+      case '4':
+        return '英けん4きゅう';
+      case '3':
+        return '英けん3きゅう';
+      case 'pre2':
+        return '英けんじゅん2きゅう';
+      case 'pre2plus':
+        return '英けんじゅん2きゅうプラス';
+      case '2':
+        return '英けん2きゅう';
+      case 'pre1':
+        return '英けんじゅん1きゅう';
+      case '5':
+        return '英けん5きゅう';
+      default:
+        return '英けん$grade'; // debug-visible: an unknown grade reads wrong, not silently as 5級
+    }
+  }
+
   /// [SessionEndHook] streak pill (tomorrow's return pull) is prominent near
   /// the TOP — not buried last as it was before studio finding #6.
-  /// Content order: [streak pill] → story beat → bookmark → next-case tease.
+  /// Content order: [合格率 pill] → [streak pill] → story beat → bookmark → tease.
   /// All existing callbacks (onContinue / Navigator.pop) are unchanged.
-  void _showPayoffDialog(StreakState? streak, String storyBeat) {
-    if (!mounted) return;
+  Future<void> _showPayoffDialog(StreakState? streak, String storyBeat) async {
+    if (!mounted || _payoffDialogShown) return;
+    _payoffDialogShown = true;
+    // Awaited before the dialog so the gauge is ready on first frame; null on a
+    // fresh profile (no practice data yet) → the pill is hidden, never a 0%.
+    final estimate = await liveCseEstimate(widget.eikenLevel);
+    if (!mounted) {
+      _payoffDialogShown = false;
+      return;
+    }
     showDialog<void>(
       context: context,
       barrierColor: Colors.black.withAlpha(160),
@@ -1054,7 +1137,17 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
                       style:
                           dqText(size: 17, w: FontWeight.w800, color: dqGold),
                     ),
-                    // ── Streak pill FIRST (studio #6 reorder) ──────────────────
+                    // ── 合格率 pill: game reward ⇄ 英検 outcome in ONE moment ──
+                    // (CEO 2424). Sits BEFORE the streak pill so the game→英検
+                    // coupling reads first. Shown only once the estimate is real
+                    // (≥20 items, the same diagnosing floor the home meter uses) so
+                    // the peak never shows a deflating near-0% on thin data.
+                    if (estimate != null &&
+                        estimate.totalItemsAttempted >= 20) ...[
+                      const SizedBox(height: 14),
+                      _passGaugePill(estimate),
+                    ],
+                    // ── Streak pill (studio #6 reorder) ────────────────────────
                     // Surface the streak / daily-goal at the emotional peak so the
                     // child SEES tomorrow's return pull — the previous order buried
                     // it last where no one scrolled. Same SessionEndHook all 5 exam
@@ -1127,7 +1220,9 @@ class _SceneViewState extends State<SceneView> with TickerProviderStateMixin {
           ),
         );
       },
-    );
+    ).whenComplete(() {
+      if (mounted) _payoffDialogShown = false;
+    });
   }
 
   /// The CASE CLOSED stamp widget, reused by both the in-Stack Phase 2 overlay
