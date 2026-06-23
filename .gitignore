@@ -112,3 +112,5 @@ tools/fonts/
 # the chosen image is committed under assets/ explicitly). Keeps WIP webp out.
 candidates/
 art_candidates/
+.claude/team-clearance/
+.claude/team-first-audit.log

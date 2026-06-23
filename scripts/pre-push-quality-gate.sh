@@ -177,6 +177,18 @@ if [ "${ENGQUEST_SKIP_PREPUSH:-0}" = "1" ]; then
   exit 0
 fi
 
+# --------------------------------------------------------- RULE #0 anti-revert
+# The team-first gate (scripts/guard-team-first.sh + its registration + Rule #0)
+# must not be silently reverted. test-team-first-gate.sh is deterministic + agent-
+# free; if it fails the gate was removed/broken => BLOCK the push loudly.
+if [ -f "$REPO/scripts/test-team-first-gate.sh" ]; then
+  if ! ( cd "$REPO" && bash scripts/test-team-first-gate.sh ) >/dev/null 2>&1; then
+    do_block "$(git -C "$REPO" rev-parse HEAD 2>/dev/null || echo unknown)" "team-first-gate-reverted" \
+      "RULE #0 team-first gate missing/reverted/broken (scripts/test-team-first-gate.sh failed). The mechanical team-first enforcement must not be silently removed. Restore it before pushing."
+  fi
+  log "ok: team-first gate healthy"
+fi
+
 # ----------------------------------------------------------------------------- main: per pushed ref
 # git feeds one line per ref on stdin. We evaluate each; first hard failure blocks the
 # whole push (git semantics: any non-zero aborts). We act only on the gated ref (main).

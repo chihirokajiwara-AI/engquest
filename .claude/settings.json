@@ -7,6 +7,19 @@
           {
             "type": "command",
             "command": "/Users/openclaw/dev/engquest-flutter/scripts/guard-heavy-jobs.sh"
+          },
+          {
+            "type": "command",
+            "command": "/Users/openclaw/dev/engquest-flutter/scripts/guard-team-first.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/openclaw/dev/engquest-flutter/scripts/guard-team-first.sh"
           }
         ]
       },
@@ -16,6 +29,17 @@
           {
             "type": "command",
             "command": "/Users/openclaw/dev/engquest-flutter/scripts/guard-model-routing.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Workflow|Agent|Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/openclaw/dev/engquest-flutter/scripts/record-team-convened.sh"
           }
         ]
       }

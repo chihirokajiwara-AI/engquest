@@ -1,5 +1,31 @@
 # ENG Quest — Flutter Web App
 
+## RULE #0 — TEAM-FIRST (MECHANICALLY ENFORCED — DO NOT EDIT TO WEAKEN)
+
+**Before ANY substantive product / design / direction / architecture / "what is
+world-class / what do we build next" CONCLUSION, the order is TEAM → DECIDE →
+EXECUTE — never the reverse.** The main loop may NOT conclude solo. It MUST first
+convene a STANDING multi-expert team (≥5 diverse, latest-2026-grounded value/craft
+lenses) via a Workflow — `diverse-values-council` for product/direction/cast/art,
+`game-studio-panel` for game×英検 quality, `world-studio`/`character-studio` for
+world/cast — let the team reach the collective conclusion, then EXECUTE it. The
+loop SURFACES value-conflicts to the CEO; it never overrides the team with its own
+taste. "This one is simple / I already know" IS the narrowness this rule exists to
+stop — when unsure whether something is substantive, **it is**: run the team.
+
+This is NOT willpower. It is enforced by a blocking hook (`scripts/guard-team-first.sh`,
+PreToolUse): a substantive git commit / new lib file / Telegram direction-message is
+**physically blocked (exit 2)** unless a fresh team-clearance token exists — and that
+token is written ONLY by the PostToolUse hook on a REAL team-Workflow completion
+(`scripts/record-team-convened.sh`). There is NO self-serve skip; the gate classifies
+by the STAGED GIT DIFF, not the commit message. Tier-2 mechanical execution (read-only
+Bash, tests, edits to existing non-design files, applying an already-team-decided plan)
+runs freely. Canonical spec + 3-tier decision rights: `docs/governance/DECISION-GATE.md`.
+Anti-revert: `scripts/test-team-first-gate.sh` (run in pre-push/CI) asserts the gate +
+this rule still exist; editing the guard or settings.json is itself gated. Why Rule #0:
+solo-deciding caused a 16h hang, red code shipped, 7,923 corrupted items, false "solid"
+verification, exists-mis-scored-as-quality — and text rules alone failed 15+ times.
+
 ## Project Overview
 English learning RPG for Japanese children (ages 4-18). Target: 英検準1級 / CEFR B2 by high school at ¥3,000/month.
 Flutter web app with FSRS-4.5 spaced repetition, Claude AI dialog, Google TTS audio, Firebase backend.
