@@ -2397,7 +2397,11 @@ class _SummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DqPanel(
+    // Casebook frame (double gilt rule + navy-gradient) on the post-battle
+    // results — the most-seen reward surface — for detective-theme cohesion (⑤).
+    // Use the `title` slot (size-13 gold heading), NOT caseLabel (size-10): the
+    // heading stays at/above DqPanel's old size-12 so 6yo legibility doesn't drop.
+    return DetectiveCaseFrame(
       title: title,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
