@@ -252,6 +252,66 @@ jobs:
       - name: Build web (edilab entrypoint, release)
         run: flutter build web --release -t lib/main_edilab.dart
 
+      - name: Upload web build for the smoke job
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-build-${{ github.sha }}
+          path: build/web
+          retention-days: 1
+
+  # ── Real-browser smoke (NON-GATING canary) ─────────────────────────────────
+  # Serves the built web app and runs scripts/smoke_flow.mjs (de-flaked 21cd401):
+  # boots the app, walks the core 英検 flow via the CanvasKit semantics tree, and
+  # fails on JS errors / dropped taps. Deliberately NOT in ci-pass `needs`: a
+  # headless-CanvasKit smoke can flake on infra and this job has never run in CI
+  # yet, so gating on it could red main on noise. It runs on every push for
+  # visibility; promote it into ci-pass `needs` ONLY after it proves stable over
+  # real runs. (smoke_flow.mjs SKIPs with exit 0 if playwright is absent.)
+  smoke-web:
+    name: Real-browser Smoke (canary, non-gating)
+    runs-on: ubuntu-latest
+    needs: build-web
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download the web build
+        uses: actions/download-artifact@v4
+        with:
+          name: web-build-${{ github.sha }}
+          path: build/web
+
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Playwright + Chromium
+        run: npm install --no-save playwright@1.44.0 && npx playwright install --with-deps chromium
+
+      # serve + smoke MUST share one step: a backgrounded process is killed when
+      # its `run` step ends, so serving in a prior step would leave nothing up.
+      - name: Serve build + real-browser core-flow smoke
+        env:
+          PLAYWRIGHT_PATH: ${{ github.workspace }}/node_modules/playwright/index.js
+        run: |
+          npm install --no-save serve@14
+          npx serve build/web -p 8099 -s &
+          SERVE_PID=$!
+          for i in $(seq 1 30); do curl -sf http://localhost:8099/ >/dev/null && break; sleep 1; done
+          node scripts/smoke_flow.mjs http://localhost:8099
+          STATUS=$?
+          kill $SERVE_PID 2>/dev/null || true
+          exit $STATUS
+
+      - name: Upload smoke screenshot on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-end-screenshot
+          path: /tmp/eq_smoke_end.png
+          retention-days: 3
+
   # ── Summary job (required status check) ────────────────────────────────────
   ci-pass:
     name: CI Pass
