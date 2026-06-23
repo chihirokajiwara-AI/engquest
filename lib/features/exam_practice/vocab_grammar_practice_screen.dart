@@ -1164,6 +1164,32 @@ class _HearWordButton extends StatelessWidget {
       listenable: audio,
       builder: (context, _) {
         final loadingThis = audio.isLoading && audio.currentVocabId == vocabId;
+        // Honest degradation (mirrors the proven battle-card pattern): for grades
+        // whose word audio isn't bundled (4級+), the 🔊 used to look live and
+        // silently no-op. Proactive = the manifest/cache positively knows it's
+        // absent (hasAudioSync safe-defaults true, so working audio is untouched);
+        // reactive = a playback attempt errored. Either → a dimmed, tap-disabled
+        // volume_off with 'おとは じゅんびちゅう', so a child never taps a dead button.
+        final knownAbsent = !audio.hasAudioSync(vocabId);
+        final playbackFailed = audio.state == WordAudioState.error &&
+            audio.currentVocabId == vocabId;
+        final unavailable = !loadingThis && (knownAbsent || playbackFailed);
+        if (unavailable) {
+          return Semantics(
+            label: '$word の おとは じゅんびちゅう',
+            child: Tooltip(
+              message: 'おとは じゅんびちゅう',
+              child: const Padding(
+                padding: EdgeInsets.all(4),
+                child: Opacity(
+                  opacity: 0.35,
+                  child: Icon(Icons.volume_off_rounded,
+                      color: dqGoldDeep, size: 22),
+                ),
+              ),
+            ),
+          );
+        }
         return Semantics(
           button: true,
           label: '$word を きく',
