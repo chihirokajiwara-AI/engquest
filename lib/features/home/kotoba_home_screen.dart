@@ -45,6 +45,7 @@ import 'package:engquest/features/exam_practice/pass/skill_accuracy_store.dart';
 import 'package:engquest/features/exam_practice/exam_review_store.dart';
 import 'package:engquest/features/exam_practice/pass/pass_meter_screen.dart';
 import 'package:engquest/features/exam_practice/pass/pass_gauge.dart';
+import 'package:engquest/features/exam_practice/pass/grade_ladder_widget.dart';
 import 'package:engquest/features/quest/quest_map_screen.dart';
 import 'package:engquest/features/quest/ui/dq_ui.dart';
 import 'package:engquest/features/settings/settings_screen.dart';
@@ -391,6 +392,11 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
                       const SizedBox(height: 16),
                       // ── 合格率 readiness, surfaced at the top (#66/#68) ──────
                       _buildReadinessCard(),
+                      const SizedBox(height: 10),
+                      // ── 英検 grade-journey strip (5級→準1級) — the felt long-road
+                      //    progression a single grade's 合格率 number can't convey
+                      //    (retention core, CEO 2424) ──────────────────────────────
+                      _buildGradeLadderStrip(),
                       const SizedBox(height: 14),
                       // ── 英検 core, foregrounded (#66, CEO 2026-06-08) ──────
                       _buildExamCta(), // PRIMARY: 英検れんしゅう / 合格率
@@ -1044,6 +1050,20 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
   // ── PRIMARY CTA: 英検れんしゅう / 合格率 (the core 合格 surface) ─────────────
   // Foregrounded per #66 (CEO 2026-06-08): 英検 practice + the 合格率 it builds is
   // the product's primary daily path — the prominent gold action.
+
+  /// Compact 英検 grade-journey strip on the daily hub: the child always sees
+  /// WHERE they are on the 5級→準1級 road and the next stop ahead. The live 合格率
+  /// badge on the current stop reuses the same [_estimate] (no new data path), so
+  /// the hub shows both today's number AND the multi-year arc it sits on — the
+  /// felt-progression CEO 2424 said the experience core was missing.
+  Widget _buildGradeLadderStrip() => DqPanel(
+        title: '英検（えいけん）への みち / Eiken Journey',
+        child: GradeLadderWidget(
+          currentGrade: _eikenLevel,
+          readinessPct: _estimate?.readinessPct,
+          showLabels: false,
+        ),
+      );
 
   Widget _buildExamCta() {
     // S1 (council wf w4cnnw8ho — unanimous #102): a no-data first-run beginner
