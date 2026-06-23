@@ -627,10 +627,6 @@ class _BattleScreenState extends State<BattleScreen>
       if (dueIds.contains(deck[i].vocabId)) queue.add(i);
     }
     queue.shuffle(math.Random());
-    // ZPD: after the base shuffle, steer NEW cards toward the child's placement
-    // ability (no-op when placementTheta==0). Presentation-only — no FSRS state
-    // is touched. Reviewed-due cards always stay ahead of new ones.
-    thetaSortQueue(queue, deck, widget.placementTheta);
 
     // Re-check: getDueCards above is an await AFTER the line-317 mounted check,
     // so a child navigating away mid-load could otherwise setState on a disposed
@@ -638,8 +634,17 @@ class _BattleScreenState extends State<BattleScreen>
     if (!mounted) return;
     setState(() {
       _deck = deck;
-      _queue = queue.isNotEmpty ? queue : List.generate(deck.length, (i) => i)
-        ..shuffle(math.Random());
+      // Fall back to "everything is due" if the due-queue is empty (e.g. a
+      // Firestore getDueCards error) so the deck still opens (#40). ZPD: steer
+      // NEW cards toward the child's placement ability — applied to WHICHEVER
+      // queue we use, so the fallback gets the same θ ordering, not a bare
+      // shuffle (pre-deploy bug-hunt: the fallback was bypassing thetaSortQueue).
+      // Presentation-only — no FSRS state is touched; reviewed-due stay ahead.
+      final q = queue.isNotEmpty
+          ? queue
+          : (List.generate(deck.length, (i) => i)..shuffle(math.Random()));
+      thetaSortQueue(q, deck, widget.placementTheta);
+      _queue = q;
       _queueIdx = 0;
       _sessionResults.clear();
       _requeuedDeckIndices.clear();
@@ -655,6 +660,9 @@ class _BattleScreenState extends State<BattleScreen>
       _answersThisSession = 0;
       _xpPopups.clear();
       _starsCtrl.reset();
+      // Also stop any in-flight streak-shake so a mid-shake (もういちど tapped
+      // <300ms into a shake) doesn't carry onto the new session's first card.
+      _shakeCtrl.reset();
       _repoLoading = false;
       // Session begins now — first card is visible. Capture start timestamp
       // so we can compute real elapsed minutes when the session completes.
