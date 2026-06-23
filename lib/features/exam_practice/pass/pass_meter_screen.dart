@@ -251,6 +251,20 @@ class _PassHeroState extends State<_PassHero>
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Respect OS reduce-motion: jump the sweep to its end so the meter shows the
+    // final value instantly. Done HERE, not in build(): setting _ctrl.value
+    // notifies listeners synchronously, and doing that during build() throws
+    // "setState() called during build" once AnimatedBuilder has registered its
+    // listener (e.g. on a live reduce-motion toggle). MediaQuery is available in
+    // didChangeDependencies, which also re-runs if the setting changes at runtime.
+    if (prefersReducedMotion(context) && !_ctrl.isCompleted) {
+      _ctrl.value = 1.0;
+    }
+  }
+
+  @override
   void dispose() {
     _ctrl.dispose();
     super.dispose();
@@ -258,18 +272,12 @@ class _PassHeroState extends State<_PassHero>
 
   @override
   Widget build(BuildContext context) {
-    // Respect the OS "reduce motion" accessibility setting: skip the sweep and
-    // show the final value instantly. prefersReducedMotion is defined in dq_ui.dart.
-    final reduced = prefersReducedMotion(context);
     final pct = widget.est.readinessPct;
     final gradeLabel = _gradeLabelJa(widget.est.grade);
-
-    // When motion is reduced, jump the controller to the end state so _anim.value
-    // equals the final pct. We do this lazily on first build rather than in
-    // initState so the BuildContext is available for MediaQuery.
-    if (reduced && !_ctrl.isCompleted) {
-      _ctrl.value = 1.0;
-    }
+    // reduced-motion: show the final value directly. (didChangeDependencies has
+    // already jumped the controller to the end, so _anim.value == pct too — this
+    // is belt-and-suspenders, NOT a controller mutation during build.)
+    final reduced = prefersReducedMotion(context);
 
     return DqPanel(
       child: Column(
