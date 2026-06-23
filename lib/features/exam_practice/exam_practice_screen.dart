@@ -32,6 +32,7 @@ import 'word_ordering_practice_screen.dart';
 import 'writing_practice_screen.dart';
 import '../speaking/speaking_consent_notice.dart';
 import '../speaking/speaking_screen.dart';
+import '../../core/ui/page_transitions.dart';
 
 class ExamPracticeScreen extends StatefulWidget {
   const ExamPracticeScreen({
@@ -221,7 +222,7 @@ class _ExamPracticeScreenState extends State<ExamPracticeScreen> {
       // trains it — closing the diagnose→practice loop (#68).
       final weakSkill = await Navigator.push<EikenSkill?>(
         context,
-        MaterialPageRoute(
+        FadeSlideRoute(
           builder: (_) => PassMeterScreen(estimate: estimate),
         ),
       );
@@ -267,7 +268,7 @@ class _ExamPracticeScreenState extends State<ExamPracticeScreen> {
       case ExamSectionType.vocabGrammar:
         Navigator.push(
           context,
-          MaterialPageRoute(
+          FadeSlideRoute(
             builder: (_) => VocabGrammarPracticeScreen(
               eikenGrade: widget.eikenGrade,
               section: section,
@@ -277,7 +278,7 @@ class _ExamPracticeScreenState extends State<ExamPracticeScreen> {
       case ExamSectionType.wordOrdering:
         Navigator.push(
           context,
-          MaterialPageRoute(
+          FadeSlideRoute(
             builder: (_) => WordOrderingPracticeScreen(
               eikenGrade: widget.eikenGrade,
               section: section,
@@ -287,7 +288,7 @@ class _ExamPracticeScreenState extends State<ExamPracticeScreen> {
       case ExamSectionType.conversationComplete:
         Navigator.push(
           context,
-          MaterialPageRoute(
+          FadeSlideRoute(
             builder: (_) => ConversationPracticeScreen(
               eikenGrade: widget.eikenGrade,
               section: section,
@@ -297,7 +298,7 @@ class _ExamPracticeScreenState extends State<ExamPracticeScreen> {
       case ExamSectionType.readingComprehension:
         Navigator.push(
           context,
-          MaterialPageRoute(
+          FadeSlideRoute(
             builder: (_) => ReadingPracticeScreen(
               eikenGrade: widget.eikenGrade,
               section: section,
@@ -307,7 +308,7 @@ class _ExamPracticeScreenState extends State<ExamPracticeScreen> {
       case ExamSectionType.writing:
         Navigator.push(
           context,
-          MaterialPageRoute(
+          FadeSlideRoute(
             builder: (_) => WritingPracticeScreen(
               eikenGrade: widget.eikenGrade,
               section: section,
@@ -317,7 +318,7 @@ class _ExamPracticeScreenState extends State<ExamPracticeScreen> {
       case ExamSectionType.listening:
         Navigator.push(
           context,
-          MaterialPageRoute(
+          FadeSlideRoute(
             builder: (_) => ListeningPracticeScreen(
               eikenGrade: widget.eikenGrade,
               section: section,
@@ -327,12 +328,12 @@ class _ExamPracticeScreenState extends State<ExamPracticeScreen> {
       case ExamSectionType.speaking:
         Navigator.push(
           context,
-          MaterialPageRoute(
+          FadeSlideRoute(
             builder: (_) => SpeakingConsentNotice(
               eikenGrade: widget.eikenGrade,
               onConsent: () => Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
+                FadeSlideRoute(
                   builder: (_) => SpeakingScreen(eikenGrade: widget.eikenGrade),
                 ),
               ),

@@ -4,7 +4,9 @@
 import 'package:flutter/material.dart';
 
 /// A page route that fades and slides the new screen up from the bottom.
-/// Used for world map zone entry transitions.
+/// Used for world-map zone entry AND exam-practice section entry so the whole
+/// app shares ONE motion language instead of bare platform MaterialPageRoute
+/// (on web the platform default is a flat fade/instant — this reads as designed).
 class FadeSlideRoute<T> extends PageRouteBuilder<T> {
   FadeSlideRoute({required WidgetBuilder builder})
       : super(
