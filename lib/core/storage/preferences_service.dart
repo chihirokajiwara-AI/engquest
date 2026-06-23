@@ -11,6 +11,9 @@ abstract class PrefKeys {
   static const String ageYears = 'age_years';
   static const String dailyGoalMinutes = 'daily_goal_minutes';
   static const String cefrPlacement = 'cefr_placement';
+  // Onboarding placement ability θ (0..6), written by app.dart at onboarding.
+  // Read by the home review flow to ZPD-sort new battle cards.
+  static const String placementTheta = 'onboarding_placement_theta';
 
   // Daily review reminder preferences (P2.10).
   // [remindersOptedOut] is stored inverted so the default (false) == opted-in,

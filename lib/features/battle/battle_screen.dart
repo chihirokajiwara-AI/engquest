@@ -347,6 +347,12 @@ class BattleScreen extends StatefulWidget {
   /// I/O. Null → production WordAudioPlayerService.
   final WordAudioPlayerService? wordAudioService;
 
+  /// Onboarding placement ability (0..6, placement_engine). When > 0, new cards
+  /// in the due queue are ZPD-sorted toward this level (thetaSortQueue). Default
+  /// 0.0 = no placement data → unchanged shuffle order (backwards-compatible
+  /// with every call site that doesn't pass it).
+  final double placementTheta;
+
   const BattleScreen({
     super.key,
     this.repository,
@@ -354,6 +360,7 @@ class BattleScreen extends StatefulWidget {
     this.childAge = 8,
     this.eikenGrade = '5',
     this.wordAudioService,
+    this.placementTheta = 0.0,
   });
 
   /// Computes elapsed session time in whole minutes, rounded to the nearest
@@ -620,6 +627,10 @@ class _BattleScreenState extends State<BattleScreen>
       if (dueIds.contains(deck[i].vocabId)) queue.add(i);
     }
     queue.shuffle(math.Random());
+    // ZPD: after the base shuffle, steer NEW cards toward the child's placement
+    // ability (no-op when placementTheta==0). Presentation-only — no FSRS state
+    // is touched. Reviewed-due cards always stay ahead of new ones.
+    thetaSortQueue(queue, deck, widget.placementTheta);
 
     // Re-check: getDueCards above is an await AFTER the line-317 mounted check,
     // so a child navigating away mid-load could otherwise setState on a disposed
