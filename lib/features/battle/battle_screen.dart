@@ -381,6 +381,11 @@ class _BattleScreenState extends State<BattleScreen>
   // moment). Null until computed / when the grade has no estimate yet.
   CseEstimate? _preEstimate;
   CseEstimate? _postEstimate;
+  // Bumped on every deck (re)load. _recordSkillAccuracy's async closure captures
+  // the epoch at fire time and only writes its estimates back if it still matches
+  // — so a 「もういちど」 re-init that resets the estimates can't be overwritten by a
+  // prior session's in-flight liveCseEstimate (stale 合格率 baseline race).
+  int _sessionEpoch = 0;
 
   // ── Session timer (P0.1) ────────────────────────────────────────────────────
   /// Wall-clock timestamp captured when the deck finishes loading and the first
@@ -599,6 +604,7 @@ class _BattleScreenState extends State<BattleScreen>
       // Clear last session's progress snapshot so the summary recomputes fresh.
       _preEstimate = null;
       _postEstimate = null;
+      _sessionEpoch++; // invalidate any in-flight prior-session estimate write-back
     });
 
     // Fire battle_started once the deck is visible. Inert until analytics consent.
@@ -798,6 +804,8 @@ class _BattleScreenState extends State<BattleScreen>
     // would empty the list → c.total==0 → this session's reading accuracy is
     // silently dropped from 合格率. Capturing the grades up front closes it.
     final sessionGrades = _sessionResults.map((r) => r.grade).toList();
+    final epoch =
+        _sessionEpoch; // this session's identity; checked before write-back
     unawaited(() async {
       // Capture the baseline BEFORE recording this session — deterministically,
       // in the same closure, so the +delta can never be collapsed by a race with
@@ -820,7 +828,10 @@ class _BattleScreenState extends State<BattleScreen>
       }
       // Recompute AFTER recording so the summary reflects this session.
       final post = await liveCseEstimate(widget.eikenGrade);
-      if (mounted) {
+      // Only write back if THIS session is still current — a 「もういちど」 re-init
+      // bumps _sessionEpoch, so a prior session's late estimates are discarded
+      // instead of clobbering the fresh session's reset baseline.
+      if (mounted && _sessionEpoch == epoch) {
         setState(() {
           _preEstimate = pre;
           _postEstimate = post;
