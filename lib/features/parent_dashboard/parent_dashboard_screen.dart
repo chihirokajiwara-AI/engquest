@@ -1589,6 +1589,20 @@ class _SettingsTab extends StatelessWidget {
                       onTap: () async {
                         Navigator.of(ctx).pop();
                         await _revokeVoiceConsent();
+                        // Confirm the change. A COPPA consent action that gives no
+                        // feedback leaves the parent unsure it took. Use the outer
+                        // (still-mounted) scaffold context — `ctx` is the popped
+                        // dialog route and would silently drop the SnackBar.
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                  '音声（おんせい）同意（どうい）を リセットしました / Voice consent reset',
+                                  textAlign: TextAlign.center),
+                              duration: Duration(seconds: 3),
+                            ),
+                          );
+                        }
                       },
                       child: Container(
                         alignment: Alignment.center,
