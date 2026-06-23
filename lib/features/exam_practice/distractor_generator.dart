@@ -60,6 +60,11 @@ List<String>? buildAntiLeakDistractors(
 ) {
   final ans = answer.word.trim();
   if (ans.isEmpty || answer.pos.isEmpty) return null;
+  // POS-match (below) is the grammatical-plausibility guard. If the answer's own
+  // POS is `unknown` (a non-standard pos string in the data → fromString default),
+  // it would match ANY other unknown-tagged word regardless of real part of
+  // speech — skip rather than emit a grammatically-mismatched distractor set.
+  if (answer.pos.first == PartOfSpeech.unknown) return null;
   final initial = ans[0].toLowerCase();
   final pos = answer.pos.first;
   final ansLower = ans.toLowerCase();
@@ -88,8 +93,12 @@ List<String>? buildAntiLeakDistractors(
         (jp == ansJp || jp.contains(ansJp) || ansJp.contains(jp))) {
       return false;
     }
-    // never show a word that is already visible in the sentence
-    if (lowerSentence.contains(wl)) return false;
+    // never show a word already visible in the sentence — WORD-BOUNDARY match,
+    // not raw substring. contains() both over-rejects ("at" inside "attitude"
+    // silently drains valid short-word distractors → the item gets skipped) and
+    // under-rejects (a distractor "study" isn't caught when the sentence shows
+    // "studying"). Mirrors wholeWordMatch() used elsewhere for the same reason.
+    if (RegExp('\\b${RegExp.escape(wl)}\\b').hasMatch(lowerSentence)) return false;
     return true;
   }
 
@@ -112,5 +121,7 @@ List<String>? buildAntiLeakDistractors(
   diffCat.shuffle(rng);
   sameCat.shuffle(rng);
   final ordered = [...diffCat, ...sameCat];
-  return ordered.take(3).map((c) => c.word).toList();
+  // .trim() the output: all filtering was done on the trimmed form, so a bank
+  // word with stray whitespace must not surface as a padded distractor string.
+  return ordered.take(3).map((c) => c.word.trim()).toList();
 }

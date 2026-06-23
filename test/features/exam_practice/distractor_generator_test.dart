@@ -172,5 +172,53 @@ void main() {
       final d = buildAntiLeakDistractors(answer, 'A ___ runs.', bank, rng);
       expect(d, isNull);
     });
+
+    // Word-boundary (not raw-substring) sentence filter:
+    test('a distractor that is only a SUBSTRING of a sentence word is kept', () {
+      // Old raw .contains() rejected "add" for being inside "ladder", silently
+      // draining a valid distractor → the item got skipped. \b-matching keeps it.
+      final answer = w('act', pos: PartOfSpeech.verb);
+      final bank = [
+        answer,
+        w('add', pos: PartOfSpeech.verb),
+        w('aim', pos: PartOfSpeech.verb),
+        w('ask', pos: PartOfSpeech.verb),
+      ];
+      final d = buildAntiLeakDistractors(
+          answer, 'We had a ladder here.', bank, Random(1));
+      expect(d, isNotNull,
+          reason: '"add" is a substring of "ladder", not a whole word — keep it');
+      expect(d!, contains('add'));
+      expect(d, hasLength(3));
+    });
+
+    test('a WHOLE-WORD match in the sentence is still rejected', () {
+      // The primary rule holds: a word literally present in the sentence is out.
+      final answer = w('act', pos: PartOfSpeech.verb);
+      final bank = [
+        answer,
+        w('add', pos: PartOfSpeech.verb),
+        w('aim', pos: PartOfSpeech.verb),
+        w('ask', pos: PartOfSpeech.verb),
+      ];
+      final d = buildAntiLeakDistractors(
+          answer, 'Please add the numbers.', bank, Random(1));
+      expect(d, isNull,
+          reason: '"add" is a whole word here → excluded → <3 left → null');
+    });
+
+    test('an answer with an unknown POS is skipped (no cross-POS distractors)',
+        () {
+      final answer = w('alpha', pos: PartOfSpeech.unknown);
+      final bank = [
+        answer,
+        w('apple', pos: PartOfSpeech.unknown),
+        w('arrow', pos: PartOfSpeech.unknown),
+        w('angle', pos: PartOfSpeech.unknown),
+      ];
+      final d = buildAntiLeakDistractors(answer, 'An ___ value.', bank, Random(1));
+      expect(d, isNull,
+          reason: 'unknown answer POS would match any unknown-tagged word');
+    });
   });
 }
