@@ -97,5 +97,28 @@ void main() {
         prev = r;
       }
     });
+
+    // Regression: a review-state card with stability 0 (a missing/corrupt
+    // Firestore field defaults to 0) must NOT produce NaN/Infinity in the recall
+    // stability update — that would crash NaN.round() on the native VM and cause
+    // an infinite 1-day over-drill on web.
+    test('review card with stability 0 (data gap) never yields NaN stability', () {
+      final gap = FSRSCard(
+        vocabId: 'gap',
+        state: CardState.review,
+        stability: 0.0,
+        difficulty: 5.0,
+        reps: 3,
+        lastReview: t0,
+        dueDate: t0,
+      );
+      for (final g in <Grade>[Grade.hard, Grade.good, Grade.easy]) {
+        final out = fsrs.schedule(gap, g, t0);
+        expect(out.stability.isFinite, isTrue,
+            reason: '$g on a stability-0 review card must stay finite');
+        expect(out.stability, greaterThan(0.0));
+        expect(out.dueDate, isNotNull);
+      }
+    });
   });
 }

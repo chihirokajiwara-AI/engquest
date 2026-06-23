@@ -91,13 +91,19 @@ class FSRSAlgorithm {
   /// S′ᵣ = S · (exp(w₈) · (11−D) · S^(−w₉) · (exp((1−R)·w₁₀)−1) · hp · eb)
   /// where hp = w₁₅ if hard, eb = w₁₆ if easy, else 1.
   double _nextStabilityRecall(double d, double s, double r, Grade g) {
+    // Guard s == 0: a review-state card loaded with stability 0 (a missing/corrupt
+    // Firestore `stability` field defaults to 0 via fromJson) would otherwise hit
+    // pow(0, -w9) = Infinity → 0 * Infinity = NaN, which math.max() cannot rescue
+    // → NaN stored → native-VM crash on NaN.round() / web infinite 1-day
+    // over-drill. Mirrors _nextStabilityForget's sSafe guard.
+    final sSafe = math.max(s, 0.1);
     final hardPenalty = g == Grade.hard ? w[15] : 1.0;
     final easyBonus = g == Grade.easy ? w[16] : 1.0;
     final rClamped = r.clamp(0.0, 0.999); // avoid exp((1-1)*w10)-1 = 0
-    final result = s *
+    final result = sSafe *
         math.exp(w[8]) *
         (11 - d) *
-        math.pow(s, -w[9]) *
+        math.pow(sSafe, -w[9]) *
         (math.exp((1 - rClamped) * w[10]) - 1) *
         hardPenalty *
         easyBonus;
