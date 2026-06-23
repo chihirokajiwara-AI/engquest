@@ -110,7 +110,8 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
   bool _examReviewDue = false;
   String _eikenLevel = '5'; // used to route to the right scene
   int _childAge = 8; // used to age-filter the FSRS review deck
-  double _placementTheta = 0.0; // onboarding ability → ZPD-sorts review new cards
+  double _placementTheta =
+      0.0; // onboarding ability → ZPD-sorts review new cards
   CseEstimate? _estimate; // live 合格率, null until the child has practice data
   MasteryRecommendation? _advice; // mastery-based progression advice (#14)
   bool _loading = true;
@@ -166,8 +167,7 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
     //     grade was supplied via initialEikenLevel.
     try {
       final prefs = await PreferencesService.getInstance();
-      final t = double.tryParse(
-          prefs.getString(PrefKeys.placementTheta) ?? '');
+      final t = double.tryParse(prefs.getString(PrefKeys.placementTheta) ?? '');
       if (t != null) _placementTheta = t;
     } catch (_) {/* keep 0.0 — safe */}
 

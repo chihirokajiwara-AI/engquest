@@ -102,7 +102,8 @@ void main() {
     // Firestore field defaults to 0) must NOT produce NaN/Infinity in the recall
     // stability update — that would crash NaN.round() on the native VM and cause
     // an infinite 1-day over-drill on web.
-    test('review card with stability 0 (data gap) never yields NaN stability', () {
+    test('review card with stability 0 (data gap) never yields NaN stability',
+        () {
       final gap = FSRSCard(
         vocabId: 'gap',
         state: CardState.review,

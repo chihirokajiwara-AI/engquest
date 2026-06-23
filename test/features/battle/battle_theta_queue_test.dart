@@ -33,7 +33,8 @@ void main() {
       expect(q.indexOf(3) < q.indexOf(2), isTrue);
     });
 
-    test('high theta steers the HARDEST new cards first (θ→difficulty mapped)', () {
+    test('high theta steers the HARDEST new cards first (θ→difficulty mapped)',
+        () {
       // θ=6 maps to target difficulty 10; |d−10| ascending → 9, 5, 1.
       final deck = [nu('easy', 1), nu('mid', 5), nu('hard', 9)];
       final q = [0, 1, 2];

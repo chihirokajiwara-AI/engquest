@@ -174,7 +174,8 @@ void main() {
     });
 
     // Word-boundary (not raw-substring) sentence filter:
-    test('a distractor that is only a SUBSTRING of a sentence word is kept', () {
+    test('a distractor that is only a SUBSTRING of a sentence word is kept',
+        () {
       // Old raw .contains() rejected "add" for being inside "ladder", silently
       // draining a valid distractor → the item got skipped. \b-matching keeps it.
       final answer = w('act', pos: PartOfSpeech.verb);
@@ -187,7 +188,8 @@ void main() {
       final d = buildAntiLeakDistractors(
           answer, 'We had a ladder here.', bank, Random(1));
       expect(d, isNotNull,
-          reason: '"add" is a substring of "ladder", not a whole word — keep it');
+          reason:
+              '"add" is a substring of "ladder", not a whole word — keep it');
       expect(d!, contains('add'));
       expect(d, hasLength(3));
     });
@@ -216,7 +218,8 @@ void main() {
         w('arrow', pos: PartOfSpeech.unknown),
         w('angle', pos: PartOfSpeech.unknown),
       ];
-      final d = buildAntiLeakDistractors(answer, 'An ___ value.', bank, Random(1));
+      final d =
+          buildAntiLeakDistractors(answer, 'An ___ value.', bank, Random(1));
       expect(d, isNull,
           reason: 'unknown answer POS would match any unknown-tagged word');
     });

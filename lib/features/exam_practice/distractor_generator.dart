@@ -98,7 +98,9 @@ List<String>? buildAntiLeakDistractors(
     // silently drains valid short-word distractors → the item gets skipped) and
     // under-rejects (a distractor "study" isn't caught when the sentence shows
     // "studying"). Mirrors wholeWordMatch() used elsewhere for the same reason.
-    if (RegExp('\\b${RegExp.escape(wl)}\\b').hasMatch(lowerSentence)) return false;
+    if (RegExp('\\b${RegExp.escape(wl)}\\b').hasMatch(lowerSentence)) {
+      return false;
+    }
     return true;
   }
 
