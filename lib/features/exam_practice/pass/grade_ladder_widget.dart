@@ -241,10 +241,13 @@ class _GradeStop extends StatelessWidget {
       iconColor = dqGold;
       labelColor = dqGold;
     } else if (isNext) {
-      borderColor = dqGoldDeep;
+      // Subordinate "next goal" — dimmed so it never competes with the current
+      // stop's bright gold ring + glow (visual audit H2: exactly ONE "you are
+      // here"). Was a full dqGoldDeep ring that read as a second highlight.
+      borderColor = dqGoldDeep.withAlpha(120);
       fillColor = dqNight0;
-      iconColor = dqGoldDeep;
-      labelColor = dqInk;
+      iconColor = dqGoldDeep.withAlpha(150);
+      labelColor = dqInk.withAlpha(180);
     } else {
       // Future grade.
       borderColor = dqGoldDeep.withAlpha(80);
@@ -326,6 +329,26 @@ class _GradeStop extends StatelessWidget {
             width: 56,
             child: Column(
               children: [
+                // Explicit "you are here" so a 6yo reads their position at a
+                // glance (visual audit H2), not just from the star/glow.
+                if (isCurrent)
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 3),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                    decoration: BoxDecoration(
+                      color: dqGold,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Text(
+                      'いま ここ',
+                      style: notoSerifJp(
+                        color: dqNight0,
+                        fontSize: 8,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                  ),
                 Text(
                   shortJa,
                   textAlign: TextAlign.center,

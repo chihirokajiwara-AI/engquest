@@ -1076,7 +1076,9 @@ class _KotobaHomeScreenState extends State<KotobaHomeScreen> {
         child: GradeLadderWidget(
           currentGrade: _eikenLevel,
           readinessPct: _estimate?.readinessPct,
-          showLabels: false,
+          // Labels ON: a real-render audit found the unlabeled strip read as
+          // abstract decoration — a 6yo couldn't tell it was 5級→準1級.
+          showLabels: true,
         ),
       );
 
