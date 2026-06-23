@@ -13,7 +13,10 @@
 //   - recordStudySession() called after any battle/exam completion
 //   - If today is the same as lastStudyDate → no change to streak (already counted)
 //   - If today is exactly one day after lastStudyDate → streak++
-//   - If today is 2+ days after lastStudyDate → streak resets to 1
+//   - One missed day (diff==2) on an established streak (≥ kStreakRepairMinToGrace)
+//     → GRACE: streak kept + extended (and load() shows it as alive, not broken)
+//   - Two missed days (diff==3) on an established streak → PARTIAL credit (halved)
+//   - Otherwise (3+ missed days, or too small to grace) → streak resets to 1
 //   - New user with no lastStudyDate → streak starts at 1
 
 import 'dart:async';
@@ -203,7 +206,14 @@ class StreakService {
     // 「Nにち れんぞく」 with zero real practice, killing the daily-study motivation
     // that is the whole point of the streak. Only [0, 1] days counts.
     final daysSinceLast = lastDate != null ? _daysBetween(lastDate, nowDt) : -1;
-    final alive = daysSinceLast >= 0 && daysSinceLast <= 1;
+    // ALIVE also covers the 1-missed-day GRACE window (diff==2) for an established
+    // streak: recordStudySession will forgive it the instant the child studies, so
+    // the home must NOT pre-emptively greet them with a broken/0 streak (おかえり)
+    // — that contradicts the grace mechanic before they even play. Mirrors the
+    // recordStudySession branch exactly (diff==2 && streak ≥ kStreakRepairMinToGrace).
+    final alive = daysSinceLast >= 0 &&
+        (daysSinceLast <= 1 ||
+            (daysSinceLast == 2 && storedStreak >= kStreakRepairMinToGrace));
     final streak = alive ? storedStreak : 0;
     final streakBroken = !alive && storedStreak > 0;
 

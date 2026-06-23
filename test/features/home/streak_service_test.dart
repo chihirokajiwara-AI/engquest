@@ -92,6 +92,38 @@ void main() {
     expect(state.streakBroken, isFalse);
   });
 
+  // Regression (pre-deploy bug-hunt): load() must mirror recordStudySession's
+  // grace branch. A 1-missed-day gap (diff==2) on an established streak is
+  // forgiven on the next session, so the home must show it ALIVE — not greet the
+  // child with a 0/broken streak before they play.
+  test('grace window (1 missed day, established streak) loads ALIVE not broken',
+      () async {
+    final now = DateTime(2026, 6, 10);
+    SharedPreferences.setMockInitialValues({
+      'streak_current': 9, // >= kStreakRepairMinToGrace
+      'streak_last_study_date': iso(now.subtract(const Duration(days: 2))),
+    });
+    PreferencesService.resetInstance();
+    final state = await StreakService().load(now: now);
+    expect(state.currentStreak, 9,
+        reason: 'a graceable 1-missed-day gap keeps the streak shown');
+    expect(state.streakBroken, isFalse);
+  });
+
+  test('1 missed day on a SMALL streak (below grace threshold) is broken',
+      () async {
+    final now = DateTime(2026, 6, 10);
+    SharedPreferences.setMockInitialValues({
+      'streak_current': 2, // < kStreakRepairMinToGrace (3) → not graced
+      'streak_last_study_date': iso(now.subtract(const Duration(days: 2))),
+    });
+    PreferencesService.resetInstance();
+    final state = await StreakService().load(now: now);
+    expect(state.currentStreak, 0);
+    expect(state.streakBroken, isTrue,
+        reason: 'too small to grace → genuinely broken');
+  });
+
   test('StreakState.studiedOn returns false for unset bits', () {
     const state = StreakState(
       currentStreak: 1,
