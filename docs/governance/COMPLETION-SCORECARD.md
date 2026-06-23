@@ -27,7 +27,7 @@ needs CEO go (spend / secret / prod / legal / art-gen).
 |9|Writing課題量|50|BUILD|expand prompt bank per grade|
 |10|distractor意味品質|65|GATE:backend|runtime same-POS now; semantic uniqueness = LLM|
 |11|例文品質|82|BUILD|2026-06-23: 英検5級 (600/600) AND 4級 (700/700) — 1,300 example sentences now carry a child-ひらがな gloss = comprehensible input for a 6yo, render-verified (5級 card-flip 7a0ee04, same path for 4級), 52+27 content-qa defects caught. REMAINING: 3級 (next-youngest), then STOP (準2/2/準1 = teens who read English). tighten cloze-clean sentences|
-|12|大問構造再現|86|BUILD|準1大問3=7 etc. residual fixes|
+|12|大問構造再現/級メタ|88|BUILD|2026-06-23: fixed a 英検-fidelity error — 準2級&準2級プラス CEFR label was B1 (one band too high; official=A2, B1 is 2級), shown on grade cards+exam hub; +regression test locking all 7 grades CEFR (7f2b15c). REMAINING: 準1大問3=7 etc.|
 
 ## B. ペダゴジー
 | # | item | now | type | next action |
