@@ -114,6 +114,11 @@ class _SilentBattleScreenState extends State<SilentBattleScreen> {
         }
       } else if (ctrl.phase == BattlePhase.victory) {
         _sound.playSessionComplete();
+      } else if (ctrl.phase == BattlePhase.defeat) {
+        // Losing the LAST heart on a penalized wrong tap goes prompt→defeat
+        // DIRECTLY, skipping resolved — so without this arm the losing tap was
+        // silent. Give it the same wrong tone as any other penalized miss.
+        if (ctrl.currentStep.penalizeWrong) _sound.playWrong();
       }
       _lastPhase = ctrl.phase;
     }
