@@ -160,8 +160,16 @@ class SkillAccuracyStore {
         final c = (m['c'] as num?)?.toInt() ?? 0;
         final t = (m['t'] as num?)?.toInt() ?? 0;
         return (correct: c, total: t);
-      } catch (_) {
-        // Corrupt JSON → fall through to legacy / zero rather than throw.
+      } catch (e) {
+        // Corrupt JSON → fall through to legacy/zero rather than throw. The skill
+        // then reads as 未測定 until the next record — a SAFE direction (it never
+        // over-promises 合格率), but otherwise silent. Log it (matching record()/
+        // readSkill()) so a real corruption is diagnosable, not mistaken for a
+        // new-user state.
+        if (kDebugMode) {
+          debugPrint('[SkillAccuracyStore] corrupt JSON at '
+              '${_key(grade, skill)} ($e) — reads 未測定 until next record');
+        }
       }
     }
     final c = _prefs.getInt(_legacyCorrectKey(grade, skill));
