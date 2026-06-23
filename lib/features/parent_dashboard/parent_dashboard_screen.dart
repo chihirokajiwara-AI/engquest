@@ -952,9 +952,14 @@ class _BarChartPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     if (days.isEmpty) return;
-    final maxWords =
+    final rawMax =
         days.map((d) => d.wordsPracticed).fold(0, (a, b) => a > b ? a : b);
-    if (maxWords == 0) return;
+    // An all-zero week is the GUARANTEED day-1 state for a new subscriber. The
+    // old `if (maxWords == 0) return;` painted a blank void inside the fixed
+    // 140px panel → reads as "broken" on a paying parent's first Progress open,
+    // before any trust. Guard the /0 (ratio stays 0 → 4px stub) so the weekday
+    // axis + stub bars still render, and add a calm note below.
+    final maxWords = rawMax == 0 ? 1 : rawMax;
 
     const barPad = 8.0;
     final barW = (size.width - barPad * (days.length + 1)) / days.length;
@@ -994,6 +999,20 @@ class _BarChartPainter extends CustomPainter {
         tp.paint(canvas, Offset(x + barW / 2 - tp.width / 2, top - 14));
       }
     }
+
+    // Empty-week note: the axis + stub bars above already read as a chart; this
+    // tells the parent it's an honest "no data yet", not a glitch.
+    if (rawMax == 0) {
+      tp.text = TextSpan(
+          text: 'まだ きろくが ありません',
+          style: TextStyle(
+              color: dqInk.withAlpha(150),
+              fontSize: 11,
+              fontStyle: FontStyle.italic));
+      tp.layout();
+      tp.paint(canvas,
+          Offset(size.width / 2 - tp.width / 2, chartH / 2 - tp.height / 2));
+    }
   }
 
   String _dayLabel(DateTime d) {
@@ -1002,7 +1021,10 @@ class _BarChartPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+  bool shouldRepaint(covariant _BarChartPainter oldDelegate) =>
+      // `days` is immutable after the FutureBuilder resolves; only an explicit
+      // _loadProgress() refresh swaps the list. No need to repaint every frame.
+      oldDelegate.days != days;
 }
 
 // ── Mini calendar ─────────────────────────────────────────────────────────────
