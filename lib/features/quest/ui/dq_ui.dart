@@ -1317,12 +1317,12 @@ class AudioOptionButtonState extends State<AudioOptionButton>
     Color fill = warm ? pcParchment1 : dqBox.withAlpha(210);
     final audioIcon = warm ? pcFrameGold : dqGold;
     if (state == DqChoiceState.correct) {
-      border = const Color(0xFF7BD08B);
+      border = const Color(0xFF8BE08B);
       fill = warm
           ? const Color(0xFF14361F)
           : const Color(0xFF15351B).withAlpha(235);
     } else if (state == DqChoiceState.wrong) {
-      border = const Color(0xFFD9886A);
+      border = const Color(0xFFE89090);
       fill = warm
           ? const Color(0xFF3A1A14)
           : const Color(0xFF3A1414).withAlpha(235);
@@ -1433,9 +1433,9 @@ class AudioOptionButtonState extends State<AudioOptionButton>
                                 size: 20, w: FontWeight.w700, color: pcInk)
                             : dqText(size: 20, w: FontWeight.w700))),
                 if (state == DqChoiceState.correct)
-                  const Icon(Icons.check, color: Color(0xFF7BD08B), size: 22)
+                  const Icon(Icons.check, color: Color(0xFF8BE08B), size: 22)
                 else if (state == DqChoiceState.wrong)
-                  const Icon(Icons.close, color: Color(0xFFD9886A), size: 22),
+                  const Icon(Icons.close, color: Color(0xFFE89090), size: 22),
               ],
             ),
           ),
