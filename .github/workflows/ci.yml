@@ -222,10 +222,40 @@ jobs:
           echo "iOS build failed after 3 attempts"
           exit 1
 
+  # ── Web build check ──────────────────────────────────────────────────────────
+  # Web is the PRIMARY platform (the live site at 178.105.113.79 is Flutter web),
+  # yet CI only built Android + iOS — a web-only compile break (e.g. an accidental
+  # dart:io import, forbidden for web but not otherwise gated) could ship to the
+  # primary target unnoticed. This deterministic release build closes that gap.
+  # The interactive real-browser smoke (Playwright/CanvasKit semantics) runs
+  # locally via scripts/audit_realbrowser.sh; wiring that flaky browser layer into
+  # CI reliably is a separate follow-up so it never reds the build on infra noise.
+  build-web:
+    name: Web Build Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter 3.44.x
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.44.x'
+          channel: 'stable'
+          cache: true
+          cache-key: 'flutter-${{ runner.os }}-3.44.x'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build web (edilab entrypoint, release)
+        run: flutter build web --release -t lib/main_edilab.dart
+
   # ── Summary job (required status check) ────────────────────────────────────
   ci-pass:
     name: CI Pass
-    needs: [analyze-and-test, build-android, build-ios]
+    needs: [analyze-and-test, build-android, build-ios, build-web]
     runs-on: ubuntu-latest
     if: always()
     steps:
@@ -241,6 +271,10 @@ jobs:
           fi
           if [ "${{ needs.build-ios.result }}" != "success" ]; then
             echo "❌ build-ios failed"
+            exit 1
+          fi
+          if [ "${{ needs.build-web.result }}" != "success" ]; then
+            echo "❌ build-web failed"
             exit 1
           fi
           echo "✅ All CI checks passed"
