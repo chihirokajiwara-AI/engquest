@@ -438,6 +438,9 @@ class _BattleScreenState extends State<BattleScreen>
 
   // ── Session-complete star burst animation ──────────────────────────────────
   late AnimationController _starsCtrl;
+  // Celebratory screenshake on a 3+ correct-answer streak (juice). Reduced-motion
+  // safe (duration→zero in didChangeDependencies, like the flip/stars controllers).
+  late AnimationController _shakeCtrl;
   late Animation<double> _starsAnim;
 
   // ── Colours ────────────────────────────────────────────────────────────────
@@ -472,6 +475,10 @@ class _BattleScreenState extends State<BattleScreen>
       duration: const Duration(milliseconds: 1800),
     );
     _starsAnim = CurvedAnimation(parent: _starsCtrl, curve: Curves.easeOut);
+    _shakeCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
     _sound.loadPreferences().then((_) {
       if (mounted) setState(() {});
     });
@@ -496,6 +503,7 @@ class _BattleScreenState extends State<BattleScreen>
     if (prefersReducedMotion(context)) {
       _flipCtrl.duration = Duration.zero;
       _starsCtrl.duration = Duration.zero;
+      _shakeCtrl.duration = Duration.zero;
     }
   }
 
@@ -505,6 +513,7 @@ class _BattleScreenState extends State<BattleScreen>
     _dwellTimer?.cancel();
     _flipCtrl.dispose();
     _starsCtrl.dispose();
+    _shakeCtrl.dispose();
     _wordAudio.dispose();
     super.dispose();
   }
@@ -675,6 +684,14 @@ class _BattleScreenState extends State<BattleScreen>
 
   // ── Grade ──────────────────────────────────────────────────────────────────
 
+  /// Short celebratory screenshake (≤6px, decaying, 300ms) for a 3+ correct
+  /// streak. No-op under OS reduce-motion. Cosmetic — grade/FSRS/XP are all
+  /// recorded independently of this call.
+  void _triggerShake() {
+    if (prefersReducedMotion(context)) return;
+    _shakeCtrl.forward(from: 0.0);
+  }
+
   void _gradeCard(Grade grade) {
     // Card-back dwell (studio #3): the buttons are visible but inert until the
     // ~700ms settle elapses, so a flip-gesture tap-race can't grade unread.
@@ -696,6 +713,9 @@ class _BattleScreenState extends State<BattleScreen>
       });
       // Streak
       _streak++;
+      // Juice: a 3+ correct streak earns a short celebratory screenshake — an
+      // escalating reward for a run of recalls. Cosmetic only (reduced-motion safe).
+      if (_streak >= 3) _triggerShake();
     } else {
       _sound.playWrong();
       _streak = 0;
@@ -1091,7 +1111,19 @@ class _BattleScreenState extends State<BattleScreen>
             _buildProgressBar(),
             if (_momentumText != null) _buildMomentumBanner(),
             Expanded(
-              child: _buildFlipCardWithShimmer(),
+              // Celebratory screenshake on a 3+ streak (juice): nudges the card
+              // horizontally (decaying ≤6px over 300ms). Idle value 0 → no offset;
+              // the flip-card subtree is built once, only the transform rebuilds.
+              child: AnimatedBuilder(
+                animation: _shakeCtrl,
+                builder: (context, child) {
+                  final t = _shakeCtrl.value;
+                  final dx = math.sin(t * math.pi * 6) * (1.0 - t) * 6.0;
+                  return Transform.translate(
+                      offset: Offset(dx, 0), child: child);
+                },
+                child: _buildFlipCardWithShimmer(),
+              ),
             ),
             // The pre-flip recall cue ("recall the meaning, then tap") lives in
             // the card itself (after the サイレント rescue frame) — a separate
