@@ -148,4 +148,25 @@ void main() {
         reason:
             'sectionId drives the _pre2FillIn passage in the reading screen');
   });
+
+  // CEFR labels are shown to children + parents (exam-hub tile + grade-selector
+  // card) and are cross-checkable against the official MEXT / eiken.or.jp table.
+  // Lock each grade's CEFR so a regression (e.g. 準2級 wrongly = 'B1' = one band
+  // too high; 2級 is B1) can't silently ship. Verified vs eiken.or.jp 2026-06-23.
+  test('each grade CEFR label matches the official 英検 correspondence', () {
+    const expected = {
+      '5': 'A1',
+      '4': 'A1-A2',
+      '3': 'A2',
+      'pre2': 'A2', // 準2級 = A2 (NOT B1 — that is 2級)
+      'pre2plus': 'A2', // 準2級プラス CSE range A1-A2, pass score in the A2 band
+      '2': 'B1-B2',
+      'pre1': 'B2',
+    };
+    expected.forEach((grade, cefr) {
+      expect(kEikenExams[grade]?.cefrLevel, cefr,
+          reason: '$grade CEFR must be $cefr (official 英検↔CEFR table); a wrong '
+              'band misrepresents what the certification attests to a parent.');
+    });
+  });
 }

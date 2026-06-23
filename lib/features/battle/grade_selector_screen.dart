@@ -55,7 +55,8 @@ const _grades = [
   _GradeInfo(
     grade: 'pre2',
     label: '英検準2級',
-    cefrLabel: 'B1',
+    cefrLabel:
+        'A2', // official: 準2級 = CEFR A2, not B1 (2級 is B1). Fixed 2026-06-23.
     description: '高校中級レベル・1,500語',
     icon: Icons.shield_outlined,
     color: Color(0xFFFF9800),
@@ -207,12 +208,20 @@ class _GradeCard extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Text(
-                          info.label,
-                          style: const TextStyle(
-                            color: Color(0xFF263238),
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                        // Flexible + ellipsis: at 200% OS text-scale on a 320px
+                        // phone the grade name + CEFR chip overflowed the column
+                        // (RenderFlex) — the label now shrinks before pushing the
+                        // chip off-screen. (a11y/responsive, flaw-hunt round 4.)
+                        Flexible(
+                          child: Text(
+                            info.label,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              color: Color(0xFF263238),
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                         const SizedBox(width: 8),

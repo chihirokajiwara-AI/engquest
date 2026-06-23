@@ -237,7 +237,10 @@ const Map<String, EikenExamDef> kEikenExams = {
   'pre2': EikenExamDef(
     grade: 'pre2',
     labelJa: '英検準2級',
-    cefrLevel: 'B1',
+    // 準2級 = CEFR A2 (official: eiken.or.jp / MEXT 対照表; B1 is 2級). Was 'B1'
+    // = one band too high — a parent cross-checking the official table would
+    // catch it. Verified 2026-06-23.
+    cefrLevel: 'A2',
     totalMinutes:
         105, // 一次 = R/W 80分 + リスニング約25分 (2024改定後, eiken.or.jp 2026-06)
     passingScore: 1322,
@@ -312,7 +315,10 @@ const Map<String, EikenExamDef> kEikenExams = {
   'pre2plus': EikenExamDef(
     grade: 'pre2plus',
     labelJa: '英検準2級プラス',
-    cefrLevel: 'B1',
+    // 準2級プラス CEFR range = A1–A2; its passing score (1829 CSE) sits in the A2
+    // band (eiken.or.jp 2025 新設級 info, verified 2026-06-23). Was 'B1' = same as
+    // 2級, wrong for a grade that sits BELOW 2級.
+    cefrLevel: 'A2',
     totalMinutes: 110, // 一次 = 筆記85分 + リスニング約25分 (eiken.or.jp, 2026-06-07)
     passingScore: 1402,
     maxScore: 1875,
