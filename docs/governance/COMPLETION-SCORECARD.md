@@ -26,7 +26,7 @@ needs CEO go (spend / secret / prod / legal / art-gen).
 |8|Listening項目量|72|BUILD|204 items at full official 大問 targets (was stale "110"); gated by mock_listening_fulllength; answer keys content-qa-verified all 7 grades|
 |9|Writing課題量|50|BUILD|expand prompt bank per grade|
 |10|distractor意味品質|65|GATE:backend|runtime same-POS now; semantic uniqueness = LLM|
-|11|例文品質|78|BUILD|2026-06-22: 英検5級 ALL 600 example sentences now carry a child-ひらがな gloss (comprehensible input for a 6yo; ce547d2..e6d4c84, 27 content-qa defects caught), REAL-RENDER verified on the card back (7a0ee04, legible 390×844, 0 JS-err). REMAINING: other grades (4/3/pre2/pre2plus/2/pre1)|
+|11|例文品質|82|BUILD|2026-06-23: 英検5級 (600/600) AND 4級 (700/700) — 1,300 example sentences now carry a child-ひらがな gloss = comprehensible input for a 6yo, render-verified (5級 card-flip 7a0ee04, same path for 4級), 52+27 content-qa defects caught. REMAINING: 3級 (next-youngest), then STOP (準2/2/準1 = teens who read English). tighten cloze-clean sentences|
 |12|大問構造再現|86|BUILD|準1大問3=7 etc. residual fixes|
 
 ## B. ペダゴジー
