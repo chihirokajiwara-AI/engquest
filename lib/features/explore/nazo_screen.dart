@@ -76,6 +76,21 @@ class NazoResult {
   });
 }
 
+// ── Saturation helper (mirrors scene_view.saturationMatrix) ──────────────────
+// Defined locally to avoid a circular import (scene_view.dart imports this
+// file).  s=1 → identity (full colour); s=0 → greyscale (Rec.709 weights).
+// Used by the NPC portrait bloom animation on a correct answer.
+List<double> _saturationMatrix(double s) {
+  const lr = 0.2126, lg = 0.7152, lb = 0.0722;
+  final ir = (1 - s) * lr, ig = (1 - s) * lg, ib = (1 - s) * lb;
+  return <double>[
+    ir + s, ig, ib, 0, 0, //
+    ir, ig + s, ib, 0, 0, //
+    ir, ig, ib + s, 0, 0, //
+    0, 0, 0, 1, 0, //
+  ];
+}
+
 // ── NazoScreen ────────────────────────────────────────────────────────────────
 
 /// Casebook "framed ledger" re-skin flag (CEO 1904 craft bar + 1933/1934 de-Layton).
@@ -156,6 +171,12 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
   //    550ms gap read as a freeze to a 6yo). Safe to fire early because the burst
   //    sits BEHIND the content (studio #2), so it glows behind the lesson, never
   //    buries it.
+  //  • _npcBloomCtrl (~90ms onset, 300ms easeOut) — the NPC portrait saturates
+  //    grey→colour at the SAME moment as the burst, co-occurring with the English
+  //    word/meaning stamp so the child perceives "I said THIS word → THIS person
+  //    came alive" in one perceptual beat (~500ms encoding window). The bloom
+  //    completes well before the CTA appears at ~550ms, and long before the
+  //    Navigator.pop. Reduced-motion: saturation jumps to 1 instantly.
   //  • _readWindowDone (~550ms) — gates the 「ナゾ、解けた！」 CTA + auto-advance, so a
   //    child still cannot skip past reading WHY it was right before the window.
   // Reduced-motion collapses both to the old instant.
@@ -165,6 +186,11 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
   Timer? _readWindowTimer;
   Timer? _finishTimer;
   bool _finished = false;
+  // NPC portrait grey→colour bloom controller. Starts at 0 (full greyscale via
+  // saturationMatrix(0)); driven to 1 (full colour) on correct answer at ~90ms
+  // onset. Declared late final and initialised in initState() (TickerProvider
+  // available there). Disposed in dispose().
+  late final AnimationController _npcBloomCtrl;
   // Teach at the error moment (studio #3): a wrong tap briefly surfaces the tapped
   // word's meaning (from the TeachCard) under the options, so the same tap that is
   // the game's "wrong" beat also teaches. Null = nothing shown.
@@ -233,6 +259,14 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
     _minos = MinosController(
       maxValue: minosMaxForGrade(widget.eikenLevel),
     );
+    // NPC portrait bloom: starts at 0 (greyscale) and animates to 1 (full
+    // colour) on correct answer.  Duration matches the burst onset window so
+    // the world-feel payoff is simultaneous.  Reduced-motion path skips the
+    // animation entirely (see _choose).
+    _npcBloomCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
     _coins = widget.hintCoinService ?? HintCoinService();
     _loadCoinBalance();
     final audio = _step.autoPlayAudio;
@@ -256,6 +290,7 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
     _wrongMeaningTimer?.cancel();
     _recallTimer?.cancel();
     _recallPopTimer?.cancel();
+    _npcBloomCtrl.dispose();
     _cue.dispose();
     super.dispose();
   }
@@ -310,6 +345,8 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
     // appear; the moment also auto-advances so a non-reader is carried to the
     // restoration. Reduced-motion shows everything at once (old behaviour).
     if (prefersReducedMotion(context)) {
+      // Accessibility: skip animation, show colour portrait immediately.
+      _npcBloomCtrl.value = 1.0;
       setState(() {
         _burstReady = true;
         _readWindowDone = true;
@@ -318,9 +355,14 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
     } else {
       // Burst glow fires almost immediately so the win is felt with the tap
       // (panel game-feel): it blooms BEHIND the lesson, never burying it.
+      // The NPC portrait bloom fires at the SAME ~90ms onset so the child
+      // perceives "I said THIS word → THIS person came alive" in one beat.
       _burstTimer = Timer(const Duration(milliseconds: 90), () {
         if (!mounted) return;
         setState(() => _burstReady = true);
+        // Bloom the NPC portrait grey→colour over 300ms easeOut, co-timed
+        // with the burst so the restoration is felt as a single payoff moment.
+        _npcBloomCtrl.forward();
       });
       // The read-window CTA + auto-advance stay gated to ~550ms so a child can't
       // skip past the WHY before reading it.
@@ -1517,13 +1559,58 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
         ),
       );
 
+  /// NPC portrait with grey→colour bloom on correct answer.
+  ///
+  /// When [widget.hotspot.npcColorAsset] is present the portrait starts in
+  /// full greyscale (saturation=0) and blooms to full colour (saturation=1)
+  /// over 300ms easeOut, driven by [_npcBloomCtrl].  The animation is
+  /// triggered at the same ~90ms onset as the gold burst so the child
+  /// perceives "I said THIS word → THIS person came alive" in one ~500ms
+  /// perceptual beat — within the encoding window.
+  ///
+  /// When the asset is null (emoji-only fallback) no filter is applied: the
+  /// emoji already carries no colour information that the filter could shift,
+  /// and wrapping it would cost a texture pass for zero visual gain.
+  ///
+  /// Reduced-motion: [_npcBloomCtrl] is jumped to 1.0 instantly in [_choose]
+  /// before this widget rebuilds, so the filter evaluates to identity (no
+  /// greyscale on initial render, instant colour on answer) — accessible.
+  Widget _bloomPortrait({
+    required String? imageAsset,
+    required String? emoji,
+    required double size,
+  }) {
+    final portrait =
+        DqPortrait(imageAsset: imageAsset, emoji: emoji, size: size);
+    // Only apply the saturation filter when a colour image asset is present.
+    // The grey NPC asset is NOT used here — we apply saturationMatrix(0) to the
+    // colour asset, which produces an identical greyscale appearance without
+    // requiring a separate asset, and then animate back to saturation=1.
+    if (imageAsset == null) return portrait;
+    // Drive the easeOut curve by sampling the controller value through
+    // Curves.easeOut directly (avoids allocating a CurvedAnimation on each
+    // build call while keeping the curve correct).
+    return AnimatedBuilder(
+      animation: _npcBloomCtrl,
+      builder: (_, child) => ColorFiltered(
+        colorFilter: ColorFilter.matrix(
+          _saturationMatrix(
+            Curves.easeOut.transform(_npcBloomCtrl.value),
+          ),
+        ),
+        child: child,
+      ),
+      child: portrait,
+    );
+  }
+
   // Reuses the same quiz-card layout as quest_screen's _quizPrompt.
   Widget _quizCard() {
     final step = _step;
     if (step is QuestEncounter) {
       return Column(
         children: [
-          DqPortrait(
+          _bloomPortrait(
             imageAsset: widget.hotspot.npcColorAsset ??
                 QuestScreen.npcImage(step.npcName),
             emoji: step.npcEmoji,
@@ -1574,7 +1661,7 @@ class _NazoScreenState extends State<NazoScreen> with TickerProviderStateMixin {
     };
     return Column(
       children: [
-        DqPortrait(
+        _bloomPortrait(
           imageAsset: widget.hotspot.npcColorAsset ??
               QuestScreen.npcImage(step.npcName),
           emoji: step.npcEmoji,
