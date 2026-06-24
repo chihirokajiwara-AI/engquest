@@ -878,7 +878,7 @@ class DqPanel extends StatelessWidget {
 }
 
 /// A detective-style menu tile with a bilingual label (JP / EN) and an icon, for
-/// home-screen quick-start actions (単語バトル / Word Battle, etc.). Renders as a
+/// home-screen quick-start actions (ことばの ナゾ / Word Mysteries, etc.). Renders as a
 /// gold-bordered navy row with a leading icon medallion; the optional [color]
 /// tints only the icon medallion (the frame stays dq palette, never candy-bright).
 class DqTile extends StatelessWidget {

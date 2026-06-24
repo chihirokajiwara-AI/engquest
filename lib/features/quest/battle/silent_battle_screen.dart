@@ -275,8 +275,8 @@ class _SilentBattleScreenState extends State<SilentBattleScreen> {
         Expanded(
           child: Center(
             child: dqBilingual(
-              'サイレントバトル',
-              'Silent Battle',
+              'サイレントじけん',
+              'The Silent Case',
               jpSize: 16,
               jpColor: dqGold,
               stacked: true,

@@ -22,7 +22,7 @@
 //   - 3D perspective card flip (400 ms, easeInOut)
 //   - Scale-bounce grade buttons (0.95→1.0, 150 ms)
 //   - Golden shimmer overlay on correct answer (300 ms)
-//   - Streak counter with fire emoji (🔥 × N) when streak ≥ 3
+//   - Streak counter with insight emoji (💡 × N) when streak ≥ 3
 //   - +XP floating text animation (TweenAnimationBuilder, 800 ms)
 //   - Animated star-burst on session complete (CustomPainter)
 //   - SoundService stubs + HapticFeedback
@@ -1234,7 +1234,7 @@ class _BattleScreenState extends State<BattleScreen>
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('🔥', style: TextStyle(fontSize: 16)),
+            const Text('💡', style: TextStyle(fontSize: 16)),
             const SizedBox(width: 8),
             Flexible(
               child: Text(
@@ -1276,7 +1276,7 @@ class _BattleScreenState extends State<BattleScreen>
     );
     final progress =
         goalFraction ?? (_totalCards == 0 ? 0.0 : _doneCards / _totalCards);
-    // HP-style bar: cream-bordered navy track with a gold fill.
+    // Goal-progress bar: cream-bordered navy track with a gold fill.
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       child: Container(
@@ -1945,14 +1945,14 @@ class _BattleHeader extends StatelessWidget {
           // #114/WCAG SC 1.4.4: Flexible so the title never pushes the header Row
           // into a ~57px overflow. FittedBox.scaleDown SHRINKS the title to fit
           // instead of wrapping — a real-render re-audit (CEO 1363) showed the
-          // tight header wrapping 'たんごバトル' into an ugly orphaned 'ル' even at
+          // tight header wrapping 'ことばの ナゾ' into an ugly orphaned glyph even at
           // normal text scale. Scaling keeps it one clean line (and still degrades
           // gracefully at large text scales).
           Flexible(
             child: FittedBox(
               fit: BoxFit.scaleDown,
               alignment: Alignment.centerLeft,
-              child: dqBilingual('たんごバトル', 'Word Battle',
+              child: dqBilingual('ことばの ナゾ', 'Word Mysteries',
                   jpSize: 17, jpColor: dqGold, stacked: true),
             ),
           ),
@@ -2021,7 +2021,7 @@ class _StreakBadge extends StatelessWidget {
         boxShadow: [BoxShadow(color: dqGoldDeep.withAlpha(110), blurRadius: 8)],
       ),
       child: Text(
-        '🔥 × $streak',
+        '💡 × $streak',
         style: dqText(
           size: 13,
           w: FontWeight.w800,
@@ -2063,7 +2063,7 @@ class _DailyReturnCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (streak >= 1)
-            Text('🔥 $streak日 れんぞく！',
+            Text('💡 $streak日 れんぞく！',
                 style: dqText(size: 16, w: FontWeight.w800, color: dqGold)),
           if (streak >= 1) const SizedBox(height: 4),
           Text(goalLine,

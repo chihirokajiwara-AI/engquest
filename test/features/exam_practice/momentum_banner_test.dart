@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:engquest/features/exam_practice/practice_encouragement.dart';
 
 void main() {
-  testWidgets('momentum banner shows the streak count + 🔥', (tester) async {
+  testWidgets('momentum banner shows the streak count + 💡', (tester) async {
     await tester.pumpWidget(const MaterialApp(
       home: Scaffold(body: PracticeMomentumBanner(streak: 5)),
     ));
@@ -13,7 +13,7 @@ void main() {
         find.byKey(const ValueKey('practice_momentum_banner')), findsOneWidget);
     expect(find.textContaining('5問'), findsOneWidget);
     expect(find.textContaining('れんぞく 正解'), findsOneWidget);
-    expect(find.textContaining('🔥'), findsOneWidget);
+    expect(find.textContaining('💡'), findsOneWidget);
   });
 
   // The banner is a NEW UI element on 4 practice screens; the screen-level 2.0x

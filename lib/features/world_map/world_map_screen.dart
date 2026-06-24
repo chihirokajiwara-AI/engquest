@@ -458,7 +458,7 @@ class _StreakBadge extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text('🔥', style: TextStyle(fontSize: 18)),
+          const Text('💡', style: TextStyle(fontSize: 18)),
           const SizedBox(height: 2),
           Text(
             '$streak',

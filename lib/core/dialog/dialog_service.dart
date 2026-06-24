@@ -16,7 +16,7 @@ extension DialogScenarioX on DialogScenario {
       case DialogScenario.shopDialog:
         return 'おみせでかいもの';
       case DialogScenario.battleIntro:
-        return 'バトルのはじまり';
+        return 'じけんの はじまり';
     }
   }
 
