@@ -34,6 +34,13 @@ PUBSPEC = os.path.join(REPO, "pubspec.yaml")
 # Matches assets/audio/eiken5, eiken4, eiken3, eiken_pre2, eiken2, eiken_pre1.
 HEAVY_RE = re.compile(r"assets/audio/eiken[0-9_a-z]*")
 
+# eiken5 (5級, the trial-cohort grade) is DELIBERATELY bundled (~600 MP3s / 18MB,
+# FUNCTIONAL offline 🔊) — a bounded exception ~50× smaller than the ~925MB
+# all-grades bundle this gate prevents (CEO-approved + deployed 2026-06-24). The
+# BIG grades (eiken4/3/pre2/pre2plus/2/pre1) stay forbidden — adding any of them
+# re-bloats the build by hundreds of MB + thousands of AssetManifest entries.
+ALLOWED = {"assets/audio/eiken5"}
+
 
 def main() -> int:
     if not os.path.exists(PUBSPEC):
@@ -57,7 +64,7 @@ def main() -> int:
                         in_assets = False
                 if stripped.startswith("- "):
                     path = stripped[2:].strip()
-                    if HEAVY_RE.search(path):
+                    if HEAVY_RE.search(path) and path.rstrip("/") not in ALLOWED:
                         offenders.append(path)
 
     print("------------------------------------------------------------")
@@ -72,7 +79,8 @@ def main() -> int:
         print("(network/CDN) when it ships. Keep only a1/phonics/quiz/listening/ui_ja.")
         return 1
 
-    print("OK: no per-word 英検 audio dir is bundled (the #48 fix holds).")
+    print("OK: only the bounded eiken5 trial bundle is allowed; the big grades "
+          "stay excluded (the #48 fix holds).")
     return 0
 
 
