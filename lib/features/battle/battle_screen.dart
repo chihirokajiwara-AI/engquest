@@ -483,9 +483,9 @@ class _BattleScreenState extends State<BattleScreen>
 
   // ── Session-complete star burst animation ──────────────────────────────────
   late AnimationController _starsCtrl;
-  // Celebratory screenshake on a 3+ correct-answer streak (juice). Reduced-motion
+  // Celebratory lift+pop on a 3+ correct-answer streak (juice). Reduced-motion
   // safe (duration→zero in didChangeDependencies, like the flip/stars controllers).
-  late AnimationController _shakeCtrl;
+  late AnimationController _celebrateCtrl;
   late Animation<double> _starsAnim;
 
   // ── Colours ────────────────────────────────────────────────────────────────
@@ -520,7 +520,7 @@ class _BattleScreenState extends State<BattleScreen>
       duration: const Duration(milliseconds: 1800),
     );
     _starsAnim = CurvedAnimation(parent: _starsCtrl, curve: Curves.easeOut);
-    _shakeCtrl = AnimationController(
+    _celebrateCtrl = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
@@ -548,7 +548,7 @@ class _BattleScreenState extends State<BattleScreen>
     if (prefersReducedMotion(context)) {
       _flipCtrl.duration = Duration.zero;
       _starsCtrl.duration = Duration.zero;
-      _shakeCtrl.duration = Duration.zero;
+      _celebrateCtrl.duration = Duration.zero;
     }
   }
 
@@ -558,7 +558,7 @@ class _BattleScreenState extends State<BattleScreen>
     _dwellTimer?.cancel();
     _flipCtrl.dispose();
     _starsCtrl.dispose();
-    _shakeCtrl.dispose();
+    _celebrateCtrl.dispose();
     _wordAudio.dispose();
     super.dispose();
   }
@@ -660,9 +660,9 @@ class _BattleScreenState extends State<BattleScreen>
       _answersThisSession = 0;
       _xpPopups.clear();
       _starsCtrl.reset();
-      // Also stop any in-flight streak-shake so a mid-shake (もういちど tapped
-      // <300ms into a shake) doesn't carry onto the new session's first card.
-      _shakeCtrl.reset();
+      // Also stop any in-flight streak lift+pop so a mid-animation (もういちど
+      // tapped <300ms in) doesn't carry onto the new session's first card.
+      _celebrateCtrl.reset();
       _repoLoading = false;
       // Session begins now — first card is visible. Capture start timestamp
       // so we can compute real elapsed minutes when the session completes.
@@ -741,12 +741,12 @@ class _BattleScreenState extends State<BattleScreen>
 
   // ── Grade ──────────────────────────────────────────────────────────────────
 
-  /// Short celebratory screenshake (≤6px, decaying, 300ms) for a 3+ correct
-  /// streak. No-op under OS reduce-motion. Cosmetic — grade/FSRS/XP are all
-  /// recorded independently of this call.
-  void _triggerShake() {
+  /// Short celebratory lift+pop (≤5px / 1.04 scale, single 300ms hump) for a 3+
+  /// correct streak. No-op under OS reduce-motion. Cosmetic — grade/FSRS/XP are
+  /// all recorded independently of this call.
+  void _triggerCelebrate() {
     if (prefersReducedMotion(context)) return;
-    _shakeCtrl.forward(from: 0.0);
+    _celebrateCtrl.forward(from: 0.0);
   }
 
   void _gradeCard(Grade grade) {
@@ -770,9 +770,9 @@ class _BattleScreenState extends State<BattleScreen>
       });
       // Streak
       _streak++;
-      // Juice: a 3+ correct streak earns a short celebratory screenshake — an
+      // Juice: a 3+ correct streak earns a short celebratory lift+pop — an
       // escalating reward for a run of recalls. Cosmetic only (reduced-motion safe).
-      if (_streak >= 3) _triggerShake();
+      if (_streak >= 3) _triggerCelebrate();
     } else {
       _sound.playWrong();
       _streak = 0;
@@ -1168,16 +1168,20 @@ class _BattleScreenState extends State<BattleScreen>
             _buildProgressBar(),
             if (_momentumText != null) _buildMomentumBanner(),
             Expanded(
-              // Celebratory screenshake on a 3+ streak (juice): nudges the card
-              // horizontally (decaying ≤6px over 300ms). Idle value 0 → no offset;
-              // the flip-card subtree is built once, only the transform rebuilds.
+              // Celebratory lift+pop on a 3+ streak (juice): a single smooth upward
+              // hump (no horizontal jolt — the combat "screen shake" was reframed
+              // out, council 2026-06-23). sin(t·π) gives one 0→1→0 hump over 300ms:
+              // the card lifts ≤5px and pops to 1.04 scale, then settles. Idle value
+              // 0 → no transform; the flip-card subtree builds once, only this rebuilds.
               child: AnimatedBuilder(
-                animation: _shakeCtrl,
+                animation: _celebrateCtrl,
                 builder: (context, child) {
-                  final t = _shakeCtrl.value;
-                  final dx = math.sin(t * math.pi * 6) * (1.0 - t) * 6.0;
+                  final hump = math.sin(_celebrateCtrl.value * math.pi);
                   return Transform.translate(
-                      offset: Offset(dx, 0), child: child);
+                    offset: Offset(0, -5.0 * hump),
+                    child:
+                        Transform.scale(scale: 1.0 + 0.04 * hump, child: child),
+                  );
                 },
                 child: _buildFlipCardWithShimmer(),
               ),
