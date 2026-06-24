@@ -233,6 +233,16 @@ class _SilentBattleScreenState extends State<SilentBattleScreen> {
             Expanded(
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 280),
+                // Top-align the incoming/outgoing children so short content
+                // never floats centred in the Expanded, leaving a dead void
+                // in the middle of the screen (CEO-flagged 390×844 defect).
+                layoutBuilder: (currentChild, previousChildren) => Stack(
+                  alignment: Alignment.topCenter,
+                  children: [
+                    ...previousChildren,
+                    if (currentChild != null) currentChild,
+                  ],
+                ),
                 child: KeyedSubtree(
                   key: ValueKey(
                       'phase_${ctrl.phase.name}_${ctrl.currentIndex}_${ctrl.lastPicked}'),
@@ -351,75 +361,117 @@ class _SilentBattleScreenState extends State<SilentBattleScreen> {
   }
 
   // ── Intro phase ───────────────────────────────────────────────────────────
+  //
+  // Vertical rhythm: hero portrait (upper-third anchor) → tension narration
+  // (middle) → CTA button (bottom). Uses LayoutBuilder+ConstrainedBox so the
+  // content stretches to fill the available height via spaceBetween and scrolls
+  // safely when OS text-scale pushes total content beyond the viewport.
 
   Widget _buildIntro(SilentBattleController ctrl) {
     final firstStep = ctrl.steps.first;
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          const SizedBox(height: 20),
-          // Grey portrait — silence still covers the villager.
-          _GreyPortrait(
-            npcName: firstStep.npcName,
-            npcEmoji: firstStep.npcEmoji,
-            size: 88,
+    return LayoutBuilder(
+      builder: (context, constraints) => SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: constraints.maxHeight),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // ── Upper anchor: enlarged grey portrait as the encounter HERO.
+              Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: _GreyPortrait(
+                  npcName: firstStep.npcName,
+                  npcEmoji: firstStep.npcEmoji,
+                  size: 128,
+                ),
+              ),
+              // ── Middle: tension narration.
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                child: DqDialogBox(
+                  speaker: 'サイレント',
+                  child: Text(
+                    'サイレントが ${firstStep.npcName} を つつんでいる。\nことばを となえて！',
+                    style: dqText(size: 15),
+                  ),
+                ),
+              ),
+              // ── Bottom: action CTA.
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: DqButton(
+                  label: '▶ となえる！',
+                  onTap: () {
+                    widget.controller.startBattle();
+                    _maybeAutoPlay();
+                  },
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 20),
-          DqDialogBox(
-            speaker: 'サイレント',
-            child: Text(
-              'サイレントが ${firstStep.npcName} を つつんでいる。\nことばを となえて！',
-              style: dqText(size: 15),
-            ),
-          ),
-          const SizedBox(height: 28),
-          DqButton(
-            label: '▶ となえる！',
-            onTap: () {
-              widget.controller.startBattle();
-              _maybeAutoPlay();
-            },
-          ),
-        ],
+        ),
       ),
     );
   }
 
   // ── Prompt phase ──────────────────────────────────────────────────────────
+  //
+  // Rhythm: enlarged portrait hero (upper) → step body (middle) →
+  // answer block (prompt label + options, bottom). LayoutBuilder+ConstrainedBox
+  // guarantees fill with spaceBetween; scrolls at large OS text scale.
 
   Widget _buildPrompt(SilentBattleController ctrl) {
     final step = ctrl.currentStep;
     final colourProgress =
         ctrl.steps.isNotEmpty ? ctrl.clearedSteps / ctrl.steps.length : 0.0;
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          const SizedBox(height: 8),
-          _PortraitReveal(
-            npcName: step.npcName,
-            npcEmoji: step.npcEmoji,
-            colourProgress: colourProgress,
+    return LayoutBuilder(
+      builder: (context, constraints) => SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: constraints.maxHeight),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // ── Upper anchor: colour-revealing portrait (the tension hero).
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: _PortraitReveal(
+                  npcName: step.npcName,
+                  npcEmoji: step.npcEmoji,
+                  colourProgress: colourProgress,
+                  size: 128,
+                ),
+              ),
+              // ── Middle: question / step body.
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: _buildStepBody(step),
+              ),
+              // ── Bottom: answer block (prompt label + choices).
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    step.practicePromptJa ?? '正（ただ）しい返事（へんじ）をえらぼう',
+                    style: dqText(size: 12, color: dqGold),
+                  ),
+                  const SizedBox(height: 8),
+                  ..._buildOptions(step, ctrl),
+                  const SizedBox(height: 8),
+                ],
+              ),
+            ],
           ),
-          const SizedBox(height: 12),
-          _buildStepBody(step),
-          const SizedBox(height: 14),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              step.practicePromptJa ?? '正（ただ）しい返事（へんじ）をえらぼう',
-              style: dqText(size: 12, color: dqGold),
-            ),
-          ),
-          const SizedBox(height: 8),
-          ..._buildOptions(step, ctrl),
-          const SizedBox(height: 16),
-        ],
+        ),
       ),
     );
   }
 
   // ── Resolved phase ────────────────────────────────────────────────────────
+  //
+  // Rhythm: portrait hero (upper) → step body + answered options (middle) →
+  // feedback dialog + advance CTA (bottom). Same LayoutBuilder fill pattern.
 
   Widget _buildResolved(SilentBattleController ctrl) {
     final step = ctrl.currentStep;
@@ -427,53 +479,76 @@ class _SilentBattleScreenState extends State<SilentBattleScreen> {
     final colourProgress =
         ctrl.steps.isNotEmpty ? ctrl.clearedSteps / ctrl.steps.length : 0.0;
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          const SizedBox(height: 8),
-          _PortraitReveal(
-            npcName: step.npcName,
-            npcEmoji: step.npcEmoji,
-            colourProgress: colourProgress,
-          ),
-          const SizedBox(height: 12),
-          _buildStepBody(step),
-          const SizedBox(height: 14),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              step.practicePromptJa ?? '正（ただ）しい返事（へんじ）をえらぼう',
-              style: dqText(size: 12, color: dqGold),
-            ),
-          ),
-          const SizedBox(height: 8),
-          ..._buildOptions(step, ctrl),
-          const SizedBox(height: 10),
-          if (correct) ...[
-            DqDialogBox(
-              speaker: step.npcName,
-              child: Text(step.onCorrect, style: dqText(size: 15)),
-            ),
-            const SizedBox(height: 16),
-            DqButton(
-              label: _isLastStep(ctrl) ? 'むらびとをすくった！' : 'つぎの てがかりへ',
-              onTap: () => widget.controller.advance(),
-            ),
-          ] else ...[
-            DqDialogBox(
-              child: Text(
-                'もういちど となえて！',
-                style: dqText(size: 15, color: dqGold),
+    return LayoutBuilder(
+      builder: (context, constraints) => SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: constraints.maxHeight),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // ── Upper anchor: portrait hero.
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: _PortraitReveal(
+                  npcName: step.npcName,
+                  npcEmoji: step.npcEmoji,
+                  colourProgress: colourProgress,
+                  size: 128,
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-            DqButton(
-              label: '▶ もういちど',
-              onTap: () => widget.controller.advance(),
-            ),
-          ],
-          const SizedBox(height: 16),
-        ],
+              // ── Middle: step body + answered options.
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _buildStepBody(step),
+                    const SizedBox(height: 10),
+                    Text(
+                      step.practicePromptJa ?? '正（ただ）しい返事（へんじ）をえらぼう',
+                      style: dqText(size: 12, color: dqGold),
+                    ),
+                    const SizedBox(height: 8),
+                    ..._buildOptions(step, ctrl),
+                  ],
+                ),
+              ),
+              // ── Bottom: feedback + advance CTA.
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (correct) ...[
+                      DqDialogBox(
+                        speaker: step.npcName,
+                        child: Text(step.onCorrect, style: dqText(size: 15)),
+                      ),
+                      const SizedBox(height: 14),
+                      DqButton(
+                        label: _isLastStep(ctrl) ? 'むらびとをすくった！' : 'つぎの てがかりへ',
+                        onTap: () => widget.controller.advance(),
+                      ),
+                    ] else ...[
+                      DqDialogBox(
+                        child: Text(
+                          'もういちど となえて！',
+                          style: dqText(size: 15, color: dqGold),
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+                      DqButton(
+                        label: '▶ もういちど',
+                        onTap: () => widget.controller.advance(),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -482,99 +557,150 @@ class _SilentBattleScreenState extends State<SilentBattleScreen> {
       ctrl.currentIndex == ctrl.steps.length - 1;
 
   // ── Victory phase ─────────────────────────────────────────────────────────
+  //
+  // Rhythm: full-colour restored portrait (upper hero) → NPC speech (middle) →
+  // rewards + CTA (bottom). Fills available height; scrolls on large text scale.
 
   Widget _buildVictory(SilentBattleController ctrl) {
     final xp = BattleRewards.totalXp(ctrl.stepResults);
     final step = ctrl.steps.last;
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          const SizedBox(height: 16),
-          // Full-colour portrait: colour restored.
-          DqPortrait(
-            imageAsset: QuestScreen.npcImage(step.npcName),
-            emoji: step.npcEmoji,
-            size: 96,
+    return LayoutBuilder(
+      builder: (context, constraints) => SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: constraints.maxHeight),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // ── Upper anchor: full-colour portrait (colour restored = victory).
+              Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: DqPortrait(
+                  imageAsset: QuestScreen.npcImage(step.npcName),
+                  emoji: step.npcEmoji,
+                  size: 128,
+                ),
+              ),
+              // ── Middle: NPC victory speech.
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                child: DqDialogBox(
+                  speaker: step.npcName,
+                  child: Text(step.onCorrect, style: dqText(size: 15)),
+                ),
+              ),
+              // ── Bottom: rewards summary + advance CTA.
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _ShardsRow(shards: ctrl.shards),
+                    const SizedBox(height: 12),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: dqNight0.withAlpha(180),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                            color: dqGold.withAlpha(160), width: 1.5),
+                      ),
+                      child: Text(
+                        '✨ +$xp XP 獲得！',
+                        style:
+                            dqText(size: 16, w: FontWeight.w800, color: dqGold),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    DqButton(
+                      label: 'つぎの てがかりへ',
+                      onTap: widget.onVictory ??
+                          () => Navigator.of(context).pop(true),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 16),
-          DqDialogBox(
-            speaker: step.npcName,
-            child: Text(step.onCorrect, style: dqText(size: 15)),
-          ),
-          const SizedBox(height: 16),
-          _ShardsRow(shards: ctrl.shards),
-          const SizedBox(height: 12),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            decoration: BoxDecoration(
-              color: dqNight0.withAlpha(180),
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: dqGold.withAlpha(160), width: 1.5),
-            ),
-            child: Text(
-              '✨ +$xp XP 獲得！',
-              style: dqText(size: 16, w: FontWeight.w800, color: dqGold),
-            ),
-          ),
-          const SizedBox(height: 24),
-          DqButton(
-            label: 'つぎの てがかりへ',
-            onTap: widget.onVictory ?? () => Navigator.of(context).pop(true),
-          ),
-        ],
+        ),
       ),
     );
   }
 
   // ── Defeat phase ──────────────────────────────────────────────────────────
+  //
+  // Rhythm: greyed portrait (still silenced — upper) → failure narration
+  // (middle) → shards + retry/exit CTAs (bottom). Same fill+scroll pattern.
 
   Widget _buildDefeat(SilentBattleController ctrl) {
     final step = ctrl.currentStep;
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          const SizedBox(height: 32),
-          _GreyPortrait(
-            npcName: step.npcName,
-            npcEmoji: step.npcEmoji,
-            size: 80,
-          ),
-          const SizedBox(height: 24),
-          DqDialogBox(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'ことばが まだ たりない…',
-                  style: dqText(size: 18, w: FontWeight.w800, color: dqInk),
+    return LayoutBuilder(
+      builder: (context, constraints) => SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: constraints.maxHeight),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // ── Upper anchor: still-grey portrait (villager still silenced).
+              Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: _GreyPortrait(
+                  npcName: step.npcName,
+                  npcEmoji: step.npcEmoji,
+                  size: 128,
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  'あつめた かけらは のこっている。\nもういちど ことばを となえに いこう。',
-                  style: dqText(size: 14),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 16),
-          _ShardsRow(shards: ctrl.shards),
-          const SizedBox(height: 28),
-          DqButton(
-            label: '▶ もういちど となえる',
-            onTap: () => widget.controller.reset(),
-          ),
-          const SizedBox(height: 12),
-          GestureDetector(
-            onTap: widget.onDefeat ?? () => Navigator.of(context).maybePop(),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Text(
-                '街（まち）の ちずへ',
-                style: dqText(size: 14, color: dqGoldDeep),
               ),
-            ),
+              // ── Middle: failure narration.
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                child: DqDialogBox(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'ことばが まだ たりない…',
+                        style:
+                            dqText(size: 18, w: FontWeight.w800, color: dqInk),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'あつめた かけらは のこっている。\nもういちど ことばを となえに いこう。',
+                        style: dqText(size: 14),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              // ── Bottom: shard count + retry / exit CTAs.
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _ShardsRow(shards: ctrl.shards),
+                    const SizedBox(height: 20),
+                    DqButton(
+                      label: '▶ もういちど となえる',
+                      onTap: () => widget.controller.reset(),
+                    ),
+                    const SizedBox(height: 12),
+                    GestureDetector(
+                      onTap: widget.onDefeat ??
+                          () => Navigator.of(context).maybePop(),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: Text(
+                          '街（まち）の ちずへ',
+                          style: dqText(size: 14, color: dqGoldDeep),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -759,11 +885,13 @@ class _PortraitReveal extends StatelessWidget {
   final String npcName;
   final String npcEmoji;
   final double colourProgress; // 0.0 = full grey, 1.0 = full colour
+  final double size;
 
   const _PortraitReveal({
     required this.npcName,
     required this.npcEmoji,
     required this.colourProgress,
+    this.size = 88,
   });
 
   @override
@@ -808,7 +936,7 @@ class _PortraitReveal extends StatelessWidget {
       child: DqPortrait(
         imageAsset: QuestScreen.npcImage(npcName),
         emoji: npcEmoji,
-        size: 88,
+        size: size,
       ),
     );
   }
