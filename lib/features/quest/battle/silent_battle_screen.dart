@@ -942,7 +942,7 @@ class _PortraitReveal extends StatelessWidget {
   }
 }
 
-/// Combo flash badge (チャージ multiplier display).
+/// Combo flash badge (てがかり clue-combo multiplier display).
 class _ComboFlash extends StatelessWidget {
   final int combo;
   const _ComboFlash({required this.combo});
@@ -965,7 +965,7 @@ class _ComboFlash extends StatelessWidget {
           ],
         ),
         child: Text(
-          'チャージ × $combo',
+          'てがかり × $combo',
           style: dqText(
             size: 12,
             w: FontWeight.w800,

@@ -89,7 +89,7 @@ class SilentBattleController extends ChangeNotifier {
   int get hearts => _hearts;
   int get maxHeartsValue => maxHearts;
 
-  // チャージ (combo multiplier): increments on each first-try correct answer.
+  // てがかり (clue combo multiplier): increments on each first-try correct answer.
   int _combo = 0;
   int get combo => _combo;
 
